@@ -28,10 +28,6 @@
 - --gcc option to output best optimisation parameters
   for that CPU.
 
-- --check-mca
-  Useful for polling from a script to check for errors
-  that don't raise MCE
-
 - Some CPUs allow the name string to be changed.
   If this has happened we die horribly. We need to store the current
   name string, perform the cpuid reset sequence, and restore the
