@@ -14,6 +14,7 @@ OBJS =\
 \
 	Intel/identify.o\
 	Intel/bluesmoke.o\
+	Intel/cachesize.o\
 	Intel/eblcr.o\
 \
 	IDT/identify.o\

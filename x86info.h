@@ -21,16 +21,18 @@ typedef __u32 u32;
 #define VENDOR_RISE 5
 
 struct cpudata {
-	int number;
-	int vendor;
-	int family;
-	int model;
-	int stepping;
-	int type;
-	int brand;
-	int cachesize_L1;
-	int cachesize_L2;
-	char name[80];
+	unsigned int number;
+	unsigned int vendor;
+	unsigned int family;
+	unsigned int model;
+	unsigned int stepping;
+	unsigned int type;
+	unsigned int brand;
+	unsigned int cachesize_L1_I, cachesize_L1_D;
+	unsigned int cachesize_L2;
+	unsigned int cachesize_L3;
+	unsigned int maxi, maxei;
+	unsigned char name[80];
 };
 
 void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
