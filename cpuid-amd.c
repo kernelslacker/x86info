@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.12 2001/03/17 17:15:49 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.13 2001/03/30 19:36:04 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -145,6 +145,7 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 				printf ("Unknown CPU");
 				break;
 			}
+			printf ("]\n");
 			break;
 
 		case 5:
@@ -185,6 +186,7 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 				printf ("Unknown CPU");
 				break;
 			}
+			printf ("]\n");
 			break;
 
 		case 6:
@@ -246,11 +248,11 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 				printf ("Unknown CPU");
 				break;
 			}
+			printf ("]\n");
+			if (show_msr)
+				dump_athlon_MSR(cpunum);
 			break;
 		}
-		printf ("]\n");
-		if (show_msr)
-			dump_athlon_MSR(cpunum);
 	}
 
 	if (maxei >= 0x80000001) {
