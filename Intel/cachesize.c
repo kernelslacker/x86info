@@ -1,7 +1,8 @@
 /*
- * $Id: cachesize.c,v 1.2 2001/12/10 21:48:37 davej Exp $
+ * $Id: cachesize.c,v 1.3 2002/11/11 19:47:03 davej Exp $
  */
 
+#include <stdio.h>
 #include "../x86info.h"
 
 void get_intel_cacheinfo (struct cpudata *c)
@@ -112,4 +113,10 @@ void get_intel_cacheinfo (struct cpudata *c)
 			}
 		}
 	}
+	/*
+		printf ("cachesize_L1_I=%d\n", c->cachesize_L1_I);
+		printf ("cachesize_L1_D=%d\n", c->cachesize_L1_D);
+		printf ("cachesize_L2=%d\n", c->cachesize_L2);
+		printf ("cachesize_L3=%d\n", c->cachesize_L3);
+	*/
 }
