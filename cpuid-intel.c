@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.13 2001/07/21 00:15:56 davej Exp $
+ *  $Id: cpuid-intel.c,v 1.14 2001/07/21 01:50:11 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -136,8 +136,6 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		"30     reserved",
 		"31     reserved"
 	};
-
-	printf ("Intel-specific functions\n");
 
 	if (maxi >= 1) {
 		/* Family/model/type etc */
