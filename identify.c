@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.15 2001/12/10 20:30:38 davej Exp $
+ *  $Id: identify.c,v 1.16 2001/12/10 20:50:01 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -9,8 +9,6 @@
 
 #include <stdio.h>
 #include "x86info.h"
-
-extern int silent;
 
 void identify (struct cpudata *cpu)
 {

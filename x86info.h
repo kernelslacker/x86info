@@ -33,9 +33,6 @@ struct cpudata {
 	char name[80];
 };
 
-extern int used_UP;
-extern int silent;
-
 void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 
@@ -73,7 +70,8 @@ extern int show_flags;
 extern int show_msr;
 extern int show_registers;
 
+extern int used_UP;
+extern int silent;
 extern int user_is_root;
 
-extern struct cpudata *cpu;
 #endif /* _X86INFO_H */
