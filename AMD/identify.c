@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.29 2002/10/13 18:53:11 davej Exp $
+ *  $Id: identify.c,v 1.30 2002/10/13 19:49:08 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -15,7 +15,7 @@
 #include "../x86info.h"
 #include "AMD.h"
 
-static char *amd_nameptr;
+static char *amd_nameptr, *namebegin;
 #define add_to_cpuname(x)	amd_nameptr += sprintf(amd_nameptr, "%s", x);
 
 static void do_assoc(unsigned long assoc)
@@ -98,7 +98,7 @@ void Identify_AMD(struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 
-	amd_nameptr = cpu->name;
+	namebegin = amd_nameptr = cpu->name;
 	cpu->vendor = VENDOR_AMD;
 
 	if (cpu->maxi < 1)
@@ -252,7 +252,7 @@ void Identify_AMD(struct cpudata *cpu)
 		if (getL2size(cpu->number) < 256)
 			add_to_cpuname ("Duron (Morgan)");
 	
-		if (cpu->cpuname == nameptr) {
+		if (amd_nameptr == namebegin) {
 			add_to_cpuname ("Athlon ");
 			determine_xp_mp(cpu);
 			add_to_cpuname (" (palomino)");
@@ -292,7 +292,7 @@ void Identify_AMD(struct cpudata *cpu)
 			add_to_cpuname ("Mobile ");
 		if (getL2size(cpu->number) < 256)
 			add_to_cpuname ("Duron ");
-		if (cpu->cpuname == nameptr)
+		if (amd_nameptr == namebegin)
 			add_to_cpuname ("Athlon ");
 	
 		determine_xp_mp(cpu);
