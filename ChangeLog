@@ -1,6 +1,7 @@
 2003-3-11 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/powernow.c: Decode extra bits present in x86-64
+	* AMD/identify.c: Add some extra x86-64 steppings.
 
 2003-3-7 Dave Jones <davej@codemonkey.org.uk>
 

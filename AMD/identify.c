@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.45 2003/02/10 13:31:26 davej Exp $
+ *  $Id: identify.c,v 1.46 2003/03/11 14:04:35 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -348,15 +348,15 @@ out_660:
 
 	case 0xF00:
 		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname ("Athlon 64");
+		add_to_cpuname ("Athlon 64 ES");
 		break;
-
 	case 0xF10:
 		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname ("Opteron");
+		add_to_cpuname ("Opteron ES");
 		break;
 
 	case 0xF40:
+	case 0xF80:
 		cpu->connector = CONN_SOCKET_754;
 		add_to_cpuname ("Athlon 64");
 		break;
