@@ -1,6 +1,7 @@
 2003-3-28 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/cachesize.c: Add Centrino cache descriptors.
+	* Intel/identify.c: Add P4-M (Centrino)
 
 2003-3-19 Dave Jones <davej@codemonkey.org.uk>
 
