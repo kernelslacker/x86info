@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.54 2002/05/31 12:14:51 davej Exp $
+ *  $Id: x86info.c,v 1.55 2002/05/31 14:44:25 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -76,6 +76,7 @@ static void parse_command_line (int argc, char **argv)
 			show_msr = 1;
 			show_MHz = 1;
 			show_registers = 1;
+			show_mtrr = 1;
 			need_root = 1;
 		}
 
