@@ -1,11 +1,12 @@
 /*
- *  $Id: MHz.c,v 1.2 2001/04/25 17:21:02 davej Exp $
+ *  $Id: MHz.c,v 1.3 2001/05/07 22:03:27 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  * Estimate CPU MHz routine by Andrea Arcangeli <andrea@suse.de>
+ * Small changes by David Sterba <sterd9am@ss1000.ms.mff.cuni.cz>
  *
  */
 

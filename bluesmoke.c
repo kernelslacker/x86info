@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.3 2001/04/20 06:42:04 davej Exp $
+ *  $Id: bluesmoke.c,v 1.4 2001/05/07 22:03:27 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -99,8 +99,6 @@ void decode_bluesmoke(int cpunum)
 				printf ("  Read data error enable (stores) %sabled\n", val2 & (1<<1) ? "en" : "dis");
 			}
 		}
-
-
 	}
 	printf ("\n");
 

@@ -1,16 +1,22 @@
-2001-05-27 Wim Coekaerts <wim.coekaerts@oracle.com>
+2001-05-07 Dave Jones <davej@suse.de>
+
+	* cpuid-intel.c: Put values into the cpu struct.
+	  This should fix Pentium4 recognition, and a few
+	  other small Intel related bugs.
+
+2001-04-27 Wim Coekaerts <wim.coekaerts@oracle.com>
 
 	* cpuid-rise.c: 0.18um is model 2 not model 1
 	  Dump available CPU features
 	* identify.c: Additional RiSE ID added.
 
-2001-05-25 David Sterba <sterd9am@ss1000.ms.mff.cuni.cz>
+2001-04-25 David Sterba <sterd9am@ss1000.ms.mff.cuni.cz>
 
 	* binary.c: Optimised conversion routine. 
 	* MHz.c: use sleep -> usleep for higher accuracy,
 	  Change bzero -> memset.
 
-2001-05-15 Constantine Gavrilov <const-g@optibase.com>
+2001-04-15 Constantine Gavrilov <const-g@optibase.com>
 
 	* x86info.c: SMP boxes are numbered 0..n -> 1..n
 
