@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.4 2001/12/10 17:52:15 davej Exp $
+ *  $Id: bluesmoke.c,v 1.5 2002/03/06 13:02:19 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -40,6 +40,14 @@ void decode_athlon_bluesmoke(int cpunum)
 	banks = val & 0xf;
 
 	printf ("Number of reporting banks : %d\n\n", banks);
+
+	if (read_msr(cpunum, MCG_STATUS, &val) == 1) {
+		if (val != 0) {
+			printf("            31       23       15       7 \n");
+			printf ("MCG_STATUS: ");
+			dumpmsr_bin (cpunum, MCG_STATUS, 32);
+		}
+	}
 
 	if (read_msr(cpunum, MCG_CTL, &val) == 1) {
 		printf ("MCG_CTL:\n");
