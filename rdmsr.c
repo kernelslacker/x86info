@@ -1,5 +1,5 @@
 /*
- *  $Id: rdmsr.c,v 1.12 2002/09/02 15:57:36 davej Exp $
+ *  $Id: rdmsr.c,v 1.13 2002/11/22 16:33:11 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -22,12 +22,18 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 	unsigned char buffer[8];
 	unsigned long lo, hi;
 	int fh;
+	static int nodriver=0;
+
+	if (nodriver==1)
+		return 0;
 
 	sprintf (cpuname, "/dev/cpu/%d/msr", cpu);
 
 	fh = open (cpuname, O_RDONLY);
 	if (fh==-1) {
-		if (!silent) perror(cpuname);
+		if (!silent)
+			perror(cpuname);
+		nodriver=1;
 		return (0);
 	}
 

@@ -14,6 +14,10 @@
 	* AMD/powernow.h: Add powernow bitfields
 	* x86info.c: Add --powernow option
 
+2002-11-16  Dave Jones <davej@codemonkey.org.uk>
+
+	* rdmsr.c: Don't retry if first open fails.
+
 2002-11-12  Dave Jones <davej@codemonkey.org.uk>
 
 	* x86info.c: Put a seperator between CPUs on SMP.
