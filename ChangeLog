@@ -1,3 +1,5 @@
+Released as 1.10
+
 2002-07-24 Dave Jones <davej@suse.de>
 
 	* Intel/identify.c: Add more P4 codenames.
