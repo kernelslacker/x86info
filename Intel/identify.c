@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.21 2002/04/26 12:41:45 davej Exp $
+ *  $Id: identify.c,v 1.22 2002/05/02 17:55:12 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -13,6 +13,7 @@
 #include "Intel.h"
 
 /* Decode Intel TLB and cache info descriptors */
+//TODO : Errata workaround. http://www.sandpile.org/post/msgs/20002736.htm
 void decode_Intel_TLB (int x, int family)
 {
 	switch (x & 0xff) {
