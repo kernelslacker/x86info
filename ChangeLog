@@ -1,3 +1,8 @@
+2004-12-22 Dave Jones <davej@codemonkey.org.uk>
+
+	* Intel/cachesize.c: Add some EM64T cache descriptors. 
+	  Submitted by Kornilios Kourtis <kkourt@cslab.ece.ntua.gr>
+
 2004-10-6 Dominik Brodowski <linux@dominikbrodowski.de>
 
 	* Intel/info.c: report 1 instead of 0 logical CPUs.

@@ -1,5 +1,5 @@
 /*
- *  $Id: cachesize.c,v 1.12 2003/08/17 22:37:38 davej Exp $
+ *  $Id: cachesize.c,v 1.13 2004/12/22 22:34:08 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -46,6 +46,7 @@ static struct _cache_table L1D_cache_table[] =
 	{ 0xa,  8, "L1 Data cache:\n\tSize: 8KB\t2-way associative.\n\tline size=32 bytes." },
 	{ 0xc,  16, "L1 Data cache:\n\tSize: 16KB\t4-way associative.\n\tline size=32 bytes." },
 	{ 0x2c, 32, "L1 Data cache:\n\tSize: 32KB\t8-way associative.\n\tline size=64 bytes." },
+	{ 0x60, 16, "L1 Data cache:\n\tSize: 16KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
 	{ 0x66, 8, "L1 Data cache:\n\tSize: 8KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
 	{ 0x67, 16, "L1 Data cache:\n\tSize: 16KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
 	{ 0x68, 32, "L1 Data cache:\n\tSize: 32KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
@@ -62,6 +63,7 @@ static struct _cache_table L2_cache_table[] =
 	{ 0x43, 512, "L2 unified cache:\n\tSize: 512KB\t4-way associative.\n\tline size=32 bytes." },
 	{ 0x44, 1024, "L2 unified cache:\n\tSize: 1MB\t4-way associative.\n\tline size=32 bytes." },
 	{ 0x45, 2048, "L2 unified cache:\n\tSize: 2MB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x78, 1024, "L2 unified cache:\n\tSize: 1MB\tSectored, 8-way associative.\n\tline size=64 bytes." },
 	{ 0x79, 128, "L2 unified cache:\n\tSize: 128KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
 	{ 0x7a, 256, "L2 unified cache:\n\tSize: 256KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
 	{ 0x7b, 512, "L2 unified cache:\n\tSize: 512KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
