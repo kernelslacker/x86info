@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.21 2001/08/03 16:40:21 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.22 2001/08/10 09:25:46 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -105,15 +105,12 @@ static void dump_athlon_MSR(int cpunum)
 
 void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 {
-	unsigned int i;
-	unsigned long maxei, eax, ebx, ecx, edx;
-	unsigned long tmp;
+	char *nameptr;
+	unsigned long eax, ebx, ecx, edx;
+
+	nameptr = cpu->name;
 
 	cpu->vendor = VENDOR_AMD;
-
-	cpuid (cpunum, 0x80000000, &maxei, NULL, NULL, NULL);
-	if (show_registers && (maxei != 0))
-		dump_extended_AMD_regs(cpunum, maxei);
 
 	if (maxi >= 0x00000001) {
 		cpuid (cpunum, 0x00000001, &eax, &ebx, &ecx, &edx);
@@ -121,161 +118,168 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		cpu->model = (eax >> 4) & 0xf;
 		cpu->family = (eax >> 8) & 0xf;
 
-		printf ("Family: %d Model: %d [", cpu->family, cpu->model);
 		switch (cpu->family) {
 		case 4:
 			switch (cpu->model) {
 			case 3:
-				printf ("Am486DX2-WT");
+				sprintf (cpu->name, "Am486DX2-WT");
 				break;
 			case 7:
-				printf ("Am486DX2-WB");
+				sprintf (cpu->name, "Am486DX2-WB");
 				break;
 			case 8:
-				printf ("Am486DX4-WT / Am5x86-WT");
+				sprintf (cpu->name, "Am486DX4-WT / Am5x86-WT");
 				break;
 			case 9:
-				printf ("Am486DX4-WB / Am5x86-WB");
+				sprintf (cpu->name, "Am486DX4-WB / Am5x86-WB");
 				break;
 			case 10:
-				printf ("Elan SC400");
+				sprintf (cpu->name, "Elan SC400");
 				break;
 			case 0xe:
-				printf ("Am5x86-WT");
+				sprintf (cpu->name, "Am5x86-WT");
 				break;
 			case 0xf:
-				printf ("Am5x86-WB");
+				sprintf (cpu->name, "Am5x86-WB");
 				break;
 			default:
-				printf ("Unknown CPU");
+				sprintf (cpu->name, "Unknown CPU");
 				break;
 			}
-			printf ("]\n");
 			break;
 
 		case 5:
 			switch (cpu->model) {
 			case 0:
-				printf ("SSA5 (PR75/PR90/PR100)");
+				sprintf (cpu->name, "SSA5 (PR75/PR90/PR100)");
 				break;
 			case 1:
-				printf ("K5 (PR120/PR133)");
+				sprintf (cpu->name, "K5 (PR120/PR133)");
 				break;
 			case 2:
-				printf ("K5 (PR166)");
+				sprintf (cpu->name, "K5 (PR166)");
 				break;
 			case 3:
-				printf ("K5 (PR200)");
+				sprintf (cpu->name, "K5 (PR200)");
 				break;
 			case 6:
-				printf ("K6 (0.30 um)");
+				sprintf (cpu->name, "K6 (0.30 um)");
 				break;
 			case 7:
-				printf ("K6 (0.25 um)");
+				sprintf (cpu->name, "K6 (0.25 um)");
 				break;
 			case 8:
-				printf ("K6-2");
+				nameptr += sprintf (cpu->name,"K6-2");
 				if (cpu->stepping >= 8)
-					printf (" (CXT core)");
+					printf (nameptr, " (CXT core)");
 				break;
 			case 9:
-				printf ("K6-III");
+				sprintf (cpu->name, "K6-III");
 				break;
 			case 12:
-				printf ("K6-2+ (0.18um)");
+				sprintf (cpu->name, "K6-2+ (0.18um)");
 				break;
 			case 13:
-				printf ("K6-3+ (0.18um)");
+				sprintf (cpu->name, "K6-3+ (0.18um)");
 				break;
 			default:
-				printf ("Unknown CPU");
+				sprintf (cpu->name, "Unknown CPU");
 				break;
 			}
-			printf ("]\n");
 			break;
 
 		case 6:
 			switch (cpu->model) {
 			case 0:
-				printf ("K7 ES");
+				sprintf (cpu->name, "K7 ES");
 				break;
 			case 1:
-				printf ("Athlon (0.25um");
+				nameptr += sprintf (cpu->name, "Athlon (0.25um)");
 				switch (cpu->stepping) {
 				case 1:
-					printf (" Rev C1");
+					sprintf (nameptr, " Rev C1");
 					break;
 				case 2:
-					printf (" Rev C2");
+					sprintf (nameptr, " Rev C2");
 					break;
 				}
 				break;
 			case 2:
-				printf ("Athlon (0.18um");
+				nameptr += sprintf (cpu->name, "Athlon (0.18um)");
 				switch (cpu->stepping) {
 				case 1:
-					printf (" Rev A1");
+					sprintf (nameptr, " Rev A1");
 					break;
 				case 2:
-					printf (" Rev A2");
+					sprintf (nameptr, " Rev A2");
 					break;
 				}
 				break;
 			case 3:
-				printf ("Duron");
+				nameptr += sprintf (cpu->name, "Duron");
 				switch (cpu->stepping) {
 				case 0:
-					printf (" Rev A0");
+					sprintf (nameptr, " Rev A0");
 					break;
 				case 1:
-					printf (" Rev A2");
+					sprintf (nameptr, " Rev A2");
 					break;
 				}
 				break;
 			case 4:
-				printf ("Thunderbird");
+				nameptr += sprintf (cpu->name, "Thunderbird");
 				switch (cpu->stepping) {
 				case 0:
-					printf (" Rev A1");
+					sprintf (nameptr, " Rev A1");
 					break;
 				case 1:
-					printf (" Rev A2");
+					sprintf (nameptr, " Rev A2");
 					break;
 				case 2:
-					printf (" Rev A4-A8");
+					sprintf (nameptr, " Rev A4-A8");
 					break;
 				case 3:
-					printf (" Rev A9");
+					sprintf (nameptr, " Rev A9");
 					break;
 				}
 				break;
 			case 6:
-				printf ("Mobile ");
+				nameptr += sprintf (cpu->name, "Mobile ");
 				switch (cpu->stepping) {
 				case 0:
-					printf ("Athlon Rev A0-A1");
+					sprintf (nameptr, "Athlon Rev A0-A1");
 					break;
 				case 1:
-					printf ("Athlon Rev A2");
+					sprintf (nameptr, "Athlon Rev A2");
 					break;
 				case 2:
-					printf ("Duron");
+					sprintf (nameptr, "Duron");
 					break;
 				}
 				break;
 			default:
-				printf ("Unknown CPU");
+				sprintf (cpu->name, "Unknown CPU");
 				break;
 			}
-			printf ("]\n");
-			if (show_msr)
-				dump_athlon_MSR(cpunum);
-
-			if (show_bluesmoke)
-				decode_bluesmoke(cpunum);
-			break;
 		}
 	}
+}
+
+
+void display_AMD_info(int cpunum, unsigned int maxei, struct cpudata *cpu)
+{
+	unsigned int i;
+	unsigned long tmp;
+	unsigned long eax, ebx, ecx, edx;
+
+	if (show_registers && (maxei != 0))
+		dump_extended_AMD_regs(cpunum, maxei);
+
+	if (show_msr)
+		dump_athlon_MSR(cpunum);
+
+	if (show_bluesmoke)
+		decode_bluesmoke(cpunum);
 
 	if (maxei >= 0x80000001) {
 		cpuid (cpunum, 0x00000001, &eax, &ebx, &ecx, &tmp);

@@ -22,6 +22,7 @@ struct cpudata {
 	int brand;
 	int cachesize_L1;
 	int cachesize_L2;
+	char name[80];
 };
 
 extern int used_UP;
@@ -36,6 +37,8 @@ void docyrix (int, unsigned int, struct cpudata *cpu);
 void doIDT (int, unsigned int, struct cpudata *cpu);
 void doRise (int, unsigned int, struct cpudata *cpu);
 
+void display_AMD_info(int cpunum, unsigned int maxei, struct cpudata *cpu);
+
 void decode_feature_flags (struct cpudata *cpu, int flags);
 void identify (int cpunum);
 void dumpregs (int cpunum);
@@ -48,3 +51,4 @@ void estimate_MHz(int cpunum);
 void decode_bluesmoke(int cpunum);
 int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
+

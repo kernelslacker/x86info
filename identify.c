@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.4 2001/04/27 22:11:29 davej Exp $
+ *  $Id: identify.c,v 1.5 2001/08/10 09:25:46 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -13,14 +13,15 @@
 void identify (int cpunum)
 {
 	struct cpudata cpu;
-	unsigned long maxi, eax, ebx, ecx, edx;
+	unsigned long maxi, maxei, eax, ebx, ecx, edx;
 
 	/* Dump all the CPUID results in raw hex */
 	cpuid (cpunum, 0, &maxi, NULL, NULL, NULL);
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
 
 	cpuid (cpunum, 0, &eax, &ebx, &ecx, &edx);
-
+	cpuid (cpunum, 0x80000000, &maxei, NULL, NULL, NULL);
+	
 	switch (ebx) {
 	case 0x756e6547:	/* Intel */
 		dointel (cpunum, maxi, &cpu);
@@ -45,6 +46,15 @@ void identify (int cpunum)
 
 	default:
 		printf ("Unknown vendor\n");
-		break;
+		return;
+	}
+
+	printf ("Family: %d Model: %d [%s]\n", cpu.family, cpu.model, cpu.name);
+	switch (cpu.vendor) {
+		case VENDOR_AMD:
+			display_AMD_info (cpunum, maxei, &cpu);
+			break;
+		default:
+			break;
 	}
 }
