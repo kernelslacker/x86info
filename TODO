@@ -2,8 +2,7 @@
 
 - Report the CPU packaging type on CPUs where info is available.
 
-- --mtrr, --arr
-  Dump MTRR/ARR registers.
+- Dump cyrix ARR registers when we pass --mtrr
 
 - --apic
   Dump APIC registers

@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.53 2002/04/27 10:48:51 davej Exp $
+ *  $Id: x86info.c,v 1.54 2002/05/31 12:14:51 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -30,12 +30,13 @@
 int show_msr=0;
 int show_registers=0;
 int show_flags=0;
-int show_cacheinfo=0;
-int show_all=0;
-int show_MHz=0;
-int show_mptable=0;
-int show_bluesmoke=0;
 int show_eblcr=0;
+int show_cacheinfo=0;
+int show_bluesmoke=0;
+
+static int show_mptable=0;
+static int show_mtrr=0;
+static int show_MHz=0;
 
 int silent = 0;
 int used_UP = 0;
@@ -54,6 +55,7 @@ void usage (char *programname)
 -mp,  --mptable\n\
 -m,   --msr\n\
       --mult\n\
+      --mtrr\n\
 -r,   --registers\n\
 -s,   --show-bluesmoke\n\
 \n", programname);
@@ -101,6 +103,11 @@ static void parse_command_line (int argc, char **argv)
 			show_mptable = 1;
 		}
 
+		if (!strcmp(arg, "--mtrr")) {
+			need_root = 1;
+			show_mtrr = 1;
+		}
+
 		if ((!strcmp(arg, "-r") || !strcmp(arg, "--registers")))
 			show_registers = 1;
 
@@ -135,7 +142,7 @@ int main (int argc, char **argv)
 	if (getuid()!=0)
 		user_is_root=0;
 
-	if (need_root==1 && user_is_root==0)
+	if (need_root && !user_is_root)
 		printf ("Need to be root to use specified options.\n");
 
 #if defined __WIN32__
@@ -162,7 +169,7 @@ int main (int argc, char **argv)
 
 		/* Check mptable if present. This way we get number of CPUs
 		   on SMP systems that have booted UP kernels. */
-		if (user_is_root==1) {
+		if (user_is_root) {
 			issmp (&nrSMPCPUs, 0);
 			if (nrSMPCPUs > nrCPUs) {
 				printf (", but found %d CPUs in MPTable.", nrSMPCPUs);
@@ -190,6 +197,9 @@ int main (int argc, char **argv)
 			printf ("CPU #%u\n", i+1);
 
 		identify (&cpu);
+
+		if (show_mtrr && user_is_root)
+			dump_mtrrs(&cpu);
 
 		/*
 		 * Doing this per-cpu is a problem, as we can't
