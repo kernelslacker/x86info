@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.2 2001/08/19 15:09:27 davej Exp $
+ *  $Id: identify.c,v 1.3 2001/09/10 10:51:59 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -162,14 +162,14 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 				case 8:	nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III (Coppermine)");	break;
 				case 10:
 					switch (cpu->brand) {
-					case 0:	nameptr+=sprintf (cpu->name, "%s", "Pentium II Deschutes");	break;
+					case 0:	nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes)");	break;
 					case 1:	nameptr+=sprintf (cpu->name, "%s", "Celeron");				break;
 					case 2:	nameptr+=sprintf (cpu->name, "%s", "Pentium III");			break;
 					case 3:	nameptr+=sprintf (cpu->name, "%s", "Pentium III Xeon");		break;
 					default:nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");			break;
 				}
 				break;
-				case 11:nameptr+=sprintf (cpu->name, "%s", "Pentium III Tualatin");	break;
+				case 11:nameptr+=sprintf (cpu->name, "%s", "Pentium III (Tualatin)");	break;
 				default:nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");	break;
 			}
 			break;
