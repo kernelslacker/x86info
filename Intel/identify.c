@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.16 2001/12/11 01:06:56 davej Exp $
+ *  $Id: identify.c,v 1.17 2001/12/11 17:48:41 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -79,13 +79,13 @@ void decode_Intel_TLB (int x, int family)
 		printf ("L2 unified cache:\n\tSize: 256K\tSectored, 8 way associative.\n\tline size=64 bytes.\n");
 		break;
 	case 0x82:
-		printf ("L2 unified cache:\n\tSize: 256K\tSectored, 8 way associative.\n\tline size=32 bytes.");
+		printf ("L2 unified cache:\n\tSize: 256K\tSectored, 8 way associative.\n\tline size=32 bytes.\n");
 		break;
 	case 0x84:
-		printf ("L2 unified cache:\n\tSize: 1MB\tSectored, 8 way associative\n\tline size=32 bytes.");
+		printf ("L2 unified cache:\n\tSize: 1MB\tSectored, 8 way associative\n\tline size=32 bytes.\n");
 		break;
 	case 0x85:
-		printf ("L2 unified cache:\n\tSize: 2MB\tSectored, 8 way associative\n\tline size=32 bytes.");
+		printf ("L2 unified cache:\n\tSize: 2MB\tSectored, 8 way associative\n\tline size=32 bytes.\n");
 		break;
 
 	default:
