@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.38 2002/11/19 16:55:22 davej Exp $
+ *  $Id: identify.c,v 1.39 2002/11/19 17:06:53 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -331,10 +331,10 @@ void Identify_Intel (struct cpudata *cpu)
 		break;
 	case 0xF40:
 	case 0xF50:
-		cpu->connector = CONN_SOCKET_478;
-		cpu->datasheet_url = strdup (p4_478_datasheet);
-		cpu->errata_url = strdup (p4_errata);
-		nameptr+=sprintf (cpu->name, "%s", "P4 Xeon (Foster)");
+		cpu->connector = CONN_SOCKET_603;
+//		cpu->datasheet_url = strdup (p4_478_datasheet);
+//		cpu->errata_url = strdup (p4_errata);
+		nameptr+=sprintf (cpu->name, "%s", "Pentium 4 Xeon (Foster)");
 		break;
 	default:
 		nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");

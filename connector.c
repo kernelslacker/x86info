@@ -29,6 +29,7 @@ void decode_connector(unsigned int type)
 	char conn_slot_2[] = "Slot 2 (SEC Cartridge)";
 	char conn_socket_423[] = "Socket423 (PGA423 Socket)";
 	char conn_socket_478[] = "Socket478 (PGA478 Socket)";
+	char conn_socket_603[] = "Socket603 (PGA603 Socket)";
 	char conn_MMC[] = "Mobile Module Connector (BGA)";
 	char conn_MMC2[] = "Mobile Module Connector (MMC-2)";
 	/* Transmeta specific sockets */
@@ -111,6 +112,10 @@ void decode_connector(unsigned int type)
 
 	case CONN_SOCKET_478:
 		printf("%s", conn_socket_478);
+		break;
+
+	case CONN_SOCKET_603:
+		printf("%s", conn_socket_603);
 		break;
 
 	case CONN_MMC:
