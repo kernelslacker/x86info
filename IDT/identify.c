@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.6 2001/09/07 12:58:36 davej Exp $
+ *  $Id: identify.c,v 1.7 2001/09/07 15:33:51 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -110,14 +110,15 @@ void decode_IDT_cacheinfo(unsigned int maxei, struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 
+	printf ("\n");
 	if (maxei >= 0x80000005) {
 		/* TLB and cache info */
 		cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
 		printf ("Instruction TLB: %ld-way associative. %ld entries.\n", (ebx >> 8) & 0xff, ebx & 0xff);
 		printf ("Data TLB: %ld-way associative. %ld entries.\n", ebx >> 24, (ebx >> 16) & 0xff);
-		printf ("L1 Data cache: size %ldKB\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes\n",
+		printf ("L1 Data cache:\n\tSize: %ldKb\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes.\n",
 			ecx >> 24, (ecx >> 16) & 0xff, (ecx >> 8) & 0xff, ecx & 0xff);
-		printf ("L1 Instruction cache: size %ldKB\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld\n",
+		printf ("L1 Instruction cache:\n\tSize: %ldKb\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes.\n",
 			edx >> 24, (edx >> 16) & 0xff, (edx >> 8) & 0xff, edx & 0xff);
 	}
 
@@ -125,10 +126,10 @@ void decode_IDT_cacheinfo(unsigned int maxei, struct cpudata *cpu)
 	if (maxei >= 0x80000006) {
 		cpuid (cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
 		if ((cpu->family==6) && (cpu->model==7 || cpu->model==8))
-			printf ("L2 (on CPU) cache: %ld KB %lx way associative, %ld lines per tag, line size %ld\n",
+			printf ("L2 (on CPU) cache:\n\tSize: %ldKb\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes.\n",
 				ecx >> 24, (ecx >> 16) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
 		else
-			printf ("L2 (on CPU) cache: %ld KB associativity %lx lines per tag %ld line size %ld\n",
+			printf ("L2 (on CPU) cache:\n\tSize: %ldKb\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes.\n",
 				ecx >> 16, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
 	}
 }

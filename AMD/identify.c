@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.6 2001/08/24 01:10:24 davej Exp $
+ *  $Id: identify.c,v 1.7 2001/09/07 15:33:51 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -65,7 +65,7 @@ static void decode_AMD_cacheinfo(int cpunum, unsigned long maxei)
 	if (maxei >= 0x80000006) {
 		cpuid (cpunum, 0x80000006, &eax, &ebx, &ecx, &edx);
 		printf ("L2 (on CPU) cache:\n\t");
-		printf ("Size %ldKb\t", ecx >> 16);
+		printf ("Size: %ldKb\t", ecx >> 16);
 		do_assoc ((ecx >> 12) & 0x0f);
 		printf ("\n\t");
 		printf ("lines per tag=%ld\t", (ecx >> 8) & 0x0f);
