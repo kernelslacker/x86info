@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.16 2001/12/10 23:05:06 davej Exp $
+ *  $Id: identify.c,v 1.17 2001/12/10 23:25:43 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -30,7 +30,8 @@ void Identify_IDT (unsigned int maxi, struct cpudata *cpu)
 		switch (cpu->family) {
 		case 5:
 			switch (cpu->model) {
-			case 4:	sprintf (cpu->name, "%s", "Winchip C6");	break;
+			case 4:	sprintf (cpu->name, "%s", "Winchip C6");
+					break;
 			case 8:
 				switch (cpu->stepping) {
 				default:
@@ -64,13 +65,15 @@ void Identify_IDT (unsigned int maxi, struct cpudata *cpu)
 		 * This is the CyrixIII family. */
 		case 6:
 			switch (cpu->model) {
-				case 6:	sprintf (cpu->name, "%s", "VIA Cyrix III");	break;
+				case 6:	sprintf (cpu->name, "%s", "VIA Cyrix III");
+						break;
 				case 7:	nameptr += sprintf (cpu->name, "%s", "VIA C3");
-					if (cpu->stepping>7)
-						sprintf(nameptr, "%s", " \"Ezra\"");
-					break;
+						if (cpu->stepping>7)
+							sprintf(nameptr, "%s", " \"Ezra\"");
+						break;
 				default:
-					printf ("Unknown CPU");
+						printf ("Unknown CPU");
+						break;
 			}
 			break;
 

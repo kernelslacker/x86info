@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.44 2001/12/10 17:56:25 davej Exp $
+ *  $Id: x86info.c,v 1.45 2001/12/10 23:25:43 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -116,6 +116,7 @@ static void parse_command_line (int argc, char **argv)
 int main (int argc, char **argv)
 {
 	unsigned int i, nrCPUs=1, nrSMPCPUs;
+	struct cpudata cpu;
 
 	parse_command_line(argc, argv);
 	if (!silent) {
@@ -181,13 +182,12 @@ int main (int argc, char **argv)
 		issmp (&nrSMPCPUs, 1);
 
 	for (i=0; i<nrCPUs; i++) {
-		struct cpudata cpu;
 		cpu.number = i;
 
 		if (!silent && nrCPUs!=1)
 			printf ("CPU #%u\n", i+1);
 
-		identify(&cpu);
+		identify (&cpu);
 		if (show_registers)
 			dumpregs(i);
 
