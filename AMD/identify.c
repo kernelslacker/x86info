@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.2 2001/08/19 15:09:27 davej Exp $
+ *  $Id: identify.c,v 1.3 2001/08/19 15:34:53 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -98,13 +98,13 @@ static void dump_k6_MSR (struct cpudata *cpu)
 	printf("\t\t\t\t31       23       15       7 \n");
 	dumpmsr(cpu->number, 0xC0000082);
 
-	/* K6-2 core (Stepping 8-F), K6-III or later. */
-	if (cpu->model > 8) {
+	/* K6-2/K6-3 core (Stepping 8-F), K6-III or later. */
+	if (cpu->model == 8 || cpu->model == 9 || cpu->model == 13) {
 		if (rdmsr (cpu->number, 0xC0000082, &val) == 1) {
 			if (val & (0x3ff << 22))
 				printf ("Write allocate disabled\n");
 			else {
-				printf ("Write allocate enable limit: %d Mbytes\n", (int) val & ((0x3ff<<22)>>22) * 4);
+				printf ("Write allocate enable limit: %dMbytes\n", (int) ((val & 0x3ff)>>22) * 4);
 				printf ("Write allocate 15-16M bytes: %s\n", val & (1<<16) ? "enabled" : "disabled");
 			}
 		}else {
@@ -112,16 +112,12 @@ static void dump_k6_MSR (struct cpudata *cpu)
 		}
 	}
 	/* Original K6 or K6-2 (old core). */
-	if (cpu->model > 5) {
+	if (cpu->model < 8 ||
+		(cpu->model==8 && cpu->stepping < 8)) {
 		if (rdmsr (cpu->number, 0xC0000082, &val) == 1) {
-			if (val & (0x7f << 1))
-				printf ("Write allocate disabled\n");
-			else {
-				printf ("Write allocate enable limit: %d Mbytes\n", (int) val & (0x7f<<1)>>1 * 4);
-				printf ("Write allocate 15-16M bytes: %s\n", val & 1 ? "enabled" : "disabled");
-				printf ("Hardware write allocate control: %s\n", val & 0x100 ? "enabled" : "disabled");
-			}
-		}else {
+			printf ("Write allocate enable limit: %dMbytes\n", (int) ((val & 0x7e)>>1) * 4);
+			printf ("Write allocate 15-16M bytes: %s\n", val & 1 ? "enabled" : "disabled");
+		} else {
 			printf ("Couldn't read WHCR register.\n");
 		}
 	}
