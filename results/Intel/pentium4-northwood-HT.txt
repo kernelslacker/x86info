@@ -154,11 +154,6 @@ MTRRdefType (0x2ff): 0x0000000000000c00
 
 2.8Ghz processor (estimate).
 
-int 0x80: 100 cycles
-cpuid: 100 cycles
-addl: 2 cycles
-locked add: 100 cycles
-bswap: 4 cycles
 --------------------------------------------------------------------------
 CPU #2
 eax in: 0x00000000, eax = 00000002 ebx = 756e6547 ecx = 6c65746e edx = 49656e69
@@ -306,9 +301,4 @@ MTRRdefType (0x2ff): 0x0000000000000c00
 
 2.8Ghz processor (estimate).
 
-int 0x80: 100 cycles
-cpuid: 100 cycles
-addl: 2 cycles
-locked add: 100 cycles
-bswap: 4 cycles
 --------------------------------------------------------------------------
