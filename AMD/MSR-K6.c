@@ -1,5 +1,5 @@
 /*
- *  $Id: MSR-K6.c,v 1.9 2002/06/04 21:56:31 davej Exp $
+ *  $Id: MSR-K6.c,v 1.10 2002/11/25 15:34:30 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -23,7 +23,6 @@ void dump_k6_MSR (struct cpudata *cpu)
 	if (!user_is_root)
 		return;
 
-	printf("\t\t\t\t31       23       15       7 \n");
 	dumpmsr(cpu->number, 0xC0000082, 32);
 
 	/* Original K6 or K6-2 (old core). */
