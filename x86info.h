@@ -39,6 +39,7 @@ struct cpudata {
 	unsigned char connector;
 	unsigned int flags;
 	unsigned int eflags;
+	unsigned int bflags;
 	unsigned int MHz;
 	char * datasheet_url;
 	char * errata_url;
@@ -74,7 +75,8 @@ struct cpudata {
 #define CONN_SOCKET_478		24
 #define CONN_SOCKET_603		25
 #define CONN_MICROFCBGA		26
-#define CONN_SOCKET_940		27
+#define CONN_SOCKET_939		27
+#define CONN_SOCKET_940		28
 
 void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);

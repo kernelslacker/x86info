@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.25 2003/11/04 02:02:43 davej Exp $
+ *  $Id: features.c,v 1.26 2004/03/19 14:44:41 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -85,6 +85,7 @@ void decode_feature_flags (struct cpudata *cpu)
 	cpu->flags = edx;
 	if (cpu->vendor==VENDOR_INTEL) {
 		cpu->eflags = ecx;
+		cpu->bflags = ebx;
 	} else {
 		if (cpu->maxei >= 0x80000001) {
 			cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);

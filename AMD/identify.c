@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.50 2003/11/04 01:36:43 davej Exp $
+ *  $Id: identify.c,v 1.51 2004/03/19 14:44:42 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -457,31 +457,119 @@ out_660:
 
 	case 0xF00:
 		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname ("Athlon 64 ES");
+		add_to_cpuname ("Athlon 64 ");
+		switch (cpu->stepping) {
+		case 0:
+			add_to_cpuname ("[SH7-A0]");
+			break;
+		case 1:
+			add_to_cpuname ("[SH7-A2]");
+			break;
+		}
 		break;
+
 	case 0xF10:
+		add_to_cpuname ("Opteron ES ");
 		cpu->connector = CONN_SOCKET_940;
-		add_to_cpuname ("Opteron ES");
+		switch (cpu->stepping) {
+		case 0:
+			add_to_cpuname ("[SH7-A0]");
+			break;
+		case 1:
+			add_to_cpuname ("[SH7-A2]");
+			break;
+		}
 		break;
 
 	case 0xF40:
-	case 0xF80:
 		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname ("Athlon 64");
+		add_to_cpuname ("Athlon 64 ");
+		switch (cpu->stepping) {
+		case 0:
+			add_to_cpuname("[SH7-B0]");
+			break;
+		case 8:
+			//might be mobile
+			add_to_cpuname("[SH7-C0]");
+			break;
+		case 0xa:
+			//might be mobile
+			add_to_cpuname("[SH7-CG]");
+			break;
+		}
 		break;
 
 	case 0xF50:
 		cpu->connector = CONN_SOCKET_940;
 		add_to_cpuname ("Opteron");
 		switch (cpu->stepping) {
-			case 0:
-				add_to_cpuname("[B0]");
-				break;
-			case 1:
-				add_to_cpuname ("[SH7-B3]");
-				break;
-			default:
-				break;
+		case 0:
+			add_to_cpuname("[B0]");
+			break;
+		case 1:
+			add_to_cpuname ("[SH7-B3]");
+			break;
+		case 8:
+			// could also be athlon 64fx
+			add_to_cpuname ("[SH7-C0]");
+			break;
+		case 0xA:
+			// could also be athlon 64fx
+			add_to_cpuname ("[SH7-CG]");
+		default:
+			break;
+		}
+		break;
+
+	case 0xF70:
+		add_to_cpuname ("Athlon 64 ");
+		cpu->connector = CONN_SOCKET_939;
+		switch (cpu->stepping) {
+		case 0xa:
+			add_to_cpuname("[SH7-CG]");
+			break;
+		}
+		break;
+
+	case 0xF80:
+		cpu->connector = CONN_SOCKET_754;
+		add_to_cpuname ("Athlon 64 ");
+		switch (cpu->stepping) {
+		case 2:
+			//might be mobile
+			add_to_cpuname("CH7-CG");
+			break;
+		}
+		break;
+
+	case 0xFB0:
+		cpu->connector = CONN_SOCKET_939;
+		add_to_cpuname ("Athlon 64 ");
+		switch (cpu->stepping) {
+		case 2:
+			add_to_cpuname("CH7-CG");
+			break;
+		}
+		break;
+
+	case 0xFC0:
+		cpu->connector = CONN_SOCKET_754;
+		add_to_cpuname ("Athlon 64 ");
+		switch (cpu->stepping) {
+		case 0:
+			//might be mobile
+			add_to_cpuname ("DH7-CG");
+			break;
+		}
+		break;
+
+	case 0xFF0:
+		cpu->connector = CONN_SOCKET_939;
+		add_to_cpuname ("Athlon 64 ");
+		switch (cpu->stepping) {
+		case 0:
+			add_to_cpuname ("DH7-CG");
+			break;
 		}
 		break;
 

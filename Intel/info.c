@@ -1,5 +1,5 @@
 /*
- *  $Id: info.c,v 1.7 2003/06/13 11:36:20 davej Exp $
+ *  $Id: info.c,v 1.8 2004/03/19 14:44:42 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -72,9 +72,10 @@ void display_Intel_info (struct cpudata *cpu)
 
 	/* Hyper-Threading Technology */
 	if (cpu->flags & (1 << 28)) {
-		int nr_ht = (cpu->eflags >> 16) & 0xFF;
-		printf ("Number of logical processors supported "
-			"within the physical package: %d\n\n", nr_ht);
+		int nr_ht = (cpu->bflags >> 16) & 0xFF;
+		int phys_id = (cpu->bflags >> 24) & 0xFF;
+		printf ("The physical package %d supports "
+			"%d logical processors \n\n", phys_id, nr_ht);
 	}
 
 	if (show_microcode)

@@ -1,3 +1,7 @@
+2004-3-19 Dave Jones <davej@codemonkey.org.uk>
+
+	* AMD/identify.c: Identify a bunch more opterons/athlon64's
+
 2004-2-2 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/identify.c: Add P4 Prescott.
