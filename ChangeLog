@@ -1,6 +1,8 @@
 2003-3-14 Dave Jones <davej@codemonkey.org.uk>
 
 	* identify.c: decode 0xc0000000 range cpuids if available.
+	* bench/bench.h: improve timing routine a little. still needs work.
+	* bench/benchmarks.c: remove lea (eax), 1(eax) test for now.
 
 2003-3-13 Dave Jones <davej@codemonkey.org.uk>
 
