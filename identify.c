@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.5 2001/08/10 09:25:46 davej Exp $
+ *  $Id: identify.c,v 1.6 2001/08/10 09:28:00 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -9,6 +9,8 @@
 
 #include <stdio.h>
 #include "x86info.h"
+
+extern int silent;
 
 void identify (int cpunum)
 {
@@ -49,12 +51,16 @@ void identify (int cpunum)
 		return;
 	}
 
-	printf ("Family: %d Model: %d [%s]\n", cpu.family, cpu.model, cpu.name);
-	switch (cpu.vendor) {
-		case VENDOR_AMD:
-			display_AMD_info (cpunum, maxei, &cpu);
-			break;
-		default:
-			break;
+	if (!silent) {
+		printf ("Family: %d Model: %d [%s]\n", cpu.family, cpu.model, cpu.name);
+
+	
+		switch (cpu.vendor) {
+			case VENDOR_AMD:
+				display_AMD_info (cpunum, maxei, &cpu);
+				break;
+			default:
+				break;
+		}
 	}
 }
