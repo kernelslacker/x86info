@@ -1,3 +1,7 @@
+2001-08-19  Mark Brown  <broonie@sirena.org.uk>
+
+	* x86info.1: Document --show-bluesmoke.
+
 2001-08-19 Dave Jones <davej@suse.de>
 
 	* AMD/ Cyrix/ IDT/ Intel/ RiSE/:
