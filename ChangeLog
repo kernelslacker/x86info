@@ -1,3 +1,8 @@
+2003-6-8 Bryan O'Sullivan <bos@serpentine.com>
+
+	* AMD/identify.c: Opteron is socket 940 not 754
+	* x86info.h, connector.c: Add Socket 940
+
 2003-6-9 Jeremy Fitzhardinge <jeremy@goop.org>
 
 	* Intel/info.c: Pentium M MSR support.

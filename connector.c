@@ -21,6 +21,7 @@ void decode_connector(unsigned int type)
 	char conn_socket_a[] = "Socket A (462 Pin PGA)";
 	char conn_socketA_or_slotA[] = "Socket A or Slot A";
 	char conn_socket_754[] = "Socket 754";
+	char conn_socket_940[] = "Socket 940";
 	/* Intel specific sockets */
 	char conn_socket_57b[] = "Socket 5/7 (320 Pin PGA)";
 	char conn_mobile_7[] = "Mobile Module (320 Lead TCP)";
@@ -89,6 +90,10 @@ void decode_connector(unsigned int type)
 
 	case CONN_SOCKET_754:
 		printf("%s", conn_socket_754);
+		break;
+
+	case CONN_SOCKET_940:
+		printf("%s", conn_socket_940);
 		break;
 
 	case CONN_SOCKET_57B:
