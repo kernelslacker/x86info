@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.49 2003/09/12 17:10:41 davej Exp $
+ *  $Id: identify.c,v 1.50 2003/11/04 01:36:43 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -7,6 +7,7 @@
  *
  *  AMD-specific information
  *
+ * http://www.pbase.com/image/17079307/original
  */
 
 #include <stdio.h>
@@ -282,7 +283,20 @@ void Identify_AMD(struct cpudata *cpu)
 		} else {
 			add_to_cpuname ("Athlon ");
 			determine_xp_mp(cpu);
-			add_to_cpuname (" (palomino)");
+			/* Palomino
+			 * 0.18u L2=256KB
+			 * 266MHz FSB
+			 * 12%-20% faster than Athlon Thunderbird at same GHz
+			 * Power requirement reduced by 20%
+			 * Athlon XP 1500+ (Oct 2001)
+			 * Athlon XP 1600+ (Oct 2001)
+			 * Athlon XP 1700+ (Oct 2001)
+			 * Athlon XP 1800+ (Oct 2001)
+			 * Athlon XP 1900+ (Nov 2001)
+			 * Athlon XP 2000+ (Jan 2002)
+			 * Athlon XP 2100+ (Mar 2002)
+			 */
+			add_to_cpuname (" (Palomino)");
 		}
 out_660:
 		switch (cpu->stepping) {
@@ -323,6 +337,26 @@ out_660:
 			add_to_cpuname ("Athlon ");
 			determine_xp_mp(cpu);
 		}
+		/*
+		 * Thoroughbred
+		 * 0.13u L2=256KB
+		 * Thoroughbred 'A' = 266FSB
+		 * Thoroughbred 'B' = 266FSB
+		 * Thoroughbred 'B' = 333FSB
+		 * Throughbred B has an extra layer of copper interconnects
+		 * to reduce interference.
+		 * Athlon XP1600+ (A:June 2002 B:Mar 2003)
+		 * Athlon XP1700+ (A:June 2002 B:Dec 2002)
+		 * Athlon XP1800+ (A:June 2002 B:Dec 2002)
+		 * Athlon XP1900+ (A:June 2002 B:Dec 2002)
+		 * Athlon XP2000+ (A:June 2002 B:Aug 2002)
+		 * Athlon XP2100+ (A:June 2002 B:Dec 2002)
+		 * Athlon XP2200+ (A:June 2002 B:Aug 2002)
+		 * Athlon XP2400+ (            B:Aug 2002)
+		 * Athlon XP2600+ (            B:Aug 2002 B2: Nov 2002)
+		 * Athlon XP2700+ (                       B2: Oct 2002)
+		 * Athlon XP2800+ (                       B2: Oct 2002)
+		 */
 		add_to_cpuname (" (Thoroughbred)");
 
 		if (cpu->stepping == 0)
@@ -344,7 +378,82 @@ out_660:
 		//fab_process = ".13 micron copper";
 		//transistors = 54300000;
 		//die_size = "101 sq. mm";
+		/* Barton
+		 * L2=512
+		 * 333 FSB & 400 FSB
+		 * 10%-15% faster than Athlon XP (old) with same GHz
+		 * CPU core size 20% bigger than T-bred.
+		 * 333 FSB:
+		 * Athlon XP 2500+ (Feb 2003)
+		 * Athlon XP 2600+ (June 2003)
+		 * Athlon XP 2800+ (Feb 2003)
+		 * Athlon XP 3000+ (Feb 2003)
+		 * 400 FSB:
+		 * Athlon XP 3000+ (Apr 2003)
+		 * Athlon XP 3200+ (May 2003)
+		 * Athlon XP 3400+ (Q4 2003)
+		 * Athlon XP 3600+ (Q1 2004)
+		 * Athlon XP 3800+ (Q2 2004)
+		 */
 		break;
+/*
+ * Applebred
+ * 0.13u L2=64KB
+ * 266FSB
+ * Barton grade processor modules with 64KB cache
+ *
+ * Duron 1.4 (Aug 2003)
+ * Duron 1.6 (Aug 2003)
+ * Duron 1.8 (Q4 2003)
+ */
+
+/*
+ * Socket 940
+ * Sledgehammer
+ * 0.13u
+ * L2=1mb
+ * 400FSB
+ * SOI (silicon on insulator)
+ * Registered DIMM required
+ * 25% faster than Athlon XP with same GHz
+ * Athlon 64 FX51 (Sep 2003)
+ * Athlon 64 FX53 (Nov 2003)
+ * Athlon 64 FX55 (Q4 2003)
+ */
+
+ /*
+  * Socket 754
+  * Clawhammer
+  * 0.13
+  * L2=1mb
+  * 400FSB
+  * No dual channel memory access
+  * Registered DIMM not required
+  * Athlon 64 3000+ (Oct 2003)
+  * Athlon 64 3200+ (Sep 2003)
+  * Athlon 64 3400+ (Oct 2003)
+  * Athlon 64 3700+ (Q4 2003)
+  */
+
+ /*
+  * Socket 939
+  * San Diego
+  * 90nm l2=1mb
+  * 400FSB
+  * Dual channel memory access
+  * Registered DIMM not required
+  * Athlon64 FX-57 (Q1 2004)
+  */
+
+ /*
+  * Socket 754
+  * Victoria
+  * 90nm L2=1MB
+  * 400FSB
+  * No dual channel memory access
+  * Registered DIMM not required
+  * Athlon64 3x00+ (Q3 2004)
+  */
 
 	case 0xF00:
 		cpu->connector = CONN_SOCKET_754;

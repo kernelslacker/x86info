@@ -1,3 +1,8 @@
+2003-11-4 Dave Jones <davej@codemonkey.org.uk>
+
+	* AMD/identify.c: Add various random CPU facts.
+	* IDT/*.c: Various cleanup of powersaver/longhaul decoding.
+
 2003-9-24 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/identify.c: Fix P4 errata url.

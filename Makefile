@@ -29,7 +29,7 @@ OBJS =\
 \
 	IDT/identify.o\
 	IDT/MSR-C3.o\
-	IDT/longhaul-v2.o\
+	IDT/longhaul.o\
 	IDT/powersaver.o\
 \
 	NatSemi/identify.o\

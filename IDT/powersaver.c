@@ -1,5 +1,5 @@
 /*
- *  $Id: powersaver.c,v 1.2 2003/04/02 17:45:34 davej Exp $
+ *  $Id: powersaver.c,v 1.3 2003/11/04 01:36:43 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -44,22 +44,44 @@ void decode_powersaver(struct cpudata *cpu)
 	printf (" Software clock multiplier is ");
 	if (ps.bits.EnableSoftBusRatio == 0)
 		printf ("disabled\n");
-	else
+	else {
 		printf ("enabled\n");
+		printf ("\tMaxMHzBR4: %s\n", ps.bits.MaxMHzBR4 ? "1" : "0");
+		printf ("\tMaxMHzBR: ");
+		binary (4, ps.bits.MaxMHzBR);
+		printf ("\tMinMHzBR4: %s\n", ps.bits.MinMHzBR4 ? "1" : "0");
+		printf ("\tMinMHzBR: ");
+		binary (4, ps.bits.MinMHzBR);
+	}
 
 	/* these bits invalid if revision == 0*/
 	if (ps.bits.RevisionID != 0) {
 		printf (" Software VID is ");
 		if (ps.bits.EnableSoftVID == 0)
 			printf ("disabled\n");
-		else
+		else {
 			printf ("enabled\n");
+			printf ("\tVRM Rev=%s\n",
+				ps.bits.VRMRev ? "Mobile VRM" : "VRM 8.5");
+			printf ("\tMinimumVID: ");
+			binary (4, ps.bits.MinimumVID);
+			printf ("\tMaximumVID: ");
+			binary (5, ps.bits.MaximumVID);
+		}
 
-		printf ("VRM Rev: ");
-		if (ps.bits.VRMRev == 0)
-			printf ("VRM 8.5\n");
-		else
-			printf ("Mobile VRM\n");
+		if (ps.bits.EnableSoftBusRatio==1) {
+			printf ("\tEnableSoftBusRatio=Enabled\n");
+			printf ("\tMaxMHzFSB: ");
+			binary (2, ps.bits.MaxMHzFSB);
+			printf ("\tMinMHzFSB: ");
+			binary (2, ps.bits.MinMHzFSB);
+		}
+
+		//if (ps.bits.EnableSoftBSEL==1)
+		//	printf ("\tEnableSoftBSEL=Enabled\n");
+
+		printf ("\tSoftBusRatio4=%s\n", ps.bits.SoftBusRatio4 ? "1" : "0");
+		printf ("\tSoftBusRatio=");
+		binary (4, ps.bits.SoftBusRatio);
 	}
 }
-
