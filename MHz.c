@@ -1,5 +1,5 @@
 /*
- *  $Id: MHz.c,v 1.1 2001/03/17 00:08:09 davej Exp $
+ *  $Id: MHz.c,v 1.2 2001/04/25 17:21:02 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -28,7 +28,7 @@ void estimate_MHz()
         unsigned long long int cycles[2]; /* gotta be 64 bit */
 	unsigned int microseconds; /* total time taken */
 	
-	bzero(&tz, sizeof(tz));
+	memset(&tz, 0, sizeof(tz));
 
 	/* get this function in cached memory */
 	gettimeofday(&tvstart, &tz);
@@ -36,7 +36,7 @@ void estimate_MHz()
 	gettimeofday(&tvstart, &tz);
 
 	/* we don't trust that this is any specific length of time */
-	sleep(1);
+	usleep(1000000);
 	
 	cycles[1] = rdtsc();
 	gettimeofday(&tvstop, &tz);
