@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.37 2002/11/12 21:38:34 davej Exp $
+ *  $Id: identify.c,v 1.38 2002/11/19 16:55:22 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -319,7 +319,7 @@ void Identify_Intel (struct cpudata *cpu)
 		cpu->connector = CONN_SOCKET_478;
 		cpu->datasheet_url = strdup (p4_478_datasheet);
 		cpu->errata_url = strdup (p4_errata);
-		nameptr += sprintf (cpu->name, "%s", "Pentium 4 Xeon (Northwood)");
+		nameptr += sprintf (cpu->name, "%s", "Pentium 4 (Northwood)");
 		switch (cpu->stepping) {
 		case 4:
 			nameptr+=sprintf (nameptr, "%s", " [B0]");

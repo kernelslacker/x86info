@@ -1,6 +1,7 @@
 2002-11-19  Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/identify.c: There are no mobile MPs, so make it default to XP
+	* Intel/identify.c: F27 isn't a Xeon.
 
 2002-11-12  Dave Jones <davej@codemonkey.org.uk>
 
