@@ -1,5 +1,5 @@
 /*
- *  $Id: info.c,v 1.4 2003/01/18 16:59:42 davej Exp $
+ *  $Id: info.c,v 1.5 2003/06/08 22:19:53 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -35,6 +35,8 @@ void display_Intel_info (struct cpudata *cpu)
 	if (show_msr) {
 		if (cpu->family==0xf)
 			dump_p4_MSRs(cpu);
+		if (cpu->family==0x6 && cpu->model==9)
+			dump_centrino_MSRs(cpu);
 	}
 
 	show_Intel_caches(cpu);

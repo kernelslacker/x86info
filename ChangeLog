@@ -1,3 +1,10 @@
+2003-6-9 Jeremy Fitzhardinge <jeremy@goop.org>
+
+	* Intel/info.c: Pentium M MSR support.
+	* Intel/MSR-PM.c: Pentium M MSR support.
+	* Makefile: Pentium M MSR support.
+	* Intel/Intel.h: Pentium M MSR support.
+
 2003-5-3 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/identify.c: Add S codes for Pentium II.
