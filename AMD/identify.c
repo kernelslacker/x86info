@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.19 2002/06/06 12:07:04 davej Exp $
+ *  $Id: identify.c,v 1.20 2002/06/06 22:08:19 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -241,6 +241,11 @@ void Identify_AMD (struct cpudata *cpu)
 								break;
 							}
 						}
+						break;
+				case 15:
+						/* based on http://www.tecchannel.de/hardware/937/images/0010328_PIC.gif */
+						if (cpu->model==0 && cpu->stepping==0)
+							printf ("Clawhammer ES\n");
 						break;
 
 				default:sprintf (cpu->name, "%s", "Unknown CPU");
