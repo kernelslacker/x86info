@@ -1,5 +1,5 @@
 /*
- *  $Id: rdmsr.c,v 1.15 2003/04/11 00:17:19 davej Exp $
+ *  $Id: rdmsr.c,v 1.16 2003/06/09 22:15:20 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -61,11 +61,14 @@ void dumpmsr (int cpu, unsigned int msr, int size)
 	unsigned long long val=0;
 
 	if (read_msr(cpu, msr, &val) == 1) {
-		printf ("MSR: 0x%08x=0x%016llx : ", msr, val);
-		if (size==32)
+		if (size==32){
+			printf ("MSR: 0x%08x=0x%08lx : ", msr, (unsigned long) val);
 			binary32(val);
-		if (size==64)
+		}
+		if (size==64) {
+			printf ("MSR: 0x%08x=0x%016llx : ", msr, val);
 			binary64(val);
+		}
 		return;
 	}
 	printf ("Couldn't read MSR 0x%x\n", msr);

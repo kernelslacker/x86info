@@ -8,6 +8,7 @@
 	  discrepancy of the nearest 50. Crap, needs improving.
 	* x86info.c: Make GHz output look like 2.8GHz instead of 2.800GHz
 	  disable --bench for this release.
+	* rdmsr.c: dump val as 32 bit value if passed 32 bit size.
 
 2003-6-8 Bryan O'Sullivan <bos@serpentine.com>
 
