@@ -1,11 +1,18 @@
 x86info v1.7            http://www.sourceforge.net/projects/x86info
 Dave Jones <davej@suse.de>
 
-This program started life as a cpuid program by Phil Karn.
-It's been modified considerably, and much more is planned.
+Somewhere in the mists of time, there was a program by Phil Karn (KA9Q)
+called cpuid, which identified CPU. It didn't get updated very often,
+and quickly got out of date. It also didn't do much more than just
+simple decoding.
+
+x86info was written to succeed Phils work. Initially, it borrowed some bits
+from his code, but the last remnants are now long gone. Additional functionality
+has been added, such as support for SMP, and building on non-Linux platforms.
 
 For problems specific to the Cygwin/Win32 port, contact
 Matthew Gregan <mgregan@jade.co.nz>.
+
 
 Features:
  - SMP support.
@@ -13,10 +20,11 @@ Features:
  - Parsing of model specific registers.
  - Approximation of current CPU MHz.
 
+
 Caveats:
-   For usage of the MSR / SMP functions, x86info
-   needs the x86 cpuid driver provided with kernel
-   2.2.18 / 2.4.0, and the appropriate nodes in /dev
+   For usage of the MSR / SMP functions, x86info needs the
+   x86 cpuid driver provided with the Linux kernel 2.2.18 / 2.4.0,
+   and the appropriate nodes in /dev
 
    To set up these devices, do the following..
 
@@ -35,38 +43,7 @@ Caveats:
 	- only one CPU is polled in an SMP system
 	- no support for reading MSRs
 
-Command line switches:
+   FreeBSD / OpenBSD / NetBSD also have the same limitations.
 
-?, --help
- Show command line arguments.
-
--a, --all
- Show all information. This turns on -c, -f, -m, -r, -mhz
-
--c, --cacheinfo
- Show TLB / Cache sizes/associativity.
-
--f, --flags
- Show features supported by CPU(s)
-
--m, --msr
- Dump model specific registers.
- Currently only undocumented Athlon registers for research purposes.
- Future versions will include parsing of bits in MSRs for all
- processors.
-
--mhz, --mhz
- Estimate current MHz.
-
--mp, --mptable
- Dump the MP table from the BIOS, showing all known CPUs.
-
---mult
- Decode CPU multipliers/bus speed where possible.
-
--r, --registers
- Dump register values from all cpuid calls possible.
-
--s, --show-bluesmoke
- Show the Machine Check registers if available.
+Info on the command line switches can be found in the man page.
 
