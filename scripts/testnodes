@@ -1,13 +1,17 @@
 #!/bin/sh
 # FIXME: Don't spit out these warnings on *BSD / Win32.
 
-if [ ! -c /dev/cpu/0/cpuid ] ; then
-	echo "*** No /dev/cpu/0/cpuid found."
-	echo "type \"make nodes\" as root to install device nodes"
-	echo "You will also need cpuid driver installed"
-fi
-if [ ! -c /dev/cpu/0/msr ] ; then
-	echo "*** No /dev/cpu/0/msr found."
-	echo "type \"make nodes\" as root to install device nodes"
-	echo "You will also need msr driver installed"
-fi
+for i in `seq 0 31`
+do
+	if [ ! -c /dev/cpu/$i/cpuid ] ; then
+		echo "*** No /dev/cpu/$i/cpuid found."
+		echo "type \"make nodes\" as root to install device nodes"
+		echo "You will also need cpuid driver installed"
+	fi
+
+	if [ ! -c /dev/cpu/$i/msr ] ; then
+		echo "*** No /dev/cpu/$i/msr found."
+		echo "type \"make nodes\" as root to install device nodes"
+		echo "You will also need msr driver installed"
+	fi
+done

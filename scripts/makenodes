@@ -3,17 +3,18 @@
 if [ ! -d /dev/cpu ] ; then
 	mkdir /dev/cpu
 fi
-for i in 0 1 2 3 4 5 6 7
+
+for i in `seq 0 31`
 do
 	if [ ! -d /dev/cpu/$i ] ; then
 		mkdir /dev/cpu/$i
 	fi
-	if [ ! -f /dev/cpu/$i/cpuid ] ; then
+	if [ ! -c /dev/cpu/$i/cpuid ] ; then
 		(cd /dev/cpu/$i ; mknod cpuid c 203 $i)
 	fi
-	if [ ! -f /dev/cpu/$i/msr ] ; then
+	if [ ! -c /dev/cpu/$i/msr ] ; then
 		(cd /dev/cpu/$i ; mknod msr c 202 $i)
 	fi
 done
 
-echo "cpuid & msr /dev nodes created."
+echo "All cpuid & msr /dev nodes present."
