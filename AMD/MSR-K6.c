@@ -1,5 +1,5 @@
 /*
- *  $Id: MSR-K6.c,v 1.6 2001/12/09 16:35:51 davej Exp $
+ *  $Id: MSR-K6.c,v 1.7 2001/12/10 20:17:34 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -14,8 +14,6 @@
 #include <sys/types.h>
 #include "../x86info.h"
 #include "AMD.h"
-
-extern int user_is_root;
 
 void dump_k6_MSR (struct cpudata *cpu)
 {

@@ -1,5 +1,5 @@
 /*
- *  $Id: MSR-Athlon.c,v 1.2 2001/09/10 16:56:43 davej Exp $
+ *  $Id: MSR-Athlon.c,v 1.3 2001/12/10 20:17:34 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -14,9 +14,6 @@
 #include <sys/types.h>
 #include "../x86info.h"
 #include "AMD.h"
-
-extern int user_is_root;
-
 
 void dump_athlon_MSR(struct cpudata *cpu)
 {
