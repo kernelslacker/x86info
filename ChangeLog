@@ -11,6 +11,7 @@
 	* Intel/cachesize.c: Changed to use lookup table
 	* Intel/identify.c: Split out info foo into Intel/info.c
 	* x86info.c: Build a linked-list of CPU structs.
+	   Also plug a memory leak from the --url's
 
 Released as 1.11
 

@@ -1,6 +1,7 @@
 /*
- *  $Id: identify.c,v 1.35 2002/11/19 16:04:00 davej Exp $ This file is part of
- *  x86info.  (C) 2001 Dave Jones.
+ *  $Id: identify.c,v 1.36 2002/11/19 16:08:36 davej Exp $
+ *  This file is part of x86info.
+ *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
