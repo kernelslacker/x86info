@@ -30,7 +30,7 @@ struct pst_s {
 };
 
 
-void dump_PSB(struct cpudata *cpu)
+void dump_PSB(struct cpudata *cpu, int maxfid, int startvid)
 {
 	int fd, i, j;
 	char *p;
@@ -56,13 +56,13 @@ void dump_PSB(struct cpudata *cpu)
 		if (memcmp(p, "AMDK7PNOW!",  10) == 0){
 			printf ("Found PSB header at %p\n", p);
 			psb = (struct psb_s *) p;
-			printf ("Table version: %x\n", psb->tableversion);
+			printf ("Table version: 0x%x\n", psb->tableversion);
 			if (psb->tableversion != 0x12) {
 				printf ("Sorry, only v1.2 tables supported right now\n");
 				goto out;
 			}
 
-			printf ("Flags: %x ", psb->flags);
+			printf ("Flags: 0x%x ", psb->flags);
 			if ((psb->flags & 1)==0) {
 				printf ("(Mobile voltage regulator)\n");
 			} else {
@@ -80,18 +80,19 @@ void dump_PSB(struct cpudata *cpu)
 				pst = (struct pst_s *) p;
 				numpstates = pst->numpstates;
 
-				if (etuple(cpu) == pst->cpuid) {
+				if ((etuple(cpu) == pst->cpuid) && (maxfid==pst->maxfid) && (startvid==pst->startvid))
+				{
 					printf ("PST:%d (@%p)\n", i, pst);
-					printf ("cpuid: %x\t", pst->cpuid);
+					printf ("cpuid: 0x%x\t", pst->cpuid);
 					printf ("fsb: %d\t", pst->fsbspeed);
-					printf ("maxFID: %d\t", pst->maxfid);
-					printf ("startvid: %d\n", pst->startvid);
+					printf ("maxFID: 0x%x\t", pst->maxfid);
+					printf ("startvid: 0x%x\n", pst->startvid);
 					printf ("num of p states in this table: %d\n", numpstates);
 
 					p = (char *) pst + sizeof (struct pst_s);
 					for (j=0 ; j < numpstates; j++) {
-						printf ("FID: %x\t", *p++);
-						printf ("VID: %x\n", *p++);
+						printf ("FID: 0x%x\t", *p++);
+						printf ("VID: 0x%x\n", *p++);
 					}
 					printf ("\n");
 				} else {

@@ -1,5 +1,5 @@
 /*
- *  $Id: powernow.c,v 1.6 2003/01/15 18:57:05 davej Exp $
+ *  $Id: powernow.c,v 1.7 2003/01/16 03:37:31 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -33,8 +33,8 @@ static double fid_codes[32] = {
 void decode_powernow(struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
-	struct msr_vidctl vidctl;
-	struct msr_fidvidstatus fidvidstatus;
+	union msr_vidctl vidctl;
+	union msr_fidvidstatus fidvidstatus;
 
 	if (cpu->maxei < 0x80000007)
 		return;
@@ -64,13 +64,13 @@ void decode_powernow(struct cpudata *cpu)
 		return;
 	}
 
-	printf ("FID changes %s happen\n", vidctl.FIDC ? "will" : "won't");
-	printf ("VID changes %s happen\n", vidctl.VIDC ? "will" : "won't");
+	printf ("FID changes %s happen\n", vidctl.bits.FIDC ? "will" : "won't");
+	printf ("VID changes %s happen\n", vidctl.bits.VIDC ? "will" : "won't");
 
-	if (vidctl.VIDC)
-		printf ("Current VID multiplier code: %0.3f\n", mobile_vid_table[vidctl.VID]);
-	if (vidctl.FIDC)
-		printf ("Current FSB multiplier code: %.1f\n", fid_codes[vidctl.FID]);
+	if (vidctl.bits.VIDC)
+		printf ("Current VID multiplier code: %0.3f\n", mobile_vid_table[vidctl.bits.VID]);
+	if (vidctl.bits.FIDC)
+		printf ("Current FSB multiplier code: %.1f\n", fid_codes[vidctl.bits.FID]);
 
 	/* Now dump the status */
 
@@ -79,15 +79,16 @@ void decode_powernow(struct cpudata *cpu)
 		return;
 	}
 
+
 	printf ("Voltage ID codes: Maximum=%0.3fV Startup=%0.3fV Currently=%0.3fV\n",
-		mobile_vid_table[fidvidstatus.MVID],
-		mobile_vid_table[fidvidstatus.SVID],
-		mobile_vid_table[fidvidstatus.CVID]);
+		mobile_vid_table[fidvidstatus.bits.MVID],
+		mobile_vid_table[fidvidstatus.bits.SVID],
+		mobile_vid_table[fidvidstatus.bits.CVID]);
 
 	printf ("Frequency ID codes: Maximum=%.1fx Startup=%.1fx Currently=%.1fx\n",
-		fid_codes[fidvidstatus.MFID],
-		fid_codes[fidvidstatus.SFID],
-		fid_codes[fidvidstatus.CFID]);
+		fid_codes[fidvidstatus.bits.MFID],
+		fid_codes[fidvidstatus.bits.SFID],
+		fid_codes[fidvidstatus.bits.CFID]);
 
 //	printf ("Voltage ID codes: Maximum=0x%x Startup=0x%x Currently=0x%x\n",
 //		fidvidstatus.MVID, fidvidstatus.SVID, fidvidstatus.CVID);
@@ -95,8 +96,9 @@ void decode_powernow(struct cpudata *cpu)
 //		fidvidstatus.MFID, fidvidstatus.SFID, fidvidstatus.CFID);
 
 	if (show_bios) {
-		printf ("Decoding BIOS PST tables\n");
-		dump_PSB(cpu);
+		printf ("Decoding BIOS PST tables (maxfid=%x, startvid=%x)\n",
+					fidvidstatus.bits.MFID, fidvidstatus.bits.SVID);
+		dump_PSB(cpu, fidvidstatus.bits.MFID, fidvidstatus.bits.SVID);
 	}
 }
 
