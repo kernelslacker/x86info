@@ -1,11 +1,12 @@
 /*
- *  $Id: MSR-K6.c,v 1.8 2002/06/04 21:52:59 davej Exp $
+ *  $Id: MSR-K6.c,v 1.9 2002/06/04 21:56:31 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  AMD-K6 specific MSR information
+ *  See 21329h1.pdf for more details.
  *
  */
 
@@ -60,13 +61,13 @@ void dump_k6_MSR (struct cpudata *cpu)
 				printf ("Data prefetch disabled.\n");
 			printf ("EWBE mode: ");
 			switch ((val & (1<<2|1<<3|1<<4))>>2) {
-				case 0:	printf ("strong ordering\n");
+				case 0:	printf ("strong ordering (slowest performance)\n");
 					break;
-				case 1:	printf ("speculative disable\n");
+				case 1:	printf ("speculative disable (close to best performance)\n");
 					break;
 				case 2:	printf ("invalid\n");
 					break;
-				case 3:	printf ("global disable\n");
+				case 3:	printf ("global disable (best performance)\n");
 					break;
 			}
 		} else {
