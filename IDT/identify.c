@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.30 2003/02/10 02:58:27 davej Exp $
+ *  $Id: identify.c,v 1.31 2003/02/10 03:02:22 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -96,6 +96,7 @@ void Identify_IDT (struct cpudata *cpu)
 					//0.13 (Cu)
 					//die_size = "78 sq. mm"; (C5X)
 					//die_size = "54 sq. mm"; (C5XL)
+					//January 2003
 					break;
 	// C5YL
 	// C5X
