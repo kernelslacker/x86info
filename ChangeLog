@@ -1,3 +1,7 @@
+2003-3-7 Dave Jones <davej@codemonkey.org.uk>
+
+	* Intel/identify.c: Recognise D-1 stepping P4s.
+
 2003-2-11 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/microcode.c: Add leading 0x to version output
