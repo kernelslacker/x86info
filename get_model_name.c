@@ -1,5 +1,5 @@
 /*
- *  $Id: get_model_name.c,v 1.3 2002/11/12 16:37:08 davej Exp $
+ *  $Id: get_model_name.c,v 1.4 2003/06/13 11:36:20 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -36,5 +36,8 @@ void get_model_name (struct cpudata *cpu)
 		for (i = 0; i < 4; i++)
 			*cp++ = edx >> (8 * i);
 	}
-	printf ("Processor name string: %s\n\n", namestring);
+	cp = namestring;
+	while(*cp == ' ')
+		cp++;
+	printf ("Processor name string: %s\n\n", cp);
 }

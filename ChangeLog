@@ -1,6 +1,8 @@
 2003-6-13 Jeremy Fitzhardinge <jeremy@goop.org>
 
 	* features.c: identify Intel extended flags.
+	* Intel/info.c: Banias also has model name.
+	* get_model_name.c: Eat leading spaces.
 
 2003-6-12 Dave Jones <davej@codemonkey.org.uk>
 

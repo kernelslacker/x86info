@@ -1,5 +1,5 @@
 /*
- *  $Id: info.c,v 1.6 2003/06/09 21:35:00 davej Exp $
+ *  $Id: info.c,v 1.7 2003/06/13 11:36:20 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -26,8 +26,8 @@ void display_Intel_info (struct cpudata *cpu)
 		cpu->family, cpu->model, cpu->stepping, cpu->type, cpu->brand);
 	printf ("CPU Model: %s\n", cpu->name);
 
-	/* Pentium4 and above have cpu name. */
-	if (cpu->family == 0xF)
+	/* Pentium4 and Banias have cpu name. */
+	if (cpu->family == 0xF || (cpu->family == 6 && cpu->model == 9))
 		get_model_name (cpu);
 
 	decode_feature_flags (cpu);
