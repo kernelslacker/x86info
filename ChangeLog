@@ -1,3 +1,7 @@
+2003-9-24 Dave Jones <davej@codemonkey.org.uk>
+
+	* Intel/identify.c: Fix P4 errata url.
+
 2003-9-12 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/identify.c: Opteron B0

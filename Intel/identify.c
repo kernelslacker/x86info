@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.54 2003/06/09 21:34:59 davej Exp $
+ *  $Id: identify.c,v 1.55 2003/09/24 00:20:41 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -20,7 +20,7 @@
 
 static char p4_423_datasheet[]="http://developer.intel.com/design/pentium4/datashts/24919805.pdf";
 static char p4_478_datasheet[]="http://developer.intel.com/design/pentium4/datashts/24988703.pdf\n\thttp://developer.intel.com/design/pentium4/datashts/29864304.pdf";
-static char p4_errata[]="http://developer.intel.com/design/pentium4/specupdt/24919928.pdf";
+static char p4_errata[]="http://developer.intel.com/design/pentium4/specupdt/249199.htm";
 
 
 void Identify_Intel (struct cpudata *cpu)
