@@ -9,10 +9,10 @@ do
 		mkdir /dev/cpu/$i
 	fi
 	if [ ! -f /dev/cpu/$i/cpuid ] ; then
-		mknod cpuid c 203 $i
+		(cd /dev/cpu/$i ; mknod cpuid c 203 $i)
 	fi
 	if [ ! -f /dev/cpu/$i/msr ] ; then
-		mknod msr c 202 $i
+		(cd /dev/cpu/$i ; mknod msr c 202 $i)
 	fi
 done
 

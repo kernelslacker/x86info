@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.19 2001/12/20 16:49:11 davej Exp $
+ *  $Id: identify.c,v 1.20 2001/12/22 00:36:26 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -61,7 +61,7 @@ void identify (struct cpudata *cpu)
 				break;
 
 			case VENDOR_NATSEMI:
-				display_NatSemi_info (maxi, cpu);
+				display_NatSemi_info (maxi, maxei, cpu);
 				break;
 
 			case VENDOR_RISE:
