@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.34 2001/08/29 12:19:16 broonie Exp $
+ *  $Id: x86info.c,v 1.35 2001/09/07 20:20:16 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -12,6 +12,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "x86info.h"
+#ifndef linux
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#endif
 
 int show_msr=0;
 int show_registers=0;
@@ -42,7 +46,7 @@ void usage (char *programname)
 	exit (0);
 }
 
-void parse_command_line (int argc, char **argv)
+static void parse_command_line (int argc, char **argv)
 {
 	char **argp, *arg;
 
@@ -51,8 +55,8 @@ void parse_command_line (int argc, char **argv)
 			show_registers = 1;
 			show_flags = 1;
 			show_cacheinfo = 1;
-			show_msr =1;
-			show_MHz =1;
+			show_msr = 1;
+			show_MHz = 1;
 			show_bluesmoke =1;
 			show_eblcr =1;
 			want_MSR_level_access = 1;
@@ -112,7 +116,18 @@ int main (int argc, char **argv)
 		user_is_root=0;
 	}
 
+#if defined _SC_NPROCESSORS	/* Linux */
 	nrCPUs = sysconf (_SC_NPROCESSORS_CONF);
+#elseif
+	{
+		int mib[2] = { CTL_HW, HW_NCPU };
+		size_t len;
+		len = sizeof(nrCPUs);
+		sysctl(mib, 2, &nrCPUs, &len, NULL, 0);
+	}
+#else
+	nrCPUs = 1;
+#endif
 	if (!silent) {
 		printf ("Found %d CPU", nrCPUs);
 		if (nrCPUs > 1)
@@ -145,4 +160,3 @@ int main (int argc, char **argv)
 
 	return (0);
 }
-

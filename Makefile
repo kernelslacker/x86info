@@ -32,6 +32,9 @@ OBJS =\
 x86info: $(OBJS)
 	gcc -o x86info $(OBJS)
 
+.c.o:
+	gcc $(CFLAGS) -o $@ -c $<
+
 clean:
 	find . -name "*.o" -exec rm {} \;
 	rm -f x86info

@@ -3,7 +3,12 @@
  * May be used under the terms of the GNU Public License (GPL)
  */
 
+#ifdef linux
 #include <linux/types.h>
+#else
+#include <machine/types.h>
+#define __u32 int
+#endif
 
 typedef __u32 u32;
 
