@@ -8,13 +8,15 @@
 
 	* mptable.[c|h]: Add routines to parse MP tables.
 	* x86info.c: Add --mptable option, and nrCPU sanity check.
-	* Intel/identify.c: Only read eblcr when asked to.
 	* */identify.c: Move externs to x86info.h
 	* eblcr.c: Moved to Intel/
 	* get_model_name: Added generic routine.
 	* IDT/identify.c: Fathers MSR-C3.c
 	  Output changed to same order as AMD output
 	  Made to use get_model_name() instead of duplicating code.
+	* Intel/cachesize.c: Work out cache sizes for Intel CPUs.
+	* Intel/identify.c: Only read eblcr when asked to.
+	  Distinguish between Celerons & Pentiums.
 
 2001-12-9	Hans-Frieder Vogt <hfvogt@nexgo.de>
 
