@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.13 2001/03/30 19:36:04 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.14 2001/04/20 04:34:44 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -17,6 +17,7 @@
 extern int show_registers;
 extern int show_cacheinfo;
 extern int show_msr;
+extern int show_bluesmoke;
 
 static void do_assoc(unsigned long assoc)
 {
@@ -251,6 +252,8 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 			printf ("]\n");
 			if (show_msr)
 				dump_athlon_MSR(cpunum);
+			if (show_bluesmoke)
+				decode_bluesmoke(cpunum);
 			break;
 		}
 	}

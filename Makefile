@@ -15,7 +15,8 @@ OBJS =\
 	dumpregs.o\
 	rdmsr.o\
 	binary.o\
-	MHz.o
+	MHz.o\
+	bluesmoke.o
 
 x86info: $(OBJS)
 	gcc -o x86info $(OBJS)

@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.9 2001/03/19 01:40:33 davej Exp $
+ *  $Id: cpuid-intel.c,v 1.10 2001/04/20 04:34:44 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -13,6 +13,7 @@
 
 extern int show_cacheinfo;
 extern int show_flags;
+extern int show_bluesmoke;
 
 /* Decode Intel TLB and cache info descriptors */
 void decode_intel_tlb (int x)
@@ -289,6 +290,7 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 				printf ("Unknown CPU");
 				break;
 			}
+			break;
 		}
 
 		switch (type) {
@@ -365,4 +367,8 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		printf ("-%04lX", ecx >> 16);
 		printf ("-%04lX\n", ecx & 0xffff);
 	}
+
+	/* FIXME: Bit test for MCA here!*/
+	if (show_bluesmoke)
+		decode_bluesmoke(cpunum);
 }

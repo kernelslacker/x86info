@@ -4,4 +4,6 @@
   kernel before hpa cleaned it up.
 - --gcc option to output best optimisation parameters
   for that CPU.
-
+- --check-mca
+  Useful for polling from a script to check for errors
+  that don't raise MCE
