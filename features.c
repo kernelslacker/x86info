@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.13 2001/12/10 23:53:47 davej Exp $
+ *  $Id: features.c,v 1.14 2001/12/10 23:56:15 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -50,8 +50,10 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 
 	printf ("\n");
 
-	if (eflags == 0)
+	if (eflags == 0) {
+		printf ("\n");
 		return;
+	}
 
 	/* Vendor specific extensions. */
 	switch (cpu->vendor) {
