@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.17 2001/12/10 23:25:43 davej Exp $
+ *  $Id: identify.c,v 1.18 2001/12/10 23:51:58 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -118,6 +118,8 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx, tmp=0;
 
+	printf ("Family: %d Model: %d Stepping: %d [%s]\n",
+		cpu->family, cpu->model, cpu->stepping, cpu->name);
 	get_model_name (maxei, cpu);
 
 	if (maxei != 0 && show_registers) {

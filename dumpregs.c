@@ -1,5 +1,5 @@
 /*
- *  $Id: dumpregs.c,v 1.2 2001/02/26 16:44:27 davej Exp $
+ *  $Id: dumpregs.c,v 1.3 2001/12/10 23:51:58 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -20,8 +20,17 @@ void dumpregs (int cpunum)
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
 	for (i = 0; i <= maxi; i++) {
 		cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
-		printf ("eax in: %i, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
+		printf ("eax in: 0x%08x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
 	}
+}
+
+void showvendor (int cpunum)
+{
+	unsigned int i;
+	unsigned long maxi, eax, ebx, ecx, edx;
+
+	cpuid (cpunum, 0, &maxi, NULL, NULL, NULL);
+	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
 
 	/* Vendor ID and max CPUID level supported */
 	cpuid (cpunum, 0, &eax, &ebx, &ecx, &edx);

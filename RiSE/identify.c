@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.5 2001/12/10 22:53:32 davej Exp $
+ *  $Id: identify.c,v 1.6 2001/12/10 23:51:58 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -46,6 +46,8 @@ void display_RiSE_info(unsigned int maxi, unsigned int maxei, struct cpudata *cp
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx, tmp=0;
 
+	printf ("Family: %d Model: %d Stepping: %d [%s]\n",
+		cpu->family, cpu->model, cpu->stepping, cpu->name);
 	get_model_name (maxei, cpu);
 
 	if (maxi != 0 && show_registers) {

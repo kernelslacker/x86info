@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.17 2001/12/10 21:12:12 davej Exp $
+ *  $Id: identify.c,v 1.18 2001/12/10 23:51:58 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -30,36 +30,29 @@ void identify (struct cpudata *cpu)
 		default:					printf ("Unknown vendor\n");				return;
 	}
 
+	if (show_registers)
+		dumpregs (cpu->number);
+
 	if (!silent) {
 
 		switch (cpu->vendor) {
 			case VENDOR_AMD:
-				printf ("Family: %d Model: %d Stepping: %d [%s]\n",
-					cpu->family, cpu->model, cpu->stepping, cpu->name);
 				display_AMD_info (maxei, cpu);
 				break;
 
 			case VENDOR_CYRIX:
-				printf ("Family: %d Model: %d Stepping: %d [%s]\n",
-					cpu->family, cpu->model, cpu->stepping, cpu->name);
 				display_Cyrix_info (maxi, maxei, cpu);
 				break;
 
 			case VENDOR_CENTAUR:
-				printf ("Family: %d Model: %d Stepping: %d [%s]\n",
-					cpu->family, cpu->model, cpu->stepping, cpu->name);
 				display_IDT_info (maxei, cpu);
 				break;
 
 			case VENDOR_INTEL:
-				printf ("Family: %d Model: %d Stepping: %d Type: %d [%s]\n",
-					cpu->family, cpu->model, cpu->stepping, cpu->type, cpu->name);
 				display_Intel_info (maxi, cpu);
 				break;
 
 			case VENDOR_RISE:
-				printf ("Family: %d Model: %d Stepping: %d [%s]\n",
-					cpu->family, cpu->model, cpu->stepping, cpu->name);
 				display_RiSE_info (maxi, maxei, cpu);
 				break;
 

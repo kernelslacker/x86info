@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.45 2001/12/10 23:25:43 davej Exp $
+ *  $Id: x86info.c,v 1.46 2001/12/10 23:51:58 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -188,8 +188,6 @@ int main (int argc, char **argv)
 			printf ("CPU #%u\n", i+1);
 
 		identify (&cpu);
-		if (show_registers)
-			dumpregs(i);
 
 		/*
 		 * Doing this per-cpu is a problem, as we can't
