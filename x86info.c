@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.13 2001/04/13 18:35:58 davej Exp $
+ *  $Id: x86info.c,v 1.14 2001/04/15 18:36:56 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -68,7 +68,7 @@ void parse_command_line (int argc, char **argv)
 
 int main (int argc, char **argv)
 {
-	unsigned int i,n, nrCPUs;
+	unsigned int i, nrCPUs;
 
 	printf ("x86info v1.2.  Dave Jones 2001\n");
 	printf ("Feedback to <davej@suse.de>.\n\n");
@@ -83,19 +83,14 @@ int main (int argc, char **argv)
 		printf ("s");
 	printf ("\n");
 
-	for (i = 1; i<=nrCPUs; i++) {
-	
-		if (nrCPUs == 1)
-			n = 0;
-		else
-			n = i;
-
+	for (i = 0; i<nrCPUs; i++) {
 		if (show_registers)
-			dumpregs(n);
-		identify(n);
+			dumpregs(i);
+		identify(i);
 	}
 	if (show_MHz)
 		estimate_MHz();
 
 	return (0);
 }
+
