@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid.c,v 1.5 2001/05/21 13:12:00 davej Exp $
+ *  $Id: cpuid.c,v 1.6 2001/05/21 18:58:01 davej Exp $
  *	This file is part of x86info
  *	(C) 2000, 2001 Dave Jones.
  *	Fixes by Arjan van de Ven (arjanv@redhat.com) and
@@ -47,6 +47,7 @@ void cpuid (int CPU_number, int index,
 		close (fh);
 	} else {
 		/* Something went wrong, just do UP and hope for the best. */
+		used_UP = 1;
 		cpuid_UP (index, eax, ebx, ecx, edx);
 		return;
 	}

@@ -20,6 +20,8 @@ struct cpudata {
 	int cachesize_L2;
 };
 
+extern int used_UP;
+
 void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void decode_intel_tlb (int);

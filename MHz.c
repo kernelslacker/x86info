@@ -1,5 +1,5 @@
 /*
- *  $Id: MHz.c,v 1.3 2001/05/07 22:03:27 davej Exp $
+ *  $Id: MHz.c,v 1.4 2001/05/21 18:58:01 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -44,6 +44,6 @@ void estimate_MHz()
 	microseconds = ((tvstop.tv_sec-tvstart.tv_sec)*1000000) +
 		(tvstop.tv_usec-tvstart.tv_usec);
 
-	printf("%lldMHz processor (estimate).\n",
+	printf("%lldMHz processor (estimate).\n\n",
 		(cycles[1]-cycles[0])/microseconds);
 }
