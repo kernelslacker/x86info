@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.20 2002/06/06 22:08:19 davej Exp $
+ *  $Id: identify.c,v 1.21 2002/06/18 18:16:42 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -252,6 +252,7 @@ void Identify_AMD (struct cpudata *cpu)
 						break;
 			}
 			break;
+
 		default:sprintf (cpu->name, "%s", "Unknown CPU");
 				break;
 		}

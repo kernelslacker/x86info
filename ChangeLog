@@ -1,3 +1,8 @@
+2002-06-18 Dave Jones <davej@suse.de>
+
+	* mtrr.c: Dump fixed range MTRR regs too.
+	* x86info.c: clear cpu struct before using it.
+
 2002-06-07 Dave Jones <davej@suse.de>
 
 	* features.c: s/xmm/sse/
