@@ -12,6 +12,7 @@ int show_registers=0;
 void usage (char *programname)
 {
 	printf ("usage: %s [ -r ] [ -registers ]\n\n", programname);
+	exit (0);
 }
 
 void parse_command_line (int argc, char **argv)
