@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.11 2001/05/07 21:10:50 davej Exp $
+ *  $Id: cpuid-intel.c,v 1.12 2001/06/13 22:03:58 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -246,7 +246,7 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 			case 8:
 				printf ("Celeron / Pentium III (Coppermine)");
 				break;
-			case 0xA:
+			case 10:
 				switch (cpu->brand) {
 				case 0:
 					printf ("Pentium II Deschutes");
@@ -261,6 +261,10 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 					printf ("Pentium III Xeon");
 					break;
 				}
+				break;
+			case 11:
+				printf ("Pentium III Tualatin");
+				break;
 			default:
 				printf ("Unknown CPU");
 				break;
