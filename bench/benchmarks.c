@@ -8,7 +8,7 @@
 
 void show_benchmarks()
 {
-	int i, ret;
+	int i, ret, tmp=0;
 	unsigned long bmin;
 
 	if (show_bench != 1)
@@ -20,5 +20,6 @@ void show_benchmarks()
 	TIME(asm volatile("addl $1,0(%esp)"), "addl");
 	TIME(asm volatile("lock ; addl $1,0(%esp)"), "locked add");
 	TIME(asm volatile("lea 1(%eax),%eax"), "lea 1(%%eax),%%eax");
-}
 
+	TIME(asm volatile("bswap %0" : "=r" (tmp) : "0" (tmp)), "bswap");
+}

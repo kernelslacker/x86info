@@ -1,3 +1,7 @@
+2003-2-7 Dave Jones <davej@codemonkey.org.uk>
+
+	* bench/benchmarks.c: Add bswap.
+
 2003-1-27 Dave Jones <davej@codemonkey.org.uk>
 
 	* scripts/testnodes: Only check for # of CPUs present.
@@ -16,7 +20,7 @@
 
 2003-1-18 Dave Jones <davej@codemonkey.org.uk>
 
-	* Bench/*: Various cleanups, and addition of locked add benchmark.
+	* bench/*: Various cleanups, and addition of locked add benchmark.
 	* Intel/cachesize.c: Some L2 caches were marked as L3's.
 	* Intel/identify.c: Decode cache sizes before CPU determination.
 
