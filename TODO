@@ -21,3 +21,13 @@
   name string, perform the cpuid reset sequence, and restore the
   name string on exit.
 
+- cpuid macro might cut down huge switch statements in a few places
+
+- socket type
+
+- voltages
+
+- might be time to start thinking about XML ?
+
+- libx86info for other apps
+
