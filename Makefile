@@ -1,4 +1,4 @@
-CFLAGS = -Wall -W -g -O2
+CFLAGS = -Wall -W -g -O2 -m32
 #CFLAGS += -mwin32 -DWIN32_LEAN_AND_MEAN
 SHELL = /bin/sh
 
@@ -38,7 +38,7 @@ OBJS =\
 	get_model_name.o\
 
 x86info: $(OBJS)
-	gcc -o x86info $(OBJS)
+	gcc $(CFLAGS) -o x86info $(OBJS)
 
 .c.o:
 	gcc $(CFLAGS) -o $@ -c $<

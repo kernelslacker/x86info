@@ -1,9 +1,13 @@
+2002-03-18  Dave Jones <davej@suse.de>
+
+	* Makefile: Various cleanups to work with AMD-64 simulator.
+
 2002-03-10  Sami Farin <safari@iki.fi>
-    * features.c, Intel/identify.c: If Hyper-Threading Technology is
-      present, show number of logical processors supported within the
-      physical package.
-    * Intel/identify.c: Pentium 4 [B0] recognition,
-      Cache Size/TLB information fixes and updates.
+	* features.c, Intel/identify.c: If Hyper-Threading Technology is
+	  present, show number of logical processors supported within the
+	  physical package.
+	* Intel/identify.c: Pentium 4 [B0] recognition,
+	  Cache Size/TLB information fixes and updates.
 
 2002-1-3	Dave Jones <davej@suse.de>
 
