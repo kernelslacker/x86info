@@ -1,3 +1,7 @@
+2004-6-2 Dave Jones <davej@codemonkey.org.uk>
+
+	* AMD/bugs.c: Check on model, not family for Athlons.
+
 2004-5-7 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/identify.c: Recognise SH8-D0 K8's
