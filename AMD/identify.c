@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.16 2002/04/27 10:43:45 davej Exp $
+ *  $Id: identify.c,v 1.17 2002/04/27 10:48:51 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -142,10 +142,6 @@ void Identify_AMD (unsigned int maxi, struct cpudata *cpu)
 			break;
 
 		case 6:
-			printf ("VOON: %d %d %d\n",
-						6,
-						cpu->model,
-						cpu->stepping);
 			switch (cpu->model) {
 				case 0:	sprintf (cpu->name, "%s", "K7 ES");		break;
 				case 1:	nameptr += sprintf (cpu->name, "%s", "Athlon (0.25um)");
