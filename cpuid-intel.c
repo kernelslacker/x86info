@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.7 2001/02/28 00:48:00 davej Exp $
+ *  $Id: cpuid-intel.c,v 1.8 2001/03/04 17:38:46 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -248,15 +248,21 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 
 		case 0xF:
 			/* Family 15 */
-			if (cpu->model == 0) {
+			switch (cpu->model) {
+			case 0:
 				printf ("Pentium IV");
 				if (cpu->stepping == 7)
 					printf (" (stepping B-2)");
 				if (cpu->stepping == 0xA)
 					printf (" (stepping C-1)");
 				break;
-			} else {
+			case 4:
+			case 5:
+				printf ("P4 Xeon (Foster)");
+				break;
+			default:
 				printf ("Unknown CPU");
+				break;
 			}
 		}
 
