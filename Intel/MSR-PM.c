@@ -1,5 +1,5 @@
 /*
- *  $Id: MSR-PM.c,v 1.3 2003/06/11 23:44:21 davej Exp $
+ *  $Id: MSR-PM.c,v 1.4 2003/06/12 05:56:10 davej Exp $
  *  This file is part of x86info.
  *  (C) 2002 Dave Jones.
  *
@@ -67,7 +67,7 @@ void dump_centrino_MSRs (struct cpudata *cpu)
 	if (tcc && read_msr (cpu->number, MSR_PM_THERM2_CTL, &val)==1) { /* THERM2_CTL */
 		printf("  Thermal monitor %d\n", (val & (1<<16)) ? 2 : 1);
 	}
-	if (read_msr (cpu->number, 0x19a, &val)==1) { /* THERM_CONTROL */
+	if (read_msr (cpu->number, MSR_IA32_THERM_CONTROL, &val)==1) {
 		if (val & (1<<4)) {
 			printf("  Software-controlled clock: %f%% duty cycle\n",
 			       ((val >> 1) & 7) / 8.);
