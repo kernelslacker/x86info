@@ -2,6 +2,7 @@
 
 	* x86info.c: Rename --powernow to --pm
 	* powernow.h: Define bitfields the right way around
+	* AMD/identify.c: Add model 10 Athlons.
 
 2002-11-19  Dave Jones <davej@codemonkey.org.uk>
 

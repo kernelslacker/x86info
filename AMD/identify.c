@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.38 2002/11/20 15:29:42 davej Exp $
+ *  $Id: identify.c,v 1.39 2002/11/20 17:23:23 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -325,7 +325,14 @@ void Identify_AMD(struct cpudata *cpu)
 			add_to_cpuname ("[A0]");
 		if (cpu->stepping == 1)
 			add_to_cpuname ("[B0]");
+		break;
 
+	case 0x6a0:
+		cpu->connector = CONN_SOCKET_A;
+		if (is_mobile(cpu))
+			add_to_cpuname("Mobile ");
+		add_to_cpuname ("Athlon ");
+		determine_xp_mp(cpu);
 		break;
 
 	case 0xF00:		/* based on http://www.tecchannel.de/hardware/937/images/0010328_PIC.gif */
