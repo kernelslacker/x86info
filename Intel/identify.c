@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.26 2002/06/06 12:32:13 davej Exp $
+ *  $Id: identify.c,v 1.27 2002/06/08 01:24:08 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -20,7 +20,7 @@ void decode_Intel_TLB (int x, int family)
 	case 0:
 		break;
 	case 0x1:
-		printf ("Instruction TLB: 4KB pages, 4-way assocative, 32 entries\n");
+		printf ("Instruction TLB: 4KB pages, 4-way associative, 32 entries\n");
 		break;
 	case 0x2:
 		printf ("Instruction TLB: 4MB pages, fully associative, 2 entries\n");
@@ -48,6 +48,18 @@ void decode_Intel_TLB (int x, int family)
 		break;
 	case 0x23:
 		printf ("L3 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=64 bytes.\n");
+		break;
+	case 0x25:
+		printf ("L3 unified cache:\n\tSize: 2MB\t8-way associative.\n\tline size=64 bytes.\n");
+		break;
+	case 0x29:                                                                                                    
+		printf ("L3 unified cache:\n\tSize: 4MB\t8-way associative.\n\tline size=64 bytes.\n");               
+		break;                                                                                                
+	case 0x39:                                                                                                    
+		printf ("L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=64 bytes.\n");             
+		break;                                                                                                
+	case 0x3c:                                                                                                    
+		printf ("L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=64 bytes.\n");             
 		break;
 	case 0x40:
 		if (family==15)

@@ -35,6 +35,10 @@
 	  maxei & maxi are now used from the cpu-> struct.
 	  This fix makes x86info pass the valgrind test.
 
+2002-05-22 Sami Farin <safari@iki.fi>
+
+	* Intel/identify.c: Add four more cache descriptors.
+
 2002-05-15 Randy Dunlap <randy.dunlap@verizon.net>
 
 	* Intel/bluesmoke.c:
