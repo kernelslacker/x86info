@@ -59,6 +59,7 @@ struct cpudata {
 #define CONN_MMC2		20
 #define CONN_BGA474		21
 #define CONN_BGA		22
+#define CONN_SOCKET_754	23
 
 void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
