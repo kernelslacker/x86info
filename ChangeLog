@@ -1,3 +1,6 @@
+2003-12-31 Dave Jones <davej@codemonkey.org.uk>
+	* Intel/identify.c: Add P3 Xeon S-Spec numbers.
+
 2003-12-18 Dave Jones <davej@codemonkey.org.uk>
 	* Intel/identify.c: Add P4 S-Spec numbers.
 	Add recognition note for P4 extreme edition.

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.56 2003/12/18 03:13:51 davej Exp $
+ *  $Id: identify.c,v 1.57 2003/12/31 22:08:22 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -339,9 +339,22 @@ void Identify_Intel (struct cpudata *cpu)
 		cpu->connector = CONN_SLOT_1;
 		switch (cpu->stepping) {
 		case 2:
+			// Core=500 FSB=100
+			// SL2XU SL3C9 (l2=512)
+			// SL2XV SL3CA (l2=1MB)
+			// SL2XW SL3CB (l2=2MB)
 			nameptr+=sprintf (cpu->name, "%s", "Pentium III (Katmai) [kB0]");
 			break;
 		case 3:
+			// Core=550 FSB=100
+			// SL3FK SL3D9 SL3AJ SL3Y4 SL3FR SL3LM (l2=512)
+			// SL3DA SL3CE SL3TW SL3LN (l2=1mb)
+			// SL3DB SL3CF SL3LP (l2=2mb)
+			//
+			// Core 500 FSB=100
+			// SL385 (l2=512)
+			// SL386 (l2=1MB)
+			// SL387 (l2=2MB)
 			nameptr+=sprintf (cpu->name, "%s", "Pentium III (Katmai) [kC0]");
 			break;
 		default:
@@ -365,6 +378,38 @@ void Identify_Intel (struct cpudata *cpu)
 				break;
 			case 0xA:
 				nameptr+=sprintf (nameptr, "%s", " [cD0]");
+				break;
+			}
+			break;
+		case 3:
+			nameptr+= sprintf (cpu->name, "%s", "Pentium III Xeon");
+			switch (cpu->stepping) {
+			case 1:
+				// l2=256KB FSB=133
+				// Core=600		SL3BJ SL3BK SL3SS
+				// Core=667		SL3BL SL3DC SL3ST
+				// Core=733		SL3SF SL3SG SL3SU
+				// Core=800		SL3V2 SL3V3 SL3VU
+				nameptr+=sprintf (nameptr, "%s", " [A2]");
+				break;
+			case 3:
+				// l2=256 FSB=133
+				// Core=600		SL3WM SL3WN
+				// Core=667		SL3WP SL3WQ
+				// Core=733		SL3WR SL3WS
+				// Core=800		SL3WT SL3WU
+				// Core=866		SL3WV SL3WW SL4PZ
+				// Core=933		SL3WX SL3WY
+				nameptr+=sprintf (nameptr, "%s", " [B0]");
+				break;
+			case 6:
+				// l2=256 FSB=133
+				// Core=733		SL4H6 SL4H7
+				// Core=800		SL4H8 SL4H9
+				// Core=866		SL4HA SL4HB SL4U2
+				// Core=933		SL4HC SL4HD SL4R9
+				// Core=1000	SL4HE SL4HF
+				nameptr+=sprintf (nameptr, "%s", " [C0]");
 				break;
 			}
 			break;
@@ -418,7 +463,30 @@ void Identify_Intel (struct cpudata *cpu)
 			nameptr+=sprintf (cpu->name, "%s", "Pentium III");
 			break;
 		case 3:
+			// FSB=100
 			nameptr+=sprintf (cpu->name, "%s", "Pentium III Xeon");
+			switch (cpu->stepping) {
+				case 0:
+					// Core=700
+					//    L2=1MB		SL3U4 SL3U5 SL4GD SL4GE
+					//    L2=2MB		SL3WZ SL3X2 SL4GF SL4GG
+					nameptr+=sprintf (cpu->name, "%s", " [A0]");
+					break;
+				case 1:
+					// Core=700
+					//    L2=1MB		SL49P SL49Q SL4RZ
+					//    L2=2MB		SL49R SL49S SL4R3
+					nameptr+=sprintf (cpu->name, "%s", " [A1]");
+					break;
+				case 4:
+					// Core=700
+					//    L2=1MB		SL4XU SL5D4 SL4XV
+					//    L2=2MB		SL4XW SL5D5 SL4XX
+					// Core=900
+					//    L2=2MB		SL4XY SL4XZ SL5D3
+					nameptr+=sprintf (cpu->name, "%s", " [B0]");
+					break;
+			}
 			break;
 		case 4:
 			nameptr+=sprintf (cpu->name, "%s", "Pentium III (Cascades)");
