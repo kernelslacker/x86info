@@ -27,6 +27,7 @@ struct cpudata {
 	unsigned int efamily;
 	unsigned int family;
 	unsigned int model;
+	unsigned int emodel;
 	unsigned int stepping;
 	unsigned int type;
 	unsigned int brand;

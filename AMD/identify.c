@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.51 2004/03/19 14:44:42 davej Exp $
+ *  $Id: identify.c,v 1.52 2004/05/07 19:15:58 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -133,8 +133,8 @@ void Identify_AMD(struct cpudata *cpu)
 	cpu->stepping = eax & 0xf;
 	cpu->model = (eax >> 4) & 0xf;
 	cpu->family = (eax >> 8) & 0xf;
-	cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
-	cpu->efamily = (eax >>8) & 0xf;
+	cpu->emodel = (eax >> 16) & 0xff;
+	cpu->efamily= (eax >> 20) & 0xf;
 
 	switch (cpu->family) {
 	case 4:
@@ -486,7 +486,11 @@ out_660:
 		add_to_cpuname ("Athlon 64 ");
 		switch (cpu->stepping) {
 		case 0:
-			add_to_cpuname("[SH7-B0]");
+			if (cpu->emodel==0) {
+				add_to_cpuname("[SH7-B0]");
+			} else {
+				add_to_cpuname("[SH8-D0]");
+			}
 			break;
 		case 8:
 			//might be mobile
@@ -499,22 +503,25 @@ out_660:
 		}
 		break;
 
+	// Gar, these could also be athlon 64fx
 	case 0xF50:
 		cpu->connector = CONN_SOCKET_940;
 		add_to_cpuname ("Opteron");
 		switch (cpu->stepping) {
 		case 0:
-			add_to_cpuname("[B0]");
+			if (cpu->emodel==0) {
+				add_to_cpuname("[SH7-B0]");
+			} else {
+				add_to_cpuname("[SH8-D0]");
+			}
 			break;
 		case 1:
 			add_to_cpuname ("[SH7-B3]");
 			break;
 		case 8:
-			// could also be athlon 64fx
 			add_to_cpuname ("[SH7-C0]");
 			break;
 		case 0xA:
-			// could also be athlon 64fx
 			add_to_cpuname ("[SH7-CG]");
 		default:
 			break;
@@ -525,6 +532,9 @@ out_660:
 		add_to_cpuname ("Athlon 64 ");
 		cpu->connector = CONN_SOCKET_939;
 		switch (cpu->stepping) {
+		case 0x0:
+			add_to_cpuname("[SH8-D0]");
+			break;
 		case 0xa:
 			add_to_cpuname("[SH7-CG]");
 			break;

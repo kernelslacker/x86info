@@ -1,3 +1,7 @@
+2004-5-7 Dave Jones <davej@codemonkey.org.uk>
+
+	* AMD/identify.c: Recognise SH8-D0 K8's
+
 2004-5-6 Dave Jones <davej@codemonkey.org.uk>
 
 	* cpuid_UP.S: Add marker for non-executable stack
