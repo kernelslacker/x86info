@@ -2,4 +2,6 @@
   (cache size)
 - Flags code needs an update. It was taken from the
   kernel before hpa cleaned it up.
+- --gcc option to output best optimisation parameters
+  for that CPU.
 
