@@ -35,6 +35,8 @@ OBJS =\
 \
 	RiSE/identify.o\
 \
+	SiS/identify.o\
+\
 	x86info.o\
 	havecpuid.o\
 	cpuid.o\

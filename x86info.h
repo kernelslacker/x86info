@@ -18,6 +18,7 @@ typedef unsigned int u32;
 #define VENDOR_NATSEMI 5
 #define VENDOR_RISE 6
 #define VENDOR_TRANSMETA 7
+#define VENDOR_SIS 8
 
 struct cpudata {
 	struct cpudata *next;
@@ -82,6 +83,7 @@ void Identify_IDT (struct cpudata *cpu);
 void Identify_Intel (struct cpudata *cpu);
 void Identify_RiSE (struct cpudata *cpu);
 void Identify_NatSemi (struct cpudata *cpu);
+void Identify_SiS (struct cpudata *cpu);
 
 void display_AMD_info(struct cpudata *cpu);
 void display_Cyrix_info(struct cpudata *cpu);
@@ -89,6 +91,7 @@ void display_IDT_info(struct cpudata *cpu);
 void display_Intel_info(struct cpudata *cpu);
 void display_NatSemi_info(struct cpudata *cpu);
 void display_RiSE_info(struct cpudata *cpu);
+void display_SiS_info(struct cpudata *cpu);
 
 void decode_feature_flags (struct cpudata *cpu);
 void identify (struct cpudata *cpu);

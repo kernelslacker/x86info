@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.26 2003/03/14 11:12:44 davej Exp $
+ *  $Id: identify.c,v 1.27 2003/04/11 00:10:42 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -45,8 +45,11 @@ void identify(struct cpudata *cpu)
 	case 0x65736952:	/* Rise */
 		Identify_RiSE(cpu);
 		break;
+	case 0x20536953:	/* SiS */
+		Identify_SiS(cpu);
+		break;
 	default:
-		printf("Unknown vendor\n");
+		printf("Unknown vendor (%lx)\n", ebx);
 		return;
 	}
 }
@@ -101,6 +104,10 @@ void show_info(struct cpudata *cpu)
 
 	case VENDOR_RISE:
 		display_RiSE_info(cpu);
+		break;
+
+	case VENDOR_SIS:
+		display_SiS_info(cpu);
 		break;
 
 	default:
