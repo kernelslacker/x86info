@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.15 2002/01/03 19:46:55 davej Exp $
+ *  $Id: features.c,v 1.16 2002/03/14 16:45:12 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -17,7 +17,7 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 		"fpu", "vme", "de", "pse", "tsc", "msr", "pae", "mce",
 		"cx8", "apic", NULL, "sep", "mtrr", "pge", "mca", "cmov",
 		"pat", "pse36", "psn", "clflsh", NULL, "dtes", "acpi", "mmx",
-		"fxsr", "xmm", "xmm2", "selfsnoop", "ht", "acc", "ia64", NULL
+		"fxsr", "xmm", "xmm2", "selfsnoop", "ht", "acc", "ia64", "pbe"
 	};
 	const char *amd_cap_flags[] = {
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -83,7 +83,17 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 			break;
 
 		case VENDOR_CYRIX:
+			break;
+
 		case VENDOR_INTEL:
+		/* Hyper-Threading Technology */
+		if (flags & (1 << 28)) {
+			int nr_ht = (eflags >> 16) & 0xFF;
+				printf ("Number of logical processors supported "
+						"within the physical package: %d\n", nr_ht);
+		}
+		break;
+
 		default:
 			/* Unknown CPU manufacturer or no special handling needed */
 			break;

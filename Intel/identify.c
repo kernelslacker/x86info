@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.18 2001/12/12 01:53:26 davej Exp $
+ *  $Id: identify.c,v 1.19 2002/03/14 16:45:12 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -31,16 +31,22 @@ void decode_Intel_TLB (int x, int family)
 		printf ("Data TLB: 4MB pages, 4-way associative, 8 entries\n");
 		break;
 	case 0x6:
-		printf ("L1 Instruction cache:\n\tSize: 8KB\t4-way associative.\n\tline size=32 bytes\n");
+		printf ("L1 Instruction cache:\n\tSize: 8KB\t4-way associative.\n\tline size=32 bytes.\n");
 		break;
 	case 0x8:
-		printf ("L1 Instruction cache:\n\tSize: 16KB\t4-way associative.\n\tline size=32 bytes\n");
+		printf ("L1 Instruction cache:\n\tSize: 16KB\t4-way associative.\n\tline size=32 bytes.\n");
 		break;
 	case 0xa:
-		printf ("L1 Data cache:\n\tSize: 8KB\t2-way associative.\n\tline size=32 bytes\n");
+		printf ("L1 Data cache:\n\tSize: 8KB\t2-way associative.\n\tline size=32 bytes.\n");
 		break;
 	case 0xc:
-		printf ("L1 Data cache:\n\tSize: 16KB\t2-way or 4-way associative.\n\tline size=32 bytes\n");
+		printf ("L1 Data cache:\n\tSize: 16KB\t4-way associative.\n\tline size=32 bytes.\n");
+		break;
+	case 0x22:
+		printf ("L3 unified cache:\n\tSize: 512KB\t4-way associative.\n\tline size=64 bytes.\n");
+		break;
+	case 0x23:
+		printf ("L3 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=64 bytes.\n");
 		break;
 	case 0x40:
 		if (family==15)
@@ -66,30 +72,66 @@ void decode_Intel_TLB (int x, int family)
 	case 0x50:
 		printf ("Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 64 entries.\n");
 		break;
+	case 0x51:
+		printf ("Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 128 entries.\n");
+		break;
+	case 0x52:
+		printf ("Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 256 entries.\n");
+		break;
 	case 0x5b:
-		printf ("Data TLB: 4K or 4MB pages, fully associative, 64 entries.\n");
+		printf ("Data TLB: 4KB or 4MB pages, fully associative, 64 entries.\n");
+		break;
+	case 0x5c:
+		printf ("Data TLB: 4KB or 4MB pages, fully associative, 128 entries.\n");
+		break;
+	case 0x5d:
+		printf ("Data TLB: 4KB or 4MB pages, fully associative, 256 entries.\n");
 		break;
 	case 0x66:
-		printf ("L2 Data cache:\n\tSize: 8KB\tSectored, 8 way associative.\n\tline size=64 bytes.\n");
+		printf ("L1 Data cache:\n\tSize: 8KB\tSectored, 4-way associative.\n\tline size=64 bytes.\n");
+		break;
+	case 0x67:
+		printf ("L1 Data cache:\n\tSize: 16KB\tSectored, 4-way associative.\n\tline size=64 bytes.\n");
+		break;
+	case 0x68:
+		printf ("L1 Data cache:\n\tSize: 32KB\tSectored, 4-way associative.\n\tline size=64 bytes.\n");
 		break;
 	case 0x70:
-		printf ("Instruction trace cache:\n\tSize: 12K uOps\t4 way associative.\n");
+		printf ("Instruction trace cache:\n\tSize: 12K uOps\t8-way associative.\n");
+		break;
+	case 0x71:
+		printf ("Instruction trace cache:\n\tSize: 16K uOps\t8-way associative.\n");
+		break;
+	case 0x72:
+		printf ("Instruction trace cache:\n\tSize: 32K uOps\t8-way associative.\n");
+		break;
+	case 0x79:
+		printf ("L2 unified cache:\n\tSize: 128KB\tSectored, 8-way associative.\n\tline size=64 bytes.\n");
 		break;
 	case 0x7a:
-		printf ("L2 unified cache:\n\tSize: 256K\tSectored, 8 way associative.\n\tline size=64 bytes.\n");
+		printf ("L2 unified cache:\n\tSize: 256KB\tSectored, 8-way associative.\n\tline size=64 bytes.\n");
+		break;
+	case 0x7b:
+		printf ("L2 unified cache:\n\tSize: 512KB\tSectored, 8-way associative.\n\tline size=64 bytes.\n");
+		break;
+	case 0x7c:
+		printf ("L2 unified cache:\n\tSize: 1MB\tSectored, 8-way associative.\n\tline size=64 bytes.\n");
 		break;
 	case 0x82:
-		printf ("L2 unified cache:\n\tSize: 256K\tSectored, 8 way associative.\n\tline size=32 bytes.\n");
+		printf ("L2 unified cache:\n\tSize: 256KB\t8-way associative.\n\tline size=32 bytes.\n");
+		break;
+	case 0x83:
+		printf ("L2 unified cache:\n\tSize: 512KB\t8-way associative.\n\tline size=32 bytes.\n");
 		break;
 	case 0x84:
-		printf ("L2 unified cache:\n\tSize: 1MB\tSectored, 8 way associative\n\tline size=32 bytes.\n");
+		printf ("L2 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=32 bytes.\n");
 		break;
 	case 0x85:
-		printf ("L2 unified cache:\n\tSize: 2MB\tSectored, 8 way associative\n\tline size=32 bytes.\n");
+		printf ("L2 unified cache:\n\tSize: 2MB\t8-way associative.\n\tline size=32 bytes.\n");
 		break;
 
 	default:
-		printf ("unknown TLB/cache descriptor:\n\t0x%x\n", x);
+		printf ("unknown TLB/cache descriptor:\n\t0x%x\n", (x & 0xff));
 		break;
 	}
 }
@@ -348,6 +390,14 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 					break;
 				}
 				break;
+			case 2:
+				nameptr += sprintf (cpu->name, "%s", "Pentium 4");
+				switch (cpu->stepping) {
+				case 4:
+					nameptr+=sprintf (nameptr, "%s", " [B0]");
+					break;
+				}
+				break;	
 			case 4:
 			case 5:
 				nameptr+=sprintf (cpu->name, "%s", "P4 Xeon (Foster)");
@@ -391,7 +441,7 @@ void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 		get_model_name (eax, cpu);
 
 	cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
-	decode_feature_flags (cpu, edx, 0);
+	decode_feature_flags (cpu, edx, ebx);
 
 	if (maxi >= 2 && show_cacheinfo) {
 		/* Decode TLB and cache info */
