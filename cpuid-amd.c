@@ -10,6 +10,32 @@
 #include "x86info.h"
 
 extern int show_registers;
+extern int show_cacheinfo;
+
+static void decode_AMD_cacheinfo(int cpunum, unsigned long maxei)
+{
+	unsigned long eax, ebx, ecx, edx;
+
+	if (maxei >= 0x80000005) {
+		/* TLB and cache info */
+		cpuid (cpunum, 0x80000005, &eax, &ebx, &ecx, &edx);
+		printf ("Data TLB: associativity %ld #entries %ld\n", ebx >> 24, (ebx >> 16) & 0xff);
+		printf ("Instruction TLB: associativity %ld #entries %ld\n", (ebx >> 8) & 0xff, ebx & 0xff);
+		printf ("L1 Data cache: size %ld KB associativity %lx lines per tag %ld line size %ld\n",
+			ecx >> 24, (ecx >> 16) & 0xff, (ecx >> 8) & 0xff, ecx & 0xff);
+		printf ("L1 Instruction cache: size %ld KB associativity %lx lines per tag %ld line size %ld\n",
+			edx >> 24, (edx >> 16) & 0xff, (edx >> 8) & 0xff, edx & 0xff);
+	}
+
+	/* check K6-III (and later?) on-chip L2 cache size */
+	if (maxei >= 0x80000006) {
+		cpuid (cpunum, 0x80000006, &eax, &ebx, &ecx, &edx);
+		printf ("L2 (on CPU) cache: %ld KB associativity %lx lines per tag %ld line size %ld\n",
+			ecx >> 16, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
+	}
+	printf ("\n");
+}
+
 
 static void dump_extended_AMD_regs(int cpunum, unsigned long maxei)
 {
@@ -32,7 +58,6 @@ void doamd (int cpunum, int maxi, struct cpudata *cpu)
 	cpu->vendor = VENDOR_AMD;
 
 	cpuid (cpunum, 0x80000000, &maxei, NULL, NULL, NULL);
-
 	if (show_registers && (maxei != 0))
 		dump_extended_AMD_regs(cpunum, maxei);
 
@@ -160,7 +185,7 @@ void doamd (int cpunum, int maxi, struct cpudata *cpu)
 			}
 			break;
 		}
-		printf ("]\n");
+		printf ("]\n\n");
 	}
 
 	/* Check for presence of extended info */
@@ -169,8 +194,6 @@ void doamd (int cpunum, int maxi, struct cpudata *cpu)
 
 	if (maxei >= 0x80000001) {
 		cpuid (cpunum, 0x80000001, &eax, &ebx, &ecx, &edx);
-
-		printf ("Feature flags:\n");
 		decode_feature_flags (cpu, edx);
 	}
 
@@ -191,24 +214,9 @@ void doamd (int cpunum, int maxi, struct cpudata *cpu)
 			for (i = 0; i < 4; i++)
 				*cp++ = edx >> (8 * i);
 		}
-		printf ("Processor name string: %s\n", namestring);
+		printf ("Processor name string: %s\n\n", namestring);
 	}
 
-	if (maxei >= 0x80000005) {
-		/* TLB and cache info */
-		cpuid (cpunum, 0x80000005, &eax, &ebx, &ecx, &edx);
-		printf ("Data TLB: associativity %ld #entries %ld\n", ebx >> 24, (ebx >> 16) & 0xff);
-		printf ("Instruction TLB: associativity %ld #entries %ld\n", (ebx >> 8) & 0xff, ebx & 0xff);
-		printf ("L1 Data cache: size %ld KB associativity %lx lines per tag %ld line size %ld\n",
-			ecx >> 24, (ecx >> 16) & 0xff, (ecx >> 8) & 0xff, ecx & 0xff);
-		printf ("L1 Instruction cache: size %ld KB associativity %lx lines per tag %ld line size %ld\n",
-			edx >> 24, (edx >> 16) & 0xff, (edx >> 8) & 0xff, edx & 0xff);
-	}
-
-	/* check K6-III (and later?) on-chip L2 cache size */
-	if (maxei >= 0x80000006) {
-		cpuid (cpunum, 0x80000006, &eax, &ebx, &ecx, &edx);
-		printf ("L2 (on CPU) cache: %ld KB associativity %lx lines per tag %ld line size %ld\n",
-			ecx >> 16, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
-	}
+	if (show_cacheinfo)
+		decode_AMD_cacheinfo(cpunum, maxei);
 }

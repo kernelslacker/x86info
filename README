@@ -8,3 +8,20 @@ x86info features:
  - Recognition of all Intel/AMD/IDT/Cyrix CPUs.
 
 
+Command line switches:
+
+? | -help
+ Show command line arguments.
+
+-c | -cacheinfo
+ Show TLB / Cache sizes/associativity.
+
+-f | -flags
+ Show features supported by CPU(s)
+
+-r | -registers
+ Dump register values from all cpuid calls possible.
+
+-a
+ Show all information. This turns on -r
+

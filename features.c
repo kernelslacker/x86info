@@ -8,6 +8,7 @@
 #include "x86info.h"
 
 extern struct cpudata *cpu;
+extern int show_flags;
 
 void decode_feature_flags (struct cpudata *cpu, int flags)
 {
@@ -29,6 +30,10 @@ void decode_feature_flags (struct cpudata *cpu, int flags)
 	};
 	int i;
 
+	if (show_flags == 0)
+		return;
+
+	printf ("Feature flags:\n");
 	/* Modify the capabilities according to chip type */
 	switch (cpu->vendor) {
 
