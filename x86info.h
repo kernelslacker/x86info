@@ -113,7 +113,7 @@ extern int show_flags;
 extern int verbose;
 extern int show_msr;
 extern int show_mtrr;
-extern int show_powernow;
+extern int show_pm;
 extern int show_registers;
 extern int show_urls;
 

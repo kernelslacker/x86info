@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.68 2002/11/19 19:15:59 davej Exp $
+ *  $Id: x86info.c,v 1.69 2002/11/20 15:29:41 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -34,7 +34,7 @@ int show_eblcr=0;
 int show_flags=0;
 int show_msr=0;
 int show_mtrr=0;
-int show_powernow=0;
+int show_pm=0;
 int show_registers=0;
 int show_urls=0;
 
@@ -62,7 +62,7 @@ void usage (char *programname)
 -m,   --msr\n\
       --mult\n\
       --mtrr\n\
-      --powernow\n\
+      --pm\n\
 -r,   --registers\n\
 -s,   --show-bluesmoke\n\
 -u,   --urls\n\
@@ -78,14 +78,15 @@ static void parse_command_line (int argc, char **argv)
 		if ((!strcmp(arg, "-a") || !strcmp(arg, "--all"))) {
 			show_bluesmoke =1;
 			show_cacheinfo = 1;
+			show_connector = 1;
 			show_eblcr =1;
 			show_flags = 1;
 			show_mptable =1;
 			show_msr = 1;
 			show_MHz = 1;
-			show_registers = 1;
 			show_mtrr = 1;
-			show_connector = 1;
+			show_pm = 1;
+			show_registers = 1;
 			show_urls = 1;
 			need_root = 1;
 		}
@@ -122,8 +123,8 @@ static void parse_command_line (int argc, char **argv)
 			show_mtrr = 1;
 		}
 
-		if (!strcmp(arg, "--registers"))
-			show_powernow = 1;
+		if (!strcmp(arg, "--pm"))
+			show_pm = 1;
 
 		if ((!strcmp(arg, "-r") || !strcmp(arg, "--registers")))
 			show_registers = 1;
