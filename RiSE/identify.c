@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.10 2002/10/30 03:11:20 davej Exp $
+ *  $Id: identify.c,v 1.11 2002/11/11 20:02:56 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -41,8 +41,9 @@ void Identify_RiSE (struct cpudata *cpu)
 
 void display_RiSE_info(struct cpudata *cpu)
 {
-	printf ("Family: %d Model: %d Stepping: %d [%s]\n",
-		cpu->family, cpu->model, cpu->stepping, cpu->name);
+	printf ("Family: %d Model: %d Stepping: %d\n",
+		cpu->family, cpu->model, cpu->stepping);
+	printf ("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);
 
 	decode_feature_flags (cpu);

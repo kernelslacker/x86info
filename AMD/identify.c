@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.33 2002/10/30 03:11:19 davej Exp $
+ *  $Id: identify.c,v 1.34 2002/11/11 20:02:55 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -353,8 +353,9 @@ void display_AMD_info(struct cpudata *cpu)
 	if (show_cacheinfo)
 		decode_AMD_cacheinfo(cpu);
 
-	printf("Family: %d Model: %d Stepping: %d [%s]\n",
-	       cpu->family, cpu->model, cpu->stepping, cpu->name);
+	printf("Family: %d Model: %d Stepping: %d\n",
+	       cpu->family, cpu->model, cpu->stepping);
+	printf ("CPU Model : %s\n", cpu->name);
 	get_model_name(cpu);
 
 	if (cpu->maxei >= 0x80000007) {

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.34 2002/11/02 03:26:54 davej Exp $
+ *  $Id: identify.c,v 1.35 2002/11/11 20:02:55 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -502,8 +502,9 @@ void display_Intel_info (struct cpudata *cpu)
 	int ntlb, i;
 	unsigned long eax, ebx, ecx, edx;
 
-	printf ("Family: %d Model: %d Stepping: %d Type: %d [%s]\n",
-		cpu->family, cpu->model, cpu->stepping, cpu->type, cpu->name);
+	printf ("Family: %d Model: %d Stepping: %d Type: %d\n",
+		cpu->family, cpu->model, cpu->stepping, cpu->type);
+	printf ("CPU Model: %s\n", cpu->name);
 
 	/* Pentium4 and above have cpu name. */
 	if (cpu->family == 0xF)

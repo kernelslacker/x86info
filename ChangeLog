@@ -1,6 +1,7 @@
 2002-11-11  Dave Jones <davej@codemonkey.org.uk>
 
 	* mptable.c: Change formatting for better fit on 79 columns.
+	* */identify.c: Split the fam/model/step+name into two lines.
 
 2002-11-02  Dave Jones <davej@codemonkey.org.uk>
 
