@@ -1,5 +1,5 @@
 /*
- *  $Id: microcode.c,v 1.1 2002/12/13 23:10:44 davej Exp $
+ *  $Id: microcode.c,v 1.2 2003/02/11 11:53:41 davej Exp $
  *  This file is part of x86info.
  *  (C) 2002 Dave Jones.
  *
@@ -29,7 +29,7 @@ void decode_microcode(struct cpudata *cpu)
 	if (read_msr (cpu->number, MSR_IA32_UCODE_REV, &val)==1) {
 		ver = val >>32;
 		if (ver>0)
-			printf ("Microcode version: %llx\n", val >>32);
+			printf ("Microcode version: 0x%llx\n", val >>32);
 		printf ("\n");
 	}
 }

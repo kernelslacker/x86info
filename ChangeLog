@@ -1,3 +1,7 @@
+2003-2-11 Dave Jones <davej@codemonkey.org.uk>
+
+	* Intel/microcode.c: Add leading 0x to version output
+
 2003-2-10 Dave Jones <davej@codemonkey.org.uk>
 
 	* IDT/identify.c:
