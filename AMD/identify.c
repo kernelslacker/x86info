@@ -1,7 +1,6 @@
 /*
- *  $Id: identify.c,v 1.34 2002/11/11 20:02:55 davej Exp $
- *  This file is part of x86info.
- *  (C) 2001 Dave Jones.
+ *  $Id: identify.c,v 1.35 2002/11/19 16:04:00 davej Exp $ This file is part of
+ *  x86info.  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
@@ -83,18 +82,6 @@ static int getL2size(int cpunum)
 	return (ecx >> 16);
 }
 
-static void determine_xp_mp(struct cpudata *cpu)
-{
-	unsigned long eax, ebx, ecx, edx;
-
-	cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
-	if ((edx & (1 << 19)) == 0) {
-		add_to_cpuname ("XP");
-	} else {
-		add_to_cpuname ("MP");
-	}
-}
-
 
 static int is_mobile(struct cpudata *cpu)
 {
@@ -107,6 +94,25 @@ static int is_mobile(struct cpudata *cpu)
 			return 1;
 	} else {
 		return 0;
+	}
+}
+
+
+static void determine_xp_mp(struct cpudata *cpu)
+{
+	unsigned long eax, ebx, ecx, edx;
+
+	/* There are no mobile MPs. */
+	if (is_mobile(cpu)) {
+		add_to_cpuname("XP");
+		return;
+	}
+
+	cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
+	if ((edx & (1 << 19)) == 0) {
+		add_to_cpuname ("XP");
+	} else {
+		add_to_cpuname ("MP");
 	}
 }
 
@@ -266,10 +272,9 @@ void Identify_AMD(struct cpudata *cpu)
 
 		if (is_mobile(cpu))
 			add_to_cpuname ("Mobile Athlon 4");
-		if (getL2size(cpu->number) < 256)
+		if (getL2size(cpu->number) < 256) {
 			add_to_cpuname ("Duron (Morgan)");
-	
-		if (amd_nameptr == namebegin) {
+		} else {
 			add_to_cpuname ("Athlon ");
 			determine_xp_mp(cpu);
 			add_to_cpuname (" (palomino)");
@@ -307,12 +312,12 @@ void Identify_AMD(struct cpudata *cpu)
 		cpu->connector = CONN_SOCKET_A;
 		if (is_mobile(cpu))
 			add_to_cpuname ("Mobile ");
-		if (getL2size(cpu->number) < 256)
+		if (getL2size(cpu->number) < 256) {
 			add_to_cpuname ("Duron ");
-		if (amd_nameptr == namebegin)
+		} else {
 			add_to_cpuname ("Athlon ");
-	
-		determine_xp_mp(cpu);
+			determine_xp_mp(cpu);
+		}
 		add_to_cpuname (" (Thoroughbred)");
 			
 		if (cpu->stepping == 0)
