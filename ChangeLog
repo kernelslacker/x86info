@@ -1,3 +1,7 @@
+2003-1-20 Dave Jones <davej@codemonkey.org.uk>
+
+	* AMD/powernow.c: Don't poke MSRs if no FID/VID scaling is present.
+
 2003-1-18 Dave Jones <davej@codemonkey.org.uk>
 
 	* Bench/*: Various cleanups, and addition of locked add benchmark.

@@ -1,5 +1,5 @@
 /*
- *  $Id: powernow.c,v 1.8 2003/01/16 17:09:18 davej Exp $
+ *  $Id: powernow.c,v 1.9 2003/01/20 18:51:04 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -35,6 +35,7 @@ void decode_powernow(struct cpudata *cpu)
 	unsigned long eax, ebx, ecx, edx;
 	union msr_vidctl vidctl;
 	union msr_fidvidstatus fidvidstatus;
+	int can_scale_vid=0, can_scale_bus=0;
 
 	if (cpu->maxei < 0x80000007)
 		return;
@@ -44,13 +45,20 @@ void decode_powernow(struct cpudata *cpu)
 	printf("Available features:");
 	if (edx & 1 << 0)
 		printf("\n\tTemperature sensing diode present.");
-	if (edx & 1 << 1)
+	if (edx & 1 << 1) {
 		printf("\n\tBus divisor control");
-	if (edx & 1 << 2)
+		can_scale_bus=1;
+	}
+	if (edx & 1 << 2) {
 		printf("\n\tVoltage ID control\n");
+		can_scale_vid=1;
+	}
 	if (!(edx & (1 << 0 | 1 << 1 | 1 << 2)))
 		printf(" None\n");
 	printf("\n");
+
+	if (can_scale_bus==0 && can_scale_vid==0)
+		return;
 
 	if (!user_is_root)
 		return;
