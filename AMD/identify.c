@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.26 2002/07/12 01:48:59 davej Exp $
+ *  $Id: identify.c,v 1.27 2002/07/14 12:57:00 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -286,7 +286,7 @@ void Identify_AMD(struct cpudata *cpu)
 		break;
 
 	case 0xF00:		/* based on http://www.tecchannel.de/hardware/937/images/0010328_PIC.gif */
-		printf("Clawhammer ES\n");
+		sprintf(nameptr, "%s", "Clawhammer ES");
 		break;
 
 	default:
