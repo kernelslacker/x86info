@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.53 2004/06/03 20:31:49 davej Exp $
+ *  $Id: identify.c,v 1.54 2004/06/11 12:35:05 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -574,6 +574,18 @@ out_660:
 			break;
 		}
 		break;
+
+	case 0xFE0:
+		//might be mobile
+		cpu->connector = CONN_SOCKET_754;
+		add_to_cpuname ("Athlon 64 ");
+		switch (cpu->stepping) {
+		case 0:
+			add_to_cpuname ("DH7-CG");
+			break;
+		}
+		break;
+
 
 	case 0xFF0:
 		cpu->connector = CONN_SOCKET_939;

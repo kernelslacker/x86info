@@ -1,3 +1,7 @@
+2004-7-11 Dave Jones <davej@codemonkey.org.uk>
+
+	* AMD/identify: Recognise 0xFE0 stepping Athlon64's
+
 2004-6-2 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/bugs.c: Fix athlon check.
