@@ -1,3 +1,7 @@
+2002-05-26  Dave Jones <davej@suse.de>
+
+	* Intel/identify.c: Recognise another P4 stepping. (E0)
+
 2002-04-17  Dave Jones <davej@suse.de>
 
 	* Intel/identify.c: Add another stepping.
@@ -9,6 +13,7 @@
 	  unknown family is detected.
 
 2002-03-10  Sami Farin <safari@iki.fi>
+
 	* features.c, Intel/identify.c: If Hyper-Threading Technology is
 	  present, show number of logical processors supported within the
 	  physical package.
