@@ -3,6 +3,7 @@
 	* identify.c: Display MHz as GHz if >1000. Always do MHz calculation,
 	  even if no --MHz is specified
 	* Mhz.c: Store results in cpu struct. Use integer instead of fp.
+	* Intel/identify.c: We can further decode sSpec if we use MHz.
 
 2003-4-24 Dave Jones <davej@codemonkey.org.uk>
 
