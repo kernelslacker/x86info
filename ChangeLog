@@ -1,3 +1,7 @@
+2003-5-3 Dave Jones <davej@codemonkey.org.uk>
+
+	* Intel/identify.c: Add S codes for Pentium II.
+
 2003-5-2 Dave Jones <davej@codemonkey.org.uk>
 
 	* identify.c: Display MHz as GHz if >1000. Always do MHz calculation,

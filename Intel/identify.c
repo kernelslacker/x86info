@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.51 2003/05/02 16:02:25 davej Exp $
+ *  $Id: identify.c,v 1.52 2003/05/03 01:07:15 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -200,42 +200,118 @@ void Identify_Intel (struct cpudata *cpu)
 			break;
 		case 3:
 			nameptr+=sprintf (nameptr, "%s", "(Klamath) [C0]");
+			switch (cpu->MHz) {
+				case 233:
+					//sSpec# SL264, SL268, SL28K
+					break;
+				case 266:
+					//sSpec# SL265, SL269, SL28L
+					break;
+				case 300:
+					//sSpec# SL28R, SL2MZ
+					break;
+			}
 			break;
 		case 4:
 			nameptr+=sprintf (nameptr, "%s", "(Klamath) [C1]");
+			switch (cpu->MHz) {
+				case 233:
+					//sSpec# SL2HD, SL2HF, SL2QA
+					break;
+				case 266:
+					//sSpec# SL2HC, SL2HE, SL2QB
+					break;
+				case 300:
+					//sSpec# SL2HA, SL2QC
+					break;
+			}
 			break;
 		}
 		break;
 	case 0x640:
+		//Does this exist? Its not in Intels spec update.
 		cpu->connector = CONN_SLOT_1;
 		nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes?)");
 		break;
 	case 0x650:
 		cpu->connector = CONN_SLOT_1;
-		if (cpu->cachesize_L2 == 0) {
-			nameptr+=sprintf (cpu->name, "%s", "Celeron (Covington)");
-			break;
-		}
-		if (cpu->cachesize_L2 == 256) {
-			nameptr+=sprintf (cpu->name, "%s", "Mobile Pentium II (Dixon)");
-			break;
-		}
-		switch (cpu->stepping) {
-		case 0:
-			nameptr+=sprintf (cpu->name, "%s", "Pentium II [dA0]");
-			break;
-		case 1:
-			nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dA1]");
-			break;
-		case 2:
-			nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dB0]");
-			break;
-		case 3:
-			nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dB1]");
-			break;
-		default:
-			nameptr+=sprintf (cpu->name, "%s", "Pentium II");
-			break;
+		switch (cpu->cachesize_L2) {
+			case 0:
+				nameptr+=sprintf (cpu->name, "%s", "Celeron (Covington)");
+				break;
+
+			case 256:
+				nameptr+=sprintf (cpu->name, "%s", "Mobile Pentium II (Dixon)");
+				break;
+
+			case 512:
+				switch (cpu->stepping) {
+				case 0:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium II [dA0]");
+					switch (cpu->MHz) {
+						case 266:
+							//sSpec# SL2K9
+							break;
+						case 333:
+							//sSpec# SL2KA, SL2QF
+							break;
+					}
+					break;
+				case 1:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dA1]");
+					switch (cpu->MHz) {
+						case 300:
+							//66 bus sSpec# SL35V, SL2VY
+							break;
+						case 333:
+							//66 bus sSpec# SL2QH, SL2S5, SL2ZP
+							break;
+						case 350:
+							//100Bus - sSpec# SL2ZQ, SL2S6, SL2SF
+							break;
+						case 400:
+							//100Bus - sSpec# Sl2S7, SL2SH
+							break;
+					}
+					break;
+				case 2:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dB0]");
+					switch (cpu->MHz) {
+						case 266:
+							//66Bus sSpec# SL33D, SL2W7
+							break;
+						case 300:
+							//66Bus - SL2YK, SL2W8
+							break;
+						case 333:
+							//66Bus - SL2KE, SL2TV
+							break;
+						case 350:
+							//100Bus - SL2WZ, SL2U3, SL2U4, SL356, SL37F, SL3FN
+							break;
+						case 400:
+							//100Bus - SL2YM, SL37G, SL2U5, SL2U6, SL357, SL3EE, SL3F9
+							break;
+						case 450:
+							//100Bus - SL2WB, SL37H, SL2U7, SL358
+							break;
+					}
+					break;
+				case 3:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dB1]");
+					switch (cpu->MHz) {
+						case 350:
+							//100Bus - SL38M, SL36U, SL3J2
+							break;
+						case 400:
+							//100Bus - SL38N, SL38Z, SL3D5
+							break;
+					}
+					break;
+				default:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium II");
+					break;
+				}
 		}
 		break;
 	case 0x660:
