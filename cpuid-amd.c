@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.24 2001/08/10 11:34:57 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.25 2001/08/14 17:39:22 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -244,11 +244,13 @@ void display_AMD_info(unsigned int maxei, struct cpudata *cpu)
 		cpuid (cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
 		printf ("PowerNOW! Technology information\n");
 		printf ("Available features:");
+		if (edx & 1<<0)
+			printf ("\n\tTemperature sensing diode present.");
 		if (edx & 1<<1)
 			printf ("\n\tBus divisor control");
 		if (edx & 1<<2)
 			printf ("\n\tVoltage ID control\n");
-		if (!(edx & (1<<1 | 1<<2)))
+		if (!(edx & (1<<0 | 1<<1 | 1<<2)))
 			printf (" None");
 		printf ("\n\n");
 	}
