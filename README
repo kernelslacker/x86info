@@ -10,18 +10,18 @@ x86info features:
 
 Command line switches:
 
-? | -help
+?, --help
  Show command line arguments.
 
--c | -cacheinfo
+-c, --cacheinfo
  Show TLB / Cache sizes/associativity.
 
--f | -flags
+-f, --flags
  Show features supported by CPU(s)
 
--r | -registers
+-r, --registers
  Dump register values from all cpuid calls possible.
 
--a
- Show all information. This turns on -r
+-a, --all
+ Show all information. This turns on -c, -f, -r
 
