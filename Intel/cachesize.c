@@ -1,5 +1,5 @@
 /*
- *  $Id: cachesize.c,v 1.11 2003/06/12 11:10:14 davej Exp $
+ *  $Id: cachesize.c,v 1.12 2003/08/17 22:37:38 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -21,128 +21,131 @@
 struct _cache_table
 {
 	unsigned char descriptor;
-	char type;
 	int size;
 	char *string;
 };
 
-#define LVL_1_INST 1
-#define LVL_1_DATA 2
-#define LVL_2      3
-#define LVL_3      4
-#define LVL_TRACE  5
-#define INST_TLB   6
-#define DATA_TLB   7
-#define NOCACHE    8
-
-static struct _cache_table cache_table[] =
+static struct _cache_table TRACE_cache_table[] =
 {
-	{ 0x1,  INST_TLB,   32, "Instruction TLB: 4KB pages, 4-way associative, 32 entries" },
-	{ 0x2,  INST_TLB,    2, "Instruction TLB: 4MB pages, fully associative, 2 entries" },
-	{ 0x3,  DATA_TLB,   64, "Data TLB: 4KB pages, 4-way associative, 64 entries" },
-	{ 0x4,  DATA_TLB,    8, "Data TLB: 4MB pages, 4-way associative, 8 entries" },
-	{ 0x6,  LVL_1_INST,  8, "L1 Instruction cache:\n\tSize: 8KB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x8,  LVL_1_INST, 16, "L1 Instruction cache:\n\tSize: 16KB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0xa,  LVL_1_DATA,  8, "L1 Data cache:\n\tSize: 8KB\t2-way associative.\n\tline size=32 bytes." },
-	{ 0xc,  LVL_1_DATA, 16, "L1 Data cache:\n\tSize: 16KB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x22, LVL_3,     512, "L3 unified cache:\n\tSize: 512KB\t4-way associative.\n\tline size=64 bytes." },
-	{ 0x23, LVL_3,    1024, "L3 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=64 bytes." },
-	{ 0x25, LVL_3,    2048, "L3 unified cache:\n\tSize: 2MB\t8-way associative.\n\tline size=64 bytes." },
-	{ 0x29, LVL_3,    4096, "L3 unified cache:\n\tSize: 4MB\t8-way associative.\n\tline size=64 bytes." },
-	{ 0x2c, LVL_1_DATA,	32, "L1 Data cache:\n\tSize: 32KB\t8-way associative.\n\tline size=64 bytes." },
-	{ 0x30, LVL_1_INST,	32,	"L1 Instruction cache:\n\t:Size 32KB\t8-way associative.\n\tline size=64 bytes." },
-	{ 0x39, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=64 bytes." },
-	{ 0x3b, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\t2-way associative.\n\tline size=64 bytes." },
-	{ 0x3c, LVL_2,     256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=64 bytes." },
-	{ 0x40, NOCACHE,     0, "No level 2 cache or no level 3 cache if valid 2nd level cache."},
-	{ 0x41, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x42, LVL_2,     256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x43, LVL_2,     512, "L2 unified cache:\n\tSize: 512KB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x44, LVL_2,    1024, "L2 unified cache:\n\tSize: 1MB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x45, LVL_2,    2048, "L2 unified cache:\n\tSize: 2MB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x50, INST_TLB,   64, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 64 entries." },
-	{ 0x51, INST_TLB,  128, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 128 entries." },
-	{ 0x52, INST_TLB,  256, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 256 entries." },
-	{ 0x5b, DATA_TLB,   64, "Data TLB: 4KB or 4MB pages, fully associative, 64 entries." },
-	{ 0x5c, DATA_TLB,  128, "Data TLB: 4KB or 4MB pages, fully associative, 128 entries." },
-	{ 0x5d, DATA_TLB,  256, "Data TLB: 4KB or 4MB pages, fully associative, 256 entries." },
-	{ 0x66, LVL_1_DATA,  8, "L1 Data cache:\n\tSize: 8KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
-	{ 0x67, LVL_1_DATA, 16, "L1 Data cache:\n\tSize: 16KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
-	{ 0x68, LVL_1_DATA, 32, "L1 Data cache:\n\tSize: 32KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
-	{ 0x70, LVL_TRACE,  12, "Instruction trace cache:\n\tSize: 12K uOps\t8-way associative." },
-	{ 0x71, LVL_TRACE,  16, "Instruction trace cache:\n\tSize: 16K uOps\t8-way associative." },
-	{ 0x72, LVL_TRACE,  32, "Instruction trace cache:\n\tSize: 32K uOps\t8-way associative." },
-	{ 0x79, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
-	{ 0x7a, LVL_2,     256, "L2 unified cache:\n\tSize: 256KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
-	{ 0x7b, LVL_2,     512, "L2 unified cache:\n\tSize: 512KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
-	{ 0x7c, LVL_2,    1024, "L2 unified cache:\n\tSize: 1MB\tSectored, 8-way associative.\n\tline size=64 bytes." },
-	{ 0x82, LVL_2,     256, "L2 unified cache:\n\tSize: 256KB\t8-way associative.\n\tline size=32 bytes." },
-	{ 0x83, LVL_2,     512, "L2 unified cache:\n\tSize: 512KB\t8-way associative.\n\tline size=32 bytes." },
-	{ 0x84, LVL_2,    1024, "L2 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=32 bytes." },
-	{ 0x85, LVL_2,    2048, "L2 unified cache:\n\tSize: 2MB\t8-way associative.\n\tline size=32 bytes." },
-	{ 0x86, LVL_2,     512, "L2 unified cache:\n\tSize: 512KB\t4-way associative\n\tline size=64 bytes." },
-	{ 0x87, LVL_2,    1024, "L2 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=64 bytes." },
-	{ 0xb0, INST_TLB,  128, "Instruction TLB: 4K pages, 4-way associative, 128 entries." },
-	{ 0xb3, DATA_TLB,  128, "Data TLB: 4K pages, 4-way associative, 128 entries." },
-	{ 0, 0, 0, 0 }
+	{ 0x70, 12, "Instruction trace cache:\n\tSize: 12K uOps\t8-way associative." },
+	{ 0x71, 16, "Instruction trace cache:\n\tSize: 16K uOps\t8-way associative." },
+	{ 0x72, 32, "Instruction trace cache:\n\tSize: 32K uOps\t8-way associative." },
+	{ 0, 0, 0 }
+};
+
+static struct _cache_table L1I_cache_table[] =
+{
+	{ 0x6,  8, "L1 Instruction cache:\n\tSize: 8KB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x8,  16, "L1 Instruction cache:\n\tSize: 16KB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x30, 32,	"L1 Instruction cache:\n\t:Size 32KB\t8-way associative.\n\tline size=64 bytes." },
+	{ 0, 0, 0 }
+};
+
+static struct _cache_table L1D_cache_table[] =
+{
+	{ 0xa,  8, "L1 Data cache:\n\tSize: 8KB\t2-way associative.\n\tline size=32 bytes." },
+	{ 0xc,  16, "L1 Data cache:\n\tSize: 16KB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x2c, 32, "L1 Data cache:\n\tSize: 32KB\t8-way associative.\n\tline size=64 bytes." },
+	{ 0x66, 8, "L1 Data cache:\n\tSize: 8KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
+	{ 0x67, 16, "L1 Data cache:\n\tSize: 16KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
+	{ 0x68, 32, "L1 Data cache:\n\tSize: 32KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
+	{ 0, 0, 0 }
+};
+
+static struct _cache_table L2_cache_table[] =
+{
+	{ 0x39, 128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=64 bytes." },
+	{ 0x3b, 128, "L2 unified cache:\n\tSize: 128KB\t2-way associative.\n\tline size=64 bytes." },
+	{ 0x3c, 256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=64 bytes." },
+	{ 0x41, 128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x42, 256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x43, 512, "L2 unified cache:\n\tSize: 512KB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x44, 1024, "L2 unified cache:\n\tSize: 1MB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x45, 2048, "L2 unified cache:\n\tSize: 2MB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x79, 128, "L2 unified cache:\n\tSize: 128KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
+	{ 0x7a, 256, "L2 unified cache:\n\tSize: 256KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
+	{ 0x7b, 512, "L2 unified cache:\n\tSize: 512KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
+	{ 0x7c, 1024, "L2 unified cache:\n\tSize: 1MB\tSectored, 8-way associative.\n\tline size=64 bytes." },
+	{ 0x82, 256, "L2 unified cache:\n\tSize: 256KB\t8-way associative.\n\tline size=32 bytes." },
+	{ 0x83, 512, "L2 unified cache:\n\tSize: 512KB\t8-way associative.\n\tline size=32 bytes." },
+	{ 0x84, 1024, "L2 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=32 bytes." },
+	{ 0x85, 2048, "L2 unified cache:\n\tSize: 2MB\t8-way associative.\n\tline size=32 bytes." },
+	{ 0x86, 512, "L2 unified cache:\n\tSize: 512KB\t4-way associative\n\tline size=64 bytes." },
+	{ 0x87, 1024, "L2 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=64 bytes." },
+	{ 0, 0, 0 }
+};
+
+static struct _cache_table L3_cache_table[] =
+{
+	{ 0x22, 512, "L3 unified cache:\n\tSize: 512KB\t4-way associative.\n\tline size=64 bytes." },
+	{ 0x23, 1024, "L3 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=64 bytes." },
+	{ 0x25, 2048, "L3 unified cache:\n\tSize: 2MB\t8-way associative.\n\tline size=64 bytes." },
+	{ 0x29, 4096, "L3 unified cache:\n\tSize: 4MB\t8-way associative.\n\tline size=64 bytes." },
+	{ 0, 0, 0 }
+};
+
+static struct _cache_table ITLB_cache_table[] =
+{
+	{ 0x1,  32, "Instruction TLB: 4KB pages, 4-way associative, 32 entries" },
+	{ 0x2,  2, "Instruction TLB: 4MB pages, fully associative, 2 entries" },
+	{ 0x50, 64, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 64 entries." },
+	{ 0x51, 128, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 128 entries." },
+	{ 0x52, 256, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 256 entries." },
+	{ 0xb0, 128, "Instruction TLB: 4K pages, 4-way associative, 128 entries." },
+	{ 0, 0, 0 }
+};
+
+static struct _cache_table DTLB_cache_table[] =
+{
+	{ 0x3,  64, "Data TLB: 4KB pages, 4-way associative, 64 entries" },
+	{ 0x4,  8, "Data TLB: 4MB pages, 4-way associative, 8 entries" },
+	{ 0x5b, 64, "Data TLB: 4KB or 4MB pages, fully associative, 64 entries." },
+	{ 0x5c, 128, "Data TLB: 4KB or 4MB pages, fully associative, 128 entries." },
+	{ 0x5d, 256, "Data TLB: 4KB or 4MB pages, fully associative, 256 entries." },
+	{ 0xb3, 128, "Data TLB: 4K pages, 4-way associative, 128 entries." },
+	{ 0, 0, 0 }
 };
 
 /* Decode Intel TLB and cache info descriptors */
 //TODO : Errata workaround. http://www.sandpile.org/post/msgs/20002736.htm
-static void decode_Intel_cache (int des, struct cpudata *cpu, int output)
+static void decode_Intel_cache (int des, struct cpudata *cpu, int output,
+			struct _cache_table *table)
 {
 	int k=0;
 
 	//TODO: Add description to link-list in cpu->
+	//TODO: print unknown descriptors.
 
-	while (cache_table[k].descriptor != 0) {
-//		printf ("descriptor: %x\n", des);
-		if (cache_table[k].descriptor == des) {
-			switch (cache_table[k].type) {
-				case LVL_1_INST:
-					cpu->cachesize_L1_I += cache_table[k].size;
-					if (output)
-						printf ("%s\n", cache_table[k].string);
-					return;
-				case LVL_1_DATA:
-					cpu->cachesize_L1_D += cache_table[k].size;
-					if (output)
-						printf ("%s\n", cache_table[k].string);
-					return;
-				case LVL_2:
-					cpu->cachesize_L2 += cache_table[k].size;
-					if (output)
-						printf ("%s\n", cache_table[k].string);
-					return;
-				case LVL_3:
-					cpu->cachesize_L3 += cache_table[k].size;
-						printf ("%s\n", cache_table[k].string);
-					return;
-				case LVL_TRACE:
-					cpu->cachesize_trace += cache_table[k].size;
-					if (output)
-						printf ("%s\n", cache_table[k].string);
-					return;
-				default:
-					if (output)
-						printf ("%s\n", cache_table[k].string);
-					return;
-			}
+	while (table[k].descriptor != 0) {
+		if (table[k].descriptor == des) {
+
+			if (table == TRACE_cache_table)
+				cpu->cachesize_trace += table[k].size;
+
+			if (table == L1I_cache_table)
+				cpu->cachesize_L1_I += table[k].size;
+
+			if (table == L1D_cache_table)
+				cpu->cachesize_L1_D += table[k].size;
+
+			if (table == L2_cache_table)
+				cpu->cachesize_L2 += table[k].size;
+
+			if (table == L3_cache_table)
+				cpu->cachesize_L3 += table[k].size;
+
+			if (output)
+				printf ("%s\n", table[k].string);
 		}
 		k++;
 	}
-	printf ("unknown TLB/cache descriptor:\t0x%x\n", (des & 0xff));
 }
 
-
-void decode_Intel_caches (struct cpudata *cpu, int output)
+static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int output)
 {
 	int i, j, n;
 	long regs[4];
 	unsigned char *dp = (unsigned char *)regs;
-
-	if (cpu->maxi < 2)
-		return;
 
 	/* Decode TLB and cache info */
 	cpuid (cpu->number, 2, &regs[0], &regs[1], &regs[2], &regs[3]);
@@ -161,8 +164,23 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 		/* Byte 0 is level count, not a descriptor */
 		for (j=1; j<16; j++)
 			if (dp[j]!=0)
-				decode_Intel_cache (dp[j], cpu, output);
+				decode_Intel_cache (dp[j], cpu, output, table);
 	}
+}
+
+
+void decode_Intel_caches (struct cpudata *cpu, int output)
+{
+	if (cpu->maxi < 2)
+		return;
+
+	decode_cache (cpu, TRACE_cache_table, output);
+	decode_cache (cpu, L1I_cache_table, output);
+	decode_cache (cpu, L1D_cache_table, output);
+	decode_cache (cpu, L2_cache_table, output);
+	decode_cache (cpu, L3_cache_table, output);
+	decode_cache (cpu, ITLB_cache_table, output);
+	decode_cache (cpu, DTLB_cache_table, output);
 }
 
 /*
