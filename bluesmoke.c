@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.1 2001/04/20 04:34:44 davej Exp $
+ *  $Id: bluesmoke.c,v 1.2 2001/04/20 06:21:10 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -15,7 +15,7 @@
 #include "x86info.h"
 
 #define MCG_CAP 0x0179
-#define MCG_STAT 0x17a
+#define MCG_STATUS 0x17a
 #define MCG_CTL 0x17b
 
 #define MC_CTL 0x0400
@@ -45,9 +45,19 @@ void decode_bluesmoke(int cpunum)
 	}
 	banks = val & 0xf;
 
-	printf ("Number of reporting banks : %d\n", banks);
+	printf ("Number of reporting banks : %d\n\n", banks);
 
-	printf("\t\t\t\t31       23       15       7 \n");
+	if (rdmsr(cpunum, MCG_CTL, &val) == 1) {
+		printf ("MCG_CTL:\n");
+		printf (" Data cache check %sabled\n", val & (1<<0) ? "en" : "dis"); 
+		printf (" Instruction cache check %sabled\n", val & (1<<1) ? "en" : "dis"); 
+		printf (" Bus unit check %sabled\n", val & (1<<2) ? "en" : "dis"); 
+		printf (" Load/Store unit check %sabled\n", val & (1<<3) ? "en" : "dis"); 
+	}
+	printf ("\n");
+
+
+	printf("           31       23       15       7 \n");
 	for (i=0; i<banks; i++) {
 		printf ("Bank: %d (0x%x)\n", i, MC_CTL+i*4);
 		printf ("MC%dCTL:    ", i);

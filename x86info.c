@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.16 2001/04/20 04:34:44 davej Exp $
+ *  $Id: x86info.c,v 1.17 2001/04/20 06:21:10 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -45,6 +45,7 @@ void parse_command_line (int argc, char **argv)
 			show_cacheinfo = 1;
 			show_msr =1;
 			show_MHz =1;
+			show_bluesmoke =1;
 		}
 
 		if ((!strcmp(arg, "-c") || !strcmp(arg, "--cache")))
