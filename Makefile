@@ -41,13 +41,13 @@ OBJS =\
 	connector.c
 
 x86info: $(OBJS)
-	gcc $(CFLAGS) -o x86info $(OBJS)
+	$(CC) $(CFLAGS) -o x86info $(OBJS)
 
 .c.o:
-	gcc $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 .S.o:
-	gcc $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 nodes:
 	scripts/makenodes

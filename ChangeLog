@@ -5,6 +5,7 @@
 	* dumpregs.c: make more generic, move to identify.c
 	* */identify.c: reduce duplication, and use generic dumpregs()
 	* Intel/identify.c: identify C1 stepping of P4 Xeon
+	* Makefile: Use $(CC) instead of gcc
 
 2002-06-18 Dave Jones <davej@suse.de>
 
