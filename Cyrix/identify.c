@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.9 2002/05/23 00:13:07 davej Exp $
+ *  $Id: identify.c,v 1.10 2002/07/12 00:48:56 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -41,34 +41,21 @@ void Identify_Cyrix (struct cpudata *cpu)
 		cpu->model = (eax >> 4) & 0xf;
 		cpu->family = (eax >> 8) & 0xf;
 
-		switch (cpu->family) {
-			case 4:	if (cpu->model==5) {
-						sprintf (cpu->name, "%s", "MediaGX");
+		switch (tuple(cpu) & 0xff0) {
+			case 0x450:	sprintf (cpu->name, "%s", "MediaGX");
 						break;
-					}
-					sprintf (cpu->name, "%s", "Unknown CPU");
-					break;
-			case 5:	switch (cpu->model) {
-						case 2:	sprintf (cpu->name, "%s", "6x86");
-								break;
-						case 4:	sprintf (cpu->name, "%s", "GXm");
-								break;
-						default:sprintf (cpu->name, "%s", "Unknown CPU");
-								break;
-					}
-					break;
-			case 6:	switch (cpu->model) {
-						case 0:
-							sprintf (cpu->name, "%s", "6x86/MX");
-							break;
-						case 2:
-							sprintf (cpu->name, "%s", "MII");
-							break;
-						default:
-							sprintf (cpu->name, "%s", "Unknown CPU");
-							break;
-					}
-					break;
+
+			case 0x520:	sprintf (cpu->name, "%s", "6x86");
+						break;
+			case 0x524:	sprintf (cpu->name, "%s", "GXm");
+						break;
+
+			case 0x600:	sprintf (cpu->name, "%s", "6x86/MX");
+						break;
+			case 0x620:	sprintf (cpu->name, "%s", "MII");
+						break;
+			default:	sprintf (cpu->name, "%s", "Unknown CPU");
+						break;
 		}
 
 		/* Check for presence of extended info */

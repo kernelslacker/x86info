@@ -3,6 +3,7 @@
 	* x86info.h: introduced tuple macro
 	* Intel/identify.c: used tuple macro to clean up code.
 	* AMD/identify.c: used tuple macro to clean up code.
+	* Cyrix/identify.c: used tuple macro to clean up code.
 
 2002-06-18 Dave Jones <davej@suse.de>
 
