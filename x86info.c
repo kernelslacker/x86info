@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.74 2003/02/07 14:49:08 davej Exp $
+ *  $Id: x86info.c,v 1.75 2003/05/02 15:44:42 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -277,6 +277,7 @@ int main (int argc, char **argv)
 		if (!silent && nrCPUs!=1)
 			printf ("CPU #%u\n", i+1);
 
+		estimate_MHz(cpu);
 		identify (cpu);
 		show_info (cpu);
 
@@ -287,8 +288,13 @@ int main (int argc, char **argv)
 		 *
 		 * Could also experiment with the new scheduler binding syscalls.
 		 */
-		if (show_MHz)
-			estimate_MHz(i);
+		if (show_MHz) {
+			if (cpu->MHz < 1000)
+				printf("%dMHz", cpu->MHz);
+			else
+				printf("%d.%dGhz", cpu->MHz / 1000, cpu->MHz % 1000);
+			printf (" processor (estimate).\n\n");
+		}
 		if (show_bench)
 			show_benchmarks();
 

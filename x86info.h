@@ -39,6 +39,7 @@ struct cpudata {
 	unsigned char connector;
 	unsigned int flags;
 	unsigned int eflags;
+	unsigned int MHz;
 	char * datasheet_url;
 	char * errata_url;
 };
@@ -105,7 +106,7 @@ void dumpmsr_bin (int cpunum, unsigned int msr, int size);
 
 void dump_mtrrs (struct cpudata *cpu);
 
-void estimate_MHz(int cpunum);
+void estimate_MHz(struct cpudata *cpu);
 int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
 int issmp(int *numcpu, int verb);

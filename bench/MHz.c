@@ -1,5 +1,5 @@
 /*
- *  $Id: MHz.c,v 1.1 2002/12/18 13:42:12 davej Exp $
+ *  $Id: MHz.c,v 1.2 2003/05/02 15:44:45 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -30,7 +30,7 @@ __inline__ unsigned long long int rdtsc()
 	return x;
 }
 
-void estimate_MHz(int cpunum)
+void estimate_MHz(struct cpudata *cpu)
 {
 #ifndef __WIN32__
 	struct timezone tz;
@@ -39,19 +39,20 @@ void estimate_MHz(int cpunum)
 	unsigned long long int cycles[2]; /* gotta be 64 bit */
 	unsigned long microseconds; /* total time taken */
 	unsigned long eax, ebx, ecx, edx;
-	double freq = 1.0f;
+	unsigned long freq = 1;
 
 #ifdef __WIN32__
 	LARGE_INTEGER lfreq;
 
 	QueryPerformanceFrequency(&lfreq);
-	freq = (double)lfreq.LowPart/1000000;
+	freq = lfreq.LowPart/1000000;
 #endif /* __WIN32__ */
 
 	/* Make sure we have a TSC (and hence RDTSC) */
-	cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
+	cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
 	if ((edx & (1<<4))==0) {
 		printf ("No TSC, MHz calculation cannot be performed.\n");
+		cpu->MHz = 0;
 		return;
 	}
 
@@ -75,7 +76,6 @@ void estimate_MHz(int cpunum)
 	timer_init();
 	cycles[1] = rdtsc();
 	microseconds = timer_init() - microseconds;
-
 #else
 	gettimeofday(&tvstop, &tz);
 	cycles[1] = rdtsc();
@@ -85,8 +85,7 @@ void estimate_MHz(int cpunum)
 		(tvstop.tv_usec-tvstart.tv_usec);
 #endif /* __WIN32__ */
 
-	printf("%.2f MHz processor (estimate).\n\n",
-		(float)(cycles[1]-cycles[0])/(microseconds/freq));
+	cpu->MHz = (int) (cycles[1]-cycles[0]) / (microseconds/freq);
 }
 
 #ifdef __WIN32__
