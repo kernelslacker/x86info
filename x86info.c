@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.11 2001/03/17 00:08:09 davej Exp $
+ *  $Id: x86info.c,v 1.12 2001/04/11 13:29:42 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -8,6 +8,8 @@
  */
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include "x86info.h"
 
