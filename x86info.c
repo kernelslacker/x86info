@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.20 2001/05/22 14:53:22 davej Exp $
+ *  $Id: x86info.c,v 1.21 2001/07/15 17:13:57 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -97,7 +97,7 @@ int main (int argc, char **argv)
 		identify(i);
 	}
 	if (show_MHz)
-		estimate_MHz();
+		estimate_MHz(i);
 
 	if (nrCPUs > 1 && used_UP==1) {
 		printf ("WARNING: Detected SMP, but cpuid driver not loaded.\n");

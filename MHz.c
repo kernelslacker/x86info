@@ -1,5 +1,5 @@
 /*
- *  $Id: MHz.c,v 1.4 2001/05/21 18:58:01 davej Exp $
+ *  $Id: MHz.c,v 1.5 2001/07/15 17:13:57 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -14,6 +14,7 @@
 #include <sys/time.h>
 #include <string.h>
 #include <unistd.h>
+#include "x86info.h"
 
 __inline__ unsigned long long int rdtsc()
 {
@@ -22,13 +23,21 @@ __inline__ unsigned long long int rdtsc()
 	return x;
 }
 
-void estimate_MHz()
+void estimate_MHz(int cpunum)
 {
 	struct timezone tz;
         struct timeval tvstart, tvstop;
         unsigned long long int cycles[2]; /* gotta be 64 bit */
 	unsigned int microseconds; /* total time taken */
-	
+	unsigned long eax, ebx, ecx, edx;
+
+	/* Make sure we have a TSC (and hence RDTSC) */
+	cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
+	if ((edx & (1<<4))==0) {
+		printf ("No TSC, MHz calculation cannot be performed.\n");
+		return;
+	}
+
 	memset(&tz, 0, sizeof(tz));
 
 	/* get this function in cached memory */
