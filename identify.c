@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.18 2001/12/10 23:51:58 davej Exp $
+ *  $Id: identify.c,v 1.19 2001/12/20 16:49:11 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -21,12 +21,20 @@ void identify (struct cpudata *cpu)
 	cpuid (cpu->number, 0x80000000, &maxei, NULL, NULL, NULL);
 	
 	switch (ebx) {
-		case 0x756e6547:/* Intel */	Identify_Intel (maxi, cpu);		break;
-		case 0x68747541:/* AMD */	Identify_AMD (maxi, cpu);			break;
-		case 0x69727943:/* Cyrix */	Identify_Cyrix (maxi, maxei, cpu);	break;
-		case 0x746e6543:/* IDT */	Identify_IDT (maxi, cpu);	break;
+		case 0x756e6547:/* Intel */	Identify_Intel (maxi, cpu);
+									break;
+		case 0x68747541:/* AMD */	Identify_AMD (maxi, cpu);
+									break;
+		case 0x69727943:/* Cyrix */	Identify_Cyrix (maxi, maxei, cpu);
+									break;
+		case 0x746e6543:/* IDT */	Identify_IDT (maxi, cpu);
+									break;
+		case 0x646f6547:/* Natsemi Geode*/
+									Identify_NatSemi (maxi, cpu);
+									break;
 		case 0x52697365:/* Rise This should be checked. Why 2 ? */
-		case 0x65736952:/* Rise */	Identify_RiSE (maxi, cpu);	break;
+		case 0x65736952:/* Rise */	Identify_RiSE (maxi, cpu);
+									break;
 		default:					printf ("Unknown vendor\n");				return;
 	}
 
@@ -50,6 +58,10 @@ void identify (struct cpudata *cpu)
 
 			case VENDOR_INTEL:
 				display_Intel_info (maxi, cpu);
+				break;
+
+			case VENDOR_NATSEMI:
+				display_NatSemi_info (maxi, cpu);
 				break;
 
 			case VENDOR_RISE:

@@ -20,6 +20,8 @@ OBJS =\
 	IDT/identify.o\
 	IDT/MSR-C3.o\
 \
+	NatSemi/identify.o\
+\
 	RiSE/identify.o\
 \
 	x86info.o\
