@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.15 2001/05/13 21:31:12 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.16 2001/05/21 13:41:10 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -296,4 +296,16 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 
 	if (show_cacheinfo)
 		decode_AMD_cacheinfo(cpunum, maxei);
+
+	if (maxei >= 0x80000007) {
+		cpuid (cpunum, 0x80000007, &eax, &ebx, &ecx, &edx);
+		printf ("PowerNOW! Technology information\n");
+		printf ("Available features:\n");
+		if (edx & 1<<1)
+			printf ("\tBus divisor control\n");
+		if (edx & 1<<2)
+			printf ("\tVoltage ID control\n");
+		if (!edx & 1<<1|1<<2)
+			printf ("\tNone\n");
+	}
 }
