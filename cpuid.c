@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid.c,v 1.10 2002/01/03 18:26:59 davej Exp $
+ *  $Id: cpuid.c,v 1.11 2002/09/02 15:57:36 davej Exp $
  *	This file is part of x86info
  *	(C) 2000, 2001 Dave Jones.
  *	Fixes by Arjan van de Ven (arjanv@redhat.com) and
@@ -18,7 +18,7 @@
 
 #include "x86info.h"
 
-void cpuid (int CPU_number, int index,
+void cpuid (int CPU_number, int idx,
 	unsigned long *eax,
 	unsigned long *ebx,
 	unsigned long *ecx,
@@ -30,7 +30,7 @@ void cpuid (int CPU_number, int index,
 	int fh;
 
 	if (nodriver==1) {
-		cpuid_UP (index, eax, ebx, ecx, edx);
+		cpuid_UP (idx, eax, ebx, ecx, edx);
 		return;
 	}
 
@@ -38,7 +38,7 @@ void cpuid (int CPU_number, int index,
 	snprintf (cpuname,18, "/dev/cpu/%d/cpuid", CPU_number);
 	fh = open (cpuname, O_RDONLY);
 	if (fh != -1) {
-		lseek (fh, index, SEEK_CUR);
+		lseek (fh, idx, SEEK_CUR);
 		read (fh, &buffer[0], 16);
 		if (eax!=0)	*eax = (*(unsigned long *)buffer);
 		if (ebx!=0)	*ebx = (*(unsigned long *)(buffer+4));
@@ -52,7 +52,7 @@ void cpuid (int CPU_number, int index,
 			perror(cpuname);
 		}
 		used_UP = 1;
-		cpuid_UP (index, eax, ebx, ecx, edx);
+		cpuid_UP (idx, eax, ebx, ecx, edx);
 		return;
 	}
 }

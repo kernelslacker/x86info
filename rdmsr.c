@@ -1,5 +1,5 @@
 /*
- *  $Id: rdmsr.c,v 1.11 2002/05/31 12:14:51 davej Exp $
+ *  $Id: rdmsr.c,v 1.12 2002/09/02 15:57:36 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include "x86info.h"
 
-int read_msr(int cpu, unsigned int index, unsigned long long *val)
+int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 {
 	char cpuname[16];
 	unsigned char buffer[8];
@@ -31,7 +31,7 @@ int read_msr(int cpu, unsigned int index, unsigned long long *val)
 		return (0);
 	}
 
-	lseek (fh, index, SEEK_CUR);
+	lseek (fh, idx, SEEK_CUR);
 
 	if (fh != -1) {
 
