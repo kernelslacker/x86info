@@ -5,6 +5,9 @@
 
 - Report the CPU packaging type on CPUs where info is available.
 
+- --mtrr, --arr
+  Dump MTRR/ARR registers.
+
 - --apic
   Dump APIC registers
 
