@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-rise.c,v 1.3 2001/04/27 22:11:29 davej Exp $
+ *  $Id: cpuid-rise.c,v 1.4 2001/04/28 00:58:24 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -117,7 +117,8 @@ void doRise (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		so I am just setting the edx value and let the rest of the co
 		*/
 
-		edx |= (1 << 8) ;
+	// FIXME: Hmmm, Not so sure about this.
+	//	edx |= (1 << 8) ;
  
 		if (show_flags) {
 			printf ("Feature flags %08lx:\n", edx);
