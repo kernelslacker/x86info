@@ -1,3 +1,5 @@
+Released as v1.7
+
 2001-12-11	Matthew Gregan <mgregan@jade.co.nz>
 
 	* Makefile: Add x86info.exe to clean target.
