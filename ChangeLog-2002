@@ -22,7 +22,7 @@
 
 2002-11-27  Dave Jones <davej@codemonkey.org.uk>>
 
-	* Intel/identify.c: Add reocgnition for Mobile Pentium 3 and P3M
+	* Intel/identify.c: Add recognition for Mobile Pentium 3 and P3M
 	* Intel/info.c: Decode brand field.
 
 2002-11-25  Dave Jones <davej@codemonkey.org.uk>
