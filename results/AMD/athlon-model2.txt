@@ -1,0 +1,154 @@
+x86info v1.11.  Dave Jones 2001, 2002
+Feedback to <davej@suse.de>.
+
+Found 1 CPU
+eax in: 0x00000000, eax = 00000001 ebx = 68747541 ecx = 444d4163 edx = 69746e65
+eax in: 0x00000001, eax = 00000621 ebx = 00000000 ecx = 00000000 edx = 0183fbff
+
+eax in: 0x80000000, eax = 80000006 ebx = 68747541 ecx = 444d4163 edx = 69746e65
+eax in: 0x80000001, eax = 00000721 ebx = 00000000 ecx = 00000000 edx = c1c3fbff
+eax in: 0x80000002, eax = 20444d41 ebx = 6c687441 ecx = 74286e6f edx = 5020296d
+eax in: 0x80000003, eax = 65636f72 ebx = 726f7373 ecx = 00000000 edx = 00000000
+eax in: 0x80000004, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x80000005, eax = 0408ff08 ebx = ff18ff10 ecx = 40020140 edx = 40020140
+eax in: 0x80000006, eax = 00000000 ebx = 41004100 ecx = 02002140 edx = 00000000
+
+				31       23       15       7 
+MSR: 0x0000002a=0x00000000 : 00000000 00000000 00000000 00000000
+MSR: 0xc0000080=0x00000000 : 00000000 00000000 00000000 00000000
+MSR: 0xc0010010=0x001e0604 : 00000000 00011110 00000110 00000100
+MSR: 0xc0010015=0x0a701008 : 00001010 01110000 00010000 00001000
+MSR: 0xc001001b=0x16820223 : 00010110 10000010 00000010 00100011
+
+Number of reporting banks : 4
+
+MCG_CTL:
+ Data cache check enabled
+  ECC 1 bit error reporting disabled
+  ECC multi bit error reporting disabled
+  Data cache data parity disabled
+  Data cache main tag parity disabled
+  Data cache snoop tag parity disabled
+  L1 TLB parity disabled
+  L2 TLB parity disabled
+ Instruction cache check enabled
+  ECC 1 bit error reporting enabled
+  ECC multi bit error reporting enabled
+  Instruction cache data parity enabled
+  IC main tag parity enabled
+  IC snoop tag parity enabled
+  L1 TLB parity enabled
+  L2 TLB parity enabled
+  Predecode array parity enabled
+  Target selector parity enabled
+  Read data error enabled
+ Bus unit check enabled
+  External L2 tag parity error enabled
+  L2 partial tag parity error enabled
+  System ECC TLB reload error enabled
+  L2 ECC TLB reload error enabled
+  L2 ECC K7 deallocate enabled
+  L2 ECC probe deallocate enabled
+  System datareaderror reporting enabled
+ Load/Store unit check enabled
+  Read data error enable (loads) enabled
+  Read data error enable (stores) enabled
+
+           31       23       15       7 
+Bank: 0 (0x400)
+MC0CTL:    00000000 00000000 00000000 00000000
+MC0STATUS: 00000000 00000000 00000000 00000000
+MC0ADDR:   10001000 01100100 00000101 11110000
+MC0MISC:   00000000 00000000 00000000 00000000
+
+Bank: 1 (0x404)
+MC1CTL:    11111111 11111111 11111111 11111111
+MC1STATUS: 00000000 00000000 00000000 00000000
+MC1ADDR:   11000000 00011111 00110011 10100000
+MC1MISC:   00000000 00000000 00000000 00000000
+
+Bank: 2 (0x408)
+MC2CTL:    00000000 00000000 00000000 01111111
+MC2STATUS: 00000000 00000000 00000000 00000000
+MC2ADDR:   00111101 10100110 10100101 01000001
+MC2MISC:   00111101 10100110 10100101 01000001
+
+Bank: 3 (0x40c)
+MC3CTL:    00000000 00000000 00000000 00000111
+MC3STATUS: 00000000 00000000 00000000 00000000
+MC3ADDR:   10111101 01101110 11010100 11101111
+MC3MISC:   00000000 00000000 00000000 00000000
+
+Feature flags:
+	Onboard FPU
+	Virtual Mode Extensions
+	Debugging Extensions
+	Page Size Extensions
+	Time Stamp Counter
+	Model-Specific Registers
+	Physical Address Extensions
+	Machine Check Architecture
+	CMPXCHG8 instruction
+	Onboard APIC
+	SYSENTER/SYSEXIT
+	Memory Type Range Registers
+	Page Global Enable
+	Machine Check Architecture
+	CMOV instruction
+	Page Attribute Table
+	36-bit PSEs
+	MMX support
+	FXSAVE and FXRESTORE instructions
+
+Extended feature flags:
+ syscall mmxext 3dnowext 3dnow
+
+Instruction TLB: Fully associative. 16 entries.
+Data TLB: Fully associative. 24 entries.
+L1 Data cache:
+	Size: 64Kb	2-way associative. 
+	lines per tag=1	line size=64 bytes.
+L1 Instruction cache:
+	Size: 64Kb	2-way associative. 
+	lines per tag=1	line size=64 bytes.
+L2 (on CPU) cache:
+	Size: 512Kb	2-way associative. 
+	lines per tag=1	line size=64 bytes.
+
+Family: 6 Model: 2 Stepping: 1 [Athlon (0.18um) [A1]]
+Processor name string: AMD Athlon(tm) Processor
+
+Connector type: Slot A (242 Contact Cartridge)
+MTRR registers:
+MTRRcap (0xfe): 0x0000000000000508
+MTRRphysBase0 (0x200): 0x0000000000000006
+MTRRphysMask0 (0x201): 0x0000000fc0000800
+MTRRphysBase1 (0x202): 0x0000000030000000
+MTRRphysMask1 (0x203): 0x0000000ff0000800
+MTRRphysBase2 (0x204): 0x00000000ce000001
+MTRRphysMask2 (0x205): 0x0000000ffe000800
+MTRRphysBase3 (0x206): 0x00000000d0000001
+MTRRphysMask3 (0x207): 0x0000000ff0000800
+MTRRphysBase4 (0x208): 0x0000000000000000
+MTRRphysMask4 (0x209): 0x0000000000000000
+MTRRphysBase5 (0x20a): 0x0000000000000000
+MTRRphysMask5 (0x20b): 0x0000000000000000
+MTRRphysBase6 (0x20c): 0x0000000000000000
+MTRRphysMask6 (0x20d): 0x0000000000000000
+MTRRphysBase7 (0x20e): 0x0000000000000000
+MTRRphysMask7 (0x20f): 0x0000000000000000
+MTRRfix64K_00000 (0x250): 0x1e1e1e1e1e1e1e1e
+MTRRfix16K_80000 (0x258): 0x1e1e1e1e1e1e1e1e
+MTRRfix16K_A0000 (0x259): 0x0000000000000000
+MTRRfix4K_C8000 (0x269): 0x1010101010101010
+MTRRfix4K_D0000 0x26a: 0x0000000000000000
+MTRRfix4K_D8000 0x26b: 0x0000000000000000
+MTRRfix4K_E0000 0x26c: 0x1515151515151515
+MTRRfix4K_E8000 0x26d: 0x1515151515151515
+MTRRfix4K_F0000 0x26e: 0x1515151515151515
+MTRRfix4K_F8000 0x26f: 0x1515151515151515
+MTRRdefType (0x2ff): 0x0000000000000c00
+
+
+800.04 MHz processor (estimate).
+
