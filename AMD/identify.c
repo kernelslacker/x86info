@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.41 2002/12/04 18:07:03 davej Exp $
+ *  $Id: identify.c,v 1.42 2003/01/03 10:58:39 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -336,9 +336,24 @@ void Identify_AMD(struct cpudata *cpu)
 		add_to_cpuname (" (Barton)");
 		break;
 
-	case 0xF00:		/* based on http://www.tecchannel.de/hardware/937/images/0010328_PIC.gif */
+	case 0xF00:
 		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname ("Clawhammer ES");
+		add_to_cpuname ("Athlon 64");
+		break;
+
+	case 0xF10:
+		cpu->connector = CONN_SOCKET_754;
+		add_to_cpuname ("Opteron");
+		break;
+
+	case 0xF40:
+		cpu->connector = CONN_SOCKET_754;
+		add_to_cpuname ("Athlon 64");
+		break;
+
+	case 0xF50:
+		cpu->connector = CONN_SOCKET_754;
+		add_to_cpuname ("Opteron");
 		break;
 
 	default:
