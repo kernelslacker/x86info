@@ -1,3 +1,8 @@
+2002-10-24 Dave Jones <davej@codemonkey.org.uk>
+
+	* AMD/identify.c: Hopefully fix up the false positives detecting
+	  mobile athlons.
+
 2002-10-22 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/identify.c: Seems the northwood is a Xeon.

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.31 2002/10/18 17:02:08 davej Exp $
+ *  $Id: identify.c,v 1.32 2002/10/24 15:57:53 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -71,6 +71,7 @@ static void decode_AMD_cacheinfo(struct cpudata *cpu)
 	printf("\n");
 }
 
+
 /*
  * Returns size of L2 cache for Duron/Athlon descrimination
  * Assumes 0x80000006 is valid.
@@ -93,6 +94,22 @@ static void determine_xp_mp(struct cpudata *cpu)
 		add_to_cpuname ("MP");
 	}
 }
+
+
+static int is_mobile(struct cpudata *cpu)
+{
+	unsigned long eax, ebx, ecx, edx;
+	if (cpu->maxei >= 0x80000007) {
+		cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
+		if ((edx & (1<<1|1<<2)) == 0)
+			return 0;
+		else
+			return 1;
+	} else {
+		return 0;
+	}
+}
+
 
 void Identify_AMD(struct cpudata *cpu)
 {
@@ -247,7 +264,7 @@ void Identify_AMD(struct cpudata *cpu)
 	case 0x660:
 		cpu->connector = CONN_SOCKET_A;
 
-		if (cpu->maxei >= 0x80000007)
+		if (is_mobile(cpu))
 			add_to_cpuname ("Mobile Athlon 4");
 		if (getL2size(cpu->number) < 256)
 			add_to_cpuname ("Duron (Morgan)");
@@ -273,7 +290,7 @@ void Identify_AMD(struct cpudata *cpu)
 
 	case 0x670:
 		cpu->connector = CONN_SOCKET_A;
-		if (cpu->maxei >= 0x80000007)
+		if (is_mobile(cpu))
 			add_to_cpuname ("Mobile ");
 		add_to_cpuname ("Duron (Morgan core) ");
 		switch (cpu->stepping) {
@@ -288,7 +305,7 @@ void Identify_AMD(struct cpudata *cpu)
 
 	case 0x680:
 		cpu->connector = CONN_SOCKET_A;
-		if (cpu->maxei >= 0x80000007)
+		if (is_mobile(cpu))
 			add_to_cpuname ("Mobile ");
 		if (getL2size(cpu->number) < 256)
 			add_to_cpuname ("Duron ");
@@ -360,3 +377,4 @@ void display_AMD_info(struct cpudata *cpu)
 		printf("\n\n");
 	}
 }
+
