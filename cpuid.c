@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid.c,v 1.4 2001/04/17 06:29:40 davej Exp $
+ *  $Id: cpuid.c,v 1.5 2001/05/21 13:12:00 davej Exp $
  *	This file is part of x86info
  *	(C) 2000, 2001 Dave Jones.
  *	Fixes by Arjan van de Ven (arjanv@redhat.com) and
@@ -47,8 +47,7 @@ void cpuid (int CPU_number, int index,
 		close (fh);
 	} else {
 		/* Something went wrong, just do UP and hope for the best. */
-		printf ("Detected SMP, but cpuid driver not loaded.\n");
-		printf ("Falling back to UP cpuid routine.\n");
 		cpuid_UP (index, eax, ebx, ecx, edx);
+		return;
 	}
 }
