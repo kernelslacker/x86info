@@ -92,7 +92,7 @@ MC0MISC:   00000000 00000000 00000000 00000000
 Bank: 1 (0x404)
 MC1CTL:    11111111 11111111 11111111 11111111
 MC1STATUS: 00000000 00000000 00000000 00000000
-MC1ADDR:   00000000 01000000 10000000 00000000
+MC1ADDR:   00000000 01000000 00000000 00000000
 MC1MISC:   00000000 00000000 00000000 00000000
 
 Bank: 2 (0x408)
@@ -130,115 +130,26 @@ MSR: 0xc0010041=0x0013090f : 00000000 00000000 00000000 00000000
 MSR: 0xc0010042=0x90909000f060f : 00000000 00001001 00001001 00001001
            00000000 00001111 00000110 00001111
 
-FID changes won't happen
-VID changes won't happen
-Voltage ID codes: Maximum=2.000V Startup=2.000V Currently=1.800V
-Frequency ID codes: Maximum=5.5x Startup=3.0x Currently=15.0x
-Decoding BIOS PST tables
+FID changes will happen
+VID changes will happen
+Current VID multiplier code: 1.550
+Current FSB multiplier code: 10.5
+Voltage ID codes: Maximum=1.550V Startup=1.550V Currently=1.550V
+Frequency ID codes: Maximum=10.5x Startup=6.0x Currently=10.5x
+Decoding BIOS PST tables (maxfid=f, startvid=9)
 Found PSB header at 0x40158800
-Table version: 12
-Flags: 0 (Mobile voltage regulator)
-Settling Time: 100
-Has 31 P states. (Only dumping ones relevant to this CPU).
-PST:19 (@0x40158944)
-cpuid: 780	fsb: 133	maxFID: 14	startvid: 11
-num of p states in this table: 5
-FID: 12	VID: 13
-FID: 4	VID: 13
-FID: 6	VID: 13
-FID: 8	VID: 11
-FID: e	VID: b
-
-PST:20 (@0x40158956)
-cpuid: 780	fsb: 133	maxFID: 15	startvid: 11
-num of p states in this table: 5
-FID: 12	VID: 13
-FID: 4	VID: 13
-FID: 6	VID: 13
-FID: a	VID: 11
-FID: f	VID: b
-
-PST:21 (@0x40158968)
-cpuid: 780	fsb: 133	maxFID: 0	startvid: 11
-num of p states in this table: 5
-FID: 12	VID: 13
-FID: 4	VID: 13
-FID: 6	VID: 13
-FID: c	VID: e
-FID: 0	VID: b
-
-PST:22 (@0x4015897a)
-cpuid: 780	fsb: 133	maxFID: 2	startvid: 12
-num of p states in this table: 5
-FID: 12	VID: 13
-FID: 4	VID: 13
-FID: 6	VID: 13
-FID: c	VID: 13
-FID: 2	VID: c
-
-PST:23 (@0x4015898c)
-cpuid: 780	fsb: 133	maxFID: 12	startvid: 11
-num of p states in this table: 5
-FID: 12	VID: 13
-FID: 4	VID: 13
-FID: 6	VID: 13
-FID: 8	VID: e
-FID: c	VID: b
-
-PST:24 (@0x4015899e)
-cpuid: 780	fsb: 133	maxFID: 1	startvid: 9
-num of p states in this table: 5
-FID: 12	VID: 13
-FID: 4	VID: 13
-FID: 6	VID: 13
-FID: c	VID: d
-FID: 1	VID: 9
-
-PST:25 (@0x401589b0)
-cpuid: 780	fsb: 133	maxFID: 1	startvid: 12
-num of p states in this table: 5
-FID: 12	VID: 13
-FID: 4	VID: 13
-FID: 6	VID: 13
-FID: c	VID: 13
-FID: 1	VID: c
-
-PST:26 (@0x401589c2)
-cpuid: 780	fsb: 133	maxFID: 15	startvid: 9
-num of p states in this table: 5
-FID: 12	VID: 13
-FID: 4	VID: 13
-FID: 6	VID: 13
-FID: a	VID: d
-FID: f	VID: 9
-
-PST:27 (@0x401589d4)
-cpuid: 780	fsb: 133	maxFID: 0	startvid: 9
-num of p states in this table: 5
-FID: 12	VID: 13
-FID: 4	VID: 13
-FID: 6	VID: 13
-FID: c	VID: c
-FID: 0	VID: 9
-
-PST:28 (@0x401589e6)
-cpuid: 780	fsb: 133	maxFID: 2	startvid: 10
-num of p states in this table: 5
-FID: 12	VID: 13
-FID: 4	VID: 13
-FID: 6	VID: 13
-FID: c	VID: 11
-FID: 2	VID: a
-
-PST:29 (@0x401589f8)
-cpuid: 780	fsb: 133	maxFID: 3	startvid: 10
-num of p states in this table: 6
-FID: 12	VID: 13
-FID: 4	VID: 13
-FID: 6	VID: 13
-FID: a	VID: 13
-FID: e	VID: e
-FID: 3	VID: a
+Table version: 0x12
+Flags: 0x0 (Mobile voltage regulator)
+Settling Time: 100 microseconds.
+Has 31 PST tables. (Only dumping ones relevant to this CPU).
+ PST:26 (@0x401589c2)
+  cpuid: 0x780	  fsb: 133	  maxFID: 0xf	  startvid: 0x9
+  num of p states in this table: 5
+    FID: 0x12 (4.0x [532MHz])	VID: 0x13 (1.200V)
+    FID: 0x4 (5.0x [665MHz])	VID: 0x13 (1.200V)
+    FID: 0x6 (6.0x [798MHz])	VID: 0x13 (1.200V)
+    FID: 0xa (8.0x [1064MHz])	VID: 0xd (1.350V)
+    FID: 0xf (10.5x [1396MHz])	VID: 0x9 (1.550V)
 
 Connector type: Socket A (462 Pin PGA)
 
@@ -276,5 +187,8 @@ MTRRdefType (0x2ff): 0x0000000000000c00
 
 1391.35 MHz processor (estimate).
 
-cpuid took 2 cycles
-int 0x80 took 269 cycles
+int 0x80: 267 cycles
+cpuid: 68 cycles
+addl: 11 cycles
+locked add: 10 cycles
+lea 1(%eax),%eax: 11 cycles
