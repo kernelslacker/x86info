@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.5 2001/05/21 19:32:25 davej Exp $
+ *  $Id: bluesmoke.c,v 1.6 2001/06/26 16:26:33 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -40,7 +40,7 @@ void decode_bluesmoke(int cpunum)
 		return;
 
 	if ((val & (1<<8)) == 0) {
-		printf ("Erk, MCG_CTL not present!\n");
+		printf ("Erk, MCG_CTL not present! :%llx:\n", val);
 		return;
 	}
 	banks = val & 0xf;
