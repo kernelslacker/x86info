@@ -1,4 +1,9 @@
-2002-04-23 Dave Jones <davej@suse.de>
+2002-05-24 Dave Jones <davej@suse.de>
+
+	* Intel/identify.c:
+	  Recognise C0 stepping of P4 Xeon
+
+2002-05-23 Dave Jones <davej@suse.de>
 
 	* get_model_name.c, identify.c, x86info.h,
 	* AMD/identify.c, Cyrix/identify.c

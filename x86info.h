@@ -1,9 +1,5 @@
 #ifndef _X86INFO_H
 #define _X86INFO_H
-/* x86info by Dave Jones
- * Based on 'cpuid' by Phil Karn, KA9Q
- * May be used under the terms of the GNU Public License (GPL)
- */
 
 #ifdef linux
 #include <linux/types.h>
