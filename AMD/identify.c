@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.22 2002/07/12 00:36:19 davej Exp $
+ *  $Id: identify.c,v 1.23 2002/07/12 00:46:34 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -103,160 +103,156 @@ void Identify_AMD (struct cpudata *cpu)
 	cpu->vendor = VENDOR_AMD;
 
 
-	if (cpu->maxi >= 0x00000001) {
-		cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
-		cpu->stepping = eax & 0xf;
-		cpu->model = (eax >> 4) & 0xf;
-		cpu->family = (eax >> 8) & 0xf;
+	if (cpu->maxi < 1)
+		return;
 
-		switch (cpu->family) {
-		case 4:
-			switch (cpu->model) {
-				case 3:	sprintf (cpu->name, "%s", "Am486DX2-WT");	break;
-				case 7:	sprintf (cpu->name, "%s", "Am486DX2-WB");	break;
-				case 8:	sprintf (cpu->name, "%s", "Am486DX4-WT / Am5x86-WT");	break;
-				case 9:	sprintf (cpu->name, "%s", "Am486DX4-WB / Am5x86-WB");	break;
-				case 10:sprintf (cpu->name, "%s", "Elan SC400");	break;
-				case 0xe:sprintf (cpu->name, "%s", "Am5x86-WT");	break;
-				case 0xf:sprintf (cpu->name, "%s", "Am5x86-WB");	break;
-				default:sprintf (cpu->name, "%s", "Unknown CPU");	break;
-			}
-			cpu->connector = CONN_SOCKET_3;
-			break;
+	cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
+	cpu->stepping = eax & 0xf;
+	cpu->model = (eax >> 4) & 0xf;
+	cpu->family = (eax >> 8) & 0xf;
 
-		case 5:
-			switch (cpu->model) {
-				case 0:	sprintf (cpu->name, "%s", "SSA5 (PR75/PR90/PR100)");
-						cpu->connector = CONN_SOCKET_5_7;
-						break;
-				case 1:	sprintf (cpu->name, "%s", "K5 (PR120/PR133)");
-						cpu->connector = CONN_SOCKET_5_7;
-						break;
-				case 2:	sprintf (cpu->name, "%s", "K5 (PR166)");
-						cpu->connector = CONN_SOCKET_5_7;
-						break;
-				case 3:	sprintf (cpu->name, "%s", "K5 (PR200)");
-						cpu->connector = CONN_SOCKET_5_7;
-						break;
-				case 6:	sprintf (cpu->name, "%s", "K6 (0.30 um)");
-						cpu->connector = CONN_SOCKET_7;
-						break;
-				case 7:	sprintf (cpu->name, "%s", "K6 (0.25 um)");
-						cpu->connector = CONN_SOCKET_7;
-						break;
-				case 8:	nameptr += sprintf (cpu->name, "%s", "K6-2");
-						cpu->connector = CONN_SUPER_SOCKET_7;
-						if (cpu->stepping >= 8)
-							printf (nameptr, "%s", " (CXT core)");
-						break;
-				case 9:	sprintf (cpu->name, "%s", "K6-III");
-						cpu->connector = CONN_SUPER_SOCKET_7;
-						break;
-				case 12:sprintf (cpu->name, "%s", "K6-2+ (0.18um)");
-						cpu->connector = CONN_SUPER_SOCKET_7;
-						break;
-				case 13:sprintf (cpu->name, "%s", "K6-3+ (0.18um)");
-						cpu->connector = CONN_SUPER_SOCKET_7;
-						break;
-				default:sprintf (cpu->name, "%s", "Unknown CPU");
-						break;
-			}
-			break;
+	switch (cpu->family) {
+		case 4:	cpu->connector = CONN_SOCKET_3;
+				break;
+	}
 
-		case 6:
-			switch (cpu->model) {
-				case 0:	cpu->connector = CONN_SLOT_A;
-						sprintf (cpu->name, "%s", "K7 ES");
-						break;
-
-				case 1:	cpu->connector = CONN_SLOT_A;
-						nameptr += sprintf (cpu->name, "%s", "Athlon (0.25um)");
-						switch (cpu->stepping) {
-							case 1:	sprintf (nameptr, "%s", " Rev C1");	break;
-							case 2:	sprintf (nameptr, "%s", " Rev C2");	break;
-						}
+	switch (tuple(cpu) & 0xff0) {
+		case 0x430:	sprintf (cpu->name, "%s", "Am486DX2-WT");
+					break;
+		case 0x470:	sprintf (cpu->name, "%s", "Am486DX2-WB");
+					break;
+		case 0x480:	sprintf (cpu->name, "%s", "Am486DX4-WT / Am5x86-WT");
+					break;
+		case 0x490:	sprintf (cpu->name, "%s", "Am486DX4-WB / Am5x86-WB");
+					break;
+		case 0x4a0:	sprintf (cpu->name, "%s", "Elan SC400");
+					break;
+		case 0x4e0:	sprintf (cpu->name, "%s", "Am5x86-WT");
+					break;
+		case 0x4f0:	sprintf (cpu->name, "%s", "Am5x86-WB");
 					break;
 
-				case 2:	cpu->connector = CONN_SLOT_A;
-						nameptr += sprintf (cpu->name, "%s", "Athlon (0.18um)");
-						switch (cpu->stepping) {
-							case 1:	sprintf (nameptr, "%s", " Rev A1");	break;
-							case 2:	sprintf (nameptr, "%s", " Rev A2");	break;
-						}
-						break;
-				case 3:	cpu->connector = CONN_SOCKET_A;
-						nameptr += sprintf (cpu->name, "%s", "Duron");
-						switch (cpu->stepping) {
-							case 0:	sprintf (nameptr, "%s", " Rev A0");	break;
-							case 1:	sprintf (nameptr, "%s", " Rev A2");	break;
-						}
-						break;
-				case 4:	cpu->connector = CONN_SOCKET_A;
-						nameptr += sprintf (cpu->name, "%s", "Thunderbird");
-						switch (cpu->stepping) {
-							case 0:	sprintf (nameptr, "%s", " Rev A1");		break;
-							case 1:	sprintf (nameptr, "%s", " Rev A2");		break;
-							case 2:	sprintf (nameptr, "%s", " Rev A4-A8");	break;
-							case 3:	sprintf (nameptr, "%s", " Rev A9");		break;
-						}
-						break;
-				case 6:	cpu->connector = CONN_SOCKET_A;
-						switch (cpu->stepping) {
-							case 0:	sprintf (nameptr, "%s", "Athlon 4 (Palomino core) Rev A0-A1");	break;
-							case 1:	sprintf (nameptr, "%s", "Athlon 4 (Palomino core) Rev A2");		break;
-							case 2:	
-									if (getL2size(cpu->number) < 256) {
-										sprintf (nameptr, "%s", "Mobile Duron");
-										break;
-									} else {
-										cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
-										if ((edx & (1<<19)) == 0) {
-											sprintf (nameptr, "%s", "Athlon XP");
-											break;
-										} else {
-											sprintf (nameptr, "%s", "Athlon MP");
-											break;
-										}
-									}
-						}
-						break;
+		case 0x500:	sprintf (cpu->name, "%s", "SSA5 (PR75/PR90/PR100)");
+					cpu->connector = CONN_SOCKET_5_7;
+					break;
+		case 0x510:	sprintf (cpu->name, "%s", "K5 (PR120/PR133)");
+					cpu->connector = CONN_SOCKET_5_7;
+					break;
+		case 0x520:	sprintf (cpu->name, "%s", "K5 (PR166)");
+					cpu->connector = CONN_SOCKET_5_7;
+					break;
+		case 0x530:	sprintf (cpu->name, "%s", "K5 (PR200)");
+					cpu->connector = CONN_SOCKET_5_7;
+					break;
+		case 0x560:	sprintf (cpu->name, "%s", "K6 (0.30 um)");
+					cpu->connector = CONN_SOCKET_7;
+					break;
+		case 0x570:	sprintf (cpu->name, "%s", "K6 (0.25 um)");
+					cpu->connector = CONN_SOCKET_7;
+					break;
+		case 0x580:	nameptr += sprintf (cpu->name, "%s", "K6-2");
+					cpu->connector = CONN_SUPER_SOCKET_7;
+					if (cpu->stepping >= 8)
+						printf (nameptr, "%s", " (CXT core)");
+					break;
+		case 0x590:	sprintf (cpu->name, "%s", "K6-III");
+					cpu->connector = CONN_SUPER_SOCKET_7;
+					break;
+		case 0x5c0:sprintf (cpu->name, "%s", "K6-2+ (0.18um)");
+					cpu->connector = CONN_SUPER_SOCKET_7;
+					break;
+		case 0x5d0:sprintf (cpu->name, "%s", "K6-3+ (0.18um)");
+					cpu->connector = CONN_SUPER_SOCKET_7;
+					break;
 
-				case 7:	cpu->connector = CONN_SOCKET_A;
-						switch (cpu->stepping) {
-							case 0:	sprintf (cpu->name, "%s", "Duron (Morgan core) Rev A0");	break;
-							case 1:	sprintf (cpu->name, "%s", "Duron (Morgan core) Rev A1");	break;
-						}
-						break;
+		case 0x600:	cpu->connector = CONN_SLOT_A;
+				sprintf (cpu->name, "%s", "K7 ES");
+				break;
 
-				case 8:	cpu->connector = CONN_SOCKET_A;
-						if (getL2size(cpu->number) < 256) {
-							sprintf (nameptr, "%s", "Duron");
-							break;
-						} else {
-							cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
-							if ((edx & (1<<19)) == 0) {
-								sprintf (nameptr, "%s", "Athlon XP (Thoroughbred core)");
+		case 0x610:	cpu->connector = CONN_SLOT_A;
+					nameptr += sprintf (cpu->name, "%s", "Athlon (0.25um)");
+					switch (cpu->stepping) {
+						case 1:	sprintf (nameptr, "%s", " Rev C1");	break;
+						case 2:	sprintf (nameptr, "%s", " Rev C2");	break;
+					}
+					break;
+
+		case 0x620:	cpu->connector = CONN_SLOT_A;
+					nameptr += sprintf (cpu->name, "%s", "Athlon (0.18um)");
+					switch (cpu->stepping) {
+						case 1:	sprintf (nameptr, "%s", " Rev A1");	break;
+						case 2:	sprintf (nameptr, "%s", " Rev A2");	break;
+					}
+					break;
+
+		case 0x630:	cpu->connector = CONN_SOCKET_A;
+					nameptr += sprintf (cpu->name, "%s", "Duron");
+					switch (cpu->stepping) {
+						case 0:	sprintf (nameptr, "%s", " Rev A0");	break;
+						case 1:	sprintf (nameptr, "%s", " Rev A2");	break;
+					}
+					break;
+
+		case 0x640:	cpu->connector = CONN_SOCKET_A;
+					nameptr += sprintf (cpu->name, "%s", "Thunderbird");
+					switch (cpu->stepping) {
+						case 0:	sprintf (nameptr, "%s", " Rev A1");		break;
+						case 1:	sprintf (nameptr, "%s", " Rev A2");		break;
+						case 2:	sprintf (nameptr, "%s", " Rev A4-A8");	break;
+						case 3:	sprintf (nameptr, "%s", " Rev A9");		break;
+					}
+					break;
+
+		case 0x660:	cpu->connector = CONN_SOCKET_A;
+					switch (cpu->stepping) {
+						case 0:	sprintf (nameptr, "%s", "Athlon 4 (Palomino core) Rev A0-A1");	break;
+						case 1:	sprintf (nameptr, "%s", "Athlon 4 (Palomino core) Rev A2");		break;
+						case 2:	
+							if (getL2size(cpu->number) < 256) {
+								sprintf (nameptr, "%s", "Mobile Duron");
 								break;
 							} else {
-								sprintf (nameptr, "%s", "Athlon MP (Thoroughbred core)");
-								break;
+								cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
+								if ((edx & (1<<19)) == 0) {
+									sprintf (nameptr, "%s", "Athlon XP");
+									break;
+								} else {
+									sprintf (nameptr, "%s", "Athlon MP");
+									break;
+								}
 							}
+					}
+					break;
+
+		case 0x670:	cpu->connector = CONN_SOCKET_A;
+					switch (cpu->stepping) {
+						case 0:	sprintf (cpu->name, "%s", "Duron (Morgan core) Rev A0");	break;
+						case 1:	sprintf (cpu->name, "%s", "Duron (Morgan core) Rev A1");	break;
+					}
+					break;
+
+		case 0x680:	cpu->connector = CONN_SOCKET_A;
+					if (getL2size(cpu->number) < 256) {
+						sprintf (nameptr, "%s", "Duron");
+						break;
+					} else {
+						cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
+						if ((edx & (1<<19)) == 0) {
+							sprintf (nameptr, "%s", "Athlon XP (Thoroughbred core)");
+							break;
+						} else {
+							sprintf (nameptr, "%s", "Athlon MP (Thoroughbred core)");
+							break;
 						}
-						break;
-				case 15:
-						/* based on http://www.tecchannel.de/hardware/937/images/0010328_PIC.gif */
-						if (cpu->model==0 && cpu->stepping==0)
-							printf ("Clawhammer ES\n");
-						break;
+					}
+					break;
 
-				default:sprintf (cpu->name, "%s", "Unknown CPU");
-						break;
-			}
-			break;
+		case 0xF00:	/* based on http://www.tecchannel.de/hardware/937/images/0010328_PIC.gif */
+					printf ("Clawhammer ES\n");
+					break;
 
-		default:sprintf (cpu->name, "%s", "Unknown CPU");
-				break;
-		}
+		default:	sprintf (cpu->name, "%s", "Unknown CPU");
+					break;
 	}
 }
 
