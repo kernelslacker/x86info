@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.17 2002/06/07 21:46:17 davej Exp $
+ *  $Id: features.c,v 1.18 2002/07/12 01:06:07 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -86,9 +86,9 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 			break;
 
 		case VENDOR_INTEL:
-		/* Hyper-Threading Technology */
-		if (flags & (1 << 28)) {
-			int nr_ht = (eflags >> 16) & 0xFF;
+			/* Hyper-Threading Technology */
+			if (flags & (1 << 28)) {
+				int nr_ht = (eflags >> 16) & 0xFF;
 				printf ("Number of logical processors supported "
 						"within the physical package: %d\n", nr_ht);
 		}
