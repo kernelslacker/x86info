@@ -1,7 +1,11 @@
+2001-08-29 Dave Jones <davej@suse.de>
+
+	* IDT/identify.c:
+	  Work around C3 Ezra cache size bug.
 
 Released as v1.5
 
-2001-08-19  Mark Brown  <broonie@sirena.org.uk>
+2001-08-19 Mark Brown <broonie@sirena.org.uk>
 
 	* x86info.1: Document --show-bluesmoke.
 
