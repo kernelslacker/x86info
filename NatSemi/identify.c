@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.3 2002/07/12 00:56:19 davej Exp $
+ *  $Id: identify.c,v 1.4 2002/07/12 01:28:36 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -35,30 +35,11 @@ void Identify_NatSemi (struct cpudata *cpu)
 
 void display_NatSemi_info(struct cpudata *cpu)
 {
-	unsigned int i;
 	unsigned long eax, ebx, ecx, edx, tmp=0;
 
 	printf ("Family: %d Model: %d Stepping: %d [%s]\n",
 		cpu->family, cpu->model, cpu->stepping, cpu->name);
 	get_model_name (cpu);
-
-	if (cpu->maxi != 0 && show_registers) {
-		/* Dump extended info in raw hex */
-		for (i = 0x00000000; i <= cpu->maxi; i++) {
-			cpuid (cpu->number, i, &eax, &ebx, &ecx, &edx);
-			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
-		}
-		printf ("\n");
-	}
-
-	if (cpu->maxei != 0 && show_registers) {
-		/* Dump extended info in raw hex */
-		for (i = 0x80000000; i <= cpu->maxei; i++) {
-			cpuid (cpu->number, i, &eax, &ebx, &ecx, &edx);
-			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
-		}
-		printf ("\n");
-	}
 
 	cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
 	if (cpu->maxei >= 0x80000001)

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.21 2002/05/23 00:13:06 davej Exp $
+ *  $Id: identify.c,v 1.22 2002/07/12 01:28:36 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -40,8 +40,11 @@ void identify (struct cpudata *cpu)
 		default:					printf ("Unknown vendor\n");				return;
 	}
 
-	if (show_registers)
-		dumpregs (cpu->number);
+	if (show_registers) {
+		dumpregs (cpu->number, 0, maxi);
+		if (cpu->maxei >=0x80000000)
+			dumpregs (cpu->number, 0x80000000, maxei);
+	}
 
 	if (!silent) {
 

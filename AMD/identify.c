@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.24 2002/07/12 01:15:14 davej Exp $
+ *  $Id: identify.c,v 1.25 2002/07/12 01:28:36 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -78,21 +78,6 @@ static int getL2size(int cpunum)
 	cpuid(cpunum, 0x80000006, &eax, &ebx, &ecx, &edx);
 	return (ecx >> 16);
 }
-
-static void dump_extended_AMD_regs(struct cpudata *cpu)
-{
-	unsigned long eax, ebx, ecx, edx;
-	unsigned int i;
-
-	/* Dump extended info in raw hex */
-	for (i = 0x80000000; i <= cpu->maxei; i++) {
-		cpuid(cpu->number, i, &eax, &ebx, &ecx, &edx);
-		printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n",
-		     i, eax, ebx, ecx, edx);
-	}
-	printf("\n");
-}
-
 
 void Identify_AMD(struct cpudata *cpu)
 {
@@ -315,9 +300,6 @@ void display_AMD_info(struct cpudata *cpu)
 {
 	unsigned long tmp;
 	unsigned long eax, ebx, ecx, edx;
-
-	if (show_registers && (cpu->maxei != 0))
-		dump_extended_AMD_regs(cpu);
 
 	if (show_msr) {
 		if (cpu->family == 5)

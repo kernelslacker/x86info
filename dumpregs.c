@@ -1,5 +1,5 @@
 /*
- *  $Id: dumpregs.c,v 1.4 2002/04/29 00:27:28 davej Exp $
+ *  $Id: dumpregs.c,v 1.5 2002/07/12 01:28:36 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -10,15 +10,13 @@
 #include <stdio.h>
 #include "x86info.h"
 
-void dumpregs (int cpunum)
+void dumpregs (int cpunum, unsigned int begin, unsigned int end)
 {
 	unsigned int i;
-	unsigned long maxi, eax, ebx, ecx, edx;
+	unsigned long eax, ebx, ecx, edx;
 
 	/* Dump all the CPUID results in raw hex */
-	cpuid (cpunum, 0, &maxi, NULL, NULL, NULL);
-	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
-	for (i = 0; i <= maxi; i++) {
+	for (i=begin; i<=end; i++) {
 		cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
 		printf ("eax in: 0x%08x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
 	}
