@@ -1,6 +1,7 @@
 2003-4-11 Dave Jones <davej@codemonkey.org.uk>
 
 	* SiS/identify.c: Add recognition of SiS 55x
+	* rdmsr.c: when dumping long long zero pad to 64 bit.
 
 2003-4-2 Dave Jones <davej@codemonkey.org.uk>
 
