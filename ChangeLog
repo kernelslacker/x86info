@@ -1,3 +1,9 @@
+Released as v1.9
+
+2002-05-27	Dave Jones <davej@suse.de>
+
+	* AMD/identify.c: Add a missing break; that broke AMD detection.
+
 Released as v1.8
 
 2002-05-26  Dave Jones <davej@suse.de>
