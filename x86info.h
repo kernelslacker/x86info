@@ -41,7 +41,7 @@ void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned 
 
 void Identify_AMD (unsigned int, struct cpudata *cpu);
 void Identify_Cyrix (unsigned int, unsigned int, struct cpudata *cpu);
-void Identify_IDT (unsigned int, unsigned int, struct cpudata *cpu);
+void Identify_IDT (unsigned int, struct cpudata *cpu);
 void Identify_Intel (unsigned int, struct cpudata *cpu);
 void Identify_RiSE (unsigned int, unsigned int, struct cpudata *cpu);
 

@@ -17,6 +17,7 @@ OBJS =\
 	Intel/eblcr.o\
 \
 	IDT/identify.o\
+	IDT/MSR-C3.o\
 \
 	RiSE/identify.o\
 \

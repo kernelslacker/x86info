@@ -11,6 +11,8 @@
 	* Intel/identify.c: Only read eblcr when asked to.
 	* */identify.c: Move externs to x86info.h
 	* eblcr.c: Moved to Intel/
+	* IDT/identify.c: Fathers MSR-C3.c
+	  Output changed to same order as AMD output
 
 2001-12-9	Hans-Frieder Vogt <hfvogt@nexgo.de>
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.14 2001/08/19 15:09:27 davej Exp $
+ *  $Id: identify.c,v 1.15 2001/12/10 20:30:38 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -26,7 +26,7 @@ void identify (struct cpudata *cpu)
 		case 0x756e6547:/* Intel */	Identify_Intel (maxi, cpu);		break;
 		case 0x68747541:/* AMD */	Identify_AMD (maxi, cpu);			break;
 		case 0x69727943:/* Cyrix */	Identify_Cyrix (maxi, maxei, cpu);	break;
-		case 0x746e6543:/* IDT */	Identify_IDT (maxi, maxei, cpu);	break;
+		case 0x746e6543:/* IDT */	Identify_IDT (maxi, cpu);	break;
 		case 0x52697365:/* Rise This should be checked. Why 2 ? */
 		case 0x65736952:/* Rise */	Identify_RiSE (maxi, maxei, cpu);	break;
 		default:					printf ("Unknown vendor\n");				return;
