@@ -1,3 +1,7 @@
+2003-1-23 Dave Jones <davej@codemonkey.org.uk>
+
+	* bench/benchmarks.c: Add addl & lea benchmarks.
+
 2003-1-20 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/powernow.c: Don't poke MSRs if no FID/VID scaling is present.
