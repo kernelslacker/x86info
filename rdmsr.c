@@ -1,5 +1,5 @@
 /*
- *  $Id: rdmsr.c,v 1.8 2001/09/10 16:56:43 davej Exp $
+ *  $Id: rdmsr.c,v 1.9 2001/09/10 17:08:07 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -57,7 +57,7 @@ void dumpmsr (int cpu, unsigned int msr, int size)
 	if (rdmsr(cpu, msr, &val) == 1) {
 		printf ("MSR: 0x%08x=0x%8llx : ", msr, val);
 		if (size==32)
-			binary64(val);
+			binary32(val);
 		if (size==64)
 			binary64(val);
 		return;
