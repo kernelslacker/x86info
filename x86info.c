@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.39 2001/12/10 17:13:15 davej Exp $
+ *  $Id: x86info.c,v 1.40 2001/12/10 17:17:16 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -39,7 +39,7 @@ int show_eblcr=0;
 int silent = 0;
 int used_UP = 0;
 int user_is_root = 1;
-int want_MSR_level_access = 0;
+int need_root = 0;
 
 void usage (char *programname)
 {
@@ -69,7 +69,7 @@ static void parse_command_line (int argc, char **argv)
 			show_MHz = 1;
 			show_bluesmoke =1;
 			show_eblcr =1;
-			want_MSR_level_access = 1;
+			need_root = 1;
 		}
 
 		if ((!strcmp(arg, "-c") || !strcmp(arg, "--cache")))
@@ -79,12 +79,12 @@ static void parse_command_line (int argc, char **argv)
 			show_flags = 1;
 
 		if ((!strcmp(arg, "-m") || !strcmp(arg, "--msr"))) {
-			want_MSR_level_access = 1;
+			need_root = 1;
 			show_msr = 1;
 		}
 
 		if (!strcmp(arg, "--mult")) {
-			want_MSR_level_access = 1;
+			need_root = 1;
 			show_eblcr = 1;
 		}
 
@@ -95,7 +95,7 @@ static void parse_command_line (int argc, char **argv)
 			show_registers = 1;
 
 		if ((!strcmp(arg, "-s") || !strcmp(arg, "--show-bluesmoke"))) {
-			want_MSR_level_access = 1;
+			need_root = 1;
 			show_bluesmoke = 1;
 		}
 
@@ -124,7 +124,7 @@ int main (int argc, char **argv)
 	if (getuid()!=0)
 		user_is_root=0;
 
-	if (want_MSR_level_access==1 && user_is_root==0)
+	if (need_root==1 && user_is_root==0)
 		printf ("Need to be root to access MSRs.\n");
 
 #if defined __WIN32__
