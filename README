@@ -1,13 +1,18 @@
 x86info v1.0            http://www.sourceforge.net/projects/x86info
+Dave Jones <davej@suse.de>
 
 This program started life as a cpuid program by Phil Karn.
 It's been modified considerably, and much more is planned.
 
 Features:
  - SMP support.
-   Needs the x86 cpuid driver provided with kernel
-   2.2.18 / 2.4.0, and the appropriate nodes in /dev
  - Recognition of all Intel/AMD/IDT/Cyrix CPUs.
+ - Parsing of model specific registers.
+
+Caveats:
+   For usage of the MSR / SMP functions, x86info
+   needs the x86 cpuid driver provided with kernel
+   2.2.18 / 2.4.0, and the appropriate nodes in /dev
 
 
 Command line switches:
@@ -21,10 +26,15 @@ Command line switches:
 -f, --flags
  Show features supported by CPU(s)
 
+-m, --msr
+ Dump model specific registers.
+ Currently only undocumented Athlon registers for research purposes.
+ Future versions will include parsing of bits in MSRs for all
+ processors.
+
 -r, --registers
  Dump register values from all cpuid calls possible.
 
 -a, --all
- Show all information. This turns on -c, -f, -r
-
+ Show all information. This turns on -c, -f, -m, -r
 

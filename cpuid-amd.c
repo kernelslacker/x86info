@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.10 2001/03/11 04:12:54 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.11 2001/03/12 06:34:46 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -14,6 +14,7 @@
 
 extern int show_registers;
 extern int show_cacheinfo;
+extern int show_msr;
 
 static void do_assoc(unsigned long assoc)
 {
@@ -27,12 +28,6 @@ static void do_assoc(unsigned long assoc)
 static void decode_AMD_cacheinfo(int cpunum, unsigned long maxei)
 {
 	unsigned long eax, ebx, ecx, edx;
-/*-		printf ("Data TLB: associativity %ld #entries %ld\n", ebx >> 24, (ebx >> 16) & 0xff);
--		printf ("Instruction TLB: associativity %ld #entries %ld\n", (ebx >> 8) & 0xff, ebx & 0xff);
--		printf ("L1 Data cache: size %ld KB associativity %lx lines per tag %ld line size %ld\n",
--			ecx >> 24, (ecx >> 16) & 0xff, (ecx >> 8) & 0xff, ecx & 0xff);
--		printf ("L1 Instruction cache: size %ld KB associativity %lx lines per tag %ld line size %ld\n",
--			edx >> 24, (edx >> 16) & 0xff, (edx >> 8) & 0xff, edx & 0xff);*/
 
 	if (maxei >= 0x80000005) {
 		/* TLB and cache info */
@@ -46,23 +41,29 @@ static void decode_AMD_cacheinfo(int cpunum, unsigned long maxei)
 		do_assoc (ebx>>24);
 		printf ("%ld entries.\n", (ebx >> 16) & 0xff);
 
-		printf ("L1 Data cache: %ldKb ", ecx >> 24);
+		printf ("L1 Data cache:\n\t");
+		printf ("Size: %ldKb\t", ecx >> 24);
 		do_assoc ((ecx >> 16) & 0xff);
-		printf ("lines per tag=%ld. ", (ecx >> 8) & 0xff);
+		printf ("\n\t");
+		printf ("lines per tag=%ld\t", (ecx >> 8) & 0xff);
 		printf ("line size=%ld bytes.\n", ecx & 0xff);
 
-		printf ("L1 Instruction cache: %ldKb ", edx >> 24);
+		printf ("L1 Instruction cache:\n\t");
+		printf ("Size: %ldKb\t", edx >> 24);
 		do_assoc ((edx >> 16) & 0xff);
-		printf ("lines per tag=%ld. ", (edx >> 8) & 0xff);
+		printf ("\n\t");
+		printf ("lines per tag=%ld\t", (edx >> 8) & 0xff);
 		printf ("line size=%ld bytes.\n", edx & 0xff);
 	}
 
 	/* check K6-III (and later?) on-chip L2 cache size */
 	if (maxei >= 0x80000006) {
 		cpuid (cpunum, 0x80000006, &eax, &ebx, &ecx, &edx);
-		printf ("L2 (on CPU) cache: %ldKb ", ecx >> 16);
+		printf ("L2 (on CPU) cache:\n\t");
+		printf ("Size %ldKb\t", ecx >> 16);
 		do_assoc ((ecx >> 12) & 0x0f);
-		printf ("lines per tag=%ld. ", (ecx >> 8) & 0x0f);
+		printf ("\n\t");
+		printf ("lines per tag=%ld\t", (ecx >> 8) & 0x0f);
 		printf ("line size=%ld bytes.\n", ecx & 0xff);
 	}
 	printf ("\n");
@@ -81,6 +82,18 @@ static void dump_extended_AMD_regs(int cpunum, unsigned long maxei)
 	}
 	printf ("\n");
 }
+
+static void dump_athlon_MSR(int cpunum)
+{
+	printf("\t\t\t\t31       23       15       7 \n");
+	dumpmsr(cpunum, 0x2A);
+	dumpmsr(cpunum, 0xC0000080);
+	dumpmsr(cpunum, 0xC0010010);
+	dumpmsr(cpunum, 0xC0010015);
+	dumpmsr(cpunum, 0xC001001B);
+	printf ("\n");
+}
+
 
 void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 {
@@ -228,12 +241,10 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 			}
 			break;
 		}
-		printf ("]\n\n");
+		printf ("]\n");
+		if (show_msr)
+			dump_athlon_MSR(cpunum);
 	}
-
-	/* Check for presence of extended info */
-	if (maxei == 0)
-		return;
 
 	if (maxei >= 0x80000001) {
 		cpuid (cpunum, 0x80000001, &eax, &ebx, &ecx, &edx);
@@ -263,4 +274,3 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 	if (show_cacheinfo)
 		decode_AMD_cacheinfo(cpunum, maxei);
 }
-

@@ -31,3 +31,8 @@ void doRise (int, unsigned int, struct cpudata *cpu);
 void decode_feature_flags (struct cpudata *cpu, int flags);
 void identify (int cpunum);
 void dumpregs (int cpunum);
+
+int rdmsr(int cpu, unsigned int index, unsigned long long *val);
+void long2binstr(long value);
+void dumpmsr (int cpunum, unsigned int msr);
+

@@ -1,4 +1,3 @@
-- Display some MSR info (/dev/msr)
 - Recognise different types of Celerons
   (cache size)
 - Flags code needs an update. It was taken from the

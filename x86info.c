@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.8 2001/02/26 16:44:27 davej Exp $
+ *  $Id: x86info.c,v 1.9 2001/03/12 06:34:46 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include "x86info.h"
 
+int show_msr=0;
 int show_registers=0;
 int show_flags=0;
 int show_cacheinfo=0;
@@ -21,7 +22,8 @@ void usage (char *programname)
 	printf ("Usage: %s [<switches>]\n\
 -a, --all\n\
 -c, --cacheinfo \n\
--f, --flags \n\
+-f, --flags\n\
+-m, --msr\n\
 -r, --registers\n\n", programname);
 	exit (0);
 }
@@ -35,13 +37,17 @@ void parse_command_line (int argc, char **argv)
 			show_registers = 1;
 			show_flags = 1;
 			show_cacheinfo = 1;
+			show_msr =1;
 		}
+
+		if ((!strcmp(arg, "-c") || !strcmp(arg, "--cache")))
+			show_cacheinfo = 1;
 
 		if ((!strcmp(arg, "-f") || !strcmp(arg, "--flags")))
 			show_flags = 1;
 
-		if ((!strcmp(arg, "-c") || !strcmp(arg, "--cache")))
-			show_cacheinfo = 1;
+		if ((!strcmp(arg, "-m") || !strcmp(arg, "--msr")))
+			show_msr= 1;
 
 		if ((!strcmp(arg, "-r") || !strcmp(arg, "--registers")))
 			show_registers = 1;
@@ -56,10 +62,11 @@ int main (int argc, char **argv)
 {
 	unsigned int i,n, nrCPUs;
 
-	printf ("x86info v1.0.  Dave Jones 2001.\n");
+	printf ("x86info v1.0.  Dave Jones 2001\n");
+	printf ("Feedback to <davej@suse.de>.\n\n");
 
 	parse_command_line(argc, argv);
-	
+
 	/* FIXME: Insert code here to test if CPUID instruction is available */
 
 	nrCPUs = sysconf (_SC_NPROCESSORS_CONF);

@@ -12,7 +12,9 @@ OBJS =\
 	cpuid-idt.o\
 	cpuid-rise.o\
 	identify.o\
-	dumpregs.o
+	dumpregs.o\
+	rdmsr.o\
+	binary.o
 
 x86info: $(OBJS)
 	gcc -o x86info $(OBJS)
