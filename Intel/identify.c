@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.52 2003/05/03 01:07:15 davej Exp $
+ *  $Id: identify.c,v 1.53 2003/06/09 09:44:08 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -402,7 +402,7 @@ void Identify_Intel (struct cpudata *cpu)
 
 	case 0x690:
 //		cpu->connector = 
-		nameptr += sprintf (cpu->name, "%s", "Pentium 4-M (Centrino)");
+		nameptr += sprintf (cpu->name, "%s", "Pentium M (Banias)");
 		break;
 
 	case 0x6A0:

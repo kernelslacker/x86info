@@ -4,6 +4,7 @@
 	* Intel/MSR-PM.c: Pentium M MSR support.
 	* Makefile: Pentium M MSR support.
 	* Intel/Intel.h: Pentium M MSR support.
+	* Intel/identify.c: s/Centrino/Banias/
 
 2003-5-3 Dave Jones <davej@codemonkey.org.uk>
 
