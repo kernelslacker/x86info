@@ -48,10 +48,3 @@ Command line switches:
 -s, --show-bluesmoke
  Show the Machine Check registers if available.
 
---parse-bluesmoke
- Translate a Machine Check Exception dump to english.
-
---check-bluesmoke
- Check the Machine Check registers, and print warning if necessary.
- This option is intended for use in for eg, an hourly cronjob.
-

@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.31 2001/08/14 18:20:03 davej Exp $
+ *  $Id: x86info.c,v 1.32 2001/08/26 17:10:02 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -20,8 +20,6 @@ int show_cacheinfo=0;
 int show_all=0;
 int show_MHz=0;
 int show_bluesmoke=0;
-int check_bluesmoke=0;
-int parse_bluesmoke=0;
 int show_eblcr=0;
 
 int silent = 0;
@@ -40,8 +38,6 @@ void usage (char *programname)
       --mult\n\
 -r,   --registers\n\
 -s,   --show-bluesmoke\n\
-      --check-bluesmoke\n\
-      --parse-bluesmoke\n\
 \n", programname);
 	exit (0);
 }
@@ -88,15 +84,6 @@ void parse_command_line (int argc, char **argv)
 			want_MSR_level_access = 1;
 			show_bluesmoke = 1;
 		}
-
-		if (!strcmp(arg, "--check-bluesmoke")) {
-			want_MSR_level_access = 1;
-			check_bluesmoke = 1;
-			silent = 1;
-		}
-
-		if (!strcmp(arg, "--parse-bluesmoke"))
-			parse_bluesmoke = 1;
 
 		if ((!strcmp(arg, "?") || !strcmp(arg, "--help")))
 			usage(argv[0]);	
