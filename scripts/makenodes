@@ -1,10 +1,12 @@
 #!/bin/bash
 
+NRNODES=`grep processor /proc/cpuinfo | wc -l`
+
 if [ ! -d /dev/cpu ] ; then
 	mkdir /dev/cpu
 fi
 
-for i in `seq 0 31`
+for i in `seq 0 $NRNODES`
 do
 	if [ ! -d /dev/cpu/$i ] ; then
 		mkdir /dev/cpu/$i
