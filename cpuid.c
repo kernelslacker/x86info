@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid.c,v 1.8 2001/09/01 16:32:30 davej Exp $
+ *  $Id: cpuid.c,v 1.9 2001/11/19 12:31:27 davej Exp $
  *	This file is part of x86info
  *	(C) 2000, 2001 Dave Jones.
  *	Fixes by Arjan van de Ven (arjanv@redhat.com) and
@@ -34,7 +34,7 @@ void cpuid (int CPU_number, int index,
 		return;
 	}
 
-	/* Ok, this is SMP, so we need to use the /dev/CPU interface. */
+	/* Ok, use the /dev/CPU interface in preference to the _up code. */
 	snprintf (cpuname,18, "/dev/cpu/%d/cpuid", CPU_number);
 	fh = open (cpuname, O_RDONLY);
 	if (fh != -1) {
