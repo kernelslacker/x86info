@@ -1,9 +1,20 @@
+- Recognise CPUs with bugs, and print warnings
+  if workarounds are not enabled. For example..
+  "Stepping D0 Duron detected with Cache size bug.
+   You should upgrade your kernel to work around this bug"
+
+- Intel cache sizing code could be improved.
+  See arch/i386/kernel/setup.c from kernel
+
 - Recognise different types of Celerons
   (cache size)
+
 - Flags code needs an update. It was taken from the
   kernel before hpa cleaned it up.
+
 - --gcc option to output best optimisation parameters
   for that CPU.
+
 - --check-mca
   Useful for polling from a script to check for errors
   that don't raise MCE
