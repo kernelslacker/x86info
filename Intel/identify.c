@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.58 2004/02/02 23:33:15 davej Exp $
+ *  $Id: identify.c,v 1.59 2004/02/09 00:22:18 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -659,6 +659,10 @@ void Identify_Intel (struct cpudata *cpu)
 		// SL79L 3.0GHz (800FSB)
 		// SL7B8 3.2GHz (800FSB)
 		// SL7B9 3.4GHz (800FSB)
+		// process = "0.09u";
+		// 125 million transistors
+		// 112mm2 die size
+		// pipeline_stages=31
 		nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [C0]");
 		break;
 	case 0xF40:
