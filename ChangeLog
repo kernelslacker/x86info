@@ -1,3 +1,7 @@
+2002-06-4 Dave Jones <davej@suse.de>
+
+	* AMD/MSR-K6.c: Decode K6 EFER register.
+
 2002-05-31 Dave Jones <davej@suse.de>
 
 	* mtrr.c: Dump MTRR registers using --mtrr

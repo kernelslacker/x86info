@@ -1,5 +1,5 @@
 /*
- *  $Id: MSR-K6.c,v 1.7 2001/12/10 20:17:34 davej Exp $
+ *  $Id: MSR-K6.c,v 1.8 2002/06/04 21:52:59 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -46,6 +46,31 @@ void dump_k6_MSR (struct cpudata *cpu)
 			}
 		} else {
 			printf ("Couldn't read WHCR register.\n");
+		}
+	}
+
+	/* Dump EWBE register on K6-2 & K6-3 */
+	if ((cpu->family==5) && (cpu->model>=8)) {
+		if (read_msr (cpu->number, 0xC0000080, &val) == 1) {
+			if (val & (1<<0))
+				printf ("System call extension present.\n");
+			if (val & (1<<1))
+				printf ("Data prefetch enabled.\n");
+			else
+				printf ("Data prefetch disabled.\n");
+			printf ("EWBE mode: ");
+			switch ((val & (1<<2|1<<3|1<<4))>>2) {
+				case 0:	printf ("strong ordering\n");
+					break;
+				case 1:	printf ("speculative disable\n");
+					break;
+				case 2:	printf ("invalid\n");
+					break;
+				case 3:	printf ("global disable\n");
+					break;
+			}
+		} else {
+			printf ("Couldn't read EFER register.\n");
 		}
 	}
 
