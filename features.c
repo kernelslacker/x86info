@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.14 2001/12/10 23:56:15 davej Exp $
+ *  $Id: features.c,v 1.15 2002/01/03 19:46:55 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -22,7 +22,7 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 	const char *amd_cap_flags[] = {
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, "syscall", NULL, NULL, NULL, NULL,
-		NULL, NULL, NULL, NULL, NULL, NULL, "mmxext", NULL,
+		NULL, NULL, NULL, "mp", NULL, NULL, "mmxext", NULL,
 		NULL, NULL, NULL, NULL, NULL, "lm", "3dnowext", "3dnow"
 	};
 	const char *centaur_cap_flags[] = {
