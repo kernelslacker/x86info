@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.3 2001/08/28 23:10:59 davej Exp $
+ *  $Id: identify.c,v 1.4 2001/08/31 01:28:11 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -110,6 +110,8 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx;
+	unsigned long long val=0;
+	int longhaul=0;
 
 	if (maxei != 0 && show_registers) {
 		/* Dump extended info in raw hex */
@@ -149,5 +151,42 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 		else
 			printf ("L2 (on CPU) cache: %ld KB associativity %lx lines per tag %ld line size %ld\n",
 				ecx >> 16, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
+	}
+
+	/* Decode longhaul info. */
+	if (cpu->family != 6)	/* only interested in VIA Cyrix */
+		return;
+
+	printf ("Longhaul v");
+	if (cpu->model==6 || (cpu->model==7 && cpu->stepping==0))
+		printf ("1.0");
+	if (cpu->model==7 && cpu->stepping>0) {
+		printf ("2.0");
+		longhaul=2;
+	}
+	if (cpu->model==8)
+		printf ("3.0");
+	printf (" present\n");
+
+	if (longhaul==2 && rdmsr(cpu->number, 0x110A, &val) == 1) {
+		dumpmsr(cpu->number, 0x110A);
+		if (val & 1)
+			printf ("\tSoftVID support\n");
+		if (val & 2)
+			printf ("\tSoftBSEL support\n");
+		if (val==0)
+			printf ("\tSoftware clock multiplier only: No Softvid\n");
+
+		printf ("\tRevision key: %d\n", val & (1<<7|1<<6|1<<5|1<<4) >> 4);
+		if (val & (1<<8))
+			printf ("EnableSoftBusRatio=Enabled\n");
+		if (val & (1<<9))
+			printf ("EnableSoftVid=Enabled\n");
+		if (val & (1<<10))
+			printf ("EnableSoftBSEL=Enabled\n");
+		printf ("MaxMHzBR=%d\n", val & 1<<12);
+		printf ("MinMHzBR=%d\n", val & 1<<13);
+		printf ("SoftBusRatio=%d\n", val & 1<<14);
+		printf ("VRM Rev=%d\n", val & 1<<15);
 	}
 }
