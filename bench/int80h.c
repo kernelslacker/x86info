@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include "../x86info.h"
+#include "bench.h"
 
 void time_int80h()
 {
@@ -15,11 +16,11 @@ void time_int80h()
 
 	start = rdtsc();
 	for (i = 0; i < 1000000; i++) {
-		asm volatile("call 0xfffff000"
+		asm volatile("int $0x80"
 			:"=a" (ret)
 			:"0" (__NR_getppid));
 	}
 	end = rdtsc();
-	printf("%f cycles\n", (end - start) / 1000000.0);
+	printf("int 0x80 took %f cycles\n", (end - start) / 1000000.0);
 }
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.71 2002/12/13 23:10:44 davej Exp $
+ *  $Id: x86info.c,v 1.72 2002/12/18 14:08:17 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -27,7 +27,9 @@
 
 #include "x86info.h"
 
+int show_bench=0;
 int show_bluesmoke=0;
+int show_bugs=0;
 int show_cacheinfo=0;
 int show_connector=0;
 int show_eblcr=0;
@@ -38,7 +40,6 @@ int show_mtrr=0;
 int show_pm=0;
 int show_registers=0;
 int show_urls=0;
-int show_bugs=0;
 
 static int show_mptable=0;
 static int show_MHz=0;
@@ -55,6 +56,7 @@ void usage (char *programname)
 {
 	printf ("Usage: %s [<switches>]\n\
 -a,   --all\n\
+      --bench\n\
       --bugs\n\
 -c,   --cache\n\
       --connector\n\
@@ -80,6 +82,7 @@ static void parse_command_line (int argc, char **argv)
 
 	for (argp = argv+1; argp <= argv + argc && (arg = *argp); argp++) {
 		if ((!strcmp(arg, "-a") || !strcmp(arg, "--all"))) {
+			show_bench = 1;
 			show_bluesmoke = 1;
 			show_bugs = 1;
 			show_cacheinfo = 1;
@@ -96,6 +99,9 @@ static void parse_command_line (int argc, char **argv)
 			show_urls = 1;
 			need_root = 1;
 		}
+
+		if (!strcmp(arg, "--bench"))
+			show_bench = 1;
 
 		if (!strcmp(arg, "--bugs"))
 			show_bugs = 1;
@@ -270,9 +276,14 @@ int main (int argc, char **argv)
 		 * Doing this per-cpu is a problem, as we can't
 		 * schedule userspace code per-cpu.
 		 * Although running nrCPUs * threads would probably work.
+		 *
+		 * Could also experiment with the new scheduler binding syscalls.
 		 */
 		if (show_MHz)
 			estimate_MHz(i);
+		if (show_bench)
+			show_benchmarks();
+
 		if (nrCPUs>1)
 			separator();
 

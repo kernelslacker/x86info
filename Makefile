@@ -45,6 +45,8 @@ OBJS =\
 	mtrr.o \
 	connector.o\
 \
+	bench/benchmarks.o\
+	bench/int80h.o\
 	bench/MHz.o
 
 x86info: $(OBJS)

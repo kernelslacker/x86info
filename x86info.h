@@ -105,7 +105,9 @@ void interpret_eblcr(u32 lo);
 int issmp(int *numcpu, int verb);
 void get_model_name (struct cpudata *cpu);
 void decode_connector (unsigned int type);
+void show_benchmarks (void);
 
+extern int show_bench;
 extern int show_bluesmoke;
 extern int show_bugs;
 extern int show_cacheinfo;
