@@ -1,3 +1,7 @@
+2004-2-2 Dave Jones <davej@codemonkey.org.uk>
+
+	* Intel/identify.c: Add P4 Prescott.
+
 2003-12-31 Dave Jones <davej@codemonkey.org.uk>
 	* Intel/identify.c: Add P3 Xeon S-Spec numbers.
 

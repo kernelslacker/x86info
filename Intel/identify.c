@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.57 2003/12/31 22:08:22 davej Exp $
+ *  $Id: identify.c,v 1.58 2004/02/02 23:33:15 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -612,6 +612,7 @@ void Identify_Intel (struct cpudata *cpu)
 			//SL6Z5 2.8GHz (800FSB)
 			/* P4 Extreme edition.*/
 			//SL7AA 3.2GHz (800FSB) 2MB L3 cache
+			//SL7CH 3.4GHz (800FSB) 2MB L3 cache
 			nameptr+=sprintf (nameptr, "%s", " [M0]");
 			break;
 		case 7:
@@ -647,10 +648,18 @@ void Identify_Intel (struct cpudata *cpu)
 			//SL6WU SL6WK 3GHz (800FSB)
 			//SL6QC SL6PG 3.06GHz (533FSB)
 			//SL6WG SL6WE 3.2GHz (800FSB)
-
+			//SL793 3.4GHz (800FSB)
 			nameptr+=sprintf (nameptr, "%s", " [D1]");
 			break;
 		}
+		break;
+	case 0xF33:
+		// SL7D8 2.8GHz (533FSB)
+		// SL79K 2.8GHz (800FSB)
+		// SL79L 3.0GHz (800FSB)
+		// SL7B8 3.2GHz (800FSB)
+		// SL7B9 3.4GHz (800FSB)
+		nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [C0]");
 		break;
 	case 0xF40:
 	case 0xF50:
