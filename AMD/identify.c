@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.9 2001/10/21 16:33:34 davej Exp $
+ *  $Id: identify.c,v 1.10 2001/11/19 11:23:53 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -74,6 +74,16 @@ static void decode_AMD_cacheinfo(int cpunum, unsigned long maxei)
 	printf ("\n");
 }
 
+/*
+ * Returns size of L2 cache for Duron/Athlon descrimination
+ * Assumes 0x80000006 is valid.
+ */
+static int getL2size(int cpunum)
+{
+	unsigned long eax, ebx, ecx, edx;
+	cpuid (cpunum, 0x80000006, &eax, &ebx, &ecx, &edx);
+	return (ecx >> 16);
+}
 
 static void dump_extended_AMD_regs(int cpunum, unsigned long maxei)
 {
@@ -167,10 +177,22 @@ void Identify_AMD (unsigned int maxi, struct cpudata *cpu)
 						}
 						break;
 				case 6:	switch (cpu->stepping) {
-							case 0:	sprintf (nameptr, "%s", "Athlon 4 Rev A0-A1");	break;
-							case 1:	sprintf (nameptr, "%s", "Athlon 4 Rev A2");		break;
-							case 2:	sprintf (nameptr, "%s", "Mobile Duron");		break;
-							//FIXME: 662 is also rev A5 Athlon XP
+							case 0:	sprintf (nameptr, "%s", "Athlon 4 (Palomino core) Rev A0-A1");	break;
+							case 1:	sprintf (nameptr, "%s", "Athlon 4 (Palomino core) Rev A2");		break;
+							case 2:	
+									if (getL2size(cpu->number) < 256) {
+										sprintf (nameptr, "%s", "Mobile Duron");
+										break;
+									} else {
+										cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
+										if ((edx & (1<<19)) == 0) {
+											sprintf (nameptr, "%s", "Athlon XP");
+											break;
+										} else {
+											sprintf (nameptr, "%s", "Athlon MP");
+											break;
+										}
+									}
 						}
 						break;
 				case 7:	switch (cpu->stepping) {
@@ -178,6 +200,22 @@ void Identify_AMD (unsigned int maxi, struct cpudata *cpu)
 							case 1:	sprintf (cpu->name, "%s", "Duron (Morgan core) Rev A1");	break;
 						}
 						break;
+				case 8:
+						if (getL2size(cpu->number) < 256) {
+							sprintf (nameptr, "%s", "Duron");
+							break;
+						} else {
+							cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
+							if ((edx & (1<<19)) == 0) {
+								sprintf (nameptr, "%s", "Athlon XP (Thoroughbred core)");
+								break;
+							} else {
+								sprintf (nameptr, "%s", "Athlon MP (Thoroughbred core)");
+								break;
+							}
+						}
+						break;
+
 				default:sprintf (cpu->name, "%s", "Unknown CPU");
 				break;
 			}
