@@ -2,6 +2,7 @@
 
 	* features.c: Correct typos.
 	* Results/: Start collecting resulting output from different CPUs.
+	* features.c, identify.c: Make flags/eflags per CPU & store result.
 
 2002-10-26  Mark Brown  <broonie@sirena.org.uk>
 

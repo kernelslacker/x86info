@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.12 2002/07/12 01:28:36 davej Exp $
+ *  $Id: identify.c,v 1.13 2002/10/30 03:11:19 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -90,7 +90,7 @@ void display_Cyrix_info(struct cpudata *cpu)
 		cpu->family, cpu->model, cpu->stepping, cpu->name);
 	get_model_name (cpu);
 
-	decode_feature_flags (cpu, edx, 0);
+	decode_feature_flags (cpu);
 
 	printf ("TLB & L1 Cache info\n");
 	if (cpu->maxi >= 2 && show_cacheinfo) {

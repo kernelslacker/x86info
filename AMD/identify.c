@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.32 2002/10/24 15:57:53 davej Exp $
+ *  $Id: identify.c,v 1.33 2002/10/30 03:11:19 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -336,8 +336,9 @@ void Identify_AMD(struct cpudata *cpu)
 
 void display_AMD_info(struct cpudata *cpu)
 {
-	unsigned long tmp;
 	unsigned long eax, ebx, ecx, edx;
+
+	decode_feature_flags(cpu);
 
 	if (show_msr) {
 		if (cpu->family == 5)
@@ -348,12 +349,6 @@ void display_AMD_info(struct cpudata *cpu)
 
 	if (show_bluesmoke)
 		decode_athlon_bluesmoke(cpu->number);
-
-	if (cpu->maxei >= 0x80000001) {
-		cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &tmp);
-		cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
-		decode_feature_flags(cpu, tmp, edx);
-	}
 
 	if (show_cacheinfo)
 		decode_AMD_cacheinfo(cpu);

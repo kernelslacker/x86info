@@ -32,6 +32,8 @@ struct cpudata {
 	unsigned int maxi, maxei;
 	unsigned char name[80];
 	unsigned char connector;
+	unsigned int flags;
+	unsigned int eflags;
 };
 
 #define tuple(c) ((c->family<<8)|(c->model<<4)|(c->stepping))
@@ -78,7 +80,7 @@ void display_Intel_info(struct cpudata *cpu);
 void display_NatSemi_info(struct cpudata *cpu);
 void display_RiSE_info(struct cpudata *cpu);
 
-void decode_feature_flags (struct cpudata *cpu, int flags, int eflags);
+void decode_feature_flags (struct cpudata *cpu);
 void identify (struct cpudata *cpu);
 void show_info (struct cpudata *cpu);
 

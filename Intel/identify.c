@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.32 2002/10/22 10:44:42 davej Exp $
+ *  $Id: identify.c,v 1.33 2002/10/30 03:11:20 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -492,8 +492,7 @@ void display_Intel_info (struct cpudata *cpu)
 	if (cpu->family == 0xF)
 		get_model_name (cpu);
 
-	cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
-	decode_feature_flags (cpu, edx, ebx);
+	decode_feature_flags (cpu);
 
 	if (cpu->maxi >= 2 && show_cacheinfo) {
 		/* Decode TLB and cache info */

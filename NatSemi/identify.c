@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.4 2002/07/12 01:28:36 davej Exp $
+ *  $Id: identify.c,v 1.5 2002/10/30 03:11:20 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -35,14 +35,9 @@ void Identify_NatSemi (struct cpudata *cpu)
 
 void display_NatSemi_info(struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx, tmp=0;
-
 	printf ("Family: %d Model: %d Stepping: %d [%s]\n",
 		cpu->family, cpu->model, cpu->stepping, cpu->name);
 	get_model_name (cpu);
 
-	cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
-	if (cpu->maxei >= 0x80000001)
-		cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &tmp);
-	decode_feature_flags (cpu, edx, tmp);
+	decode_feature_flags (cpu);
 }
