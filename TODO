@@ -17,8 +17,6 @@
   name string, perform the cpuid reset sequence, and restore the
   name string on exit.
 
-- cpuid macro might cut down huge switch statements in a few places
-
 - After identifying CPU we can associate more info with the CPU.
   - CPU codename
   - Introduction date
