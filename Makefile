@@ -2,7 +2,7 @@ CFLAGS = -Wall -W -g -O2
 #CFLAGS += -mwin32 -DWIN32_LEAN_AND_MEAN
 SHELL = /bin/sh
 
-all: x86info
+all: x86info test
 
 OBJS =\
 	AMD/identify.o\
@@ -43,6 +43,12 @@ x86info: $(OBJS)
 
 .S.o:
 	gcc $(CFLAGS) -o $@ -c $<
+
+nodes:
+	scripts/makenodes
+
+test:
+	scripts/testnodes
 
 clean:
 	@find . -name "*.o" -exec rm {} \;

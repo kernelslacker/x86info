@@ -1,3 +1,10 @@
+2001-12-18	Dave Jones <davej@suse.de>
+
+	* Makefile: add 'test' and 'nodes' targets.
+	* scripts/testnodes:
+	* scripts/makenodes: Added in order to reduce number of
+	  "bug reports" of missing /dev nodes
+
 Released as v1.7
 
 2001-12-11	Matthew Gregan <mgregan@jade.co.nz>

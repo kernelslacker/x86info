@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ ! -c /dev/cpu/0/cpuid ] ; then
+	echo "*** No /dev/cpu/0/cpuid found."
+	echo "type \"make nodes\" as root to install device nodes"
+	echo "You will also need cpuid driver installed"
+fi
+if [ ! -c /dev/cpu/0/msr ] ; then
+	echo "*** No /dev/cpu/0/msr found."
+	echo "type \"make nodes\" as root to install device nodes"
+	echo "You will also need msr driver installed"
+fi
