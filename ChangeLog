@@ -2,6 +2,7 @@
 
 	* Cyrix/identify.c: Add recognition for Cyrix MII
 	* IDT/identify.c: Cluster register dumps together.
+	* IDT/MSR-C3.c: Check for root capability before using readmsr.
 	* Intel/identify.c: Recognise some extra Intel CPUs / revisions.
 
 2001-12-10	Dave <dave@iol.cz>

@@ -1,5 +1,5 @@
 /*
- *  $Id: MSR-C3.c,v 1.1 2001/12/10 20:30:39 davej Exp $
+ *  $Id: MSR-C3.c,v 1.2 2001/12/11 01:16:14 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -14,6 +14,9 @@ void dump_C3_MSR (struct cpudata *cpu)
 {
 	unsigned long long val=0;
 	int longhaul=0;
+
+	if (!user_is_root)
+		return;
 
 	printf ("FCR: ");
 	dumpmsr (cpu->number, 0x1107, 32);
