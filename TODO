@@ -9,9 +9,6 @@
 - --apic
   Dump APIC registers
 
-- --bugs to print known CPU errata
-  "Stepping D0 Duron detected with Cache size bug."
-
 - --gcc option to output best optimisation parameters
   for that CPU.
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.69 2002/11/20 15:29:41 davej Exp $
+ *  $Id: x86info.c,v 1.70 2002/12/04 17:49:28 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -37,6 +37,7 @@ int show_mtrr=0;
 int show_pm=0;
 int show_registers=0;
 int show_urls=0;
+int show_bugs=0;
 
 static int show_mptable=0;
 static int show_MHz=0;
@@ -53,10 +54,10 @@ void usage (char *programname)
 {
 	printf ("Usage: %s [<switches>]\n\
 -a,   --all\n\
--c,   --cacheinfo\n\
+      --bugs\n\
+-c,   --cache\n\
       --connector\n\
 -f,   --flags\n\
--v,   --verbose\n\
 -mhz, --mhz\n\
 -mp,  --mptable\n\
 -m,   --msr\n\
@@ -66,6 +67,7 @@ void usage (char *programname)
 -r,   --registers\n\
 -s,   --show-bluesmoke\n\
 -u,   --urls\n\
+-v,   --verbose\n\
 \n", programname);
 	exit (0);
 }
@@ -76,7 +78,8 @@ static void parse_command_line (int argc, char **argv)
 
 	for (argp = argv+1; argp <= argv + argc && (arg = *argp); argp++) {
 		if ((!strcmp(arg, "-a") || !strcmp(arg, "--all"))) {
-			show_bluesmoke =1;
+			show_bluesmoke = 1;
+			show_bugs = 1;
 			show_cacheinfo = 1;
 			show_connector = 1;
 			show_eblcr =1;
@@ -90,6 +93,9 @@ static void parse_command_line (int argc, char **argv)
 			show_urls = 1;
 			need_root = 1;
 		}
+
+		if (!strcmp(arg, "--bugs"))
+			show_bugs = 1;
 
 		if ((!strcmp(arg, "-c") || !strcmp(arg, "--cache")))
 			show_cacheinfo = 1;

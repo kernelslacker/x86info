@@ -1,3 +1,7 @@
+2002-12-05  Dave Jones <davej@codemonkey.org.uk>
+
+	* x86info.c: Add --bugs, correct helptext for --cache
+
 2002-11-27  Dave Jones <davej@codemonkey.org.uk>>
 
 	* Intel/identify.c: Add reocgnition for Mobile Pentium 3 and P3M

@@ -107,6 +107,7 @@ void get_model_name (struct cpudata *cpu);
 void decode_connector (unsigned int type);
 
 extern int show_bluesmoke;
+extern int show_bugs;
 extern int show_cacheinfo;
 extern int show_connector;
 extern int show_eblcr;
