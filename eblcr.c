@@ -2,6 +2,7 @@
 #include "x86info.h"
 
 extern int user_is_root;
+extern int show_eblcr;
 
 void interpret_eblcr(u32 lo)
 {
@@ -21,7 +22,7 @@ void interpret_eblcr(u32 lo)
 	int mul = (lo >> 22) & 15;
 	int busclock, cpuclk;
 
-	if (!user_is_root)
+	if (!user_is_root || !show_eblcr)
 		return;
 
 	/*

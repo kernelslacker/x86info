@@ -39,6 +39,9 @@ Command line switches:
 -mhz, --mhz
  Estimate current MHz.
 
+--mult
+ Decode CPU multipliers/bus speed where possible.
+
 -r, --registers
  Dump register values from all cpuid calls possible.
 

@@ -1,10 +1,15 @@
 2001-08-14 Dave Jones <davej@suse.de>
 
+	* eblcr.c:
+	  Now depends on --mult being passed.
 	* cpuid-rise.c:
 	* cpuid-intel.c:
 	  Remove duplicated feature flag stuff, use the common stuff.
 	* cpuid-amd.c:
 	  Detect PowerNOW! thermistor.
+	* x86info.c:
+	  Added --mult stuff, and needs_MSR_level_access.
+	  Now only spits out "Need to be root" once, and only when necessary.
 
 2001-08-10 Dave Jones <davej@suse.de>
 

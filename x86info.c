@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.29 2001/08/14 18:09:06 davej Exp $
+ *  $Id: x86info.c,v 1.30 2001/08/14 18:17:33 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -22,6 +22,7 @@ int show_MHz=0;
 int show_bluesmoke=0;
 int check_bluesmoke=0;
 int parse_bluesmoke=0;
+int show_eblcr=0;
 
 int silent = 0;
 int used_UP = 0;
@@ -36,6 +37,7 @@ void usage (char *programname)
 -f,   --flags\n\
 -mhz, --mhz\n\
 -m,   --msr\n\
+      --mult\n\
 -r,   --registers\n\
 -s,   --show-bluesmoke\n\
       --check-bluesmoke\n\
@@ -56,6 +58,7 @@ void parse_command_line (int argc, char **argv)
 			show_msr =1;
 			show_MHz =1;
 			show_bluesmoke =1;
+			show_eblcr =1;
 			want_MSR_level_access = 1;
 		}
 
@@ -68,6 +71,11 @@ void parse_command_line (int argc, char **argv)
 		if ((!strcmp(arg, "-m") || !strcmp(arg, "--msr"))) {
 			want_MSR_level_access = 1;
 			show_msr = 1;
+		}
+
+		if (!strcmp(arg, "--mult")) {
+			want_MSR_level_access = 1;
+			show_eblcr = 1;
 		}
 
 		if ((!strcmp(arg, "-mhz") || !strcmp(arg, "--mhz")))
