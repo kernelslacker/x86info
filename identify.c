@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.8 2001/08/10 10:06:38 davej Exp $
+ *  $Id: identify.c,v 1.9 2001/08/10 10:25:25 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -25,30 +25,13 @@ void identify (int cpunum)
 	cpuid (cpunum, 0x80000000, &maxei, NULL, NULL, NULL);
 	
 	switch (ebx) {
-	case 0x756e6547:	/* Intel */
-		Identify_Intel (cpunum, maxi, &cpu);
-		break;
-
-	case 0x68747541:	/* AMD */
-		Identify_AMD (cpunum, maxi, &cpu);
-		break;
-
-	case 0x69727943:	/* Cyrix */
-		docyrix (cpunum, maxi, &cpu);
-		break;
-
-	case 0x746e6543:	/* IDT */
-		doIDT (cpunum, maxi, &cpu);
-		break;
-
-	case 0x52697365:	/* This should be checked. Why 2 ? */
-	case 0x65736952:	/* Rise */
-		doRise (cpunum, maxi, &cpu);
-		break;
-
-	default:
-		printf ("Unknown vendor\n");
-		return;
+		case 0x756e6547:/* Intel */	Identify_Intel (cpunum, maxi, &cpu);		break;
+		case 0x68747541:/* AMD */	Identify_AMD (cpunum, maxi, &cpu);			break;
+		case 0x69727943:/* Cyrix */	Identify_Cyrix (cpunum, maxi, maxei, &cpu);	break;
+		case 0x746e6543:/* IDT */	doIDT (cpunum, maxi, &cpu);					break;
+		case 0x52697365:/* Rise This should be checked. Why 2 ? */
+		case 0x65736952:/* Rise */	doRise (cpunum, maxi, &cpu);				break;
+		default:					printf ("Unknown vendor\n");				return;
 	}
 
 	if (!silent) {
@@ -58,6 +41,12 @@ void identify (int cpunum)
 				printf ("Family: %d Model: %d Stepping: %d [%s]\n",
 					cpu.family, cpu.model, cpu.stepping, cpu.name);
 				display_AMD_info (cpunum, maxei, &cpu);
+				break;
+
+			case VENDOR_CYRIX:
+				printf ("Family: %d Model: %d Stepping: %d [%s]\n",
+					cpu.family, cpu.model, cpu.stepping, cpu.name);
+				display_Cyrix_info (cpunum, maxi, maxei, &cpu);
 				break;
 
 			case VENDOR_INTEL:

@@ -1,3 +1,13 @@
+2001-08-10 Dave Jones <davej@suse.de>
+
+	* cpuid-amd.c:
+	* cpuid-intel.c: 
+	  Identify functions don't output text any more.
+	* x86info.c:
+	  added --check-bluesmoke, --parse-bluesmoke and silent mode.
+
+Released as v1.4
+
 2001-08-03 Dave Jones <davej@suse.de>
 
 	* cpuid-amd.c: Recognise AMD Elan SC400

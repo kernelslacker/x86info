@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-cyrix.c,v 1.7 2001/03/11 04:12:54 davej Exp $
+ *  $Id: cpuid-cyrix.c,v 1.8 2001/08/10 10:25:25 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -30,107 +30,51 @@ void decode_cyrix_tlb (int x)
 }
 
 /* Cyrix-specific information */
-void docyrix (int cpunum, unsigned int maxi, struct cpudata *cpu)
+void Identify_Cyrix (int cpunum, unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 {
-	unsigned int i, ntlb;
-	unsigned long maxei, eax, ebx, ecx, edx;
-	int stepping, model, family, reserved;
+	int i;
+	unsigned long eax, ebx, ecx, edx;
 
-	printf ("Cyrix-specific functions\n");
-	cpuid (cpunum, 0x80000000, &maxei, NULL, NULL, NULL);
-	if (maxei >= 0x80000000 && show_registers) {
-		/* Dump extended info in raw hex */
-		for (i = 0x80000000; i <= maxei; i++) {
-			cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
-			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
-				edx);
-		}
-	}
+	cpu->vendor = VENDOR_CYRIX;
 
 	/* Do standard stuff */
 	if (maxi >= 1) {
 		cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
-		stepping = eax & 0xf;
-		model = (eax >> 4) & 0xf;
-		family = (eax >> 8) & 0xf;
-		reserved = eax >> 12;
+		cpu->stepping = eax & 0xf;
+		cpu->model = (eax >> 4) & 0xf;
+		cpu->family = (eax >> 8) & 0xf;
 
-		printf ("Family: %d Model: %d [", family, model);
-		switch (family) {
-		case 4:
-			switch (model) {
-			case 4:
-				printf ("MediaGX");
-				break;
-			}
-			break;
-		case 5:
-			switch (model) {
-			case 2:
-				printf ("6x86");
-				break;
-			case 4:
-				printf ("GXm");
-				break;
-			}
-			break;
-		case 6:
-			switch (model) {
-			case 0:
-				printf ("6x86/MX");
-				break;
-			}
-			break;
-		}
-		printf ("]\n\n");
-		decode_feature_flags (cpu, edx);
-
-		if (maxi >= 2 && show_cacheinfo) {
-			/* TLB and L1 Cache info */
-			ntlb = 255;
-			for (i = 0; i < ntlb; i++) {
-				cpuid (cpunum, 2, &eax, &ebx, &ecx, &edx);
-				ntlb = eax & 0xff;
-				decode_cyrix_tlb (eax >> 8);
-				decode_cyrix_tlb (eax >> 16);
-				decode_cyrix_tlb (eax >> 24);
-
-				/* ebx and ecx are reserved */
-
-				if ((edx & 0x80000000) == 0) {
-					decode_cyrix_tlb (edx);
-					decode_cyrix_tlb (edx >> 8);
-					decode_cyrix_tlb (edx >> 16);
-					decode_cyrix_tlb (edx >> 24);
-				}
-			}
+		switch (cpu->family) {
+			case 4:	if (cpu->model==5) sprintf (cpu->name, "%s", "MediaGX");	break;
+					sprintf (cpu->name, "%s", "Unknown CPU");
+					break;
+			case 5:	switch (cpu->model) {
+						case 2:	sprintf (cpu->name, "%s", "6x86");	break;
+						case 4:	sprintf (cpu->name, "%s", "GXm");		break;
+						default:sprintf (cpu->name, "%s", "Unknown CPU"); break;
+					}
+					break;
+			case 6:	if (cpu->model==0) sprintf (cpu->name, "%s", "6x86/MX");	break;
+					sprintf (cpu->name, "%s", "Unknown CPU");
+					break;
 		}
 
 		/* Check for presence of extended info */
 		if (maxei < 0x80000000)
 			return;
 
-		printf ("\nExtended feature flags:\n");
 		if (maxei >= 0x80000001) {
 			cpuid (cpunum, 0x80000001, &eax, &ebx, &ecx, &edx);
-			stepping = eax & 0xf;
-			model = (eax >> 4) & 0xf;
-			family = (eax >> 8) & 0xf;
-			reserved = eax >> 12;
-			printf ("Family: %d Model: %d [", family, model);
-			switch (family) {
-			case 4:
-				printf ("MediaGX");
-				break;
-			case 5:
-				printf ("6x86/GXm");
-				break;
-			case 6:
-				printf ("6x86/MX");
+			cpu->stepping = eax & 0xf;
+			cpu->model = (eax >> 4) & 0xf;
+			cpu->family = (eax >> 8) & 0xf;
+
+			switch (cpu->family) {
+				case 4:	sprintf (cpu->name, "MediaGX");		break;
+				case 5:	sprintf (cpu->name, "6x86/GXm");	break;
+				case 6:	sprintf (cpu->name, "6x86/MX");		break;
 			}
-			printf ("]\n");
 		}
-		printf ("\n");
 
 		if (maxei >= 0x80000002) {
 			/* Processor identification string */
@@ -150,27 +94,68 @@ void docyrix (int cpunum, unsigned int maxi, struct cpudata *cpu)
 					*cp++ = edx >> (8 * i);
 			}
 			*cp++ = '\n';
-			printf ("Processor name string: %s\n", namestring);
+			sprintf (cpu->name, "%s", namestring);
 		}
-		if (maxei >= 0x80000005 && show_cacheinfo) {
-			/* TLB and L1 Cache info */
-			ntlb = 255;
-			for (i = 0; i < ntlb; i++) {
-				cpuid (cpunum, 0x80000005, &eax, &ebx, &ecx, &edx);
-				ntlb = eax & 0xff;
-				decode_cyrix_tlb (ebx >> 8);
-				decode_cyrix_tlb (ebx >> 16);
-				decode_cyrix_tlb (ebx >> 24);
+	}
+}
 
-				/* eax and edx are reserved */
+void display_Cyrix_info(int cpunum, unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
+{
+	unsigned int i, ntlb;
+	unsigned long eax, ebx, ecx, edx;
 
-				if ((ecx & 0x80000000) == 0) {
-					decode_cyrix_tlb (ecx);
-					decode_cyrix_tlb (ecx >> 8);
-					decode_cyrix_tlb (ecx >> 16);
-					decode_cyrix_tlb (ecx >> 24);
-				}
+	printf ("Cyrix-specific functions\n");
+	if (maxei >= 0x80000000 && show_registers) {
+		/* Dump extended info in raw hex */
+		for (i = 0x80000000; i <= maxei; i++) {
+			cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
+			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
+				edx);
+		}
+	}
+
+	decode_feature_flags (cpu, edx);
+
+	printf ("TLB & L1 Cache info\n");
+	if (maxi >= 2 && show_cacheinfo) {
+		/* TLB and L1 Cache info */
+		ntlb = 255;
+		for (i = 0; i < ntlb; i++) {
+			cpuid (cpunum, 2, &eax, &ebx, &ecx, &edx);
+			ntlb = eax & 0xff;
+			decode_cyrix_tlb (eax >> 8);
+			decode_cyrix_tlb (eax >> 16);
+			decode_cyrix_tlb (eax >> 24);
+
+			/* ebx and ecx are reserved */
+			if ((edx & 0x80000000) == 0) {
+				decode_cyrix_tlb (edx);
+				decode_cyrix_tlb (edx >> 8);
+				decode_cyrix_tlb (edx >> 16);
+				decode_cyrix_tlb (edx >> 24);
+			}
+		}
+	}
+
+	printf ("TLB & L1 Cache info from extended info\n");
+	if (maxei >= 0x80000005 && show_cacheinfo) {
+		/* TLB and L1 Cache info */
+		ntlb = 255;
+		for (i = 0; i < ntlb; i++) {
+			cpuid (cpunum, 0x80000005, &eax, &ebx, &ecx, &edx);
+			ntlb = eax & 0xff;
+			decode_cyrix_tlb (ebx >> 8);
+			decode_cyrix_tlb (ebx >> 16);
+			decode_cyrix_tlb (ebx >> 24);
+
+			/* eax and edx are reserved */
+			if ((ecx & 0x80000000) == 0) {
+				decode_cyrix_tlb (ecx);
+				decode_cyrix_tlb (ecx >> 8);
+				decode_cyrix_tlb (ecx >> 16);
+				decode_cyrix_tlb (ecx >> 24);
 			}
 		}
 	}
 }
+
