@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include "x86info.h"
 
+extern int show_cacheinfo;
+extern int show_flags;
+
 /* Decode Intel TLB and cache info descriptors */
 void decode_intel_tlb (int x)
 {
@@ -271,15 +274,17 @@ void dointel (int cpunum, int maxi, struct cpudata *cpu)
 
 		printf ("Reserved: %d\n\n", reserved);
 
-		printf ("Feature flags %08lx:\n", edx);
-		for (i = 0; i < 32; i++) {
-			if (edx & (1 << i)) {
-				printf ("%s\n", x86_cap_flags[i]);
+		if (show_flags) {
+			printf ("Feature flags %08lx:\n", edx);
+			for (i = 0; i < 32; i++) {
+				if (edx & (1 << i)) {
+					printf ("%s\n", x86_cap_flags[i]);
+				}
 			}
 		}
 	}
 
-	if (maxi >= 2) {
+	if (maxi >= 2 && show_cacheinfo) {
 		/* Decode TLB and cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {
