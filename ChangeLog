@@ -3,6 +3,7 @@
 	* x86info.c: Put a seperator between CPUs on SMP.
 	* get_model_name.c: Early return if no name.
 	* Intel/MSR-P4.c: Dump various P4 MSRs.
+	* Intel/MSR-P6.c: P6 family MSR decoding.
 
 Released as 1.11
 
