@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.18 2001/06/16 01:46:07 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.19 2001/07/09 23:54:52 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -126,22 +126,22 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		case 4:
 			switch (cpu->model) {
 			case 3:
-				printf ("80486DX2");
+				printf ("Am486DX2-WT");
 				break;
 			case 7:
-				printf ("80486DX2WB");
+				printf ("Am486DX2-WB");
 				break;
 			case 8:
-				printf ("80486DX4");
+				printf ("Am486DX4-WT / Am5x86-WT");
 				break;
 			case 9:
-				printf ("80486DX4WB");
+				printf ("Am486DX4-WB / Am5x86-WB");
 				break;
 			case 0xe:
-				printf ("5x86");
+				printf ("Am5x86-WT");
 				break;
 			case 0xf:
-				printf ("5x86WB");
+				printf ("Am5x86-WB");
 				break;
 			default:
 				printf ("Unknown CPU");
