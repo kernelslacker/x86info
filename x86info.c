@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.28 2001/08/10 12:43:08 davej Exp $
+ *  $Id: x86info.c,v 1.29 2001/08/14 18:09:06 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -25,6 +25,8 @@ int parse_bluesmoke=0;
 
 int silent = 0;
 int used_UP = 0;
+int user_is_root = 1;
+int want_MSR_level_access = 0;
 
 void usage (char *programname)
 {
@@ -54,6 +56,7 @@ void parse_command_line (int argc, char **argv)
 			show_msr =1;
 			show_MHz =1;
 			show_bluesmoke =1;
+			want_MSR_level_access = 1;
 		}
 
 		if ((!strcmp(arg, "-c") || !strcmp(arg, "--cache")))
@@ -62,19 +65,24 @@ void parse_command_line (int argc, char **argv)
 		if ((!strcmp(arg, "-f") || !strcmp(arg, "--flags")))
 			show_flags = 1;
 
-		if ((!strcmp(arg, "-m") || !strcmp(arg, "--msr")))
-			show_msr= 1;
+		if ((!strcmp(arg, "-m") || !strcmp(arg, "--msr"))) {
+			want_MSR_level_access = 1;
+			show_msr = 1;
+		}
 
 		if ((!strcmp(arg, "-mhz") || !strcmp(arg, "--mhz")))
-			show_MHz= 1;
+			show_MHz = 1;
 
 		if ((!strcmp(arg, "-r") || !strcmp(arg, "--registers")))
 			show_registers = 1;
 
-		if ((!strcmp(arg, "-s") || !strcmp(arg, "--show-bluesmoke")))
+		if ((!strcmp(arg, "-s") || !strcmp(arg, "--show-bluesmoke"))) {
+			want_MSR_level_access = 1;
 			show_bluesmoke = 1;
+		}
 
 		if (!strcmp(arg, "--check-bluesmoke")) {
+			want_MSR_level_access = 1;
 			check_bluesmoke = 1;
 			silent = 1;
 		}
@@ -102,6 +110,11 @@ int main (int argc, char **argv)
 		printf ("No CPUID instruction available.\n");
 		printf ("No further information available for this CPU.\n");
 		return(0);
+	}
+
+	if ((getuid()!=0) && want_MSR_level_access==1 ) {
+		printf ("Need to be root to access MSRs.\n");
+		user_is_root=0;
 	}
 
 	nrCPUs = sysconf (_SC_NPROCESSORS_CONF);

@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.25 2001/08/14 17:39:22 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.26 2001/08/14 18:09:06 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -18,6 +18,7 @@ extern int show_registers;
 extern int show_cacheinfo;
 extern int show_msr;
 extern int show_bluesmoke;
+extern int user_is_root;
 
 static void do_assoc(unsigned long assoc)
 {
@@ -88,10 +89,8 @@ static void dump_extended_AMD_regs(int cpunum, unsigned long maxei)
 
 static void dump_athlon_MSR(int cpunum)
 {
-	if (getuid()!=0) {
-		printf ("Need to be root to access MSRs.\n");
+	if (!user_is_root)
 		return;
-	}
 
 	printf("\t\t\t\t31       23       15       7 \n");
 	dumpmsr(cpunum, 0x2A);

@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.7 2001/06/26 16:42:58 davej Exp $
+ *  $Id: bluesmoke.c,v 1.8 2001/08/14 18:09:06 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -24,25 +24,22 @@
 #define MC_MISC 0x403
 
 extern int show_bluesmoke;
-
+extern int user_is_root;
 
 void decode_bluesmoke(int cpunum)
 {
 	unsigned long long val, val2;
 	int banks, i;
 
-	if (getuid()!=0) {
-		printf ("Need to be root to access MSRs.\n");
+	if (!user_is_root)
 		return;
-	}
 
 	if (rdmsr(cpunum, MCG_CAP, &val) != 1)
 		return;
 
-	if ((val & (1<<8)) == 0) {
+	if ((val & (1<<8)) == 0)
 		printf ("Erk, MCG_CTL not present! :%llx:\n", val);
-	//	return;
-	}
+
 	banks = val & 0xf;
 
 	printf ("Number of reporting banks : %d\n\n", banks);

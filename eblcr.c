@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "x86info.h"
 
+extern int user_is_root;
+
 void interpret_eblcr(u32 lo)
 {
 	static unsigned int buscode[2][4] = {
@@ -18,6 +20,9 @@ void interpret_eblcr(u32 lo)
 	int bus = (lo >> 18) & 3;
 	int mul = (lo >> 22) & 15;
 	int busclock, cpuclk;
+
+	if (!user_is_root)
+		return;
 
 	/*
 	 * FIXME:
