@@ -19,6 +19,12 @@ void interpret_eblcr(u32 lo)
 	int mul = (lo >> 22) & 15;
 	int busclock, cpuclk;
 
+	/*
+	 * FIXME:
+	 * 766MHz Celeron. 66MHz x 11.5 Being picked up as 133x5.0
+	 * bus:1 mul:0
+	 */
+	
 /*	printf ("bus:%x mul:%x\n", bus, mul);*/
 	
 	/* The mobile pIII added bit 27.
