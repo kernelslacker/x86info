@@ -2,6 +2,7 @@
 
 	* AMD/identify.c: Add various random CPU facts.
 	* IDT/*.c: Various cleanup of powersaver/longhaul decoding.
+	* identify.c: Code cleanup.
 
 2003-9-24 Dave Jones <davej@codemonkey.org.uk>
 

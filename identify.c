@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.27 2003/04/11 00:10:42 davej Exp $
+ *  $Id: identify.c,v 1.28 2003/11/04 02:02:43 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -12,20 +12,19 @@
 
 void identify(struct cpudata *cpu)
 {
-	unsigned long maxi, maxei, eax, ebx, ecx, edx;
+	unsigned long maxi, maxei, vendor;
 
-	cpuid(cpu->number, 0, &maxi, NULL, NULL, NULL);
+	cpuid(cpu->number, 0, &maxi, &vendor, NULL, NULL);
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
 	cpu->maxi = maxi;
 
-	cpuid(cpu->number, 0, &eax, &ebx, &ecx, &edx);
 	cpuid(cpu->number, 0x80000000, &maxei, NULL, NULL, NULL);
 	cpu->maxei = maxei;
 
 	cpuid(cpu->number, 0xC0000000, &maxei, NULL, NULL, NULL);
 	cpu->maxei2 = maxei;
 
-	switch (ebx) {
+	switch (vendor) {
 	case 0x756e6547:	/* Intel */
 		Identify_Intel(cpu);
 		break;
@@ -49,7 +48,7 @@ void identify(struct cpudata *cpu)
 		Identify_SiS(cpu);
 		break;
 	default:
-		printf("Unknown vendor (%lx)\n", ebx);
+		printf("Unknown vendor (%lx)\n", vendor);
 		return;
 	}
 }
