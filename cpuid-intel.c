@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.12 2001/06/13 22:03:58 davej Exp $
+ *  $Id: cpuid-intel.c,v 1.13 2001/07/21 00:15:56 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -370,6 +370,12 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		printf ("-%04lX", edx & 0xffff);
 		printf ("-%04lX", ecx >> 16);
 		printf ("-%04lX\n", ecx & 0xffff);
+	}
+
+	if (cpu->family == 6 && cpu->model >= 3) {
+		unsigned long long eblcr;
+		rdmsr (cpunum, 0x2A, &eblcr);
+		interpret_eblcr(eblcr);
 	}
 
 	/* FIXME: Bit test for MCA here!*/

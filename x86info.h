@@ -3,6 +3,8 @@
  * May be used under the terms of the GNU Public License (GPL)
  */
 
+#include <linux/types.h>
+
 #define VENDOR_AMD	1
 #define VENDOR_CENTAUR 2
 #define VENDOR_CYRIX 3
@@ -42,4 +44,5 @@ void dumpmsr (int cpunum, unsigned int msr);
 void dumpmsr_bin (int cpunum, unsigned int msr);
 void estimate_MHz(int cpunum);
 void decode_bluesmoke(int cpunum);
-extern int HaveCPUID(void);
+int HaveCPUID(void);
+void interpret_eblcr(__u32 lo);
