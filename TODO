@@ -1,11 +1,6 @@
-- introduce verbosity (-v/-vv/-vvv) options to do 'everything'. -a output is
-  getting too verbose without it.
-
 - introduce hexdump option (-x) to dump register values in addition to decoding.
 
 - Identify Transmeta CPUs.
-
-- Disallow --mtrr on cpu's that don't have MTRRs.
 
 - Decode mtrr registers as well as dumping them
 

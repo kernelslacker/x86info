@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.61 2002/10/30 14:53:21 davej Exp $
+ *  $Id: x86info.c,v 1.62 2002/11/02 03:26:54 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -36,6 +36,7 @@ int show_cacheinfo=0;
 int show_bluesmoke=0;
 int show_mtrr=0;
 int show_connector=0;
+int show_urls=0;
 
 static int show_mptable=0;
 static int show_MHz=0;
@@ -62,6 +63,7 @@ void usage (char *programname)
       --mtrr\n\
 -r,   --registers\n\
 -s,   --show-bluesmoke\n\
+-u,   --urls\n\
 \n", programname);
 	exit (0);
 }
@@ -82,6 +84,7 @@ static void parse_command_line (int argc, char **argv)
 			show_registers = 1;
 			show_mtrr = 1;
 			show_connector = 1;
+			show_urls = 1;
 			need_root = 1;
 		}
 
@@ -124,6 +127,9 @@ static void parse_command_line (int argc, char **argv)
 			need_root = 1;
 			show_bluesmoke = 1;
 		}
+
+		if ((!strcmp(arg, "-u") || !strcmp(arg, "--urls")))
+			show_urls = 1;
 
 		if ((!strcmp(arg, "-v") || !strcmp(arg, "--verbose")))
 			verbose = 1;

@@ -34,6 +34,8 @@ struct cpudata {
 	unsigned char connector;
 	unsigned int flags;
 	unsigned int eflags;
+	char * datasheet_url;
+	char * errata_url;
 };
 
 #define tuple(c) ((c->family<<8)|(c->model<<4)|(c->stepping))
@@ -62,6 +64,7 @@ struct cpudata {
 #define CONN_BGA474		21
 #define CONN_BGA		22
 #define CONN_SOCKET_754	23
+#define CONN_SOCKET_478	24
 
 void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
@@ -108,6 +111,7 @@ extern int verbose;
 extern int show_msr;
 extern int show_mtrr;
 extern int show_registers;
+extern int show_urls;
 
 extern unsigned int nrCPUs;
 

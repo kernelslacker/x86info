@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.33 2002/10/30 03:11:20 davej Exp $
+ *  $Id: identify.c,v 1.34 2002/11/02 03:26:54 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -14,8 +14,13 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include "../x86info.h"
 #include "Intel.h"
+
+static char p4_423_datasheet[]="http://developer.intel.com/design/pentium4/datashts/24919805.pdf";
+static char p4_478_datasheet[]="http://developer.intel.com/design/pentium4/datashts/24988703.pdf\n\thttp://developer.intel.com/design/pentium4/datashts/29864304.pdf";
+static char p4_errata[]="http://developer.intel.com/design/pentium4/specupdt/24919928.pdf";
 
 /* Decode Intel TLB and cache info descriptors */
 //TODO : Errata workaround. http://www.sandpile.org/post/msgs/20002736.htm
@@ -419,6 +424,8 @@ void Identify_Intel (struct cpudata *cpu)
 
 	case 0xF00:	/* Family 15 */
 		cpu->connector = CONN_SOCKET_423;
+		cpu->datasheet_url = strdup (p4_423_datasheet);
+		cpu->errata_url = strdup (p4_errata);
 		nameptr += sprintf (cpu->name, "%s", "Pentium 4");
 		switch (cpu->stepping) {
 		case 7:
@@ -429,8 +436,12 @@ void Identify_Intel (struct cpudata *cpu)
 			break;
 		}
 		break;
+
 	case 0xF10:
+		cpu->connector = CONN_SOCKET_423;
 		nameptr += sprintf (cpu->name, "%s", "Pentium 4 (Willamette)");
+		cpu->datasheet_url = strdup (p4_423_datasheet);
+		cpu->errata_url = strdup (p4_errata);
 		switch (cpu->stepping) {
 		case 1:
 			nameptr+=sprintf (nameptr, "%s", " [C0]");
@@ -444,6 +455,9 @@ void Identify_Intel (struct cpudata *cpu)
 		}
 		break;
 	case 0xF20:
+		cpu->connector = CONN_SOCKET_478;
+		cpu->datasheet_url = strdup (p4_478_datasheet);
+		cpu->errata_url = strdup (p4_errata);
 		nameptr += sprintf (cpu->name, "%s", "Pentium 4 Xeon (Northwood)");
 		switch (cpu->stepping) {
 		case 4:
@@ -456,6 +470,9 @@ void Identify_Intel (struct cpudata *cpu)
 		break;
 	case 0xF40:
 	case 0xF50:
+		cpu->connector = CONN_SOCKET_478;
+		cpu->datasheet_url = strdup (p4_478_datasheet);
+		cpu->errata_url = strdup (p4_errata);
 		nameptr+=sprintf (cpu->name, "%s", "P4 Xeon (Foster)");
 		break;
 	default:
@@ -523,6 +540,7 @@ void display_Intel_info (struct cpudata *cpu)
 				decode_Intel_TLB (edx >> 24, cpu->family);
 			}
 		}
+		printf ("\n");
 	}
 
 	if (cpu->maxi >= 3) {
@@ -552,4 +570,11 @@ void display_Intel_info (struct cpudata *cpu)
 	/* FIXME: Bit test for MCA here!*/
 	if (show_bluesmoke)
 		decode_Intel_bluesmoke(cpu->number, cpu->family);
+
+	/* Hyper-Threading Technology */
+	if (cpu->flags & (1 << 28)) {
+		int nr_ht = (cpu->eflags >> 16) & 0xFF;
+		printf ("Number of logical processors supported "
+			"within the physical package: %d\n\n", nr_ht);
+	}
 }

@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.22 2002/10/30 14:53:21 davej Exp $
+ *  $Id: features.c,v 1.23 2002/11/02 03:26:54 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -132,13 +132,7 @@ void decode_feature_flags (struct cpudata *cpu)
 			break;
 
 		case VENDOR_INTEL:
-			/* Hyper-Threading Technology */
-			if (cpu->flags & (1 << 28)) {
-				int nr_ht = (cpu->eflags >> 16) & 0xFF;
-				printf ("Number of logical processors supported "
-						"within the physical package: %d\n", nr_ht);
-		}
-		break;
+			break;
 
 		default:
 			/* Unknown CPU manufacturer or no special handling needed */

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.24 2002/07/12 01:48:59 davej Exp $
+ *  $Id: identify.c,v 1.25 2002/11/02 03:26:54 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -103,6 +103,16 @@ void show_info(struct cpudata *cpu)
 
 	if (show_connector)
 		decode_connector (cpu->connector);
+
+	if (show_urls) {
+		if (cpu->datasheet_url != NULL)
+			printf ("Datasheet: %s\n", cpu->datasheet_url);
+
+		if (cpu->errata_url != NULL)
+			printf ("Errata: %s\n", cpu->errata_url);
+
+		printf ("\n");
+	}
 
 	if (!user_is_root)
 		return;
