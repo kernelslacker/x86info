@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.57 2002/06/18 18:16:42 davej Exp $
+ *  $Id: x86info.c,v 1.58 2002/07/12 01:48:59 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -33,11 +33,11 @@ int show_flags=0;
 int show_eblcr=0;
 int show_cacheinfo=0;
 int show_bluesmoke=0;
+int show_mtrr=0;
+int show_connector=0;
 
 static int show_mptable=0;
-static int show_mtrr=0;
 static int show_MHz=0;
-static int show_connector=0;
 
 int silent = 0;
 int used_UP = 0;
@@ -205,12 +205,7 @@ int main (int argc, char **argv)
 			printf ("CPU #%u\n", i+1);
 
 		identify (&cpu);
-
-		if (show_mtrr && user_is_root)
-			dump_mtrrs(&cpu);
-
-		if (show_connector)
-			decode_connector(cpu.connector);
+		show_info (&cpu);
 
 		/*
 		 * Doing this per-cpu is a problem, as we can't

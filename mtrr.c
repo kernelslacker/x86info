@@ -1,5 +1,5 @@
 /*
- *  $Id: mtrr.c,v 1.2 2002/06/18 18:16:42 davej Exp $
+ *  $Id: mtrr.c,v 1.3 2002/07/12 01:48:59 davej Exp $
  *  This file is part of x86info
  *  (C) 2002 Dave Jones.
  *
@@ -12,13 +12,12 @@
 #include <stdio.h>
 #include "x86info.h"
 
-void dump_mtrr (int cpu, int msr)
+static void dump_mtrr (int cpu, int msr)
 {
 	unsigned long long val=0;
 
-	if (read_msr(cpu, msr, &val) == 1) {
+	if (read_msr(cpu, msr, &val) == 1)
 		printf ("0x%016llx\n", val);
-	}
 }
 
 void dump_mtrrs (struct cpudata *cpu)

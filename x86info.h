@@ -79,6 +79,7 @@ void display_RiSE_info(struct cpudata *cpu);
 
 void decode_feature_flags (struct cpudata *cpu, int flags, int eflags);
 void identify (struct cpudata *cpu);
+void show_info (struct cpudata *cpu);
 
 int read_msr(int cpu, unsigned int index, unsigned long long *val);
 void binary32(unsigned long value);
@@ -97,9 +98,11 @@ void decode_connector (unsigned int type);
 
 extern int show_bluesmoke;
 extern int show_cacheinfo;
+extern int show_connector;
 extern int show_eblcr;
 extern int show_flags;
 extern int show_msr;
+extern int show_mtrr;
 extern int show_registers;
 
 extern unsigned int nrCPUs;
