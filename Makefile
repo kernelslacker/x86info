@@ -40,11 +40,12 @@ OBJS =\
 	identify.o\
 	rdmsr.o\
 	binary.o\
-	MHz.o\
 	mptable.o\
 	get_model_name.o\
 	mtrr.o \
-	connector.o
+	connector.o\
+\
+	bench/MHz.o
 
 x86info: $(OBJS)
 	$(CC) $(CFLAGS) -o x86info $(OBJS)

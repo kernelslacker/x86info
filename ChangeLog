@@ -1,3 +1,9 @@
+2002-12-18  Dave Jones <davej@codemonkey.org.uk>
+
+	* bench/: new dir
+	* MHz.c: Moved to bench/
+	* bench/syscall.c: Add Linus' syscall benchmark
+
 2002-12-05  Dave Jones <davej@codemonkey.org.uk>
 
 	* x86info.c: Add --bugs, correct helptext for --cache

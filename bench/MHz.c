@@ -1,5 +1,5 @@
 /*
- *  $Id: MHz.c,v 1.8 2001/12/09 16:35:51 davej Exp $
+ *  $Id: MHz.c,v 1.1 2002/12/18 13:42:12 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -21,7 +21,7 @@
 __inline__ unsigned long timer_init();
 #endif /* __WIN32__ */
 
-#include "x86info.h"
+#include "../x86info.h"
 
 __inline__ unsigned long long int rdtsc()
 {
