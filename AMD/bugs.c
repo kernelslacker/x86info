@@ -1,5 +1,5 @@
 /*
- *  $Id: bugs.c,v 1.4 2004/06/02 21:23:56 davej Exp $
+ *  $Id: bugs.c,v 1.5 2004/06/02 22:29:29 davej Exp $
  *  This file is part of x86info.
  *  (C) 2002 Dave Jones.
  *
@@ -35,10 +35,7 @@ void show_amd_bugs(struct cpudata *cpu)
 	switch (cpu->family) {
 	/* Athlons. */
 	case 6:
-		switch (cpu->model) {
-		case 7:	show_k7_bugs(cpu);
-				break;
-		}
+		show_k7_bugs(cpu);
 		break;
 
 	default:

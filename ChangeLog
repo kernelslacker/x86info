@@ -1,6 +1,6 @@
 2004-6-2 Dave Jones <davej@codemonkey.org.uk>
 
-	* AMD/bugs.c: Check on model, not family for Athlons.
+	* AMD/bugs.c: Fix athlon check.
 
 2004-5-7 Dave Jones <davej@codemonkey.org.uk>
 
