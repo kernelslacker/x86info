@@ -17,6 +17,7 @@
 	* Intel/cachesize.c: Work out cache sizes for Intel CPUs.
 	* Intel/identify.c: Only read eblcr when asked to.
 	  Distinguish between Celerons & Pentiums.
+	  Make cache descriptions match in style to the AMD descriptions.
 
 2001-12-9	Hans-Frieder Vogt <hfvogt@nexgo.de>
 
