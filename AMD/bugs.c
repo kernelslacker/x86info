@@ -1,5 +1,5 @@
 /*
- *  $Id: bugs.c,v 1.1 2002/12/04 18:07:03 davej Exp $
+ *  $Id: bugs.c,v 1.2 2003/01/15 19:07:48 davej Exp $
  *  This file is part of x86info.
  *  (C) 2002 Dave Jones.
  *
@@ -24,7 +24,7 @@ static void show_k7_bugs(struct cpudata *cpu)
 		if (read_msr (cpu->number, MSR_CLKCTL, &val) == 1) {
 			if ((val & 0xfff00000) != 0x20000000) {
 				printf ("CLK_CTL is programmed to %llx, instead of %llx\n",
-						val, ((val&0xfff00000)|0x20000000));
+						val, ((val&~0xfff00000)|0x20000000));
 			}
 		}
 	}
