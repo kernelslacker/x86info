@@ -22,18 +22,18 @@ void decode_cyrix_tlb (int x)
 }
 
 /* Cyrix-specific information */
-void docyrix (int maxi, struct cpudata *cpu)
+void docyrix (int cpunum, int maxi, struct cpudata *cpu)
 {
 	unsigned int i, ntlb;
 	unsigned long maxei, eax, ebx, ecx, edx;
 	int stepping, model, family, reserved;
 
 	printf ("Cyrix-specific functions\n");
-	cpuid (0x80000000, &maxei, NULL, NULL, NULL);
+	cpuid (cpunum, 0x80000000, &maxei, NULL, NULL, NULL);
 	if (maxei >= 0x80000000) {
 		/* Dump extended info in raw hex */
 		for (i = 0x80000000; i <= maxei; i++) {
-			cpuid (i, &eax, &ebx, &ecx, &edx);
+			cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
 			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
 				edx);
 		}
@@ -41,7 +41,7 @@ void docyrix (int maxi, struct cpudata *cpu)
 
 	/* Do standard stuff */
 	if (maxi >= 1) {
-		cpuid (1, &eax, &ebx, &ecx, &edx);
+		cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
 		stepping = eax & 0xf;
 		model = (eax >> 4) & 0xf;
 		family = (eax >> 8) & 0xf;
@@ -150,7 +150,7 @@ void docyrix (int maxi, struct cpudata *cpu)
 		/* TLB and L1 Cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {
-			cpuid (2, &eax, &ebx, &ecx, &edx);
+			cpuid (cpunum, 2, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
 			decode_cyrix_tlb (eax >> 8);
 			decode_cyrix_tlb (eax >> 16);
@@ -173,7 +173,7 @@ void docyrix (int maxi, struct cpudata *cpu)
 
 	printf ("\nExtended feature flags:\n");
 	if (maxei >= 0x80000001) {
-		cpuid (0x80000001, &eax, &ebx, &ecx, &edx);
+		cpuid (cpunum, 0x80000001, &eax, &ebx, &ecx, &edx);
 		stepping = eax & 0xf;
 		model = (eax >> 4) & 0xf;
 		family = (eax >> 8) & 0xf;
@@ -264,7 +264,7 @@ void docyrix (int maxi, struct cpudata *cpu)
 		unsigned int j;
 		cp = namestring;
 		for (j = 0x80000002; j <= 0x80000004; j++) {
-			cpuid (j, &eax, &ebx, &ecx, &edx);
+			cpuid (cpunum, j, &eax, &ebx, &ecx, &edx);
 
 			for (i = 0; i < 4; i++)
 				*cp++ = eax >> (8 * i);
@@ -282,7 +282,7 @@ void docyrix (int maxi, struct cpudata *cpu)
 		/* TLB and L1 Cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {
-			cpuid (0x80000005, &eax, &ebx, &ecx, &edx);
+			cpuid (cpunum, 0x80000005, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
 			decode_cyrix_tlb (ebx >> 8);
 			decode_cyrix_tlb (ebx >> 16);

@@ -62,7 +62,7 @@ void decode_intel_tlb (int x)
 
 
 /* Intel-specific information */
-void dointel (int maxi, struct cpudata *cpu)
+void dointel (int cpunum, int maxi, struct cpudata *cpu)
 {
 	int i;
 	unsigned long eax, ebx, ecx, edx;
@@ -107,7 +107,7 @@ void dointel (int maxi, struct cpudata *cpu)
 
 	if (maxi >= 1) {
 		/* Family/model/type etc */
-		cpuid (1, &eax, &ebx, &ecx, &edx);
+		cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
 		stepping = eax & 0xf;
 		model = (eax >> 4) & 0xf;
 		family = (eax >> 8) & 0xf;
@@ -283,7 +283,7 @@ void dointel (int maxi, struct cpudata *cpu)
 		/* Decode TLB and cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {
-			cpuid (2, &eax, &ebx, &ecx, &edx);
+			cpuid (cpunum, 2, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
 			decode_intel_tlb (eax >> 8);
 			decode_intel_tlb (eax >> 16);
@@ -312,10 +312,10 @@ void dointel (int maxi, struct cpudata *cpu)
 	if (maxi >= 3) {
 		/* Pentium III CPU serial number */
 		unsigned long signature;
-		cpuid (1, &eax, NULL, NULL, NULL);
+		cpuid (cpunum, 1, &eax, NULL, NULL, NULL);
 		signature = eax;
 
-		cpuid (3, &eax, &ebx, &ecx, &edx);
+		cpuid (cpunum, 3, &eax, &ebx, &ecx, &edx);
 		printf ("Processor serial: ");
 		printf ("%04lX", signature >> 16);
 		printf ("-%04lX", signature & 0xffff);

@@ -2,4 +2,5 @@
 - Display some MSR info (/dev/msr)
 - Recognise different types of Celerons
   (cache size)
+- Options to show / hide things like registers
 

@@ -17,11 +17,14 @@ struct cpudata {
 	int cachesize_L2;
 };
 
-extern void cpuid (int, long *, long *, long *, long *);
-extern void decode_intel_tlb (int);
-extern void decode_cyrix_tlb (int);
-extern void dointel (int, struct cpudata *cpu);
-extern void doamd (int, struct cpudata *cpu);
-extern void docyrix (int, struct cpudata *cpu);
-extern void doIDT (int, struct cpudata *cpu);
-extern void decode_feature_flags (struct cpudata *cpu, int flags);
+void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
+void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
+void decode_intel_tlb (int);
+void decode_cyrix_tlb (int);
+void dointel (int, int, struct cpudata *cpu);
+void doamd (int, int, struct cpudata *cpu);
+void docyrix (int, int, struct cpudata *cpu);
+void doIDT (int, int, struct cpudata *cpu);
+void decode_feature_flags (struct cpudata *cpu, int flags);
+void identify (int cpunum);
+void dumpregs (int cpunum);

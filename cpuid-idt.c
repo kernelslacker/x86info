@@ -7,18 +7,18 @@
 #include "x86info.h"
 
 /* IDT-specific information */
-void doIDT (int maxi, struct cpudata *cpu)
+void doIDT (int cpunum, int maxi, struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned long maxei, eax, ebx, ecx, edx;
 
 	cpu->vendor = VENDOR_CENTAUR;
 
-	cpuid (0x80000000, &maxei, NULL, NULL, NULL);
+	cpuid (cpunum, 0x80000000, &maxei, NULL, NULL, NULL);
 	if (maxei != 0) {
 		/* Dump extended info in raw hex */
 		for (i = 0x80000000; i <= maxei; i++) {
-			cpuid (i, &eax, &ebx, &ecx, &edx);
+			cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
 			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
 				edx);
 		}
@@ -26,7 +26,7 @@ void doIDT (int maxi, struct cpudata *cpu)
 
 	/* Do standard stuff */
 	if (maxi >= 1) {
-		cpuid (1, &eax, &ebx, &ecx, &edx);
+		cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
 		cpu->stepping = eax & 0xf;
 		cpu->model = (eax >> 4) & 0xf;
 		cpu->family = (eax >> 8) & 0xf;
@@ -80,7 +80,7 @@ void doIDT (int maxi, struct cpudata *cpu)
 
 	printf ("Feature flags:\n");
 	if (maxei >= 0x80000001) {
-		cpuid (0x80000001, &eax, &ebx, &ecx, &edx);
+		cpuid (cpunum, 0x80000001, &eax, &ebx, &ecx, &edx);
 		decode_feature_flags (cpu, edx);
 	}
 
@@ -90,7 +90,7 @@ void doIDT (int maxi, struct cpudata *cpu)
 		unsigned int j;
 		cp = namestring;
 		for (j = 0x80000002; j <= 0x80000004; j++) {
-			cpuid (j, &eax, &ebx, &ecx, &edx);
+			cpuid (cpunum, j, &eax, &ebx, &ecx, &edx);
 
 			for (i = 0; i < 4; i++)
 				*cp++ = eax >> (8 * i);
@@ -107,7 +107,7 @@ void doIDT (int maxi, struct cpudata *cpu)
 
 	if (maxei >= 0x80000005) {
 		/* TLB and cache info */
-		cpuid (0x80000005, &eax, &ebx, &ecx, &edx);
+		cpuid (cpunum, 0x80000005, &eax, &ebx, &ecx, &edx);
 		printf ("Data TLB: associativity %lx #entries %ld\n", ebx >> 24, (ebx >> 16) & 0xff);
 		printf ("Instruction TLB: associativity %lx #entries %ld\n", (ebx >> 8) & 0xff, ebx & 0xff);
 		printf ("L1 Data cache: size %ld KB associativity %lx lines per tag %ld line size %ld\n",
@@ -118,7 +118,7 @@ void doIDT (int maxi, struct cpudata *cpu)
 
 	/* check K6-III (and later?) on-chip L2 cache size */
 	if (maxei >= 0x80000006) {
-		cpuid (0x80000006, &eax, &ebx, &ecx, &edx);
+		cpuid (cpunum, 0x80000006, &eax, &ebx, &ecx, &edx);
 		printf ("L2 (on CPU) cache: %ld KB associativity %lx lines per tag %ld line size %ld\n",
 			ecx >> 16, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
 	}
