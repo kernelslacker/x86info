@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.3 2001/12/10 17:52:15 davej Exp $
+ *  $Id: identify.c,v 1.4 2001/12/10 18:01:36 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -43,16 +43,25 @@ void Identify_Cyrix (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 		cpu->family = (eax >> 8) & 0xf;
 
 		switch (cpu->family) {
-			case 4:	if (cpu->model==5) sprintf (cpu->name, "%s", "MediaGX");	break;
+			case 4:	if (cpu->model==5) {
+						sprintf (cpu->name, "%s", "MediaGX");
+						break;
+					}
 					sprintf (cpu->name, "%s", "Unknown CPU");
 					break;
 			case 5:	switch (cpu->model) {
-						case 2:	sprintf (cpu->name, "%s", "6x86");	break;
-						case 4:	sprintf (cpu->name, "%s", "GXm");		break;
-						default:sprintf (cpu->name, "%s", "Unknown CPU"); break;
+						case 2:	sprintf (cpu->name, "%s", "6x86");
+								break;
+						case 4:	sprintf (cpu->name, "%s", "GXm");
+								break;
+						default:sprintf (cpu->name, "%s", "Unknown CPU");
+								break;
 					}
 					break;
-			case 6:	if (cpu->model==0) sprintf (cpu->name, "%s", "6x86/MX");	break;
+			case 6:	if (cpu->model==0) {
+						sprintf (cpu->name, "%s", "6x86/MX");
+						break;
+					}
 					sprintf (cpu->name, "%s", "Unknown CPU");
 					break;
 		}
@@ -68,9 +77,12 @@ void Identify_Cyrix (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 			cpu->family = (eax >> 8) & 0xf;
 
 			switch (cpu->family) {
-				case 4:	sprintf (cpu->name, "MediaGX");		break;
-				case 5:	sprintf (cpu->name, "6x86/GXm");	break;
-				case 6:	sprintf (cpu->name, "6x86/MX");		break;
+				case 4:	sprintf (cpu->name, "MediaGX");
+						break;
+				case 5:	sprintf (cpu->name, "6x86/GXm");
+						break;
+				case 6:	sprintf (cpu->name, "6x86/MX");
+						break;
 			}
 		}
 
