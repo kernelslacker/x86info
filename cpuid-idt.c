@@ -43,10 +43,17 @@ void doIDT (int maxi, struct cpudata *cpu)
 				default:
 					printf ("2");
 					break;
-				case 7...9:
+				case 7:
+				case 8:
+				case 9:
 					printf ("2A");
 					break;
-				case 10...15:
+				case 10:
+				case 11:
+				case 12:
+				case 13:
+				case 14:
+				case 15:
 					printf ("2B");
 					break;
 				}

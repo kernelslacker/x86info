@@ -66,7 +66,7 @@ void dointel (int maxi, struct cpudata *cpu)
 {
 	int i;
 	unsigned long eax, ebx, ecx, edx;
-	int stepping, model, family, type, reserved, ntlb;
+	int stepping, model, family, type, brand, reserved, ntlb;
 
 	static char *x86_cap_flags[] = {
 		"FPU    Floating Point Unit",
@@ -112,16 +112,20 @@ void dointel (int maxi, struct cpudata *cpu)
 		model = (eax >> 4) & 0xf;
 		family = (eax >> 8) & 0xf;
 		type = (eax >> 12) & 0x3;
+		brand = (ebx & 0xf);
 		reserved = eax >> 14;
 
 		printf ("Family: %d Model: %d Type %d [", family, model, type);
 		switch (family) {
 		case 4:
+			/* Family 4 */
 			printf ("i486 ");
 			switch (model) {
 			case 0:
+				printf ("DX-25/33");
+				break;
 			case 1:
-				printf ("DX");
+				printf ("DX-50");
 				break;
 			case 2:
 				printf ("SX");
@@ -141,11 +145,22 @@ void dointel (int maxi, struct cpudata *cpu)
 			case 8:
 				printf ("DX4");
 				break;
+			case 9:
+				printf ("write-back enhanced DX4");
+				break;
+			default:
+				printf ("Unknown CPU");
+				break;
 			}
 			break;
+
 		case 5:
+			/* Family 5 */
 			printf ("Pentium ");
 			switch (model) {
+			case 0:
+				printf ("A-step");
+				break;
 			case 1:
 				printf ("60/66");
 				break;
@@ -153,34 +168,90 @@ void dointel (int maxi, struct cpudata *cpu)
 				printf ("75-200");
 				break;
 			case 3:
-				printf ("for 486 system");
+				printf ("Overdrive");
 				break;
 			case 4:
 				printf ("MMX");
 				break;
+			case 7:
+				printf ("Mobile");
+				break;
+			case 8:
+				printf ("MMX Mobile");
+				break;
 			}
 			break;
+
 		case 6:
-			printf ("Pentium Pro; ");
+			/* Family 6 */
 			switch (model) {
+			case 0:
+				printf ("A-Step");
+				break;
 			case 1:
 				printf ("Pentium Pro;");
 				break;
 			case 3:
-				printf ("Pentium II Model 3;");
+				printf ("Pentium II");
+				if (cpu->stepping == 2)
+					printf (" (Overdrive)");
+				break;
+			case 4:
+				printf ("Pentium II");
 				break;
 			case 5:
-				printf ("Pentium II Model 5/Xeon/Celeron;");
+				/*FIXME: Cache size determine needed here */
+				printf ("Pentium II/Xeon/Celeron");
 				break;
 			case 6:
-				printf ("Celeron;");
+				printf ("Celeron / Mobile Pentium II");
 				break;
 			case 7:
-				printf ("Pentium III/Pentium III Xeon;");
+				printf ("Pentium III/Pentium III Xeon");
+				break;
+			case 8:
+				printf ("Celeron / Pentium III (Coppermine)");
+				break;
+			case 0xA:
+				switch (brand) {
+				case 0:
+					printf ("Pentium II Deschutes");
+					break;
+				case 1:
+					printf ("Celeron");
+					break;
+				case 2:
+					printf ("Pentium III");
+					break;
+				case 3:
+					printf ("Pentium III Xeon");
+					break;
+				}
+			default:
+				printf ("Unknown CPU");
 				break;
 			}
 			break;
+
+		case 7:
+			/* Family 7 */
+			printf ("Itanium");
+			break;
+
+		case 0xF:
+			/* Family 15 */
+			if (cpu->model == 0) {
+				printf ("Pentium IV");
+				if (cpu->stepping == 7)
+					printf (" (stepping B-2)");
+				if (cpu->stepping == 0xA)
+					printf (" (stepping C-1)");
+				break;
+			} else {
+				printf ("Unknown CPU");
+			}
 		}
+
 		switch (type) {
 		case 0:
 			printf (" Original OEM");
