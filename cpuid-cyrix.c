@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-cyrix.c,v 1.6 2001/02/28 00:48:00 davej Exp $
+ *  $Id: cpuid-cyrix.c,v 1.7 2001/03/11 04:12:54 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -70,7 +70,7 @@ void docyrix (int cpunum, unsigned int maxi, struct cpudata *cpu)
 				printf ("6x86");
 				break;
 			case 4:
-				printf ("BXm");
+				printf ("GXm");
 				break;
 			}
 			break;
