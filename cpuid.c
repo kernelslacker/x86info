@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid.c,v 1.3 2001/04/08 02:21:07 davej Exp $
+ *  $Id: cpuid.c,v 1.4 2001/04/17 06:29:40 davej Exp $
  *	This file is part of x86info
  *	(C) 2000, 2001 Dave Jones.
  *	Fixes by Arjan van de Ven (arjanv@redhat.com) and
@@ -28,8 +28,8 @@ void cpuid (int CPU_number, int index,
 	unsigned char buffer[16];
 	int fh;
 
-	/* Have we established this is uniprocessor ? */
-	if (CPU_number == -1) {
+	/* Uniprocessor ? Or 1st CPU in SMP ? */
+	if (CPU_number == 0) {
 		cpuid_UP (index, eax, ebx, ecx, edx);
 		return;
 	}
