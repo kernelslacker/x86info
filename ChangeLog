@@ -4,6 +4,7 @@
 	* */identify.c: used tuple macro to clean up code.
 	* dumpregs.c: make more generic, move to identify.c
 	* */identify.c: reduce duplication, and use generic dumpregs()
+	* Intel/identify.c: identify C1 stepping of P4 Xeon
 
 2002-06-18 Dave Jones <davej@suse.de>
 

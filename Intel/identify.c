@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.28 2002/07/12 00:36:19 davej Exp $
+ *  $Id: identify.c,v 1.29 2002/07/12 13:01:24 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -427,6 +427,9 @@ void Identify_Intel (struct cpudata *cpu)
 		switch (cpu->stepping) {
 		case 4:
 			nameptr+=sprintf (nameptr, "%s", " [B0]");
+			break;
+		case 7:
+			nameptr+=sprintf (nameptr, "%s", " [C1]");
 			break;
 		}
 		break;
