@@ -1,6 +1,10 @@
-/* x86info by Dave Jones
- * Based in part on 'cpuid' by Phil Karn, KA9Q
- * May be used under the terms of the GNU Public License (GPL)
+/*
+ *  $Id: x86info.c,v 1.8 2001/02/26 16:44:27 davej Exp $
+ *  This file is part of x86info.
+ *  (C) 2001 Dave Jones.
+ *
+ *  Licensed under the terms of the GNU GPL License version 2.
+ *
  */
 
 #include <stdio.h>

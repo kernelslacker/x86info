@@ -1,8 +1,11 @@
-/* x86info Dave Jones.
- * Based on 'cpuid' by Phil Karn, KA9Q.
- * May be used under the terms of the GNU Public License (GPL)
+/*
+ *  $Id: cpuid-amd.c,v 1.7 2001/02/26 16:44:27 davej Exp $
+ *  This file is part of x86info.
+ *  (C) 2001 Dave Jones.
  *
- * AMD-specific information
+ *  Licensed under the terms of the GNU GPL License version 2.
+ *
+ *  AMD-specific information
  *
  */
 

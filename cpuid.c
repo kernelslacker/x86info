@@ -1,7 +1,9 @@
 /*
- *  $Id: cpuid.c,v 1.1 2001/02/26 14:49:02 davej Exp $
+ *  $Id: cpuid.c,v 1.2 2001/02/26 16:44:27 davej Exp $
  *	This file is part of x86info
- *	(C) 2000 Dave Jones.
+ *	(C) 2000, 2001 Dave Jones.
+ *	Fixes by Arjan van de Ven (arjanv@redhat.com) and
+ *	Philipp Rumpf (prumpf@mandrakesoft.com)
  *
  * 	Licensed under the terms of the GNU GPL License version 2.
  *

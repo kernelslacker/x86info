@@ -1,4 +1,10 @@
 /*
+ *  $Id: features.c,v 1.5 2001/02/26 16:44:27 davej Exp $
+ *  This file is part of x86info
+ *  (C) 2001 Dave Jones.
+ *
+ *  Licensed under the terms of the GNU GPL License version 2.
+ *
  * Feature flag decoding.
  * Modified from a routine in Linux kernel 2.4.0test3 by Jauder Ho <jauderho@carumba.com>
  * FIXME: Update to latest code from 2.4 kernel.
