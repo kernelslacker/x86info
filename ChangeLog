@@ -3,6 +3,8 @@
 	* mptable.[c|h]: Add routines to parse MP tables.
 	* x86info.c: Add --mptable option, and nrCPU sanity check.
 	* Intel/identify.c: Only read eblcr when asked to.
+	* */identify.c: Move externs to x86info.h
+	* eblcr.c: Moved to Intel/
 
 2001-12-9	Hans-Frieder Vogt <hfvogt@nexgo.de>
 
