@@ -1,5 +1,5 @@
 /*
- *  $Id: MHz.c,v 1.6 2001/09/25 15:16:31 davej Exp $
+ *  $Id: MHz.c,v 1.7 2001/11/19 20:09:21 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -26,8 +26,8 @@ __inline__ unsigned long long int rdtsc()
 void estimate_MHz(int cpunum)
 {
 	struct timezone tz;
-        struct timeval tvstart, tvstop;
-        unsigned long long int cycles[2]; /* gotta be 64 bit */
+	struct timeval tvstart, tvstop;
+	unsigned long long int cycles[2]; /* gotta be 64 bit */
 	unsigned int microseconds; /* total time taken */
 	unsigned long eax, ebx, ecx, edx;
 
