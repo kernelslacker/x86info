@@ -1,3 +1,7 @@
+2003-1-6 Sami Farin <safari@iki.fi>
+
+	* Intel/identify.c: Compile fixes.
+
 2003-1-3 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/identify.c: Add some extra x86-64 steppings.

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.42 2002/12/30 13:16:02 davej Exp $
+ *  $Id: identify.c,v 1.43 2003/01/06 16:36:27 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -297,7 +297,7 @@ void Identify_Intel (struct cpudata *cpu)
 			case 1:
 			case 3:
 				cpu->connector = CONN_SLOT_1;
-				nameptr += sprintf (cpu-name, "%s", "Celeron (Tualatin) [tA1/cA2]");
+				nameptr += sprintf (cpu->name, "%s", "Celeron (Tualatin) [tA1/cA2]");
 				break;
 			case 6:
 				cpu->connector = CONN_MICROFCBGA;
@@ -316,7 +316,6 @@ void Identify_Intel (struct cpudata *cpu)
 					nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
 					break;
 				}
-			}
 		}
 		break;
 
