@@ -1,6 +1,8 @@
 2002-03-18  Dave Jones <davej@suse.de>
 
 	* Makefile: Various cleanups to work with AMD-64 simulator.
+	* AMD/identify.c: Report 'unknown' instead of garbage when an
+	  unknown family is detected.
 
 2002-03-10  Sami Farin <safari@iki.fi>
 	* features.c, Intel/identify.c: If Hyper-Threading Technology is
