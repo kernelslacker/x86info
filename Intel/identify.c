@@ -1,11 +1,16 @@
 /*
- *  $Id: identify.c,v 1.30 2002/07/24 10:04:23 davej Exp $
+ *  $Id: identify.c,v 1.31 2002/09/24 12:42:04 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  * Intel specific parts
+ *
+ * References:
+ *	http://developer.intel.com/
+ *	http://microcodes.sourceforge.net/CPUID.htm
+ *
  */
 
 #include <stdio.h>
@@ -240,7 +245,6 @@ void Identify_Intel (struct cpudata *cpu)
 		nameptr+=sprintf (nameptr, "%s", "MMX Mobile");
 		cpu->connector = CONN_SOCKET_7;
 		break;
-
 	case 0x600:
 		nameptr+=sprintf (cpu->name, "%s", "Pentium Pro A-Step");
 		cpu->connector = CONN_SOCKET_8;
@@ -248,13 +252,30 @@ void Identify_Intel (struct cpudata *cpu)
 	case 0x610:
 		nameptr+=sprintf (cpu->name, "%s", "Pentium Pro");
 		cpu->connector = CONN_SOCKET_8;
+		switch (cpu->stepping) {
+		case 1:
+			nameptr+=sprintf (nameptr, "%s", "[B0]");
+			break;
+		case 2:
+			nameptr+=sprintf (nameptr, "%s", "[C0]");
+			break;
+		case 6:
+			nameptr+=sprintf (nameptr, "%s", "[sA0]");
+			break;
+		case 7:
+			nameptr+=sprintf (nameptr, "%s", "[sA1]");
+			break;
+		case 9:
+			nameptr+=sprintf (nameptr, "%s", "[sB1]");
+			break;
+		}
 		break;
 	case 0x630:
 		nameptr+=sprintf (cpu->name, "%s", "Pentium II ");
 		cpu->connector = CONN_SLOT_1;
 		switch (cpu->stepping) {
 		case 2:
-			nameptr+=sprintf (nameptr, "%s", "Overdrive");
+			nameptr+=sprintf (nameptr, "%s", "Overdrive [tdB0]");
 			break;
 		case 3:
 			nameptr+=sprintf (nameptr, "%s", "(Klamath) [C0]");

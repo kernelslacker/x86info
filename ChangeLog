@@ -1,3 +1,7 @@
+2002-09-24 Dave Jones <davej@suse.de>
+
+	* Intel/identify.c: Add more Pentium Pro steppings.
+
 2002-09-11 Dave Jones <davej@suse.de>
 
 	* IDT/identify.c: mention cache size errata when workaround in use.
