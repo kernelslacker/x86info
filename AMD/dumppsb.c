@@ -71,7 +71,7 @@ void dump_PSB(struct cpudata *cpu, int maxfid, int startvid)
 				printf ("(Desktop voltage regulator)\n");
 			}
 
-			printf ("Settling Time: %d\n", psb->settlingtime);
+			printf ("Settling Time: %d microseconds.\n", psb->settlingtime);
 			printf ("Has %d PST tables. (Only dumping ones relevant to this CPU).\n", psb->numpst);
 
 			p += sizeof (struct psb_s);
@@ -118,14 +118,4 @@ out:
 	close(fd);
 	return;
 }
-/*
-    printf ("Voltage ID codes: Maximum=%0.3fV Startup=%0.3fV Currently=%0.3fV\n",
-					        mobile_vid_table[fidvidstatus.bits.MVID],
-							        mobile_vid_table[fidvidstatus.bits.SVID],
-									        mobile_vid_table[fidvidstatus.bits.CVID]);
 
-    printf ("Frequency ID codes: Maximum=%.1fx Startup=%.1fx Currently=%.1fx\n",
-					        fid_codes[fidvidstatus.bits.MFID],
-							        fid_codes[fidvidstatus.bits.SFID],
-									        fid_codes[fidvidstatus.bits.CFID]);
-*/
