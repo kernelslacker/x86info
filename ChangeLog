@@ -1,3 +1,6 @@
+2005-02-08 Dave Jones <davej@codemonkey.org.uk>
+Released as v1.13
+
 2004-12-22 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/cachesize.c: Add some EM64T cache descriptors. 
