@@ -14,7 +14,7 @@ int show_all=0;
 
 void usage (char *programname)
 {
-	printf ("Usage: %s [OPTION]\n\
+	printf ("Usage: %s [<switches>]\n\
 -a, --all\n\
 -c, --cacheinfo \n\
 -f, --flags \n\
@@ -52,12 +52,16 @@ int main (int argc, char **argv)
 {
 	unsigned int i,n, nrCPUs;
 
+	printf ("x86info v1.0.  Dave Jones 2001.\n");
+
 	parse_command_line(argc, argv);
 	
 	/* FIXME: Insert code here to test if CPUID instruction is available */
 
 	nrCPUs = sysconf (_SC_NPROCESSORS_CONF);
-	printf ("%d CPUs found\n", nrCPUs);
+	printf ("Found %d CPU\n", nrCPUs);
+	if (nrCPUs > 1)
+		printf ("s");
 
 	for (i = 1; i<=nrCPUs; i++) {
 	
