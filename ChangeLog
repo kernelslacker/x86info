@@ -1,3 +1,26 @@
+2001-12-9	Hans-Frieder Vogt <hfvogt@nexgo.de>
+
+	* AMD/MSR-K6.c:
+	  Fix write-allocation reports on K6-III
+
+2001-12-9	Matthew Gregan <mgregan@jade.co.nz>
+
+	* AMD/AMD.h, Cyrix/Cyrix.h, Intel/Intel.h, x86info.h:
+	  Add guards
+	* AMD/MSR-K6.c, AMD/bluesmoke.c, IDT/identify.c:
+	* Intel/bluesmoke.c, rdmsr.c:
+	  s/rdmsr/readmsr/  (work around OpenBSD braindamage)
+	* Intel/identify.c:
+	  Reformat & update. Add chip revisions where known.
+	* MHz.c:
+	  Win32 support, increase usleep amount to work on win32
+	  (Also better value for Linux and other OSs)
+	* Makefile:
+	  Win32 support.
+	* bluesmoke.c: Remove, go with vendor specific version.
+	* cpuid.s: renamed to cpuid_UP.S
+	* x86info.c: Win32 support, extra sanity checks.
+
 Released as v1.6
 
 2001-09-21  Dave Jones <davej@suse.de>

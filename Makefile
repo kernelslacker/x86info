@@ -1,4 +1,6 @@
 CFLAGS = -Wall -W -g -O2
+#CFLAGS += -mwin32 -DWIN32_LEAN_AND_MEAN
+SHELL = /bin/sh
 
 all: x86info
 
@@ -35,7 +37,11 @@ x86info: $(OBJS)
 .c.o:
 	gcc $(CFLAGS) -o $@ -c $<
 
+.S.o:
+	gcc $(CFLAGS) -o $@ -c $<
+
 clean:
-	find . -name "*.o" -exec rm {} \;
-	rm -f x86info
+	@find . -name "*.o" -exec rm {} \;
+	@find . -name "*~" -exec rm {} \;
+	@rm -f x86info
 

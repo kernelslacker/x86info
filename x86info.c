@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.37 2001/11/21 18:14:58 davej Exp $
+ *  $Id: x86info.c,v 1.38 2001/12/09 16:35:51 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -11,11 +11,21 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "x86info.h"
+
 #ifndef linux
+
+#ifdef __WIN32__
 #include <sys/types.h>
+#include <windows.h>
+#else
+#include <sys/types.h>
+#include <sys/param.h>
 #include <sys/sysctl.h>
-#endif
+#endif /* __WIN32__ */
+
+#endif /* linux */
+
+#include "x86info.h"
 
 int show_msr=0;
 int show_registers=0;
@@ -116,21 +126,37 @@ int main (int argc, char **argv)
 		user_is_root=0;
 	}
 
-#if defined _SC_NPROCESSORS_CONF	/* Linux */
+#if defined __WIN32__
+	{
+		SYSTEM_INFO sys_info;
+		GetSystemInfo(&sys_info);
+		nrCPUs = sys_info.dwNumberOfProcessors;
+	}
+#elif defined _SC_NPROCESSORS_CONF	/* Linux */
 	nrCPUs = sysconf (_SC_NPROCESSORS_CONF);
-#else	/* BSD */
+#else /* BSD */
 	{
 		int mib[2] = { CTL_HW, HW_NCPU };
 		size_t len;
 		len = sizeof(nrCPUs);
 		sysctl(mib, 2, &nrCPUs, &len, NULL, 0);
 	}
-#endif
+#endif /* __WIN32__ */
+
 	if (!silent) {
-		printf ("Found %d CPU", nrCPUs);
+		printf ("Found %u CPU", nrCPUs);
 		if (nrCPUs > 1)
 			printf ("s");
 		printf ("\n");
+	}
+
+	/*
+	 * can't have less than 1 CPU, or more than
+	 * 65535 (some abitrary large number)
+	 */
+	if ((nrCPUs < 1) || (nrCPUs > 65535)) {
+		printf("CPU count is bogus: defaulting to 1 CPU.\n");
+		nrCPUs = 1;
 	}
 
 	for (i=0; i<nrCPUs; i++) {
@@ -138,7 +164,7 @@ int main (int argc, char **argv)
 		cpu.number = i;
 
 		if (!silent && nrCPUs!=1)
-			printf ("CPU #%d\n", i+1);
+			printf ("CPU #%u\n", i+1);
 
 		identify(&cpu);
 		if (show_registers)

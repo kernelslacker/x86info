@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.5 2001/10/12 20:27:39 davej Exp $
+ *  $Id: identify.c,v 1.6 2001/12/09 16:35:51 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -123,57 +123,186 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 		case 4:		/* Family 4 */
 			nameptr += sprintf (cpu->name, "%s", "i486 ");
 			switch (cpu->model) {
-				case 0:	nameptr+=sprintf (nameptr, "%s", "DX-25/33");	break;
-				case 1:	nameptr+=sprintf (nameptr, "%s", "DX-50");		break;
-				case 2:	nameptr+=sprintf (nameptr, "%s", "SX");			break;
-				case 3:	nameptr+=sprintf (nameptr, "%s", "487/DX2");	break;
-				case 4:	nameptr+=sprintf (nameptr, "%s", "SL");			break;
-				case 5:	nameptr+=sprintf (nameptr, "%s", "SX2");		break;
-				case 7:	nameptr+=sprintf (nameptr, "%s", "write-back enhanced DX2");	break;
-				case 8:	nameptr+=sprintf (nameptr, "%s", "DX4");		break;
-				case 9:	nameptr+=sprintf (nameptr, "%s", "write-back enhanced DX4");	break;
-				default:nameptr+=sprintf (nameptr, "%s", "Unknown CPU");break;
+			case 0:
+				nameptr+=sprintf (nameptr, "%s", "DX-25/33");
+				break;
+			case 1:
+				nameptr+=sprintf (nameptr, "%s", "DX-50");
+				break;
+			case 2:
+				nameptr+=sprintf (nameptr, "%s", "SX");
+				break;
+			case 3:
+				nameptr+=sprintf (nameptr, "%s", "487/DX2");
+				break;
+			case 4:
+				nameptr+=sprintf (nameptr, "%s", "SL");
+				break;
+			case 5:
+				nameptr+=sprintf (nameptr, "%s", "SX2");
+				break;
+			case 7:
+				nameptr+=sprintf (nameptr, "%s", "write-back enhanced DX2");
+				break;
+			case 8:
+				nameptr+=sprintf (nameptr, "%s", "DX4");
+				break;
+			case 9:
+				nameptr+=sprintf (nameptr, "%s", "write-back enhanced DX4");
+				break;
+			default:
+				nameptr+=sprintf (nameptr, "%s", "Unknown CPU");
+				break;
 			}
 			break;
 
 		case 5:		/* Family 5 */
 			nameptr += sprintf (cpu->name, "%s", "Pentium ");
 			switch (cpu->model) {
-				case 0:	nameptr+=sprintf (nameptr, "%s", "A-step");		break;
-				case 1:	nameptr+=sprintf (nameptr, "%s", "60/66");		break;
-				case 2:	nameptr+=sprintf (nameptr, "%s", "75-200");		break;
-				case 3:	nameptr+=sprintf (nameptr, "%s", "Overdrive");	break;
-				case 4:	nameptr+=sprintf (nameptr, "%s", "MMX");		break;
-				case 7:	nameptr+=sprintf (nameptr, "%s", "Mobile");		break;
-				case 8:	nameptr+=sprintf (nameptr, "%s", "MMX Mobile");	break;
+			case 0:
+				nameptr+=sprintf (nameptr, "%s", "A-step");
+				break;
+			case 1:
+				nameptr+=sprintf (nameptr, "%s", "60/66");
+				break;
+			case 2:
+				nameptr+=sprintf (nameptr, "%s", "75-200");
+				break;
+			case 3:
+				nameptr+=sprintf (nameptr, "%s", "Overdrive");
+				break;
+			case 4:
+				nameptr+=sprintf (nameptr, "%s", "MMX");
+				break;
+			case 7:
+				nameptr+=sprintf (nameptr, "%s", "Mobile");
+				break;
+			case 8:
+				nameptr+=sprintf (nameptr, "%s", "MMX Mobile");
+				break;
 			}
 			break;
 
 		case 6:		/* Family 6 */
 			switch (cpu->model) {
-				case 0:	nameptr+=sprintf (cpu->name, "%s", "A-Step");		break;
-				case 1:	nameptr+=sprintf (cpu->name, "%s", "Pentium Pro");	break;
-				case 3:	nameptr+=sprintf (cpu->name, "%s", "Pentium II");
-					if (cpu->stepping == 2)
-						nameptr+=sprintf (nameptr, "%s", " (Overdrive)");
+			case 0:
+				nameptr+=sprintf (cpu->name, "%s", "Pentium Pro A-Step");
+				break;
+			case 1:
+				nameptr+=sprintf (cpu->name, "%s", "Pentium Pro");
+				break;
+			case 3:
+				nameptr+=sprintf (cpu->name, "%s", "Pentium II ");
+				switch (cpu->stepping) {
+				case 2:
+					nameptr+=sprintf (nameptr, "%s", "Overdrive");
 					break;
-				case 4:	nameptr+=sprintf (cpu->name, "%s", "Pentium II");	break;
-				case 5:	/*FIXME: Cache size determine needed here */
-						nameptr+=sprintf (cpu->name, "%s","Pentium II/Xeon/Celeron");	break;
-				case 6:	nameptr+=sprintf (cpu->name, "%s", "Celeron / Mobile Pentium II");	break;
-				case 7:	nameptr+=sprintf (cpu->name, "%s", "Pentium III/Pentium III Xeon");	break;
-				case 8:	nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III (Coppermine)");	break;
-				case 10:
-					switch (cpu->brand) {
-					case 0:	nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes)");	break;
-					case 1:	nameptr+=sprintf (cpu->name, "%s", "Celeron");				break;
-					case 2:	nameptr+=sprintf (cpu->name, "%s", "Pentium III");			break;
-					case 3:	nameptr+=sprintf (cpu->name, "%s", "Pentium III Xeon");		break;
-					default:nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");			break;
+				case 3:
+					nameptr+=sprintf (nameptr, "%s", "(Klamath) [C0]");
+					break;
+				case 4:
+					nameptr+=sprintf (nameptr, "%s", "(Klamath) [C1]");
+					break;
 				}
 				break;
-				case 11:nameptr+=sprintf (cpu->name, "%s", "Pentium III (Tualatin)");	break;
-				default:nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");	break;
+			case 4:
+				nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes?)");
+				break;
+			case 5:
+				/*FIXME: Cache size determine needed here */
+				switch (cpu->stepping) {
+				case 0:
+					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium II [dA0]");
+					break;
+				case 1:
+					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium II (Deschutes) [dA1]");
+					break;
+				case 2:
+					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium II (Deschutes) [dB0]");
+					break;
+				case 3:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dB1]");
+					break;
+				default:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium II");
+					break;
+				}
+				break;
+			case 6:
+				switch (cpu->stepping) {
+				case 0:
+					nameptr+=sprintf (cpu->name, "%s", "Celeron-A [mA0]");
+					break;
+				case 5:
+					nameptr+=sprintf (cpu->name, "%s", "Celeron-A [mB0]");
+					break;
+				case 0xA:
+					nameptr+=sprintf (cpu->name, "%s", "Mobile Pentium II [mdA0]");
+					break;
+				default:
+					nameptr+=sprintf (cpu->name, "%s", "Celeron / Mobile Pentium II");
+					break;
+				}
+				break;
+			case 7:
+				switch (cpu->stepping) {
+				case 2:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium III [kB0]");
+					break;
+				case 3:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium III [kC0]");
+					break;
+				default:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium III/Pentium III Xeon");
+					break;
+				}
+				break;
+			case 8:
+				nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III");
+				switch (cpu->stepping) {
+				case 1:
+					nameptr+=sprintf (nameptr, "%s", " [cA2]");
+					break;
+				case 3:
+					nameptr+=sprintf (nameptr, "%s", " [cB0]");
+					break;
+				case 6:
+					nameptr+=sprintf (nameptr, "%s", " [cC0]");
+					break;
+				case 0xA:
+					nameptr+=sprintf (nameptr, "%s", " [cD0]");
+					break;
+				}
+				break;
+			case 0xA:
+				switch (cpu->brand) {
+				case 0:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes)");
+					break;
+				case 1:
+					nameptr+=sprintf (cpu->name, "%s", "Celeron");
+					break;
+				case 2:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium III");
+					break;
+				case 3:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium III Xeon");
+					break;
+				default:
+					nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
+					break;
+				}
+				break;
+			case 0xB:
+				switch (cpu->stepping) {
+				case 1:
+					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III (Tualatin) [tA1]");
+					break;
+				default:
+					nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
+					break;
+				}
+				break;
 			}
 			break;
 
@@ -183,25 +312,49 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 
 		case 0xF:	/* Family 15 */
 			switch (cpu->model) {
-				case 0:
-					nameptr += sprintf (cpu->name, "%s", "Pentium IV");
-					if (cpu->stepping == 7)
-						nameptr+=sprintf (nameptr, "%s", " (stepping B-2)");
-					if (cpu->stepping == 0xA)
-						nameptr+=sprintf (nameptr, "%s", " (stepping C-1)");
+			case 0:
+				nameptr += sprintf (cpu->name, "%s", "Pentium 4");
+				switch (cpu->stepping) {
+				case 7:
+					nameptr+=sprintf (nameptr, "%s", " [B2]");
 					break;
-				case 4:
-				case 5:	nameptr+=sprintf (cpu->name, "%s", "P4 Xeon (Foster)");	break;
-				default:nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");	break;
+				case 0xA:
+					nameptr+=sprintf (nameptr, "%s", " [C1]");
+					break;
+				}
+				break;
+			case 1:
+				nameptr += sprintf (cpu->name, "%s", "Pentium 4");
+				switch (cpu->stepping) {
+				case 2:
+					nameptr+=sprintf (nameptr, "%s", " [D0]");
+					break;
+				}
+				break;
+			case 4:
+			case 5:
+				nameptr+=sprintf (cpu->name, "%s", "P4 Xeon (Foster)");
+				break;
+			default:
+				nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
+				break;
 			}
 			break;
 		}
 
 		switch (cpu->type) {
-			case 0:	sprintf (nameptr, "%s", " Original OEM");	break;
-			case 1:	sprintf (nameptr, "%s", " Overdrive");		break;
-			case 2:	sprintf (nameptr, "%s", " Dual-capable");	break;
-			case 3:	sprintf (nameptr, "%s", " Reserved");		break;
+		case 0:
+			sprintf (nameptr, "%s", " Original OEM");
+			break;
+		case 1:
+			sprintf (nameptr, "%s", " Overdrive");
+			break;
+		case 2:
+			sprintf (nameptr, "%s", " Dual-capable");
+			break;
+		case 3:
+			sprintf (nameptr, "%s", " Reserved");
+			break;
 		}
 	}
 }
@@ -264,7 +417,7 @@ void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 
 	if (cpu->family == 6 && cpu->model >= 3) {
 		unsigned long long eblcr;
-		rdmsr (cpu->number, 0x2A, &eblcr);
+		read_msr (cpu->number, 0x2A, &eblcr);
 		interpret_eblcr(eblcr);
 	}
 

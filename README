@@ -4,6 +4,9 @@ Dave Jones <davej@suse.de>
 This program started life as a cpuid program by Phil Karn.
 It's been modified considerably, and much more is planned.
 
+For problems specific to the Cygwin/Win32 port, contact
+Matthew Gregan <mgregan@jade.co.nz>.
+
 Features:
  - SMP support.
  - Recognition of all Intel/AMD/IDT/Cyrix/VIA CPUs.
@@ -25,13 +28,20 @@ Caveats:
 		mknod msr c 202 $i
 	done
 
+   To build under Win32/Cygwin, uncomment the second line
+   in the Makefile, otherwise some files will fail to build.
+
+   Usage under Win32 is somewhat limited at present:
+	- only one CPU is polled in an SMP system
+	- no support for reading MSRs
+
 Command line switches:
 
 ?, --help
  Show command line arguments.
 
 -a, --all
- Show all information. This turns on -c, -f, -m, -r
+ Show all information. This turns on -c, -f, -m, -r, -mhz
 
 -c, --cacheinfo
  Show TLB / Cache sizes/associativity.

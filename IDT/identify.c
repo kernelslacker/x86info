@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.10 2001/10/20 18:51:25 davej Exp $
+ *  $Id: identify.c,v 1.11 2001/12/09 16:35:51 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -181,7 +181,7 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 		printf ("3.0");
 	printf (" present\n");
 
-	if (longhaul==2 && rdmsr(cpu->number, 0x110A, &val) == 1) {
+	if (longhaul==2 && read_msr(cpu->number, 0x110A, &val) == 1) {
 		dumpmsr (cpu->number, 0x110A, 64);
 		if (val & 1)
 			printf ("\tSoftVID support\n");
@@ -190,7 +190,7 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 		if (val==0)
 			printf ("\tSoftware clock multiplier only: No Softvid\n");
 
-		printf ("\tRevision key: %d\n", (val & (1<<7|1<<6|1<<5|1<<4)) >> 4);
+		printf ("\tRevision key: %llu\n", (val & (1<<7|1<<6|1<<5|1<<4)) >> 4);
 		if (val & (1<<8))
 			printf ("\tEnableSoftBusRatio=Enabled\n");
 		if (val & (1<<9))
@@ -198,7 +198,7 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 		if (val & (1<<10))
 			printf ("\tEnableSoftBSEL=Enabled\n");
 
-		printf ("\tSoftBusRatio=%d\n", val & 1<<14);
+		printf ("\tSoftBusRatio=%llu\n", val & 1<<14);
 		if (val & 0xf)
 			printf ("\tVRM Rev=%s\n",
 				((val & 1<<15)) ? "Mobile VRM" : "VRM 8.5");

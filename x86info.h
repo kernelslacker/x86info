@@ -1,3 +1,5 @@
+#ifndef _X86INFO_H
+#define _X86INFO_H
 /* x86info by Dave Jones
  * Based on 'cpuid' by Phil Karn, KA9Q
  * May be used under the terms of the GNU Public License (GPL)
@@ -8,7 +10,7 @@
 #else
 #include <machine/types.h>
 #define __u32 int
-#endif
+#endif /* linux */
 
 typedef __u32 u32;
 
@@ -53,7 +55,7 @@ void decode_feature_flags (struct cpudata *cpu, int flags);
 void identify (struct cpudata *cpu);
 void dumpregs (int cpunum);
 
-int rdmsr(int cpu, unsigned int index, unsigned long long *val);
+int read_msr(int cpu, unsigned int index, unsigned long long *val);
 void binary32(unsigned long value);
 void binary64(unsigned long long value);
 void dumpmsr (int cpunum, unsigned int msr, int size);
@@ -62,3 +64,4 @@ void dumpmsr_bin (int cpunum, unsigned int msr, int size);
 void estimate_MHz(int cpunum);
 int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
+#endif /* _X86INFO_H */
