@@ -2,6 +2,8 @@
 
 - Report the CPU packaging type on CPUs where info is available.
 
+- Disallow --mtrr on cpu's that don't have MTRRs.
+
 - Dump cyrix ARR registers when we pass --mtrr
 
 - --apic
@@ -30,3 +32,4 @@
 
 - libx86info for other apps
 
+- review code for extended natsemi support.
