@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.16 2001/08/10 11:34:57 davej Exp $
+ *  $Id: cpuid-intel.c,v 1.17 2001/08/11 23:01:53 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -102,6 +102,7 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 	unsigned long eax, ebx, ecx, edx;
 	int reserved;
 
+	cpu->vendor = VENDOR_INTEL;
 	nameptr = cpu->name;
 
 	if (maxi >= 1) {
@@ -243,6 +244,7 @@ void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 	};
 
 	if (show_flags) {
+		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
 		printf ("Feature flags %08lx:\n", edx);
 		for (i = 0; i < 32; i++) {
 			if (edx & (1 << i)) {
