@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.22 2001/08/10 09:25:46 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.23 2001/08/10 09:46:50 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -103,7 +103,7 @@ static void dump_athlon_MSR(int cpunum)
 }
 
 
-void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
+void Identify_AMD (int cpunum, unsigned int maxi, struct cpudata *cpu)
 {
 	char *nameptr;
 	unsigned long eax, ebx, ecx, edx;
@@ -122,28 +122,28 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		case 4:
 			switch (cpu->model) {
 			case 3:
-				sprintf (cpu->name, "Am486DX2-WT");
+				sprintf (cpu->name, "%s", "Am486DX2-WT");
 				break;
 			case 7:
-				sprintf (cpu->name, "Am486DX2-WB");
+				sprintf (cpu->name, "%s", "Am486DX2-WB");
 				break;
 			case 8:
-				sprintf (cpu->name, "Am486DX4-WT / Am5x86-WT");
+				sprintf (cpu->name, "%s", "Am486DX4-WT / Am5x86-WT");
 				break;
 			case 9:
-				sprintf (cpu->name, "Am486DX4-WB / Am5x86-WB");
+				sprintf (cpu->name, "%s", "Am486DX4-WB / Am5x86-WB");
 				break;
 			case 10:
-				sprintf (cpu->name, "Elan SC400");
+				sprintf (cpu->name, "%s", "Elan SC400");
 				break;
 			case 0xe:
-				sprintf (cpu->name, "Am5x86-WT");
+				sprintf (cpu->name, "%s", "Am5x86-WT");
 				break;
 			case 0xf:
-				sprintf (cpu->name, "Am5x86-WB");
+				sprintf (cpu->name, "%s", "Am5x86-WB");
 				break;
 			default:
-				sprintf (cpu->name, "Unknown CPU");
+				sprintf (cpu->name, "%s", "Unknown CPU");
 				break;
 			}
 			break;
@@ -151,39 +151,39 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		case 5:
 			switch (cpu->model) {
 			case 0:
-				sprintf (cpu->name, "SSA5 (PR75/PR90/PR100)");
+				sprintf (cpu->name, "%s", "SSA5 (PR75/PR90/PR100)");
 				break;
 			case 1:
-				sprintf (cpu->name, "K5 (PR120/PR133)");
+				sprintf (cpu->name, "%s", "K5 (PR120/PR133)");
 				break;
 			case 2:
-				sprintf (cpu->name, "K5 (PR166)");
+				sprintf (cpu->name, "%s", "K5 (PR166)");
 				break;
 			case 3:
-				sprintf (cpu->name, "K5 (PR200)");
+				sprintf (cpu->name, "%s", "K5 (PR200)");
 				break;
 			case 6:
-				sprintf (cpu->name, "K6 (0.30 um)");
+				sprintf (cpu->name, "%s", "K6 (0.30 um)");
 				break;
 			case 7:
-				sprintf (cpu->name, "K6 (0.25 um)");
+				sprintf (cpu->name, "%s", "K6 (0.25 um)");
 				break;
 			case 8:
-				nameptr += sprintf (cpu->name,"K6-2");
+				nameptr += sprintf (cpu->name, "%s", "K6-2");
 				if (cpu->stepping >= 8)
-					printf (nameptr, " (CXT core)");
+					printf (nameptr, "%s", " (CXT core)");
 				break;
 			case 9:
-				sprintf (cpu->name, "K6-III");
+				sprintf (cpu->name, "%s", "K6-III");
 				break;
 			case 12:
-				sprintf (cpu->name, "K6-2+ (0.18um)");
+				sprintf (cpu->name, "%s", "K6-2+ (0.18um)");
 				break;
 			case 13:
-				sprintf (cpu->name, "K6-3+ (0.18um)");
+				sprintf (cpu->name, "%s", "K6-3+ (0.18um)");
 				break;
 			default:
-				sprintf (cpu->name, "Unknown CPU");
+				sprintf (cpu->name, "%s", "Unknown CPU");
 				break;
 			}
 			break;
@@ -191,74 +191,74 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		case 6:
 			switch (cpu->model) {
 			case 0:
-				sprintf (cpu->name, "K7 ES");
+				sprintf (cpu->name, "%s", "K7 ES");
 				break;
 			case 1:
-				nameptr += sprintf (cpu->name, "Athlon (0.25um)");
+				nameptr += sprintf (cpu->name, "%s", "Athlon (0.25um)");
 				switch (cpu->stepping) {
 				case 1:
-					sprintf (nameptr, " Rev C1");
+					sprintf (nameptr, "%s", " Rev C1");
 					break;
 				case 2:
-					sprintf (nameptr, " Rev C2");
+					sprintf (nameptr, "%s", " Rev C2");
 					break;
 				}
 				break;
 			case 2:
-				nameptr += sprintf (cpu->name, "Athlon (0.18um)");
+				nameptr += sprintf (cpu->name, "%s", "Athlon (0.18um)");
 				switch (cpu->stepping) {
 				case 1:
-					sprintf (nameptr, " Rev A1");
+					sprintf (nameptr, "%s", " Rev A1");
 					break;
 				case 2:
-					sprintf (nameptr, " Rev A2");
+					sprintf (nameptr, "%s", " Rev A2");
 					break;
 				}
 				break;
 			case 3:
-				nameptr += sprintf (cpu->name, "Duron");
+				nameptr += sprintf (cpu->name, "%s", "Duron");
 				switch (cpu->stepping) {
 				case 0:
-					sprintf (nameptr, " Rev A0");
+					sprintf (nameptr, "%s", " Rev A0");
 					break;
 				case 1:
-					sprintf (nameptr, " Rev A2");
+					sprintf (nameptr, "%s", " Rev A2");
 					break;
 				}
 				break;
 			case 4:
-				nameptr += sprintf (cpu->name, "Thunderbird");
+				nameptr += sprintf (cpu->name, "%s", "Thunderbird");
 				switch (cpu->stepping) {
 				case 0:
-					sprintf (nameptr, " Rev A1");
+					sprintf (nameptr, "%s", " Rev A1");
 					break;
 				case 1:
-					sprintf (nameptr, " Rev A2");
+					sprintf (nameptr, "%s", " Rev A2");
 					break;
 				case 2:
-					sprintf (nameptr, " Rev A4-A8");
+					sprintf (nameptr, "%s", " Rev A4-A8");
 					break;
 				case 3:
-					sprintf (nameptr, " Rev A9");
+					sprintf (nameptr, "%s", " Rev A9");
 					break;
 				}
 				break;
 			case 6:
-				nameptr += sprintf (cpu->name, "Mobile ");
+				nameptr += sprintf (cpu->name, "%s", "Mobile ");
 				switch (cpu->stepping) {
 				case 0:
-					sprintf (nameptr, "Athlon Rev A0-A1");
+					sprintf (nameptr, "%s", "Athlon Rev A0-A1");
 					break;
 				case 1:
-					sprintf (nameptr, "Athlon Rev A2");
+					sprintf (nameptr, "%s", "Athlon Rev A2");
 					break;
 				case 2:
-					sprintf (nameptr, "Duron");
+					sprintf (nameptr, "%s", "Duron");
 					break;
 				}
 				break;
 			default:
-				sprintf (cpu->name, "Unknown CPU");
+				sprintf (cpu->name, "%s", "Unknown CPU");
 				break;
 			}
 		}
