@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.39 2002/11/20 17:23:23 davej Exp $
+ *  $Id: identify.c,v 1.40 2002/11/25 20:56:15 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -333,6 +333,7 @@ void Identify_AMD(struct cpudata *cpu)
 			add_to_cpuname("Mobile ");
 		add_to_cpuname ("Athlon ");
 		determine_xp_mp(cpu);
+		add_to_cpuname (" (Barton)");
 		break;
 
 	case 0xF00:		/* based on http://www.tecchannel.de/hardware/937/images/0010328_PIC.gif */

@@ -1,6 +1,7 @@
 2002-11-25  Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/MSR-*.c: Removed bit-counting headers
+	* AMD/identify.c: Model 10 is 'barton'
 
 2002-11-20  Dave Jones <davej@codemonkey.org.uk>
 
