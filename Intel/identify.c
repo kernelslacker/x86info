@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.3 2001/09/10 10:51:59 davej Exp $
+ *  $Id: identify.c,v 1.4 2001/10/12 19:50:14 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -65,7 +65,7 @@ void decode_Intel_TLB (int x)
 		printf ("L2 unified cache: 2MB, 4-way set assoc, 32 byte line size\n");
 		break;
 	case 0x50:
-		printf ("Instruction TLB: 4K,2MB or 4MB pages, fully assoc, 64 entries\n");
+		printf ("Instruction TLB: 4K, 2MB or 4MB pages, fully assoc, 64 entries\n");
 		break;
 	case 0x5b:
 		printf ("Data TLB: 4K or 4MB pages, fully assoc, 64 entries\n");
