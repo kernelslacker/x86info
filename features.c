@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.6 2001/06/16 01:46:07 davej Exp $
+ *  $Id: features.c,v 1.7 2001/09/07 09:29:21 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -73,7 +73,8 @@ void decode_feature_flags (struct cpudata *cpu, int flags)
 		break;
 
 	case VENDOR_CENTAUR:
-		if (cpu->model >= 8)	/* Only Winchip2 and above */
+		if ((cpu->family==5 && cpu->model >= 8) ||	/* Only Winchip2 and above */
+			(cpu->family==6))	/* VIA Cyrix III family */
 			cap_flags[31] = "3dnow";
 		break;
 
