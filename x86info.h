@@ -100,6 +100,7 @@ void identify (struct cpudata *cpu);
 void show_info (struct cpudata *cpu);
 
 int read_msr(int cpu, unsigned int idx, unsigned long long *val);
+void binary(unsigned int n, unsigned long value);
 void binary32(unsigned long value);
 void binary64(unsigned long long value);
 void dumpmsr (int cpunum, unsigned int msr, int size);

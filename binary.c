@@ -1,5 +1,14 @@
 #include <stdio.h>
 
+void binary (unsigned int n, unsigned long value)
+{
+	unsigned int i;
+
+	for(i=0; i<n; i++, value<<=1)
+		putchar( (1<<(n-1) & value) ? '1' : '0' );
+	putchar('\n');
+}
+
 void binary32 (unsigned long value)
 {
 	int i;
