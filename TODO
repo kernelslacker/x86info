@@ -1,0 +1,5 @@
+- Support SMP (/dev/cpu)
+- Display some MSR info (/dev/msr)
+- Recognise different types of Celerons
+  (cache size)
+
