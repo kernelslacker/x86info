@@ -1,3 +1,7 @@
+2003-6-12 Jeremy Fitzhardinge <jeremy@goop.org>
+
+	* Intel/MSR-PM.c: Decode PERF_STATUS.
+
 2003-6-8 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/Intel.h, Intel/cachesize.c, Intel/identify.c, Intel/info.c:

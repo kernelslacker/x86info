@@ -1,5 +1,5 @@
 /*
- *  $Id: MSR-PM.c,v 1.1 2003/06/08 22:20:18 davej Exp $
+ *  $Id: MSR-PM.c,v 1.2 2003/06/11 23:17:51 davej Exp $
  *  This file is part of x86info.
  *  (C) 2002 Dave Jones.
  *
@@ -26,7 +26,23 @@ void dump_centrino_MSRs (struct cpudata *cpu)
 	printf ("Pentium M MSRs:\n");
 
 	if (read_msr (cpu->number, 0x198, &val)==1) {
-		printf ("  Current performance mode is 0x%04x\n", (int)(val & 0xffff));
+		/*
+		   Voltage and frequency values derived from 1300MHz
+		   Pentium M in an IBM ThinkPad X31.  Constants for
+		   voltage function derived from voltage points documented
+		   in Pentium M datasheet (Intel document 25261201.pdf,
+		   table 5), and ACPI power management tables.
+
+		   This register is specifically documented as
+		   implementation-defined, so it may not apply to
+		   other Enhanced SpeedStep enabled CPUs, or even other
+		   Pentium Ms.
+		 */
+		unsigned uv = (unsigned)val & 0xffff;
+		int volt = (uv & 0xff) * 16 + 700;
+		int mhz = 100 * (uv & 0xff00) >> 8;
+		printf ("  Current performance mode is 0x%04x: %dMHz, %d.%dV\n",
+			uv, mhz, volt/1000, volt%1000);
 	}
 	if (read_msr (cpu->number, 0x1a0, &val)==1) {
 		printf ("  Enabled: ");
