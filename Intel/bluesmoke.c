@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.6 2002/05/14 02:47:30 davej Exp $
+ *  $Id: bluesmoke.c,v 1.7 2002/06/06 20:47:34 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -24,7 +24,6 @@
 #define MC_CTL 0x0400
 #define MC_STATUS 0x0401
 #define MC_ADDR 0x402
-#define MC_MISC 0x403
 
 #define PENTIUM4(family)	(family == 0xf)
 
@@ -120,8 +119,6 @@ void decode_Intel_bluesmoke(int cpunum, int family)
 		dumpmsr_bin (cpunum, MC_STATUS+i*4, 64);
 		printf ("MC%dADDR:   ", i);
 		dumpmsr_bin (cpunum, MC_ADDR+i*4, 64);
-		printf ("MC%dMISC:   ", i);
-		dumpmsr_bin (cpunum, MC_MISC+i*4, 64);
 		printf ("\n");
 	}
 }
