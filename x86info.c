@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.64 2002/11/12 16:32:51 davej Exp $
+ *  $Id: x86info.c,v 1.65 2002/11/12 17:28:19 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -140,9 +140,19 @@ static void parse_command_line (int argc, char **argv)
 }
 
 
+void separator(void)
+{
+	int j;
+
+	for (j=0; j<74; j++)
+		printf ("-");
+	printf ("\n");
+}
+
+
 int main (int argc, char **argv)
 {
-	unsigned int i, j;
+	unsigned int i;
 	struct cpudata cpu;
 
 	memset (&cpu, 0, sizeof(struct cpudata));
@@ -209,6 +219,8 @@ int main (int argc, char **argv)
 	if (show_mptable && user_is_root)
 		issmp (&nrSMPCPUs, 1);
 
+	separator();
+
 	for (i=0; i<nrCPUs; i++) {
 		cpu.number = i;
 
@@ -225,12 +237,8 @@ int main (int argc, char **argv)
 		 */
 		if (show_MHz)
 			estimate_MHz(i);
-
-		if (nrCPUs>1) {
-			for (j=0; j<74; j++)
-				printf ("-");
-			printf ("\n");
-		}
+		if (nrCPUs>1)
+			separator();
 	}
 
 	if (nrCPUs > 1 && used_UP==1 && (!silent)) {
