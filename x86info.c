@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.43 2001/12/10 17:36:02 davej Exp $
+ *  $Id: x86info.c,v 1.44 2001/12/10 17:56:25 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -133,7 +133,7 @@ int main (int argc, char **argv)
 		user_is_root=0;
 
 	if (need_root==1 && user_is_root==0)
-		printf ("Need to be root to access MSRs.\n");
+		printf ("Need to be root to use specified options.\n");
 
 #if defined __WIN32__
 	{
