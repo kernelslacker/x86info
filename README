@@ -58,6 +58,9 @@ Command line switches:
 -mhz, --mhz
  Estimate current MHz.
 
+-mp, --mptable
+ Dump the MP table from the BIOS, showing all known CPUs.
+
 --mult
  Decode CPU multipliers/bus speed where possible.
 
