@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.26 2001/08/10 09:00:03 davej Exp $
+ *  $Id: x86info.c,v 1.27 2001/08/10 11:34:57 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -113,9 +113,12 @@ int main (int argc, char **argv)
 	}
 
 	for (i=0; i<nrCPUs; i++) {
+		struct cpudata cpu;
+		cpu.number = i;
+
+		identify(&cpu);
 		if (show_registers)
 			dumpregs(i);
-		identify(i);
 
 		/*
 		 * Doing this per-cpu is a problem, as we can't
@@ -128,6 +131,7 @@ int main (int argc, char **argv)
 		printf ("WARNING: Detected SMP, but cpuid driver not loaded.\n");
 		printf ("Used single CPU routines. Results inaccurate.\n");
 	}
+
 	return (0);
 }
 

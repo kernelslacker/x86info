@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-idt.c,v 1.9 2001/08/10 10:35:36 davej Exp $
+ *  $Id: cpuid-idt.c,v 1.10 2001/08/10 11:34:57 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -13,7 +13,7 @@
 extern int show_cacheinfo;
 extern int show_registers;
 
-void Identify_IDT (int cpunum, unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
+void Identify_IDT (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 {
 	char *nameptr;
 	unsigned long eax, ebx, ecx, edx;
@@ -24,7 +24,7 @@ void Identify_IDT (int cpunum, unsigned int maxi, unsigned int maxei, struct cpu
 
 	/* Do standard stuff */
 	if (maxi >= 1) {
-		cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
+		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
 		cpu->stepping = eax & 0xf;
 		cpu->model = (eax >> 4) & 0xf;
 		cpu->family = (eax >> 8) & 0xf;
@@ -89,7 +89,7 @@ void Identify_IDT (int cpunum, unsigned int maxi, unsigned int maxei, struct cpu
 		unsigned int i;
 		cp = namestring;
 		for (j = 0x80000002; j <= 0x80000004; j++) {
-			cpuid (cpunum, j, &eax, &ebx, &ecx, &edx);
+			cpuid (cpu->number, j, &eax, &ebx, &ecx, &edx);
 
 			for (i = 0; i < 4; i++)
 				*cp++ = eax >> (8 * i);
@@ -106,7 +106,7 @@ void Identify_IDT (int cpunum, unsigned int maxi, unsigned int maxei, struct cpu
 }
 
 
-void display_IDT_info(int cpunum, unsigned int maxei, struct cpudata *cpu)
+void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx;
@@ -114,7 +114,7 @@ void display_IDT_info(int cpunum, unsigned int maxei, struct cpudata *cpu)
 	if (maxei != 0 && show_registers) {
 		/* Dump extended info in raw hex */
 		for (i = 0x80000000; i <= maxei; i++) {
-			cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
+			cpuid (cpu->number, i, &eax, &ebx, &ecx, &edx);
 			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
 				edx);
 		}
@@ -125,13 +125,13 @@ void display_IDT_info(int cpunum, unsigned int maxei, struct cpudata *cpu)
 		return;
 
 	if (maxei >= 0x80000001) {
-		cpuid (cpunum, 0x80000001, &eax, &ebx, &ecx, &edx);
+		cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 		decode_feature_flags (cpu, edx);
 	}
 
 	if (maxei >= 0x80000005 && show_cacheinfo) {
 		/* TLB and cache info */
-		cpuid (cpunum, 0x80000005, &eax, &ebx, &ecx, &edx);
+		cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
 		printf ("Data TLB: associativity %lx #entries %ld\n", ebx >> 24, (ebx >> 16) & 0xff);
 		printf ("Instruction TLB: associativity %lx #entries %ld\n", (ebx >> 8) & 0xff, ebx & 0xff);
 		printf ("L1 Data cache: size %ld KB associativity %lx lines per tag %ld line size %ld\n",
@@ -142,7 +142,7 @@ void display_IDT_info(int cpunum, unsigned int maxei, struct cpudata *cpu)
 
 	/* check on-chip L2 cache size */
 	if (maxei >= 0x80000006) {
-		cpuid (cpunum, 0x80000006, &eax, &ebx, &ecx, &edx);
+		cpuid (cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
 		printf ("L2 (on CPU) cache: %ld KB associativity %lx lines per tag %ld line size %ld\n",
 			ecx >> 16, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
 	}

@@ -14,6 +14,7 @@ typedef __u32 u32;
 #define VENDOR_RISE 5
 
 struct cpudata {
+	int number;
 	int vendor;
 	int family;
 	int model;
@@ -31,20 +32,20 @@ void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigne
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void decode_intel_tlb (int);
 void decode_cyrix_tlb (int);
-void Identify_Intel (int, unsigned int, struct cpudata *cpu);
-void Identify_AMD (int, unsigned int, struct cpudata *cpu);
-void Identify_Cyrix (int, unsigned int, unsigned int, struct cpudata *cpu);
-void Identify_IDT (int, unsigned int, unsigned int, struct cpudata *cpu);
-void Identify_Rise (int, unsigned int, unsigned int, struct cpudata *cpu);
+void Identify_Intel (unsigned int, struct cpudata *cpu);
+void Identify_AMD (unsigned int, struct cpudata *cpu);
+void Identify_Cyrix (unsigned int, unsigned int, struct cpudata *cpu);
+void Identify_IDT (unsigned int, unsigned int, struct cpudata *cpu);
+void Identify_Rise (unsigned int, unsigned int, struct cpudata *cpu);
 
-void display_AMD_info(int cpunum, unsigned int maxei, struct cpudata *cpu);
-void display_Cyrix_info(int cpunum, unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
-void display_IDT_info(int cpunum, unsigned int maxei, struct cpudata *cpu);
-void display_Intel_info(int cpunum, unsigned int maxi, struct cpudata *cpu);
-void display_Rise_info(int cpunum, unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
+void display_AMD_info(unsigned int maxei, struct cpudata *cpu);
+void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
+void display_IDT_info(unsigned int maxei, struct cpudata *cpu);
+void display_Intel_info(unsigned int maxi, struct cpudata *cpu);
+void display_Rise_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
 
 void decode_feature_flags (struct cpudata *cpu, int flags);
-void identify (int cpunum);
+void identify (struct cpudata *cpu);
 void dumpregs (int cpunum);
 
 int rdmsr(int cpu, unsigned int index, unsigned long long *val);

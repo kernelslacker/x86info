@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-rise.c,v 1.5 2001/08/10 10:45:52 davej Exp $
+ *  $Id: cpuid-rise.c,v 1.6 2001/08/10 11:34:57 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -14,7 +14,7 @@ extern int show_cacheinfo;
 extern int show_flags;
 extern int show_registers;
 
-void Identify_Rise (int cpunum, unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
+void Identify_Rise (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx;
@@ -22,7 +22,7 @@ void Identify_Rise (int cpunum, unsigned int maxi, unsigned int maxei, struct cp
 
 	/* Do standard stuff */
 	if (maxi >= 1) {
-		cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
+		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
 		cpu->stepping = eax & 0xf;
 		cpu->model = (eax >> 4) & 0xf;
 		cpu->family = (eax >> 8) & 0xf;
@@ -55,7 +55,7 @@ void Identify_Rise (int cpunum, unsigned int maxi, unsigned int maxei, struct cp
 		unsigned int j;
 		cp = namestring;
 		for (j = 0x80000002; j <= 0x80000004; j++) {
-			cpuid (cpunum, j, &eax, &ebx, &ecx, &edx);
+			cpuid (cpu->number, j, &eax, &ebx, &ecx, &edx);
 
 			for (i = 0; i < 4; i++)
 				*cp++ = eax >> (8 * i);
@@ -72,7 +72,7 @@ void Identify_Rise (int cpunum, unsigned int maxi, unsigned int maxei, struct cp
 }
 
 
-void display_Rise_info(int cpunum, unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
+void display_Rise_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx;
@@ -114,7 +114,7 @@ void display_Rise_info(int cpunum, unsigned int maxi, unsigned int maxei, struct
 	if (maxi != 0 && show_registers) {
 		/* Dump extended info in raw hex */
 		for (i = 0x00000000; i <= maxi; i++) {
-			cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
+			cpuid (cpu->number, i, &eax, &ebx, &ecx, &edx);
 			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
 		}
 		printf ("\n");
@@ -123,7 +123,7 @@ void display_Rise_info(int cpunum, unsigned int maxi, unsigned int maxei, struct
 	if (maxei != 0 && show_registers) {
 		/* Dump extended info in raw hex */
 		for (i = 0x80000000; i <= maxei; i++) {
-			cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
+			cpuid (cpu->number, i, &eax, &ebx, &ecx, &edx);
 			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
 		}
 		printf ("\n");
@@ -138,7 +138,7 @@ void display_Rise_info(int cpunum, unsigned int maxi, unsigned int maxei, struct
 	}
 
 	if (maxei >= 0x80000001) {
-		cpuid (cpunum, 0x80000001, &eax, &ebx, &ecx, &edx);
+		cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 		decode_feature_flags (cpu, edx);
 	}
 }

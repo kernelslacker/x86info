@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-cyrix.c,v 1.8 2001/08/10 10:25:25 davej Exp $
+ *  $Id: cpuid-cyrix.c,v 1.9 2001/08/10 11:34:57 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -30,7 +30,7 @@ void decode_cyrix_tlb (int x)
 }
 
 /* Cyrix-specific information */
-void Identify_Cyrix (int cpunum, unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
+void Identify_Cyrix (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 {
 	int i;
 	unsigned long eax, ebx, ecx, edx;
@@ -39,7 +39,7 @@ void Identify_Cyrix (int cpunum, unsigned int maxi, unsigned int maxei, struct c
 
 	/* Do standard stuff */
 	if (maxi >= 1) {
-		cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
+		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
 		cpu->stepping = eax & 0xf;
 		cpu->model = (eax >> 4) & 0xf;
 		cpu->family = (eax >> 8) & 0xf;
@@ -64,7 +64,7 @@ void Identify_Cyrix (int cpunum, unsigned int maxi, unsigned int maxei, struct c
 			return;
 
 		if (maxei >= 0x80000001) {
-			cpuid (cpunum, 0x80000001, &eax, &ebx, &ecx, &edx);
+			cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 			cpu->stepping = eax & 0xf;
 			cpu->model = (eax >> 4) & 0xf;
 			cpu->family = (eax >> 8) & 0xf;
@@ -82,7 +82,7 @@ void Identify_Cyrix (int cpunum, unsigned int maxi, unsigned int maxei, struct c
 			unsigned int j;
 			cp = namestring;
 			for (j = 0x80000002; j <= 0x80000004; j++) {
-				cpuid (cpunum, j, &eax, &ebx, &ecx, &edx);
+				cpuid (cpu->number, j, &eax, &ebx, &ecx, &edx);
 
 				for (i = 0; i < 4; i++)
 					*cp++ = eax >> (8 * i);
@@ -99,7 +99,7 @@ void Identify_Cyrix (int cpunum, unsigned int maxi, unsigned int maxei, struct c
 	}
 }
 
-void display_Cyrix_info(int cpunum, unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
+void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 {
 	unsigned int i, ntlb;
 	unsigned long eax, ebx, ecx, edx;
@@ -108,7 +108,7 @@ void display_Cyrix_info(int cpunum, unsigned int maxi, unsigned int maxei, struc
 	if (maxei >= 0x80000000 && show_registers) {
 		/* Dump extended info in raw hex */
 		for (i = 0x80000000; i <= maxei; i++) {
-			cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
+			cpuid (cpu->number, i, &eax, &ebx, &ecx, &edx);
 			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
 				edx);
 		}
@@ -121,7 +121,7 @@ void display_Cyrix_info(int cpunum, unsigned int maxi, unsigned int maxei, struc
 		/* TLB and L1 Cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {
-			cpuid (cpunum, 2, &eax, &ebx, &ecx, &edx);
+			cpuid (cpu->number, 2, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
 			decode_cyrix_tlb (eax >> 8);
 			decode_cyrix_tlb (eax >> 16);
@@ -142,7 +142,7 @@ void display_Cyrix_info(int cpunum, unsigned int maxi, unsigned int maxei, struc
 		/* TLB and L1 Cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {
-			cpuid (cpunum, 0x80000005, &eax, &ebx, &ecx, &edx);
+			cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
 			decode_cyrix_tlb (ebx >> 8);
 			decode_cyrix_tlb (ebx >> 16);

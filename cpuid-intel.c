@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.15 2001/08/10 10:03:34 davej Exp $
+ *  $Id: cpuid-intel.c,v 1.16 2001/08/10 11:34:57 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -96,7 +96,7 @@ void decode_intel_tlb (int x)
 
 
 /* Intel-specific information */
-void Identify_Intel (int cpunum, unsigned int maxi, struct cpudata *cpu)
+void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 {
 	char *nameptr;
 	unsigned long eax, ebx, ecx, edx;
@@ -106,7 +106,7 @@ void Identify_Intel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 
 	if (maxi >= 1) {
 		/* Family/model/type etc */
-		cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
+		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
 		cpu->stepping = eax & 0xf;
 		cpu->model = (eax >> 4) & 0xf;
 		cpu->family = (eax >> 8) & 0xf;
@@ -202,7 +202,7 @@ void Identify_Intel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 }
 
 
-void display_Intel_info (int cpunum, unsigned int maxi, struct cpudata *cpu)
+void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 {
 	int ntlb, i;
 	unsigned long eax, ebx, ecx, edx;
@@ -255,7 +255,7 @@ void display_Intel_info (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		/* Decode TLB and cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {
-			cpuid (cpunum, 2, &eax, &ebx, &ecx, &edx);
+			cpuid (cpu->number, 2, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
 			decode_intel_tlb (eax >> 8);
 			decode_intel_tlb (eax >> 16);
@@ -285,10 +285,10 @@ void display_Intel_info (int cpunum, unsigned int maxi, struct cpudata *cpu)
 	if (maxi >= 3) {
 		/* Pentium III CPU serial number */
 		unsigned long signature;
-		cpuid (cpunum, 1, &eax, NULL, NULL, NULL);
+		cpuid (cpu->number, 1, &eax, NULL, NULL, NULL);
 		signature = eax;
 
-		cpuid (cpunum, 3, &eax, &ebx, &ecx, &edx);
+		cpuid (cpu->number, 3, &eax, &ebx, &ecx, &edx);
 		printf ("Processor serial: ");
 		printf ("%04lX", signature >> 16);
 		printf ("-%04lX", signature & 0xffff);
@@ -300,11 +300,11 @@ void display_Intel_info (int cpunum, unsigned int maxi, struct cpudata *cpu)
 
 	if (cpu->family == 6 && cpu->model >= 3) {
 		unsigned long long eblcr;
-		rdmsr (cpunum, 0x2A, &eblcr);
+		rdmsr (cpu->number, 0x2A, &eblcr);
 		interpret_eblcr(eblcr);
 	}
 
 	/* FIXME: Bit test for MCA here!*/
 	if (show_bluesmoke)
-		decode_bluesmoke(cpunum);
+		decode_bluesmoke(cpu->number);
 }
