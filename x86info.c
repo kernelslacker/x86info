@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.30 2001/08/14 18:17:33 davej Exp $
+ *  $Id: x86info.c,v 1.31 2001/08/14 18:20:03 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -137,7 +137,7 @@ int main (int argc, char **argv)
 		struct cpudata cpu;
 		cpu.number = i;
 
-		if (!silent)
+		if (!silent && nrCPUs!=1)
 			printf ("CPU #%d\n", i+1);
 
 		identify(&cpu);
