@@ -1,3 +1,7 @@
+2002-07-24 Dave Jones <davej@suse.de>
+
+	* Intel/identify.c: Add more P4 codenames.
+
 2002-07-14 Dave Jones <davej@suse.de>
 
 	* Intel/bluesmoke.c: Reformat binary output.

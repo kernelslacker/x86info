@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.29 2002/07/12 13:01:24 davej Exp $
+ *  $Id: identify.c,v 1.30 2002/07/24 10:04:23 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -409,7 +409,7 @@ void Identify_Intel (struct cpudata *cpu)
 		}
 		break;
 	case 0xF10:
-		nameptr += sprintf (cpu->name, "%s", "Pentium 4");
+		nameptr += sprintf (cpu->name, "%s", "Pentium 4 (Willamette)");
 		switch (cpu->stepping) {
 		case 1:
 			nameptr+=sprintf (nameptr, "%s", " [C0]");
@@ -423,7 +423,7 @@ void Identify_Intel (struct cpudata *cpu)
 		}
 		break;
 	case 0xF20:
-		nameptr += sprintf (cpu->name, "%s", "Pentium 4");
+		nameptr += sprintf (cpu->name, "%s", "Pentium 4 (Northwood)");
 		switch (cpu->stepping) {
 		case 4:
 			nameptr+=sprintf (nameptr, "%s", " [B0]");
