@@ -104,7 +104,7 @@ extern int show_cacheinfo;
 extern int show_connector;
 extern int show_eblcr;
 extern int show_flags;
-extern int show_verbose_flags;
+extern int verbose;
 extern int show_msr;
 extern int show_mtrr;
 extern int show_registers;
