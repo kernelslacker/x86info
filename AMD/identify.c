@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.43 2003/01/15 18:57:05 davej Exp $
+ *  $Id: identify.c,v 1.44 2003/01/16 14:08:06 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -273,8 +273,10 @@ void Identify_AMD(struct cpudata *cpu)
 	case 0x660:
 		cpu->connector = CONN_SOCKET_A;
 
-		if (is_mobile(cpu))
+		if (is_mobile(cpu)) {
 			add_to_cpuname ("Mobile Athlon 4");
+			goto out_660;
+		}
 		if (getL2size(cpu->number) < 256) {
 			add_to_cpuname ("Duron (Morgan)");
 		} else {
@@ -282,7 +284,7 @@ void Identify_AMD(struct cpudata *cpu)
 			determine_xp_mp(cpu);
 			add_to_cpuname (" (palomino)");
 		}
-
+out_660:
 		switch (cpu->stepping) {
 		case 0:
 			add_to_cpuname (" [A0-A1]");
@@ -300,7 +302,7 @@ void Identify_AMD(struct cpudata *cpu)
 		cpu->connector = CONN_SOCKET_A;
 		if (is_mobile(cpu))
 			add_to_cpuname ("Mobile ");
-		add_to_cpuname ("Duron (Morgan core) ");
+		add_to_cpuname ("Duron (Morgan core)");
 		switch (cpu->stepping) {
 		case 0:
 			add_to_cpuname (" [A0]");

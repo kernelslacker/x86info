@@ -1,6 +1,7 @@
 2003-1-16 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/powernow.h: Define bitfields correctly.
+	* AMD/identify.c: Fix up "Mobile Athlon 4Athlon XP" problem.
 
 2003-1-15 Dave Jones <davej@codemonkey.org.uk>
 
