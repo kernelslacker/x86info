@@ -1,4 +1,4 @@
-CFLAGS = -Wall -W -g
+CFLAGS = -Wall -W -g -O2
 all: x86info
 
 OBJS =\
@@ -14,7 +14,8 @@ OBJS =\
 	identify.o\
 	dumpregs.o\
 	rdmsr.o\
-	binary.o
+	binary.o\
+	MHz.o
 
 x86info: $(OBJS)
 	gcc -o x86info $(OBJS)

@@ -1,4 +1,4 @@
-x86info v1.0            http://www.sourceforge.net/projects/x86info
+x86info v1.1            http://www.sourceforge.net/projects/x86info
 Dave Jones <davej@suse.de>
 
 This program started life as a cpuid program by Phil Karn.
@@ -8,6 +8,7 @@ Features:
  - SMP support.
  - Recognition of all Intel/AMD/IDT/Cyrix CPUs.
  - Parsing of model specific registers.
+ - Approximation of current CPU MHz.
 
 Caveats:
    For usage of the MSR / SMP functions, x86info
@@ -19,6 +20,9 @@ Command line switches:
 
 ?, --help
  Show command line arguments.
+
+-a, --all
+ Show all information. This turns on -c, -f, -m, -r
 
 -c, --cacheinfo
  Show TLB / Cache sizes/associativity.
@@ -32,9 +36,10 @@ Command line switches:
  Future versions will include parsing of bits in MSRs for all
  processors.
 
+-mhz, --mhz
+ Estimate current MHz.
+
 -r, --registers
  Dump register values from all cpuid calls possible.
 
--a, --all
- Show all information. This turns on -c, -f, -m, -r
 

@@ -35,4 +35,5 @@ void dumpregs (int cpunum);
 int rdmsr(int cpu, unsigned int index, unsigned long long *val);
 void long2binstr(long value);
 void dumpmsr (int cpunum, unsigned int msr);
+void estimate_MHz(void);
 

@@ -1,3 +1,11 @@
+2001-03-16 Andrea Arcangeli <andrea@suse.de>
+
+	* MHz.c: Estimate CPU MHz.
+
+2001-03-14 Keith Schincke <kschin@unf.edu>
+
+	* x86info.c: Fix output on SMP.
+
 2001-03-12 Dave Jones <davej@suse.de>
 
 	Initial Release.

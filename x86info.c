@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.10 2001/03/14 18:45:53 davej Exp $
+ *  $Id: x86info.c,v 1.11 2001/03/17 00:08:09 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -16,6 +16,7 @@ int show_registers=0;
 int show_flags=0;
 int show_cacheinfo=0;
 int show_all=0;
+int show_MHz=0;
 
 void usage (char *programname)
 {
@@ -23,6 +24,7 @@ void usage (char *programname)
 -a, --all\n\
 -c, --cacheinfo \n\
 -f, --flags\n\
+-mhz, --mhz\n\
 -m, --msr\n\
 -r, --registers\n\n", programname);
 	exit (0);
@@ -38,6 +40,7 @@ void parse_command_line (int argc, char **argv)
 			show_flags = 1;
 			show_cacheinfo = 1;
 			show_msr =1;
+			show_MHz =1;
 		}
 
 		if ((!strcmp(arg, "-c") || !strcmp(arg, "--cache")))
@@ -48,6 +51,9 @@ void parse_command_line (int argc, char **argv)
 
 		if ((!strcmp(arg, "-m") || !strcmp(arg, "--msr")))
 			show_msr= 1;
+
+		if ((!strcmp(arg, "-mhz") || !strcmp(arg, "--mhz")))
+			show_MHz= 1;
 
 		if ((!strcmp(arg, "-r") || !strcmp(arg, "--registers")))
 			show_registers = 1;
@@ -62,7 +68,7 @@ int main (int argc, char **argv)
 {
 	unsigned int i,n, nrCPUs;
 
-	printf ("x86info v1.0.  Dave Jones 2001\n");
+	printf ("x86info v1.1.  Dave Jones 2001\n");
 	printf ("Feedback to <davej@suse.de>.\n\n");
 
 	parse_command_line(argc, argv);
@@ -86,6 +92,8 @@ int main (int argc, char **argv)
 			dumpregs(n);
 		identify(n);
 	}
+	if (show_MHz)
+		estimate_MHz();
 
 	return (0);
 }
