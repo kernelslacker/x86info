@@ -4,6 +4,9 @@
 	  Make the cachesize output look like it did in previous releases.
 	  This is quite ugly, but is still a step forward to how I want it
 	  to look one day.
+	* bench/MHz.c: Rounding up to nearest 50MHz if MHz is within a 15MHz
+	  discrepancy of the nearest 50. Crap, needs improving.
+
 
 2003-6-8 Bryan O'Sullivan <bos@serpentine.com>
 

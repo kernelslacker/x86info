@@ -1,5 +1,5 @@
 /*
- *  $Id: MHz.c,v 1.2 2003/05/02 15:44:45 davej Exp $
+ *  $Id: MHz.c,v 1.3 2003/06/09 22:02:36 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -86,6 +86,13 @@ void estimate_MHz(struct cpudata *cpu)
 #endif /* __WIN32__ */
 
 	cpu->MHz = (int) (cycles[1]-cycles[0]) / (microseconds/freq);
+
+
+	if ((cpu->MHz % 50) > 15)
+		cpu->MHz = ((cpu->MHz / 50) * 50) + 50;
+	else
+		cpu->MHz = ((cpu->MHz / 50) * 50);
+
 }
 
 #ifdef __WIN32__
