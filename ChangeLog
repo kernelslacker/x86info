@@ -1,3 +1,7 @@
+2002-11-27  Dave Jones <davej@codemonkey.org.uk>>
+
+	* Intel/identify.c: Add reocgnition for Mobile Pentium 3 and P3M
+
 2002-11-25  Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/MSR-*.c: Removed bit-counting headers
