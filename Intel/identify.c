@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.14 2001/12/10 23:56:15 davej Exp $
+ *  $Id: identify.c,v 1.15 2001/12/11 01:04:18 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -105,8 +105,6 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 	cpu->vendor = VENDOR_INTEL;
 	nameptr = cpu->name;
 
-	get_intel_cacheinfo (cpu);
-
 	if (maxi >= 1) {
 		/* Family/model/type etc */
 		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
@@ -116,6 +114,8 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 		cpu->type = (eax >> 12) & 0x3;
 		cpu->brand = (ebx & 0xf);
 		reserved = eax >> 14;
+
+		get_intel_cacheinfo (cpu);
 
 		switch (cpu->family) {
 		case 4:		/* Family 4 */
@@ -259,7 +259,7 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 					nameptr+=sprintf (cpu->name, "%s", "Pentium III [kB0]");
 					break;
 				case 3:
-					nameptr+=sprintf (cpu->name, "%s", "Pentium III [kC0]");
+					nameptr+=sprintf (cpu->name, "%s", "Pentium III (Katmai) [kC0]");
 					break;
 				default:
 					nameptr+=sprintf (cpu->name, "%s", "Pentium III/Pentium III Xeon");
@@ -280,7 +280,7 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 					nameptr+=sprintf (nameptr, "%s", " [cB0]");
 					break;
 				case 6:
-					nameptr+=sprintf (nameptr, "%s", " [cC0]");
+					nameptr+=sprintf (nameptr, "%s", " (Coppermine) [cC0]");
 					break;
 				case 0xA:
 					nameptr+=sprintf (nameptr, "%s", " [cD0]");
@@ -300,6 +300,9 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 					break;
 				case 3:
 					nameptr+=sprintf (cpu->name, "%s", "Pentium III Xeon");
+					break;
+				case 4:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium III (Cascades)");
 					break;
 				default:
 					nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");

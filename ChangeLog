@@ -1,6 +1,8 @@
 2001-12-11	Dave Jones <davej@suse.de>
 
 	* Cyrix/identify.c: Add recognition for Cyrix MII
+	* IDT/identify.c: Cluster register dumps together.
+	* Intel/identify.c: Recognise some extra Intel CPUs / revisions.
 
 2001-12-10	Dave <dave@iol.cz>
 
