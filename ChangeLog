@@ -1,3 +1,7 @@
+2003-4-23 Dave Jones <davej@codemonkey.org.uk>
+
+	* AMD/identify.c: Add Opteron stepping from public docs.
+
 2003-4-11 Dave Jones <davej@codemonkey.org.uk>
 
 	* SiS/identify.c: Add recognition of SiS 55x
