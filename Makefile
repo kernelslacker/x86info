@@ -28,6 +28,7 @@ OBJS =\
 \
 	IDT/identify.o\
 	IDT/MSR-C3.o\
+	IDT/longhaul-v2.o\
 \
 	NatSemi/identify.o\
 \

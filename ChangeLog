@@ -1,6 +1,7 @@
 2003-1-27 Dave Jones <davej@codemonkey.org.uk>
 
 	* IDT/identify.c: Add Nehemiah & Samuel2.
+	* IDT/longhaul-v2.c: Split out from C3-MSR.c
 
 2003-1-23 Dave Jones <davej@codemonkey.org.uk>
 
