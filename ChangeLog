@@ -1,3 +1,7 @@
+2002-05-28	Dave Jones <davej@suse.de>
+
+	* IDT/identify.c: Add recognition of Ezra-T
+
 Released as v1.9
 
 2002-05-27	Dave Jones <davej@suse.de>

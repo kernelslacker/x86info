@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.19 2001/12/11 01:03:20 davej Exp $
+ *  $Id: identify.c,v 1.20 2002/04/27 23:35:32 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -70,6 +70,8 @@ void Identify_IDT (unsigned int maxi, struct cpudata *cpu)
 				case 7:	nameptr += sprintf (cpu->name, "%s", "VIA C3");
 						if (cpu->stepping>7)
 							sprintf(nameptr, "%s", " \"Ezra\"");
+						break;
+				case 8:	nameptr += sprintf (cpu->name, "%s", "VIA Ezra-T");
 						break;
 				default:
 						printf ("Unknown CPU");
