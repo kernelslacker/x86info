@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.22 2001/07/15 17:32:53 davej Exp $
+ *  $Id: x86info.c,v 1.23 2001/07/21 01:44:12 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -95,13 +95,18 @@ int main (int argc, char **argv)
 		printf ("s");
 	printf ("\n");
 
-	for (i = 0; i<nrCPUs; i++) {
+	for (i=0; i<nrCPUs; i++) {
 		if (show_registers)
 			dumpregs(i);
 		identify(i);
+
+		/*
+		 * Doing this per-cpu is a problem, as we can't
+		 * schedule userspace code per-cpu. */
+		if (show_MHz)
+			estimate_MHz(i);
+
 	}
-	if (show_MHz)
-		estimate_MHz(i);
 
 	if (nrCPUs > 1 && used_UP==1) {
 		printf ("WARNING: Detected SMP, but cpuid driver not loaded.\n");

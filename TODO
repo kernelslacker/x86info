@@ -1,3 +1,11 @@
+- Bluesmoke implementation currently is AMD centric.
+  Probably easier to do a bluesmoke-amd.c and bluesmoke-intel.c
+
+- Report the CPU packaging type on CPUs where info is available.
+
+- --apic
+  Dump APIC registers
+
 - Recognise CPUs with bugs, and print warnings
   if workarounds are not enabled. For example..
   "Stepping D0 Duron detected with Cache size bug.
