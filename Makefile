@@ -10,6 +10,7 @@ OBJS =\
 	cpuid-intel.o\
 	cpuid-cyrix.o\
 	cpuid-idt.o\
+	cpuid-rise.o\
 	identify.o\
 	dumpregs.o
 

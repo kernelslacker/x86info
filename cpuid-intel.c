@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.6 2001/02/26 16:44:27 davej Exp $
+ *  $Id: cpuid-intel.c,v 1.7 2001/02/28 00:48:00 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -70,7 +70,7 @@ void decode_intel_tlb (int x)
 
 
 /* Intel-specific information */
-void dointel (int cpunum, int maxi, struct cpudata *cpu)
+void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 {
 	int i;
 	unsigned long eax, ebx, ecx, edx;
@@ -197,7 +197,7 @@ void dointel (int cpunum, int maxi, struct cpudata *cpu)
 				printf ("A-Step");
 				break;
 			case 1:
-				printf ("Pentium Pro;");
+				printf ("Pentium Pro");
 				break;
 			case 3:
 				printf ("Pentium II");

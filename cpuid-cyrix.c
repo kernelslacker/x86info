@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-cyrix.c,v 1.5 2001/02/26 16:44:27 davej Exp $
+ *  $Id: cpuid-cyrix.c,v 1.6 2001/02/28 00:48:00 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -30,7 +30,7 @@ void decode_cyrix_tlb (int x)
 }
 
 /* Cyrix-specific information */
-void docyrix (int cpunum, int maxi, struct cpudata *cpu)
+void docyrix (int cpunum, unsigned int maxi, struct cpudata *cpu)
 {
 	unsigned int i, ntlb;
 	unsigned long maxei, eax, ebx, ecx, edx;

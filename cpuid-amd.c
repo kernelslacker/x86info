@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.7 2001/02/26 16:44:27 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.8 2001/02/28 00:48:00 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -53,7 +53,7 @@ static void dump_extended_AMD_regs(int cpunum, unsigned long maxei)
 	printf ("\n");
 }
 
-void doamd (int cpunum, int maxi, struct cpudata *cpu)
+void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned long maxei, eax, ebx, ecx, edx;
