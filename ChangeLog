@@ -1,6 +1,7 @@
 2003-2-7 Dave Jones <davej@codemonkey.org.uk>
 
 	* bench/benchmarks.c: Add bswap.
+	* Makefile: Use -m32 when compiling on x86-64
 
 2003-1-27 Dave Jones <davej@codemonkey.org.uk>
 
