@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-rise.c,v 1.7 2001/08/14 18:00:32 davej Exp $
+ *  $Id: identify.c,v 1.1 2001/08/19 14:47:25 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -8,7 +8,7 @@
  *  Rise specific parts.
  */
 #include <stdio.h>
-#include "x86info.h"
+#include "../x86info.h"
 
 extern int show_cacheinfo;
 extern int show_flags;

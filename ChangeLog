@@ -1,3 +1,13 @@
+2001-08-19 Dave Jones <davej@suse.de>
+
+	* AMD/ Cyrix/ IDT/ Intel/ RiSE/:
+	  Vendor specific directories created.
+	* cpuid-*.c:
+	  Moved to vendor directories and renamed to identify.c
+	* bluesmoke.c:
+	  Moved to vendor directories that support bluesmoke.
+	  (Currently AMD & Intel).
+
 2001-08-18 Dave Jones <davej@suse.de>
 
 	* cpuid-amd.c:

@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.27 2001/08/18 23:59:05 davej Exp $
+ *  $Id: identify.c,v 1.1 2001/08/19 14:47:25 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -12,7 +12,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include "x86info.h"
+#include "../x86info.h"
+#include "amd.h"
 
 extern int show_registers;
 extern int show_cacheinfo;
@@ -252,7 +253,7 @@ void display_AMD_info(unsigned int maxei, struct cpudata *cpu)
 	}
 
 	if (show_bluesmoke)
-		decode_bluesmoke(cpu->number);
+		decode_athlon_bluesmoke(cpu->number);
 
 	if (maxei >= 0x80000001) {
 		cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &tmp);

@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.18 2001/08/14 18:00:32 davej Exp $
+ *  $Id: identify.c,v 1.1 2001/08/19 14:47:25 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -9,7 +9,8 @@
  */
 
 #include <stdio.h>
-#include "x86info.h"
+#include "../x86info.h"
+#include "Intel.h"
 
 extern int show_cacheinfo;
 extern int show_flags;
@@ -266,5 +267,5 @@ void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 
 	/* FIXME: Bit test for MCA here!*/
 	if (show_bluesmoke)
-		decode_bluesmoke(cpu->number);
+		decode_intel_bluesmoke(cpu->number);
 }
