@@ -1,0 +1,103 @@
+.\" This -*- nroff -*- file has been generated from
+.\" DocBook SGML with docbook-to-man on Debian GNU/Linux.
+...\"
+...\"	transcript compatibility for postscript use.
+...\"
+...\"	synopsis:  .P! <file.ps>
+...\"
+.de P!
+\\&.
+.fl			\" force out current output buffer
+\\!%PB
+\\!/showpage{}def
+...\" the following is from Ken Flowers -- it prevents dictionary overflows
+\\!/tempdict 200 dict def tempdict begin
+.fl			\" prolog
+.sy cat \\$1\" bring in postscript file
+...\" the following line matches the tempdict above
+\\!end % tempdict %
+\\!PE
+\\!.
+.sp \\$2u	\" move below the image
+..
+.de pF
+.ie     \\*(f1 .ds f1 \\n(.f
+.el .ie \\*(f2 .ds f2 \\n(.f
+.el .ie \\*(f3 .ds f3 \\n(.f
+.el .ie \\*(f4 .ds f4 \\n(.f
+.el .tm ? font overflow
+.ft \\$1
+..
+.de fP
+.ie     !\\*(f4 \{\
+.	ft \\*(f4
+.	ds f4\"
+'	br \}
+.el .ie !\\*(f3 \{\
+.	ft \\*(f3
+.	ds f3\"
+'	br \}
+.el .ie !\\*(f2 \{\
+.	ft \\*(f2
+.	ds f2\"
+'	br \}
+.el .ie !\\*(f1 \{\
+.	ft \\*(f1
+.	ds f1\"
+'	br \}
+.el .tm ? font underflow
+..
+.ds f1\"
+.ds f2\"
+.ds f3\"
+.ds f4\"
+'\" t 
+.ta 8n 16n 24n 32n 40n 48n 56n 64n 72n  
+.TH "x86info" "1" 
+.SH "NAME" 
+x86info \(em display x86 CPU diagnostics 
+.SH "SYNOPSIS" 
+.PP 
+\fBx86info\fP [\fB-a\fP]  [\fB-c\fP]  [\fB-f\fP]  [\fB-m\fP]  [\fB-mhz\fP]  [\fB-r\fP]  [\fB?\fP]  [\fB--all\fP]  [\fB--cache\fP]  [\fB--flags\fP]  [\fB--msr\fP]  [\fB--mhz\fP]  [\fB--registers\fP]  [\fB--help\fP]  
+.SH "DESCRIPTION" 
+.PP 
+This manual page documents \fBx86info\fP, a 
+program which displays a range of information about the CPUs 
+present in an x86 system. 
+.SH "OPTIONS" 
+.PP 
+This program follows the usual GNU command line syntax, with 
+long options starting with two dashes (`-').  A summary of options 
+is included below. 
+.IP "\fB?\fP           \fB--help\fP         " 10 
+Show summary of options. 
+.IP "\fB-a\fP           \fB--all\fP         " 10 
+Show all information.  Equivalent to 
+\fB-c\fP \fB-f\fP \fB-m\fP 	    \fB-r\fP.  
+.IP "\fB-c\fP           \fB--cacheinfo\fP         " 10 
+Show TLB, cache sizes and cache associativity. 
+.IP "\fB-f\fP           \fB--flags\fP         " 10 
+Show CPU feature flags. 
+.IP "\fB-m\fP           \fB--msr\fP         " 10 
+Dump model specific registers.  Currently only 
+undocumented \fBAthlon\fP registers are 
+supported but future versions will include parsion of bits 
+in MSRs for all processors.  
+.IP "\fB-mhz\fP           \fB--mhz\fP         " 10 
+Estimate current clock rate. 
+.IP "\fB-r\fP           \fB--registers\fP         " 10 
+Show register values from all possible cpuid calls. 
+.SH "AUTHOR" 
+.PP 
+\fBx86info\fP was written by Dave Jones 
+davej@suse.de. 
+.PP 
+This manual page was written by Mark Brown broonie@debian.org for 
+the \fBDebian GNU/Linux\fP system (but may be used by others). 
+.PP 
+Permission is granted to copy, distribute and/or modify this 
+document under the terms of the GNU Free Documentation License, 
+Version 1.1 or any later version published by the Free Software 
+Foundation; with no Invariant Sections, no Front-Cover Texts and 
+no Back-Cover Texts. 
+...\" created by instant / docbook-to-man, Sun 15 Jul 2001, 22:38 
