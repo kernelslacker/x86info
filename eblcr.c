@@ -22,6 +22,8 @@ void interpret_eblcr(u32 lo)
 	int mul = (lo >> 22) & 15;
 	int busclock, cpuclk;
 
+	return;	/* too many bugs right now.. fix for a future release */
+
 	if (!user_is_root || !show_eblcr)
 		return;
 
