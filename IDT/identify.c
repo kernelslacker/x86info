@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.32 2003/04/11 00:27:16 davej Exp $
+ *  $Id: identify.c,v 1.33 2004/08/11 11:18:27 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -106,6 +106,8 @@ void Identify_IDT (struct cpudata *cpu)
 					//die_size = "54 sq. mm"; (C5XL)
 					//January 22 2003
 					break;
+
+	// C5P introduced the HW AES
 	// C5YL
 	// C5X
 	// CZA
