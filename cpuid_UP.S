@@ -55,3 +55,6 @@ L4:	popl %edx
 	movl %ebp,%esp
 	popl %ebp
 	ret
+
+.section .note.GNU-stack,"x"
+

@@ -1,3 +1,7 @@
+2004-5-6 Dave Jones <davej@codemonkey.org.uk>
+
+	* cpuid_UP.S: Add marker for non-executable stack
+
 2004-3-19 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/identify.c: Identify a bunch more opterons/athlon64's
