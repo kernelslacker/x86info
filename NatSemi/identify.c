@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.2 2002/05/23 00:13:07 davej Exp $
+ *  $Id: identify.c,v 1.3 2002/07/12 00:56:19 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -16,26 +16,19 @@ void Identify_NatSemi (struct cpudata *cpu)
 	cpu->vendor = VENDOR_NATSEMI;
 
 	/* Do standard stuff */
-	if (cpu->maxi >= 1) {
-		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
-		cpu->stepping = eax & 0xf;
-		cpu->model = (eax >> 4) & 0xf;
-		cpu->family = (eax >> 8) & 0xf;
+	if (cpu->maxi < 1)
+		return;
 
-		switch (cpu->family) {
-		case 5:
-			switch (cpu->model) {
-				case 4:		sprintf (cpu->name, "%s", "Geode GX1");
-							break;
-				default:	sprintf (cpu->name, "%s", "Unknown CPU");
-							break;
-			}
-			break;
+	cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
+	cpu->stepping = eax & 0xf;
+	cpu->model = (eax >> 4) & 0xf;
+	cpu->family = (eax >> 8) & 0xf;
 
-		default:
-			printf ("Unknown CPU");
-			break;
-		}
+	switch (tuple(cpu) & 0xff0) {
+		case 0x540:	sprintf (cpu->name, "%s", "Geode GX1");
+					break;
+		default:	sprintf (cpu->name, "%s", "Unknown CPU");
+					break;
 	}
 }
 

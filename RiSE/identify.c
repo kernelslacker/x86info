@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.7 2002/05/23 00:13:07 davej Exp $
+ *  $Id: identify.c,v 1.8 2002/07/12 00:56:19 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -16,27 +16,25 @@ void Identify_RiSE (struct cpudata *cpu)
 	cpu->vendor = VENDOR_RISE;
 
 	/* Do standard stuff */
-	if (cpu->maxi >= 1) {
-		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
-		cpu->stepping = eax & 0xf;
-		cpu->model = (eax >> 4) & 0xf;
-		cpu->family = (eax >> 8) & 0xf;
+	if (cpu->maxi < 1)
+		return;
 
-		switch (cpu->family) {
-		case 5:
-			switch (cpu->model) {
-				case 0:		sprintf (cpu->name, "%s", "iDragon (0.25um)");		break;
-				case 2:		sprintf (cpu->name, "%s", "iDragon (0.18um)");		break;
-				case 8:		sprintf (cpu->name, "%s", "iDragon II (0.25um)");	break;
-				case 9:		sprintf (cpu->name, "%s", "iDragon II (0.18um)");	break;
-				default:	sprintf (cpu->name, "%s", "Unknown CPU");			break;
-			}
-			break;
+	cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
+	cpu->stepping = eax & 0xf;
+	cpu->model = (eax >> 4) & 0xf;
+	cpu->family = (eax >> 8) & 0xf;
 
-		default:
-			printf ("Unknown CPU");
-			break;
-		}
+	switch (tuple(cpu) & 0xff0) {
+		case 0x500:	sprintf (cpu->name, "%s", "iDragon (0.25um)");
+					break;
+		case 0x520:	sprintf (cpu->name, "%s", "iDragon (0.18um)");
+					break;
+		case 0x580:	sprintf (cpu->name, "%s", "iDragon II (0.25um)");
+					break;
+		case 0x590:	sprintf (cpu->name, "%s", "iDragon II (0.18um)");
+					break;
+		default:	sprintf (cpu->name, "%s", "Unknown CPU");
+					break;
 	}
 }
 

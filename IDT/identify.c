@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.21 2002/05/23 00:13:07 davej Exp $
+ *  $Id: identify.c,v 1.22 2002/07/12 00:56:19 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -21,68 +21,42 @@ void Identify_IDT (struct cpudata *cpu)
 	cpu->vendor = VENDOR_CENTAUR;
 
 	/* Do standard stuff */
-	if (cpu->maxi >= 1) {
-		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
-		cpu->stepping = eax & 0xf;
-		cpu->model = (eax >> 4) & 0xf;
-		cpu->family = (eax >> 8) & 0xf;
+	if (cpu->maxi < 1)
+		return;
 
-		switch (cpu->family) {
-		case 5:
-			switch (cpu->model) {
-			case 4:	sprintf (cpu->name, "%s", "Winchip C6");
+	cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
+	cpu->stepping = eax & 0xf;
+	cpu->model = (eax >> 4) & 0xf;
+	cpu->family = (eax >> 8) & 0xf;
+
+	switch (tuple(cpu) & 0xff0) {
+		case 0x540:	sprintf (cpu->name, "%s", "Winchip C6");
 					break;
-			case 8:
-				switch (cpu->stepping) {
-				default:
-					sprintf (cpu->name, "%s", "Winchip 2");
-					break;
-				case 7:
-				case 8:
-				case 9:
-					sprintf (cpu->name, "%s", "Winchip 2A");
-					break;
-				case 10:
-				case 11:
-				case 12:
-				case 13:
-				case 14:
-				case 15:
-					sprintf (cpu->name, "%s", "Winchip 2B");
-					break;
-				}
-				break;
-			case 9:
-				sprintf (cpu->name, "%s", "Winchip 3");
-				break;
-			default:
-				sprintf (cpu->name, "%s", "unknown CPU");
-				break;
-			}
+		case 0x580 ... 0x586:
+			sprintf (cpu->name, "%s", "Winchip 2");
+			break;
+		case 0x587 ... 0x589:
+			sprintf (cpu->name, "%s", "Winchip 2A");
+			break;
+		case 0x58A ... 0x58F:
+			sprintf (cpu->name, "%s", "Winchip 2B");
+			break;
+		case 0x590:
+			sprintf (cpu->name, "%s", "Winchip 3");
 			break;
 		
 		/* Family 6 is when VIA bought out Cyrix & IDT
 		 * This is the CyrixIII family. */
-		case 6:
-			switch (cpu->model) {
-				case 6:	sprintf (cpu->name, "%s", "VIA Cyrix III");
-						break;
-				case 7:	nameptr += sprintf (cpu->name, "%s", "VIA C3");
-						if (cpu->stepping>7)
-							sprintf(nameptr, "%s", " \"Ezra\"");
-						break;
-				case 8:	nameptr += sprintf (cpu->name, "%s", "VIA Ezra-T");
-						break;
-				default:
-						printf ("Unknown CPU");
-						break;
-			}
-			break;
-
-		default:
-			sprintf (cpu->name, "%s", "Unknown CPU");
-			break;
-		}
+		case 0x660:	sprintf (cpu->name, "%s", "VIA Cyrix III");
+					break;
+		case 0x670:	nameptr += sprintf (cpu->name, "%s", "VIA C3");
+					if (cpu->stepping>7)
+						sprintf(nameptr, "%s", " \"Ezra\"");
+					break;
+		case 0x680:	nameptr += sprintf (cpu->name, "%s", "VIA Ezra-T");
+					break;
+		default:	printf ("Unknown CPU");
+					break;
 	}
 }
 

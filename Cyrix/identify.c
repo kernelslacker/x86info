@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.10 2002/07/12 00:48:56 davej Exp $
+ *  $Id: identify.c,v 1.11 2002/07/12 00:56:19 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -35,49 +35,49 @@ void Identify_Cyrix (struct cpudata *cpu)
 	cpu->vendor = VENDOR_CYRIX;
 
 	/* Do standard stuff */
-	if (cpu->maxi >= 1) {
-		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
+	if (cpu->maxi < 1)
+		return;
+
+	cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
+	cpu->stepping = eax & 0xf;
+	cpu->model = (eax >> 4) & 0xf;
+	cpu->family = (eax >> 8) & 0xf;
+
+	switch (tuple(cpu) & 0xff0) {
+		case 0x450:	sprintf (cpu->name, "%s", "MediaGX");
+					break;
+
+		case 0x520:	sprintf (cpu->name, "%s", "6x86");
+					break;
+		case 0x524:	sprintf (cpu->name, "%s", "GXm");
+					break;
+
+		case 0x600:	sprintf (cpu->name, "%s", "6x86/MX");
+					break;
+		case 0x620:	sprintf (cpu->name, "%s", "MII");
+					break;
+		default:	sprintf (cpu->name, "%s", "Unknown CPU");
+					break;
+	}
+
+	/* Check for presence of extended info */
+	if (cpu->maxei < 0x80000000)
+		return;
+
+	if (cpu->maxei >= 0x80000001) {
+		cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 		cpu->stepping = eax & 0xf;
 		cpu->model = (eax >> 4) & 0xf;
 		cpu->family = (eax >> 8) & 0xf;
 
-		switch (tuple(cpu) & 0xff0) {
-			case 0x450:	sprintf (cpu->name, "%s", "MediaGX");
-						break;
-
-			case 0x520:	sprintf (cpu->name, "%s", "6x86");
-						break;
-			case 0x524:	sprintf (cpu->name, "%s", "GXm");
-						break;
-
-			case 0x600:	sprintf (cpu->name, "%s", "6x86/MX");
-						break;
-			case 0x620:	sprintf (cpu->name, "%s", "MII");
-						break;
-			default:	sprintf (cpu->name, "%s", "Unknown CPU");
-						break;
+		switch (cpu->family) {
+			case 4:	sprintf (cpu->name, "MediaGX");
+					break;
+			case 5:	sprintf (cpu->name, "6x86/GXm");
+					break;
+			case 6:	sprintf (cpu->name, "6x86/MX");
+					break;
 		}
-
-		/* Check for presence of extended info */
-		if (cpu->maxei < 0x80000000)
-			return;
-
-		if (cpu->maxei >= 0x80000001) {
-			cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
-			cpu->stepping = eax & 0xf;
-			cpu->model = (eax >> 4) & 0xf;
-			cpu->family = (eax >> 8) & 0xf;
-
-			switch (cpu->family) {
-				case 4:	sprintf (cpu->name, "MediaGX");
-						break;
-				case 5:	sprintf (cpu->name, "6x86/GXm");
-						break;
-				case 6:	sprintf (cpu->name, "6x86/MX");
-						break;
-			}
-		}
-
 	}
 }
 
