@@ -1,3 +1,9 @@
+2002-10-26  Mark Brown  <broonie@sirena.org.uk>
+
+	* x86info.c, x86info.h, x86info.1, features.c: Add new options -F
+	and --verbose-flags which cause a more verbose description of the
+	feature flags to be displayed.
+	
 2002-10-24 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/identify.c: Hopefully fix up the false positives detecting

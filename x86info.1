@@ -58,7 +58,7 @@
 x86info \(em display x86 CPU diagnostics 
 .SH "SYNOPSIS" 
 .PP 
-\fBx86info\fP [\fB-a\fP]  [\fB-c\fP]  [\fB-f\fP]  [\fB-m\fP]  [\fB-mhz\fP]  [\fB-r\fP]  [\fB?\fP]  [\fB--all\fP]  [\fB--cache\fP]  [\fB--flags\fP]  [\fB--msr\fP]  [\fB--mhz\fP]  [\fB--registers\fP]  [\fB--help\fP]  
+\fBx86info\fP [\fB-a\fP]  [\fB-c\fP]  [\fB-f\fP] [fB-F\fP]  [\fB-m\fP] [\fB-mhz\fP]  [\fB-r\fP]  [\fB?\fP]  [\fB--all\fP]  [\fB--cache\fP] [\fB--flags\fP] [\fB--verbose-flags\fP]  [\fB--msr\fP]  [\fB--mhz\fP]  [\fB--registers\fP]  [\fB--help\fP]  
 .SH "DESCRIPTION" 
 .PP 
 This manual page documents \fBx86info\fP, a 
@@ -82,6 +82,8 @@ Show all information.  Equivalent to
 Show TLB, cache sizes and cache associativity. 
 .IP "\fB-f\fP           \fB--flags\fP         " 10 
 Show CPU feature flags. 
+.IP "\fB-F\fP           \fB--verbose-flags\fP         " 10 
+Show verbose description of CPU feature flags rather than abbereviations.
 .IP "\fB-m\fP           \fB--msr\fP         " 10 
 Dump model specific registers.  This feature is currently only 
 supported on a few different processors. Future versions will

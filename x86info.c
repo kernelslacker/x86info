@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.59 2002/07/24 10:18:41 davej Exp $
+ *  $Id: x86info.c,v 1.60 2002/10/29 08:44:58 broonie Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -30,6 +30,7 @@
 int show_msr=0;
 int show_registers=0;
 int show_flags=0;
+int show_verbose_flags=0;
 int show_eblcr=0;
 int show_cacheinfo=0;
 int show_bluesmoke=0;
@@ -53,6 +54,7 @@ void usage (char *programname)
 -c,   --cacheinfo\n\
       --connector\n\
 -f,   --flags\n\
+-F,   --verbose-flags\n\
 -mhz, --mhz\n\
 -mp,  --mptable\n\
 -m,   --msr\n\
@@ -91,6 +93,11 @@ static void parse_command_line (int argc, char **argv)
 
 		if ((!strcmp(arg, "-f") || !strcmp(arg, "--flags")))
 			show_flags = 1;
+
+		if ((!strcmp(arg, "-F") || !strcmp(arg, "--verbose-flags"))) {
+			show_flags = 1;
+			show_verbose_flags = 1;
+		}
 
 		if ((!strcmp(arg, "-m") || !strcmp(arg, "--msr"))) {
 			need_root = 1;

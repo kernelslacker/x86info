@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.18 2002/07/12 01:06:07 davej Exp $
+ *  $Id: features.c,v 1.19 2002/10/29 08:44:57 broonie Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -18,6 +18,40 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 		"cx8", "apic", NULL, "sep", "mtrr", "pge", "mca", "cmov",
 		"pat", "pse36", "psn", "clflsh", NULL, "dtes", "acpi", "mmx",
 		"fxsr", "sse", "sse2", "selfsnoop", "ht", "acc", "ia64", "pbe"
+	};
+	const char *generic_cap_flags_desc[] = {
+		"Onboard FPU", 
+		"Virtual Mode Extensions", 
+		"Debugging Extensions", 
+		"Page Size Extensions", 
+		"Time Stamp Counter", 
+		"Model-Specific Registers", 
+		"Physical Address Extensions", 
+		"Machine Check Architecture",
+		"CMPXCH8 instruction", 
+		"Onboard APIC",
+		NULL, 
+		"SYSENTER/SYSEXIT", 
+		"Memory Type Range Registers", 
+		"Page Global Enable", 
+		"Machine Check Architecture",
+		"CMOV instruction",
+		"Page Attribute Table",
+		"36-bit PSEs", 
+		"Processor serial number", 
+		"CLFLUSH instruction", 
+		NULL, 
+		"Debug Trace Store", 
+		"ACPI via MSR", 
+		"MMX support",
+		"FXSAVE and FXRESTORE instructions", 
+		"SSE support", 
+		"SSE2 support", 
+		"CPU self snoop", 
+		"Hyper-Threadign", 
+		"Automatic clock Control", 
+		"IA-64 processor", 
+		"pbe"
 	};
 	const char *amd_cap_flags[] = {
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -45,8 +79,13 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 
 	printf ("Feature flags:\n");
 	for (i = 0; i < 32; i++)
-		if (flags & (1 << i))
-			printf (" %s", generic_cap_flags[i]);
+		if (flags & (1 << i)) {
+			if (show_verbose_flags) {
+				printf ("\t%s\n", generic_cap_flags_desc[i]);
+			} else {
+				printf (" %s", generic_cap_flags[i]);
+			}
+		}
 
 	printf ("\n");
 
