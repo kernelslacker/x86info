@@ -1,3 +1,7 @@
+2004-8-20 Dave Jones <davej@codemonkey.org.uk>
+
+	* Intel/identify.c: Add 6d6 Pentium-M recognition.
+
 2004-7-11 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/identify: Recognise 0xFE0 stepping Athlon64's

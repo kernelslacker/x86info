@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.59 2004/02/09 00:22:18 davej Exp $
+ *  $Id: identify.c,v 1.60 2004/08/20 13:05:56 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -520,6 +520,31 @@ void Identify_Intel (struct cpudata *cpu)
 					nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
 					break;
 				}
+		}
+		break;
+	case 0x6d0:
+		nameptr += sprintf (cpu->name, "%s", "Pentium M ");
+		cpu->connector = CONN_MICROFCBGA;
+		switch (cpu->stepping) {
+			/*
+				S-spec	Processor	Hi-Freq	Low-Freq
+						Number
+				SL7EM	755			2.0GHz	600MHz
+				SL7EL	755			2.0GHz	600MHz
+				SL7EN	745			1.8GHz	600MHz
+				SL7EQ	745			1.8GHz	600MHz
+				SL7EP	735			1.7GHz	600MHz
+				SL7ER	735			1.7GHz	600MHz
+				SL7EG	725			1.6GHz	600MHz
+				SL7F2	725			1.6GHz	600MHz
+				SL7GL	715			1.5GHz	600MHz
+				SL7GK	715			1.5GHz	600MHz
+				SL7VC	738			1.4GHz	600MHz
+				SL7VD	733			1.1GHz	600MHz
+				SL7V2	723			1.0GHz	600MHz
+			 */
+			case 6:	nameptr+=sprintf (cpu->name, "%s", "[B-1]");
+					break;
 		}
 		break;
 
