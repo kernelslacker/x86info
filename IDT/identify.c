@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.15 2001/12/10 22:53:32 davej Exp $
+ *  $Id: identify.c,v 1.16 2001/12/10 23:05:06 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -130,7 +130,7 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 	if (maxei == 0)
 		return;
 
-	cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &tmp);
+	cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
 	if (maxei >= 0x80000001)
 		cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &tmp);
 	decode_feature_flags (cpu, edx, tmp);
