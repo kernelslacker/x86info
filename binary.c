@@ -16,5 +16,6 @@ void binary32 (unsigned long value)
 void binary64(unsigned long long value)
 {
 	binary32 (value>>32);
+	printf ("             ");
 	binary32 (value);
 }

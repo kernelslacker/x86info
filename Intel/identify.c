@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.22 2002/05/02 17:55:12 davej Exp $
+ *  $Id: identify.c,v 1.23 2002/05/14 02:47:30 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -358,6 +358,9 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 				case 1:
 					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III (Tualatin) [tA1/cA2]");
 					break;
+				case 4:
+					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III [B-1]");
+					break;
 				default:
 					nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
 					break;
@@ -504,5 +507,5 @@ void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 
 	/* FIXME: Bit test for MCA here!*/
 	if (show_bluesmoke)
-		decode_Intel_bluesmoke(cpu->number);
+		decode_Intel_bluesmoke(cpu->number, cpu->family);
 }

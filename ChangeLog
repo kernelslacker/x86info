@@ -1,20 +1,27 @@
-2002-05-29  Dave Jones <davej@suse.de>
+2002-05-15  Randy Dunlap <randy.dunlap@verizon.net>
+
+	* Intel/bluesmoke.c:
+	  calculate banks as low 8 bits not low 4 bits.
+	  print number of extended MSRs
+	  print banks as 64 bit not 32 bit.
+
+2002-04-29  Dave Jones <davej@suse.de>
 
 	* mptable.c, dumpregs.c: minor formatting changes.
 
-2002-05-28	Dave Jones <davej@suse.de>
+2002-04-28	Dave Jones <davej@suse.de>
 
 	* IDT/identify.c: Add recognition of Ezra-T
 
 Released as v1.9
 
-2002-05-27	Dave Jones <davej@suse.de>
+2002-04-27	Dave Jones <davej@suse.de>
 
 	* AMD/identify.c: Add a missing break; that broke AMD detection.
 
 Released as v1.8
 
-2002-05-26  Dave Jones <davej@suse.de>
+2002-04-26  Dave Jones <davej@suse.de>
 
 	* Intel/identify.c: Recognise another P4 stepping. (E0)
 

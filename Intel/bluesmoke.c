@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.5 2001/12/10 17:52:15 davej Exp $
+ *  $Id: bluesmoke.c,v 1.6 2002/05/14 02:47:30 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -15,18 +15,23 @@
 #include "../x86info.h"
 
 #define MCG_CAP 0x0179
+#define MCG_CTL_PBIT	8
+#define MCG_EXT_PBIT	9
 #define MCG_STATUS 0x17a
 #define MCG_CTL 0x17b
+#define MCG_EXT 0x180
 
 #define MC_CTL 0x0400
 #define MC_STATUS 0x0401
 #define MC_ADDR 0x402
 #define MC_MISC 0x403
 
-void decode_Intel_bluesmoke(int cpunum)
+#define PENTIUM4(family)	(family == 0xf)
+
+void decode_Intel_bluesmoke(int cpunum, int family)
 {
 	unsigned long long val, val2;
-	int banks, i;
+	int banks, i, extcount = 0;
 
 	if (!user_is_root)
 		return;
@@ -34,12 +39,21 @@ void decode_Intel_bluesmoke(int cpunum)
 	if (read_msr(cpunum, MCG_CAP, &val) != 1)
 		return;
 
-	if ((val & (1<<8)) == 0)
+	banks = val & 0xff;
+
+	printf ("\nNumber of reporting banks : %d\n\n", banks);
+
+	if (PENTIUM4(family)) {
+		if ((val & (1<<MCG_EXT_PBIT))) {
+			extcount = (val >> 16) & 0xff;
+			printf ("Number of extended MC registers : %d\n\n", extcount);
+		}
+		else
+			printf ("Erk, MCG_EXT not present! :%llx:\n", val);
+	}
+	else
+	if ((val & (1<<MCG_CTL_PBIT)) == 0)
 		printf ("Erk, MCG_CTL not present! :%llx:\n", val);
-
-	banks = val & 0xf;
-
-	printf ("Number of reporting banks : %d\n\n", banks);
 
 	if (read_msr(cpunum, MCG_CTL, &val) == 1) {
 		printf ("MCG_CTL:\n");
@@ -96,18 +110,18 @@ void decode_Intel_bluesmoke(int cpunum)
 	}
 	printf ("\n");
 
-
-	printf("           31       23       15       7 \n");
+	printf("           63       55       47      39 \n");
+	printf("             31       23       15       7 \n");
 	for (i=0; i<banks; i++) {
 		printf ("Bank: %d (0x%x)\n", i, MC_CTL+i*4);
 		printf ("MC%dCTL:    ", i);
-		dumpmsr_bin (cpunum, MC_CTL+i*4, 32);
+		dumpmsr_bin (cpunum, MC_CTL+i*4, 64);
 		printf ("MC%dSTATUS: ", i);
-		dumpmsr_bin (cpunum, MC_STATUS+i*4, 32);
+		dumpmsr_bin (cpunum, MC_STATUS+i*4, 64);
 		printf ("MC%dADDR:   ", i);
-		dumpmsr_bin (cpunum, MC_ADDR+i*4, 32);
+		dumpmsr_bin (cpunum, MC_ADDR+i*4, 64);
 		printf ("MC%dMISC:   ", i);
-		dumpmsr_bin (cpunum, MC_MISC+i*4, 32);
+		dumpmsr_bin (cpunum, MC_MISC+i*4, 64);
 		printf ("\n");
 	}
 }
