@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.4 2001/08/31 01:28:11 davej Exp $
+ *  $Id: identify.c,v 1.5 2001/09/07 12:55:04 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -134,20 +134,20 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 	if (maxei >= 0x80000005 && show_cacheinfo) {
 		/* TLB and cache info */
 		cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
-		printf ("Data TLB: associativity %lx #entries %ld\n", ebx >> 24, (ebx >> 16) & 0xff);
-		printf ("Instruction TLB: associativity %lx #entries %ld\n", (ebx >> 8) & 0xff, ebx & 0xff);
-		printf ("L1 Data cache: size %ld KB associativity %lx lines per tag %ld line size %ld\n",
+		printf ("Instruction TLB: %ld-way associative. %ld entries.\n", (ebx >> 8) & 0xff, ebx & 0xff);
+		printf ("Data TLB: %ld-way associative. %ld entries.\n", ebx >> 24, (ebx >> 16) & 0xff);
+		printf ("L1 Data cache: size %ldKB\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes\n",
 			ecx >> 24, (ecx >> 16) & 0xff, (ecx >> 8) & 0xff, ecx & 0xff);
-		printf ("L1 Instruction cache: size %ld KB associativity %lx lines per tag %ld line size %ld\n",
+		printf ("L1 Instruction cache: size %ldKB\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld\n",
 			edx >> 24, (edx >> 16) & 0xff, (edx >> 8) & 0xff, edx & 0xff);
 	}
 
 	/* check on-chip L2 cache size */
 	if (maxei >= 0x80000006) {
 		cpuid (cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
-		if (cpu->model==7 || cpu->model==8)
-			printf ("L2 (on CPU) cache: %ld KB associativity %lx lines per tag %ld line size %ld\n",
-				ecx >> 24, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
+		if ((cpu->family==6) && (cpu->model==7 || cpu->model==8))
+			printf ("L2 (on CPU) cache: %ld KB %lx way associative, %ld lines per tag, line size %ld\n",
+				ecx >> 24, (ecx >> 16) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
 		else
 			printf ("L2 (on CPU) cache: %ld KB associativity %lx lines per tag %ld line size %ld\n",
 				ecx >> 16, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
