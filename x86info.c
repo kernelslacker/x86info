@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.47 2001/12/11 17:03:45 davej Exp $
+ *  $Id: x86info.c,v 1.48 2001/12/13 18:47:31 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -191,7 +191,9 @@ int main (int argc, char **argv)
 
 		/*
 		 * Doing this per-cpu is a problem, as we can't
-		 * schedule userspace code per-cpu. */
+		 * schedule userspace code per-cpu.
+		 * Although running nrCPUs * threads would probably work.
+		 */
 		if (show_MHz)
 			estimate_MHz(i);
 	}
