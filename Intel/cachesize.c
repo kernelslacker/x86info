@@ -1,5 +1,5 @@
 /*
- *  $Id: cachesize.c,v 1.4 2002/11/12 21:38:34 davej Exp $
+ *  $Id: cachesize.c,v 1.5 2003/01/18 16:54:34 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -48,13 +48,13 @@ static struct _cache_table cache_table[] =
 	{ 0x23, LVL_3,    1024, "L3 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=64 bytes." },
 	{ 0x25, LVL_3,    2048, "L3 unified cache:\n\tSize: 2MB\t8-way associative.\n\tline size=64 bytes." },
 	{ 0x29, LVL_3,    4096, "L3 unified cache:\n\tSize: 4MB\t8-way associative.\n\tline size=64 bytes." },
-	{ 0x39, LVL_3,     128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=64 bytes." },
-	{ 0x3c, LVL_3,     256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=64 bytes." },
-	{ 0x41, LVL_3,     128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x42, LVL_3,     256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x43, LVL_3,     512, "L2 unified cache:\n\tSize: 512KB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x44, LVL_3,    1024, "L2 unified cache:\n\tSize: 1MB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x45, LVL_3,    2048, "L2 unified cache:\n\tSize: 2MB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x39, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=64 bytes." },
+	{ 0x3c, LVL_2,     256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=64 bytes." },
+	{ 0x41, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x42, LVL_2,     256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x43, LVL_2,     512, "L2 unified cache:\n\tSize: 512KB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x44, LVL_2,    1024, "L2 unified cache:\n\tSize: 1MB\t4-way associative.\n\tline size=32 bytes." },
+	{ 0x45, LVL_2,    2048, "L2 unified cache:\n\tSize: 2MB\t4-way associative.\n\tline size=32 bytes." },
 	{ 0x50, INST_TLB,   64, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 64 entries." },
 	{ 0x51, INST_TLB,  128, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 128 entries." },
 	{ 0x52, INST_TLB,  256, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 256 entries." },
