@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.44 2003/01/18 16:59:42 davej Exp $
+ *  $Id: identify.c,v 1.45 2003/02/10 02:58:27 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -78,6 +78,10 @@ void Identify_Intel (struct cpudata *cpu)
 	case 0x480:
 		nameptr+=sprintf (nameptr, "%s", "DX4");
 		cpu->connector = CONN_SOCKET_3;
+		//transistors = 1600000;
+		//fab_process = "0.6 micron CMOS";
+		//die_size = "345 sq. mm";
+		//introduction_date = "March 1994";
 		break;
 	case 0x490:
 		nameptr+=sprintf (nameptr, "%s", "write-back enhanced DX4");
@@ -103,6 +107,10 @@ void Identify_Intel (struct cpudata *cpu)
 	case 0x540:
 		nameptr+=sprintf (nameptr, "%s", "MMX");
 		cpu->connector = CONN_SOCKET_7;
+		//transistors = 4500000;
+		//fab_process = "0.35 micron CMOS";
+		//die_size = "140 sq.mm";
+		//introduction_date = "June 1997";
 		break;
 	case 0x570:
 		nameptr+=sprintf (nameptr, "%s", "Mobile");

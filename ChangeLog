@@ -1,3 +1,9 @@
+2003-2-10 Dave Jones <davej@codemonkey.org.uk>
+
+	* IDT/identify.c:
+	* Intel/identify.c: Add various comments that may later
+	  be used as further info to print out.
+
 2003-2-7 Dave Jones <davej@codemonkey.org.uk>
 
 	* bench/benchmarks.c: Add bswap.
