@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.7 2001/12/10 23:51:58 davej Exp $
+ *  $Id: identify.c,v 1.8 2001/12/11 00:58:06 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -57,11 +57,17 @@ void Identify_Cyrix (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 								break;
 					}
 					break;
-			case 6:	if (cpu->model==0) {
-						sprintf (cpu->name, "%s", "6x86/MX");
-						break;
+			case 6:	switch (cpu->model) {
+						case 0:
+							sprintf (cpu->name, "%s", "6x86/MX");
+							break;
+						case 2:
+							sprintf (cpu->name, "%s", "MII");
+							break;
+						default:
+							sprintf (cpu->name, "%s", "Unknown CPU");
+							break;
 					}
-					sprintf (cpu->name, "%s", "Unknown CPU");
 					break;
 		}
 

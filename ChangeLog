@@ -1,3 +1,7 @@
+2001-12-11	Dave Jones <davej@suse.de>
+
+	* Cyrix/identify.c: Add recognition for Cyrix MII
+
 2001-12-10	Dave <dave@iol.cz>
 
 	* Cyrix/identify.c: Fix misplaced { } in Cyrix detection.
