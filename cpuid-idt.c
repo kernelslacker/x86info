@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-idt.c,v 1.7 2001/02/28 00:48:00 davej Exp $
+ *  $Id: cpuid-idt.c,v 1.8 2001/03/27 03:22:27 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -72,6 +72,25 @@ void doIDT (int cpunum, unsigned int maxi, struct cpudata *cpu)
 				printf ("<unknown type>");
 				break;
 			}
+			break;
+		
+		/* Family 6 is when VIA bought out Cyrix & IDT
+		 * This is the CyrixIII family. */
+		case 6:
+			switch (cpu->model) {
+				case 6:
+					printf ("VIA Cyrix III");
+					break;
+
+				case 7:
+					printf ("VIA C3");
+					if (cpu->stepping>7)
+						printf(" \"Ezra\"");
+					break;
+
+				default:
+					printf ("Unknown");
+			}		
 			break;
 
 		default:
