@@ -22,6 +22,7 @@
   - Introduction date
   - number of transistors
   - voltages (I/O, Core, Maximum)
+  - number of pipelines
 
 - review code for extended natsemi support.
 
