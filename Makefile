@@ -23,6 +23,7 @@ OBJS =\
 	Intel/eblcr.o\
 	Intel/MSR-P4.o\
 	Intel/MSR-P6.o\
+	Intel/microcode.o\
 \
 	IDT/identify.o\
 	IDT/MSR-C3.o\

@@ -113,6 +113,7 @@ extern int show_connector;
 extern int show_eblcr;
 extern int show_flags;
 extern int verbose;
+extern int show_microcode;
 extern int show_msr;
 extern int show_mtrr;
 extern int show_pm;

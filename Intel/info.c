@@ -1,5 +1,5 @@
 /*
- *  $Id: info.c,v 1.2 2002/11/27 12:53:50 davej Exp $
+ *  $Id: info.c,v 1.3 2002/12/13 23:10:44 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -73,4 +73,7 @@ void display_Intel_info (struct cpudata *cpu)
 		printf ("Number of logical processors supported "
 			"within the physical package: %d\n\n", nr_ht);
 	}
+
+	if (show_microcode)
+		decode_microcode(cpu);
 }

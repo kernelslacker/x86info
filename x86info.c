@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.70 2002/12/04 17:49:28 davej Exp $
+ *  $Id: x86info.c,v 1.71 2002/12/13 23:10:44 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -33,6 +33,7 @@ int show_connector=0;
 int show_eblcr=0;
 int show_flags=0;
 int show_msr=0;
+int show_microcode=0;
 int show_mtrr=0;
 int show_pm=0;
 int show_registers=0;
@@ -59,6 +60,7 @@ void usage (char *programname)
       --connector\n\
 -f,   --flags\n\
 -mhz, --mhz\n\
+      --microcode\n\
 -mp,  --mptable\n\
 -m,   --msr\n\
       --mult\n\
@@ -84,6 +86,7 @@ static void parse_command_line (int argc, char **argv)
 			show_connector = 1;
 			show_eblcr =1;
 			show_flags = 1;
+			show_microcode = 1;
 			show_mptable =1;
 			show_msr = 1;
 			show_MHz = 1;
@@ -111,9 +114,9 @@ static void parse_command_line (int argc, char **argv)
 			show_msr = 1;
 		}
 
-		if (!strcmp(arg, "--mult")) {
+		if (!strcmp(arg, "--microcode")) {
 			need_root = 1;
-			show_eblcr = 1;
+			show_microcode = 1;
 		}
 
 		if ((!strcmp(arg, "-mhz") || !strcmp(arg, "--mhz")))
@@ -127,6 +130,11 @@ static void parse_command_line (int argc, char **argv)
 		if (!strcmp(arg, "--mtrr")) {
 			need_root = 1;
 			show_mtrr = 1;
+		}
+
+		if (!strcmp(arg, "--mult")) {
+			need_root = 1;
+			show_eblcr = 1;
 		}
 
 		if (!strcmp(arg, "--pm"))
