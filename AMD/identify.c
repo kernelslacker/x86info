@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.44 2003/01/16 14:08:06 davej Exp $
+ *  $Id: identify.c,v 1.45 2003/02/10 13:31:26 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -324,11 +324,14 @@ out_660:
 			determine_xp_mp(cpu);
 		}
 		add_to_cpuname (" (Thoroughbred)");
-			
+
 		if (cpu->stepping == 0)
 			add_to_cpuname ("[A0]");
 		if (cpu->stepping == 1)
 			add_to_cpuname ("[B0]");
+		//fab_process = ".13 micron";
+		//transistors = 37600000;
+		//die_size = "84 sq.mm";
 		break;
 
 	case 0x6a0:
@@ -338,6 +341,9 @@ out_660:
 		add_to_cpuname ("Athlon ");
 		determine_xp_mp(cpu);
 		add_to_cpuname (" (Barton)");
+		//fab_process = ".13 micron copper";
+		//transistors = 54300000;
+		//die_size = "101 sq. mm";
 		break;
 
 	case 0xF00:
