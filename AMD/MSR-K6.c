@@ -1,5 +1,5 @@
 /*
- *  $Id: MSR-K6.c,v 1.1 2001/08/19 15:46:08 davej Exp $
+ *  $Id: MSR-K6.c,v 1.2 2001/08/19 15:47:54 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -30,13 +30,9 @@ void dump_k6_MSR (struct cpudata *cpu)
 	/* Original K6 or K6-2 (old core). */
 	if (cpu->model > 5) {
 		if (rdmsr (cpu->number, 0xC0000082, &val) == 1) {
-			if (val & (0x7f << 1))
-				printf ("Write allocate disabled\n");
-			else {
-				printf ("Write allocate enable limit: %d Mbytes\n", (int) ((val & 0x7e) >>1) * 4);
+				printf ("Write allocate enable limit: %dMbytes\n", (int) ((val & 0x7e) >>1) * 4);
 				printf ("Write allocate 15-16M bytes: %s\n", val & 1 ? "enabled" : "disabled");
-			}
-		}else {
+		} else {
 			printf ("Couldn't read WHCR register.\n");
 		}
 	}
@@ -47,10 +43,10 @@ void dump_k6_MSR (struct cpudata *cpu)
 			if (val & (0x3ff << 22))
 				printf ("Write allocate disabled\n");
 			else {
-				printf ("Write allocate enable limit: %d Mbytes\n", (int) val & (0x3ff>>22) * 4);
+				printf ("Write allocate enable limit: %dMbytes\n", (int) val & (0x3ff>>22) * 4);
 				printf ("Write allocate 15-16M bytes: %s\n", val & (1<<16) ? "enabled" : "disabled");
 			}
-		}else {
+		} else {
 			printf ("Couldn't read WHCR register.\n");
 		}
 	}
