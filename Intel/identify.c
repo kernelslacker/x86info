@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.41 2002/11/27 12:53:50 davej Exp $
+ *  $Id: identify.c,v 1.42 2002/12/30 13:16:02 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -208,7 +208,7 @@ void Identify_Intel (struct cpudata *cpu)
 		cpu->connector = CONN_SLOT_1;
 		switch (cpu->stepping) {
 		case 2:
-			nameptr+=sprintf (cpu->name, "%s", "Pentium III [kB0]");
+			nameptr+=sprintf (cpu->name, "%s", "Pentium III (Katmai) [kB0]");
 			break;
 		case 3:
 			nameptr+=sprintf (cpu->name, "%s", "Pentium III (Katmai) [kC0]");
@@ -293,22 +293,29 @@ void Identify_Intel (struct cpudata *cpu)
 		}
 		break;
 	case 0x6B0:
-		if (cpu->brand == 6) {
-			cpu->connector = CONN_MICROFCBGA;
-			nameptr += sprintf (cpu->name, "%s", "Pentium III-M");
-			break;
-		} else {
-			cpu->connector = CONN_SLOT_1;
-			switch (cpu->stepping) {
+		switch (cpu->brand) {
 			case 1:
-				nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III (Tualatin) [tA1/cA2]");
+			case 3:
+				cpu->connector = CONN_SLOT_1;
+				nameptr += sprintf (cpu-name, "%s", "Celeron (Tualatin) [tA1/cA2]");
 				break;
-			case 4:
-				nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III [B-1]");
+			case 6:
+				cpu->connector = CONN_MICROFCBGA;
+				nameptr += sprintf (cpu->name, "%s", "Pentium III-M");
 				break;
 			default:
-				nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
-				break;
+				cpu->connector = CONN_SLOT_1;
+				switch (cpu->stepping) {
+				case 1:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium III (Tualatin) [tA1/cA2]");
+					break;
+				case 4:
+					nameptr+=sprintf (cpu->name, "%s", "Pentium III [B-1]");
+					break;
+				default:
+					nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
+					break;
+				}
 			}
 		}
 		break;

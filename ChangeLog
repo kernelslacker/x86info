@@ -1,3 +1,7 @@
+2002-12-30  Dave Jones <davej@codemonkey.org.uk>
+
+	* Intel/identify.c: Fix up some celeron idents.
+
 2002-12-22  Dave Jones <davej@codemonkey.org.uk>
 
 	* bench/cpuid.c: Benchmark cpuid.
