@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.25 2001/08/10 08:47:10 davej Exp $
+ *  $Id: x86info.c,v 1.26 2001/08/10 09:00:03 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -23,18 +23,22 @@ int show_bluesmoke=0;
 int check_bluesmoke=0;
 int parse_bluesmoke=0;
 
+int silent = 0;
 int used_UP = 0;
 
 void usage (char *programname)
 {
 	printf ("Usage: %s [<switches>]\n\
--a, --all\n\
--c, --cacheinfo \n\
--f, --flags\n\
+-a,   --all\n\
+-c,   --cacheinfo \n\
+-f,   --flags\n\
 -mhz, --mhz\n\
--m, --msr\n\
--r, --registers\n\
--s, --smoke\n", programname);
+-m,   --msr\n\
+-r,   --registers\n\
+-s,   --show-bluesmoke\n\
+      --check-bluesmoke\n\
+      --parse-bluesmoke\n\
+\n", programname);
 	exit (0);
 }
 
@@ -70,8 +74,10 @@ void parse_command_line (int argc, char **argv)
 		if ((!strcmp(arg, "-s") || !strcmp(arg, "--show-bluesmoke")))
 			show_bluesmoke = 1;
 
-		if (!strcmp(arg, "--check-bluesmoke"))
+		if (!strcmp(arg, "--check-bluesmoke")) {
 			check_bluesmoke = 1;
+			silent = 1;
+		}
 
 		if (!strcmp(arg, "--parse-bluesmoke"))
 			parse_bluesmoke = 1;
@@ -86,10 +92,11 @@ int main (int argc, char **argv)
 {
 	unsigned int i, nrCPUs;
 
-	printf ("x86info v1.5.  Dave Jones 2001\n");
-	printf ("Feedback to <davej@suse.de>.\n\n");
-
 	parse_command_line(argc, argv);
+	if (!silent) {
+		printf ("x86info v1.5.  Dave Jones 2001\n");
+		printf ("Feedback to <davej@suse.de>.\n\n");
+	}
 
 	if ((HaveCPUID())==0) {
 		printf ("No CPUID instruction available.\n");
@@ -98,10 +105,12 @@ int main (int argc, char **argv)
 	}
 
 	nrCPUs = sysconf (_SC_NPROCESSORS_CONF);
-	printf ("Found %d CPU", nrCPUs);
-	if (nrCPUs > 1)
-		printf ("s");
-	printf ("\n");
+	if (!silent) {
+		printf ("Found %d CPU", nrCPUs);
+		if (nrCPUs > 1)
+			printf ("s");
+		printf ("\n");
+	}
 
 	for (i=0; i<nrCPUs; i++) {
 		if (show_registers)
@@ -113,10 +122,9 @@ int main (int argc, char **argv)
 		 * schedule userspace code per-cpu. */
 		if (show_MHz)
 			estimate_MHz(i);
-
 	}
 
-	if (nrCPUs > 1 && used_UP==1) {
+	if (nrCPUs > 1 && used_UP==1 && (!silent)) {
 		printf ("WARNING: Detected SMP, but cpuid driver not loaded.\n");
 		printf ("Used single CPU routines. Results inaccurate.\n");
 	}
