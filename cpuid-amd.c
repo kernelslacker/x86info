@@ -9,6 +9,21 @@
 #include <stdio.h>
 #include "x86info.h"
 
+extern int show_registers;
+
+static void dump_extended_AMD_regs(int cpunum, unsigned long maxei)
+{
+	unsigned long eax, ebx, ecx, edx;
+	unsigned int i;
+
+	/* Dump extended info in raw hex */
+	for (i = 0x80000000; i <= maxei; i++) {
+		cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
+		printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
+	}
+	printf ("\n");
+}
+
 void doamd (int cpunum, int maxi, struct cpudata *cpu)
 {
 	unsigned int i;
@@ -17,15 +32,9 @@ void doamd (int cpunum, int maxi, struct cpudata *cpu)
 	cpu->vendor = VENDOR_AMD;
 
 	cpuid (cpunum, 0x80000000, &maxei, NULL, NULL, NULL);
-	if (maxei != 0) {
 
-		/* Dump extended info in raw hex */
-		for (i = 0x80000000; i <= maxei; i++) {
-			cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
-			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
-				edx);
-		}
-	}
+	if (show_registers && (maxei != 0))
+		dump_extended_AMD_regs(cpunum, maxei);
 
 	if (maxi >= 0x00000001) {
 		cpuid (cpunum, 0x00000001, &eax, &ebx, &ecx, &edx);

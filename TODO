@@ -1,7 +1,6 @@
 - Display some MSR info (/dev/msr)
 - Recognise different types of Celerons
   (cache size)
-- Options to show / hide things like registers
 - Flags code needs an update. It was taken from the
   kernel before hpa cleaned it up.
 
