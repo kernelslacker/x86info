@@ -1,3 +1,8 @@
+2002-07-12 Dave Jones <davej@suse.de>
+
+	* x86info.h: introduced tuple macro
+	* Intel/identify.c: used tuple macro to clean up code.
+
 2002-06-18 Dave Jones <davej@suse.de>
 
 	* mtrr.c: Dump fixed range MTRR regs too.

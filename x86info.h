@@ -34,6 +34,8 @@ struct cpudata {
 	unsigned char connector;
 };
 
+#define tuple(c) ((c->family<<8)|(c->model<<4)|(c->stepping))
+
 #define CONN_UNKNOWN		0
 #define CONN_SOCKET_3		1
 #define CONN_SOCKET_4		2
