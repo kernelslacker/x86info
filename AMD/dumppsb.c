@@ -6,6 +6,7 @@
 #include <ctype.h>
 #include <sys/mman.h>
 
+#include "powernow.h"
 #include "../x86info.h"
 
 #define START 0x000c0000L
@@ -37,6 +38,7 @@ void dump_PSB(struct cpudata *cpu, int maxfid, int startvid)
 	struct psb_s *psb;
 	struct pst_s *pst;
 	int numpstates;
+	int fid, vid;
 
 	fd=open("/dev/mem", O_RDONLY);
 
@@ -70,7 +72,7 @@ void dump_PSB(struct cpudata *cpu, int maxfid, int startvid)
 			}
 
 			printf ("Settling Time: %d\n", psb->settlingtime);
-			printf ("Has %d P states. (Only dumping ones relevant to this CPU).\n", psb->numpst);
+			printf ("Has %d PST tables. (Only dumping ones relevant to this CPU).\n", psb->numpst);
 
 			p += sizeof (struct psb_s);
 
@@ -82,17 +84,21 @@ void dump_PSB(struct cpudata *cpu, int maxfid, int startvid)
 
 				if ((etuple(cpu) == pst->cpuid) && (maxfid==pst->maxfid) && (startvid==pst->startvid))
 				{
-					printf ("PST:%d (@%p)\n", i, pst);
-					printf ("cpuid: 0x%x\t", pst->cpuid);
-					printf ("fsb: %d\t", pst->fsbspeed);
-					printf ("maxFID: 0x%x\t", pst->maxfid);
-					printf ("startvid: 0x%x\n", pst->startvid);
-					printf ("num of p states in this table: %d\n", numpstates);
+					printf (" PST:%d (@%p)\n", i, pst);
+					printf ("  cpuid: 0x%x\t", pst->cpuid);
+					printf ("  fsb: %d\t", pst->fsbspeed);
+					printf ("  maxFID: 0x%x\t", pst->maxfid);
+					printf ("  startvid: 0x%x\n", pst->startvid);
+					printf ("  num of p states in this table: %d\n", numpstates);
 
 					p = (char *) pst + sizeof (struct pst_s);
 					for (j=0 ; j < numpstates; j++) {
-						printf ("FID: 0x%x\t", *p++);
-						printf ("VID: 0x%x\n", *p++);
+						fid = *p++;
+						printf ("    FID: 0x%x (%.1fx [%.0fMHz])\t", fid,
+							fid_codes[fid], pst->fsbspeed * fid_codes[fid]);
+
+						vid = *p++;
+						printf ("VID: 0x%x (%0.3fV)\n", vid, mobile_vid_table[vid]);
 					}
 					printf ("\n");
 				} else {
@@ -112,3 +118,14 @@ out:
 	close(fd);
 	return;
 }
+/*
+    printf ("Voltage ID codes: Maximum=%0.3fV Startup=%0.3fV Currently=%0.3fV\n",
+					        mobile_vid_table[fidvidstatus.bits.MVID],
+							        mobile_vid_table[fidvidstatus.bits.SVID],
+									        mobile_vid_table[fidvidstatus.bits.CVID]);
+
+    printf ("Frequency ID codes: Maximum=%.1fx Startup=%.1fx Currently=%.1fx\n",
+					        fid_codes[fidvidstatus.bits.MFID],
+							        fid_codes[fidvidstatus.bits.SFID],
+									        fid_codes[fidvidstatus.bits.CFID]);
+*/

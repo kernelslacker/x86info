@@ -1,5 +1,5 @@
 /*
- *  $Id: powernow.h,v 1.3 2003/01/16 03:37:31 davej Exp $
+ *  $Id: powernow.h,v 1.4 2003/01/16 17:09:18 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -48,4 +48,7 @@ union msr_fidvidstatus {
 	} bits;
 	unsigned long long val;
 };
+
+extern double mobile_vid_table[32];
+extern double fid_codes[32];
 
