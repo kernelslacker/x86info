@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-idt.c,v 1.8 2001/03/27 03:22:27 davej Exp $
+ *  $Id: cpuid-idt.c,v 1.9 2001/08/10 10:35:36 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -13,23 +13,14 @@
 extern int show_cacheinfo;
 extern int show_registers;
 
-void doIDT (int cpunum, unsigned int maxi, struct cpudata *cpu)
+void Identify_IDT (int cpunum, unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 {
-	unsigned int i;
-	unsigned long maxei, eax, ebx, ecx, edx;
+	char *nameptr;
+	unsigned long eax, ebx, ecx, edx;
+
+	nameptr = cpu->name;
 
 	cpu->vendor = VENDOR_CENTAUR;
-
-	cpuid (cpunum, 0x80000000, &maxei, NULL, NULL, NULL);
-
-	if (maxei != 0 && show_registers) {
-		/* Dump extended info in raw hex */
-		for (i = 0x80000000; i <= maxei; i++) {
-			cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
-			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
-				edx);
-		}
-	}
 
 	/* Do standard stuff */
 	if (maxi >= 1) {
@@ -38,22 +29,19 @@ void doIDT (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		cpu->model = (eax >> 4) & 0xf;
 		cpu->family = (eax >> 8) & 0xf;
 
-		printf ("Family: %d Model: %d [Winchip-", cpu->family, cpu->model);
 		switch (cpu->family) {
 		case 5:
 			switch (cpu->model) {
-			case 4:
-				printf ("C6");
-				break;
+			case 4:	sprintf (cpu->name, "%s", "Winchip C6");	break;
 			case 8:
 				switch (cpu->stepping) {
 				default:
-					printf ("2");
+					sprintf (cpu->name, "%s", "Winchip 2");
 					break;
 				case 7:
 				case 8:
 				case 9:
-					printf ("2A");
+					sprintf (cpu->name, "%s", "Winchip 2A");
 					break;
 				case 10:
 				case 11:
@@ -61,15 +49,15 @@ void doIDT (int cpunum, unsigned int maxi, struct cpudata *cpu)
 				case 13:
 				case 14:
 				case 15:
-					printf ("2B");
+					sprintf (cpu->name, "%s", "Winchip 2B");
 					break;
 				}
 				break;
 			case 9:
-				printf ("3");
+				sprintf (cpu->name, "%s", "Winchip 3");
 				break;
 			default:
-				printf ("<unknown type>");
+				sprintf (cpu->name, "%s", "unknown CPU");
 				break;
 			}
 			break;
@@ -78,41 +66,27 @@ void doIDT (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		 * This is the CyrixIII family. */
 		case 6:
 			switch (cpu->model) {
-				case 6:
-					printf ("VIA Cyrix III");
-					break;
-
-				case 7:
-					printf ("VIA C3");
+				case 6:	sprintf (cpu->name, "%s", "VIA Cyrix III");	break;
+				case 7:	nameptr += sprintf (cpu->name, "%s", "VIA C3");
 					if (cpu->stepping>7)
-						printf(" \"Ezra\"");
+						sprintf(nameptr, "%s", " \"Ezra\"");
 					break;
-
 				default:
-					printf ("Unknown");
-			}		
+					printf ("Unknown CPU");
+			}
 			break;
 
 		default:
-			printf ("<unknown type>");
+			sprintf (cpu->name, "%s", "Unknown CPU");
 			break;
 		}
-		printf ("]\n");
-	}
-
-	/* Check for presence of extended info */
-	if (maxei == 0)
-		return;
-
-	if (maxei >= 0x80000001) {
-		cpuid (cpunum, 0x80000001, &eax, &ebx, &ecx, &edx);
-		decode_feature_flags (cpu, edx);
 	}
 
 	if (maxei >= 0x80000002) {
 		/* Processor identification string */
 		char namestring[49], *cp;
 		unsigned int j;
+		unsigned int i;
 		cp = namestring;
 		for (j = 0x80000002; j <= 0x80000004; j++) {
 			cpuid (cpunum, j, &eax, &ebx, &ecx, &edx);
@@ -127,7 +101,32 @@ void doIDT (int cpunum, unsigned int maxi, struct cpudata *cpu)
 				*cp++ = edx >> (8 * i);
 		}
 		*cp++ = '\n';
-		printf ("Processor name string: %s\n", namestring);
+		sprintf (cpu->name, "%s", namestring);
+	}
+}
+
+
+void display_IDT_info(int cpunum, unsigned int maxei, struct cpudata *cpu)
+{
+	unsigned int i;
+	unsigned long eax, ebx, ecx, edx;
+
+	if (maxei != 0 && show_registers) {
+		/* Dump extended info in raw hex */
+		for (i = 0x80000000; i <= maxei; i++) {
+			cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
+			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
+				edx);
+		}
+	}
+
+	/* Check for presence of extended info */
+	if (maxei == 0)
+		return;
+
+	if (maxei >= 0x80000001) {
+		cpuid (cpunum, 0x80000001, &eax, &ebx, &ecx, &edx);
+		decode_feature_flags (cpu, edx);
 	}
 
 	if (maxei >= 0x80000005 && show_cacheinfo) {

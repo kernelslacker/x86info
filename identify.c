@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.9 2001/08/10 10:25:25 davej Exp $
+ *  $Id: identify.c,v 1.10 2001/08/10 10:35:36 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -28,7 +28,7 @@ void identify (int cpunum)
 		case 0x756e6547:/* Intel */	Identify_Intel (cpunum, maxi, &cpu);		break;
 		case 0x68747541:/* AMD */	Identify_AMD (cpunum, maxi, &cpu);			break;
 		case 0x69727943:/* Cyrix */	Identify_Cyrix (cpunum, maxi, maxei, &cpu);	break;
-		case 0x746e6543:/* IDT */	doIDT (cpunum, maxi, &cpu);					break;
+		case 0x746e6543:/* IDT */	Identify_IDT (cpunum, maxi, maxei, &cpu);					break;
 		case 0x52697365:/* Rise This should be checked. Why 2 ? */
 		case 0x65736952:/* Rise */	doRise (cpunum, maxi, &cpu);				break;
 		default:					printf ("Unknown vendor\n");				return;
