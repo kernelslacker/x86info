@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.4 2001/10/12 19:50:14 davej Exp $
+ *  $Id: identify.c,v 1.5 2001/10/12 20:27:39 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -17,7 +17,7 @@ extern int show_flags;
 extern int show_bluesmoke;
 
 /* Decode Intel TLB and cache info descriptors */
-void decode_Intel_TLB (int x)
+void decode_Intel_TLB (int x, int family)
 {
 	switch (x & 0xff) {
 	case 0:
@@ -47,7 +47,10 @@ void decode_Intel_TLB (int x)
 		printf ("Data cache: 16KB, 2-way or 4-way set assoc, 32 byte line size\n");
 		break;
 	case 0x40:
-		printf ("No L2 cache\n");
+		if (family==15)
+			printf ("No L3 cache\n");	/* Pentium 4 */
+		else
+			printf ("No L2 cache\n");
 		break;
 	case 0x41:
 		printf ("L2 unified cache: 128KB, 4-way set assoc, 32 byte line size\n");
@@ -218,27 +221,27 @@ void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 		for (i = 0; i < ntlb; i++) {
 			cpuid (cpu->number, 2, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
-			decode_Intel_TLB (eax >> 8);
-			decode_Intel_TLB (eax >> 16);
-			decode_Intel_TLB (eax >> 24);
+			decode_Intel_TLB (eax >> 8, cpu->family);
+			decode_Intel_TLB (eax >> 16, cpu->family);
+			decode_Intel_TLB (eax >> 24, cpu->family);
 
 			if ((ebx & 0x80000000) == 0) {
-				decode_Intel_TLB (ebx);
-				decode_Intel_TLB (ebx >> 8);
-				decode_Intel_TLB (ebx >> 16);
-				decode_Intel_TLB (ebx >> 24);
+				decode_Intel_TLB (ebx, cpu->family);
+				decode_Intel_TLB (ebx >> 8, cpu->family);
+				decode_Intel_TLB (ebx >> 16, cpu->family);
+				decode_Intel_TLB (ebx >> 24, cpu->family);
 			}
 			if ((ecx & 0x80000000) == 0) {
-				decode_Intel_TLB (ecx);
-				decode_Intel_TLB (ecx >> 8);
-				decode_Intel_TLB (ecx >> 16);
-				decode_Intel_TLB (ecx >> 24);
+				decode_Intel_TLB (ecx, cpu->family);
+				decode_Intel_TLB (ecx >> 8, cpu->family);
+				decode_Intel_TLB (ecx >> 16, cpu->family);
+				decode_Intel_TLB (ecx >> 24, cpu->family);
 			}
 			if ((edx & 0x80000000) == 0) {
-				decode_Intel_TLB (edx);
-				decode_Intel_TLB (edx >> 8);
-				decode_Intel_TLB (edx >> 16);
-				decode_Intel_TLB (edx >> 24);
+				decode_Intel_TLB (edx, cpu->family);
+				decode_Intel_TLB (edx >> 8, cpu->family);
+				decode_Intel_TLB (edx >> 16, cpu->family);
+				decode_Intel_TLB (edx >> 24, cpu->family);
 			}
 		}
 	}
