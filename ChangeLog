@@ -1,41 +1,50 @@
-2002-05-15  Randy Dunlap <randy.dunlap@verizon.net>
+2002-04-23 Dave Jones <davej@suse.de>
+
+	* get_model_name.c, identify.c, x86info.h,
+	* AMD/identify.c, Cyrix/identify.c
+	* IDT/identify.c, Intel/identify.c
+	* NatSemi/identify.c, RiSE/identify.c:
+	  maxei & maxi are now used from the cpu-> struct.
+	  This fix makes x86info pass the valgrind test.
+
+2002-05-15 Randy Dunlap <randy.dunlap@verizon.net>
 
 	* Intel/bluesmoke.c:
 	  calculate banks as low 8 bits not low 4 bits.
 	  print number of extended MSRs
 	  print banks as 64 bit not 32 bit.
 
-2002-04-29  Dave Jones <davej@suse.de>
+2002-04-29 Dave Jones <davej@suse.de>
 
 	* mptable.c, dumpregs.c: minor formatting changes.
 
-2002-04-28	Dave Jones <davej@suse.de>
+2002-04-28 Dave Jones <davej@suse.de>
 
 	* IDT/identify.c: Add recognition of Ezra-T
 
 Released as v1.9
 
-2002-04-27	Dave Jones <davej@suse.de>
+2002-04-27 Dave Jones <davej@suse.de>
 
 	* AMD/identify.c: Add a missing break; that broke AMD detection.
 
 Released as v1.8
 
-2002-04-26  Dave Jones <davej@suse.de>
+2002-04-26 Dave Jones <davej@suse.de>
 
 	* Intel/identify.c: Recognise another P4 stepping. (E0)
 
-2002-04-17  Dave Jones <davej@suse.de>
+2002-04-17 Dave Jones <davej@suse.de>
 
 	* Intel/identify.c: Add another stepping.
 
-2002-03-18  Dave Jones <davej@suse.de>
+2002-03-18 Dave Jones <davej@suse.de>
 
 	* Makefile: Various cleanups to work with AMD-64 simulator.
 	* AMD/identify.c: Report 'unknown' instead of garbage when an
 	  unknown family is detected.
 
-2002-03-10  Sami Farin <safari@iki.fi>
+2002-03-10 Sami Farin <safari@iki.fi>
 
 	* features.c, Intel/identify.c: If Hyper-Threading Technology is
 	  present, show number of logical processors supported within the
@@ -43,11 +52,11 @@ Released as v1.8
 	* Intel/identify.c: Pentium 4 [B0] recognition,
 	  Cache Size/TLB information fixes and updates.
 
-2002-1-3	Dave Jones <davej@suse.de>
+2002-1-3 Dave Jones <davej@suse.de>
 
 	* features.c: Recognise MP bit of newer Athlons.
 
-2002-1-3	David Relson <relson@osagesoftware.com>
+2002-1-3 David Relson <relson@osagesoftware.com>
 
 	* x86info.c: Export nrCPUs
 	* cpuid.c: don't print warnings about cpuid driver on UP.
@@ -56,7 +65,7 @@ Released as v1.8
 
 	* README: Mention modules.conf for modular cpuid/msr drivers.
 
-2001-12-22  Mendel L Chan <linuxrat@gnuchina.org>
+2001-12-22 Mendel L Chan <linuxrat@gnuchina.org>
 
 	* scripts/Makenodes: Add cd /dev/cpu before making nodes.
 	* identify.c: Missed argument off call to display_NatSemi_info()

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.17 2002/04/27 10:48:51 davej Exp $
+ *  $Id: identify.c,v 1.18 2002/05/23 00:13:06 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -24,13 +24,13 @@ static void do_assoc(unsigned long assoc)
 	printf (" associative. ");
 }
 
-static void decode_AMD_cacheinfo(int cpunum, unsigned long maxei)
+static void decode_AMD_cacheinfo(struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 
-	if (maxei >= 0x80000005) {
+	if (cpu->maxei >= 0x80000005) {
 		/* TLB and cache info */
-		cpuid (cpunum, 0x80000005, &eax, &ebx, &ecx, &edx);
+		cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
 
 		printf ("Instruction TLB: ");
 		do_assoc ((ebx >> 8) & 0xff);
@@ -56,8 +56,8 @@ static void decode_AMD_cacheinfo(int cpunum, unsigned long maxei)
 	}
 
 	/* check K6-III (and later?) on-chip L2 cache size */
-	if (maxei >= 0x80000006) {
-		cpuid (cpunum, 0x80000006, &eax, &ebx, &ecx, &edx);
+	if (cpu->maxei >= 0x80000006) {
+		cpuid (cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
 		printf ("L2 (on CPU) cache:\n\t");
 		printf ("Size: %ldKb\t", ecx >> 16);
 		do_assoc ((ecx >> 12) & 0x0f);
@@ -79,21 +79,21 @@ static int getL2size(int cpunum)
 	return (ecx >> 16);
 }
 
-static void dump_extended_AMD_regs(int cpunum, unsigned long maxei)
+static void dump_extended_AMD_regs(struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 	unsigned int i;
 
 	/* Dump extended info in raw hex */
-	for (i = 0x80000000; i <= maxei; i++) {
-		cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
+	for (i = 0x80000000; i <= cpu->maxei; i++) {
+		cpuid (cpu->number, i, &eax, &ebx, &ecx, &edx);
 		printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
 	}
 	printf ("\n");
 }
 
 
-void Identify_AMD (unsigned int maxi, struct cpudata *cpu)
+void Identify_AMD (struct cpudata *cpu)
 {
 	char *nameptr;
 	unsigned long eax, ebx, ecx, edx;
@@ -102,7 +102,7 @@ void Identify_AMD (unsigned int maxi, struct cpudata *cpu)
 
 	cpu->vendor = VENDOR_AMD;
 
-	if (maxi >= 0x00000001) {
+	if (cpu->maxi >= 0x00000001) {
 		cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
 		cpu->stepping = eax & 0xf;
 		cpu->model = (eax >> 4) & 0xf;
@@ -221,13 +221,13 @@ void Identify_AMD (unsigned int maxi, struct cpudata *cpu)
 }
 
 
-void display_AMD_info(unsigned int maxei, struct cpudata *cpu)
+void display_AMD_info(struct cpudata *cpu)
 {
 	unsigned long tmp;
 	unsigned long eax, ebx, ecx, edx;
 
-	if (show_registers && (maxei != 0))
-		dump_extended_AMD_regs(cpu->number, maxei);
+	if (show_registers && (cpu->maxei != 0))
+		dump_extended_AMD_regs(cpu);
 
 	if (show_msr) {
 		if (cpu->family == 5)
@@ -239,7 +239,7 @@ void display_AMD_info(unsigned int maxei, struct cpudata *cpu)
 	if (show_bluesmoke)
 		decode_athlon_bluesmoke(cpu->number);
 
-	if (maxei >= 0x80000001) {
+	if (cpu->maxei >= 0x80000001) {
 		cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &tmp);
 		cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 		decode_feature_flags (cpu, tmp, edx);
@@ -247,12 +247,12 @@ void display_AMD_info(unsigned int maxei, struct cpudata *cpu)
 
 	printf ("Family: %d Model: %d Stepping: %d [%s]\n",
 		cpu->family, cpu->model, cpu->stepping, cpu->name);
-	get_model_name (maxei, cpu);
+	get_model_name (cpu);
 
 	if (show_cacheinfo)
-		decode_AMD_cacheinfo(cpu->number, maxei);
+		decode_AMD_cacheinfo(cpu);
 
-	if (maxei >= 0x80000007) {
+	if (cpu->maxei >= 0x80000007) {
 		cpuid (cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
 		printf ("PowerNOW! Technology information\n");
 		printf ("Available features:");

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.23 2002/05/14 02:47:30 davej Exp $
+ *  $Id: identify.c,v 1.24 2002/05/23 00:13:07 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -139,7 +139,7 @@ void decode_Intel_TLB (int x, int family)
 
 
 /* Intel-specific information */
-void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
+void Identify_Intel (struct cpudata *cpu)
 {
 	char *nameptr;
 	unsigned long eax, ebx, ecx, edx;
@@ -148,7 +148,7 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 	cpu->vendor = VENDOR_INTEL;
 	nameptr = cpu->name;
 
-	if (maxi >= 1) {
+	if (cpu->maxi >= 1) {
 		/* Family/model/type etc */
 		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
 		cpu->stepping = eax & 0xf;
@@ -434,7 +434,7 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 }
 
 
-void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
+void display_Intel_info (struct cpudata *cpu)
 {
 	int ntlb, i;
 	unsigned long eax, ebx, ecx, edx;
@@ -443,14 +443,13 @@ void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 		cpu->family, cpu->model, cpu->stepping, cpu->type, cpu->name);
 
 	/* Pentium4 and above have cpu name. */
-	cpuid (cpu->number, 0x80000000, &eax, &ebx, &ecx, &edx);
 	if (cpu->family == 0xF)
-		get_model_name (eax, cpu);
+		get_model_name (cpu);
 
 	cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
 	decode_feature_flags (cpu, edx, ebx);
 
-	if (maxi >= 2 && show_cacheinfo) {
+	if (cpu->maxi >= 2 && show_cacheinfo) {
 		/* Decode TLB and cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {
@@ -481,7 +480,7 @@ void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 		}
 	}
 
-	if (maxi >= 3) {
+	if (cpu->maxi >= 3) {
 		/* Pentium III CPU serial number */
 		unsigned long signature;
 		cpuid (cpu->number, 1, &eax, NULL, NULL, NULL);

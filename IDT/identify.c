@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.20 2002/04/27 23:35:32 davej Exp $
+ *  $Id: identify.c,v 1.21 2002/05/23 00:13:07 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -11,7 +11,7 @@
 #include "../x86info.h"
 #include "IDT.h"
 
-void Identify_IDT (unsigned int maxi, struct cpudata *cpu)
+void Identify_IDT (struct cpudata *cpu)
 {
 	char *nameptr;
 	unsigned long eax, ebx, ecx, edx;
@@ -21,7 +21,7 @@ void Identify_IDT (unsigned int maxi, struct cpudata *cpu)
 	cpu->vendor = VENDOR_CENTAUR;
 
 	/* Do standard stuff */
-	if (maxi >= 1) {
+	if (cpu->maxi >= 1) {
 		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
 		cpu->stepping = eax & 0xf;
 		cpu->model = (eax >> 4) & 0xf;
@@ -87,11 +87,11 @@ void Identify_IDT (unsigned int maxi, struct cpudata *cpu)
 }
 
 
-void decode_IDT_cacheinfo(unsigned int maxei, struct cpudata *cpu)
+void decode_IDT_cacheinfo(struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 
-	if (maxei >= 0x80000005) {
+	if (cpu->maxei >= 0x80000005) {
 		/* TLB and cache info */
 		cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
 		printf ("Instruction TLB: %ld-way associative. %ld entries.\n", (ebx >> 8) & 0xff, ebx & 0xff);
@@ -103,7 +103,7 @@ void decode_IDT_cacheinfo(unsigned int maxei, struct cpudata *cpu)
 	}
 
 	/* check on-chip L2 cache size */
-	if (maxei >= 0x80000006) {
+	if (cpu->maxei >= 0x80000006) {
 		cpuid (cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
 		if ((cpu->family==6) && (cpu->model==7 || cpu->model==8))
 			printf ("L2 (on CPU) cache:\n\tSize: %ldKb\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes.\n",
@@ -115,14 +115,14 @@ void decode_IDT_cacheinfo(unsigned int maxei, struct cpudata *cpu)
 }
 
 
-void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
+void display_IDT_info(struct cpudata *cpu)
 {
 	unsigned int i;
-	unsigned long eax, ebx, ecx, edx, tmp=0;
+	unsigned long eax, ebx, ecx, edx=0, tmp=0;
 
-	if (maxei != 0 && show_registers) {
+	if (cpu->maxei != 0 && show_registers) {
 		/* Dump extended info in raw hex */
-		for (i = 0x80000000; i <= maxei; i++) {
+		for (i = 0x80000000; i <= cpu->maxei; i++) {
 			cpuid (cpu->number, i, &eax, &ebx, &ecx, &edx);
 			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
 				edx);
@@ -132,20 +132,20 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 
 	printf ("Family: %d Model: %d Stepping: %d [%s]\n",
 		cpu->family, cpu->model, cpu->stepping, cpu->name);
-	get_model_name (maxei, cpu);
+	get_model_name (cpu);
 
 
 	/* Check for presence of extended info */
-	if (maxei == 0)
+	if (cpu->maxei == 0)
 		return;
 
 	cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
-	if (maxei >= 0x80000001)
+	if (cpu->maxei >= 0x80000001)
 		cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &tmp);
 	decode_feature_flags (cpu, edx, tmp);
 
 	if (show_cacheinfo)
-		decode_IDT_cacheinfo(maxei, cpu);
+		decode_IDT_cacheinfo(cpu);
 
 	if (cpu->family == 6 && show_registers)
 		dump_C3_MSR(cpu);

@@ -1,5 +1,5 @@
 /*
- *  $Id: get_model_name.c,v 1.1 2001/12/10 21:12:12 davej Exp $
+ *  $Id: get_model_name.c,v 1.2 2002/05/23 00:13:06 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -12,13 +12,13 @@
 #include <stdio.h>
 #include "x86info.h"
 
-void get_model_name (unsigned long maxei, struct cpudata *cpu)
+void get_model_name (struct cpudata *cpu)
 {
 	unsigned int i, j;
 	unsigned long eax, ebx, ecx, edx;
 	char namestring[49], *cp;
 
-	if (maxei < 0x80000004)
+	if (cpu->maxei < 0x80000004)
 		return;
 
 	cp = namestring;

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.8 2001/12/11 00:58:06 davej Exp $
+ *  $Id: identify.c,v 1.9 2002/05/23 00:13:07 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -28,14 +28,14 @@ void decode_Cyrix_TLB (int x)
 }
 
 /* Cyrix-specific information */
-void Identify_Cyrix (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
+void Identify_Cyrix (struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 
 	cpu->vendor = VENDOR_CYRIX;
 
 	/* Do standard stuff */
-	if (maxi >= 1) {
+	if (cpu->maxi >= 1) {
 		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
 		cpu->stepping = eax & 0xf;
 		cpu->model = (eax >> 4) & 0xf;
@@ -72,10 +72,10 @@ void Identify_Cyrix (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 		}
 
 		/* Check for presence of extended info */
-		if (maxei < 0x80000000)
+		if (cpu->maxei < 0x80000000)
 			return;
 
-		if (maxei >= 0x80000001) {
+		if (cpu->maxei >= 0x80000001) {
 			cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 			cpu->stepping = eax & 0xf;
 			cpu->model = (eax >> 4) & 0xf;
@@ -94,18 +94,18 @@ void Identify_Cyrix (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 	}
 }
 
-void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
+void display_Cyrix_info(struct cpudata *cpu)
 {
 	unsigned int i, ntlb;
 	unsigned long eax, ebx, ecx, edx;
 
 	printf ("Family: %d Model: %d Stepping: %d [%s]\n",
 		cpu->family, cpu->model, cpu->stepping, cpu->name);
-	get_model_name (maxei, cpu);
+	get_model_name (cpu);
 
-	if (maxei >= 0x80000000 && show_registers) {
+	if (cpu->maxei >= 0x80000000 && show_registers) {
 		/* Dump extended info in raw hex */
-		for (i = 0x80000000; i <= maxei; i++) {
+		for (i = 0x80000000; i <= cpu->maxei; i++) {
 			cpuid (cpu->number, i, &eax, &ebx, &ecx, &edx);
 			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
 				edx);
@@ -115,7 +115,7 @@ void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *c
 	decode_feature_flags (cpu, edx, 0);
 
 	printf ("TLB & L1 Cache info\n");
-	if (maxi >= 2 && show_cacheinfo) {
+	if (cpu->maxi >= 2 && show_cacheinfo) {
 		/* TLB and L1 Cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {
@@ -136,7 +136,7 @@ void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *c
 	}
 
 	printf ("TLB & L1 Cache info from extended info\n");
-	if (maxei >= 0x80000005 && show_cacheinfo) {
+	if (cpu->maxei >= 0x80000005 && show_cacheinfo) {
 		/* TLB and L1 Cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {

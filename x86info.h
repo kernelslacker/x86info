@@ -40,19 +40,19 @@ struct cpudata {
 void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 
-void Identify_AMD (unsigned int, struct cpudata *cpu);
-void Identify_Cyrix (unsigned int, unsigned int, struct cpudata *cpu);
-void Identify_IDT (unsigned int, struct cpudata *cpu);
-void Identify_Intel (unsigned int, struct cpudata *cpu);
-void Identify_RiSE (unsigned int, struct cpudata *cpu);
-void Identify_NatSemi (unsigned int, struct cpudata *cpu);
+void Identify_AMD (struct cpudata *cpu);
+void Identify_Cyrix (struct cpudata *cpu);
+void Identify_IDT (struct cpudata *cpu);
+void Identify_Intel (struct cpudata *cpu);
+void Identify_RiSE (struct cpudata *cpu);
+void Identify_NatSemi (struct cpudata *cpu);
 
-void display_AMD_info(unsigned int maxei, struct cpudata *cpu);
-void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
-void display_IDT_info(unsigned int maxei, struct cpudata *cpu);
-void display_Intel_info(unsigned int maxi, struct cpudata *cpu);
-void display_NatSemi_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
-void display_RiSE_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
+void display_AMD_info(struct cpudata *cpu);
+void display_Cyrix_info(struct cpudata *cpu);
+void display_IDT_info(struct cpudata *cpu);
+void display_Intel_info(struct cpudata *cpu);
+void display_NatSemi_info(struct cpudata *cpu);
+void display_RiSE_info(struct cpudata *cpu);
 
 void decode_feature_flags (struct cpudata *cpu, int flags, int eflags);
 void identify (struct cpudata *cpu);
@@ -68,7 +68,7 @@ void estimate_MHz(int cpunum);
 int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
 int issmp(int *numcpu, int verb);
-void get_model_name (unsigned long maxei, struct cpudata *cpu);
+void get_model_name (struct cpudata *cpu);
 
 extern int show_bluesmoke;
 extern int show_cacheinfo;
