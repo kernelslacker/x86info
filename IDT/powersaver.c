@@ -1,5 +1,5 @@
 /*
- *  $Id: powersaver.c,v 1.1 2003/01/27 17:33:16 davej Exp $
+ *  $Id: powersaver.c,v 1.2 2003/04/02 17:45:34 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -33,11 +33,11 @@ void decode_powersaver(struct cpudata *cpu)
 
 	printf (" RevisionID: %x : ", ps.bits.RevisionID);
 	switch (ps.bits.RevisionID) {
-		case 0xb:	printf ("Initial revision (Software clock multiplier only, no SoftVID)\n");
+		case 0x0:	printf ("Initial revision (Software clock multiplier only, no SoftVID)\n");
 					break;
-		case 0x1b:	printf ("SoftVID support\n");
+		case 0x1:	printf ("SoftVID support\n");
 					break;
-		default:	printf ("Unknown.\n");
+		default:	printf ("Unknown (0x%x).\n", ps.bits.RevisionID);
 					break;
 	}
 

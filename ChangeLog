@@ -1,3 +1,7 @@
+2003-4-2 Dave Jones <davej@codemonkey.org.uk>
+
+	* IDT/powersaver.c: Fix decoding of RevisionID
+
 2003-3-28 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/cachesize.c: Add Centrino cache descriptors.
