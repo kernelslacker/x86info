@@ -1,3 +1,5 @@
+Released as v1.8
+
 2002-05-26  Dave Jones <davej@suse.de>
 
 	* Intel/identify.c: Recognise another P4 stepping. (E0)
