@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.52 2004/05/07 19:15:58 davej Exp $
+ *  $Id: identify.c,v 1.53 2004/06/03 20:31:49 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -493,6 +493,8 @@ out_660:
 			}
 			break;
 		case 8:
+			// need to check for longmode bit. could be athlon xp 3000+.
+			//  (These are 32bit only amd64's)
 			//might be mobile
 			add_to_cpuname("[SH7-C0]");
 			break;
