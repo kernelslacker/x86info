@@ -1,3 +1,7 @@
+2002-04-17  Dave Jones <davej@suse.de>
+
+	* Intel/identify.c: Add another stepping.
+
 2002-03-18  Dave Jones <davej@suse.de>
 
 	* Makefile: Various cleanups to work with AMD-64 simulator.
@@ -20,7 +24,7 @@
 	* x86info.c: Export nrCPUs
 	* cpuid.c: don't print warnings about cpuid driver on UP.
 
-2001-12-28	Bert Freudenberg <bert@isg.cs.uni-magdeburg.de>
+2001-12-28 Bert Freudenberg <bert@isg.cs.uni-magdeburg.de>
 
 	* README: Mention modules.conf for modular cpuid/msr drivers.
 
@@ -29,12 +33,12 @@
 	* scripts/Makenodes: Add cd /dev/cpu before making nodes.
 	* identify.c: Missed argument off call to display_NatSemi_info()
 
-2001-12-20	Dave Jones <davej@suse.de>
+2001-12-20 Dave Jones <davej@suse.de>
 
 	* x86info.c, x86info.h, identify.c:
 	* NatSemi/identify.c: Add National Semiconductor recognition.
 
-2001-12-18	Dave Jones <davej@suse.de>
+2001-12-18 Dave Jones <davej@suse.de>
 
 	* Makefile: add 'test' and 'nodes' targets.
 	* scripts/testnodes:
@@ -43,7 +47,7 @@
 
 Released as v1.7
 
-2001-12-11	Matthew Gregan <mgregan@jade.co.nz>
+2001-12-11 Matthew Gregan <mgregan@jade.co.nz>
 
 	* Makefile: Add x86info.exe to clean target.
 	* cpuid_UP.S: Fix for win32
@@ -51,20 +55,20 @@ Released as v1.7
 	* x86info.c: Typo.
 	* Intel/identify.c: Make Celeron coppermines show chip stepping too.
 
-2001-12-11	Dave Jones <davej@suse.de>
+2001-12-11 Dave Jones <davej@suse.de>
 
 	* Cyrix/identify.c: Add recognition for Cyrix MII
 	* IDT/identify.c: Cluster register dumps together.
 	* IDT/MSR-C3.c: Check for root capability before using readmsr.
 	* Intel/identify.c: Recognise some extra Intel CPUs / revisions.
 
-2001-12-10	Dave <dave@iol.cz>
+2001-12-10 Dave <dave@iol.cz>
 
 	* Cyrix/identify.c: Fix misplaced { } in Cyrix detection.
 	* Intel/eblcr.c: added 'const' to buscode[][] and mult[][] in order to be
 	  placed into .rodata section.
 
-2001-12-10	Dave Jones <davej@suse.de>
+2001-12-10 Dave Jones <davej@suse.de>
 
 	* mptable.[c|h]: Add routines to parse MP tables.
 	* x86info.c: Add --mptable option, and nrCPU sanity check.
@@ -80,12 +84,12 @@ Released as v1.7
 	  Make cache descriptions match in style to the AMD descriptions.
 	* features.c: Rewritten.
 
-2001-12-9	Hans-Frieder Vogt <hfvogt@nexgo.de>
+2001-12-9 Hans-Frieder Vogt <hfvogt@nexgo.de>
 
 	* AMD/MSR-K6.c:
 	  Fix write-allocation reports on K6-III
 
-2001-12-9	Matthew Gregan <mgregan@jade.co.nz>
+2001-12-9 Matthew Gregan <mgregan@jade.co.nz>
 
 	* AMD/AMD.h, Cyrix/Cyrix.h, Intel/Intel.h, x86info.h:
 	  Add guards

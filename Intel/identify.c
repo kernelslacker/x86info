@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.19 2002/03/14 16:45:12 davej Exp $
+ *  $Id: identify.c,v 1.20 2002/04/17 19:34:20 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -355,7 +355,7 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 			case 0xB:
 				switch (cpu->stepping) {
 				case 1:
-					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III (Tualatin) [tA1]");
+					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III (Tualatin) [tA1/cA2]");
 					break;
 				default:
 					nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
