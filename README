@@ -6,7 +6,7 @@ It's been modified considerably, and much more is planned.
 
 Features:
  - SMP support.
- - Recognition of all Intel/AMD/IDT/Cyrix CPUs.
+ - Recognition of all Intel/AMD/IDT/Cyrix/VIA CPUs.
  - Parsing of model specific registers.
  - Approximation of current CPU MHz.
 
@@ -42,4 +42,13 @@ Command line switches:
 -r, --registers
  Dump register values from all cpuid calls possible.
 
+-s, --show-bluesmoke
+ Show the Machine Check registers if available.
+
+--parse-bluesmoke
+ Translate a Machine Check Exception dump to english.
+
+--check-bluesmoke
+ Check the Machine Check registers, and print warning if necessary.
+ This option is intended for use in for eg, an hourly cronjob.
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.24 2001/08/03 17:16:45 davej Exp $
+ *  $Id: x86info.c,v 1.25 2001/08/10 08:47:10 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -20,6 +20,8 @@ int show_cacheinfo=0;
 int show_all=0;
 int show_MHz=0;
 int show_bluesmoke=0;
+int check_bluesmoke=0;
+int parse_bluesmoke=0;
 
 int used_UP = 0;
 
@@ -65,8 +67,14 @@ void parse_command_line (int argc, char **argv)
 		if ((!strcmp(arg, "-r") || !strcmp(arg, "--registers")))
 			show_registers = 1;
 
-		if ((!strcmp(arg, "-s") || !strcmp(arg, "--smoke")))
+		if ((!strcmp(arg, "-s") || !strcmp(arg, "--show-bluesmoke")))
 			show_bluesmoke = 1;
+
+		if (!strcmp(arg, "--check-bluesmoke"))
+			check_bluesmoke = 1;
+
+		if (!strcmp(arg, "--parse-bluesmoke"))
+			parse_bluesmoke = 1;
 
 		if ((!strcmp(arg, "?") || !strcmp(arg, "--help")))
 			usage(argv[0]);	
