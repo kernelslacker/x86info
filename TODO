@@ -32,3 +32,5 @@
   name string, perform the cpuid reset sequence, and restore the
   name string on exit.
 
+- MTRR info. (And sanity checking)
+
