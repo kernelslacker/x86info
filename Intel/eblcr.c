@@ -3,12 +3,12 @@
 
 void interpret_eblcr(u32 lo)
 {
-	static unsigned int buscode[2][4] = {
+	const unsigned int buscode[2][4] = {
 		{ 6667, 13333, 10000, 0 },
 		{ 10000, 13333, 10000, 0 }
 	};
 
-	static unsigned int mult[32] = {
+	const unsigned int mult[32] = {
 		10, 6, 8, 0, 11, 7, 9, 0,
 		10, 14, 16, 12, 0, 15, 0, 13,
 		0, 0, 0, 0, 0, 0, 17, 0,
