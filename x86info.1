@@ -64,6 +64,10 @@ x86info \(em display x86 CPU diagnostics
 This manual page documents \fBx86info\fP, a 
 program which displays a range of information about the CPUs 
 present in an x86 system. 
+.PP
+In order to make full use of this program you need to have the CPU ID
+and MSR device drivers in your kernel with accessable device files
+/dev/cpu/<n>/cpuid and /dev/cpu/<n>/msr.
 .SH "OPTIONS" 
 .PP 
 This program follows the usual GNU command line syntax, with 

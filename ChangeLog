@@ -1,3 +1,12 @@
+2001-08-29  Mark Brown  <broonie@sirena.org.uk>
+
+	* x86info.h: Prototype silent.
+	* x86info.c (main): Tweak diagnostic for missing cpuid on SMP.
+	* rdmsr.c (rdmsr): Display diagnostic when failing to access MSR
+	driver.
+	* cpuid.c (cpuid): Likewise for CPU ID driver.
+	* x86info.1: Mention requirement for CPU ID and MSR drivers.
+
 2001-08-29 Dave Jones <davej@suse.de>
 
 	* IDT/identify.c:

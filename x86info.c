@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.33 2001/08/26 17:23:40 davej Exp $
+ *  $Id: x86info.c,v 1.34 2001/08/29 12:19:16 broonie Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -139,7 +139,7 @@ int main (int argc, char **argv)
 	}
 
 	if (nrCPUs > 1 && used_UP==1 && (!silent)) {
-		printf ("WARNING: Detected SMP, but cpuid driver not loaded.\n");
+		printf ("WARNING: Detected SMP, but unable to access cpuid driver.\n");
 		printf ("Used single CPU routines. Results inaccurate.\n");
 	}
 

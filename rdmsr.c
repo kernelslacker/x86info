@@ -1,5 +1,5 @@
 /*
- *  $Id: rdmsr.c,v 1.5 2001/08/18 23:59:05 davej Exp $
+ *  $Id: rdmsr.c,v 1.6 2001/08/29 12:19:16 broonie Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -26,8 +26,10 @@ int rdmsr(int cpu, unsigned int index, unsigned long long *val)
 	sprintf (cpuname, "/dev/cpu/%d/msr", cpu);
 
 	fh = open (cpuname, O_RDONLY);
-	if (fh==-1)
+	if (fh==-1) {
+		if (!silent) perror(cpuname);
 		return (0);
+	}
 
 	lseek (fh, index, SEEK_CUR);
 

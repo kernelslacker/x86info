@@ -27,6 +27,7 @@ struct cpudata {
 };
 
 extern int used_UP;
+extern int silent;
 
 void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
