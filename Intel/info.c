@@ -1,5 +1,5 @@
 /*
- *  $Id: info.c,v 1.1 2002/11/12 21:38:34 davej Exp $
+ *  $Id: info.c,v 1.2 2002/11/27 12:53:50 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -22,8 +22,8 @@ void display_Intel_info (struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 
-	printf ("Family: %d Model: %d Stepping: %d Type: %d\n",
-		cpu->family, cpu->model, cpu->stepping, cpu->type);
+	printf ("Family: %d Model: %d Stepping: %d Type: %d Brand: %d\n",
+		cpu->family, cpu->model, cpu->stepping, cpu->type, cpu->brand);
 	printf ("CPU Model: %s\n", cpu->name);
 
 	/* Pentium4 and above have cpu name. */

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.40 2002/11/27 12:42:32 davej Exp $
+ *  $Id: identify.c,v 1.41 2002/11/27 12:53:50 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -219,11 +219,31 @@ void Identify_Intel (struct cpudata *cpu)
 		}
 		break;
 	case 0x680:
-		if (cpu->brand == 8) {
+		switch (cpu->brand) {
+		case 2:
+			nameptr+= sprintf (cpu->name, "%s", "Pentium III-M (Coppermine)");
+			switch (cpu->stepping) {
+			case 1:
+				nameptr+=sprintf (nameptr, "%s", " [cA2]");
+				break;
+			case 3:
+				nameptr+=sprintf (nameptr, "%s", " [cB0]");
+				break;
+			case 6:
+				nameptr+=sprintf (nameptr, "%s", " [cC0]");
+				break;
+			case 0xA:
+				nameptr+=sprintf (nameptr, "%s", " [cD0]");
+				break;
+			}
+			break;
+
+		case 8:
 			// cpu->connector = CONN_BGA2; - Could also be Micro-PGA2
 			nameptr+= sprintf (cpu->name, "%s", "Mobile Pentium III");
 			break;
-		} else {
+
+		default:
 			cpu->connector = CONN_SOCKET_370_FCPGA;
 			if (cpu->cachesize_L2 == 128) {
 				nameptr+=sprintf (cpu->name, "%s", "Celeron");
@@ -247,6 +267,8 @@ void Identify_Intel (struct cpudata *cpu)
 			}
 			break;
 		}
+		break;
+
 	case 0x6A0:
 		cpu->connector = CONN_SLOT_1;
 		switch (cpu->brand) {
