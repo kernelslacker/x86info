@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid.c,v 1.9 2001/11/19 12:31:27 davej Exp $
+ *  $Id: cpuid.c,v 1.10 2002/01/03 18:26:59 davej Exp $
  *	This file is part of x86info
  *	(C) 2000, 2001 Dave Jones.
  *	Fixes by Arjan van de Ven (arjanv@redhat.com) and
@@ -48,7 +48,7 @@ void cpuid (int CPU_number, int index,
 	} else {
 		/* Something went wrong, just do UP and hope for the best. */
 		nodriver = 1;
-		if (!silent) {
+		if (!silent && nrCPUs != 1) {
 			perror(cpuname);
 		}
 		used_UP = 1;

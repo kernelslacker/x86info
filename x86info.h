@@ -77,6 +77,8 @@ extern int show_flags;
 extern int show_msr;
 extern int show_registers;
 
+extern unsigned int nrCPUs;
+
 extern int used_UP;
 extern int silent;
 extern int user_is_root;

@@ -1,3 +1,8 @@
+2002-1-3	David Relson <relson@osagesoftware.com>
+
+	* x86info.c: Export nrCPUs
+	* cpuid.c: don't print warnings about cpuid driver on UP.
+
 2001-12-28	Bert Freudenberg <bert@isg.cs.uni-magdeburg.de>
 
 	* README: Mention modules.conf for modular cpuid/msr drivers.

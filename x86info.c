@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.49 2001/12/18 18:18:09 davej Exp $
+ *  $Id: x86info.c,v 1.50 2002/01/03 18:26:59 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -41,6 +41,8 @@ int silent = 0;
 int used_UP = 0;
 int user_is_root = 1;
 int need_root = 0;
+
+unsigned int nrCPUs=1, nrSMPCPUs;
 
 void usage (char *programname)
 {
@@ -115,7 +117,7 @@ static void parse_command_line (int argc, char **argv)
 
 int main (int argc, char **argv)
 {
-	unsigned int i, nrCPUs=1, nrSMPCPUs;
+	unsigned int i;
 	struct cpudata cpu;
 
 	parse_command_line(argc, argv);
