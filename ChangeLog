@@ -1,3 +1,7 @@
+2003-9-12 Dave Jones <davej@codemonkey.org.uk>
+
+	* AMD/identify.c: Opteron B0
+
 2003-8-17 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/cachesize.c: Output sorted descriptors.
