@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-rise.c,v 1.1 2001/02/28 00:48:00 davej Exp $
+ *  $Id: cpuid-rise.c,v 1.2 2001/04/27 20:52:53 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -55,7 +55,7 @@ void doRise (int cpunum, unsigned int maxi, struct cpudata *cpu)
 			case 0:
 				printf ("(0.25um)");
 				break;
-			case 1:
+			case 2:
 				printf ("(0.18um)");
 				break;
 			case 8:

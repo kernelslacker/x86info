@@ -1,3 +1,7 @@
+2001-05-27 Wim Coekaerts <wim.coekaerts@oracle.com>
+
+	* cpuid-rise.c: 0.18um is model 2 not model 1
+
 2001-05-25 David Sterba <sterd9am@ss1000.ms.mff.cuni.cz>
 
 	* binary.c: Optimised conversion routine. 
