@@ -1,6 +1,7 @@
 2004-3-19 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/identify.c: Identify a bunch more opterons/athlon64's
+	* Intel/info.c: Fix up the number of siblings per package.
 
 2004-2-2 Dave Jones <davej@codemonkey.org.uk>
 
