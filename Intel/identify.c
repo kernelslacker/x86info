@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.9 2001/12/10 21:12:12 davej Exp $
+ *  $Id: identify.c,v 1.10 2001/12/10 21:48:37 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -105,6 +105,8 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 	cpu->vendor = VENDOR_INTEL;
 	nameptr = cpu->name;
 
+	get_intel_cacheinfo (cpu);
+
 	if (maxi >= 1) {
 		/* Family/model/type etc */
 		cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
@@ -205,16 +207,23 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 				nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes?)");
 				break;
 			case 5:
-				/*FIXME: Cache size determine needed here */
+				if (cpu->cachesize_L2 == 0) {
+					nameptr+=sprintf (cpu->name, "%s", "Celeron (Covington)");
+					break;
+				}
+				if (cpu->cachesize_L2 == 256) {
+					nameptr+=sprintf (cpu->name, "%s", "Mobile Pentium II (Dixon)");
+					break;
+				}
 				switch (cpu->stepping) {
 				case 0:
-					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium II [dA0]");
+					nameptr+=sprintf (cpu->name, "%s", "Pentium II [dA0]");
 					break;
 				case 1:
-					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium II (Deschutes) [dA1]");
+					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dA1]");
 					break;
 				case 2:
-					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium II (Deschutes) [dB0]");
+					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dB0]");
 					break;
 				case 3:
 					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dB1]");
@@ -225,6 +234,10 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 				}
 				break;
 			case 6:
+				if (cpu->cachesize_L2 == 128) {
+					nameptr+=sprintf (cpu->name, "%s", "Celeron (Mendocino)");
+					break;
+				}
 				switch (cpu->stepping) {
 				case 0:
 					nameptr+=sprintf (cpu->name, "%s", "Celeron-A [mA0]");
@@ -254,7 +267,11 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 				}
 				break;
 			case 8:
-				nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III");
+				if (cpu->cachesize_L2 == 128) {
+					nameptr+=sprintf (cpu->name, "%s", "Celeron (Coppermine)");
+					break;
+				}
+				nameptr+=sprintf (cpu->name, "%s", "Pentium III");
 				switch (cpu->stepping) {
 				case 1:
 					nameptr+=sprintf (nameptr, "%s", " [cA2]");

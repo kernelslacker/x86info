@@ -1,5 +1,5 @@
 /*
- * $Id: cachesize.c,v 1.1 2001/12/10 21:36:40 davej Exp $
+ * $Id: cachesize.c,v 1.2 2001/12/10 21:48:37 davej Exp $
  */
 
 #include "../x86info.h"
@@ -7,6 +7,11 @@
 void get_intel_cacheinfo (struct cpudata *c)
 {
 	unsigned long eax, ebx, ecx, edx;
+
+	c->cachesize_L1_I = 0;
+	c->cachesize_L1_D = 0;
+	c->cachesize_L2 = 0;
+	c->cachesize_L3 = 0;
 
 	if (c->maxi > 1) {
 		/* supports eax=2  call */

@@ -1,8 +1,5 @@
 - Identify Transmeta CPUs.
 
-- Bluesmoke implementation currently is AMD centric.
-  Probably easier to do a bluesmoke-amd.c and bluesmoke-intel.c
-
 - Report the CPU packaging type on CPUs where info is available.
 
 - --mtrr, --arr
@@ -15,12 +12,6 @@
   if workarounds are not enabled. For example..
   "Stepping D0 Duron detected with Cache size bug.
    You should upgrade your kernel to work around this bug"
-
-- Intel cache sizing code could be improved.
-  See arch/i386/kernel/setup.c from kernel
-
-- Recognise different types of Celerons
-  (cache size)
 
 - Flags code needs an update. It was taken from the
   kernel before hpa cleaned it up.
