@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.15 2001/12/11 01:04:18 davej Exp $
+ *  $Id: identify.c,v 1.16 2001/12/11 01:06:56 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -271,7 +271,7 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 					nameptr+=sprintf (cpu->name, "%s", "Celeron (Coppermine)");
 					break;
 				}
-				nameptr+=sprintf (cpu->name, "%s", "Pentium III");
+				nameptr+=sprintf (cpu->name, "%s", "Pentium III (Coppermine)");
 				switch (cpu->stepping) {
 				case 1:
 					nameptr+=sprintf (nameptr, "%s", " [cA2]");
@@ -280,7 +280,7 @@ void Identify_Intel (unsigned int maxi, struct cpudata *cpu)
 					nameptr+=sprintf (nameptr, "%s", " [cB0]");
 					break;
 				case 6:
-					nameptr+=sprintf (nameptr, "%s", " (Coppermine) [cC0]");
+					nameptr+=sprintf (nameptr, "%s", " [cC0]");
 					break;
 				case 0xA:
 					nameptr+=sprintf (nameptr, "%s", " [cD0]");
