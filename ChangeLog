@@ -1,3 +1,8 @@
+2003-6-12 Dave Jones <davej@codemonkey.org.uk>
+
+	* Intel/cachesize.c: print out unknown descriptors again.
+	  Don't iterate around loop once we've found the descriptor.
+
 2003-6-12 Jeremy Fitzhardinge <jeremy@goop.org>
 
 	* Intel/MSR-PM.c: Decode PERF_STATUS.

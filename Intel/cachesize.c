@@ -1,5 +1,5 @@
 /*
- *  $Id: cachesize.c,v 1.10 2003/06/09 21:43:43 davej Exp $
+ *  $Id: cachesize.c,v 1.11 2003/06/12 11:10:14 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -103,34 +103,35 @@ static void decode_Intel_cache (int des, struct cpudata *cpu, int output)
 					cpu->cachesize_L1_I += cache_table[k].size;
 					if (output)
 						printf ("%s\n", cache_table[k].string);
-					break;
+					return;
 				case LVL_1_DATA:
 					cpu->cachesize_L1_D += cache_table[k].size;
 					if (output)
 						printf ("%s\n", cache_table[k].string);
-					break;
+					return;
 				case LVL_2:
 					cpu->cachesize_L2 += cache_table[k].size;
 					if (output)
 						printf ("%s\n", cache_table[k].string);
-					break;
+					return;
 				case LVL_3:
 					cpu->cachesize_L3 += cache_table[k].size;
 						printf ("%s\n", cache_table[k].string);
-					break;
+					return;
 				case LVL_TRACE:
 					cpu->cachesize_trace += cache_table[k].size;
 					if (output)
 						printf ("%s\n", cache_table[k].string);
-					break;
+					return;
 				default:
 					if (output)
 						printf ("%s\n", cache_table[k].string);
-					break;
+					return;
 			}
 		}
 		k++;
 	}
+	printf ("unknown TLB/cache descriptor:\t0x%x\n", (des & 0xff));
 }
 
 
