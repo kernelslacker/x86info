@@ -29,7 +29,8 @@ OBJS =\
 	rdmsr.o\
 	binary.o\
 	MHz.o\
-	eblcr.o
+	eblcr.o\
+	mptable.o
 
 x86info: $(OBJS)
 	gcc -o x86info $(OBJS)

@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	  $Id: mptable.c,v 1.2 2001/12/10 17:02:36 davej Exp $
+ *	  $Id: mptable.c,v 1.3 2001/12/10 17:13:15 davej Exp $
  */
 
 #define MP_SIG				  0x5f504d5f	  /* _MP_ */
@@ -192,7 +192,7 @@ apic_probe(vm_offset_t* paddr, int* where)
 	 * c rewrite of apic_probe() by Jack F. Vogel
 	 */
 
-	int x;
+unsigned int x;
 	u_short segment;
 	vm_offset_t target;
 	u_int buffer[ BIOS_SIZE / sizeof(int) ];

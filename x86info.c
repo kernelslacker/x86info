@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.38 2001/12/09 16:35:51 davej Exp $
+ *  $Id: x86info.c,v 1.39 2001/12/10 17:13:15 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -107,7 +107,7 @@ static void parse_command_line (int argc, char **argv)
 
 int main (int argc, char **argv)
 {
-	unsigned int i, nrCPUs=1;
+	unsigned int i, nrCPUs=1, nrSMPCPUs;
 
 	parse_command_line(argc, argv);
 	if (!silent) {
@@ -121,10 +121,11 @@ int main (int argc, char **argv)
 		return(0);
 	}
 
-	if ((getuid()!=0) && want_MSR_level_access==1 ) {
-		printf ("Need to be root to access MSRs.\n");
+	if (getuid()!=0)
 		user_is_root=0;
-	}
+
+	if (want_MSR_level_access==1 && user_is_root==0)
+		printf ("Need to be root to access MSRs.\n");
 
 #if defined __WIN32__
 	{
@@ -147,6 +148,15 @@ int main (int argc, char **argv)
 		printf ("Found %u CPU", nrCPUs);
 		if (nrCPUs > 1)
 			printf ("s");
+
+		/* Check mptable if present. This way we get number of CPUs
+		   on SMP systems that have booted UP kernels. */
+		if (user_is_root==1) {
+			issmp (&nrSMPCPUs, 0);
+			if (nrSMPCPUs > nrCPUs) {
+				printf (", but found %d CPUs in MPTable.", nrSMPCPUs);
+			}
+		}
 		printf ("\n");
 	}
 

@@ -64,4 +64,5 @@ void dumpmsr_bin (int cpunum, unsigned int msr, int size);
 void estimate_MHz(int cpunum);
 int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
+int issmp(int *numcpu, int verb);
 #endif /* _X86INFO_H */
