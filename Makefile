@@ -12,6 +12,7 @@ OBJS =\
 	AMD/MSR-Athlon.o\
 	AMD/MSR-K6.o\
 	AMD/powernow.o\
+	AMD/dumppsb.o\
 	AMD/bugs.o\
 \
 	Cyrix/identify.o\

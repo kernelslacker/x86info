@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.72 2002/12/18 14:08:17 davej Exp $
+ *  $Id: x86info.c,v 1.73 2003/01/15 18:57:05 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -28,6 +28,7 @@
 #include "x86info.h"
 
 int show_bench=0;
+int show_bios=0;
 int show_bluesmoke=0;
 int show_bugs=0;
 int show_cacheinfo=0;
@@ -57,6 +58,7 @@ void usage (char *programname)
 	printf ("Usage: %s [<switches>]\n\
 -a,   --all\n\
       --bench\n\
+	  --bios\n\
       --bugs\n\
 -c,   --cache\n\
       --connector\n\
@@ -83,6 +85,7 @@ static void parse_command_line (int argc, char **argv)
 	for (argp = argv+1; argp <= argv + argc && (arg = *argp); argp++) {
 		if ((!strcmp(arg, "-a") || !strcmp(arg, "--all"))) {
 			show_bench = 1;
+			show_bios = 1;
 			show_bluesmoke = 1;
 			show_bugs = 1;
 			show_cacheinfo = 1;
@@ -102,6 +105,11 @@ static void parse_command_line (int argc, char **argv)
 
 		if (!strcmp(arg, "--bench"))
 			show_bench = 1;
+
+		if (!strcmp(arg, "--bios")) {
+			need_root = 1;
+			show_bios = 1;
+		}
 
 		if (!strcmp(arg, "--bugs"))
 			show_bugs = 1;

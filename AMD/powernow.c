@@ -1,5 +1,5 @@
 /*
- *  $Id: powernow.c,v 1.5 2002/12/04 18:56:53 davej Exp $
+ *  $Id: powernow.c,v 1.6 2003/01/15 18:57:05 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -52,6 +52,9 @@ void decode_powernow(struct cpudata *cpu)
 		printf(" None\n");
 	printf("\n");
 
+	if (!user_is_root)
+		return;
+
 	dumpmsr(cpu->number, MSR_FID_VID_CTL, 64);
 	dumpmsr(cpu->number, MSR_FID_VID_STATUS, 64);
 	printf("\n");
@@ -91,5 +94,9 @@ void decode_powernow(struct cpudata *cpu)
 //	printf ("Frequency ID codes: Maximum=0x%x Startup=0x%x Currently=0x%x\n",
 //		fidvidstatus.MFID, fidvidstatus.SFID, fidvidstatus.CFID);
 
+	if (show_bios) {
+		printf ("Decoding BIOS PST tables\n");
+		dump_PSB(cpu);
+	}
 }
 

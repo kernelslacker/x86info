@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.42 2003/01/03 10:58:39 davej Exp $
+ *  $Id: identify.c,v 1.43 2003/01/15 18:57:05 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -132,6 +132,8 @@ void Identify_AMD(struct cpudata *cpu)
 	cpu->stepping = eax & 0xf;
 	cpu->model = (eax >> 4) & 0xf;
 	cpu->family = (eax >> 8) & 0xf;
+	cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
+	cpu->efamily = (eax >>8) & 0xf;
 
 	switch (cpu->family) {
 	case 4:

@@ -3,6 +3,7 @@
 	* scripts/makenodes: Support up to 32 CPUs
 	  Fix detection of already existing nodes.
 	* scripts/testnodes: Check for all 32 CPUs, not just CPU0
+	* AMD/dump_PSB.c: Dump BIOS powernow PSB/PST tables.
 
 2003-1-6 Sami Farin <safari@iki.fi>
 

@@ -3,12 +3,13 @@
 
 #ifdef linux
 #include <linux/types.h>
+typedef unsigned char u8;
+typedef unsigned short u16;
+typedef unsigned int u32;
 #else
 #include <machine/types.h>
 #define __u32 int
 #endif /* linux */
-
-typedef __u32 u32;
 
 #define VENDOR_AMD	1
 #define VENDOR_CENTAUR 2
@@ -22,6 +23,7 @@ struct cpudata {
 	struct cpudata *next;
 	unsigned int number;
 	unsigned int vendor;
+	unsigned int efamily;
 	unsigned int family;
 	unsigned int model;
 	unsigned int stepping;
@@ -41,6 +43,7 @@ struct cpudata {
 };
 
 #define tuple(c) ((c->family<<8)|(c->model<<4)|(c->stepping))
+#define etuple(c) ((c->efamily<<8)|(c->model<<4)|(c->stepping))
 
 #define CONN_UNKNOWN		0
 #define CONN_SOCKET_3		1
@@ -108,6 +111,7 @@ void decode_connector (unsigned int type);
 void show_benchmarks (void);
 
 extern int show_bench;
+extern int show_bios;
 extern int show_bluesmoke;
 extern int show_bugs;
 extern int show_cacheinfo;
