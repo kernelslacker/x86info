@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.75 2003/05/02 15:44:42 davej Exp $
+ *  $Id: x86info.c,v 1.76 2003/06/09 22:04:35 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -292,7 +292,7 @@ int main (int argc, char **argv)
 			if (cpu->MHz < 1000)
 				printf("%dMHz", cpu->MHz);
 			else
-				printf("%d.%dGhz", cpu->MHz / 1000, cpu->MHz % 1000);
+				printf("%d.%dGhz", cpu->MHz / 1000, (cpu->MHz % 1000)/100);
 			printf (" processor (estimate).\n\n");
 		}
 		if (show_bench)

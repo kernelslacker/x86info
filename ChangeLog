@@ -6,6 +6,7 @@
 	  to look one day.
 	* bench/MHz.c: Rounding up to nearest 50MHz if MHz is within a 15MHz
 	  discrepancy of the nearest 50. Crap, needs improving.
+	* x86info.c: Make GHz output look like 2.8GHz instead of 2.800GHz
 
 
 2003-6-8 Bryan O'Sullivan <bos@serpentine.com>
