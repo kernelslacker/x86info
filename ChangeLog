@@ -1,3 +1,8 @@
+2001-12-10	Dave Jones <davej@suse.de>
+
+	* mptable.[c|h]: Add routines to parse MP tables.
+	* x86info.c: Add --mptable option, and nrCPU sanity check.
+
 2001-12-9	Hans-Frieder Vogt <hfvogt@nexgo.de>
 
 	* AMD/MSR-K6.c:

@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.40 2001/12/10 17:17:16 davej Exp $
+ *  $Id: x86info.c,v 1.41 2001/12/10 17:23:08 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -33,6 +33,7 @@ int show_flags=0;
 int show_cacheinfo=0;
 int show_all=0;
 int show_MHz=0;
+int show_mptable=0;
 int show_bluesmoke=0;
 int show_eblcr=0;
 
@@ -48,6 +49,7 @@ void usage (char *programname)
 -c,   --cacheinfo \n\
 -f,   --flags\n\
 -mhz, --mhz\n\
+-mp,  --mptable\n\
 -m,   --msr\n\
       --mult\n\
 -r,   --registers\n\
@@ -90,6 +92,11 @@ static void parse_command_line (int argc, char **argv)
 
 		if ((!strcmp(arg, "-mhz") || !strcmp(arg, "--mhz")))
 			show_MHz = 1;
+
+		if ((!strcmp(arg, "-mp") || !strcmp(arg, "--mptable"))) {
+			need_root = 1;
+			show_mptable = 1;
+		}
 
 		if ((!strcmp(arg, "-r") || !strcmp(arg, "--registers")))
 			show_registers = 1;
@@ -168,6 +175,9 @@ int main (int argc, char **argv)
 		printf("CPU count is bogus: defaulting to 1 CPU.\n");
 		nrCPUs = 1;
 	}
+
+	if (show_mptable && user_is_root)
+		issmp (&nrSMPCPUs, 1);
 
 	for (i=0; i<nrCPUs; i++) {
 		struct cpudata cpu;
