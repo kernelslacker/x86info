@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.4 2001/12/09 16:35:51 davej Exp $
+ *  $Id: bluesmoke.c,v 1.5 2001/12/10 17:52:15 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -22,9 +22,6 @@
 #define MC_STATUS 0x0401
 #define MC_ADDR 0x402
 #define MC_MISC 0x403
-
-extern int show_bluesmoke;
-extern int user_is_root;
 
 void decode_Intel_bluesmoke(int cpunum)
 {

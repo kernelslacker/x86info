@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.10 2001/11/19 11:23:53 davej Exp $
+ *  $Id: identify.c,v 1.11 2001/12/10 17:52:15 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -14,12 +14,6 @@
 #include <sys/types.h>
 #include "../x86info.h"
 #include "AMD.h"
-
-extern int show_registers;
-extern int show_cacheinfo;
-extern int show_msr;
-extern int show_bluesmoke;
-extern int user_is_root;
 
 static void do_assoc(unsigned long assoc)
 {

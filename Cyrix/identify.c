@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.2 2001/08/19 15:09:27 davej Exp $
+ *  $Id: identify.c,v 1.3 2001/12/10 17:52:15 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -11,9 +11,6 @@
 #include <stdio.h>
 #include "../x86info.h"
 #include "Cyrix.h"
-
-extern int show_cacheinfo;
-extern int show_registers;
 
 /* Decode TLB and cache info descriptors */
 void decode_Cyrix_TLB (int x)

@@ -1,8 +1,5 @@
 #include <stdio.h>
-#include "x86info.h"
-
-extern int user_is_root;
-extern int show_eblcr;
+#include "../x86info.h"
 
 void interpret_eblcr(u32 lo)
 {

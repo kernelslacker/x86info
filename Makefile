@@ -14,6 +14,7 @@ OBJS =\
 \
 	Intel/identify.o\
 	Intel/bluesmoke.o\
+	Intel/eblcr.o\
 \
 	IDT/identify.o\
 \
@@ -29,7 +30,6 @@ OBJS =\
 	rdmsr.o\
 	binary.o\
 	MHz.o\
-	eblcr.o\
 	mptable.o
 
 x86info: $(OBJS)

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.11 2001/12/09 16:35:51 davej Exp $
+ *  $Id: identify.c,v 1.12 2001/12/10 17:52:15 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -9,9 +9,6 @@
  */
 #include <stdio.h>
 #include "../x86info.h"
-
-extern int show_cacheinfo;
-extern int show_registers;
 
 void Identify_IDT (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 {

@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.7 2001/09/07 09:29:21 davej Exp $
+ *  $Id: features.c,v 1.8 2001/12/10 17:52:15 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -12,9 +12,6 @@
 
 #include <stdio.h>
 #include "x86info.h"
-
-extern struct cpudata *cpu;
-extern int show_flags;
 
 void decode_feature_flags (struct cpudata *cpu, int flags)
 {

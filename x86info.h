@@ -65,4 +65,15 @@ void estimate_MHz(int cpunum);
 int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
 int issmp(int *numcpu, int verb);
+
+extern int show_bluesmoke;
+extern int show_cacheinfo;
+extern int show_eblcr;
+extern int show_flags;
+extern int show_msr;
+extern int show_registers;
+
+extern int user_is_root;
+
+extern struct cpudata *cpu;
 #endif /* _X86INFO_H */
