@@ -1,5 +1,9 @@
 2003-4-23 Dave Jones <davej@codemonkey.org.uk>
 
+	* Intel/identify.c: Add extra space between Pentium Pro and stepping.
+
+2003-4-22 Dave Jones <davej@codemonkey.org.uk>
+
 	* AMD/identify.c: Add Opteron stepping from public docs.
 
 2003-4-11 Dave Jones <davej@codemonkey.org.uk>

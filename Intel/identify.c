@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.48 2003/03/28 12:07:04 davej Exp $
+ *  $Id: identify.c,v 1.49 2003/04/23 17:04:42 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -129,19 +129,19 @@ void Identify_Intel (struct cpudata *cpu)
 		cpu->connector = CONN_SOCKET_8;
 		switch (cpu->stepping) {
 		case 1:
-			nameptr+=sprintf (nameptr, "%s", "[B0]");
+			nameptr+=sprintf (nameptr, "%s", " [B0]");
 			break;
 		case 2:
-			nameptr+=sprintf (nameptr, "%s", "[C0]");
+			nameptr+=sprintf (nameptr, "%s", " [C0]");
 			break;
 		case 6:
-			nameptr+=sprintf (nameptr, "%s", "[sA0]");
+			nameptr+=sprintf (nameptr, "%s", " [sA0]");
 			break;
 		case 7:
-			nameptr+=sprintf (nameptr, "%s", "[sA1]");
+			nameptr+=sprintf (nameptr, "%s", " [sA1]");
 			break;
 		case 9:
-			nameptr+=sprintf (nameptr, "%s", "[sB1]");
+			nameptr+=sprintf (nameptr, "%s", " [sB1]");
 			break;
 		}
 		break;
