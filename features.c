@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.23 2002/11/02 03:26:54 davej Exp $
+ *  $Id: features.c,v 1.24 2003/06/13 11:35:13 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -56,6 +56,12 @@ void decode_feature_flags (struct cpudata *cpu)
 		"IA-64 processor",
 		"Pending Break Enable"
 	};
+	const char *intel_cap_flags[] = {
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, "est",
+		"tm2", NULL, "cntx-id", NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+	};
 	const char *amd_cap_flags[] = {
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, "syscall", NULL, NULL, NULL, NULL,
@@ -78,7 +84,7 @@ void decode_feature_flags (struct cpudata *cpu)
 	cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
 	cpu->flags = edx;
 	if (cpu->vendor==VENDOR_INTEL) {
-		cpu->eflags = ebx;
+		cpu->eflags = ecx;
 	} else {
 		if (cpu->maxei >= 0x80000001) {
 			cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
@@ -103,7 +109,6 @@ void decode_feature_flags (struct cpudata *cpu)
 
 	/* Vendor specific extensions. */
 	switch (cpu->vendor) {
-
 		case VENDOR_AMD:
 			printf ("Extended feature flags:\n");
 			for (i = 0; i < 32; i++) {
@@ -132,6 +137,11 @@ void decode_feature_flags (struct cpudata *cpu)
 			break;
 
 		case VENDOR_INTEL:
+			printf ("Extended feature flags:\n");
+			for (i = 0; i < 32; i++) {
+				if (cpu->eflags & (1 << i) && intel_cap_flags[i])
+					printf (" %s", intel_cap_flags[i]);
+			}
 			break;
 
 		default:
