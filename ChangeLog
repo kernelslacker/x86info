@@ -1,3 +1,9 @@
+2001-08-18 Dave Jones <davej@suse.de>
+
+	* cpuid-amd.c:
+	  Pass cpu struct instead of cpu->number to dumpmsr() routines.
+	  Support K6 WHCR register dumping.
+
 2001-08-14 Dave Jones <davej@suse.de>
 
 	* eblcr.c:

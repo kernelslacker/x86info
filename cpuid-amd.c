@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.26 2001/08/14 18:09:06 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.27 2001/08/18 23:59:05 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -87,17 +87,58 @@ static void dump_extended_AMD_regs(int cpunum, unsigned long maxei)
 	printf ("\n");
 }
 
-static void dump_athlon_MSR(int cpunum)
+static void dump_k6_MSR (struct cpudata *cpu)
+{
+	unsigned long long val=0;
+
+	if (!user_is_root)
+		return;
+
+	printf("\t\t\t\t31       23       15       7 \n");
+	dumpmsr(cpu->number, 0xC0000082);
+
+	/* K6-2 core (Stepping 8-F), K6-III or later. */
+	if (cpu->model > 8) {
+		if (rdmsr (cpu->number, 0xC0000082, &val) == 1) {
+			if (val & (0x3ff << 22))
+				printf ("Write allocate disabled\n");
+			else {
+				printf ("Write allocate enable limit: %d Mbytes\n", (int) val & ((0x3ff<<22)>>22) * 4);
+				printf ("Write allocate 15-16M bytes: %s\n", val & (1<<16) ? "enabled" : "disabled");
+			}
+		}else {
+			printf ("Couldn't read WHCR register.\n");
+		}
+	}
+	/* Original K6 or K6-2 (old core). */
+	if (cpu->model > 5) {
+		if (rdmsr (cpu->number, 0xC0000082, &val) == 1) {
+			if (val & (0x7f << 1))
+				printf ("Write allocate disabled\n");
+			else {
+				printf ("Write allocate enable limit: %d Mbytes\n", (int) val & (0x7f<<1)>>1 * 4);
+				printf ("Write allocate 15-16M bytes: %s\n", val & 1 ? "enabled" : "disabled");
+				printf ("Hardware write allocate control: %s\n", val & 0x100 ? "enabled" : "disabled");
+			}
+		}else {
+			printf ("Couldn't read WHCR register.\n");
+		}
+	}
+	printf ("\n");
+}
+
+
+static void dump_athlon_MSR(struct cpudata *cpu)
 {
 	if (!user_is_root)
 		return;
 
 	printf("\t\t\t\t31       23       15       7 \n");
-	dumpmsr(cpunum, 0x2A);
-	dumpmsr(cpunum, 0xC0000080);
-	dumpmsr(cpunum, 0xC0010010);
-	dumpmsr(cpunum, 0xC0010015);
-	dumpmsr(cpunum, 0xC001001B);
+	dumpmsr(cpu->number, 0x2A);
+	dumpmsr(cpu->number, 0xC0000080);
+	dumpmsr(cpu->number, 0xC0010010);
+	dumpmsr(cpu->number, 0xC0010015);
+	dumpmsr(cpu->number, 0xC001001B);
 	printf ("\n");
 }
 
@@ -203,8 +244,12 @@ void display_AMD_info(unsigned int maxei, struct cpudata *cpu)
 	if (show_registers && (maxei != 0))
 		dump_extended_AMD_regs(cpu->number, maxei);
 
-	if (show_msr)
-		dump_athlon_MSR(cpu->number);
+	if (show_msr) {
+		if (cpu->family == 5)
+			dump_k6_MSR(cpu);
+		if (cpu->family == 6)
+			dump_athlon_MSR(cpu);
+	}
 
 	if (show_bluesmoke)
 		decode_bluesmoke(cpu->number);
