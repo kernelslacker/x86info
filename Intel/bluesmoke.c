@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.2 2001/08/19 15:09:27 davej Exp $
+ *  $Id: bluesmoke.c,v 1.3 2001/09/10 16:56:43 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -104,13 +104,13 @@ void decode_Intel_bluesmoke(int cpunum)
 	for (i=0; i<banks; i++) {
 		printf ("Bank: %d (0x%x)\n", i, MC_CTL+i*4);
 		printf ("MC%dCTL:    ", i);
-		dumpmsr_bin (cpunum, MC_CTL+i*4);
+		dumpmsr_bin (cpunum, MC_CTL+i*4, 32);
 		printf ("MC%dSTATUS: ", i);
-		dumpmsr_bin (cpunum, MC_STATUS+i*4);
+		dumpmsr_bin (cpunum, MC_STATUS+i*4, 32);
 		printf ("MC%dADDR:   ", i);
-		dumpmsr_bin (cpunum, MC_ADDR+i*4);
+		dumpmsr_bin (cpunum, MC_ADDR+i*4, 32);
 		printf ("MC%dMISC:   ", i);
-		dumpmsr_bin (cpunum, MC_MISC+i*4);
+		dumpmsr_bin (cpunum, MC_MISC+i*4, 32);
 		printf ("\n");
 	}
 }

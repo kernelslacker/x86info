@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.7 2001/09/07 15:33:51 davej Exp $
+ *  $Id: identify.c,v 1.8 2001/09/10 16:56:43 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -179,7 +179,7 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 	printf (" present\n");
 
 	if (longhaul==2 && rdmsr(cpu->number, 0x110A, &val) == 1) {
-		dumpmsr(cpu->number, 0x110A);
+		dumpmsr (cpu->number, 0x110A, 64);
 		if (val & 1)
 			printf ("\tSoftVID support\n");
 		if (val & 2)
@@ -189,14 +189,14 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 
 		printf ("\tRevision key: %d\n", val & (1<<7|1<<6|1<<5|1<<4) >> 4);
 		if (val & (1<<8))
-			printf ("EnableSoftBusRatio=Enabled\n");
+			printf ("\tEnableSoftBusRatio=Enabled\n");
 		if (val & (1<<9))
-			printf ("EnableSoftVid=Enabled\n");
+			printf ("\tEnableSoftVid=Enabled\n");
 		if (val & (1<<10))
-			printf ("EnableSoftBSEL=Enabled\n");
-		printf ("MaxMHzBR=%d\n", val & 1<<12);
-		printf ("MinMHzBR=%d\n", val & 1<<13);
-		printf ("SoftBusRatio=%d\n", val & 1<<14);
-		printf ("VRM Rev=%d\n", val & 1<<15);
+			printf ("\tEnableSoftBSEL=Enabled\n");
+		printf ("\tMaxMHzBR=%d\n", val & 1<<12);
+		printf ("\tMinMHzBR=%d\n", val & 1<<13);
+		printf ("\tSoftBusRatio=%d\n", val & 1<<14);
+		printf ("\tVRM Rev=%d\n", val & 1<<15);
 	}
 }

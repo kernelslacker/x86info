@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-void long2binstr(long value) {
+void binary32 (unsigned long value)
+{
 	int i;
 
 	for(i=0;i<32;i++,value<<=1) {
@@ -10,4 +11,10 @@ void long2binstr(long value) {
 			putchar(' ');
 	}
 	putchar('\n');
+}
+
+void binary64(unsigned long long value)
+{
+	binary32 (value>>32);
+	binary32 (value);
 }

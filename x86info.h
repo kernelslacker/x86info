@@ -54,9 +54,11 @@ void identify (struct cpudata *cpu);
 void dumpregs (int cpunum);
 
 int rdmsr(int cpu, unsigned int index, unsigned long long *val);
-void long2binstr(long value);
-void dumpmsr (int cpunum, unsigned int msr);
-void dumpmsr_bin (int cpunum, unsigned int msr);
+void binary32(unsigned long value);
+void binary64(unsigned long long value);
+void dumpmsr (int cpunum, unsigned int msr, int size);
+void dumpmsr_bin (int cpunum, unsigned int msr, int size);
+
 void estimate_MHz(int cpunum);
 int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
