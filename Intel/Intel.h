@@ -3,4 +3,5 @@
 void decode_Intel_bluesmoke(int cpunum, int family);
 void decode_Intel_TLB (int i, int family);
 void get_intel_cacheinfo (struct cpudata *c);
+void dump_p4_MSRs(struct cpudata *cpu);
 #endif /* _INTEL_H */

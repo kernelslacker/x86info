@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.35 2002/11/11 20:02:55 davej Exp $
+ *  $Id: identify.c,v 1.36 2002/11/12 17:15:31 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -511,6 +511,11 @@ void display_Intel_info (struct cpudata *cpu)
 		get_model_name (cpu);
 
 	decode_feature_flags (cpu);
+
+	if (show_msr) {
+		if (cpu->family==0xf)
+			dump_p4_MSRs(cpu);
+	}
 
 	if (cpu->maxi >= 2 && show_cacheinfo) {
 		/* Decode TLB and cache info */
