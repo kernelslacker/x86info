@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.6 2001/08/10 09:28:00 davej Exp $
+ *  $Id: identify.c,v 1.7 2001/08/10 10:03:34 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -26,11 +26,11 @@ void identify (int cpunum)
 	
 	switch (ebx) {
 	case 0x756e6547:	/* Intel */
-		dointel (cpunum, maxi, &cpu);
+		Identify_Intel (cpunum, maxi, &cpu);
 		break;
 
 	case 0x68747541:	/* AMD */
-		doamd (cpunum, maxi, &cpu);
+		Identify_AMD (cpunum, maxi, &cpu);
 		break;
 
 	case 0x69727943:	/* Cyrix */
@@ -52,13 +52,20 @@ void identify (int cpunum)
 	}
 
 	if (!silent) {
-		printf ("Family: %d Model: %d [%s]\n", cpu.family, cpu.model, cpu.name);
 
-	
 		switch (cpu.vendor) {
 			case VENDOR_AMD:
+				printf ("Family: %d Model: %d Stepping: %d [%s]\n",
+					cpu.family, cpu.model, cpu.stepping, cpu.name);
 				display_AMD_info (cpunum, maxei, &cpu);
 				break;
+
+			case VENDOR_INTEL:
+				printf ("Family: %d Model: %d Stepping: %d Type: [%s]\n",
+					cpu.family, cpu.model, cpu.stepping, cpu.type, cpu.name);
+				display_Intel_info (cpunum, maxi, &cpu);
+				break;
+
 			default:
 				break;
 		}

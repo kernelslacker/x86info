@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.14 2001/07/21 01:50:11 davej Exp $
+ *  $Id: cpuid-intel.c,v 1.15 2001/08/10 10:03:34 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -96,11 +96,116 @@ void decode_intel_tlb (int x)
 
 
 /* Intel-specific information */
-void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
+void Identify_Intel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 {
-	int i;
+	char *nameptr;
 	unsigned long eax, ebx, ecx, edx;
-	int reserved, ntlb;
+	int reserved;
+
+	nameptr = cpu->name;
+
+	if (maxi >= 1) {
+		/* Family/model/type etc */
+		cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
+		cpu->stepping = eax & 0xf;
+		cpu->model = (eax >> 4) & 0xf;
+		cpu->family = (eax >> 8) & 0xf;
+		cpu->type = (eax >> 12) & 0x3;
+		cpu->brand = (ebx & 0xf);
+		reserved = eax >> 14;
+
+		switch (cpu->family) {
+		case 4:		/* Family 4 */
+			nameptr += sprintf (cpu->name, "%s", "i486 ");
+			switch (cpu->model) {
+				case 0:	nameptr+=sprintf (nameptr, "%s", "DX-25/33");	break;
+				case 1:	nameptr+=sprintf (nameptr, "%s", "DX-50");		break;
+				case 2:	nameptr+=sprintf (nameptr, "%s", "SX");			break;
+				case 3:	nameptr+=sprintf (nameptr, "%s", "487/DX2");	break;
+				case 4:	nameptr+=sprintf (nameptr, "%s", "SL");			break;
+				case 5:	nameptr+=sprintf (nameptr, "%s", "SX2");		break;
+				case 7:	nameptr+=sprintf (nameptr, "%s", "write-back enhanced DX2");	break;
+				case 8:	nameptr+=sprintf (nameptr, "%s", "DX4");		break;
+				case 9:	nameptr+=sprintf (nameptr, "%s", "write-back enhanced DX4");	break;
+				default:nameptr+=sprintf (nameptr, "%s", "Unknown CPU");break;
+			}
+			break;
+
+		case 5:		/* Family 5 */
+			nameptr += sprintf (cpu->name, "%s", "Pentium ");
+			switch (cpu->model) {
+				case 0:	nameptr+=sprintf (nameptr, "%s", "A-step");		break;
+				case 1:	nameptr+=sprintf (nameptr, "%s", "60/66");		break;
+				case 2:	nameptr+=sprintf (nameptr, "%s", "75-200");		break;
+				case 3:	nameptr+=sprintf (nameptr, "%s", "Overdrive");	break;
+				case 4:	nameptr+=sprintf (nameptr, "%s", "MMX");		break;
+				case 7:	nameptr+=sprintf (nameptr, "%s", "Mobile");		break;
+				case 8:	nameptr+=sprintf (nameptr, "%s", "MMX Mobile");	break;
+			}
+			break;
+
+		case 6:		/* Family 6 */
+			switch (cpu->model) {
+				case 0:	nameptr+=sprintf (cpu->name, "%s", "A-Step");		break;
+				case 1:	nameptr+=sprintf (cpu->name, "%s", "Pentium Pro");	break;
+				case 3:	nameptr+=sprintf (cpu->name, "%s", "Pentium II");
+					if (cpu->stepping == 2)
+						nameptr+=sprintf (nameptr, "%s", " (Overdrive)");
+					break;
+				case 4:	nameptr+=sprintf (cpu->name, "%s", "Pentium II");	break;
+				case 5:	/*FIXME: Cache size determine needed here */
+						nameptr+=sprintf (cpu->name, "%s","Pentium II/Xeon/Celeron");	break;
+				case 6:	nameptr+=sprintf (cpu->name, "%s", "Celeron / Mobile Pentium II");	break;
+				case 7:	nameptr+=sprintf (cpu->name, "%s", "Pentium III/Pentium III Xeon");	break;
+				case 8:	nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III (Coppermine)");	break;
+				case 10:
+					switch (cpu->brand) {
+					case 0:	nameptr+=sprintf (cpu->name, "%s", "Pentium II Deschutes");	break;
+					case 1:	nameptr+=sprintf (cpu->name, "%s", "Celeron");				break;
+					case 2:	nameptr+=sprintf (cpu->name, "%s", "Pentium III");			break;
+					case 3:	nameptr+=sprintf (cpu->name, "%s", "Pentium III Xeon");		break;
+					default:nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");			break;
+				}
+				break;
+				case 11:nameptr+=sprintf (cpu->name, "%s", "Pentium III Tualatin");	break;
+				default:nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");	break;
+			}
+			break;
+
+		case 7:		/* Family 7 */
+			nameptr += sprintf (cpu->name, "%s", "Itanium");
+			break;
+
+		case 0xF:	/* Family 15 */
+			switch (cpu->model) {
+				case 0:
+					nameptr += sprintf (cpu->name, "%s", "Pentium IV");
+					if (cpu->stepping == 7)
+						nameptr+=sprintf (nameptr, "%s", " (stepping B-2)");
+					if (cpu->stepping == 0xA)
+						nameptr+=sprintf (nameptr, "%s", " (stepping C-1)");
+					break;
+				case 4:
+				case 5:	nameptr+=sprintf (cpu->name, "%s", "P4 Xeon (Foster)");	break;
+				default:nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");	break;
+			}
+			break;
+		}
+
+		switch (cpu->type) {
+			case 0:	sprintf (nameptr, "%s", " Original OEM");	break;
+			case 1:	sprintf (nameptr, "%s", " Overdrive");		break;
+			case 2:	sprintf (nameptr, "%s", " Dual-capable");	break;
+			case 3:	sprintf (nameptr, "%s", " Reserved");		break;
+		}
+	}
+}
+
+
+void display_Intel_info (int cpunum, unsigned int maxi, struct cpudata *cpu)
+{
+	int ntlb, i;
+	unsigned long eax, ebx, ecx, edx;
 
 	static char *x86_cap_flags[] = {
 		"FPU    Floating Point Unit",
@@ -137,189 +242,11 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		"31     reserved"
 	};
 
-	if (maxi >= 1) {
-		/* Family/model/type etc */
-		cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
-		cpu->stepping = eax & 0xf;
-		cpu->model = (eax >> 4) & 0xf;
-		cpu->family = (eax >> 8) & 0xf;
-		cpu->type = (eax >> 12) & 0x3;
-		cpu->brand = (ebx & 0xf);
-		reserved = eax >> 14;
-
-		printf ("Family: %d Model: %d Type %d [", cpu->family, cpu->model, cpu->type);
-		switch (cpu->family) {
-		case 4:
-			/* Family 4 */
-			printf ("i486 ");
-			switch (cpu->model) {
-			case 0:
-				printf ("DX-25/33");
-				break;
-			case 1:
-				printf ("DX-50");
-				break;
-			case 2:
-				printf ("SX");
-				break;
-			case 3:
-				printf ("487/DX2");
-				break;
-			case 4:
-				printf ("SL");
-				break;
-			case 5:
-				printf ("SX2");
-				break;
-			case 7:
-				printf ("write-back enhanced DX2");
-				break;
-			case 8:
-				printf ("DX4");
-				break;
-			case 9:
-				printf ("write-back enhanced DX4");
-				break;
-			default:
-				printf ("Unknown CPU");
-				break;
-			}
-			break;
-
-		case 5:
-			/* Family 5 */
-			printf ("Pentium ");
-			switch (cpu->model) {
-			case 0:
-				printf ("A-step");
-				break;
-			case 1:
-				printf ("60/66");
-				break;
-			case 2:
-				printf ("75-200");
-				break;
-			case 3:
-				printf ("Overdrive");
-				break;
-			case 4:
-				printf ("MMX");
-				break;
-			case 7:
-				printf ("Mobile");
-				break;
-			case 8:
-				printf ("MMX Mobile");
-				break;
-			}
-			break;
-
-		case 6:
-			/* Family 6 */
-			switch (cpu->model) {
-			case 0:
-				printf ("A-Step");
-				break;
-			case 1:
-				printf ("Pentium Pro");
-				break;
-			case 3:
-				printf ("Pentium II");
-				if (cpu->stepping == 2)
-					printf (" (Overdrive)");
-				break;
-			case 4:
-				printf ("Pentium II");
-				break;
-			case 5:
-				/*FIXME: Cache size determine needed here */
-				printf ("Pentium II/Xeon/Celeron");
-				break;
-			case 6:
-				printf ("Celeron / Mobile Pentium II");
-				break;
-			case 7:
-				printf ("Pentium III/Pentium III Xeon");
-				break;
-			case 8:
-				printf ("Celeron / Pentium III (Coppermine)");
-				break;
-			case 10:
-				switch (cpu->brand) {
-				case 0:
-					printf ("Pentium II Deschutes");
-					break;
-				case 1:
-					printf ("Celeron");
-					break;
-				case 2:
-					printf ("Pentium III");
-					break;
-				case 3:
-					printf ("Pentium III Xeon");
-					break;
-				}
-				break;
-			case 11:
-				printf ("Pentium III Tualatin");
-				break;
-			default:
-				printf ("Unknown CPU");
-				break;
-			}
-			break;
-
-		case 7:
-			/* Family 7 */
-			printf ("Itanium");
-			break;
-
-		case 0xF:
-			/* Family 15 */
-			switch (cpu->model) {
-			case 0:
-				printf ("Pentium IV");
-				if (cpu->stepping == 7)
-					printf (" (stepping B-2)");
-				if (cpu->stepping == 0xA)
-					printf (" (stepping C-1)");
-				break;
-			case 4:
-			case 5:
-				printf ("P4 Xeon (Foster)");
-				break;
-			default:
-				printf ("Unknown CPU");
-				break;
-			}
-			break;
-		}
-
-		switch (cpu->type) {
-		case 0:
-			printf (" Original OEM");
-			break;
-		case 1:
-			printf (" Overdrive");
-			break;
-		case 2:
-			printf (" Dual-capable");
-			break;
-		case 3:
-			printf (" Reserved");
-			break;
-		}
-		printf ("]\n");
-		printf ("Stepping: %d\n", cpu->stepping);
-
-		printf ("Reserved: %d\n\n", reserved);
-
-		if (show_flags) {
-			printf ("Feature flags %08lx:\n", edx);
-			for (i = 0; i < 32; i++) {
-				if (edx & (1 << i)) {
-					printf ("%s\n", x86_cap_flags[i]);
-				}
+	if (show_flags) {
+		printf ("Feature flags %08lx:\n", edx);
+		for (i = 0; i < 32; i++) {
+			if (edx & (1 << i)) {
+				printf ("%s\n", x86_cap_flags[i]);
 			}
 		}
 	}
@@ -354,6 +281,7 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 			}
 		}
 	}
+
 	if (maxi >= 3) {
 		/* Pentium III CPU serial number */
 		unsigned long signature;

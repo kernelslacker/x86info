@@ -31,13 +31,14 @@ void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigne
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void decode_intel_tlb (int);
 void decode_cyrix_tlb (int);
-void dointel (int, unsigned int, struct cpudata *cpu);
-void doamd (int, unsigned int, struct cpudata *cpu);
+void Identify_Intel (int, unsigned int, struct cpudata *cpu);
+void Identify_AMD (int, unsigned int, struct cpudata *cpu);
 void docyrix (int, unsigned int, struct cpudata *cpu);
 void doIDT (int, unsigned int, struct cpudata *cpu);
 void doRise (int, unsigned int, struct cpudata *cpu);
 
 void display_AMD_info(int cpunum, unsigned int maxei, struct cpudata *cpu);
+void display_Intel_info(int cpunum, unsigned int maxi, struct cpudata *cpu);
 
 void decode_feature_flags (struct cpudata *cpu, int flags);
 void identify (int cpunum);
