@@ -1,3 +1,7 @@
+2001-12-28	Bert Freudenberg <bert@isg.cs.uni-magdeburg.de>
+
+	* README: Mention modules.conf for modular cpuid/msr drivers.
+
 2001-12-22  Mendel L Chan <linuxrat@gnuchina.org>
 
 	* scripts/Makenodes: Add cd /dev/cpu before making nodes.

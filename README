@@ -22,7 +22,7 @@ Features:
 
 
 Caveats:
-   For usage of the MSR / SMP functions, x86info needs the
+*  For usage of the MSR / SMP functions, x86info needs the
    x86 cpuid driver provided with the Linux kernel 2.2.18 / 2.4.0,
    and the appropriate nodes in /dev
 
@@ -36,13 +36,20 @@ Caveats:
 		mknod msr c 202 $i
 	done
 
-   To build under Win32/Cygwin, uncomment the second line
+*  If you are using the cpuid / msr drivers built as modules
+   as opposed to built into the kernel, then you should ensure
+   the following is in your /etc/modules.conf
+
+	alias char-major-202 msr  
+	alias char-major-203 cpuid
+
+*  To build under Win32/Cygwin, uncomment the second line
    in the Makefile, otherwise some files will fail to build.
 
-   Usage under Win32 is somewhat limited at present:
+*  Usage under Win32 is somewhat limited at present:
 	- no support for reading MSRs (anyone want to write a driver?)
 
-   FreeBSD / OpenBSD / NetBSD also have the same limitations.
+*  FreeBSD / OpenBSD / NetBSD also have the same limitations.
 
 Info on the command line switches can be found in the man page.
 
