@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.5 2001/08/24 00:57:33 davej Exp $
+ *  $Id: identify.c,v 1.6 2001/08/24 01:10:24 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -166,15 +166,14 @@ void Identify_AMD (unsigned int maxi, struct cpudata *cpu)
 							case 3:	sprintf (nameptr, "%s", " Rev A9");		break;
 						}
 						break;
-				case 6:	nameptr += sprintf (cpu->name, "%s", "Mobile ");
-						switch (cpu->stepping) {
-							case 0:	sprintf (nameptr, "%s", "Athlon Rev A0-A1");	break;
-							case 1:	sprintf (nameptr, "%s", "Athlon Rev A2");		break;
-							case 2:	sprintf (nameptr, "%s", "Duron");				break;
+				case 6:	switch (cpu->stepping) {
+							case 0:	sprintf (nameptr, "%s", "Athlon 4 Rev A0-A1");	break;
+							case 1:	sprintf (nameptr, "%s", "Athlon 4 Rev A2");		break;
+							case 2:	sprintf (nameptr, "%s", "Mobile Duron");		break;
 						}
 						break;
 				case 7:	switch (cpu->stepping) {
-							case 0:	sprintf (nameptr, "%s", "Duron (Morgan core) Rev A0");	break;
+							case 0:	sprintf (cpu->name, "%s", "Duron (Morgan core) Rev A0");	break;
 						}
 						break;
 				default:sprintf (cpu->name, "%s", "Unknown CPU");
