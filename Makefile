@@ -5,6 +5,8 @@ all: x86info
 OBJS =\
 	AMD/identify.o\
 	AMD/bluesmoke.o\
+	AMD/MSR-Athlon.o\
+	AMD/MSR-K6.o\
 \
 	Cyrix/identify.o\
 \
