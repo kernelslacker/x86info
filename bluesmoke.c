@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.2 2001/04/20 06:21:10 davej Exp $
+ *  $Id: bluesmoke.c,v 1.3 2001/04/20 06:42:04 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -28,7 +28,7 @@ extern int show_bluesmoke;
 
 void decode_bluesmoke(int cpunum)
 {
-	unsigned long long val=0;
+	unsigned long long val, val2;
 	int banks, i;
 
 	if (getuid()!=0) {
@@ -49,10 +49,58 @@ void decode_bluesmoke(int cpunum)
 
 	if (rdmsr(cpunum, MCG_CTL, &val) == 1) {
 		printf ("MCG_CTL:\n");
-		printf (" Data cache check %sabled\n", val & (1<<0) ? "en" : "dis"); 
-		printf (" Instruction cache check %sabled\n", val & (1<<1) ? "en" : "dis"); 
-		printf (" Bus unit check %sabled\n", val & (1<<2) ? "en" : "dis"); 
-		printf (" Load/Store unit check %sabled\n", val & (1<<3) ? "en" : "dis"); 
+
+		printf (" Data cache check %sabled\n", val & (1<<0) ? "en" : "dis");
+		if ((val & (1<<0)) == 1) {
+			if (rdmsr(cpunum, MC_CTL, &val2) == 1) {
+				printf ("  ECC 1 bit error reporting %sabled\n", val2 & (1<<0) ? "en" : "dis");
+				printf ("  ECC multi bit error reporting %sabled\n", val2 & (1<<1) ? "en" : "dis");
+				printf ("  Data cache data parity %sabled\n", val2 & (1<<2) ? "en" : "dis");
+				printf ("  Data cache main tag parity %sabled\n", val2 & (1<<3) ? "en" : "dis");
+				printf ("  Data cache snoop tag parity %sabled\n", val2 & (1<<4) ? "en" : "dis");
+				printf ("  L1 TLB parity %sabled\n", val2 & (1<<5) ? "en" : "dis");
+				printf ("  L2 TLB parity %sabled\n", val2 & (1<<6) ? "en" : "dis");
+			}
+		}
+
+		printf (" Instruction cache check %sabled\n", val & (1<<1) ? "en" : "dis");
+		if ((val & (1<<1)) == 1 && (banks>1)) {
+			if (rdmsr(cpunum, MC_CTL+4, &val2) == 1) {
+				printf ("  ECC 1 bit error reporting %sabled\n", val2 & (1<<0) ? "en" : "dis");
+				printf ("  ECC multi bit error reporting %sabled\n", val2 & (1<<1) ? "en" : "dis");
+				printf ("  Instruction cache data parity %sabled\n", val2 & (1<<2) ? "en" : "dis");
+				printf ("  IC main tag parity %sabled\n", val2 & (1<<3) ? "en" : "dis");
+				printf ("  IC snoop tag parity %sabled\n", val2 & (1<<4) ? "en" : "dis");
+				printf ("  L1 TLB parity %sabled\n", val2 & (1<<5) ? "en" : "dis");
+				printf ("  L2 TLB parity %sabled\n", val2 & (1<<6) ? "en" : "dis");
+				printf ("  Predecode array parity %sabled\n", val2 & (1<<7) ? "en" : "dis");
+				printf ("  Target selector parity %sabled\n", val2 & (1<<8) ? "en" : "dis");
+				printf ("  Read data error %sabled\n", val2 & (1<<9) ? "en" : "dis");
+			}
+		}
+
+		printf (" Bus unit check %sabled\n", val & (1<<2) ? "en" : "dis");
+		if ((val & (1<<2)) == 1 && (banks>2)) {
+			if (rdmsr(cpunum, MC_CTL+8, &val2) == 1) {
+				printf ("  External L2 tag parity error %sabled\n", val2 & (1<<0) ? "en" : "dis");
+				printf ("  L2 partial tag parity error %sabled\n", val2 & (1<<1) ? "en" : "dis");
+				printf ("  System ECC TLB reload error %sabled\n", val2 & (1<<2) ? "en" : "dis");
+				printf ("  L2 ECC TLB reload error %sabled\n", val2 & (1<<3) ? "en" : "dis");
+				printf ("  L2 ECC K7 deallocate %sabled\n", val2 & (1<<4) ? "en" : "dis");
+				printf ("  L2 ECC probe deallocate %sabled\n", val2 & (1<<5) ? "en" : "dis");
+				printf ("  System datareaderror reporting %sabled\n", val2 & (1<<6) ? "en" : "dis");
+			}
+		}
+
+		printf (" Load/Store unit check %sabled\n", val & (1<<3) ? "en" : "dis");
+		if ((val & (1<<3)) == 1 && (banks>3)) {
+			if (rdmsr(cpunum, MC_CTL+12, &val2) == 1) {
+				printf ("  Read data error enable (loads) %sabled\n", val2 & (1<<0) ? "en" : "dis");
+				printf ("  Read data error enable (stores) %sabled\n", val2 & (1<<1) ? "en" : "dis");
+			}
+		}
+
+
 	}
 	printf ("\n");
 
