@@ -1,4 +1,4 @@
-CFLAGS = -Wall -W -g -O2 -m32
+CFLAGS = -Wall -W -g -O2 #-m32
 #CFLAGS += -mwin32 -DWIN32_LEAN_AND_MEAN
 SHELL = /bin/sh
 
