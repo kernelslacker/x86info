@@ -1,5 +1,5 @@
 /*
- *  $Id: cachesize.c,v 1.6 2003/01/18 16:59:42 davej Exp $
+ *  $Id: cachesize.c,v 1.7 2003/03/19 13:51:51 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -49,6 +49,7 @@ static struct _cache_table cache_table[] =
 	{ 0x25, LVL_3,    2048, "L3 unified cache:\n\tSize: 2MB\t8-way associative.\n\tline size=64 bytes." },
 	{ 0x29, LVL_3,    4096, "L3 unified cache:\n\tSize: 4MB\t8-way associative.\n\tline size=64 bytes." },
 	{ 0x39, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=64 bytes." },
+	{ 0x3b, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\t2-way associative.\n\tline size=64 bytes." },
 	{ 0x3c, LVL_2,     256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=64 bytes." },
 	{ 0x41, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=32 bytes." },
 	{ 0x42, LVL_2,     256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=32 bytes." },
