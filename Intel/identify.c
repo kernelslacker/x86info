@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.10 2001/12/10 21:48:37 davej Exp $
+ *  $Id: identify.c,v 1.11 2001/12/10 22:20:11 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -19,28 +19,28 @@ void decode_Intel_TLB (int x, int family)
 	case 0:
 		break;
 	case 0x1:
-		printf ("Instruction TLB: 4KB pages, 4-way set assoc, 32 entries\n");
+		printf ("Instruction TLB: 4KB pages, 4-way assocative, 32 entries\n");
 		break;
 	case 0x2:
-		printf ("Instruction TLB: 4MB pages, fully assoc, 2 entries\n");
+		printf ("Instruction TLB: 4MB pages, fully associative, 2 entries\n");
 		break;
 	case 0x3:
-		printf ("Data TLB: 4KB pages, 4-way set assoc, 64 entries\n");
+		printf ("Data TLB: 4KB pages, 4-way associative, 64 entries\n");
 		break;
 	case 0x4:
-		printf ("Data TLB: 4MB pages, 4-way set assoc, 8 entries\n");
+		printf ("Data TLB: 4MB pages, 4-way associative, 8 entries\n");
 		break;
 	case 0x6:
-		printf ("Instruction cache: 8KB, 4-way set assoc, 32 byte line size\n");
+		printf ("L1 Instruction cache:\n\tSize: 8KB\t4-way associative.\n\tline size=32 bytes\n");
 		break;
 	case 0x8:
-		printf ("Instruction cache: 16KB, 4-way set assoc, 32 byte line size\n");
+		printf ("L1 Instruction cache:\n\tSize: 16KB\t4-way associative.\n\tline size=32 bytes\n");
 		break;
 	case 0xa:
-		printf ("Data cache: 8KB, 2-way set assoc, 32 byte line size\n");
+		printf ("L1 Data cache:\n\tSize: 8KB\t2-way associative.\n\tline size=32 bytes\n");
 		break;
 	case 0xc:
-		printf ("Data cache: 16KB, 2-way or 4-way set assoc, 32 byte line size\n");
+		printf ("L1 Data cache:\n\tSize: 16KB\t2-way or 4-way associative.\n\tline size=32 bytes\n");
 		break;
 	case 0x40:
 		if (family==15)
@@ -49,47 +49,47 @@ void decode_Intel_TLB (int x, int family)
 			printf ("No L2 cache\n");
 		break;
 	case 0x41:
-		printf ("L2 unified cache: 128KB, 4-way set assoc, 32 byte line size\n");
+		printf ("L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=32 bytes.\n");
 		break;
 	case 0x42:
-		printf ("L2 unified cache: 256KB, 4-way set assoc, 32 byte line size\n");
+		printf ("L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=32 bytes.\n");
 		break;
 	case 0x43:
-		printf ("L2 unified cache: 512KB, 4-way set assoc, 32 byte line size\n");
+		printf ("L2 unified cache:\n\tSize: 512KB\t4-way associative.\n\tline size=32 bytes.\n");
 		break;
 	case 0x44:
-		printf ("L2 unified cache: 1MB, 4-way set assoc, 32 byte line size\n");
+		printf ("L2 unified cache:\n\tSize: 1MB\t4-way associative.\n\tline size=32 bytes.\n");
 		break;
 	case 0x45:
-		printf ("L2 unified cache: 2MB, 4-way set assoc, 32 byte line size\n");
+		printf ("L2 unified cache:\n\tSize: 2MB\t4-way associative.\n\tline size=32 bytes.\n");
 		break;
 	case 0x50:
-		printf ("Instruction TLB: 4K, 2MB or 4MB pages, fully assoc, 64 entries\n");
+		printf ("Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 64 entries.\n");
 		break;
 	case 0x5b:
-		printf ("Data TLB: 4K or 4MB pages, fully assoc, 64 entries\n");
+		printf ("Data TLB: 4K or 4MB pages, fully associative, 64 entries.\n");
 		break;
 	case 0x66:
-		printf ("Data cache: Sectored, 64 byte cache line, 8 way set assoc, 8K\n");
+		printf ("L2 Data cache:\n\tSize: 8KB\tSectored, 8 way associative.\n\tline size=64 bytes.\n");
 		break;
 	case 0x70:
-		printf ("Instruction trace cache: 4 way set associative, 12K uOps\n");
+		printf ("Instruction trace cache:\n\tSize: 12K uOps\t4 way associative.\n");
 		break;
 	case 0x7a:
-		printf ("L2 unified cache: Sectored, 64 byte cache line, 8 way set associative, 256K\n");
+		printf ("L2 unified cache:\n\tSize: 256K\tSectored, 8 way associative.\n\tline size=64 bytes.\n");
 		break;
 	case 0x82:
-		printf ("L2 unified cache: Sectored, 32 byte cache line, 8 way set associative, 256K\n");
+		printf ("L2 unified cache:\n\tSize: 256K\tSectored, 8 way associative.\n\tline size=32 bytes.");
 		break;
 	case 0x84:
-		printf ("L2 unified cache: Sectored, 32 byte cache line, 8 way set associative, 1MB\n");
+		printf ("L2 unified cache:\n\tSize: 1MB\tSectored, 8 way associative\n\tline size=32 bytes.");
 		break;
 	case 0x85:
-		printf ("L2 unified cache: Sectored, 32 byte cache line, 8 way set associative, 2MB\n");
+		printf ("L2 unified cache:\n\tSize: 2MB\tSectored, 8 way associative\n\tline size=32 bytes.");
 		break;
 
 	default:
-		printf ("unknown TLB/cache descriptor: 0x%x\n", x);
+		printf ("unknown TLB/cache descriptor:\n\t0x%x\n", x);
 		break;
 	}
 }
