@@ -1,6 +1,7 @@
 2002-12-05  Dave Jones <davej@codemonkey.org.uk>
 
 	* x86info.c: Add --bugs, correct helptext for --cache
+	* AMD/bugs.c: Report CLK_CTL bug in newer athlons.
 
 2002-11-27  Dave Jones <davej@codemonkey.org.uk>>
 

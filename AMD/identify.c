@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.40 2002/11/25 20:56:15 davej Exp $
+ *  $Id: identify.c,v 1.41 2002/12/04 18:07:03 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -372,5 +372,8 @@ void display_AMD_info(struct cpudata *cpu)
 
 	if (show_pm)
 		decode_powernow(cpu);
+
+	if (show_bugs)
+		show_amd_bugs(cpu);
 }
 
