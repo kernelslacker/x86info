@@ -1,3 +1,10 @@
+2001-09-01  Dave Jones	<davej@suse.de>
+
+	* cpuid.c:
+	  Don't call cpuid_UP() for cpu #0. Scheduling means we
+	   could end up running it on cpu #1 on SMP.
+	  If we fail to open the cpuid driver once, don't try it again.
+
 2001-08-29  Mark Brown  <broonie@sirena.org.uk>
 
 	* x86info.h: Prototype silent.

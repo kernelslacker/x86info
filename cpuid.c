@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid.c,v 1.7 2001/08/29 12:19:16 broonie Exp $
+ *  $Id: cpuid.c,v 1.8 2001/09/01 16:32:30 davej Exp $
  *	This file is part of x86info
  *	(C) 2000, 2001 Dave Jones.
  *	Fixes by Arjan van de Ven (arjanv@redhat.com) and
@@ -24,12 +24,12 @@ void cpuid (int CPU_number, int index,
 	unsigned long *ecx,
 	unsigned long *edx)
 {
+	static int nodriver=0;
 	char cpuname[20];
 	unsigned char buffer[16];
 	int fh;
 
-	/* Uniprocessor ? Or 1st CPU in SMP ? */
-	if (CPU_number == 0) {
+	if (nodriver==1) {
 		cpuid_UP (index, eax, ebx, ecx, edx);
 		return;
 	}
@@ -47,6 +47,7 @@ void cpuid (int CPU_number, int index,
 		close (fh);
 	} else {
 		/* Something went wrong, just do UP and hope for the best. */
+		nodriver = 1;
 		if (!silent) {
 			perror(cpuname);
 		}
