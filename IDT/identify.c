@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.8 2001/09/10 16:56:43 davej Exp $
+ *  $Id: identify.c,v 1.9 2001/09/14 15:11:39 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -187,16 +187,47 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 		if (val==0)
 			printf ("\tSoftware clock multiplier only: No Softvid\n");
 
-		printf ("\tRevision key: %d\n", val & (1<<7|1<<6|1<<5|1<<4) >> 4);
+		printf ("\tRevision key: %d\n", (val & (1<<7|1<<6|1<<5|1<<4)) >> 4);
 		if (val & (1<<8))
 			printf ("\tEnableSoftBusRatio=Enabled\n");
 		if (val & (1<<9))
 			printf ("\tEnableSoftVid=Enabled\n");
 		if (val & (1<<10))
 			printf ("\tEnableSoftBSEL=Enabled\n");
-		printf ("\tMaxMHzBR=%d\n", val & 1<<12);
-		printf ("\tMinMHzBR=%d\n", val & 1<<13);
+
 		printf ("\tSoftBusRatio=%d\n", val & 1<<14);
-		printf ("\tVRM Rev=%d\n", val & 1<<15);
+		if (val & 0xf)
+			printf ("\tVRM Rev=%s\n",
+				((val & 1<<15)) ? "Mobile VRM" : "VRM 8.5");
+
+		val = val>>32;
+		binary32 (val);
+		printf ("\tMaxMHzBR: %s%s%s%s\n",
+			(((val & (1<<3)) >>3) ? "1" : "0"),
+			(((val & (1<<2)) >>2) ? "1" : "0"),
+			(((val & (1<<1)) >>1) ? "1" : "0"),
+			(((val & (1<<0)) >>0) ? "1" : "0"));
+		printf ("\tMaximumVID: %s%s%s%s%s\n",
+			(((val & (1<<8)) >>8) ? "1" : "0"),
+			(((val & (1<<7)) >>7) ? "1" : "0"),
+			(((val & (1<<6)) >>6) ? "1" : "0"),
+			(((val & (1<<5)) >>5) ? "1" : "0"),
+			(((val & (1<<4)) >>4) ? "1" : "0"));
+		printf ("\tMaxMHzFSB: %s%s\n",
+			(((val & (1<<10)) >>10) ? "1" : "0"),
+			(((val & (1<<9))  >>9) ? "1" : "0"));
+		printf ("\tMinMHzBR: %s%s%s%s\n",
+			(((val & (1<<19)) >>19) ? "1" : "0"),
+			(((val & (1<<18)) >>18) ? "1" : "0"),
+			(((val & (1<<17)) >>17) ? "1" : "0"),
+			(((val & (1<<16)) >>16) ? "1" : "0"));
+		printf ("\tMinimumVID: %s%s%s%s\n",
+			(((val & (1<<23)) >>23) ? "1" : "0"),
+			(((val & (1<<22)) >>22) ? "1" : "0"),
+			(((val & (1<<21)) >>21) ? "1" : "0"),
+			(((val & (1<<20)) >>20) ? "1" : "0"));
+		printf ("\tMinMHzFSB: %s%s\n",
+			(((val & (1<<26)) >>26) ? "1" : "0"),
+			(((val & (1<<25)) >>25) ? "1" : "0"));
 	}
 }
