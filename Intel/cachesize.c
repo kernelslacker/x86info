@@ -1,5 +1,5 @@
 /*
- *  $Id: cachesize.c,v 1.9 2003/06/09 21:34:59 davej Exp $
+ *  $Id: cachesize.c,v 1.10 2003/06/09 21:43:43 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -33,6 +33,7 @@ struct _cache_table
 #define LVL_TRACE  5
 #define INST_TLB   6
 #define DATA_TLB   7
+#define NOCACHE    8
 
 static struct _cache_table cache_table[] =
 {
@@ -53,7 +54,7 @@ static struct _cache_table cache_table[] =
 	{ 0x39, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=64 bytes." },
 	{ 0x3b, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\t2-way associative.\n\tline size=64 bytes." },
 	{ 0x3c, LVL_2,     256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=64 bytes." },
-// 0x40 - no 2nd level cache or no 3rd level cache if valid 2nd level cache.
+	{ 0x40, NOCACHE,     0, "No level 2 cache or no level 3 cache if valid 2nd level cache."},
 	{ 0x41, LVL_2,     128, "L2 unified cache:\n\tSize: 128KB\t4-way associative.\n\tline size=32 bytes." },
 	{ 0x42, LVL_2,     256, "L2 unified cache:\n\tSize: 256KB\t4-way associative.\n\tline size=32 bytes." },
 	{ 0x43, LVL_2,     512, "L2 unified cache:\n\tSize: 512KB\t4-way associative.\n\tline size=32 bytes." },
@@ -119,6 +120,10 @@ static void decode_Intel_cache (int des, struct cpudata *cpu, int output)
 					break;
 				case LVL_TRACE:
 					cpu->cachesize_trace += cache_table[k].size;
+					if (output)
+						printf ("%s\n", cache_table[k].string);
+					break;
+				default:
 					if (output)
 						printf ("%s\n", cache_table[k].string);
 					break;
