@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.46 2001/12/10 23:51:58 davej Exp $
+ *  $Id: x86info.c,v 1.47 2001/12/11 17:03:45 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -171,7 +171,7 @@ int main (int argc, char **argv)
 
 	/*
 	 * can't have less than 1 CPU, or more than
-	 * 65535 (some abitrary large number)
+	 * 65535 (some arbitrary large number)
 	 */
 	if ((nrCPUs < 1) || (nrCPUs > 65535)) {
 		printf("CPU count is bogus: defaulting to 1 CPU.\n");

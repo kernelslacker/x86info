@@ -40,8 +40,7 @@ Caveats:
    in the Makefile, otherwise some files will fail to build.
 
    Usage under Win32 is somewhat limited at present:
-	- only one CPU is polled in an SMP system
-	- no support for reading MSRs
+	- no support for reading MSRs (anyone want to write a driver?)
 
    FreeBSD / OpenBSD / NetBSD also have the same limitations.
 

@@ -1,3 +1,10 @@
+2001-12-11	Matthew Gregan <mgregan@jade.co.nz>
+
+	* Makefile: Add x86info.exe to clean target.
+	* cpuid_UP.S: Fix for win32
+	* mptable.c: Fix for win32
+	* x86info.c: Typo.
+
 2001-12-11	Dave Jones <davej@suse.de>
 
 	* Cyrix/identify.c: Add recognition for Cyrix MII

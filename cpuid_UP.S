@@ -1,14 +1,25 @@
 	.align 4
 	.text
+
+#ifdef linux
+
 .globl cpuid_UP
+	.type	cpuid_UP,@function
+cpuid_UP:
+
+#else /* BSD or WIN32 */
+
+.globl _cpuid_UP
 
 #ifdef __WIN32__
-	.def	cpuid_UP;  .scl    2;      .type   32;     .endef
-#else
-	.type	cpuid_UP,@function
+	.def	_cpuid_UP;  .scl    2;      .type   32;     .endef
+#else /* BSD */
+	.type	_cpuid_UP,@function
 #endif /* __WIN32__ */
 
-cpuid_UP:
+_cpuid_UP:
+#endif /* linux */
+
 	pushl %ebp
 	movl %esp,%ebp
 	pushl %edi

@@ -47,5 +47,5 @@ x86info: $(OBJS)
 clean:
 	@find . -name "*.o" -exec rm {} \;
 	@find . -name "*~" -exec rm {} \;
-	@rm -f x86info
+	@rm -f x86info x86info.exe
 
