@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.25 2002/10/30 03:11:20 davej Exp $
+ *  $Id: identify.c,v 1.26 2002/10/30 03:18:07 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -92,8 +92,6 @@ void decode_IDT_cacheinfo(struct cpudata *cpu)
 
 void display_IDT_info(struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx=0, tmp=0;
-
 	printf ("Family: %d Model: %d Stepping: %d [%s]\n",
 		cpu->family, cpu->model, cpu->stepping, cpu->name);
 	get_model_name (cpu);

@@ -1,5 +1,5 @@
 /*
- *  $Id: mtrr.c,v 1.3 2002/07/12 01:48:59 davej Exp $
+ *  $Id: mtrr.c,v 1.4 2002/10/30 03:18:07 davej Exp $
  *  This file is part of x86info
  *  (C) 2002 Dave Jones.
  *
@@ -23,6 +23,9 @@ static void dump_mtrr (int cpu, int msr)
 void dump_mtrrs (struct cpudata *cpu)
 {
 	int i;
+
+	if (!(cpu->flags & (X86_FEATURE_MTRR)))
+		return;
 
 	printf ("MTRR registers:\n");
 

@@ -115,4 +115,6 @@ extern int used_UP;
 extern int silent;
 extern int user_is_root;
 
+#define X86_FEATURE_MTRR	1<<12
+
 #endif /* _X86INFO_H */
