@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.19 2001/07/09 23:54:52 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.20 2001/07/10 16:43:06 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -247,13 +247,16 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 				}
 				break;
 			case 6:
-				printf ("Mobile Athlon");
+				printf ("Mobile ");
 				switch (cpu->stepping) {
 				case 0:
-					printf (" Rev A0-A1");
+					printf ("Athlon Rev A0-A1");
 					break;
 				case 1:
-					printf (" Rev A2");
+					printf ("Athlon Rev A2");
+					break;
+				case 2:
+					printf ("Duron");
 					break;
 				}
 				break;
