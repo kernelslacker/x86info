@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.58 2002/07/12 01:48:59 davej Exp $
+ *  $Id: x86info.c,v 1.59 2002/07/24 10:18:41 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -137,7 +137,7 @@ int main (int argc, char **argv)
 	memset (&cpu, 0, sizeof(struct cpudata));
 	parse_command_line(argc, argv);
 	if (!silent) {
-		printf ("x86info v1.10.  Dave Jones 2001, 2002\n");
+		printf ("x86info v1.11.  Dave Jones 2001, 2002\n");
 		printf ("Feedback to <davej@suse.de>.\n\n");
 	}
 
