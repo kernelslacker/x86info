@@ -2,6 +2,7 @@
 
 	* bench/benchmarks.c: Add bswap.
 	* Makefile: Use -m32 when compiling on x86-64
+	* x86info.c: Bump copyright date.
 
 2003-1-27 Dave Jones <davej@codemonkey.org.uk>
 
