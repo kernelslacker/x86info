@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.18 2001/05/21 18:58:01 davej Exp $
+ *  $Id: x86info.c,v 1.19 2001/05/21 19:32:25 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -31,8 +31,8 @@ void usage (char *programname)
 -f, --flags\n\
 -mhz, --mhz\n\
 -m, --msr\n\
--r, --registers\n\n\
--s, --smoke", programname);
+-r, --registers\n\
+-s, --smoke\n", programname);
 	exit (0);
 }
 

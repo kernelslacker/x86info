@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.4 2001/05/07 22:03:27 davej Exp $
+ *  $Id: bluesmoke.c,v 1.5 2001/05/21 19:32:25 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -64,7 +64,7 @@ void decode_bluesmoke(int cpunum)
 		}
 
 		printf (" Instruction cache check %sabled\n", val & (1<<1) ? "en" : "dis");
-		if ((val & (1<<1)) == 1 && (banks>1)) {
+		if (((val & (1<<1)) == 2) && (banks>1)) {
 			if (rdmsr(cpunum, MC_CTL+4, &val2) == 1) {
 				printf ("  ECC 1 bit error reporting %sabled\n", val2 & (1<<0) ? "en" : "dis");
 				printf ("  ECC multi bit error reporting %sabled\n", val2 & (1<<1) ? "en" : "dis");
@@ -80,7 +80,7 @@ void decode_bluesmoke(int cpunum)
 		}
 
 		printf (" Bus unit check %sabled\n", val & (1<<2) ? "en" : "dis");
-		if ((val & (1<<2)) == 1 && (banks>2)) {
+		if ((val & (1<<2)) == 4 && (banks>2)) {
 			if (rdmsr(cpunum, MC_CTL+8, &val2) == 1) {
 				printf ("  External L2 tag parity error %sabled\n", val2 & (1<<0) ? "en" : "dis");
 				printf ("  L2 partial tag parity error %sabled\n", val2 & (1<<1) ? "en" : "dis");
@@ -93,7 +93,7 @@ void decode_bluesmoke(int cpunum)
 		}
 
 		printf (" Load/Store unit check %sabled\n", val & (1<<3) ? "en" : "dis");
-		if ((val & (1<<3)) == 1 && (banks>3)) {
+		if ((val & (1<<3)) == 8 && (banks>3)) {
 			if (rdmsr(cpunum, MC_CTL+12, &val2) == 1) {
 				printf ("  Read data error enable (loads) %sabled\n", val2 & (1<<0) ? "en" : "dis");
 				printf ("  Read data error enable (stores) %sabled\n", val2 & (1<<1) ? "en" : "dis");
