@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	  $Id: mptable.c,v 1.6 2002/04/29 00:27:28 davej Exp $
+ *	  $Id: mptable.c,v 1.7 2002/11/11 19:54:56 davej Exp $
  */
 
 #define MP_SIG				  0x5f504d5f	  /* _MP_ */
@@ -332,7 +332,7 @@ static int MPConfigTableHeader(void* pap)
 
 	/* process all the CPUs */
 	if (verbose)
-		printf("# Processors:\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
+		printf("MP Table:\n#\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
 	for (t = totalSize, c = count; c; c--) {
 		if (readType() == 0)
 			processorEntry();
@@ -389,7 +389,7 @@ static void processorEntry(void)
 
 	if(verbose)
 	{
-		printf("#\t\t%2d", entry.apicID);
+		printf("#\t%2d", entry.apicID);
 		printf("\t 0x%2x", entry.apicVersion);
 		
 		printf("\t %s, %s",
