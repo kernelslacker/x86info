@@ -1,10 +1,14 @@
 2001-08-10 Dave Jones <davej@suse.de>
 
 	* cpuid-amd.c:
+	* cpuid-cyrix.c:
 	* cpuid-intel.c: 
+	* cpuid-rise.c:
 	  Identify functions don't output text any more.
+	  No longer needs cpu number passed around, it's in cpudata now.
 	* x86info.c:
 	  added --check-bluesmoke, --parse-bluesmoke and silent mode.
+	  Now prints CPU #n before doing each CPU.
 
 Released as v1.4
 
