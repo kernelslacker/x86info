@@ -1,5 +1,5 @@
 /*
- *  $Id: powernow.c,v 1.3 2002/11/20 15:29:42 davej Exp $
+ *  $Id: powernow.c,v 1.4 2002/11/20 16:15:06 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -43,6 +43,10 @@ void decode_powernow(struct cpudata *cpu)
 	if (read_msr(cpu->number, MSR_FID_VID_CTL, &vidctl.val) == 1) {
 		printf ("FSB multiplier code: %x\n", vidctl.FID);
 		printf ("VID multiplier code: %x\n", vidctl.VID);
+		printf ("FIDC multiplier code: %x\n", vidctl.FIDC);
+		printf ("VIDC multiplier code: %x\n", vidctl.VIDC);
+		printf ("FIDCHGRATIO: %x\n", vidctl.FIDCHGRATIO);
+		printf ("SGTC: %x\n", vidctl.SGTC);
 	}
 }
 

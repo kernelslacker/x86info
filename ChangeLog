@@ -1,6 +1,7 @@
 2002-11-20  Dave Jones <davej@codemonkey.org.uk>
 
 	* x86info.c: Rename --powernow to --pm
+	* powernow.h: Define bitfields the right way around
 
 2002-11-19  Dave Jones <davej@codemonkey.org.uk>
 
