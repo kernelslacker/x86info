@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.9 2001/09/14 15:11:39 davej Exp $
+ *  $Id: identify.c,v 1.10 2001/10/20 18:51:25 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -166,6 +166,9 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 	/* Decode longhaul info. */
 	if (cpu->family != 6)	/* only interested in VIA Cyrix */
 		return;
+
+	printf ("FCR: ");
+	dumpmsr (cpu->number, 0x1107, 32);
 
 	printf ("Longhaul v");
 	if (cpu->model==6 || (cpu->model==7 && cpu->stepping==0))
