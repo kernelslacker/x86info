@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	  $Id: mptable.c,v 1.5 2001/12/11 17:03:45 davej Exp $
+ *	  $Id: mptable.c,v 1.6 2002/04/29 00:27:28 davej Exp $
  */
 
 #define MP_SIG				  0x5f504d5f	  /* _MP_ */
@@ -176,7 +176,8 @@ int issmp(int *numcpu, int verb)
 	if (! (defaultConfig = mpfps.mpfb1))
 		MPConfigTableHeader(mpfps.pap);
 
-	if(numcpu) *numcpu=ncpu;
+	if(numcpu)
+		*numcpu=ncpu;
 	return SMP_YES;
 }
 
@@ -191,7 +192,7 @@ apic_probe(vm_offset_t* paddr, int* where)
 	 * c rewrite of apic_probe() by Jack F. Vogel
 	 */
 
-unsigned int x;
+	unsigned int x;
 	u_short segment;
 	vm_offset_t target;
 	u_int buffer[ BIOS_SIZE / sizeof(int) ];
@@ -216,7 +217,7 @@ unsigned int x;
 	/* read CMOS for real top of mem */
 	seekEntry((vm_offset_t)TOPOFMEM_POINTER);
 	readEntry(&segment, 2);
-	--segment;										  /* less ONE_KBYTE */
+	--segment;						  /* less ONE_KBYTE */
 	target = segment * 1024;
 	seekEntry(target);
 	readEntry(buffer, ONE_KBYTE);
@@ -330,12 +331,15 @@ static int MPConfigTableHeader(void* pap)
 	nintr = 0;
 
 	/* process all the CPUs */
-	if(verbose) printf("# Processors:\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
+	if (verbose)
+		printf("# Processors:\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
 	for (t = totalSize, c = count; c; c--) {
 		if (readType() == 0)
 			processorEntry();
 		totalSize -= basetableEntryTypes[ 0 ].length;
 	}
+	if (verbose)
+		printf ("\n");
 	
 	return SMP_YES;
 }

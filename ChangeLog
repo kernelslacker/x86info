@@ -1,3 +1,7 @@
+2002-05-29  Dave Jones <davej@suse.de>
+
+	* mptable.c, dumpregs.c: minor formatting changes.
+
 2002-05-28	Dave Jones <davej@suse.de>
 
 	* IDT/identify.c: Add recognition of Ezra-T

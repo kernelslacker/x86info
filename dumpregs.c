@@ -1,5 +1,5 @@
 /*
- *  $Id: dumpregs.c,v 1.3 2001/12/10 23:51:58 davej Exp $
+ *  $Id: dumpregs.c,v 1.4 2002/04/29 00:27:28 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -22,6 +22,7 @@ void dumpregs (int cpunum)
 		cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
 		printf ("eax in: 0x%08x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
 	}
+	printf ("\n");
 }
 
 void showvendor (int cpunum)
