@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.18 2001/12/10 23:51:58 davej Exp $
+ *  $Id: identify.c,v 1.19 2001/12/11 01:03:20 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -118,10 +118,6 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx, tmp=0;
 
-	printf ("Family: %d Model: %d Stepping: %d [%s]\n",
-		cpu->family, cpu->model, cpu->stepping, cpu->name);
-	get_model_name (maxei, cpu);
-
 	if (maxei != 0 && show_registers) {
 		/* Dump extended info in raw hex */
 		for (i = 0x80000000; i <= maxei; i++) {
@@ -129,7 +125,13 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 			printf ("eax in: 0x%x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx,
 				edx);
 		}
+		printf ("\n");
 	}
+
+	printf ("Family: %d Model: %d Stepping: %d [%s]\n",
+		cpu->family, cpu->model, cpu->stepping, cpu->name);
+	get_model_name (maxei, cpu);
+
 
 	/* Check for presence of extended info */
 	if (maxei == 0)
