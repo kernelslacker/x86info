@@ -1,3 +1,5 @@
+	Released as v1.3
+
 2001-05-07 Dave Jones <davej@suse.de>
 
 	* cpuid-intel.c: Put values into the cpu struct.
@@ -17,6 +19,7 @@
 	  Change bzero -> memset.
 
 2001-04-15 Constantine Gavrilov <const-g@optibase.com>
+	Released as v1.2
 
 	* x86info.c: SMP boxes are numbered 0..n -> 1..n
 
@@ -25,6 +28,7 @@
 	* *.c: Remove gcc-3.0 warnings.
 
 2001-03-17 Dave Jones <davej@suse.de>
+	Released as v1.1
 
 	* rdmsr.c: Print failure if rdmsr fails.
 	* cpuid-amd.c: Check for root before trying to dump MSRs.
@@ -39,6 +43,6 @@
 
 2001-03-12 Dave Jones <davej@suse.de>
 
-	Initial Release.
+	Initial 1.0 Release.
 	Basic functionality added.
 
