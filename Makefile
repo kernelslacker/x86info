@@ -11,6 +11,7 @@ OBJS =\
 	AMD/bluesmoke.o\
 	AMD/MSR-Athlon.o\
 	AMD/MSR-K6.o\
+	AMD/powernow.o\
 \
 	Cyrix/identify.o\
 \

@@ -4,6 +4,8 @@
 	* Intel/identify.c: F27 isn't a Xeon.
 	  Change "P4 Xeon" to "Pentium 4 Xeon"
 	* connector.c: socket603 for Pentium 4 Xeons.
+	* AMD/powernow.c: forked from AMD/identify.c
+	* x86info.c: Add --powernow option
 
 2002-11-12  Dave Jones <davej@codemonkey.org.uk>
 

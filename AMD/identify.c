@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.36 2002/11/19 16:08:36 davej Exp $
+ *  $Id: identify.c,v 1.37 2002/11/19 19:16:01 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -342,7 +342,10 @@ void Identify_AMD(struct cpudata *cpu)
 
 void display_AMD_info(struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	printf("Family: %d Model: %d Stepping: %d\n",
+	       cpu->family, cpu->model, cpu->stepping);
+	printf ("CPU Model : %s\n", cpu->name);
+	get_model_name(cpu);
 
 	decode_feature_flags(cpu);
 
@@ -359,24 +362,7 @@ void display_AMD_info(struct cpudata *cpu)
 	if (show_cacheinfo)
 		decode_AMD_cacheinfo(cpu);
 
-	printf("Family: %d Model: %d Stepping: %d\n",
-	       cpu->family, cpu->model, cpu->stepping);
-	printf ("CPU Model : %s\n", cpu->name);
-	get_model_name(cpu);
-
-	if (cpu->maxei >= 0x80000007) {
-		cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
-		printf("PowerNOW! Technology information\n");
-		printf("Available features:");
-		if (edx & 1 << 0)
-			printf("\n\tTemperature sensing diode present.");
-		if (edx & 1 << 1)
-			printf("\n\tBus divisor control");
-		if (edx & 1 << 2)
-			printf("\n\tVoltage ID control\n");
-		if (!(edx & (1 << 0 | 1 << 1 | 1 << 2)))
-			printf(" None");
-		printf("\n\n");
-	}
+	if (show_powernow)
+		decode_powernow(cpu);
 }
 

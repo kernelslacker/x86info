@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.67 2002/11/12 22:28:40 davej Exp $
+ *  $Id: x86info.c,v 1.68 2002/11/19 19:15:59 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -27,20 +27,21 @@
 
 #include "x86info.h"
 
-int show_msr=0;
-int show_registers=0;
-int show_flags=0;
-int verbose=0;
-int show_eblcr=0;
-int show_cacheinfo=0;
 int show_bluesmoke=0;
-int show_mtrr=0;
+int show_cacheinfo=0;
 int show_connector=0;
+int show_eblcr=0;
+int show_flags=0;
+int show_msr=0;
+int show_mtrr=0;
+int show_powernow=0;
+int show_registers=0;
 int show_urls=0;
 
 static int show_mptable=0;
 static int show_MHz=0;
 
+int verbose=0;
 int silent = 0;
 int used_UP = 0;
 int user_is_root = 1;
@@ -61,6 +62,7 @@ void usage (char *programname)
 -m,   --msr\n\
       --mult\n\
       --mtrr\n\
+      --powernow\n\
 -r,   --registers\n\
 -s,   --show-bluesmoke\n\
 -u,   --urls\n\
@@ -119,6 +121,9 @@ static void parse_command_line (int argc, char **argv)
 			need_root = 1;
 			show_mtrr = 1;
 		}
+
+		if (!strcmp(arg, "--registers"))
+			show_powernow = 1;
 
 		if ((!strcmp(arg, "-r") || !strcmp(arg, "--registers")))
 			show_registers = 1;
