@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.16 2002/03/14 16:45:12 davej Exp $
+ *  $Id: features.c,v 1.17 2002/06/07 21:46:17 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -17,7 +17,7 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 		"fpu", "vme", "de", "pse", "tsc", "msr", "pae", "mce",
 		"cx8", "apic", NULL, "sep", "mtrr", "pge", "mca", "cmov",
 		"pat", "pse36", "psn", "clflsh", NULL, "dtes", "acpi", "mmx",
-		"fxsr", "xmm", "xmm2", "selfsnoop", "ht", "acc", "ia64", "pbe"
+		"fxsr", "sse", "sse2", "selfsnoop", "ht", "acc", "ia64", "pbe"
 	};
 	const char *amd_cap_flags[] = {
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,

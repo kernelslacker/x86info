@@ -1,3 +1,7 @@
+2002-06-07 Dave Jones <davej@suse.de>
+
+	* features.c: s/xmm/sse/
+
 2002-06-06 Dave Jones <davej@suse.de>
 
 	* connector.c: decode the type of socket the CPU is in.
