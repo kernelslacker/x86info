@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.9 2001/12/10 22:53:32 davej Exp $
+ *  $Id: features.c,v 1.10 2001/12/10 23:03:12 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -15,27 +15,27 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 {
 	const char *generic_cap_flags[] = {
 		"fpu", "vme", "de", "pse", "tsc", "msr", "pae", "mce",
-		"cx8", "apic", "10", "sep", "mtrr", "pge", "mca", "cmov",
-		"pat", "pse36", "psn", "clflsh", "20", "dtes", "acpi", "mmx",
-		"fxsr", "xmm", "xmm2", "selfsnoop", "ht", "acc", "ia64", "31"
+		"cx8", "apic", NULL, "sep", "mtrr", "pge", "mca", "cmov",
+		"pat", "pse36", "psn", "clflsh", NULL, "dtes", "acpi", "mmx",
+		"fxsr", "xmm", "xmm2", "selfsnoop", "ht", "acc", "ia64", NULL
 	};
 	const char *amd_cap_flags[] = {
-		"0", "1", "2", "3", "4", "5", "6", "7",
-		"8", "9", "10", "syscall", "12", "13", "14", "15",
-		"16", "17", "18", "19", "20", "21", "mmxext", "23",
-		"24", "25", "26", "27", "28", "lm", "3dnow!ext", "3dnow!"
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, "syscall", NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, "mmxext", NULL,
+		NULL, NULL, NULL, NULL, NULL, "lm", "3dnowext", "3dnow"
 	};
 	const char *centaur_cap_flags[] = {
-		"0", "1", "2", "3", "4", "5", "6", "7",
-		"8", "9", "10", "11", "12", "13", "14", "15",
-		"16", "17", "18", "19", "20", "21", "22", "23",
-		"24", "25", "26", "27", "28", "lm", "3dnow!ext", "3dnow!"
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, "mmxext", NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, "3dnowext", "3dnow"
 	};
 	const char *transmeta_cap_flags[] = {
-		"recovery", "longrun", "2", "lrti", "4", "5", "6", "7",
-		"8", "9", "10", "11", "12", "13", "14", "15",
-		"16", "17", "18", "19", "20", "21", "22", "23",
-		"24", "25", "26", "27", "28", "29", "30", "31"
+		"recovery", "longrun", NULL, "lrti", NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};
 
 	int i;
@@ -56,7 +56,7 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 		case VENDOR_AMD:
 			printf ("Extended feature flags:\n");
 			for (i = 0; i < 32; i++) {
-				if (eflags & (1 << i))
+				if (eflags & (1 << i) && amd_cap_flags[i])
 					printf (" %s", amd_cap_flags[i]);
 			}
 			break;
@@ -64,7 +64,7 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 		case VENDOR_CENTAUR:
 			printf ("Extended feature flags:\n");
 			for (i = 0; i < 32; i++) {
-				if (eflags & (1 << i))
+				if (eflags & (1 << i) && centaur_cap_flags[i])
 					printf (" %s", centaur_cap_flags[i]);
 			}
 			break;
@@ -72,7 +72,7 @@ void decode_feature_flags (struct cpudata *cpu, int flags, int eflags)
 		case VENDOR_TRANSMETA:
 			printf ("Extended feature flags:\n");
 			for (i = 0; i < 32; i++) {
-				if (eflags & (1 << i))
+				if (eflags & (1 << i) && transmeta_cap_flags[i])
 					printf (" %s", transmeta_cap_flags[i]);
 			}
 			break;
