@@ -4,6 +4,7 @@
 	* cpuid_UP.S: Fix for win32
 	* mptable.c: Fix for win32
 	* x86info.c: Typo.
+	* Intel/identify.c: Make Celeron coppermines show chip stepping too.
 
 2001-12-11	Dave Jones <davej@suse.de>
 
