@@ -1,6 +1,7 @@
 /*
  * Feature flag decoding.
  * Modified from a routine in Linux kernel 2.4.0test3 by Jauder Ho <jauderho@carumba.com>
+ * FIXME: Update to latest code from 2.4 kernel.
  */
 
 #include <stdio.h>
