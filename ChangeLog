@@ -1,3 +1,11 @@
+2001-08-14 Dave Jones <davej@suse.de>
+
+	* cpuid-rise.c:
+	* cpuid-intel.c:
+	  Remove duplicated feature flag stuff, use the common stuff.
+	* cpuid-amd.c:
+	  Detect PowerNOW! thermistor.
+
 2001-08-10 Dave Jones <davej@suse.de>
 
 	* cpuid-amd.c:

@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-rise.c,v 1.6 2001/08/10 11:34:57 davej Exp $
+ *  $Id: cpuid-rise.c,v 1.7 2001/08/14 18:00:32 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -76,40 +76,6 @@ void display_Rise_info(unsigned int maxi, unsigned int maxei, struct cpudata *cp
 {
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx;
-	static char *x86_cap_flags[] = {
-		"FPU    Floating Point Unit",
-		"VME    Virtual 8086 Mode Enhancements",
-		"DE     Debugging Extensions",
-		"PSE    Page Size Extensions",
-		"TSC    Time Stamp Counter",
-		"MSR    Model Specific Registers",
-		"PAE    Physical Address Extension",
-		"MCE    Machine Check Exception",
-		"CX8    COMPXCHG8B Instruction",
-		"APIC   On-chip Advanced Programmable Interrupt Controller present and enabled",
-		"10     Reserved",
-		"SEP    Fast System Call",
-		"MTRR   Memory Type Range Registers",
-		"PGE    PTE Global Flag",
-		"MCA    Machine Check Architecture",
-		"CMOV   Conditional Move and Compare Instructions",
-		"FGPAT  Page Attribute Table",
-		"PSE-36 36-bit Page Size Extension",
-		"PN     Processor Serial Number present and enabled",
-		"19     reserved",
-		"20     reserved",
-		"21     reserved",
-		"22     reserved",
-		"MMX    MMX instruction set",
-		"FXSR   Fast FP/MMX Streaming SIMD Extensions save/restore",
-		"XMM    Streaming SIMD Extensions instruction set",
-		"26     reserved",
-		"27     reserved",
-		"28     reserved",
-		"29     reserved",
-		"30     reserved",
-		"31     reserved"
-	};
 
 	if (maxi != 0 && show_registers) {
 		/* Dump extended info in raw hex */
@@ -129,13 +95,8 @@ void display_Rise_info(unsigned int maxi, unsigned int maxei, struct cpudata *cp
 		printf ("\n");
 	}
 
-	if (show_flags) {
-		printf ("Feature flags %08lx:\n", edx);
-		for (i = 0; i < 32; i++) {
-			if (edx  & (1 << i))
-				printf ("%s\n", x86_cap_flags[i]);
-		}
-	}
+	cpuid (cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
+	decode_feature_flags (cpu, edx);
 
 	if (maxei >= 0x80000001) {
 		cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
