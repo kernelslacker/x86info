@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.17 2001/05/21 18:58:01 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.18 2001/06/16 01:46:07 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -107,6 +107,7 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned long maxei, eax, ebx, ecx, edx;
+	unsigned long tmp;
 
 	cpu->vendor = VENDOR_AMD;
 
@@ -270,7 +271,9 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 	}
 
 	if (maxei >= 0x80000001) {
+		cpuid (cpunum, 0x00000001, &eax, &ebx, &ecx, &tmp);
 		cpuid (cpunum, 0x80000001, &eax, &ebx, &ecx, &edx);
+		edx |= tmp;
 		decode_feature_flags (cpu, edx);
 	}
 

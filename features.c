@@ -1,5 +1,5 @@
 /*
- *  $Id: features.c,v 1.5 2001/02/26 16:44:27 davej Exp $
+ *  $Id: features.c,v 1.6 2001/06/16 01:46:07 davej Exp $
  *  This file is part of x86info
  *  (C) 2001 Dave Jones.
  *
@@ -55,6 +55,8 @@ void decode_feature_flags (struct cpudata *cpu, int flags)
 		cap_flags[16] = "pat";
 		cap_flags[22] = "mmxext";
 		cap_flags[24] = "fxsr";
+		if (cpu->family >=6 && cpu->model >= 6)
+			cap_flags[25] = "sse";
 		cap_flags[30] = "3dnowext";
 		cap_flags[31] = "3dnow";
 		break;
@@ -63,7 +65,11 @@ void decode_feature_flags (struct cpudata *cpu, int flags)
 		cap_flags[16] = "pat";
 		cap_flags[18] = "pn";
 		cap_flags[24] = "fxsr";
-		cap_flags[25] = "xmm";
+		cap_flags[25] = "sse";
+		cap_flags[26] = "sse2";
+		cap_flags[27] = "ss";
+		cap_flags[29] = "tm";
+		cap_flags[30] = "ia64";
 		break;
 
 	case VENDOR_CENTAUR:
