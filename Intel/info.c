@@ -1,5 +1,5 @@
 /*
- *  $Id: info.c,v 1.5 2003/06/08 22:19:53 davej Exp $
+ *  $Id: info.c,v 1.6 2003/06/09 21:35:00 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -39,7 +39,8 @@ void display_Intel_info (struct cpudata *cpu)
 			dump_centrino_MSRs(cpu);
 	}
 
-	show_Intel_caches(cpu);
+	//show_Intel_caches(cpu);
+	decode_Intel_caches(cpu, 1);
 
 	if (cpu->maxi >= 3) {
 		/* Pentium III CPU serial number */

@@ -1,3 +1,10 @@
+2003-6-8 Dave Jones <davej@codemonkey.org.uk>
+
+	* Intel/Intel.h, Intel/cachesize.c, Intel/identify.c, Intel/info.c:
+	  Make the cachesize output look like it did in previous releases.
+	  This is quite ugly, but is still a step forward to how I want it
+	  to look one day.
+
 2003-6-8 Bryan O'Sullivan <bos@serpentine.com>
 
 	* AMD/identify.c: Opteron is socket 940 not 754

@@ -1,5 +1,5 @@
 /*
- *  $Id: cachesize.c,v 1.8 2003/03/28 11:51:06 davej Exp $
+ *  $Id: cachesize.c,v 1.9 2003/06/09 21:34:59 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -88,7 +88,7 @@ static struct _cache_table cache_table[] =
 
 /* Decode Intel TLB and cache info descriptors */
 //TODO : Errata workaround. http://www.sandpile.org/post/msgs/20002736.htm
-static void decode_Intel_cache (int des, struct cpudata *cpu)
+static void decode_Intel_cache (int des, struct cpudata *cpu, int output)
 {
 	int k=0;
 
@@ -100,18 +100,27 @@ static void decode_Intel_cache (int des, struct cpudata *cpu)
 			switch (cache_table[k].type) {
 				case LVL_1_INST:
 					cpu->cachesize_L1_I += cache_table[k].size;
+					if (output)
+						printf ("%s\n", cache_table[k].string);
 					break;
 				case LVL_1_DATA:
 					cpu->cachesize_L1_D += cache_table[k].size;
+					if (output)
+						printf ("%s\n", cache_table[k].string);
 					break;
 				case LVL_2:
 					cpu->cachesize_L2 += cache_table[k].size;
+					if (output)
+						printf ("%s\n", cache_table[k].string);
 					break;
 				case LVL_3:
 					cpu->cachesize_L3 += cache_table[k].size;
+						printf ("%s\n", cache_table[k].string);
 					break;
 				case LVL_TRACE:
 					cpu->cachesize_trace += cache_table[k].size;
+					if (output)
+						printf ("%s\n", cache_table[k].string);
 					break;
 			}
 		}
@@ -120,7 +129,7 @@ static void decode_Intel_cache (int des, struct cpudata *cpu)
 }
 
 
-void decode_Intel_caches (struct cpudata *cpu)
+void decode_Intel_caches (struct cpudata *cpu, int output)
 {
 	int i, j, n;
 	long regs[4];
@@ -146,10 +155,11 @@ void decode_Intel_caches (struct cpudata *cpu)
 		/* Byte 0 is level count, not a descriptor */
 		for (j=1; j<16; j++)
 			if (dp[j]!=0)
-				decode_Intel_cache (dp[j], cpu);
+				decode_Intel_cache (dp[j], cpu, output);
 	}
 }
 
+/*
 void show_Intel_caches(struct cpudata *cpu)
 {
 	if (!show_cacheinfo)
@@ -167,4 +177,5 @@ void show_Intel_caches(struct cpudata *cpu)
 		printf ("Trace cache: %d\n", cpu->cachesize_trace);
 	printf ("\n");
 }
+*/
 
