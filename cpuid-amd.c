@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-amd.c,v 1.20 2001/07/10 16:43:06 davej Exp $
+ *  $Id: cpuid-amd.c,v 1.21 2001/08/03 16:40:21 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -137,6 +137,9 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 			case 9:
 				printf ("Am486DX4-WB / Am5x86-WB");
 				break;
+			case 10:
+				printf ("Elan SC400");
+				break;
 			case 0xe:
 				printf ("Am5x86-WT");
 				break;
@@ -267,6 +270,7 @@ void doamd (int cpunum, unsigned int maxi, struct cpudata *cpu)
 			printf ("]\n");
 			if (show_msr)
 				dump_athlon_MSR(cpunum);
+
 			if (show_bluesmoke)
 				decode_bluesmoke(cpunum);
 			break;
