@@ -1,3 +1,7 @@
+2004-10-6 Dominik Brodowski <linux@dominikbrodowski.de>
+
+	* Intel/info.c: report 1 instead of 0 logical CPUs.
+
 2004-8-20 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/identify.c: Add 6d6 Pentium-M recognition.
