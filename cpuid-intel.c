@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.10 2001/04/20 04:34:44 davej Exp $
+ *  $Id: cpuid-intel.c,v 1.11 2001/05/07 21:10:50 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -100,7 +100,7 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 {
 	int i;
 	unsigned long eax, ebx, ecx, edx;
-	int stepping, model, family, type, brand, reserved, ntlb;
+	int reserved, ntlb;
 
 	static char *x86_cap_flags[] = {
 		"FPU    Floating Point Unit",
@@ -142,19 +142,19 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 	if (maxi >= 1) {
 		/* Family/model/type etc */
 		cpuid (cpunum, 1, &eax, &ebx, &ecx, &edx);
-		stepping = eax & 0xf;
-		model = (eax >> 4) & 0xf;
-		family = (eax >> 8) & 0xf;
-		type = (eax >> 12) & 0x3;
-		brand = (ebx & 0xf);
+		cpu->stepping = eax & 0xf;
+		cpu->model = (eax >> 4) & 0xf;
+		cpu->family = (eax >> 8) & 0xf;
+		cpu->type = (eax >> 12) & 0x3;
+		cpu->brand = (ebx & 0xf);
 		reserved = eax >> 14;
 
-		printf ("Family: %d Model: %d Type %d [", family, model, type);
-		switch (family) {
+		printf ("Family: %d Model: %d Type %d [", cpu->family, cpu->model, cpu->type);
+		switch (cpu->family) {
 		case 4:
 			/* Family 4 */
 			printf ("i486 ");
-			switch (model) {
+			switch (cpu->model) {
 			case 0:
 				printf ("DX-25/33");
 				break;
@@ -191,7 +191,7 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 		case 5:
 			/* Family 5 */
 			printf ("Pentium ");
-			switch (model) {
+			switch (cpu->model) {
 			case 0:
 				printf ("A-step");
 				break;
@@ -218,7 +218,7 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 
 		case 6:
 			/* Family 6 */
-			switch (model) {
+			switch (cpu->model) {
 			case 0:
 				printf ("A-Step");
 				break;
@@ -247,7 +247,7 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 				printf ("Celeron / Pentium III (Coppermine)");
 				break;
 			case 0xA:
-				switch (brand) {
+				switch (cpu->brand) {
 				case 0:
 					printf ("Pentium II Deschutes");
 					break;
@@ -293,7 +293,7 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 			break;
 		}
 
-		switch (type) {
+		switch (cpu->type) {
 		case 0:
 			printf (" Original OEM");
 			break;
@@ -308,7 +308,7 @@ void dointel (int cpunum, unsigned int maxi, struct cpudata *cpu)
 			break;
 		}
 		printf ("]\n");
-		printf ("Stepping: %d\n", stepping);
+		printf ("Stepping: %d\n", cpu->stepping);
 
 		printf ("Reserved: %d\n\n", reserved);
 

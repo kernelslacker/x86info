@@ -14,6 +14,8 @@ struct cpudata {
 	int family;
 	int model;
 	int stepping;
+	int type;
+	int brand;
 	int cachesize_L1;
 	int cachesize_L2;
 };
