@@ -16,6 +16,8 @@ eax in: 0x80000006, eax = 00000000 ebx = 41004100 ecx = 01008140 edx = 00000000
 eax in: 0x80000007, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000007
 eax in: 0x80000008, eax = 00002022 ebx = 00000000 ecx = 00000000 edx = 00000000
 
+Family: 6 Model: 8 Stepping: 0
+CPU Model : Mobile Athlon XP (Thoroughbred)[A0]
 Feature flags:
 	Onboard FPU
 	Virtual Mode Extensions
@@ -40,7 +42,6 @@ Feature flags:
 
 Extended feature flags:
  syscall mp mmxext 3dnowext 3dnow
-				31       23       15       7 
 MSR: 0x0000002a=0x00000000 : 00000000 00000000 00000000 00000000
 MSR: 0xc0000080=0x00000000 : 00000000 00000000 00000000 00000000
 MSR: 0xc0010010=0x00160602 : 00000000 00010110 00000110 00000010
@@ -91,14 +92,14 @@ MC0MISC:   00000000 00000000 00000000 00000000
 Bank: 1 (0x404)
 MC1CTL:    11111111 11111111 11111111 11111111
 MC1STATUS: 00000000 00000000 00000000 00000000
-MC1ADDR:   00000000 00001000 00000000 01000000
+MC1ADDR:   00000000 01000000 10000000 00000000
 MC1MISC:   00000000 00000000 00000000 00000000
 
 Bank: 2 (0x408)
 MC2CTL:    00000000 00000000 00000111 11111111
 MC2STATUS: 00000000 00000000 00000000 00000000
-MC2ADDR:   11101111 11111001 11111101 10001111
-MC2MISC:   11101111 11111001 11111101 10001111
+MC2ADDR:   11111111 11111011 11110111 10001111
+MC2MISC:   11111111 11111011 11110111 10001111
 
 Bank: 3 (0x40c)
 MC3CTL:    00000000 00000000 00000000 00000111
@@ -118,14 +119,126 @@ L2 (on CPU) cache:
 	Size: 256Kb	8-way associative. 
 	lines per tag=1	line size=64 bytes.
 
-Family: 6 Model: 8 Stepping: 0
-CPU Model : Mobile Athlon XP (Thoroughbred)[A0]
 PowerNOW! Technology information
 Available features:
 	Temperature sensing diode present.
 	Bus divisor control
 	Voltage ID control
 
+MSR: 0xc0010041=0x0013090f : 00000000 00000000 00000000 00000000
+           00000000 00010011 00001001 00001111
+MSR: 0xc0010042=0x90909000f060f : 00000000 00001001 00001001 00001001
+           00000000 00001111 00000110 00001111
+
+FID changes won't happen
+VID changes won't happen
+Voltage ID codes: Maximum=2.000V Startup=2.000V Currently=1.800V
+Frequency ID codes: Maximum=5.5x Startup=3.0x Currently=15.0x
+Decoding BIOS PST tables
+Found PSB header at 0x40158800
+Table version: 12
+Flags: 0 (Mobile voltage regulator)
+Settling Time: 100
+Has 31 P states. (Only dumping ones relevant to this CPU).
+PST:19 (@0x40158944)
+cpuid: 780	fsb: 133	maxFID: 14	startvid: 11
+num of p states in this table: 5
+FID: 12	VID: 13
+FID: 4	VID: 13
+FID: 6	VID: 13
+FID: 8	VID: 11
+FID: e	VID: b
+
+PST:20 (@0x40158956)
+cpuid: 780	fsb: 133	maxFID: 15	startvid: 11
+num of p states in this table: 5
+FID: 12	VID: 13
+FID: 4	VID: 13
+FID: 6	VID: 13
+FID: a	VID: 11
+FID: f	VID: b
+
+PST:21 (@0x40158968)
+cpuid: 780	fsb: 133	maxFID: 0	startvid: 11
+num of p states in this table: 5
+FID: 12	VID: 13
+FID: 4	VID: 13
+FID: 6	VID: 13
+FID: c	VID: e
+FID: 0	VID: b
+
+PST:22 (@0x4015897a)
+cpuid: 780	fsb: 133	maxFID: 2	startvid: 12
+num of p states in this table: 5
+FID: 12	VID: 13
+FID: 4	VID: 13
+FID: 6	VID: 13
+FID: c	VID: 13
+FID: 2	VID: c
+
+PST:23 (@0x4015898c)
+cpuid: 780	fsb: 133	maxFID: 12	startvid: 11
+num of p states in this table: 5
+FID: 12	VID: 13
+FID: 4	VID: 13
+FID: 6	VID: 13
+FID: 8	VID: e
+FID: c	VID: b
+
+PST:24 (@0x4015899e)
+cpuid: 780	fsb: 133	maxFID: 1	startvid: 9
+num of p states in this table: 5
+FID: 12	VID: 13
+FID: 4	VID: 13
+FID: 6	VID: 13
+FID: c	VID: d
+FID: 1	VID: 9
+
+PST:25 (@0x401589b0)
+cpuid: 780	fsb: 133	maxFID: 1	startvid: 12
+num of p states in this table: 5
+FID: 12	VID: 13
+FID: 4	VID: 13
+FID: 6	VID: 13
+FID: c	VID: 13
+FID: 1	VID: c
+
+PST:26 (@0x401589c2)
+cpuid: 780	fsb: 133	maxFID: 15	startvid: 9
+num of p states in this table: 5
+FID: 12	VID: 13
+FID: 4	VID: 13
+FID: 6	VID: 13
+FID: a	VID: d
+FID: f	VID: 9
+
+PST:27 (@0x401589d4)
+cpuid: 780	fsb: 133	maxFID: 0	startvid: 9
+num of p states in this table: 5
+FID: 12	VID: 13
+FID: 4	VID: 13
+FID: 6	VID: 13
+FID: c	VID: c
+FID: 0	VID: 9
+
+PST:28 (@0x401589e6)
+cpuid: 780	fsb: 133	maxFID: 2	startvid: 10
+num of p states in this table: 5
+FID: 12	VID: 13
+FID: 4	VID: 13
+FID: 6	VID: 13
+FID: c	VID: 11
+FID: 2	VID: a
+
+PST:29 (@0x401589f8)
+cpuid: 780	fsb: 133	maxFID: 3	startvid: 10
+num of p states in this table: 6
+FID: 12	VID: 13
+FID: 4	VID: 13
+FID: 6	VID: 13
+FID: a	VID: 13
+FID: e	VID: e
+FID: 3	VID: a
 
 Connector type: Socket A (462 Pin PGA)
 
@@ -140,14 +253,14 @@ MTRRphysBase2 (0x204): 0x000000000c000006
 MTRRphysMask2 (0x205): 0x0000000ffe000800
 MTRRphysBase3 (0x206): 0x000000000e000006
 MTRRphysMask3 (0x207): 0x0000000fff000800
-MTRRphysBase4 (0x208): 0x0000000000000000
-MTRRphysMask4 (0x209): 0x0000000000000000
-MTRRphysBase5 (0x20a): 0x0000000000000000
-MTRRphysMask5 (0x20b): 0x0000000000000000
-MTRRphysBase6 (0x20c): 0x0000000000000000
-MTRRphysMask6 (0x20d): 0x0000000000000000
-MTRRphysBase7 (0x20e): 0x0000000000000000
-MTRRphysMask7 (0x20f): 0x0000000000000000
+MTRRphysBase4 (0x208): 0x00000000f6fe0001
+MTRRphysMask4 (0x209): 0x0000000fffff0800
+MTRRphysBase5 (0x20a): 0x00000000f6fc0001
+MTRRphysMask5 (0x20b): 0x0000000ffffe0800
+MTRRphysBase6 (0x20c): 0x00000000f6f80001
+MTRRphysMask6 (0x20d): 0x0000000ffffc0800
+MTRRphysBase7 (0x20e): 0x00000000f6f00001
+MTRRphysMask7 (0x20f): 0x0000000ffff80800
 MTRRfix64K_00000 (0x250): 0x0606060606060606
 MTRRfix16K_80000 (0x258): 0x0606060606060606
 MTRRfix16K_A0000 (0x259): 0x0000000000000000
@@ -161,5 +274,7 @@ MTRRfix4K_F8000 0x26f: 0x0505050505050505
 MTRRdefType (0x2ff): 0x0000000000000c00
 
 
-1391.34 MHz processor (estimate).
+1391.35 MHz processor (estimate).
 
+cpuid took 2 cycles
+int 0x80 took 269 cycles
