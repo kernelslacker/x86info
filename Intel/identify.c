@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.6 2001/12/09 16:35:51 davej Exp $
+ *  $Id: identify.c,v 1.7 2001/12/10 17:35:08 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -12,6 +12,7 @@
 #include "../x86info.h"
 #include "Intel.h"
 
+extern int show_eblcr;
 extern int show_cacheinfo;
 extern int show_flags;
 extern int show_bluesmoke;
@@ -415,10 +416,12 @@ void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 		printf ("-%04lX\n", ecx & 0xffff);
 	}
 
-	if (cpu->family == 6 && cpu->model >= 3) {
-		unsigned long long eblcr;
-		read_msr (cpu->number, 0x2A, &eblcr);
-		interpret_eblcr(eblcr);
+	if (show_eblcr) {
+		if (cpu->family == 6 && cpu->model >= 3) {
+			unsigned long long eblcr;
+			read_msr (cpu->number, 0x2A, &eblcr);
+			interpret_eblcr(eblcr);
+		}
 	}
 
 	/* FIXME: Bit test for MCA here!*/
