@@ -1,3 +1,7 @@
+2003-3-11 Dave Jones <davej@codemonkey.org.uk>
+
+	* AMD/powernow.c: Decode extra bits present in x86-64
+
 2003-3-7 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/identify.c: Recognise D-1 stepping P4s.

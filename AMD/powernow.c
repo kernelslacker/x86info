@@ -1,5 +1,5 @@
 /*
- *  $Id: powernow.c,v 1.9 2003/01/20 18:51:04 davej Exp $
+ *  $Id: powernow.c,v 1.10 2003/03/11 13:57:39 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -43,17 +43,30 @@ void decode_powernow(struct cpudata *cpu)
 	cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
 	printf("PowerNOW! Technology information\n");
 	printf("Available features:");
-	if (edx & 1 << 0)
+
+	if (edx & (1<<0))
 		printf("\n\tTemperature sensing diode present.");
-	if (edx & 1 << 1) {
+
+	if (edx & (1<<1)) {
 		printf("\n\tBus divisor control");
 		can_scale_bus=1;
 	}
-	if (edx & 1 << 2) {
+
+	if (edx & (1<<2)) {
 		printf("\n\tVoltage ID control\n");
 		can_scale_vid=1;
 	}
-	if (!(edx & (1 << 0 | 1 << 1 | 1 << 2)))
+
+	if (edx & (1<<3))
+		printf ("\n\tThermal Trip\n");
+
+	if (edx & (1<<4))
+		printf ("\n\tThermal Monitoring\n");
+
+	if (edx & (1<<5))
+		printf ("\n\tSoftware Thermal Control\n");
+
+	if (!(edx & (1<<0 | 1<<1 | 1<<2 | 1<<3 | 1<<4 | 1<<5)))
 		printf(" None\n");
 	printf("\n");
 
