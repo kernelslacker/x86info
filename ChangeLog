@@ -1,3 +1,9 @@
+2001-12-10	Dave <dave@iol.cz>
+
+	* Cyrix/identify.c: Fix misplaced { } in Cyrix detection.
+	* Intel/eblcr.c: added 'const' to buscode[][] and mult[][] in order to be
+	  placed into .rodata section.
+
 2001-12-10	Dave Jones <davej@suse.de>
 
 	* mptable.[c|h]: Add routines to parse MP tables.
