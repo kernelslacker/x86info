@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.76 2003/06/09 22:04:35 davej Exp $
+ *  $Id: x86info.c,v 1.77 2003/06/09 22:07:11 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -84,7 +84,7 @@ static void parse_command_line (int argc, char **argv)
 
 	for (argp = argv+1; argp <= argv + argc && (arg = *argp); argp++) {
 		if ((!strcmp(arg, "-a") || !strcmp(arg, "--all"))) {
-			show_bench = 1;
+//			show_bench = 1;
 			show_bios = 1;
 			show_bluesmoke = 1;
 			show_bugs = 1;
@@ -103,8 +103,8 @@ static void parse_command_line (int argc, char **argv)
 			need_root = 1;
 		}
 
-		if (!strcmp(arg, "--bench"))
-			show_bench = 1;
+//		if (!strcmp(arg, "--bench"))
+//			show_bench = 1;
 
 		if (!strcmp(arg, "--bios")) {
 			need_root = 1;

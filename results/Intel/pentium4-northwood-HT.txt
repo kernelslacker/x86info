@@ -1,11 +1,13 @@
-x86info v1.11.  Dave Jones 2001, 2002
+x86info v1.12.  Dave Jones 2001-2003
 Feedback to <davej@suse.de>.
 
 Found 2 CPUs
-# Processors:	APIC ID	Version	State		Family	Model	Step	Flags
-#		 0	 0x14	 BSP, usable	 15	 2	 7	 0xbfebfbff
-#		 1	 0x14	 AP, usable	 15	 2	 7	 0xbfebfbff
+MP Table:
+#	APIC ID	Version	State		Family	Model	Step	Flags
+#	 0	 0x14	 BSP, usable	 15	 2	 7	 0xbfebfbff
+#	 1	 0x14	 AP, usable	 15	 2	 7	 0xbfebfbff
 
+--------------------------------------------------------------------------
 CPU #1
 eax in: 0x00000000, eax = 00000002 ebx = 756e6547 ecx = 6c65746e edx = 49656e69
 eax in: 0x00000001, eax = 00000f27 ebx = 00020809 ecx = 00000400 edx = bfebfbff
@@ -17,9 +19,8 @@ eax in: 0x80000002, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
 eax in: 0x80000003, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
 eax in: 0x80000004, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
 
-Family: 15 Model: 2 Stepping: 7 Type: 0 [Pentium 4 Xeon (Northwood) [C1] Original OEM]
-Processor name string: 
-
+Family: 15 Model: 2 Stepping: 7 Type: 0 Brand: 9
+CPU Model: Pentium 4 (Northwood) [C1] Original OEM
 Feature flags:
 	Onboard FPU
 	Virtual Mode Extensions
@@ -51,18 +52,28 @@ Feature flags:
 	Pending Break Enable
 
 
+Pentium 4 specific MSRs:
+IA32_PLATFORM_ID=0008000000000000
+System bus in order queue depth=12
+MSR_EBC_FREQUENCY_ID=0000000015010f00
+IA32_BIOS_SIGN_ID=0000002400000000
+Processor serial number is enabled
+Fast strings are enabled
+x87 FPU Fopcode compatability mode is disabled
+Thermal monitor is enabled
+Split lock is enabled
+
 Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 64 entries.
 Data TLB: 4KB or 4MB pages, fully associative, 64 entries.
 L1 Data cache:
 	Size: 8KB	Sectored, 4-way associative.
 	line size=64 bytes.
-No L3 cache
+No level 2 cache or no level 3 cache if valid 2nd level cache.
 Instruction trace cache:
 	Size: 12K uOps	8-way associative.
 L2 unified cache:
 	Size: 512KB	Sectored, 8-way associative.
 	line size=64 bytes.
-
 
 Number of reporting banks : 4
 
@@ -71,7 +82,7 @@ Number of extended MC registers : 12
 
 Bank: 0 (0x400)
 MC0CTL:    00000000 00000000 00000000 00000000
-           00000000 00000000 11111111 11111111
+           00000000 00000000 00000000 00000000
 MC0STATUS: 00000000 00000000 00000000 00000000
            00000000 00000000 00000000 00000000
 MC0ADDR:   00000000 00000000 00000000 00000000
@@ -102,6 +113,8 @@ MC3ADDR:   00000000 00000000 00000000 00000000
 
 Number of logical processors supported within the physical package: 2
 
+Microcode version: 0x0000000000000024
+
 Connector type: Socket478 (PGA478 Socket)
 
 Datasheet: http://developer.intel.com/design/pentium4/datashts/24988703.pdf
@@ -112,10 +125,10 @@ MTRR registers:
 MTRRcap (0xfe): 0x0000000000000508
 MTRRphysBase0 (0x200): 0x0000000000000006
 MTRRphysMask0 (0x201): 0x0000000ff0000800
-MTRRphysBase1 (0x202): 0x00000000e0000001
+MTRRphysBase1 (0x202): 0x00000000f8000001
 MTRRphysMask1 (0x203): 0x0000000ffc000800
-MTRRphysBase2 (0x204): 0x0000000000000000
-MTRRphysMask2 (0x205): 0x0000000000000000
+MTRRphysBase2 (0x204): 0x00000000f2000001
+MTRRphysMask2 (0x205): 0x0000000ffe000800
 MTRRphysBase3 (0x206): 0x0000000000000000
 MTRRphysMask3 (0x207): 0x0000000000000000
 MTRRphysBase4 (0x208): 0x0000000000000000
@@ -139,8 +152,14 @@ MTRRfix4K_F8000 0x26f: 0x0505050505050505
 MTRRdefType (0x2ff): 0x0000000000000c00
 
 
-2784.31 MHz processor (estimate).
+2.8Ghz processor (estimate).
 
+int 0x80: 100 cycles
+cpuid: 100 cycles
+addl: 2 cycles
+locked add: 100 cycles
+bswap: 4 cycles
+--------------------------------------------------------------------------
 CPU #2
 eax in: 0x00000000, eax = 00000002 ebx = 756e6547 ecx = 6c65746e edx = 49656e69
 eax in: 0x00000001, eax = 00000f27 ebx = 01020809 ecx = 00000400 edx = bfebfbff
@@ -152,9 +171,8 @@ eax in: 0x80000002, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
 eax in: 0x80000003, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
 eax in: 0x80000004, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
 
-Family: 15 Model: 2 Stepping: 7 Type: 0 [Pentium 4 Xeon (Northwood) [C1] Original OEM]
-Processor name string: 
-
+Family: 15 Model: 2 Stepping: 7 Type: 0 Brand: 9
+CPU Model: Pentium 4 (Northwood) [C1] Original OEM
 Feature flags:
 	Onboard FPU
 	Virtual Mode Extensions
@@ -186,18 +204,28 @@ Feature flags:
 	Pending Break Enable
 
 
+Pentium 4 specific MSRs:
+IA32_PLATFORM_ID=0008000000000000
+System bus in order queue depth=12
+MSR_EBC_FREQUENCY_ID=0000000015010f00
+IA32_BIOS_SIGN_ID=0000002400000000
+Processor serial number is enabled
+Fast strings are enabled
+x87 FPU Fopcode compatability mode is disabled
+Thermal monitor is enabled
+Split lock is enabled
+
 Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 64 entries.
 Data TLB: 4KB or 4MB pages, fully associative, 64 entries.
 L1 Data cache:
 	Size: 8KB	Sectored, 4-way associative.
 	line size=64 bytes.
-No L3 cache
+No level 2 cache or no level 3 cache if valid 2nd level cache.
 Instruction trace cache:
 	Size: 12K uOps	8-way associative.
 L2 unified cache:
 	Size: 512KB	Sectored, 8-way associative.
 	line size=64 bytes.
-
 
 Number of reporting banks : 4
 
@@ -206,7 +234,7 @@ Number of extended MC registers : 12
 
 Bank: 0 (0x400)
 MC0CTL:    00000000 00000000 00000000 00000000
-           00000000 00000000 11111111 11111111
+           00000000 00000000 00000000 00000000
 MC0STATUS: 00000000 00000000 00000000 00000000
            00000000 00000000 00000000 00000000
 MC0ADDR:   00000000 00000000 00000000 00000000
@@ -237,6 +265,8 @@ MC3ADDR:   00000000 00000000 00000000 00000000
 
 Number of logical processors supported within the physical package: 2
 
+Microcode version: 0x0000000000000024
+
 Connector type: Socket478 (PGA478 Socket)
 
 Datasheet: http://developer.intel.com/design/pentium4/datashts/24988703.pdf
@@ -247,10 +277,10 @@ MTRR registers:
 MTRRcap (0xfe): 0x0000000000000508
 MTRRphysBase0 (0x200): 0x0000000000000006
 MTRRphysMask0 (0x201): 0x0000000ff0000800
-MTRRphysBase1 (0x202): 0x00000000e0000001
+MTRRphysBase1 (0x202): 0x00000000f8000001
 MTRRphysMask1 (0x203): 0x0000000ffc000800
-MTRRphysBase2 (0x204): 0x0000000000000000
-MTRRphysMask2 (0x205): 0x0000000000000000
+MTRRphysBase2 (0x204): 0x00000000f2000001
+MTRRphysMask2 (0x205): 0x0000000ffe000800
 MTRRphysBase3 (0x206): 0x0000000000000000
 MTRRphysMask3 (0x207): 0x0000000000000000
 MTRRphysBase4 (0x208): 0x0000000000000000
@@ -274,5 +304,11 @@ MTRRfix4K_F8000 0x26f: 0x0505050505050505
 MTRRdefType (0x2ff): 0x0000000000000c00
 
 
-2784.33 MHz processor (estimate).
+2.8Ghz processor (estimate).
 
+int 0x80: 100 cycles
+cpuid: 100 cycles
+addl: 2 cycles
+locked add: 100 cycles
+bswap: 4 cycles
+--------------------------------------------------------------------------
