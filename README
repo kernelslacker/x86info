@@ -15,6 +15,15 @@ Caveats:
    needs the x86 cpuid driver provided with kernel
    2.2.18 / 2.4.0, and the appropriate nodes in /dev
 
+   To set up these devices, do the following..
+
+	mkdir /dev/cpu
+	for i in 0 1 2 3 4 5 6 7
+	do
+		mkdir /dev/cpu/$i ; cd /dev/cpu/$i
+		mknod cpuid c 203 $i
+		mknod msr c 202 $i
+	done
 
 Command line switches:
 
