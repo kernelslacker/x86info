@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.55 2002/05/31 14:44:25 davej Exp $
+ *  $Id: x86info.c,v 1.56 2002/06/06 12:07:03 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -37,6 +37,7 @@ int show_bluesmoke=0;
 static int show_mptable=0;
 static int show_mtrr=0;
 static int show_MHz=0;
+static int show_connector=0;
 
 int silent = 0;
 int used_UP = 0;
@@ -49,7 +50,8 @@ void usage (char *programname)
 {
 	printf ("Usage: %s [<switches>]\n\
 -a,   --all\n\
--c,   --cacheinfo \n\
+-c,   --cacheinfo\n\
+      --connector\n\
 -f,   --flags\n\
 -mhz, --mhz\n\
 -mp,  --mptable\n\
@@ -77,11 +79,15 @@ static void parse_command_line (int argc, char **argv)
 			show_MHz = 1;
 			show_registers = 1;
 			show_mtrr = 1;
+			show_connector = 1;
 			need_root = 1;
 		}
 
 		if ((!strcmp(arg, "-c") || !strcmp(arg, "--cache")))
 			show_cacheinfo = 1;
+
+		if (!strcmp(arg, "--connector"))
+			show_connector = 1;
 
 		if ((!strcmp(arg, "-f") || !strcmp(arg, "--flags")))
 			show_flags = 1;
@@ -201,6 +207,9 @@ int main (int argc, char **argv)
 
 		if (show_mtrr && user_is_root)
 			dump_mtrrs(&cpu);
+
+		if (show_connector)
+			decode_connector(cpu.connector);
 
 		/*
 		 * Doing this per-cpu is a problem, as we can't

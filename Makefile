@@ -38,7 +38,8 @@ OBJS =\
 	MHz.o\
 	mptable.o\
 	get_model_name.o\
-	mtrr.c
+	mtrr.c \
+	connector.c
 
 x86info: $(OBJS)
 	gcc $(CFLAGS) -o x86info $(OBJS)

@@ -31,7 +31,32 @@ struct cpudata {
 	unsigned int cachesize_L3;
 	unsigned int maxi, maxei;
 	unsigned char name[80];
+	unsigned char connector;
 };
+
+#define CONN_UNKNOWN		0
+#define CONN_SOCKET_3		1
+#define CONN_SOCKET_4		2
+#define CONN_SOCKET_5		3
+#define CONN_SOCKET_7		4
+#define CONN_SOCKET_370		5
+#define CONN_SOCKET_370FCPGA	6
+#define CONN_SOCKET_5_7		7
+#define CONN_SUPER_SOCKET_7	8
+#define CONN_SLOT_A		9
+#define CONN_SOCKET_A		10
+#define CONN_SOCKET_A_SLOT_A	11
+#define CONN_SOCKET_A_OR_SLOT_A	12
+#define CONN_SOCKET_57B		13
+#define CONN_MOBILE_7		14
+#define CONN_SOCKET_8		15
+#define CONN_SLOT_1		16
+#define CONN_SLOT_2		17
+#define CONN_SOCKET_423		18
+#define CONN_MMC		19
+#define CONN_MMC2		20
+#define CONN_BGA474		21
+#define CONN_BGA		22
 
 void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
@@ -67,6 +92,7 @@ int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
 int issmp(int *numcpu, int verb);
 void get_model_name (struct cpudata *cpu);
+void decode_connector (unsigned int type);
 
 extern int show_bluesmoke;
 extern int show_cacheinfo;

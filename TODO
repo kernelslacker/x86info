@@ -24,8 +24,6 @@
 
 - cpuid macro might cut down huge switch statements in a few places
 
-- socket type
-
 - voltages
 
 - might be time to start thinking about XML ?
