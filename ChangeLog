@@ -1,3 +1,4 @@
+
 2001-05-15 Constantine Gavrilov <const-g@optibase.com>
 
 	* x86info.c: SMP boxes are numbered 0..n -> 1..n

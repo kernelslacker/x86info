@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.14 2001/04/15 18:36:56 davej Exp $
+ *  $Id: x86info.c,v 1.15 2001/04/17 05:19:05 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -70,7 +70,7 @@ int main (int argc, char **argv)
 {
 	unsigned int i, nrCPUs;
 
-	printf ("x86info v1.2.  Dave Jones 2001\n");
+	printf ("x86info v1.3.  Dave Jones 2001\n");
 	printf ("Feedback to <davej@suse.de>.\n\n");
 
 	parse_command_line(argc, argv);
