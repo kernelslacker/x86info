@@ -1,3 +1,8 @@
+2001-09-25  Mark Zealey <mark@itsolve.co.uk>
+
+	* MHz.c: calculation can be done a lot quicker with no loss
+	  of accuracy.
+
 2001-09-10  Dave Jones	<davej@suse.de>
 
 	* rdmsr.c: dump_msr now takes msr size argument.

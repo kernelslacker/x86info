@@ -1,5 +1,5 @@
 /*
- *  $Id: MHz.c,v 1.5 2001/07/15 17:13:57 davej Exp $
+ *  $Id: MHz.c,v 1.6 2001/09/25 15:16:31 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -46,7 +46,7 @@ void estimate_MHz(int cpunum)
 	gettimeofday(&tvstart, &tz);
 
 	/* we don't trust that this is any specific length of time */
-	usleep(1000000);
+	usleep(10);
 	
 	cycles[1] = rdtsc();
 	gettimeofday(&tvstop, &tz);
