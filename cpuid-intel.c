@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-intel.c,v 1.8 2001/03/04 17:38:46 davej Exp $
+ *  $Id: cpuid-intel.c,v 1.9 2001/03/19 01:40:33 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -62,6 +62,31 @@ void decode_intel_tlb (int x)
 	case 0x45:
 		printf ("L2 unified cache: 2MB, 4-way set assoc, 32 byte line size\n");
 		break;
+	case 0x50:
+		printf ("Instruction TLB: 4K,2MB or 4MB pages, fully assoc, 64 entries\n");
+		break;
+	case 0x5b:
+		printf ("Data TLB: 4K or 4MB pages, fully assoc, 64 entries\n");
+		break;
+	case 0x66:
+		printf ("Data cache: Sectored, 64 byte cache line, 8 way set assoc, 8K\n");
+		break;
+	case 0x70:
+		printf ("Instruction trace cache: 4 way set associative, 12K uOps\n");
+		break;
+	case 0x7a:
+		printf ("L2 unified cache: Sectored, 64 byte cache line, 8 way set associative, 256K\n");
+		break;
+	case 0x82:
+		printf ("L2 unified cache: Sectored, 32 byte cache line, 8 way set associative, 256K\n");
+		break;
+	case 0x84:
+		printf ("L2 unified cache: Sectored, 32 byte cache line, 8 way set associative, 1MB\n");
+		break;
+	case 0x85:
+		printf ("L2 unified cache: Sectored, 32 byte cache line, 8 way set associative, 2MB\n");
+		break;
+
 	default:
 		printf ("unknown TLB/cache descriptor: 0x%x\n", x);
 		break;
