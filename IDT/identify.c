@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.23 2002/07/12 01:28:36 davej Exp $
+ *  $Id: identify.c,v 1.24 2002/09/11 18:23:51 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -79,10 +79,11 @@ void decode_IDT_cacheinfo(struct cpudata *cpu)
 	/* check on-chip L2 cache size */
 	if (cpu->maxei >= 0x80000006) {
 		cpuid (cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
-		if ((cpu->family==6) && (cpu->model==7 || cpu->model==8))
+		if ((cpu->family==6) && (cpu->model==7 || cpu->model==8)) {
+			printf ("L2 cache size errata detected. Using workaround\n");
 			printf ("L2 (on CPU) cache:\n\tSize: %ldKb\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes.\n",
 				ecx >> 24, (ecx >> 16) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
-		else
+		} else
 			printf ("L2 (on CPU) cache:\n\tSize: %ldKb\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes.\n",
 				ecx >> 16, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
 	}
