@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.11 2001/08/10 10:45:52 davej Exp $
+ *  $Id: identify.c,v 1.12 2001/08/10 10:47:52 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -59,6 +59,12 @@ void identify (int cpunum)
 				printf ("Family: %d Model: %d Stepping: %d Type: %d [%s]\n",
 					cpu.family, cpu.model, cpu.stepping, cpu.type, cpu.name);
 				display_Intel_info (cpunum, maxi, &cpu);
+				break;
+
+			case VENDOR_RISE:
+				printf ("Family: %d Model: %d Stepping: %d [%s]\n",
+					cpu.family, cpu.model, cpu.stepping, cpu.name);
+				display_Rise_info (cpunum, maxi, maxei, &cpu);
 				break;
 
 			default:

@@ -1,3 +1,5 @@
+- Identify Transmeta CPUs.
+
 - Bluesmoke implementation currently is AMD centric.
   Probably easier to do a bluesmoke-amd.c and bluesmoke-intel.c
 
