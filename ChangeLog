@@ -1,3 +1,7 @@
+2002-10-13 Dave Jones <davej@codemonkey.org.uk>
+
+	* AMD/identify.c: introduce add_to_cpuname()
+
 2002-09-24 Dave Jones <davej@suse.de>
 
 	* Intel/identify.c: Add more Pentium Pro steppings.

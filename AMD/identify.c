@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.27 2002/07/14 12:57:00 davej Exp $
+ *  $Id: identify.c,v 1.28 2002/10/13 18:16:28 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -14,6 +14,8 @@
 #include <sys/types.h>
 #include "../x86info.h"
 #include "AMD.h"
+
+#define add_to_cpuname(x)	nameptr += sprintf(nameptr, "%s", x);
 
 static void do_assoc(unsigned long assoc)
 {
@@ -149,10 +151,10 @@ void Identify_AMD(struct cpudata *cpu)
 		cpu->connector = CONN_SOCKET_7;
 		break;
 	case 0x580:
-		nameptr += sprintf(cpu->name, "%s", "K6-2");
+		add_to_cpuname("K6-2");
 		cpu->connector = CONN_SUPER_SOCKET_7;
 		if (cpu->stepping >= 8)
-			printf(nameptr, "%s", " (CXT core)");
+			add_to_cpuname (" (CXT core)");
 		break;
 	case 0x590:
 		sprintf(cpu->name, "%s", "K6-III");
@@ -174,58 +176,58 @@ void Identify_AMD(struct cpudata *cpu)
 
 	case 0x610:
 		cpu->connector = CONN_SLOT_A;
-		nameptr += sprintf(cpu->name, "%s", "Athlon (0.25um)");
+		add_to_cpuname ("Athlon (0.25um)");
 		switch (cpu->stepping) {
 		case 1:
-			sprintf(nameptr, "%s", " Rev C1");
+			add_to_cpuname (" [C1]");
 			break;
 		case 2:
-			sprintf(nameptr, "%s", " Rev C2");
+			add_to_cpuname (" [C2]");
 			break;
 		}
 		break;
 
 	case 0x620:
 		cpu->connector = CONN_SLOT_A;
-		nameptr += sprintf(cpu->name, "%s", "Athlon (0.18um)");
+		add_to_cpuname ("Athlon (0.18um)");
 		switch (cpu->stepping) {
 		case 1:
-			sprintf(nameptr, "%s", " Rev A1");
+			add_to_cpuname (" [A1]");
 			break;
 		case 2:
-			sprintf(nameptr, "%s", " Rev A2");
+			add_to_cpuname (" [A2]");
 			break;
 		}
 		break;
 
 	case 0x630:
 		cpu->connector = CONN_SOCKET_A;
-		nameptr += sprintf(cpu->name, "%s", "Duron");
+		add_to_cpuname ("Duron");
 		switch (cpu->stepping) {
 		case 0:
-			sprintf(nameptr, "%s", " Rev A0");
+			add_to_cpuname (" [A0]");
 			break;
 		case 1:
-			sprintf(nameptr, "%s", " Rev A2");
+			add_to_cpuname (" [A2]");
 			break;
 		}
 		break;
 
 	case 0x640:
 		cpu->connector = CONN_SOCKET_A;
-		nameptr += sprintf(cpu->name, "%s", "Thunderbird");
+		add_to_cpuname ("Athlon Thunderbird");
 		switch (cpu->stepping) {
 		case 0:
-			sprintf(nameptr, "%s", " Rev A1");
+			add_to_cpuname (" [A1]");
 			break;
 		case 1:
-			sprintf(nameptr, "%s", " Rev A2");
+			add_to_cpuname (" [A2]");
 			break;
 		case 2:
-			sprintf(nameptr, "%s", " Rev A4-A8");
+			add_to_cpuname (" [A4-A8]");
 			break;
 		case 3:
-			sprintf(nameptr, "%s", " Rev A9");
+			add_to_cpuname (" [A9]");
 			break;
 		}
 		break;
@@ -234,22 +236,23 @@ void Identify_AMD(struct cpudata *cpu)
 		cpu->connector = CONN_SOCKET_A;
 		switch (cpu->stepping) {
 		case 0:
-			sprintf(nameptr, "%s", "Athlon 4 (Palomino core) Rev A0-A1");
+			add_to_cpuname ("Athlon 4 (Palomino core) [A0-A1]");
 			break;
 		case 1:
-			sprintf(nameptr, "%s", "Athlon 4 (Palomino core) Rev A2");
+			add_to_cpuname ("Athlon 4 (Palomino core) [A2]");
 			break;
 		case 2:
 			if (getL2size(cpu->number) < 256) {
-				sprintf(nameptr, "%s", "Mobile Duron");
+				add_to_cpuname ("Mobile Duron");
 				break;
 			} else {
 				cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
+				add_to_cpuname ("Athlon ");
 				if ((edx & (1 << 19)) == 0) {
-					sprintf(nameptr, "%s", "Athlon XP");
+					add_to_cpuname ("XP");
 					break;
 				} else {
-					sprintf(nameptr, "%s", "Athlon MP");
+					add_to_cpuname ("MP");
 					break;
 				}
 			}
@@ -260,10 +263,10 @@ void Identify_AMD(struct cpudata *cpu)
 		cpu->connector = CONN_SOCKET_A;
 		switch (cpu->stepping) {
 		case 0:
-			sprintf(cpu->name, "%s", "Duron (Morgan core) Rev A0");
+			add_to_cpuname ("Duron (Morgan core) [A0]");
 			break;
 		case 1:
-			sprintf(cpu->name, "%s", "Duron (Morgan core) Rev A1");
+			add_to_cpuname ("Duron (Morgan core) [A1]");
 			break;
 		}
 		break;
@@ -271,26 +274,31 @@ void Identify_AMD(struct cpudata *cpu)
 	case 0x680:
 		cpu->connector = CONN_SOCKET_A;
 		if (getL2size(cpu->number) < 256) {
-			sprintf(nameptr, "%s", "Duron");
+			add_to_cpuname ("Duron");
 			break;
 		} else {
 			cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
+			add_to_cpuname ("Athlon ");
 			if ((edx & (1 << 19)) == 0) {
-				sprintf(nameptr, "%s", "Athlon XP (Thoroughbred core)");
-				break;
+				add_to_cpuname ("XP");
 			} else {
-				sprintf(nameptr, "%s", "Athlon MP (Thoroughbred core)");
-				break;
+				add_to_cpuname ("MP");
 			}
+			add_to_cpuname (" (Thoroughbred core)");
+			
+			if (cpu->stepping == 0)
+				add_to_cpuname ("[A0]");
+			if (cpu->stepping == 1)
+				add_to_cpuname ("[B0]");
 		}
 		break;
 
 	case 0xF00:		/* based on http://www.tecchannel.de/hardware/937/images/0010328_PIC.gif */
-		sprintf(nameptr, "%s", "Clawhammer ES");
+		add_to_cpuname ("Clawhammer ES");
 		break;
 
 	default:
-		sprintf(cpu->name, "%s", "Unknown CPU");
+		add_to_cpuname ("Unknown CPU");
 		break;
 	}
 }
