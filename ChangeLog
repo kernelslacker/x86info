@@ -1,3 +1,5 @@
+Released as v1.6
+
 2001-09-21  Dave Jones <davej@suse.de>
 
 	* x86info.c: s/_SC_NPROCESSORS/_SC_NPROCESSORS_CONF/
