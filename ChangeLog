@@ -1,3 +1,7 @@
+2003-4-24 Dave Jones <davej@codemonkey.org.uk>
+
+	* Intel/identify.c: Add decoded ppro sSpec numbers as comments.
+
 2003-4-23 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/identify.c: Add extra space between Pentium Pro and stepping.

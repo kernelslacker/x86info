@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.49 2003/04/23 17:04:42 davej Exp $
+ *  $Id: identify.c,v 1.50 2003/04/24 02:04:37 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -130,18 +130,27 @@ void Identify_Intel (struct cpudata *cpu)
 		switch (cpu->stepping) {
 		case 1:
 			nameptr+=sprintf (nameptr, "%s", " [B0]");
+			//sSpec# Q0812, Q0813, Q0815, Q0816, SY002, SY011, SY014
 			break;
 		case 2:
 			nameptr+=sprintf (nameptr, "%s", " [C0]");
+			//sSpec# Q0822, Q0825, Q0826, SY010
 			break;
 		case 6:
 			nameptr+=sprintf (nameptr, "%s", " [sA0]");
+			//cache = 256 sSpec# SY012, SY013, Q0858, Q0859, Q0860, Q0873, Q0874, Q0910
+			//cache = 512 sSpec# Q0864, Q0865
 			break;
 		case 7:
 			nameptr+=sprintf (nameptr, "%s", " [sA1]");
+			//cache = 256 sSpec# SY031, SY032, SY039, SY040, SL245, SL247, SU103, SU104, Q076 , Q0871, Q0872, Q0907, Q0908, Q0909
+			//cache = 512 sSpec# SY034, SY047, SY048, Q0918, Q0920, Q0924, Q0929, Q932 , Q935 , Q936
 			break;
 		case 9:
 			nameptr+=sprintf (nameptr, "%s", " [sB1]");
+			//cache = 256 sSpec# SL22S,SL22T,SL22U,SL22V,SL23L,SL23M,SL254,SL255,Q033 ,Q034 ,Q035 ,Q036 ,Q083 ,Q084
+			//cache = 512 sSpec# Q008, Q009, Q010, Q011, SL2FJ, SL22X, SL22Z
+			//cache = 1MB sSpec# SL259, SL25A
 			break;
 		}
 		break;
