@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	  $Id: mptable.c,v 1.1 2001/12/10 16:52:13 davej Exp $
+ *	  $Id: mptable.c,v 1.2 2001/12/10 17:02:36 davej Exp $
  */
 
 #define MP_SIG				  0x5f504d5f	  /* _MP_ */
@@ -70,9 +70,9 @@ typedef unsigned int vm_offset_t;
 #define MAXPNSTR				132
 
 typedef struct TABLE_ENTRY {
-	u_char	  type;
-	u_char	  length;
-	char		name[ 32 ];
+	u_char	type;
+	u_char	length;
+	char	name[ 32 ];
 } tableEntry;
 
 tableEntry basetableEntryTypes[] =
@@ -86,44 +86,44 @@ tableEntry basetableEntryTypes[] =
 
 /* MP Floating Pointer Structure */
 typedef struct MPFPS {
-	char		signature[ 4 ];
-	void*	   pap;
-	u_char	  length;
-	u_char	  spec_rev;
-	u_char	  checksum;
-	u_char	  mpfb1;
-	u_char	  mpfb2;
-	u_char	  mpfb3;
-	u_char	  mpfb4;
-	u_char	  mpfb5;
+	char	signature[ 4 ];
+	void*	pap;
+	u_char	length;
+	u_char	spec_rev;
+	u_char	checksum;
+	u_char	mpfb1;
+	u_char	mpfb2;
+	u_char	mpfb3;
+	u_char	mpfb4;
+	u_char	mpfb5;
 } mpfps_t;
 
 /* MP Configuration Table Header */
 typedef struct MPCTH {
-	char		signature[ 4 ];
-	u_short	 base_table_length;
-	u_char	  spec_rev;
-	u_char	  checksum;
-	u_char	  oem_id[ 8 ];
-	u_char	  product_id[ 12 ];
-	void*	   oem_table_pointer;
-	u_short	 oem_table_size;
-	u_short	 entry_count;
-	void*	   apic_address;
-	u_short	 extended_table_length;
-	u_char	  extended_table_checksum;
-	u_char	  reserved;
+	char	signature[ 4 ];
+	u_short	base_table_length;
+	u_char	spec_rev;
+	u_char	checksum;
+	u_char	oem_id[ 8 ];
+	u_char	product_id[ 12 ];
+	void*	oem_table_pointer;
+	u_short	oem_table_size;
+	u_short	entry_count;
+	void*	apic_address;
+	u_short	extended_table_length;
+	u_char	extended_table_checksum;
+	u_char	reserved;
 } mpcth_t;
 
 typedef struct PROCENTRY {
-	u_char	  type;
-	u_char	  apicID;
-	u_char	  apicVersion;
-	u_char	  cpuFlags;
-	u_long	  cpuSignature;
-	u_long	  featureFlags;
-	u_long	  reserved1;
-	u_long	  reserved2;
+	u_char	type;
+	u_char	apicID;
+	u_char	apicVersion;
+	u_char	cpuFlags;
+	u_long	cpuSignature;
+	u_long	featureFlags;
+	u_long	reserved1;
+	u_long	reserved2;
 } ProcEntry;
 
 static void apic_probe(vm_offset_t* paddr, int* where);
@@ -137,10 +137,10 @@ static void readEntry(void* entry, int size);
 static void processorEntry(void);
 
 /* global data */
-int	 pfd;			/* physical /dev/mem fd */
+int	pfd;			/* physical /dev/mem fd */
 
-int	 busses[ 16 ];
-int	 apics[ 16 ];
+int	busses[16];
+int	apics[16];
 
 int	ncpu;
 int	nbus;
@@ -150,10 +150,10 @@ int	verbose;
 
 int issmp(int *numcpu, int verb)
 {
-	vm_offset_t	paddr;
-	int		where;
-	mpfps_t		mpfps;
-	int		defaultConfig;
+	vm_offset_t paddr;
+	mpfps_t mpfps;
+	int where;
+	int defaultConfig;
 
 	verbose=verb;
 	/* open physical memory for access to MP structures */
@@ -184,7 +184,7 @@ int issmp(int *numcpu, int verb)
 /*
  * set PHYSICAL address of MP floating pointer structure
  */
-#define NEXT(X)		 ((X) += 4)
+#define NEXT(X)		((X) += 4)
 static void
 apic_probe(vm_offset_t* paddr, int* where)
 {
@@ -192,10 +192,10 @@ apic_probe(vm_offset_t* paddr, int* where)
 	 * c rewrite of apic_probe() by Jack F. Vogel
 	 */
 
-	int		 x;
-	u_short	 segment;
+	int x;
+	u_short segment;
 	vm_offset_t target;
-	u_int	   buffer[ BIOS_SIZE / sizeof(int) ];
+	u_int buffer[ BIOS_SIZE / sizeof(int) ];
 
 	/* search Extended Bios Data Area, if present */
 	seekEntry((vm_offset_t)EBDA_POINTER);
@@ -302,9 +302,9 @@ static int MPConfigTableHeader(void* pap)
 {
 	vm_offset_t paddr;
 	mpcth_t	 cth;
-	int		 x;
-	int		 totalSize, t;
-	int		 count, c;
+	int x;
+	int totalSize, t;
+	int count, c;
 
 	if (pap == 0) {
 		printf("MP Configuration Table Header MISSING!\n");
@@ -322,9 +322,8 @@ static int MPConfigTableHeader(void* pap)
 	count = cth.entry_count;
 
 	/* initialze tables */
-	for (x = 0; x < 16; ++x) {
+	for (x = 0; x < 16; ++x)
 		busses[ x ] = apics[ x ] = 0xff;
-	}
 
 	ncpu = 0;
 	nbus = 0;
@@ -344,12 +343,10 @@ static int MPConfigTableHeader(void* pap)
 
 static int readType(void)
 {
-	u_char	  type;
+	u_char type;
 
 	if (read(pfd, &type, sizeof(u_char)) != sizeof(u_char)) {
 		perror("type read");
-//		fprintf(stderr, "\npfd: %d", pfd);
-//		fflush(stderr);
 		exit(1);
 	}
 
@@ -379,7 +376,7 @@ static void readEntry(void* entry, int size)
 
 static void processorEntry(void)
 {
-	ProcEntry   entry;
+	ProcEntry entry;
 
 	/* read it into local memory */
 	readEntry(&entry, sizeof(entry));
