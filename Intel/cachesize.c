@@ -1,5 +1,5 @@
 /*
- *  $Id: cachesize.c,v 1.5 2003/01/18 16:54:34 davej Exp $
+ *  $Id: cachesize.c,v 1.6 2003/01/18 16:59:42 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -118,9 +118,6 @@ void decode_Intel_caches (struct cpudata *cpu)
 	long regs[4];
 	unsigned char *dp = (unsigned char *)regs;
 
-	if (!show_cacheinfo)
-		return;
-
 	if (cpu->maxi < 2)
 		return;
 
@@ -143,6 +140,12 @@ void decode_Intel_caches (struct cpudata *cpu)
 			if (dp[j]!=0)
 				decode_Intel_cache (dp[j], cpu);
 	}
+}
+
+void show_Intel_caches(struct cpudata *cpu)
+{
+	if (!show_cacheinfo)
+		return;
 
 	if (cpu->cachesize_L1_I)
 		printf ("L1I:%d\n", cpu->cachesize_L1_I);
@@ -156,6 +159,4 @@ void decode_Intel_caches (struct cpudata *cpu)
 		printf ("Trace cache: %d\n", cpu->cachesize_trace);
 	printf ("\n");
 }
-
-
 

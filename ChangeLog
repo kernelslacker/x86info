@@ -2,6 +2,7 @@
 
 	* Bench/*: Various cleanups, and addition of locked add benchmark.
 	* Intel/cachesize.c: Some L2 caches were marked as L3's.
+	* Intel/identify.c: Decode cache sizes before CPU determination.
 
 2003-1-16 Dave Jones <davej@codemonkey.org.uk>
 

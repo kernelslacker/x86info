@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.43 2003/01/06 16:36:27 davej Exp $
+ *  $Id: identify.c,v 1.44 2003/01/18 16:59:42 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -44,6 +44,7 @@ void Identify_Intel (struct cpudata *cpu)
 	cpu->brand = (ebx & 0xf);
 	reserved = eax >> 14;
 
+	decode_Intel_caches(cpu);
 
 	switch (cpu->family) {
 	case 4:	nameptr += sprintf (cpu->name, "%s", "i486 ");
