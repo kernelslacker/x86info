@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.11 2001/12/10 17:52:15 davej Exp $
+ *  $Id: identify.c,v 1.12 2001/12/10 21:12:12 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -220,7 +220,6 @@ void Identify_AMD (unsigned int maxi, struct cpudata *cpu)
 
 void display_AMD_info(unsigned int maxei, struct cpudata *cpu)
 {
-	unsigned int i;
 	unsigned long tmp;
 	unsigned long eax, ebx, ecx, edx;
 
@@ -244,25 +243,7 @@ void display_AMD_info(unsigned int maxei, struct cpudata *cpu)
 		decode_feature_flags (cpu, edx);
 	}
 
-	if (maxei >= 0x80000002) {
-		/* Processor identification string */
-		char namestring[49], *cp;
-		unsigned int j;
-		cp = namestring;
-		for (j = 0x80000002; j <= 0x80000004; j++) {
-			cpuid (cpu->number, j, &eax, &ebx, &ecx, &edx);
-
-			for (i = 0; i < 4; i++)
-				*cp++ = eax >> (8 * i);
-			for (i = 0; i < 4; i++)
-				*cp++ = ebx >> (8 * i);
-			for (i = 0; i < 4; i++)
-				*cp++ = ecx >> (8 * i);
-			for (i = 0; i < 4; i++)
-				*cp++ = edx >> (8 * i);
-		}
-		printf ("Processor name string: %s\n\n", namestring);
-	}
+	get_model_name (maxei, cpu);
 
 	if (show_cacheinfo)
 		decode_AMD_cacheinfo(cpu->number, maxei);

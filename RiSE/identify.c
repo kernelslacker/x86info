@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.3 2001/12/10 17:52:15 davej Exp $
+ *  $Id: identify.c,v 1.4 2001/12/10 21:12:12 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -10,9 +10,8 @@
 #include <stdio.h>
 #include "../x86info.h"
 
-void Identify_RiSE (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
+void Identify_RiSE (unsigned int maxi, struct cpudata *cpu)
 {
-	unsigned int i;
 	unsigned long eax, ebx, ecx, edx;
 	cpu->vendor = VENDOR_RISE;
 
@@ -38,32 +37,6 @@ void Identify_RiSE (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 			printf ("Unknown CPU");
 			break;
 		}
-
-	}
-
-	/* Check for presence of extended info */
-	if (maxei == 0)
-		return;
-
-	if (maxei >= 0x80000002) {
-		/* Processor identification string */
-		char namestring[49], *cp;
-		unsigned int j;
-		cp = namestring;
-		for (j = 0x80000002; j <= 0x80000004; j++) {
-			cpuid (cpu->number, j, &eax, &ebx, &ecx, &edx);
-
-			for (i = 0; i < 4; i++)
-				*cp++ = eax >> (8 * i);
-			for (i = 0; i < 4; i++)
-				*cp++ = ebx >> (8 * i);
-			for (i = 0; i < 4; i++)
-				*cp++ = ecx >> (8 * i);
-			for (i = 0; i < 4; i++)
-				*cp++ = edx >> (8 * i);
-		}
-		*cp++ = '\n';
-		sprintf (cpu->name, "%s", namestring);
 	}
 }
 
@@ -72,6 +45,8 @@ void display_RiSE_info(unsigned int maxi, unsigned int maxei, struct cpudata *cp
 {
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx;
+
+	get_model_name (maxei, cpu);
 
 	if (maxi != 0 && show_registers) {
 		/* Dump extended info in raw hex */

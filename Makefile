@@ -31,7 +31,8 @@ OBJS =\
 	rdmsr.o\
 	binary.o\
 	MHz.o\
-	mptable.o
+	mptable.o\
+	get_model_name.o\
 
 x86info: $(OBJS)
 	gcc -o x86info $(OBJS)

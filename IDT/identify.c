@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.13 2001/12/10 20:30:39 davej Exp $
+ *  $Id: identify.c,v 1.14 2001/12/10 21:12:12 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -115,27 +115,7 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx;
 
-	if (maxei >= 0x80000002) {
-		/* Processor identification string */
-		char namestring[49], *cp;
-		unsigned int j;
-		unsigned int i;
-		cp = namestring;
-		for (j = 0x80000002; j <= 0x80000004; j++) {
-			cpuid (cpu->number, j, &eax, &ebx, &ecx, &edx);
-
-			for (i = 0; i < 4; i++)
-				*cp++ = eax >> (8 * i);
-			for (i = 0; i < 4; i++)
-				*cp++ = ebx >> (8 * i);
-			for (i = 0; i < 4; i++)
-				*cp++ = ecx >> (8 * i);
-			for (i = 0; i < 4; i++)
-				*cp++ = edx >> (8 * i);
-		}
-		printf ("Processor name string: %s\n\n", namestring);
-	}
-
+	get_model_name (maxei, cpu);
 
 	if (maxei != 0 && show_registers) {
 		/* Dump extended info in raw hex */
@@ -160,5 +140,4 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 
 	if (cpu->family == 6 && show_registers)
 		dump_C3_MSR(cpu);
-
 }

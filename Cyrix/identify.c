@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.4 2001/12/10 18:01:36 davej Exp $
+ *  $Id: identify.c,v 1.5 2001/12/10 21:12:12 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -30,7 +30,6 @@ void decode_Cyrix_TLB (int x)
 /* Cyrix-specific information */
 void Identify_Cyrix (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 {
-	int i;
 	unsigned long eax, ebx, ecx, edx;
 
 	cpu->vendor = VENDOR_CYRIX;
@@ -86,26 +85,6 @@ void Identify_Cyrix (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 			}
 		}
 
-		if (maxei >= 0x80000002) {
-			/* Processor identification string */
-			char namestring[49], *cp;
-			unsigned int j;
-			cp = namestring;
-			for (j = 0x80000002; j <= 0x80000004; j++) {
-				cpuid (cpu->number, j, &eax, &ebx, &ecx, &edx);
-
-				for (i = 0; i < 4; i++)
-					*cp++ = eax >> (8 * i);
-				for (i = 0; i < 4; i++)
-					*cp++ = ebx >> (8 * i);
-				for (i = 0; i < 4; i++)
-					*cp++ = ecx >> (8 * i);
-				for (i = 0; i < 4; i++)
-					*cp++ = edx >> (8 * i);
-			}
-			*cp++ = '\n';
-			sprintf (cpu->name, "%s", namestring);
-		}
 	}
 }
 
@@ -114,7 +93,8 @@ void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *c
 	unsigned int i, ntlb;
 	unsigned long eax, ebx, ecx, edx;
 
-	printf ("Cyrix-specific functions\n");
+	get_model_name (maxei, cpu);
+
 	if (maxei >= 0x80000000 && show_registers) {
 		/* Dump extended info in raw hex */
 		for (i = 0x80000000; i <= maxei; i++) {

@@ -40,7 +40,7 @@ void Identify_AMD (unsigned int, struct cpudata *cpu);
 void Identify_Cyrix (unsigned int, unsigned int, struct cpudata *cpu);
 void Identify_IDT (unsigned int, struct cpudata *cpu);
 void Identify_Intel (unsigned int, struct cpudata *cpu);
-void Identify_RiSE (unsigned int, unsigned int, struct cpudata *cpu);
+void Identify_RiSE (unsigned int, struct cpudata *cpu);
 
 void display_AMD_info(unsigned int maxei, struct cpudata *cpu);
 void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
@@ -62,6 +62,7 @@ void estimate_MHz(int cpunum);
 int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
 int issmp(int *numcpu, int verb);
+void get_model_name (unsigned long maxei, struct cpudata *cpu);
 
 extern int show_bluesmoke;
 extern int show_cacheinfo;
