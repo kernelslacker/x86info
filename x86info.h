@@ -33,7 +33,7 @@ struct cpudata {
 	unsigned int cachesize_L2;
 	unsigned int cachesize_L3;
 	unsigned int cachesize_trace;
-	unsigned int maxi, maxei;
+	unsigned int maxi, maxei, maxei2;
 	unsigned char name[80];
 	unsigned char connector;
 	unsigned int flags;

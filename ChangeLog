@@ -1,3 +1,7 @@
+2003-3-14 Dave Jones <davej@codemonkey.org.uk>
+
+	* identify.c: decode 0xc0000000 range cpuids if available.
+
 2003-3-13 Dave Jones <davej@codemonkey.org.uk>
 
 	* Intel/identify.c: Recognise P4 based Celerons.

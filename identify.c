@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.25 2002/11/02 03:26:54 davej Exp $
+ *  $Id: identify.c,v 1.26 2003/03/14 11:12:44 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -21,6 +21,9 @@ void identify(struct cpudata *cpu)
 	cpuid(cpu->number, 0, &eax, &ebx, &ecx, &edx);
 	cpuid(cpu->number, 0x80000000, &maxei, NULL, NULL, NULL);
 	cpu->maxei = maxei;
+
+	cpuid(cpu->number, 0xC0000000, &maxei, NULL, NULL, NULL);
+	cpu->maxei2 = maxei;
 
 	switch (ebx) {
 	case 0x756e6547:	/* Intel */
@@ -70,6 +73,9 @@ void show_info(struct cpudata *cpu)
 		dumpregs (cpu->number, 0, cpu->maxi);
 		if (cpu->maxei >=0x80000000)
 			dumpregs (cpu->number, 0x80000000, cpu->maxei);
+
+		if (cpu->maxei2 >=0xC0000000)
+			dumpregs (cpu->number, 0xC0000000, cpu->maxei2);
 	}
 
 	switch (cpu->vendor) {
