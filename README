@@ -1,4 +1,4 @@
-x86info v1.0
+x86info v1.0            http://www.sourceforge.net/projects/x86info
 
 This program started life as a cpuid program by Phil Karn.
 It's been modified considerably, and much more is planned.
@@ -26,4 +26,5 @@ Command line switches:
 
 -a, --all
  Show all information. This turns on -c, -f, -r
+
 
