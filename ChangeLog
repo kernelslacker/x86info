@@ -4,6 +4,7 @@
 	  Don't repeat text.
 	* IDT/identify.c: Add Nehemiah & Samuel2.
 	* IDT/longhaul-v2.c: Split out from C3-MSR.c
+	* IDT/powersaver.c|.h: First bits of Nehemiah power management decoding.
 
 2003-1-23 Dave Jones <davej@codemonkey.org.uk>
 

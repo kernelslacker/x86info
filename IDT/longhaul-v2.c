@@ -1,5 +1,5 @@
 /*
- *  $Id: longhaul-v2.c,v 1.1 2003/01/27 15:56:29 davej Exp $
+ *  $Id: longhaul-v2.c,v 1.2 2003/01/27 17:33:16 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include "../x86info.h"
 
-void dump_longhaul2(struct cpudata *cpu)
+void decode_longhaul2(struct cpudata *cpu)
 {
 	unsigned long long val=0;
 

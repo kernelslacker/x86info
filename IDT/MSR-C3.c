@@ -1,5 +1,5 @@
 /*
- *  $Id: MSR-C3.c,v 1.3 2003/01/27 15:56:29 davej Exp $
+ *  $Id: MSR-C3.c,v 1.4 2003/01/27 17:33:16 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -22,7 +22,7 @@ void dump_C3_MSR (struct cpudata *cpu)
 	printf ("Power management: ");
 	if (cpu->model==6 || (cpu->model==7 && cpu->stepping==0)) {
 		printf ("Longhaul v1.0\n");
-		dump_longhaul2(cpu);
+		decode_longhaul2(cpu);
 	}
 
 	if (cpu->model==7 && cpu->stepping>0) {
@@ -31,5 +31,6 @@ void dump_C3_MSR (struct cpudata *cpu)
 
 	if (cpu->model==8 || cpu->model==9) {
 		printf ("Powersaver v1.0\n");
+		decode_powersaver(cpu);
 	}
 }
