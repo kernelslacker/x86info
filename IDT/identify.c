@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.31 2003/02/10 03:02:22 davej Exp $
+ *  $Id: identify.c,v 1.32 2003/04/11 00:27:16 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -53,14 +53,15 @@ void Identify_IDT (struct cpudata *cpu)
 		
 		/* Family 6 is when VIA bought out Cyrix & IDT
 		 * This is the CyrixIII family. */
-		case 0x660:	sprintf (cpu->name, "%s", "VIA C3 (Samuel) [C5A]");
+		case 0x660:	sprintf (cpu->name, "%s", "VIA Cyrix 3 (Samuel) [C5A]");
 					//pipeline_stages = 12;
 					//1.8-2.0V
 					//CPGA
 					//75mm
 					//0.18 Al
 					//500-733MHz
-					//2000
+					//11.3 mil transistors
+					//June 6 2000
 					break;
 		case 0x670 ... 0x677:
 					sprintf (cpu->name, "%s", "VIA C3 (Samuel 2) [C5B]");
@@ -70,7 +71,8 @@ void Identify_IDT (struct cpudata *cpu)
 					//52mm
 					//0.15u Al
 					//650-800MHz
-					//2001
+					//15.2 mil transistors
+					//Mar 25 2001
 					break;
 		case 0x678 ... 0x67f:
 					sprintf (cpu->name, "%s", "VIA C3 (Ezra) [C5C]");
@@ -80,23 +82,29 @@ void Identify_IDT (struct cpudata *cpu)
 					//52mm
 					//0.15u/0.13u hybrid Al
 					//800-1000MHz
-					//2001
+					//15.4 mil transistors
+					//Sep 11 2001
 					break;
+		/* Ezra-T is much like Ezra but reworked to run in Pentium III Tualatin sockets. */
 		case 0x680:	sprintf (cpu->name, "%s", "VIA C3 (Ezra-T) [C5M/C5N]");
 					//pipeline_stages = 12;
 					//CPGA/EBGA/uPGA2/uFCPGA
 					//900-1200MHz
 					//56mm
 					//0.15/0.13u hybrid (Cu)
+					//15.5 mil transistors
+					//C5N=copper interconnectrs
 					//2002
 					break;
 		case 0x690:	sprintf (cpu->name, "%s", "VIA C3 (Nehemiah) [C5XL]");
 					//pipeline_stages = 16;
+					//2 SSE units
+					//first C3 to run FPU at full clock speed (previous ran at 50%)
 					//1100-1300
 					//0.13 (Cu)
 					//die_size = "78 sq. mm"; (C5X)
 					//die_size = "54 sq. mm"; (C5XL)
-					//January 2003
+					//January 22 2003
 					break;
 	// C5YL
 	// C5X

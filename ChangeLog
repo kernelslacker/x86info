@@ -6,6 +6,7 @@
 	* Intel/bluesmoke.c: Zero pad.
 	* AMD/bluesmoke.c: Zero pad.
 	* AMD/bugs.c: Zero pad.
+	* IDT/identifty.c: More interesting comments.
 
 2003-4-2 Dave Jones <davej@codemonkey.org.uk>
 
