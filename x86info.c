@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.78 2003/08/07 16:51:05 davej Exp $
+ *  $Id: x86info.c,v 1.79 2003/08/07 16:52:05 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -191,7 +191,7 @@ int main (int argc, char **argv)
 
 	parse_command_line(argc, argv);
 	if (!silent) {
-		printf ("x86info v1.12.  Dave Jones 2001-2003\n");
+		printf ("x86info v1.12b.  Dave Jones 2001-2003\n");
 		printf ("Feedback to <davej@redhat.com>.\n\n");
 	}
 
