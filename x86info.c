@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.21 2001/07/15 17:13:57 davej Exp $
+ *  $Id: x86info.c,v 1.22 2001/07/15 17:32:53 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -83,7 +83,11 @@ int main (int argc, char **argv)
 
 	parse_command_line(argc, argv);
 
-	/* FIXME: Insert code here to test if CPUID instruction is available */
+	if ((HaveCPUID())==0) {
+		printf ("No CPUID instruction available.\n");
+		printf ("No further information available for this CPU.\n");
+		return(0);
+	}
 
 	nrCPUs = sysconf (_SC_NPROCESSORS_CONF);
 	printf ("Found %d CPU", nrCPUs);

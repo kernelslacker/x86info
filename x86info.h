@@ -42,4 +42,4 @@ void dumpmsr (int cpunum, unsigned int msr);
 void dumpmsr_bin (int cpunum, unsigned int msr);
 void estimate_MHz(int cpunum);
 void decode_bluesmoke(int cpunum);
-
+extern int HaveCPUID(void);
