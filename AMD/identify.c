@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.8 2001/10/12 22:28:21 davej Exp $
+ *  $Id: identify.c,v 1.9 2001/10/21 16:33:34 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -170,6 +170,7 @@ void Identify_AMD (unsigned int maxi, struct cpudata *cpu)
 							case 0:	sprintf (nameptr, "%s", "Athlon 4 Rev A0-A1");	break;
 							case 1:	sprintf (nameptr, "%s", "Athlon 4 Rev A2");		break;
 							case 2:	sprintf (nameptr, "%s", "Mobile Duron");		break;
+							//FIXME: 662 is also rev A5 Athlon XP
 						}
 						break;
 				case 7:	switch (cpu->stepping) {
