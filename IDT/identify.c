@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.27 2002/11/11 20:02:55 davej Exp $
+ *  $Id: identify.c,v 1.28 2003/01/27 12:04:57 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -47,13 +47,17 @@ void Identify_IDT (struct cpudata *cpu)
 		
 		/* Family 6 is when VIA bought out Cyrix & IDT
 		 * This is the CyrixIII family. */
-		case 0x660:	sprintf (cpu->name, "%s", "VIA Cyrix III");
+		case 0x660:	sprintf (cpu->name, "%s", "VIA C3 (Samuel)");
 					break;
 		case 0x670:	nameptr += sprintf (cpu->name, "%s", "VIA C3");
-					if (cpu->stepping>7)
-						sprintf(nameptr, "%s", " \"Ezra\"");
+					if (cpu->stepping<8)
+						sprintf(nameptr, "%s", " (Samuel 2)");
+					else
+						sprintf(nameptr, "%s", " (Ezra)");
 					break;
-		case 0x680:	nameptr += sprintf (cpu->name, "%s", "VIA Ezra-T");
+		case 0x680:	nameptr += sprintf (cpu->name, "%s", "VIA C3 (Ezra-T)");
+					break;
+		case 0x690:	nameptr += sprintf (cpu->name, "%s", "VIA C3 (Nehemiah)");
 					break;
 		default:	printf ("Unknown CPU");
 					break;

@@ -1,3 +1,7 @@
+2003-1-27 Dave Jones <davej@codemonkey.org.uk>
+
+	* IDT/identify.c: Add Nehemiah & Samuel2.
+
 2003-1-23 Dave Jones <davej@codemonkey.org.uk>
 
 	* bench/benchmarks.c: Add addl & lea benchmarks.
