@@ -1,0 +1,95 @@
+x86info v1.12.  Dave Jones 2001-2003
+Feedback to <davej@suse.de>.
+
+Found 1 CPU
+--------------------------------------------------------------------------
+eax in: 0x00000000, eax = 00000001 ebx = 746e6543 ecx = 736c7561 edx = 48727561
+eax in: 0x00000001, eax = 00000693 ebx = 00000000 ecx = 00000000 edx = 0380b13d
+
+eax in: 0x80000000, eax = 80000006 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x80000001, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x80000002, eax = 20414956 ebx = 6568654e ecx = 6861696d edx = 00000000
+eax in: 0x80000003, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x80000004, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x80000005, eax = 00000000 ebx = 08800880 ecx = 40040120 edx = 40040120
+eax in: 0x80000006, eax = 00000000 ebx = 00000000 ecx = 00408120 edx = 00000000
+
+eax in: 0xc0000000, eax = c0000001 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0xc0000001, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 0000001d
+
+Family: 6 Model: 9 Stepping: 3
+CPU Model : VIA C3 (Nehemiah) [C5XL]
+Feature flags:
+	Onboard FPU
+	Debugging Extensions
+	Page Size Extensions
+	Time Stamp Counter
+	Model-Specific Registers
+	CMPXCHG8 instruction
+	Memory Type Range Registers
+	Page Global Enable
+	CMOV instruction
+	MMX support
+	FXSAVE and FXRESTORE instructions
+	SSE support
+
+Extended feature flags:
+
+Instruction TLB: 8-way associative. 128 entries.
+Data TLB: 8-way associative. 128 entries.
+L1 Data cache:
+	Size: 64Kb	4-way associative.
+	lines per tag=1	line size=32 bytes.
+L1 Instruction cache:
+	Size: 64Kb	4-way associative.
+	lines per tag=1	line size=32 bytes.
+L2 (on CPU) cache:
+	Size: 64Kb	8-way associative.
+	lines per tag=1	line size=32 bytes.
+FCR: MSR: 0x00001107=0x8ebf10d6 : 10001110 10111111 00010000 11010110
+Power management: Powersaver v1.0
+MSR: 0x0000110a=0x7ff000d000080f0 : 00000111 11111111 00000000 00001101
+           00000000 00000000 10000000 11110000
+
+ RevisionID: 0 : Unknown.
+ Software clock multiplier is disabled
+
+MTRR registers:
+MTRRcap (0xfe): 0x0000000000000508
+MTRRphysBase0 (0x200): 0x0000000000000006
+MTRRphysMask0 (0x201): 0x0000000ff8000800
+MTRRphysBase1 (0x202): 0x0000000007800000
+MTRRphysMask1 (0x203): 0x0000000fff800800
+MTRRphysBase2 (0x204): 0x00000000e0000001
+MTRRphysMask2 (0x205): 0x0000000ffc000800
+MTRRphysBase3 (0x206): 0x0000000000000000
+MTRRphysMask3 (0x207): 0x0000000000000000
+MTRRphysBase4 (0x208): 0x0000000000000000
+MTRRphysMask4 (0x209): 0x0000000000000000
+MTRRphysBase5 (0x20a): 0x0000000000000000
+MTRRphysMask5 (0x20b): 0x0000000000000000
+MTRRphysBase6 (0x20c): 0x0000000000000000
+MTRRphysMask6 (0x20d): 0x0000000000000000
+MTRRphysBase7 (0x20e): 0x0000000000000000
+MTRRphysMask7 (0x20f): 0x0000000000000000
+MTRRfix64K_00000 (0x250): 0x0606060606060606
+MTRRfix16K_80000 (0x258): 0x0606060606060606
+MTRRfix16K_A0000 (0x259): 0x0000000000000000
+MTRRfix4K_C8000 (0x269): 0x0000000000000000
+MTRRfix4K_D0000 0x26a: 0x0000000000000000
+MTRRfix4K_D8000 0x26b: 0x0000000000000000
+MTRRfix4K_E0000 0x26c: 0x0000000000000000
+MTRRfix4K_E8000 0x26d: 0x0000000000000000
+MTRRfix4K_F0000 0x26e: 0x0000000000000000
+MTRRfix4K_F8000 0x26f: 0x0000000000000000
+MTRRdefType (0x2ff): 0x0000000000000c00
+
+
+1002.29 MHz processor (estimate).
+
+int 0x80: 355 cycles
+cpuid: 109 cycles
+addl: 29 cycles
+locked add: 36 cycles
+lea 1(%eax),%eax: 29 cycles
+bswap: 31 cycles
