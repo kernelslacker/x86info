@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid-rise.c,v 1.2 2001/04/27 20:52:53 davej Exp $
+ *  $Id: cpuid-rise.c,v 1.3 2001/04/27 22:11:29 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -18,6 +18,40 @@ void doRise (int cpunum, unsigned int maxi, struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned long maxei, eax, ebx, ecx, edx;
+	static char *x86_cap_flags[] = {
+		"FPU    Floating Point Unit",
+		"VME    Virtual 8086 Mode Enhancements",
+		"DE     Debugging Extensions",
+		"PSE    Page Size Extensions",
+		"TSC    Time Stamp Counter",
+		"MSR    Model Specific Registers",
+		"PAE    Physical Address Extension",
+		"MCE    Machine Check Exception",
+		"CX8    COMPXCHG8B Instruction",
+		"APIC   On-chip Advanced Programmable Interrupt Controller present and enabled",
+		"10     Reserved",
+		"SEP    Fast System Call",
+		"MTRR   Memory Type Range Registers",
+		"PGE    PTE Global Flag",
+		"MCA    Machine Check Architecture",
+		"CMOV   Conditional Move and Compare Instructions",
+		"FGPAT  Page Attribute Table",
+		"PSE-36 36-bit Page Size Extension",
+		"PN     Processor Serial Number present and enabled",
+		"19     reserved",
+		"20     reserved",
+		"21     reserved",
+		"22     reserved",
+		"MMX    MMX instruction set",
+		"FXSR   Fast FP/MMX Streaming SIMD Extensions save/restore",
+		"XMM    Streaming SIMD Extensions instruction set",
+		"26     reserved",
+		"27     reserved",
+		"28     reserved",
+		"29     reserved",
+		"30     reserved",
+		"31     reserved"
+	};
 
 	cpu->vendor = VENDOR_RISE;
 
@@ -75,6 +109,23 @@ void doRise (int cpunum, unsigned int maxi, struct cpudata *cpu)
 			break;
 		}
 		printf ("]\n");
+
+		printf("Stepping %d\n", cpu->stepping);
+
+		/* according to Rise documentation,  COMPXCHG8B is always enable
+		even tho the function bit is set to 0 (bit 8) 
+		so I am just setting the edx value and let the rest of the co
+		*/
+
+		edx |= (1 << 8) ;
+ 
+		if (show_flags) {
+			printf ("Feature flags %08lx:\n", edx);
+			for (i = 0; i < 32; i++) {
+				if (edx  & (1 << i))
+					printf ("%s\n", x86_cap_flags[i]);
+			}
+		}
 	}
 
 	/* Check for presence of extended info */

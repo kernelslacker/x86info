@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.3 2001/02/28 00:48:00 davej Exp $
+ *  $Id: identify.c,v 1.4 2001/04/27 22:11:29 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -38,7 +38,8 @@ void identify (int cpunum)
 		doIDT (cpunum, maxi, &cpu);
 		break;
 
-	case 0x52697365:	/* Rise */
+	case 0x52697365:	/* This should be checked. Why 2 ? */
+	case 0x65736952:	/* Rise */
 		doRise (cpunum, maxi, &cpu);
 		break;
 
