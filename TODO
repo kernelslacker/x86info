@@ -1,18 +1,21 @@
+- introduce verbosity (-v/-vv/-vvv) options to do 'everything'. -a output is
+  getting too verbose without it.
+
+- introduce hexdump option (-x) to dump register values in addition to decoding.
+
 - Identify Transmeta CPUs.
 
-- Report the CPU packaging type on CPUs where info is available.
-
 - Disallow --mtrr on cpu's that don't have MTRRs.
+
+- Decode mtrr registers as well as dumping them
 
 - Dump cyrix ARR registers when we pass --mtrr
 
 - --apic
   Dump APIC registers
 
-- Recognise CPUs with bugs, and print warnings
-  if workarounds are not enabled. For example..
-  "Stepping D0 Duron detected with Cache size bug.
-   You should upgrade your kernel to work around this bug"
+- --bugs to print known CPU errata
+  "Stepping D0 Duron detected with Cache size bug."
 
 - --gcc option to output best optimisation parameters
   for that CPU.
@@ -24,13 +27,17 @@
 
 - cpuid macro might cut down huge switch statements in a few places
 
-- voltages
-
-- might be time to start thinking about XML ?
-
-- libx86info for other apps
+- After identifying CPU we can associate more info with the CPU.
+  - CPU codename
+  - Introduction date
+  - number of transistors
+  - voltages (I/O, Core, Maximum)
 
 - review code for extended natsemi support.
 
 - report L3 (chipset) caches (requires PCI poking)
+
+- might be time to start thinking about XML for CPU descriptions?
+
+- libx86info for other apps
 
