@@ -40,7 +40,7 @@ struct cpudata {
 #define CONN_SOCKET_5		3
 #define CONN_SOCKET_7		4
 #define CONN_SOCKET_370		5
-#define CONN_SOCKET_370FCPGA	6
+#define CONN_SOCKET_370_FCPGA	6
 #define CONN_SOCKET_5_7		7
 #define CONN_SUPER_SOCKET_7	8
 #define CONN_SLOT_A		9

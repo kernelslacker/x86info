@@ -54,7 +54,7 @@ void decode_connector (unsigned int type)
 		case CONN_SOCKET_370:	printf ("%s", conn_socket_370);
 				break;
 
-		case CONN_SOCKET_370FCPGA:	printf ("%s", conn_socket_370FCPGA);
+		case CONN_SOCKET_370_FCPGA:	printf ("%s", conn_socket_370FCPGA);
 				break;
 
 		case CONN_SOCKET_5_7:	printf ("%s", conn_socket_5_7);

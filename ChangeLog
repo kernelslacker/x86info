@@ -3,6 +3,8 @@
 	* connector.c: decode the type of socket the CPU is in.
 	* x86info.c: add --connector option.
 	* AMD/identify.c: Add socket types for each CPU.
+	* Intel/identify.c: Add socket types for each CPU.
+	  Some of these may be incorrect, and need checking/fixing later.
 
 2002-06-4 Dave Jones <davej@suse.de>
 

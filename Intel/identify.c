@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.25 2002/05/24 21:34:57 davej Exp $
+ *  $Id: identify.c,v 1.26 2002/06/06 12:32:13 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -187,9 +187,11 @@ void Identify_Intel (struct cpudata *cpu)
 				break;
 			case 8:
 				nameptr+=sprintf (nameptr, "%s", "DX4");
+				cpu->connector = CONN_SOCKET_3;
 				break;
 			case 9:
 				nameptr+=sprintf (nameptr, "%s", "write-back enhanced DX4");
+				cpu->connector = CONN_SOCKET_3;
 				break;
 			default:
 				nameptr+=sprintf (nameptr, "%s", "Unknown CPU");
@@ -202,24 +204,31 @@ void Identify_Intel (struct cpudata *cpu)
 			switch (cpu->model) {
 			case 0:
 				nameptr+=sprintf (nameptr, "%s", "A-step");
+				cpu->connector = CONN_SOCKET_4;
 				break;
 			case 1:
 				nameptr+=sprintf (nameptr, "%s", "60/66");
+				cpu->connector = CONN_SOCKET_4;
 				break;
 			case 2:
 				nameptr+=sprintf (nameptr, "%s", "75-200");
+				cpu->connector = CONN_SOCKET_5_7;
 				break;
 			case 3:
 				nameptr+=sprintf (nameptr, "%s", "Overdrive");
+				cpu->connector = CONN_SOCKET_4;
 				break;
 			case 4:
 				nameptr+=sprintf (nameptr, "%s", "MMX");
+				cpu->connector = CONN_SOCKET_7;
 				break;
 			case 7:
 				nameptr+=sprintf (nameptr, "%s", "Mobile");
+				cpu->connector = CONN_SOCKET_7;
 				break;
 			case 8:
 				nameptr+=sprintf (nameptr, "%s", "MMX Mobile");
+				cpu->connector = CONN_SOCKET_7;
 				break;
 			}
 			break;
@@ -228,12 +237,15 @@ void Identify_Intel (struct cpudata *cpu)
 			switch (cpu->model) {
 			case 0:
 				nameptr+=sprintf (cpu->name, "%s", "Pentium Pro A-Step");
+				cpu->connector = CONN_SOCKET_8;
 				break;
 			case 1:
 				nameptr+=sprintf (cpu->name, "%s", "Pentium Pro");
+				cpu->connector = CONN_SOCKET_8;
 				break;
 			case 3:
 				nameptr+=sprintf (cpu->name, "%s", "Pentium II ");
+				cpu->connector = CONN_SLOT_1;
 				switch (cpu->stepping) {
 				case 2:
 					nameptr+=sprintf (nameptr, "%s", "Overdrive");
@@ -247,9 +259,11 @@ void Identify_Intel (struct cpudata *cpu)
 				}
 				break;
 			case 4:
+				cpu->connector = CONN_SLOT_1;
 				nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes?)");
 				break;
 			case 5:
+				cpu->connector = CONN_SLOT_1;
 				if (cpu->cachesize_L2 == 0) {
 					nameptr+=sprintf (cpu->name, "%s", "Celeron (Covington)");
 					break;
@@ -277,6 +291,7 @@ void Identify_Intel (struct cpudata *cpu)
 				}
 				break;
 			case 6:
+				cpu->connector = CONN_SOCKET_370;
 				if (cpu->cachesize_L2 == 128) {
 					nameptr+=sprintf (cpu->name, "%s", "Celeron (Mendocino)");
 					break;
@@ -297,6 +312,7 @@ void Identify_Intel (struct cpudata *cpu)
 				}
 				break;
 			case 7:
+				cpu->connector = CONN_SLOT_1;
 				switch (cpu->stepping) {
 				case 2:
 					nameptr+=sprintf (cpu->name, "%s", "Pentium III [kB0]");
@@ -310,6 +326,7 @@ void Identify_Intel (struct cpudata *cpu)
 				}
 				break;
 			case 8:
+				cpu->connector = CONN_SOCKET_370_FCPGA;
 				if (cpu->cachesize_L2 == 128) {
 					nameptr+=sprintf (cpu->name, "%s", "Celeron");
 				} else {
@@ -332,6 +349,7 @@ void Identify_Intel (struct cpudata *cpu)
 				}
 				break;
 			case 0xA:
+				cpu->connector = CONN_SLOT_1;
 				switch (cpu->brand) {
 				case 0:
 					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes)");
@@ -354,6 +372,7 @@ void Identify_Intel (struct cpudata *cpu)
 				}
 				break;
 			case 0xB:
+				cpu->connector = CONN_SLOT_1;
 				switch (cpu->stepping) {
 				case 1:
 					nameptr+=sprintf (cpu->name, "%s", "Celeron / Pentium III (Tualatin) [tA1/cA2]");
@@ -374,6 +393,7 @@ void Identify_Intel (struct cpudata *cpu)
 			break;
 
 		case 0xF:	/* Family 15 */
+			cpu->connector = CONN_SOCKET_423;
 			switch (cpu->model) {
 			case 0:
 				nameptr += sprintf (cpu->name, "%s", "Pentium 4");
