@@ -19,6 +19,7 @@ typedef __u32 u32;
 #define VENDOR_TRANSMETA 7
 
 struct cpudata {
+	struct cpudata *next;
 	unsigned int number;
 	unsigned int vendor;
 	unsigned int family;

@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.66 2002/11/12 21:38:34 davej Exp $
+ *  $Id: x86info.c,v 1.67 2002/11/12 22:28:40 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -153,9 +153,8 @@ void separator(void)
 int main (int argc, char **argv)
 {
 	unsigned int i;
-	struct cpudata cpu;
+	struct cpudata *cpu, *head=NULL, *tmp;
 
-	memset (&cpu, 0, sizeof(struct cpudata));
 	parse_command_line(argc, argv);
 	if (!silent) {
 		printf ("x86info v1.12.  Dave Jones 2001, 2002\n");
@@ -221,14 +220,31 @@ int main (int argc, char **argv)
 
 	separator();
 
+	/* Iterate over the linked list. */
+
 	for (i=0; i<nrCPUs; i++) {
-		cpu.number = i;
+		cpu = malloc (sizeof (struct cpudata));
+		if (!cpu) {
+			printf ("Out of memory\n");
+			return -1;
+		}
+
+		memset (cpu, 0, sizeof(struct cpudata));
+	
+		if (!head) {
+			head = cpu;
+		} else {
+			cpu->next = head;
+			head = cpu;
+		}
+
+		cpu->number = i;
 
 		if (!silent && nrCPUs!=1)
 			printf ("CPU #%u\n", i+1);
 
-		identify (&cpu);
-		show_info (&cpu);
+		identify (cpu);
+		show_info (cpu);
 
 		/*
 		 * Doing this per-cpu is a problem, as we can't
@@ -240,7 +256,20 @@ int main (int argc, char **argv)
 		if (nrCPUs>1)
 			separator();
 
-		memset (&cpu, 0, sizeof(struct cpudata));
+		if (cpu->next)
+			cpu = cpu->next;
+	}
+
+	/* Tear down the linked list. */
+	cpu = head;
+	for (i=0; i<nrCPUs; i++) {
+		if (cpu->datasheet_url)
+			free(cpu->datasheet_url);
+		if (cpu->errata_url)
+			free(cpu->errata_url);
+		tmp = cpu->next;
+		free (cpu);
+		cpu = tmp;
 	}
 
 	if (nrCPUs > 1 && used_UP==1 && (!silent)) {
