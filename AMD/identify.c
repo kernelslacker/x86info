@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.1 2001/08/19 14:47:25 davej Exp $
+ *  $Id: identify.c,v 1.2 2001/08/19 15:09:27 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include "../x86info.h"
-#include "amd.h"
+#include "AMD.h"
 
 extern int show_registers;
 extern int show_cacheinfo;

@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.1 2001/08/19 14:47:25 davej Exp $
+ *  $Id: bluesmoke.c,v 1.2 2001/08/19 15:09:27 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -26,7 +26,7 @@
 extern int show_bluesmoke;
 extern int user_is_root;
 
-void decode_intel_bluesmoke(int cpunum)
+void decode_Intel_bluesmoke(int cpunum)
 {
 	unsigned long long val, val2;
 	int banks, i;

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.1 2001/08/19 14:47:25 davej Exp $
+ *  $Id: identify.c,v 1.2 2001/08/19 15:09:27 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -10,12 +10,13 @@
 
 #include <stdio.h>
 #include "../x86info.h"
+#include "Cyrix.h"
 
 extern int show_cacheinfo;
 extern int show_registers;
 
 /* Decode TLB and cache info descriptors */
-void decode_cyrix_tlb (int x)
+void decode_Cyrix_TLB (int x)
 {
 	switch (x & 0xff) {
 	case 0:
@@ -123,16 +124,16 @@ void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *c
 		for (i = 0; i < ntlb; i++) {
 			cpuid (cpu->number, 2, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
-			decode_cyrix_tlb (eax >> 8);
-			decode_cyrix_tlb (eax >> 16);
-			decode_cyrix_tlb (eax >> 24);
+			decode_Cyrix_TLB (eax >> 8);
+			decode_Cyrix_TLB (eax >> 16);
+			decode_Cyrix_TLB (eax >> 24);
 
 			/* ebx and ecx are reserved */
 			if ((edx & 0x80000000) == 0) {
-				decode_cyrix_tlb (edx);
-				decode_cyrix_tlb (edx >> 8);
-				decode_cyrix_tlb (edx >> 16);
-				decode_cyrix_tlb (edx >> 24);
+				decode_Cyrix_TLB (edx);
+				decode_Cyrix_TLB (edx >> 8);
+				decode_Cyrix_TLB (edx >> 16);
+				decode_Cyrix_TLB (edx >> 24);
 			}
 		}
 	}
@@ -144,16 +145,16 @@ void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *c
 		for (i = 0; i < ntlb; i++) {
 			cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
-			decode_cyrix_tlb (ebx >> 8);
-			decode_cyrix_tlb (ebx >> 16);
-			decode_cyrix_tlb (ebx >> 24);
+			decode_Cyrix_TLB (ebx >> 8);
+			decode_Cyrix_TLB (ebx >> 16);
+			decode_Cyrix_TLB (ebx >> 24);
 
 			/* eax and edx are reserved */
 			if ((ecx & 0x80000000) == 0) {
-				decode_cyrix_tlb (ecx);
-				decode_cyrix_tlb (ecx >> 8);
-				decode_cyrix_tlb (ecx >> 16);
-				decode_cyrix_tlb (ecx >> 24);
+				decode_Cyrix_TLB (ecx);
+				decode_Cyrix_TLB (ecx >> 8);
+				decode_Cyrix_TLB (ecx >> 16);
+				decode_Cyrix_TLB (ecx >> 24);
 			}
 		}
 	}

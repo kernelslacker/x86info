@@ -30,19 +30,18 @@ extern int used_UP;
 
 void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
-void decode_intel_tlb (int);
-void decode_cyrix_tlb (int);
-void Identify_Intel (unsigned int, struct cpudata *cpu);
+
 void Identify_AMD (unsigned int, struct cpudata *cpu);
 void Identify_Cyrix (unsigned int, unsigned int, struct cpudata *cpu);
 void Identify_IDT (unsigned int, unsigned int, struct cpudata *cpu);
-void Identify_Rise (unsigned int, unsigned int, struct cpudata *cpu);
+void Identify_Intel (unsigned int, struct cpudata *cpu);
+void Identify_RiSE (unsigned int, unsigned int, struct cpudata *cpu);
 
 void display_AMD_info(unsigned int maxei, struct cpudata *cpu);
 void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
 void display_IDT_info(unsigned int maxei, struct cpudata *cpu);
 void display_Intel_info(unsigned int maxi, struct cpudata *cpu);
-void display_Rise_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
+void display_RiSE_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
 
 void decode_feature_flags (struct cpudata *cpu, int flags);
 void identify (struct cpudata *cpu);
@@ -53,7 +52,5 @@ void long2binstr(long value);
 void dumpmsr (int cpunum, unsigned int msr);
 void dumpmsr_bin (int cpunum, unsigned int msr);
 void estimate_MHz(int cpunum);
-void decode_bluesmoke(int cpunum);
 int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
-

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.13 2001/08/10 11:34:57 davej Exp $
+ *  $Id: identify.c,v 1.14 2001/08/19 15:09:27 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -28,7 +28,7 @@ void identify (struct cpudata *cpu)
 		case 0x69727943:/* Cyrix */	Identify_Cyrix (maxi, maxei, cpu);	break;
 		case 0x746e6543:/* IDT */	Identify_IDT (maxi, maxei, cpu);	break;
 		case 0x52697365:/* Rise This should be checked. Why 2 ? */
-		case 0x65736952:/* Rise */	Identify_Rise (maxi, maxei, cpu);	break;
+		case 0x65736952:/* Rise */	Identify_RiSE (maxi, maxei, cpu);	break;
 		default:					printf ("Unknown vendor\n");				return;
 	}
 
@@ -62,7 +62,7 @@ void identify (struct cpudata *cpu)
 			case VENDOR_RISE:
 				printf ("Family: %d Model: %d Stepping: %d [%s]\n",
 					cpu->family, cpu->model, cpu->stepping, cpu->name);
-				display_Rise_info (maxi, maxei, cpu);
+				display_RiSE_info (maxi, maxei, cpu);
 				break;
 
 			default:

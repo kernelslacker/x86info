@@ -1,1 +1,2 @@
-void decode_intel_bluesmoke(int cpunum);
+void decode_Intel_bluesmoke(int cpunum);
+void decode_Intel_TLB (int);

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.1 2001/08/19 14:47:25 davej Exp $
+ *  $Id: identify.c,v 1.2 2001/08/19 15:09:27 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -17,7 +17,7 @@ extern int show_flags;
 extern int show_bluesmoke;
 
 /* Decode Intel TLB and cache info descriptors */
-void decode_intel_tlb (int x)
+void decode_Intel_TLB (int x)
 {
 	switch (x & 0xff) {
 	case 0:
@@ -218,27 +218,27 @@ void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 		for (i = 0; i < ntlb; i++) {
 			cpuid (cpu->number, 2, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
-			decode_intel_tlb (eax >> 8);
-			decode_intel_tlb (eax >> 16);
-			decode_intel_tlb (eax >> 24);
+			decode_Intel_TLB (eax >> 8);
+			decode_Intel_TLB (eax >> 16);
+			decode_Intel_TLB (eax >> 24);
 
 			if ((ebx & 0x80000000) == 0) {
-				decode_intel_tlb (ebx);
-				decode_intel_tlb (ebx >> 8);
-				decode_intel_tlb (ebx >> 16);
-				decode_intel_tlb (ebx >> 24);
+				decode_Intel_TLB (ebx);
+				decode_Intel_TLB (ebx >> 8);
+				decode_Intel_TLB (ebx >> 16);
+				decode_Intel_TLB (ebx >> 24);
 			}
 			if ((ecx & 0x80000000) == 0) {
-				decode_intel_tlb (ecx);
-				decode_intel_tlb (ecx >> 8);
-				decode_intel_tlb (ecx >> 16);
-				decode_intel_tlb (ecx >> 24);
+				decode_Intel_TLB (ecx);
+				decode_Intel_TLB (ecx >> 8);
+				decode_Intel_TLB (ecx >> 16);
+				decode_Intel_TLB (ecx >> 24);
 			}
 			if ((edx & 0x80000000) == 0) {
-				decode_intel_tlb (edx);
-				decode_intel_tlb (edx >> 8);
-				decode_intel_tlb (edx >> 16);
-				decode_intel_tlb (edx >> 24);
+				decode_Intel_TLB (edx);
+				decode_Intel_TLB (edx >> 8);
+				decode_Intel_TLB (edx >> 16);
+				decode_Intel_TLB (edx >> 24);
 			}
 		}
 	}
@@ -267,5 +267,5 @@ void display_Intel_info (unsigned int maxi, struct cpudata *cpu)
 
 	/* FIXME: Bit test for MCA here!*/
 	if (show_bluesmoke)
-		decode_intel_bluesmoke(cpu->number);
+		decode_Intel_bluesmoke(cpu->number);
 }

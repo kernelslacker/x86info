@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.1 2001/08/19 14:47:25 davej Exp $
+ *  $Id: identify.c,v 1.2 2001/08/19 15:09:27 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -14,7 +14,7 @@ extern int show_cacheinfo;
 extern int show_flags;
 extern int show_registers;
 
-void Identify_Rise (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
+void Identify_RiSE (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx;
@@ -72,7 +72,7 @@ void Identify_Rise (unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 }
 
 
-void display_Rise_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
+void display_RiSE_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned long eax, ebx, ecx, edx;
