@@ -20,8 +20,5 @@ void show_benchmarks()
 	TIME(asm volatile("addl $1,0(%esp)"), "addl");
 	TIME(asm volatile("lock ; addl $1,0(%esp)"), "locked add");
 	TIME(asm volatile("lea 1(%eax),%eax"), "lea 1(%%eax),%%eax");
-
-	TIME(asm volatile("divl (%esp)"), "divl");
-	TIME(asm volatile("mull (%esp)"), "mull");
 }
 
