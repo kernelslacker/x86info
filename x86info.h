@@ -79,7 +79,6 @@ void display_RiSE_info(struct cpudata *cpu);
 
 void decode_feature_flags (struct cpudata *cpu, int flags, int eflags);
 void identify (struct cpudata *cpu);
-void dumpregs (int cpunum, unsigned int begin, unsigned int end);
 
 int read_msr(int cpu, unsigned int index, unsigned long long *val);
 void binary32(unsigned long value);

@@ -2,7 +2,7 @@
 
 	* x86info.h: introduced tuple macro
 	* */identify.c: used tuple macro to clean up code.
-	* dumpregs.c: make more generic.
+	* dumpregs.c: make more generic, move to identify.c
 	* */identify.c: reduce duplication, and use generic dumpregs()
 
 2002-06-18 Dave Jones <davej@suse.de>

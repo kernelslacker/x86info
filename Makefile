@@ -32,7 +32,6 @@ OBJS =\
 	cpuid_UP.o\
 	features.o\
 	identify.o\
-	dumpregs.o\
 	rdmsr.o\
 	binary.o\
 	MHz.o\
