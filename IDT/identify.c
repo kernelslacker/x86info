@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.2 2001/08/28 23:05:15 davej Exp $
+ *  $Id: identify.c,v 1.3 2001/08/28 23:10:59 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -143,7 +143,11 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu)
 	/* check on-chip L2 cache size */
 	if (maxei >= 0x80000006) {
 		cpuid (cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
-		printf ("L2 (on CPU) cache: %ld KB associativity %lx lines per tag %ld line size %ld\n",
-			ecx >> 24, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
+		if (cpu->model==7 || cpu->model==8)
+			printf ("L2 (on CPU) cache: %ld KB associativity %lx lines per tag %ld line size %ld\n",
+				ecx >> 24, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
+		else
+			printf ("L2 (on CPU) cache: %ld KB associativity %lx lines per tag %ld line size %ld\n",
+				ecx >> 16, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
 	}
 }
