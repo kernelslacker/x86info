@@ -7,66 +7,68 @@
 #include "x86info.h"
 
 /* Decode Intel TLB and cache info descriptors */
-void decode_intel_tlb(int x){
-  switch(x & 0xff){
-  case 0:
-    break;
-  case 0x1:
-    printf("Instruction TLB: 4KB pages, 4-way set assoc, 32 entries\n");
-    break;
-  case 0x2:
-    printf("Instruction TLB: 4MB pages, fully assoc, 2 entries\n");
-    break;
-  case 0x3:
-    printf("Data TLB: 4KB pages, 4-way set assoc, 64 entries\n");
-    break;
-  case 0x4:
-    printf("Data TLB: 4MB pages, 4-way set assoc, 8 entries\n");
-    break;
-  case 0x6:
-    printf("Instruction cache: 8KB, 4-way set assoc, 32 byte line size\n");
-    break;
-  case 0x8:
-    printf("Instruction cache: 16KB, 4-way set assoc, 32 byte line size\n");
-    break;
-  case 0xa:
-    printf("Data cache: 8KB, 2-way set assoc, 32 byte line size\n");
-    break;
-  case 0xc:
-    printf("Data cache: 16KB, 2-way or 4-way set assoc, 32 byte line size\n");
-    break;
-  case 0x40:
-    printf("No L2 cache\n");
-    break;
-  case 0x41:
-    printf("L2 unified cache: 128KB, 4-way set assoc, 32 byte line size\n");
-    break;
-  case 0x42:
-    printf("L2 unified cache: 256KB, 4-way set assoc, 32 byte line size\n");
-    break;
-  case 0x43:
-    printf("L2 unified cache: 512KB, 4-way set assoc, 32 byte line size\n");
-    break;
-  case 0x44:
-    printf("L2 unified cache: 1MB, 4-way set assoc, 32 byte line size\n");
-    break;
-  case 0x45:
-    printf("L2 unified cache: 2MB, 4-way set assoc, 32 byte line size\n");
-    break;
-  default:
-    printf("unknown TLB/cache descriptor: 0x%x\n",x);
-    break;
-  }
+void decode_intel_tlb (int x)
+{
+	switch (x & 0xff) {
+	case 0:
+		break;
+	case 0x1:
+		printf ("Instruction TLB: 4KB pages, 4-way set assoc, 32 entries\n");
+		break;
+	case 0x2:
+		printf ("Instruction TLB: 4MB pages, fully assoc, 2 entries\n");
+		break;
+	case 0x3:
+		printf ("Data TLB: 4KB pages, 4-way set assoc, 64 entries\n");
+		break;
+	case 0x4:
+		printf ("Data TLB: 4MB pages, 4-way set assoc, 8 entries\n");
+		break;
+	case 0x6:
+		printf ("Instruction cache: 8KB, 4-way set assoc, 32 byte line size\n");
+		break;
+	case 0x8:
+		printf ("Instruction cache: 16KB, 4-way set assoc, 32 byte line size\n");
+		break;
+	case 0xa:
+		printf ("Data cache: 8KB, 2-way set assoc, 32 byte line size\n");
+		break;
+	case 0xc:
+		printf ("Data cache: 16KB, 2-way or 4-way set assoc, 32 byte line size\n");
+		break;
+	case 0x40:
+		printf ("No L2 cache\n");
+		break;
+	case 0x41:
+		printf ("L2 unified cache: 128KB, 4-way set assoc, 32 byte line size\n");
+		break;
+	case 0x42:
+		printf ("L2 unified cache: 256KB, 4-way set assoc, 32 byte line size\n");
+		break;
+	case 0x43:
+		printf ("L2 unified cache: 512KB, 4-way set assoc, 32 byte line size\n");
+		break;
+	case 0x44:
+		printf ("L2 unified cache: 1MB, 4-way set assoc, 32 byte line size\n");
+		break;
+	case 0x45:
+		printf ("L2 unified cache: 2MB, 4-way set assoc, 32 byte line size\n");
+		break;
+	default:
+		printf ("unknown TLB/cache descriptor: 0x%x\n", x);
+		break;
+	}
 }
 
 
 /* Intel-specific information */
-void dointel(int maxi, struct cpudata *cpu){
-  int i;
-  unsigned long eax,ebx,ecx,edx;
-  int stepping,model,family,type,reserved,ntlb;
+void dointel (int maxi, struct cpudata *cpu)
+{
+	int i;
+	unsigned long eax, ebx, ecx, edx;
+	int stepping, model, family, type, reserved, ntlb;
 
-	static char*x86_cap_flags[] = {
+	static char *x86_cap_flags[] = {
 		"FPU    Floating Point Unit",
 		"VME    Virtual 8086 Mode Enhancements",
 		"DE     Debugging Extensions",
@@ -98,156 +100,157 @@ void dointel(int maxi, struct cpudata *cpu){
 		"28     reserved",
 		"29     reserved",
 		"30     reserved",
-		"31     reserved" };
- 
-  printf("Intel-specific functions\n");
+		"31     reserved"
+	};
 
-  if(maxi >= 1){
-    /* Family/model/type etc */
-    cpuid(1,&eax,&ebx,&ecx,&edx);
-    stepping = eax & 0xf;
-    model = (eax >> 4) & 0xf;
-    family = (eax >> 8) & 0xf;
-    type = (eax >> 12) & 0x3;
-    reserved = eax >> 14;
+	printf ("Intel-specific functions\n");
 
-    printf("Family: %d Model: %d Type %d [",family,model,type);
-    switch(family){
-    case 4:
-      printf("i486 ");
-      switch(model){
-      case 0:
-      case 1:
-	printf("DX");
-	break;
-      case 2:
-	printf("SX");
-	break;
-      case 3:
-	printf("487/DX2");
-	break;
-      case 4:
-	printf("SL");
-	break;
-      case 5:
-	printf("SX2");
-	break;
-      case 7:
-	printf("write-back enhanced DX2");
-	break;
-      case 8:
-	printf("DX4");
-	break;
-      }
-      break;
-    case 5:
-      printf("Pentium ");
-      switch(model){
-      case 1:
-	printf("60/66");
-	break;
-      case 2:
-	printf("75-200");
-	break;
-      case 3:
-	printf("for 486 system");
-	break;
-      case 4:
-	printf("MMX");
-	break;
-      }
-      break;
-    case 6:
-      printf("Pentium Pro; ");
-      switch(model){
-      case 1:
-	printf("Pentium Pro;");
-	break;
-      case 3:
-	printf("Pentium II Model 3;");
-	break;
-      case 5:
-	printf("Pentium II Model 5/Xeon/Celeron;");
-	break;
-      case 6:
-	printf("Celeron;");
-	break;
-      case 7:
-	printf("Pentium III/Pentium III Xeon;");
-	break;
-      }
-      break;
-    }
-    switch(type){
-    case 0:
-      printf(" Original OEM");
-      break;
-    case 1:
-      printf(" Overdrive");
-      break;
-    case 2:
-      printf(" Dual-capable");
-      break;
-    case 3:
-      printf(" Reserved");
-      break;
-    }
-    printf("]\n");
-    printf("Stepping: %d\n",stepping);
+	if (maxi >= 1) {
+		/* Family/model/type etc */
+		cpuid (1, &eax, &ebx, &ecx, &edx);
+		stepping = eax & 0xf;
+		model = (eax >> 4) & 0xf;
+		family = (eax >> 8) & 0xf;
+		type = (eax >> 12) & 0x3;
+		reserved = eax >> 14;
 
-    printf("Reserved: %d\n\n",reserved);
+		printf ("Family: %d Model: %d Type %d [", family, model, type);
+		switch (family) {
+		case 4:
+			printf ("i486 ");
+			switch (model) {
+			case 0:
+			case 1:
+				printf ("DX");
+				break;
+			case 2:
+				printf ("SX");
+				break;
+			case 3:
+				printf ("487/DX2");
+				break;
+			case 4:
+				printf ("SL");
+				break;
+			case 5:
+				printf ("SX2");
+				break;
+			case 7:
+				printf ("write-back enhanced DX2");
+				break;
+			case 8:
+				printf ("DX4");
+				break;
+			}
+			break;
+		case 5:
+			printf ("Pentium ");
+			switch (model) {
+			case 1:
+				printf ("60/66");
+				break;
+			case 2:
+				printf ("75-200");
+				break;
+			case 3:
+				printf ("for 486 system");
+				break;
+			case 4:
+				printf ("MMX");
+				break;
+			}
+			break;
+		case 6:
+			printf ("Pentium Pro; ");
+			switch (model) {
+			case 1:
+				printf ("Pentium Pro;");
+				break;
+			case 3:
+				printf ("Pentium II Model 3;");
+				break;
+			case 5:
+				printf ("Pentium II Model 5/Xeon/Celeron;");
+				break;
+			case 6:
+				printf ("Celeron;");
+				break;
+			case 7:
+				printf ("Pentium III/Pentium III Xeon;");
+				break;
+			}
+			break;
+		}
+		switch (type) {
+		case 0:
+			printf (" Original OEM");
+			break;
+		case 1:
+			printf (" Overdrive");
+			break;
+		case 2:
+			printf (" Dual-capable");
+			break;
+		case 3:
+			printf (" Reserved");
+			break;
+		}
+		printf ("]\n");
+		printf ("Stepping: %d\n", stepping);
 
-    printf("Feature flags %08lx:\n",edx);
-		for (i=0;i<32;i++) {
-			if (edx & (1<<i)) {
+		printf ("Reserved: %d\n\n", reserved);
+
+		printf ("Feature flags %08lx:\n", edx);
+		for (i = 0; i < 32; i++) {
+			if (edx & (1 << i)) {
 				printf ("%s\n", x86_cap_flags[i]);
 			}
 		}
-  }
+	}
 
-  if(maxi >= 2){
-    /* Decode TLB and cache info */
-    ntlb = 255;
-    for(i=0;i<ntlb;i++){
-      cpuid(2,&eax,&ebx,&ecx,&edx);
-      ntlb =  eax & 0xff;
-      decode_intel_tlb(eax >> 8);
-      decode_intel_tlb(eax >> 16);
-      decode_intel_tlb(eax >> 24);
-      
-      if((ebx & 0x80000000) == 0){
-	decode_intel_tlb(ebx);
-	decode_intel_tlb(ebx >> 8);
-	decode_intel_tlb(ebx >> 16);
-	decode_intel_tlb(ebx >> 24);
-      }
-      if((ecx & 0x80000000) == 0){
-	decode_intel_tlb(ecx);
-	decode_intel_tlb(ecx >> 8);
-	decode_intel_tlb(ecx >> 16);
-	decode_intel_tlb(ecx >> 24);
-      }
-      if((edx & 0x80000000) == 0){
-	decode_intel_tlb(edx);
-	decode_intel_tlb(edx >> 8);
-	decode_intel_tlb(edx >> 16);
-	decode_intel_tlb(edx >> 24);
-      }
-    }
-  }
-  if(maxi >= 3){
-    /* Pentium III CPU serial number */
-    unsigned long signature;
-    cpuid(1,&eax,NULL,NULL,NULL);
-    signature = eax;
+	if (maxi >= 2) {
+		/* Decode TLB and cache info */
+		ntlb = 255;
+		for (i = 0; i < ntlb; i++) {
+			cpuid (2, &eax, &ebx, &ecx, &edx);
+			ntlb = eax & 0xff;
+			decode_intel_tlb (eax >> 8);
+			decode_intel_tlb (eax >> 16);
+			decode_intel_tlb (eax >> 24);
 
-    cpuid(3,&eax,&ebx,&ecx,&edx);
-    printf("Processor serial: ");
-    printf("%04lX",signature >> 16);
-    printf("-%04lX",signature & 0xffff);
-    printf("-%04lX",edx >> 16);
-    printf("-%04lX",edx & 0xffff);
-    printf("-%04lX",ecx >> 16);
-    printf("-%04lX\n",ecx & 0xffff);
-  }
+			if ((ebx & 0x80000000) == 0) {
+				decode_intel_tlb (ebx);
+				decode_intel_tlb (ebx >> 8);
+				decode_intel_tlb (ebx >> 16);
+				decode_intel_tlb (ebx >> 24);
+			}
+			if ((ecx & 0x80000000) == 0) {
+				decode_intel_tlb (ecx);
+				decode_intel_tlb (ecx >> 8);
+				decode_intel_tlb (ecx >> 16);
+				decode_intel_tlb (ecx >> 24);
+			}
+			if ((edx & 0x80000000) == 0) {
+				decode_intel_tlb (edx);
+				decode_intel_tlb (edx >> 8);
+				decode_intel_tlb (edx >> 16);
+				decode_intel_tlb (edx >> 24);
+			}
+		}
+	}
+	if (maxi >= 3) {
+		/* Pentium III CPU serial number */
+		unsigned long signature;
+		cpuid (1, &eax, NULL, NULL, NULL);
+		signature = eax;
+
+		cpuid (3, &eax, &ebx, &ecx, &edx);
+		printf ("Processor serial: ");
+		printf ("%04lX", signature >> 16);
+		printf ("-%04lX", signature & 0xffff);
+		printf ("-%04lX", edx >> 16);
+		printf ("-%04lX", edx & 0xffff);
+		printf ("-%04lX", ecx >> 16);
+		printf ("-%04lX\n", ecx & 0xffff);
+	}
 }
