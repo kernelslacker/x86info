@@ -21,6 +21,6 @@ void time_int80h()
 			:"0" (__NR_getppid));
 	}
 	end = rdtsc();
-	printf("int 0x80 took %f cycles\n", (end - start) / 1000000.0);
+	printf("int 0x80 took %d cycles\n", (end - start) / 1000000);
 }
 

@@ -47,6 +47,7 @@ OBJS =\
 \
 	bench/benchmarks.o\
 	bench/int80h.o\
+	bench/cpuid.o\
 	bench/MHz.o
 
 x86info: $(OBJS)

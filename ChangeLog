@@ -1,3 +1,8 @@
+2002-12-22  Dave Jones <davej@codemonkey.org.uk>
+
+	* bench/cpuid.c: Benchmark cpuid.
+	* bench/int80h.c: Report time in int not float.
+
 2002-12-18  Dave Jones <davej@codemonkey.org.uk>
 
 	* bench/: new dir
