@@ -5,6 +5,8 @@
 
 #include <linux/types.h>
 
+typedef __u32 u32;
+
 #define VENDOR_AMD	1
 #define VENDOR_CENTAUR 2
 #define VENDOR_CYRIX 3
@@ -45,4 +47,4 @@ void dumpmsr_bin (int cpunum, unsigned int msr);
 void estimate_MHz(int cpunum);
 void decode_bluesmoke(int cpunum);
 int HaveCPUID(void);
-void interpret_eblcr(__u32 lo);
+void interpret_eblcr(u32 lo);

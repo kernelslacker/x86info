@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include <linux/types.h>
+#include "x86info.h"
 
-void interpret_eblcr(__u32 lo)
+void interpret_eblcr(u32 lo)
 {
 	static unsigned int buscode[2][4] = {
 		{ 6667, 13333, 10000, 0 },
