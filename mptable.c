@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	  $Id: mptable.c,v 1.3 2001/12/10 17:13:15 davej Exp $
+ *	  $Id: mptable.c,v 1.4 2001/12/10 23:20:38 davej Exp $
  */
 
 #define MP_SIG				  0x5f504d5f	  /* _MP_ */
@@ -72,7 +72,7 @@ typedef unsigned int vm_offset_t;
 typedef struct TABLE_ENTRY {
 	u_char	type;
 	u_char	length;
-	char	name[ 32 ];
+	char	name[32];
 } tableEntry;
 
 tableEntry basetableEntryTypes[] =
@@ -86,7 +86,7 @@ tableEntry basetableEntryTypes[] =
 
 /* MP Floating Pointer Structure */
 typedef struct MPFPS {
-	char	signature[ 4 ];
+	char	signature[4];
 	void*	pap;
 	u_char	length;
 	u_char	spec_rev;
@@ -100,12 +100,12 @@ typedef struct MPFPS {
 
 /* MP Configuration Table Header */
 typedef struct MPCTH {
-	char	signature[ 4 ];
+	char	signature[4];
 	u_short	base_table_length;
 	u_char	spec_rev;
 	u_char	checksum;
-	u_char	oem_id[ 8 ];
-	u_char	product_id[ 12 ];
+	u_char	oem_id[8];
+	u_char	product_id[12];
 	void*	oem_table_pointer;
 	u_short	oem_table_size;
 	u_short	entry_count;
