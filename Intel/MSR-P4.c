@@ -1,5 +1,5 @@
 /*
- *  $Id: MSR-P4.c,v 1.1 2002/11/12 17:15:31 davej Exp $
+ *  $Id: MSR-P4.c,v 1.2 2003/04/11 00:17:20 davej Exp $
  *  This file is part of x86info.
  *  (C) 2002 Dave Jones.
  *
@@ -25,7 +25,7 @@ void dump_p4_MSRs (struct cpudata *cpu)
 	printf ("Pentium 4 specific MSRs:\n");
 
 	if (read_msr (cpu->number, 0x17, &val)==1)
-		printf ("IA32_PLATFORM_ID=%llx\n", val);
+		printf ("IA32_PLATFORM_ID=%016llx\n", val);
 
 	if (read_msr (cpu->number, 0x2a, &val)==1) {
 		printf ("System bus in order queue depth=");
@@ -37,11 +37,11 @@ void dump_p4_MSRs (struct cpudata *cpu)
 	}
 
 	if (read_msr (cpu->number, 0x2c, &val)==1) {
-		printf ("MSR_EBC_FREQUENCY_ID=%llx\n", val);
+		printf ("MSR_EBC_FREQUENCY_ID=%016llx\n", val);
 	}
 
 	if (read_msr (cpu->number, 0x8b, &val)==1) {
-		printf ("IA32_BIOS_SIGN_ID=%llx\n", val);
+		printf ("IA32_BIOS_SIGN_ID=%016llx\n", val);
 	}
 
 	if (read_msr (cpu->number, 0x119, &val)==1) {

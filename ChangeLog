@@ -2,6 +2,10 @@
 
 	* SiS/identify.c: Add recognition of SiS 55x
 	* rdmsr.c: when dumping long long zero pad to 64 bit.
+	* Intel/MSR-P4.c: Zero pad to 64 bit.
+	* Intel/bluesmoke.c: Zero pad.
+	* AMD/bluesmoke.c: Zero pad.
+	* AMD/bugs.c: Zero pad.
 
 2003-4-2 Dave Jones <davej@codemonkey.org.uk>
 

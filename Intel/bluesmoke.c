@@ -1,5 +1,5 @@
 /*
- *  $Id: bluesmoke.c,v 1.8 2002/07/14 13:05:32 davej Exp $
+ *  $Id: bluesmoke.c,v 1.9 2003/04/11 00:17:20 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -48,11 +48,11 @@ void decode_Intel_bluesmoke(int cpunum, int family)
 			printf ("Number of extended MC registers : %d\n\n", extcount);
 		}
 		else
-			printf ("Erk, MCG_EXT not present! :%llx:\n", val);
+			printf ("Erk, MCG_EXT not present! :%016llx:\n", val);
 	}
 	else
 	if ((val & (1<<MCG_CTL_PBIT)) == 0)
-		printf ("Erk, MCG_CTL not present! :%llx:\n", val);
+		printf ("Erk, MCG_CTL not present! :%016llx:\n", val);
 
 	if (read_msr(cpunum, MCG_CTL, &val) == 1) {
 		printf ("MCG_CTL:\n");
