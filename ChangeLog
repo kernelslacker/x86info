@@ -18,6 +18,7 @@
 	* Intel/identify.c: Only read eblcr when asked to.
 	  Distinguish between Celerons & Pentiums.
 	  Make cache descriptions match in style to the AMD descriptions.
+	* features.c: Rewritten.
 
 2001-12-9	Hans-Frieder Vogt <hfvogt@nexgo.de>
 

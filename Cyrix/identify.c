@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.5 2001/12/10 21:12:12 davej Exp $
+ *  $Id: identify.c,v 1.6 2001/12/10 22:53:32 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
@@ -104,7 +104,7 @@ void display_Cyrix_info(unsigned int maxi, unsigned int maxei, struct cpudata *c
 		}
 	}
 
-	decode_feature_flags (cpu, edx);
+	decode_feature_flags (cpu, edx, 0);
 
 	printf ("TLB & L1 Cache info\n");
 	if (maxi >= 2 && show_cacheinfo) {

@@ -19,6 +19,7 @@ typedef __u32 u32;
 #define VENDOR_CYRIX 3
 #define VENDOR_INTEL 4
 #define VENDOR_RISE 5
+#define VENDOR_TRANSMETA 6
 
 struct cpudata {
 	unsigned int number;
@@ -50,7 +51,7 @@ void display_IDT_info(unsigned int maxei, struct cpudata *cpu);
 void display_Intel_info(unsigned int maxi, struct cpudata *cpu);
 void display_RiSE_info(unsigned int maxi, unsigned int maxei, struct cpudata *cpu);
 
-void decode_feature_flags (struct cpudata *cpu, int flags);
+void decode_feature_flags (struct cpudata *cpu, int flags, int eflags);
 void identify (struct cpudata *cpu);
 void dumpregs (int cpunum);
 
