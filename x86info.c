@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.35 2001/09/07 20:20:16 davej Exp $
+ *  $Id: x86info.c,v 1.36 2001/11/21 14:08:49 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -97,7 +97,7 @@ static void parse_command_line (int argc, char **argv)
 
 int main (int argc, char **argv)
 {
-	unsigned int i, nrCPUs;
+	unsigned int i, nrCPUs=1;
 
 	parse_command_line(argc, argv);
 	if (!silent) {
@@ -116,17 +116,15 @@ int main (int argc, char **argv)
 		user_is_root=0;
 	}
 
-#if defined _SC_NPROCESSORS	/* Linux */
+#if defined _SC_NPROCESSORS_CONF	/* Linux */
 	nrCPUs = sysconf (_SC_NPROCESSORS_CONF);
-#elseif
+#else	/* BSD */
 	{
 		int mib[2] = { CTL_HW, HW_NCPU };
 		size_t len;
 		len = sizeof(nrCPUs);
 		sysctl(mib, 2, &nrCPUs, &len, NULL, 0);
 	}
-#else
-	nrCPUs = 1;
 #endif
 	if (!silent) {
 		printf ("Found %d CPU", nrCPUs);
