@@ -56,5 +56,5 @@ L4:	popl %edx
 	popl %ebp
 	ret
 
-.section .note.GNU-stack,"x"
+.section .note.GNU-stack,"", @progbits
 
