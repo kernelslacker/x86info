@@ -1,6 +1,7 @@
 2002-11-12  Dave Jones <davej@codemonkey.org.uk>
 
 	* x86info.c: Put a seperator between CPUs on SMP.
+	* get_model_name.c: Early return if no name.
 
 Released as 1.11
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: get_model_name.c,v 1.2 2002/05/23 00:13:06 davej Exp $
+ *  $Id: get_model_name.c,v 1.3 2002/11/12 16:37:08 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -24,6 +24,8 @@ void get_model_name (struct cpudata *cpu)
 	cp = namestring;
 	for (j = 0x80000002; j <= 0x80000004; j++) {
 		cpuid (cpu->number, j, &eax, &ebx, &ecx, &edx);
+		if (eax==0)
+			return;
 
 		for (i = 0; i < 4; i++)
 			*cp++ = eax >> (8 * i);
