@@ -1,6 +1,7 @@
 2002-10-30  Dave Jones <davej@codemonkey.org.uk>
 
 	* features.c: Correct typos.
+	* Results/: Start collecting resulting output from different CPUs.
 
 2002-10-26  Mark Brown  <broonie@sirena.org.uk>
 
