@@ -1,3 +1,7 @@
+2003-12-18 Dave Jones <davej@codemonkey.org.uk>
+	* Intel/identify.c: Add P4 S-Spec numbers.
+	Add recognition note for P4 extreme edition.
+
 2003-11-4 Dave Jones <davej@codemonkey.org.uk>
 
 	* AMD/identify.c: Add various random CPU facts.

@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.55 2003/09/24 00:20:41 davej Exp $
+ *  $Id: identify.c,v 1.56 2003/12/18 03:13:51 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -459,6 +459,8 @@ void Identify_Intel (struct cpudata *cpu)
 		nameptr += sprintf (cpu->name, "%s", "Itanium");
 		break;
 
+//FIXME: What is SL4X5 ? 
+
 	case 0xF00:	/* Family 15 */
 		cpu->connector = CONN_SOCKET_423;
 		cpu->datasheet_url = strdup (p4_423_datasheet);
@@ -466,9 +468,18 @@ void Identify_Intel (struct cpudata *cpu)
 		nameptr += sprintf (cpu->name, "%s", "Pentium 4");
 		switch (cpu->stepping) {
 		case 7:
+			//SL4QD SL4SF = 1.3GHz
+			//SL4SG SL4SC = 1.4GHz
+			//SL4SH SL4TY = 1.5GHz
 			nameptr+=sprintf (nameptr, "%s", " [B2]");
 			break;
 		case 0xA:
+			//SL5FW SL5GC 1.3GHz
+			//SL4WS SL4X2 SL59U SL5N7 1.4GHz
+			//SL4WT SL4X3 SL59V SL5NB 1.5GHz
+			//SL4WU SL4X4 SL5US SL5UW 1.6GHz
+			//SL57W SL57V SL59X SL5N9 1.7GHz
+			//SL4WV SL4X5 SL5UT SL5UV 1.8GHz
 			nameptr+=sprintf (nameptr, "%s", " [C1]");
 			break;
 		}
@@ -481,12 +492,24 @@ void Identify_Intel (struct cpudata *cpu)
 		cpu->errata_url = strdup (p4_errata);
 		switch (cpu->stepping) {
 		case 1:
+			//FIXME: Does this exist? Not in latest specupdate
 			nameptr+=sprintf (nameptr, "%s", " [C0]");
 			break;
 		case 2:
+			//SL5TG SL5UE 1.4GHz
+			//SL5SX SL5TJ SL5UF SL62Y SL5TN 1.5GHz
+			//SL5VL SL5UL SL5VH SL5UJ 1.6GHz
+			//SL5SY SL5TK SL5UG SL62Z 1.7GHz
+			//SL5VM SL5VM SL5VJ SL5UK 1.8GHz
+			//SL5VN SL5WH SL5VK SL5WG 1.9GHz
+			//SL5SZ SL5TQ SL5TL 2GHz
 			nameptr+=sprintf (nameptr, "%s", " [D0]");
 			break;
 		case 3:
+			//SL6BC SL679 1.6GHz
+			//SL6BD SL67A 1.7GHz
+			//SL6BE SL78B 1.8GHz
+			//SL6BF SL67C 1.9GHz
 			nameptr+=sprintf (nameptr, "%s", " [E0]");
 			break;
 		}
@@ -506,12 +529,57 @@ void Identify_Intel (struct cpudata *cpu)
 		}
 		switch (cpu->stepping) {
 		case 4:
+			//SL66B 1.6GHz
+			//SL63X SL62P SL6BQ 1.8GHz
+			//SL6BR SL5YR 2GHz
+			//SL5YS SL6BS SL5ZU 2.2GHz
+			//SL6B3 SL67Y 2.26GHz (533MHz FSB)
+			//SL6BT SL65R SL67R 2.4GHz (400MHz FSB)
+			//SL6B4 SL67Z 2.4GHz (533MHz FSB)
+			//SL6B5 SL6B2 2.53GHz (533MHz FSB)
 			nameptr+=sprintf (nameptr, "%s", " [B0]");
 			break;
+		case 5:
+			//SL6Z3 2.4GHz (800FSB)
+			//SL6Z5 2.8GHz (800FSB)
+			/* P4 Extreme edition.*/
+			//SL7AA 3.2GHz (800FSB) 2MB L3 cache
+			nameptr+=sprintf (nameptr, "%s", " [M0]");
+			break;
 		case 7:
+			//SL6HL SL6K6 2.8GHz (533MHz FSB)
+			//SL6LA SL6S6 1.8GHz
+			//SL6GQ SL6S7 SL6E7 2GHz
+			//SL6GR SL6SB SL6EB 2.2GHz
+			//SL6DU SL6RY SL6EE 2.26GHz (533FSB)
+			//SL6EF SL6DV SL6S9 SL6RZ SL6E9 2.4GHz (533FSB)
+			//SL6SA 2.5GHz (400FSB)
+			//SL6EG SL6S2 SL6DW 2.53GHz (533FSB)
+			//SL6SB 2.6GHz (400FSB)
+			//SL6S3 SL6SK 2.66GHz (533FSB)
+			//SL6S4 SL6SL 2.8GHz (533FSB)
+			//SL6S5 SL6K7 SL6SM SL6JJ 3.06GHz (533FSB)
 			nameptr+=sprintf (nameptr, "%s", " [C1]");
 			break;
 		case 9:
+			//SL6QL 1.8GHz
+			//SL6QM SL6PK 2.0GHz
+			//SL6QN SL6PL 2.2GHz
+			//SL6QR SL6PB 2.26GHz (533FSB)
+			//SL6QP SL6PM 2.4GHz
+			//SL6QB SL6PC 2.4GHz (533FSB)
+			//SL6WF SL6WR 2.4GHz (800FSB)
+			//SL6QQ 2.5GHz
+			//SL6Q9 SL6PD 2.53GHz (533FSB)
+			//SL6QR 2.6GHz
+			//SL6WH SL6WS 2.6GHz (800FSB)
+			//SL6QA SL6PE 2.66GHz (533FSB)
+			//SL6QB SL6PF 2.8GHz (533FSB)
+			//SL6WJ SL6WT 2.8GHz (800FSB)
+			//SL6WU SL6WK 3GHz (800FSB)
+			//SL6QC SL6PG 3.06GHz (533FSB)
+			//SL6WG SL6WE 3.2GHz (800FSB)
+
 			nameptr+=sprintf (nameptr, "%s", " [D1]");
 			break;
 		}
