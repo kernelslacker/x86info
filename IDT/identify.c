@@ -1,5 +1,5 @@
 /*
- *  $Id: identify.c,v 1.28 2003/01/27 12:04:57 davej Exp $
+ *  $Id: identify.c,v 1.29 2003/01/27 12:21:04 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -30,8 +30,9 @@ void Identify_IDT (struct cpudata *cpu)
 	cpu->family = (eax >> 8) & 0xf;
 
 	switch (tuple(cpu) & 0xff0) {
-		case 0x540:	sprintf (cpu->name, "%s", "Winchip C6");
-					break;
+		case 0x540:
+			sprintf (cpu->name, "%s", "Winchip C6");
+			break;
 		case 0x580 ... 0x586:
 			sprintf (cpu->name, "%s", "Winchip 2");
 			break;
@@ -49,17 +50,17 @@ void Identify_IDT (struct cpudata *cpu)
 		 * This is the CyrixIII family. */
 		case 0x660:	sprintf (cpu->name, "%s", "VIA C3 (Samuel)");
 					break;
-		case 0x670:	nameptr += sprintf (cpu->name, "%s", "VIA C3");
-					if (cpu->stepping<8)
-						sprintf(nameptr, "%s", " (Samuel 2)");
-					else
-						sprintf(nameptr, "%s", " (Ezra)");
+		case 0x670 ... 0x677:
+					sprintf (cpu->name, "%s", "VIA C3 (Samuel 2)");
 					break;
-		case 0x680:	nameptr += sprintf (cpu->name, "%s", "VIA C3 (Ezra-T)");
+		case 0x678 ... 0x67f:
+					sprintf (cpu->name, "%s", "VIA C3 (Ezra)");
 					break;
-		case 0x690:	nameptr += sprintf (cpu->name, "%s", "VIA C3 (Nehemiah)");
+		case 0x680:	sprintf (cpu->name, "%s", "VIA C3 (Ezra-T)");
 					break;
-		default:	printf ("Unknown CPU");
+		case 0x690:	sprintf (cpu->name, "%s", "VIA C3 (Nehemiah)");
+					break;
+		default:	sprintf (cpu->name, "%s", "Unknown CPU");
 					break;
 	}
 }
