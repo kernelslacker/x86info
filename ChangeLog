@@ -1,6 +1,7 @@
 2002-05-31 Dave Jones <davej@suse.de>
 
 	* mtrr.c: Dump MTRR registers using --mtrr
+	* Makefile: Use -m32 if gcc supports it.
 
 2002-05-24 Dave Jones <davej@suse.de>
 
