@@ -1,7 +1,9 @@
+x86info v1.0
+
 This program started life as a cpuid program by Phil Karn.
 It's been modified considerably, and much more is planned.
 
-x86info features:
+Features:
  - SMP support.
    Needs the x86 cpuid driver provided with kernel
    2.2.18 / 2.4.0, and the appropriate nodes in /dev
