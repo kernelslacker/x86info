@@ -15,6 +15,7 @@ OBJS =\
 	Cyrix/identify.o\
 \
 	Intel/identify.o\
+	Intel/info.o\
 	Intel/bluesmoke.o\
 	Intel/cachesize.o\
 	Intel/eblcr.o\

@@ -1,5 +1,5 @@
 /*
- *  $Id: x86info.c,v 1.65 2002/11/12 17:28:19 davej Exp $
+ *  $Id: x86info.c,v 1.66 2002/11/12 21:38:34 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -239,6 +239,8 @@ int main (int argc, char **argv)
 			estimate_MHz(i);
 		if (nrCPUs>1)
 			separator();
+
+		memset (&cpu, 0, sizeof(struct cpudata));
 	}
 
 	if (nrCPUs > 1 && used_UP==1 && (!silent)) {
