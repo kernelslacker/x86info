@@ -1,5 +1,5 @@
 /*
- *  $Id: cpuid.c,v 1.11 2002/09/02 15:57:36 davej Exp $
+ *  $Id: cpuid.c,v 1.12 2005/04/25 20:54:12 davej Exp $
  *	This file is part of x86info
  *	(C) 2000, 2001 Dave Jones.
  *	Fixes by Arjan van de Ven (arjanv@redhat.com) and
@@ -40,10 +40,10 @@ void cpuid (int CPU_number, int idx,
 	if (fh != -1) {
 		lseek (fh, idx, SEEK_CUR);
 		read (fh, &buffer[0], 16);
-		if (eax!=0)	*eax = (*(unsigned long *)buffer);
-		if (ebx!=0)	*ebx = (*(unsigned long *)(buffer+4));
-		if (ecx!=0)	*ecx = (*(unsigned long *)(buffer+8));
-		if (edx!=0)	*edx = (*(unsigned long *)(buffer+12));
+		if (eax!=0)	*eax = (*(unsigned *)(buffer   ));
+		if (ebx!=0)	*ebx = (*(unsigned *)(buffer+ 4));
+		if (ecx!=0)	*ecx = (*(unsigned *)(buffer+ 8));
+		if (edx!=0)	*edx = (*(unsigned *)(buffer+12));
 		close (fh);
 	} else {
 		/* Something went wrong, just do UP and hope for the best. */

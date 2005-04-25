@@ -20,6 +20,41 @@ cpuid_UP:
 _cpuid_UP:
 #endif /* linux */
 
+#ifdef __x86_64__
+/* x86_64 calling convention: Args passed in rdi, rsi, rdx, rcx, r8, r9;
+   rbc, r12 -- r15, and rbp need to be preserved. */
+	pushq %rbp
+	movq %rsp,%rbp
+	pushq %rbx
+	movq %rdx, %r10
+	movq %rcx, %r11
+	movq %rdi, %rax
+	cpuid
+	test %rsi,%rsi
+	jz L1	
+	movq %rax,(%rsi)
+
+L1:	
+	test %r10,%r10
+	jz L2
+	movq %rbx,(%r10)
+
+L2:	
+	test %r11,%r11
+	jz L3
+	movq %rcx,(%r11)
+
+L3:	
+	test %r8,%r8
+	jz L4
+	movq %rdx,(%r8)
+
+L4:
+	popq %rbx
+	movq %rbp,%rsp
+	popq %rbp
+	ret
+#else
 	pushl %ebp
 	movl %esp,%ebp
 	pushl %edi
@@ -55,6 +90,7 @@ L4:	popl %edx
 	movl %ebp,%esp
 	popl %ebp
 	ret
+#endif
 
 .section .note.GNU-stack,"", @progbits
 

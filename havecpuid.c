@@ -1,18 +1,18 @@
 #include <stdio.h>
 
-static __inline__ int flag_is_changeable_p(unsigned int flag)
+static __inline__ int flag_is_changeable_p(unsigned long flag)
 {
-	unsigned int f1, f2;
-	__asm__ volatile("pushfl\n\t"
-			"pushfl\n\t"
-			"popl %0\n\t"
-			"movl %0,%1\n\t"
-			"xorl %2,%0\n\t"
-			"pushl %0\n\t"
-			"popfl\n\t"
-			"pushfl\n\t"
-			"popl %0\n\t"
-			"popfl\n\t"
+	unsigned long f1, f2;
+	__asm__ volatile("pushf\n\t"
+			"pushf\n\t"
+			"pop %0\n\t"
+			"mov %0,%1\n\t"
+			"xor %2,%0\n\t"
+			"push %0\n\t"
+			"popf\n\t"
+			"pushf\n\t"
+			"pop %0\n\t"
+			"popf\n\t"
 			: "=&r" (f1), "=&r" (f2)
 			: "ir" (flag));
 	return ((f1^f2) & flag) != 0;

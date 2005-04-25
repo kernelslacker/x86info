@@ -24,7 +24,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	  $Id: mptable.c,v 1.7 2002/11/11 19:54:56 davej Exp $
+ *	  $Id: mptable.c,v 1.8 2005/04/25 20:54:12 davej Exp $
  */
 
 #define MP_SIG				  0x5f504d5f	  /* _MP_ */
@@ -40,7 +40,7 @@
 #include "mptable.h"
 
 #ifdef linux
-typedef unsigned int vm_offset_t;
+typedef unsigned long vm_offset_t;
 #else
 #include <machine/types.h>
 #endif
