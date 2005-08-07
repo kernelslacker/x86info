@@ -1,5 +1,5 @@
 /*
- *  $Id: cachesize.c,v 1.13 2004/12/22 22:34:08 davej Exp $
+ *  $Id: cachesize.c,v 1.14 2005/08/07 18:42:37 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -141,6 +141,8 @@ static void decode_Intel_cache (int des, struct cpudata *cpu, int output,
 		}
 		k++;
 	}
+	if (table[k].descriptor == 0)
+		printf ("Unknown descriptor: %d\n", des);
 }
 
 static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int output)

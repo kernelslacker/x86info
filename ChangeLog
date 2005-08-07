@@ -1,3 +1,6 @@
+2005-08-07 Dave Jones <davej@codemonkey.org.uk>
+Released as v1.14
+
 2005-04-20 Kurt Garloff <garloff@suse.de>
 
 	* cpuid.c, cpuid_UP.S, havecpuid.c: Native support for x86-64.
