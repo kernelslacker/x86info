@@ -108,6 +108,9 @@ static struct _cache_table DTLB_cache_table[] =
 	{ 0, 0, 0 }
 };
 
+static char found_unknown=0;
+static char unknown_array[256];
+
 /* Decode Intel TLB and cache info descriptors */
 //TODO : Errata workaround. http://www.sandpile.org/post/msgs/20002736.htm
 static void decode_Intel_cache (int des, struct cpudata *cpu, int output,
@@ -141,8 +144,10 @@ static void decode_Intel_cache (int des, struct cpudata *cpu, int output,
 		}
 		k++;
 	}
-	if (table[k].descriptor == 0)
-		printf ("Unknown descriptor: %d\n", des);
+	if (table[k].descriptor == 0) {
+		unknown_array[des]=1;
+		found_unknown=1;
+	}
 }
 
 static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int output)
@@ -175,8 +180,12 @@ static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int ou
 
 void decode_Intel_caches (struct cpudata *cpu, int output)
 {
+	int i;
+
 	if (cpu->maxi < 2)
 		return;
+
+	memset (&unknown_array, 0, sizeof(unknown_array));
 
 	decode_cache (cpu, TRACE_cache_table, output);
 	decode_cache (cpu, L1I_cache_table, output);
@@ -184,6 +193,17 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 	decode_cache (cpu, L2_cache_table, output);
 	decode_cache (cpu, L3_cache_table, output);
 	decode_cache (cpu, ITLB_cache_table, output);
+
+	if (found_unknown == 0)
+		return;
+
+	printf ("Found unknown cache descriptors: ");
+
+	for (i=0; i<256; i++) {
+		if (unknown_array[i]==1)
+			printf ("%d ", i);
+	}
+	printf ("\n");
 	decode_cache (cpu, DTLB_cache_table, output);
 }
 
