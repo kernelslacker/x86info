@@ -1,3 +1,6 @@
+- detect SSE3
+- feature flag handling code could use a big cleanup.
+
 - Fix intel cache sizing
 - Fix benchmarking
 
