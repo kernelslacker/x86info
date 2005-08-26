@@ -725,19 +725,149 @@ void Identify_Intel (struct cpudata *cpu)
 			break;
 		}
 		break;
-	case 0xF33:
-		// SL7D8 2.8GHz (533FSB)
-		// SL79K 2.8GHz (800FSB)
-		// SL79L 3.0GHz (800FSB)
-		// SL7B8 3.2GHz (800FSB)
-		// SL7B9 3.4GHz (800FSB)
-		// process = "0.09u";
-		// 125 million transistors
-		// 112mm2 die size
-		// pipeline_stages=31
-		nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [C0]");
+	case 0xF30:
+		switch (cpu->stepping) {
+		case 3:
+			/*
+			sspec speed   fsb l2 90nm
+			SL7D7 2.26GHz 533 512K
+			SL7FY 2.4GHz  800 1M
+			SL7E8 2.4GHz  533 1M
+			SL7E9 2.66GHz 533 1M
+			SL7D8 2.8GHz  533 1M
+			SL79K 2.8GHz  800 1M
+			SL79L 3.0GHz  800 1M
+			SL79M 3.2GHz  800 1M
+			SL7B8 3.2GHz  800 1M
+			SL7B9 3.4GHz  800 1M
+			SL7AJ 3.4GHz  800 1M
+
+			process = "0.09u";
+			125 million transistors
+			112mm2 die size
+			pipeline_stages=31
+			*/
+			nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [C0]");
+			break;
+		case 4:
+			/*
+			1M L2 90nm
+			sspec speed   fsb
+			SL7E2 2.8GHz  533
+			SL7E3 2.8GHz  800
+			SL7KA 2.8GHz  800
+			SL7K9 2.8GHz  533
+			SL7E4 3.0GHz  800
+			SL7KB 3.0GHz  800
+			SL7L4 3.0GHz  800
+			SL7L5 3.2GHz  800
+			SL7E5 3.2GHz  800
+			SL7KC 3.2GHz  800
+			SL7E6 3.4GHz  800
+			SL7KD 3.4GHz  800
+			SL7YP 2.4GHz  533
+			SL7YU 2.66GHz 533
+			SL7J4 2.8GHz  533
+			SL7J5 2.8GHz  800
+			SL7KH 2.8GHz  533
+			SL7KJ 2.8GHz  800
+			SL7YV 2.93GHz 533
+			SL7J6 3.0GHz  800
+			SL7KK 3.0GHz  800
+			SL7J7 3.2GHz  800
+			SL7KL 3.2GHz  800
+			SL7LA 3.2GHz  800
+			SL7J8 3.4GHz  800
+			SL7KM 3.4GHz  800
+			SL7L8 3.4GHz  800
+			SL7J9 3.6GHz  800
+			SL7KN 3.6GHz  800
+			SL7L9 3.6GHz  800
+			 */
+			nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [D0]");
+			break;
+		}
 		break;
+
 	case 0xF40:
+		nameptr+=sprintf (cpu->name, "%s", "Pentium 4 ");
+		switch (cpu->stepping) {
+		case 1:
+			/*
+			 1M L2 90nm
+			SL88F 2.4GHz  533
+			SL8B3 2.66GHz 533
+			SL88G 2.8GHz  533
+			SL88H 2.8GHz  800
+			SL7PL 2.8GHz  800
+			SL7PK 2.8GHz  533
+			SL7PM 3GHz    800
+			SL88J 3GHz    800
+			SL7PN 3.2GHz  800
+			SL88K 3.2GHz  800
+			SL88L 3.4GHz  800
+			SL7PP 3.4GHz  800
+			SL7PT 2.66GHz 533
+			SL82P 2.8GHz  800
+			SL7PR 2.8GHz  800
+			SL8HX 2.8GHz  800
+			SL85U 2.66GHz 533
+			SL8J8 2.66GHz 533
+			SL85V 2.93GHz 533
+			SL8J9 2.93GHz 533
+			SL87L 3.06GHz 533
+			SL8JA 3.06GHz 533
+			SL82X 3.0GHz  800
+			SL7PU 3.0GHz  800
+			SL8HZ 3.0GHz  800
+			SL7PW 3.2GHz  800
+			SL7PX 3.2GHz  800
+			SL82Z 3.2GHz  800
+			SL8J2 3.2GHz  800
+			SL7PY 3.4GHz  800
+			SL7PZ 3.4GHz  800
+			SL833 3.4GHz  800
+			SL7ZW 3.4GHz  800
+			SL8J5 3.4GHz  800
+			SL84X 3.6GHz  800
+			SL7Q2 3.6GHz  800
+			SL7NZ 3.6GHz  800
+			SL8J6 3.6GHz  800
+			SL82U 3.8GHz  800
+			SL84Y 3.8GHz  800
+			SL7P2 3.8GHz  800
+			SL8J7 3.8GHz  800
+			 */
+			nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [E0]");
+			break;
+		case 3:
+			/*
+			 2M L2 90nm
+			 SL7Z9 3.0GHz  800
+			 SL7Z8 3.2GHz  800
+			 SL8Z7 3.4GHz  800
+			 SL7Z5 3.6GHz  800
+			 SL7Z4 3.73GHz 800
+			 SL7Z3 3.8GHz  800
+			 */
+			nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [N0]");
+			break;
+		case 4:
+			/*
+			   1Mx2 L2	800MHz FSB
+			   SL88T	2.8GHz
+			   SL88S	3GHz
+			   SL88R	3.2GHz
+			   SL8FK	3.2GHz
+			 */
+			nameptr+=sprintf (cpu->name, "%s", "Extreme Edition [A0]");
+			break;
+		default:
+			nameptr+=sprintf (cpu->name, "%s", "D (Foster)");
+			break;
+		}
+		break;
+
 	case 0xF50:
 		cpu->connector = CONN_SOCKET_603;
 //		cpu->datasheet_url = strdup (p4_478_datasheet);
