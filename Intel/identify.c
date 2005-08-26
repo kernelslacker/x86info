@@ -526,6 +526,12 @@ void Identify_Intel (struct cpudata *cpu)
 		nameptr += sprintf (cpu->name, "%s", "Pentium M ");
 		cpu->connector = CONN_MICROFCBGA;
 		switch (cpu->stepping) {
+			case 1:	nameptr+=sprintf (cpu->name, "%s", "(Dothan) [A-1]");
+					break;
+
+			case 2:	nameptr+=sprintf (cpu->name, "%s", "(Dothan) [A-2]");
+					break;
+
 			/*
 				S-spec	Processor	Hi-Freq	Low-Freq
 						Number
@@ -540,10 +546,51 @@ void Identify_Intel (struct cpudata *cpu)
 				SL7GL	715			1.5GHz	600MHz
 				SL7GK	715			1.5GHz	600MHz
 				SL7VC	738			1.4GHz	600MHz
+				SL7F4	733			1.1GHz	600MHz
 				SL7VD	733			1.1GHz	600MHz
 				SL7V2	723			1.0GHz	600MHz
 			 */
-			case 6:	nameptr+=sprintf (cpu->name, "%s", "[B-1]");
+			case 6:	nameptr+=sprintf (cpu->name, "%s", "(Dothan) [B-1]");
+					break;
+
+			/*
+			   FSB=533 2MB L2 90nm
+				SL86G	730			1.6GHz	800MHz
+				SL7SA	740			1.73GHz	800MHz
+				SL7S9	750			1.86GHz	800MHz
+				SL7SM	760			2.0GHz	800MHz
+				SL7SL	770			2.13GHz	800MHz
+				SL7VB	780			2.26GHz	800MHz
+				SL86M	730			1.6GHz	800MHz
+				SL7S8	740			1.73GHz	800MHz
+				SL7SR	750			1.86GHz	800MHz
+				Sl7SQ	760			2.0GHz	800MHz
+				SL7SP	770			2.13GHz	800MHz
+				SL7SN	780			2.26GHz	800MHz
+				SL86B	740			1.73GHz	800MHz
+				SL86A	750			1.86GHz	800MHz
+				SL869	760			2.0GHz	800MHz
+				SL868	770			2.13GHz	800MHz
+				SL8QK	780			2.26GHz	800MHz
+			   FSB=400
+				SL8QF	778			1.6GHz	600MHz
+				SL89X	758			1.5GHz	600MHz
+				SL8A3	723			1.0GHz	600MHz
+				SL8LM	733J		1.1GHz	600MHz
+				SL8A2	733J		1.1GHz	600MHz
+				SL89Z	753			1.2GHz	600MHz
+				SL8LL	753			1.2GHz	600MHz
+				SL8QG	778			1.6GHz	600MHz
+				SL89M	758			1.5GHz	600MHz
+				SL89R	723			1.0GHz	600MHz
+				SL8LT	733J		1.1GHz	600MHz
+				SL89Q	733J		1.1GHz	600MHz
+				SL89P	753			1.2GHz	600MHz
+				SL8LS	753			1.2GHz	600MHz
+				SL89N	738			1.4GHz	600MHz
+				SL89Y	738			1.4GHz	600MHz
+		     */
+			case 8:	nameptr+=sprintf (cpu->name, "%s", "(Dothan) [C-0]");
 					break;
 		}
 		break;
