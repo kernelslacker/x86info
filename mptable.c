@@ -39,11 +39,7 @@
 
 #include "mptable.h"
 
-#ifdef linux
 typedef unsigned long vm_offset_t;
-#else
-#include <machine/types.h>
-#endif
 
 /* EBDA is @ 40:0e in real-mode terms */
 #define EBDA_POINTER			0x040e		  /* location of EBDA pointer */

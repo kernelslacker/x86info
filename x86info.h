@@ -1,15 +1,10 @@
 #ifndef _X86INFO_H
 #define _X86INFO_H
 
-#ifdef linux
 #include <linux/types.h>
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
-#else
-#include <machine/types.h>
-#define __u32 int
-#endif /* linux */
 
 #define VENDOR_AMD	1
 #define VENDOR_CENTAUR 2

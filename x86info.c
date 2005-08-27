@@ -12,19 +12,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#ifndef linux
-
-#ifdef __WIN32__
-#include <sys/types.h>
-#include <windows.h>
-#else
-#include <sys/types.h>
-#include <sys/param.h>
-#include <sys/sysctl.h>
-#endif /* __WIN32__ */
-
-#endif /* linux */
-
 #include "x86info.h"
 
 int show_bench=0;
@@ -207,22 +194,7 @@ int main (int argc, char **argv)
 	if (need_root && !user_is_root)
 		printf ("Need to be root to use specified options.\n");
 
-#if defined __WIN32__
-	{
-		SYSTEM_INFO sys_info;
-		GetSystemInfo(&sys_info);
-		nrCPUs = sys_info.dwNumberOfProcessors;
-	}
-#elif defined _SC_NPROCESSORS_CONF	/* Linux */
 	nrCPUs = sysconf (_SC_NPROCESSORS_CONF);
-#else /* BSD */
-	{
-		int mib[2] = { CTL_HW, HW_NCPU };
-		size_t len;
-		len = sizeof(nrCPUs);
-		sysctl(mib, 2, &nrCPUs, &len, NULL, 0);
-	}
-#endif /* __WIN32__ */
 
 	if (!silent) {
 		printf ("Found %u CPU", nrCPUs);
