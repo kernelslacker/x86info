@@ -38,14 +38,18 @@ void Identify_IDT (struct cpudata *cpu)
 			//introduction_date = "September 1997";
 			//pipeline_stages = 6;
 			break;
-		case 0x580 ... 0x586:
-			sprintf (cpu->name, "%s", "Winchip 2");
-			break;
-		case 0x587 ... 0x589:
-			sprintf (cpu->name, "%s", "Winchip 2A");
-			break;
-		case 0x58A ... 0x58F:
-			sprintf (cpu->name, "%s", "Winchip 2B");
+		case 0x580:
+			switch (cpu->stepping) {
+			case 0 ... 6:
+				sprintf (cpu->name, "%s", "Winchip 2");
+				break;
+			case 7 ... 9:
+				sprintf (cpu->name, "%s", "Winchip 2A");
+				break;
+			case 0xA ... 0xF:
+				sprintf (cpu->name, "%s", "Winchip 2B");
+				break;
+			}
 			break;
 		case 0x590:
 			sprintf (cpu->name, "%s", "Winchip 3");
@@ -53,17 +57,20 @@ void Identify_IDT (struct cpudata *cpu)
 		
 		/* Family 6 is when VIA bought out Cyrix & IDT
 		 * This is the CyrixIII family. */
-		case 0x660:	sprintf (cpu->name, "%s", "VIA Cyrix 3 (Samuel) [C5A]");
-					//pipeline_stages = 12;
-					//1.8-2.0V
-					//CPGA
-					//75mm
-					//0.18 Al
-					//500-733MHz
-					//11.3 mil transistors
-					//June 6 2000
-					break;
-		case 0x670 ... 0x677:
+		case 0x660:
+			sprintf (cpu->name, "%s", "VIA Cyrix 3 (Samuel) [C5A]");
+				//pipeline_stages = 12;
+				//1.8-2.0V
+				//CPGA
+				//75mm
+				//0.18 Al
+				//500-733MHz
+				//11.3 mil transistors
+				//June 6 2000
+				break;
+		case 0x670:
+				switch (cpu->stepping) {
+				case 0 ... 7:
 					sprintf (cpu->name, "%s", "VIA C3 (Samuel 2) [C5B]");
 					//pipeline_stages = 12;
 					//1.6V
@@ -74,7 +81,7 @@ void Identify_IDT (struct cpudata *cpu)
 					//15.2 mil transistors
 					//Mar 25 2001
 					break;
-		case 0x678 ... 0x67f:
+				case 8 ... 0xf:
 					sprintf (cpu->name, "%s", "VIA C3 (Ezra) [C5C]");
 					//pipeline_stages = 12;
 					//1.35V
@@ -85,6 +92,8 @@ void Identify_IDT (struct cpudata *cpu)
 					//15.4 mil transistors
 					//Sep 11 2001
 					break;
+				}
+				break;
 		/* Ezra-T is much like Ezra but reworked to run in Pentium III Tualatin sockets. */
 		case 0x680:	sprintf (cpu->name, "%s", "VIA C3 (Ezra-T) [C5M/C5N]");
 					//pipeline_stages = 12;
