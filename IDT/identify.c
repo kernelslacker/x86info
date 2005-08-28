@@ -115,13 +115,23 @@ void Identify_IDT (struct cpudata *cpu)
 					//die_size = "54 sq. mm"; (C5XL)
 					//January 22 2003
 					break;
+		case 0x6A0:	switch (cpu->stepping) {
+					case 0:
+					case 8 ... 0xF:
+							sprintf (cpu->name, "%s", "VIA C3 (Esther) [C7-M]");
+							break;
+					case 1 ... 7:
+							sprintf (cpu->name, "%s", "VIA C3 (Ruth) [C7-M]");
+							break;
+					}
+					break;
 
 	// C5P introduced the HW AES
 	// C5YL
 	// C5X
 	// CZA
 
-		default:	sprintf (cpu->name, "%s", "Unknown CPU");
+		default:	sprintf (cpu->name, "%s", "Unknown VIA CPU");
 					break;
 	}
 }
