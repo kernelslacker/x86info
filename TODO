@@ -1,7 +1,7 @@
-- detect SSE3
-- feature flag handling code could use a big cleanup.
+- feature flag handling code could use more cleanup.
 
-- Fix intel cache sizing
+- Make intel cache sizing use cpuid(4) where present.
+
 - Fix benchmarking
 
 - introduce hexdump option (-x) to dump register values in addition to decoding.
@@ -15,8 +15,7 @@
 - --apic
   Dump APIC registers
 
-- --gcc option to output best optimisation parameters
-  for that CPU.
+- --gcc option to output best optimisation parameters for that CPU.
 
 - Some CPUs allow the name string to be changed.
   If this has happened we die horribly. We need to store the current
