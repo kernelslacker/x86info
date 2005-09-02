@@ -71,9 +71,14 @@ void display_Intel_info (struct cpudata *cpu)
 		decode_Intel_bluesmoke(cpu->number, cpu->family);
 
 	/* Hyper-Threading Technology */
-	if (cpu->flags & (1 << 28)) {
-		int nr_ht = (cpu->bflags >> 16) & 0xFF;
-		int phys_id = (cpu->bflags >> 24) & 0xFF;
+	if (cpu->flags_edx & (1 << 28)) {
+		int nr_ht;
+		int phys_id;
+		cpuid(cpu->number, 1, NULL, &ebx, NULL, NULL);
+
+		nr_ht = (ebx >> 16) & 0xFF;
+		phys_id = (ebx >> 24) & 0xFF;
+
 		if (!nr_ht)
 			nr_ht = 1;
 		printf ("The physical package supports "

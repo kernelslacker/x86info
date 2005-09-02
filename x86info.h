@@ -33,9 +33,10 @@ struct cpudata {
 	unsigned int maxi, maxei, maxei2;
 	unsigned char name[80];
 	unsigned char connector;
-	unsigned int flags;
-	unsigned int eflags;
-	unsigned int bflags;
+	unsigned int flags_ecx;
+	unsigned int flags_edx;
+	unsigned int eflags_ecx;
+	unsigned int eflags_edx;
 	unsigned int MHz;
 	char * datasheet_url;
 	char * errata_url;

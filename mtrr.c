@@ -24,7 +24,7 @@ void dump_mtrrs (struct cpudata *cpu)
 {
 	int i;
 
-	if (!(cpu->flags & (X86_FEATURE_MTRR)))
+	if (!(cpu->flags_edx & (X86_FEATURE_MTRR)))
 		return;
 
 	printf ("MTRR registers:\n");
