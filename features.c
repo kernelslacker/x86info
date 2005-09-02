@@ -58,32 +58,47 @@ void decode_feature_flags (struct cpudata *cpu)
 		"Pending Break Enable"
 	};
 	/* CPUID 0x00000001 ECX flags */
-	const char *intel_cap_flags[] = {
+	const char *intel_cap_generic_ecx_flags[] = {
 		"sse3", NULL, NULL, "monitor", "ds-cpl", NULL, NULL, "est",
 		"tm2", NULL, "cntx-id", NULL, NULL, "cx16", "xTPR", NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};
 	/* CPUID 0x80000001 EDX flags */
-	const char *intel_cap_eflags1[] = {
+	const char *intel_cap_extended_edx_flags[] = {
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, "SYSCALL", NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, "xd", NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, "em64t", NULL, NULL,
 	};
 	/* CPUID 0x80000001 ECX flags */
-	const char *intel_cap_eflags2[] = {
+	const char *intel_cap_extended_ecx_flags[] = {
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, "LAHF", NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	};
-	const char *amd_cap_flags[] = {
+
+
+	const char *amd_cap_generic_ecx_flags[] = {
+		"sse3", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, "cmpxchg16b", NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+	};
+	const char *amd_cap_extended_edx_flags[] = {
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, "syscall", NULL, NULL, NULL, NULL,
-		NULL, NULL, NULL, "mp", NULL, NULL, "mmxext", NULL,
-		NULL, NULL, NULL, NULL, NULL, "lm", "3dnowext", "3dnow"
+		NULL, NULL, NULL, "mp/sempron", "nx", NULL, "mmxext", NULL,
+		NULL, "Fast fxsave/fxrstor", NULL, "rdtscp", NULL, "lm", "3dnowext", "3dnow"
 	};
+	const char *amd_cap_extended_ecx_flags[] = {
+		"lahf/sahf", "CMP legacy", NULL, NULL, "cr8 legacy", NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+	};
+
 	const char *centaur_cap_flags[] = {
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -119,19 +134,30 @@ void decode_feature_flags (struct cpudata *cpu)
 			}
 		}
 	}
-	printf ("\n");
 
 	/* Vendor specific extensions. */
 	switch (cpu->vendor) {
 		case VENDOR_AMD:
+			for (i = 0; i < 32; i++) {
+				if (cpu->flags_ecx & (1 << i) && amd_cap_generic_ecx_flags[i])
+					printf (" %s", amd_cap_generic_ecx_flags[i]);
+			}
+			printf ("\n");
+			if (cpu->maxei < 0x80000001)
+				break;
 			printf ("Extended feature flags:\n");
 			for (i = 0; i < 32; i++) {
-				if (cpu->flags_ecx & (1 << i) && amd_cap_flags[i])
-					printf (" %s", amd_cap_flags[i]);
+				if (cpu->eflags_edx & (1 << i) && amd_cap_extended_edx_flags[i])
+					printf (" %s", amd_cap_extended_edx_flags[i]);
+			}
+			for (i = 0; i < 32; i++) {
+				if (cpu->eflags_ecx & (1 << i) && amd_cap_extended_ecx_flags[i])
+					printf (" %s", amd_cap_extended_ecx_flags[i]);
 			}
 			break;
 
 		case VENDOR_CENTAUR:
+			printf ("\n");
 			printf ("Extended feature flags:\n");
 			for (i = 0; i < 32; i++) {
 				if (cpu->flags_ecx & (1 << i) && centaur_cap_flags[i])
@@ -140,6 +166,7 @@ void decode_feature_flags (struct cpudata *cpu)
 			break;
 
 		case VENDOR_TRANSMETA:
+			printf ("\n");
 			printf ("Extended feature flags:\n");
 			for (i = 0; i < 32; i++) {
 				if (cpu->flags_ecx & (1 << i) && transmeta_cap_flags[i])
@@ -148,23 +175,25 @@ void decode_feature_flags (struct cpudata *cpu)
 			break;
 
 		case VENDOR_CYRIX:
+			printf ("\n");
 			break;
 
 		case VENDOR_INTEL:
-			printf ("Extended feature flags:\n");
 			for (i = 0; i < 32; i++) {
-				if (cpu->flags_ecx & (1 << i) && intel_cap_flags[i])
-					printf (" %s", intel_cap_flags[i]);
+				if (cpu->flags_ecx & (1 << i) && intel_cap_generic_ecx_flags[i])
+					printf (" %s", intel_cap_generic_ecx_flags[i]);
 			}
+			printf ("\n");
 			if (cpu->maxei < 0x80000001)
 				break;
+			printf ("Extended feature flags:\n");
 			for (i = 0; i < 32; i++) {
-				if (cpu->eflags_edx & (1 << i) && intel_cap_eflags1[i])
-					printf (" %s", intel_cap_eflags1[i]);
+				if (cpu->eflags_edx & (1 << i) && intel_cap_extended_edx_flags[i])
+					printf (" %s", intel_cap_extended_edx_flags[i]);
 			}
 			for (i = 0; i < 32; i++) {
-				if (cpu->eflags_ecx & (1 << i) && intel_cap_eflags2[i])
-					printf (" %s", intel_cap_eflags2[i]);
+				if (cpu->eflags_ecx & (1 << i) && intel_cap_extended_ecx_flags[i])
+					printf (" %s", intel_cap_extended_ecx_flags[i]);
 			}
 			break;
 
