@@ -632,7 +632,14 @@ void Identify_Intel (struct cpudata *cpu)
 		cpu->errata_url = strdup (p4_errata);
 		switch (cpu->stepping) {
 		case 1:
-			//FIXME: Does this exist? Not in latest specupdate
+			//400FSB 256K L2
+			//SSpec MHz L3
+			//SL5G8 1.6 1M 
+			//SL5S4 1.6 1M
+			//SL5FZ 1.4 512K
+			//SL5RZ 1.4 512K
+			//SL5G2 1.5 512K
+			//SL5RW 1.5 512K
 			nameptr+=sprintf (nameptr, "%s", " [C0]");
 			break;
 		case 2:
@@ -668,6 +675,17 @@ void Identify_Intel (struct cpudata *cpu)
 				break;
 		}
 		switch (cpu->stepping) {
+		case 2:
+			//512K L2
+			//          L3
+			//SL6GZ 1.5 1M
+			//SL6KB 1.5 1M
+			//SL6H2 1.9 2M
+			//SL6KC 1.9 2M
+			//SL66Z 2.0 1M
+			//SL6KD 2.0 1M
+			nameptr+=sprintf (nameptr, "%s", " [A0]");
+			break;
 		case 4:
 			//SL66B 1.6GHz
 			//SL63X SL62P SL6BQ 1.8GHz
@@ -680,12 +698,28 @@ void Identify_Intel (struct cpudata *cpu)
 			nameptr+=sprintf (nameptr, "%s", " [B0]");
 			break;
 		case 5:
+			/*[M0] */
 			//SL6Z3 2.4GHz (800FSB)
 			//SL6Z5 2.8GHz (800FSB)
 			/* P4 Extreme edition.*/
 			//SL7AA 3.2GHz (800FSB) 2MB L3 cache
 			//SL7CH 3.4GHz (800FSB) 2MB L3 cache
+
+			/* 400FSB B1 512K L2 */
+			//SL6YJ 2.0 1M L3
+			//SL6Z6 2.0 1M L3
+			//SL6Z2 2.5 1M L3
+			//SL6Z7 2.5 1M L3
+			//SL6YL 2.8 2M L3
+			//SL6Z8 2.8 2M L3
 			nameptr+=sprintf (nameptr, "%s", " [M0]");
+			break;
+		case 6:
+			//400FSB 512K L2
+			//SL79V 3.0 4M L3
+			//SL79Z 2.7 2M L3
+			//SL7A5 2.2 2M L3
+			nameptr+=sprintf (nameptr, "%s", " [C0]");
 			break;
 		case 7:
 			//SL6HL SL6K6 2.8GHz (533MHz FSB)
@@ -837,6 +871,13 @@ void Identify_Intel (struct cpudata *cpu)
 			SL84Y 3.8GHz  800
 			SL7P2 3.8GHz  800
 			SL8J7 3.8GHz  800
+			 */
+			/*
+			 8MB L3 [C-0]
+			 SL8EY 3.3GHz 667
+			 SL8EW 3GHz   667
+			 4MB L3
+			 SL8ED 2.8GHz 667
 			 */
 			nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [E0]");
 			break;
