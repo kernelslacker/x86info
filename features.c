@@ -19,8 +19,8 @@ void decode_feature_flags (struct cpudata *cpu)
 	const char *generic_cap_flags[] = {
 		"fpu", "vme", "de", "pse", "tsc", "msr", "pae", "mce",
 		"cx8", "apic", NULL, "sep", "mtrr", "pge", "mca", "cmov",
-		"pat", "pse36", "psn", "clflsh", NULL, "dtes", "acpi", "mmx",
-		"fxsr", "sse", "sse2", "selfsnoop", "ht", "acc", "ia64", "pbe"
+		"pat", "pse36", "psn", "clflsh", NULL, "ds", "acpi", "mmx",
+		"fxsr", "sse", "sse2", "ss", "ht", "tm", NULL, "pbe"
 	};
 	const char *generic_cap_flags_desc[] = {
 		"Onboard FPU",
@@ -52,13 +52,13 @@ void decode_feature_flags (struct cpudata *cpu)
 		"SSE2 support",
 		"CPU self snoop",
 		"Hyper-Threading",
-		"Automatic clock Control",
-		"IA-64 processor",
+		"Thermal Monitor",
+		NULL,
 		"Pending Break Enable"
 	};
 	const char *intel_cap_flags[] = {
-		NULL, NULL, NULL, NULL, NULL, NULL, NULL, "est",
-		"tm2", NULL, "cntx-id", NULL, NULL, NULL, NULL, NULL,
+		"sse3", NULL, NULL, "monitor", "ds-cpl", NULL, NULL, "est",
+		"tm2", NULL, "cntx-id", NULL, NULL, "cx16", "xTPR", NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};
