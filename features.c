@@ -93,7 +93,7 @@ void decode_feature_flags (struct cpudata *cpu)
 		NULL, "Fast fxsave/fxrstor", NULL, "rdtscp", NULL, "lm", "3dnowext", "3dnow"
 	};
 	const char *amd_cap_extended_ecx_flags[] = {
-		"lahf/sahf", "CMP legacy", "svm", "ExtApicSpace, "LockMovCr0", NULL, NULL, NULL,
+		"lahf/sahf", "CMP legacy", "svm", "ExtApicSpace", "LockMovCr0", NULL, NULL, NULL,
 		"3DNowPrefetch", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
