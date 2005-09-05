@@ -65,8 +65,10 @@ void decode_powernow(struct cpudata *cpu)
 
 	if (edx & (1<<5))
 		printf ("\n\tSoftware Thermal Control\n");
+	if (edx & (1<<6))
+		printf ("100MHz multiplier control\n");
 
-	if (!(edx & (1<<0 | 1<<1 | 1<<2 | 1<<3 | 1<<4 | 1<<5)))
+	if (!(edx & (1<<0 | 1<<1 | 1<<2 | 1<<3 | 1<<4 | 1<<5 | 1<<6)))
 		printf(" None\n");
 	printf("\n");
 
