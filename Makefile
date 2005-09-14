@@ -67,6 +67,9 @@ nodes:
 test:
 	scripts/testnodes
 
+release:
+	git repack -a -d
+
 clean:
 	@find . -name "*.o" -exec rm {} \;
 	@find . -name "*~" -exec rm {} \;
