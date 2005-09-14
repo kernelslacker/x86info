@@ -69,6 +69,7 @@ test:
 
 release:
 	git repack -a -d
+	git-prune-packed
 
 clean:
 	@find . -name "*.o" -exec rm {} \;
