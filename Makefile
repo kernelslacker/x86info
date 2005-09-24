@@ -67,9 +67,12 @@ nodes:
 test:
 	scripts/testnodes
 
+VERSION=1.16
+	
 release:
 	git repack -a -d
 	git-prune-packed
+	git-tar-tree HEAD x86info-$(VERSION) | gzip -9 > x86info-$(VERSION).tgz
 
 clean:
 	@find . -name "*.o" -exec rm {} \;
