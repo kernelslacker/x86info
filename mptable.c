@@ -27,7 +27,6 @@
  *	  $Id: mptable.c,v 1.8 2005/04/25 20:54:12 davej Exp $
  */
 
-#define MP_SIG				  0x5f504d5f	  /* _MP_ */
 
 #include <stdio.h>
 #include <errno.h>
@@ -38,6 +37,7 @@
 #include <sys/types.h>
 
 #include "mptable.h"
+#include "x86info.h"
 
 typedef unsigned long vm_offset_t;
 
@@ -64,9 +64,21 @@ typedef unsigned long vm_offset_t;
 
 #define MAXPNSTR				132
 
+/* global data */
+int	pfd;			/* physical /dev/mem fd */
+
+int	busses[16];
+int	apics[16];
+
+int	ncpu;
+int	nbus;
+int	napic;
+int	nintr;
+int	verbose;
+
 typedef struct TABLE_ENTRY {
-	u_char	type;
-	u_char	length;
+	u8	type;
+	u8	length;
 	char	name[32];
 } tableEntry;
 
@@ -82,219 +94,108 @@ tableEntry basetableEntryTypes[] =
 /* MP Floating Pointer Structure */
 typedef struct MPFPS {
 	char	signature[4];
-	void*	pap;
-	u_char	length;
-	u_char	spec_rev;
-	u_char	checksum;
-	u_char	mpfb1;
-	u_char	mpfb2;
-	u_char	mpfb3;
-	u_char	mpfb4;
-	u_char	mpfb5;
+	u32		pap;
+	u8	length;
+	u8	spec_rev;
+	u8	checksum;
+	u8	mpfb1;
+	u8	mpfb2;
+	u8	mpfb3;
+	u8	mpfb4;
+	u8	mpfb5;
 } mpfps_t;
 
 /* MP Configuration Table Header */
 typedef struct MPCTH {
 	char	signature[4];
-	u_short	base_table_length;
-	u_char	spec_rev;
-	u_char	checksum;
-	u_char	oem_id[8];
-	u_char	product_id[12];
-	void*	oem_table_pointer;
-	u_short	oem_table_size;
-	u_short	entry_count;
-	void*	apic_address;
-	u_short	extended_table_length;
-	u_char	extended_table_checksum;
-	u_char	reserved;
+	u16	base_table_length;
+	u8	spec_rev;
+	u8	checksum;
+	u8	oem_id[8];
+	u8	product_id[12];
+	u32 oem_table_pointer;
+	u16	oem_table_size;
+	u16	entry_count;
+	u32	apic_address;
+	u16	extended_table_length;
+	u8	extended_table_checksum;
+	u8	reserved;
 } mpcth_t;
 
 typedef struct PROCENTRY {
-	u_char	type;
-	u_char	apicID;
-	u_char	apicVersion;
-	u_char	cpuFlags;
-	u_long	cpuSignature;
-	u_long	featureFlags;
-	u_long	reserved1;
-	u_long	reserved2;
+	u8	type;
+	u8	apicID;
+	u8	apicVersion;
+	u8	cpuFlags;
+	u32	cpuSignature;
+	u32	featureFlags;
+	u32	reserved1;
+	u32	reserved2;
 } ProcEntry;
 
-static void apic_probe(vm_offset_t* paddr, int* where);
 
-static int MPConfigTableHeader(void* pap);
-
-static int readType(void);
-static void seekEntry(vm_offset_t addr);
-static void readEntry(void* entry, int size);
-
-static void processorEntry(void);
-
-/* global data */
-int	pfd;			/* physical /dev/mem fd */
-
-int	busses[16];
-int	apics[16];
-
-int	ncpu;
-int	nbus;
-int	napic;
-int	nintr;
-int	verbose;
-
-int issmp(int *numcpu, int verb)
+static void seekEntry(vm_offset_t addr)
 {
-	vm_offset_t paddr;
-	mpfps_t mpfps;
-	int where;
-	int defaultConfig;
-
-	verbose=verb;
-	/* open physical memory for access to MP structures */
-	if ((pfd = open("/dev/mem", O_RDONLY)) < 0) {
-		fprintf(stderr, "issmp(): /dev/mem: %s\n", strerror(errno));
-		return -1;
+	if (lseek(pfd, (off_t)addr, SEEK_SET) < 0) {
+		perror("/dev/mem seek");
+		exit(1);
 	}
-
-	/* probe for MP structures */
-	apic_probe(&paddr, &where);
-	if (where <= 0) {
-		if(numcpu) *numcpu=1;
-		return SMP_NO;
-	}
-
-	/* read in mpfps structure*/
-	seekEntry(paddr);
-	readEntry(&mpfps, sizeof(mpfps_t));
-
-	/* check whether an MP config table exists */
-	if (! (defaultConfig = mpfps.mpfb1))
-		MPConfigTableHeader(mpfps.pap);
-
-	if(numcpu)
-		*numcpu=ncpu;
-	return SMP_YES;
 }
 
-/*
- * set PHYSICAL address of MP floating pointer structure
- */
-#define NEXT(X)		((X) += 4)
-static void
-apic_probe(vm_offset_t* paddr, int* where)
+static void readEntry(void* entry, int size)
 {
-	/*
-	 * c rewrite of apic_probe() by Jack F. Vogel
-	 */
-
-	unsigned int x;
-	u_short segment;
-	vm_offset_t target;
-	u_int buffer[ BIOS_SIZE / sizeof(int) ];
-
-	/* search Extended Bios Data Area, if present */
-	seekEntry((vm_offset_t)EBDA_POINTER);
-	readEntry(&segment, 2);
-	if (segment) {				/* search EBDA */
-		target = (vm_offset_t)segment << 4;
-		seekEntry(target);
-		readEntry(buffer, ONE_KBYTE);
-
-		for (x = 0; x < ONE_KBYTE / sizeof (unsigned int); NEXT(x)) {
-			if (buffer[ x ] == MP_SIG) {
-				*where = 1;
-				*paddr = (x * sizeof(unsigned int)) + target;
-				return;
-			}
-		}
+	if (read(pfd, entry, size) != size) {
+		perror("readEntry");
+		exit(1);
 	}
-
-	/* read CMOS for real top of mem */
-	seekEntry((vm_offset_t)TOPOFMEM_POINTER);
-	readEntry(&segment, 2);
-	--segment;						  /* less ONE_KBYTE */
-	target = segment * 1024;
-	seekEntry(target);
-	readEntry(buffer, ONE_KBYTE);
-
-	for (x = 0; x < ONE_KBYTE / sizeof (unsigned int); NEXT(x)) {
-		if (buffer[ x ] == MP_SIG) {
-			*where = 2;
-			*paddr = (x * sizeof(unsigned int)) + target;
-			return;
-		}
-	}
-
-	/* we don't necessarily believe CMOS, check base of the last 1K of 640K */
-	if (target != (DEFAULT_TOPOFMEM - 1024)) {
-		target = (DEFAULT_TOPOFMEM - 1024);
-		seekEntry(target);
-		readEntry(buffer, ONE_KBYTE);
-
-		for (x = 0; x < ONE_KBYTE / sizeof (unsigned int); NEXT(x)) {
-			if (buffer[ x ] == MP_SIG) {
-				*where = 3;
-				*paddr = (x * sizeof(unsigned int)) + target;
-				return;
-			}
-		}
-	}
-
-	/* search the BIOS */
-	seekEntry(BIOS_BASE);
-	readEntry(buffer, BIOS_SIZE);
-
-	for (x = 0; x < BIOS_SIZE / sizeof(unsigned int); NEXT(x)) {
-		if (buffer[ x ] == MP_SIG) {
-			*where = 4;
-			*paddr = (x * sizeof(unsigned int)) + BIOS_BASE;
-			return;
-		}
-	}
-
-	/* search the extended BIOS */
-	seekEntry(BIOS_BASE2);
-	readEntry(buffer, BIOS_SIZE);
-
-	for (x = 0; x < BIOS_SIZE / sizeof(unsigned int); NEXT(x)) {
-		if (buffer[ x ] == MP_SIG) {
-			*where = 5;
-			*paddr = (x * sizeof(unsigned int)) + BIOS_BASE2;
-			return;
-		}
-	}
-
-	/* search additional memory */
-	target = GROPE_AREA1;
-	seekEntry(target);
-	readEntry(buffer, GROPE_SIZE);
-
-	for (x = 0; x < GROPE_SIZE / sizeof(unsigned int); NEXT(x)) {
-		if (buffer[ x ] == MP_SIG) {
-			*where = 6;
-			*paddr = (x * sizeof(unsigned int)) + GROPE_AREA1;
-			return;
-		}
-	}
-
-	target = GROPE_AREA2;
-	seekEntry(target);
-	readEntry(buffer, GROPE_SIZE);
-
-	for (x = 0; x < GROPE_SIZE / sizeof(unsigned int); NEXT(x)) {
-		if (buffer[ x ] == MP_SIG) {
-			*where = 7;
-			*paddr = (x * sizeof(unsigned int)) + GROPE_AREA2;
-			return;
-		}
-	}
-
-	*where = 0;
-	*paddr = (vm_offset_t)0;
 }
 
-static int MPConfigTableHeader(void* pap)
+static int readType(void)
+{
+	u_char type;
+
+	if (read(pfd, &type, sizeof(u_char)) != sizeof(u_char)) {
+		perror("type read");
+		exit(1);
+	}
+
+	if (lseek(pfd, -1, SEEK_CUR) < 0) {
+		perror("type seek");
+		exit(1);
+	}
+
+	return (int)type;
+}
+
+static void processorEntry(void)
+{
+	ProcEntry entry;
+
+	/* read it into local memory */
+	readEntry(&entry, sizeof(entry));
+
+	/* count it */
+	++ncpu;
+
+	if (verbose) {
+		printf("#\t%2d", entry.apicID);
+		printf("\t 0x%2x", entry.apicVersion);
+		
+		printf("\t %s, %s",
+				(entry.cpuFlags & PROCENTRY_FLAG_BP) ? "BSP" : "AP",
+				(entry.cpuFlags & PROCENTRY_FLAG_EN) ? "usable" : "unusable");
+		
+		printf("\t %d\t %d\t %d",
+				(entry.cpuSignature >> 8) & 0x0f,
+				(entry.cpuSignature >> 4) & 0x0f,
+				entry.cpuSignature & 0x0f);
+		
+		printf("\t 0x%04x\n", entry.featureFlags);
+	}
+}
+
+
+static int MPConfigTableHeader(u32 pap)
 {
 	vm_offset_t paddr;
 	mpcth_t	 cth;
@@ -317,7 +218,7 @@ static int MPConfigTableHeader(void* pap)
 	totalSize = cth.base_table_length - sizeof(struct MPCTH);
 	count = cth.entry_count;
 
-	/* initialze tables */
+	/* initialize tables */
 	for (x = 0; x < 16; ++x)
 		busses[ x ] = apics[ x ] = 0xff;
 
@@ -340,65 +241,145 @@ static int MPConfigTableHeader(void* pap)
 	return SMP_YES;
 }
 
-static int readType(void)
+
+
+/*
+ * set PHYSICAL address of MP floating pointer structure
+ */
+#define NEXT(X)		((X) += 4)
+static int apic_probe(vm_offset_t* paddr)
 {
-	u_char type;
+	unsigned int x;
+	u16 segment;
+	vm_offset_t target;
+	unsigned int buffer[BIOS_SIZE];
+	const char MP_SIG[]="_MP_";
 
-	if (read(pfd, &type, sizeof(u_char)) != sizeof(u_char)) {
-		perror("type read");
-		exit(1);
+	/* search Extended Bios Data Area, if present */
+	seekEntry((vm_offset_t)EBDA_POINTER);
+	readEntry(&segment, 2);
+	if (segment) {				/* search EBDA */
+		target = (vm_offset_t)segment << 4;
+		seekEntry(target);
+		readEntry(buffer, ONE_KBYTE);
+
+		for (x = 0; x < ONE_KBYTE / 4; NEXT(x)) {
+			if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
+				*paddr = (x*4) + target;
+				return 1;
+			}
+		}
 	}
 
-	if (lseek(pfd, -1, SEEK_CUR) < 0) {
-		perror("type seek");
-		exit(1);
+	/* read CMOS for real top of mem */
+	seekEntry((vm_offset_t)TOPOFMEM_POINTER);
+	readEntry(&segment, 2);
+	--segment;						  /* less ONE_KBYTE */
+	target = segment * 1024;
+	seekEntry(target);
+	readEntry(buffer, ONE_KBYTE);
+
+	for (x = 0; x < ONE_KBYTE/4; NEXT(x)) {
+		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
+			*paddr = (x*4) + target;
+			return 2;
+		}
 	}
 
-	return (int)type;
+	/* we don't necessarily believe CMOS, check base of the last 1K of 640K */
+	if (target != (DEFAULT_TOPOFMEM - 1024)) {
+		target = (DEFAULT_TOPOFMEM - 1024);
+		seekEntry(target);
+		readEntry(buffer, ONE_KBYTE);
+
+		for (x = 0; x < ONE_KBYTE/4; NEXT(x)) {
+			if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
+				*paddr = (x*4) + target;
+				return 3;
+			}
+		}
+	}
+
+	/* search the BIOS */
+	seekEntry(BIOS_BASE);
+	readEntry(buffer, BIOS_SIZE);
+
+	for (x = 0; x < BIOS_SIZE/4; NEXT(x)) {
+		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
+			*paddr = (x*4) + BIOS_BASE;
+			return 4;
+		}
+	}
+
+	/* search the extended BIOS */
+	seekEntry(BIOS_BASE2);
+	readEntry(buffer, BIOS_SIZE);
+
+	for (x = 0; x < BIOS_SIZE/4; NEXT(x)) {
+		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
+			*paddr = (x*4) + BIOS_BASE2;
+			return 4;
+		}
+	}
+
+	/* search additional memory */
+	target = GROPE_AREA1;
+	seekEntry(target);
+	readEntry(buffer, GROPE_SIZE);
+
+	for (x = 0; x < GROPE_SIZE/4; NEXT(x)) {
+		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
+			*paddr = (x*4) + GROPE_AREA1;
+			return 5;
+		}
+	}
+
+	target = GROPE_AREA2;
+	seekEntry(target);
+	readEntry(buffer, GROPE_SIZE);
+
+	for (x = 0; x < GROPE_SIZE/4; NEXT(x)) {
+		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
+			*paddr = (x*4) + GROPE_AREA2;
+			return 6;
+		}
+	}
+
+	*paddr = (vm_offset_t)0;
+	return 0;
 }
 
-static void seekEntry(vm_offset_t addr)
+
+int issmp(int *numcpu, int verb)
 {
-	if (lseek(pfd, (off_t)addr, SEEK_SET) < 0) {
-		perror("/dev/mem seek");
-		exit(1);
+	vm_offset_t paddr;
+	mpfps_t mpfps;
+
+	verbose=verb;
+	/* open physical memory for access to MP structures */
+	if ((pfd = open("/dev/mem", O_RDONLY)) < 0) {
+		fprintf(stderr, "issmp(): /dev/mem: %s\n", strerror(errno));
+		return -1;
 	}
-}
 
-static void readEntry(void* entry, int size)
-{
-	if (read(pfd, entry, size) != size) {
-		perror("readEntry");
-		exit(1);
+	/* probe for MP structures */
+	if (apic_probe(&paddr) <= 0) {
+		if (numcpu)
+			*numcpu=1;
+		return SMP_NO;
 	}
-}
 
-static void processorEntry(void)
-{
-	ProcEntry entry;
+	/* read in mpfps structure*/
+	seekEntry(paddr);
+	readEntry(&mpfps, sizeof(mpfps_t));
 
-	/* read it into local memory */
-	readEntry(&entry, sizeof(entry));
+	/* check whether an MP config table exists */
+	if (!mpfps.mpfb1)
+		MPConfigTableHeader(mpfps.pap);
 
-	/* count it */
-	++ncpu;
-
-	if(verbose)
-	{
-		printf("#\t%2d", entry.apicID);
-		printf("\t 0x%2x", entry.apicVersion);
-		
-		printf("\t %s, %s",
-				(entry.cpuFlags & PROCENTRY_FLAG_BP) ? "BSP" : "AP",
-				(entry.cpuFlags & PROCENTRY_FLAG_EN) ? "usable" : "unusable");
-		
-		printf("\t %ld\t %ld\t %ld",
-				(entry.cpuSignature >> 8) & 0x0f,
-				(entry.cpuSignature >> 4) & 0x0f,
-				entry.cpuSignature & 0x0f);
-		
-		printf("\t 0x%04lx\n", entry.featureFlags);
-	}
+	if (numcpu)
+		*numcpu=ncpu;
+	return SMP_YES;
 }
 
 #ifdef STANDALONE
