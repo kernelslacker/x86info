@@ -4,7 +4,7 @@
 NRNODES=`grep processor /proc/cpuinfo | wc -l`
 need=0
 
-for i in `seq 0 $NRNODES`
+for i in `seq 0 $(( $NRNODES - 1 ))`
 do
 	if [ ! -c /dev/cpu/$i/cpuid ] ; then
 		echo "*** No /dev/cpu/$i/cpuid found."
