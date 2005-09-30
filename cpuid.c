@@ -9,6 +9,8 @@
  *
  */
 
+#define _LARGEFILE64_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -18,7 +20,7 @@
 
 #include "x86info.h"
 
-void cpuid (int CPU_number, int idx,
+void cpuid (int CPU_number, unsigned int idx,
 	unsigned long *eax,
 	unsigned long *ebx,
 	unsigned long *ecx,
@@ -38,7 +40,7 @@ void cpuid (int CPU_number, int idx,
 	snprintf (cpuname,18, "/dev/cpu/%d/cpuid", CPU_number);
 	fh = open (cpuname, O_RDONLY);
 	if (fh != -1) {
-		lseek (fh, idx, SEEK_CUR);
+		lseek64 (fh, (off64_t)idx, SEEK_CUR);
 		read (fh, &buffer[0], 16);
 		if (eax!=0)	*eax = (*(unsigned *)(buffer   ));
 		if (ebx!=0)	*ebx = (*(unsigned *)(buffer+ 4));

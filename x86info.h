@@ -75,7 +75,7 @@ struct cpudata {
 #define CONN_SOCKET_939		27
 #define CONN_SOCKET_940		28
 
-void cpuid (int, int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
+void cpuid (int, unsigned int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 
 void Identify_AMD (struct cpudata *cpu);
