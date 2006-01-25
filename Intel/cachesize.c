@@ -30,6 +30,7 @@ static struct _cache_table TRACE_cache_table[] =
 	{ 0x70, 12, "Instruction trace cache:\n\tSize: 12K uOps\t8-way associative." },
 	{ 0x71, 16, "Instruction trace cache:\n\tSize: 16K uOps\t8-way associative." },
 	{ 0x72, 32, "Instruction trace cache:\n\tSize: 32K uOps\t8-way associative." },
+	{ 0x73, 64, "Instruction trace cache:\n\tSize: 64K uOps\t8-way associative." },
 	{ 0, 0, 0 }
 };
 
@@ -68,6 +69,7 @@ static struct _cache_table L2_cache_table[] =
 	{ 0x7a, 256, "L2 unified cache:\n\tSize: 256KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
 	{ 0x7b, 512, "L2 unified cache:\n\tSize: 512KB\tSectored, 8-way associative.\n\tline size=64 bytes." },
 	{ 0x7c, 1024, "L2 unified cache:\n\tSize: 1MB\tSectored, 8-way associative.\n\tline size=64 bytes." },
+	{ 0x7d, 2048, "L2 unified cache:\n\tSize: 2MB\tSectored, 8-way associative.\n\tline size=64 bytes." },
 	{ 0x82, 256, "L2 unified cache:\n\tSize: 256KB\t8-way associative.\n\tline size=32 bytes." },
 	{ 0x83, 512, "L2 unified cache:\n\tSize: 512KB\t8-way associative.\n\tline size=32 bytes." },
 	{ 0x84, 1024, "L2 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=32 bytes." },
