@@ -38,7 +38,7 @@ static struct _cache_table L1I_cache_table[] =
 {
 	{ 0x6,  8, "L1 Instruction cache:\n\tSize: 8KB\t4-way associative.\n\tline size=32 bytes." },
 	{ 0x8,  16, "L1 Instruction cache:\n\tSize: 16KB\t4-way associative.\n\tline size=32 bytes." },
-	{ 0x30, 32,	"L1 Instruction cache:\n\t:Size 32KB\t8-way associative.\n\tline size=64 bytes." },
+	{ 0x30, 32,	"L1 Instruction cache:\n\tSize 32KB\t8-way associative.\n\tline size=64 bytes." },
 	{ 0, 0, 0 }
 };
 
