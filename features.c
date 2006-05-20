@@ -59,9 +59,9 @@ void decode_feature_flags (struct cpudata *cpu)
 	};
 	/* CPUID 0x00000001 ECX flags */
 	const char *intel_cap_generic_ecx_flags[] = {
-		"sse3", NULL, NULL, "monitor", "ds-cpl", NULL, NULL, "est",
+		"sse3", NULL, NULL, "monitor", "ds-cpl", "vmx", NULL, "est",
 		"tm2", NULL, "cntx-id", NULL, NULL, "cx16", "xTPR", NULL,
-		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};
 	/* CPUID 0x80000001 EDX flags */
@@ -73,9 +73,9 @@ void decode_feature_flags (struct cpudata *cpu)
 	};
 	/* CPUID 0x80000001 ECX flags */
 	const char *intel_cap_extended_ecx_flags[] = {
+		"lahf_lm", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-		NULL, NULL, NULL, NULL, "LAHF", NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	};
 
