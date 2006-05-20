@@ -166,8 +166,7 @@ static void decode_Intel_cache (int des, struct cpudata *cpu, int output,
 static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int output)
 {
 	int i, j, n;
-	long regs[4];
-	unsigned char *dp = (unsigned char *)regs;
+	unsigned long regs[4];
 
 	/* Decode TLB and cache info */
 	cpuid (cpu->number, 2, &regs[0], &regs[1], &regs[2], &regs[3]);
@@ -180,13 +179,15 @@ static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int ou
 
 		/* If bit 31 is set, this is an unknown format */
 		for (j=0; j<3; j++)
-			if (regs[j] < 0)
+			if (regs[j] & 0x80000000)
 				regs[j] = 0;
 
 		/* Byte 0 is level count, not a descriptor */
-		for (j=1; j<16; j++)
-			if (dp[j]!=0)
-				decode_Intel_cache (dp[j], cpu, output, table);
+		for (j=1; j<16; j++) {
+			unsigned char val = regs[j / 4] >> (8 * (j % 4));
+			if (val)
+				decode_Intel_cache (val, cpu, output, table);
+		}
 	}
 }
 
@@ -214,7 +215,7 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 
 	for (i=0; i<256; i++) {
 		if (unknown_array[i]==1)
-			printf ("%d ", i);
+			printf ("%02x ", i);
 	}
 	printf ("\n");
 	decode_cache (cpu, DTLB_cache_table, output);
