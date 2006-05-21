@@ -185,7 +185,7 @@ int main (int argc, char **argv)
 	if ((HaveCPUID())==0) {
 		printf ("No CPUID instruction available.\n");
 		printf ("No further information available for this CPU.\n");
-		return(0);
+		return 0;
 	}
 
 	if (getuid()!=0)
@@ -204,10 +204,9 @@ int main (int argc, char **argv)
 		/* Check mptable if present. This way we get number of CPUs
 		   on SMP systems that have booted UP kernels. */
 		if (user_is_root) {
-			issmp (&nrSMPCPUs, 0);
-			if (nrSMPCPUs > nrCPUs) {
+			nrSMPCPUs = enumerate_cpus();
+			if (nrSMPCPUs > nrCPUs)
 				printf (", but found %d CPUs in MPTable.", nrSMPCPUs);
-			}
 		}
 		printf ("\n");
 	}
@@ -222,7 +221,7 @@ int main (int argc, char **argv)
 	}
 
 	if (show_mptable && user_is_root)
-		issmp (&nrSMPCPUs, 1);
+		(void)issmp(1);		// FIXME: issmp should become 'show_mptable'
 
 	separator();
 
@@ -236,7 +235,7 @@ int main (int argc, char **argv)
 		}
 
 		memset (cpu, 0, sizeof(struct cpudata));
-	
+
 		if (!head) {
 			head = cpu;
 		} else {

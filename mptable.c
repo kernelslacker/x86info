@@ -350,7 +350,33 @@ static int apic_probe(vm_offset_t* paddr)
 }
 
 
-int issmp(unsigned int *numcpu, int verb)
+int enumerate_cpus(void)
+{
+	vm_offset_t paddr;
+	mpfps_t mpfps;
+
+	/* open physical memory for access to MP structures */
+	if ((pfd = open("/dev/mem", O_RDONLY)) < 0) {
+		fprintf(stderr, "enumerate_cpus(): /dev/mem: %s\n", strerror(errno));
+		return -1;
+	}
+
+	/* probe for MP structures */
+	if (apic_probe(&paddr) <= 0)
+		return 1;
+
+	/* read in mpfps structure*/
+	seekEntry(paddr);
+	readEntry(&mpfps, sizeof(mpfps_t));
+
+	/* check whether an MP config table exists */
+	if (!mpfps.mpfb1)
+		MPConfigTableHeader(mpfps.pap);
+
+	return ncpu;
+}
+
+int issmp(int verb)
 {
 	vm_offset_t paddr;
 	mpfps_t mpfps;
@@ -363,11 +389,8 @@ int issmp(unsigned int *numcpu, int verb)
 	}
 
 	/* probe for MP structures */
-	if (apic_probe(&paddr) <= 0) {
-		if (numcpu)
-			*numcpu=1;
+	if (apic_probe(&paddr) <= 0)
 		return SMP_NO;
-	}
 
 	/* read in mpfps structure*/
 	seekEntry(paddr);
@@ -377,8 +400,6 @@ int issmp(unsigned int *numcpu, int verb)
 	if (!mpfps.mpfb1)
 		MPConfigTableHeader(mpfps.pap);
 
-	if (numcpu)
-		*numcpu=ncpu;
 	return SMP_YES;
 }
 
@@ -386,8 +407,8 @@ int issmp(unsigned int *numcpu, int verb)
 int main()
 {
 	int	numcpu, smp;
-
-	smp=issmp(&numcpu, 1);
+	numcpu = enumerate_cpus();
+	smp=issmp(1);
 	printf("SMP: %d\nCPU: %d\n", smp, numcpu);
 	return 0;
 }
