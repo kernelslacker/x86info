@@ -17,6 +17,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "x86info.h"
 
@@ -41,7 +42,10 @@ void cpuid (int CPU_number, unsigned int idx,
 	fh = open (cpuname, O_RDONLY);
 	if (fh != -1) {
 		lseek64 (fh, (off64_t)idx, SEEK_CUR);
-		read (fh, &buffer[0], 16);
+		if (read (fh, &buffer[0], 16) == -1) {
+			perror(cpuname);
+			exit(-1);
+		}
 		if (eax!=0)	*eax = (*(unsigned *)(buffer   ));
 		if (ebx!=0)	*ebx = (*(unsigned *)(buffer+ 4));
 		if (ecx!=0)	*ecx = (*(unsigned *)(buffer+ 8));
