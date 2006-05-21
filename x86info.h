@@ -1,7 +1,6 @@
 #ifndef _X86INFO_H
 #define _X86INFO_H
 
-#include <linux/types.h>
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
