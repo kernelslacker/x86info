@@ -631,5 +631,17 @@ void display_AMD_info(struct cpudata *cpu)
 
 	if (show_bugs)
 		show_amd_bugs(cpu);
+
+	/* AMD Multicore characterisation */
+	if (cpu->maxei >= 0x80000008) {
+		int nr_cores;
+		unsigned long ecx;
+
+		cpuid (cpu->number, 0x80000008, NULL, NULL, &ecx, NULL);
+		nr_cores = 1 + (ecx & 0xff);
+
+		if (nr_cores > 1)
+			printf ("The physical package has %d cores\n", nr_cores);
+	}
 }
 
