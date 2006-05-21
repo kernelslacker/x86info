@@ -350,7 +350,7 @@ static int apic_probe(vm_offset_t* paddr)
 }
 
 
-int issmp(int *numcpu, int verb)
+int issmp(unsigned int *numcpu, int verb)
 {
 	vm_offset_t paddr;
 	mpfps_t mpfps;

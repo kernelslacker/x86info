@@ -31,7 +31,7 @@ struct cpudata {
 	unsigned int cachesize_L3;
 	unsigned int cachesize_trace;
 	unsigned int maxi, maxei, maxei2;
-	unsigned char name[80];
+	char name[80];
 	unsigned char connector;
 	unsigned int flags_ecx;
 	unsigned int flags_edx;
@@ -110,7 +110,7 @@ void dump_mtrrs (struct cpudata *cpu);
 void estimate_MHz(struct cpudata *cpu);
 int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
-int issmp(int *numcpu, int verb);
+int issmp(unsigned int *numcpu, int verb);
 void get_model_name (struct cpudata *cpu);
 void decode_connector (unsigned int type);
 void show_benchmarks (void);
