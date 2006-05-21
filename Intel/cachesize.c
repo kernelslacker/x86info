@@ -165,7 +165,7 @@ static void decode_Intel_cache (int des, struct cpudata *cpu, int output,
 
 static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int output)
 {
-	int i, j, n;
+	unsigned int i, j, n;
 	unsigned long regs[4];
 
 	/* Decode TLB and cache info */
@@ -184,7 +184,7 @@ static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int ou
 
 		/* Byte 0 is level count, not a descriptor */
 		for (j=1; j<16; j++) {
-			unsigned char val = regs[j / 4] >> (8 * (j % 4));
+			unsigned char val = regs[j / 4] >> (unsigned int)(8 * (j % 4));
 			if (val)
 				decode_Intel_cache (val, cpu, output, table);
 		}
@@ -194,7 +194,7 @@ static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int ou
 
 void decode_Intel_caches (struct cpudata *cpu, int output)
 {
-	int i;
+	unsigned int i;
 
 	if (cpu->maxi < 2)
 		return;

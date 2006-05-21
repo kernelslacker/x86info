@@ -26,7 +26,7 @@
 void decode_athlon_bluesmoke(int cpunum)
 {
 	unsigned long long val, val2;
-	int banks, i;
+	unsigned int banks, i;
 
 	if (!user_is_root)
 		return;
@@ -107,14 +107,14 @@ void decode_athlon_bluesmoke(int cpunum)
 
 	printf("           31       23       15       7 \n");
 	for (i=0; i<banks; i++) {
-		printf ("Bank: %d (0x%x)\n", i, MC_CTL+i*4);
-		printf ("MC%dCTL:    ", i);
+		printf ("Bank: %u (0x%x)\n", i, (unsigned int)MC_CTL+i*4);
+		printf ("MC%uCTL:    ", i);
 		dumpmsr_bin (cpunum, MC_CTL+i*4, 32);
-		printf ("MC%dSTATUS: ", i);
+		printf ("MC%uSTATUS: ", i);
 		dumpmsr_bin (cpunum, MC_STATUS+i*4, 32);
-		printf ("MC%dADDR:   ", i);
+		printf ("MC%uADDR:   ", i);
 		dumpmsr_bin (cpunum, MC_ADDR+i*4, 32);
-		printf ("MC%dMISC:   ", i);
+		printf ("MC%uMISC:   ", i);
 		dumpmsr_bin (cpunum, MC_MISC+i*4, 32);
 		printf ("\n");
 	}

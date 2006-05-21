@@ -14,7 +14,7 @@
 void decode_feature_flags (struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
-	int i;
+	unsigned int i;
 
 	/* CPUID 0x00000001 EDX flags */
 	const char *generic_cap_flags[] = {

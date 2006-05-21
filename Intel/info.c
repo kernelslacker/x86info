@@ -22,7 +22,7 @@ void display_Intel_info (struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 
-	printf ("Family: %d Model: %d Stepping: %d Type: %d Brand: %d\n",
+	printf ("Family: %u Model: %u Stepping: %u Type: %u Brand: %u\n",
 		cpu->family, cpu->model, cpu->stepping, cpu->type, cpu->brand);
 	printf ("CPU Model: %s\n", cpu->name);
 
@@ -61,7 +61,7 @@ void display_Intel_info (struct cpudata *cpu)
 	if (show_eblcr) {
 		if (cpu->family == 6 && cpu->model >= 3) {
 			unsigned long long eblcr;
-			read_msr (cpu->number, 0x2A, &eblcr);
+			read_msr(cpu->number, 0x2A, &eblcr);
 			interpret_eblcr(eblcr);
 		}
 	}

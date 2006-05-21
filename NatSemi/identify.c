@@ -10,9 +10,14 @@
 #include <stdio.h>
 #include "../x86info.h"
 
+static char *NatSemi_nameptr;
+#define add_to_cpuname(x)   NatSemi_nameptr += snprintf(NatSemi_nameptr, sizeof(x), "%s", x);
+
 void Identify_NatSemi (struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
+
+	NatSemi_nameptr = cpu->name;
 	cpu->vendor = VENDOR_NATSEMI;
 
 	/* Do standard stuff */
@@ -25,9 +30,9 @@ void Identify_NatSemi (struct cpudata *cpu)
 	cpu->family = (eax >> 8) & 0xf;
 
 	switch (tuple(cpu) & 0xff0) {
-		case 0x540:	sprintf (cpu->name, "%s", "Geode GX1");
+		case 0x540:	add_to_cpuname("Geode GX1");
 					break;
-		default:	sprintf (cpu->name, "%s", "Unknown CPU");
+		default:	add_to_cpuname("Unknown CPU");
 					break;
 	}
 }
@@ -35,7 +40,7 @@ void Identify_NatSemi (struct cpudata *cpu)
 
 void display_NatSemi_info(struct cpudata *cpu)
 {
-	printf ("Family: %d Model: %d Stepping: %d\n",
+	printf ("Family: %u Model: %u Stepping: %u\n",
 		cpu->family, cpu->model, cpu->stepping);
 	printf ("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);

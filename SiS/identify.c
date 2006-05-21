@@ -10,9 +10,14 @@
 #include <stdio.h>
 #include "../x86info.h"
 
+static char *sis_nameptr;
+#define add_to_cpuname(x)   sis_nameptr += snprintf(sis_nameptr, sizeof(x), "%s", x);
+
 void Identify_SiS (struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
+
+	sis_nameptr = cpu->name;
 	cpu->vendor = VENDOR_SIS;
 
 	/* Do standard stuff */
@@ -25,9 +30,9 @@ void Identify_SiS (struct cpudata *cpu)
 	cpu->family = (eax >> 8) & 0xf;
 
 	switch (tuple(cpu)) {
-		case 0x505:	sprintf (cpu->name, "%s", "SiS55x");
+		case 0x505:	add_to_cpuname("SiS55x");
 					break;
-		default:	sprintf (cpu->name, "%s", "Unknown CPU");
+		default:	add_to_cpuname("Unknown CPU");
 					break;
 	}
 }
@@ -35,7 +40,7 @@ void Identify_SiS (struct cpudata *cpu)
 
 void display_SiS_info(struct cpudata *cpu)
 {
-	printf ("Family: %d Model: %d Stepping: %d\n",
+	printf ("Family: %u Model: %u Stepping: %u\n",
 		cpu->family, cpu->model, cpu->stepping);
 	printf ("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);

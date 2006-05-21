@@ -11,12 +11,15 @@
 #include "../x86info.h"
 #include "IDT.h"
 
+static char *idt_nameptr;
+#define add_to_cpuname(x)   idt_nameptr += snprintf(idt_nameptr, sizeof(x), "%s", x);
+
 void Identify_IDT (struct cpudata *cpu)
 {
 	char *nameptr;
 	unsigned long eax, ebx, ecx, edx;
 
-	nameptr = cpu->name;
+	idt_nameptr = nameptr = cpu->name;
 
 	cpu->vendor = VENDOR_CENTAUR;
 
@@ -31,7 +34,7 @@ void Identify_IDT (struct cpudata *cpu)
 
 	switch (tuple(cpu) & 0xff0) {
 		case 0x540:
-			sprintf (cpu->name, "%s", "Winchip C6");
+			add_to_cpuname("Winchip C6");
 			//transistors = 5400000;
 			//fab_process = "0.35 micron CMOS";
 			//die_size = "88 sq.mm";
@@ -41,24 +44,24 @@ void Identify_IDT (struct cpudata *cpu)
 		case 0x580:
 			switch (cpu->stepping) {
 			case 0 ... 6:
-				sprintf (cpu->name, "%s", "Winchip 2");
+				add_to_cpuname("Winchip 2");
 				break;
 			case 7 ... 9:
-				sprintf (cpu->name, "%s", "Winchip 2A");
+				add_to_cpuname("Winchip 2A");
 				break;
 			case 0xA ... 0xF:
-				sprintf (cpu->name, "%s", "Winchip 2B");
+				add_to_cpuname("Winchip 2B");
 				break;
 			}
 			break;
 		case 0x590:
-			sprintf (cpu->name, "%s", "Winchip 3");
+			add_to_cpuname("Winchip 3");
 			break;
-		
+
 		/* Family 6 is when VIA bought out Cyrix & IDT
 		 * This is the CyrixIII family. */
 		case 0x660:
-			sprintf (cpu->name, "%s", "VIA Cyrix 3 (Samuel) [C5A]");
+			add_to_cpuname("VIA Cyrix 3 (Samuel) [C5A]");
 				//pipeline_stages = 12;
 				//1.8-2.0V
 				//CPGA
@@ -71,7 +74,7 @@ void Identify_IDT (struct cpudata *cpu)
 		case 0x670:
 				switch (cpu->stepping) {
 				case 0 ... 7:
-					sprintf (cpu->name, "%s", "VIA C3 (Samuel 2) [C5B]");
+					add_to_cpuname("VIA C3 (Samuel 2) [C5B]");
 					//pipeline_stages = 12;
 					//1.6V
 					//CPGA/EBGA
@@ -82,7 +85,7 @@ void Identify_IDT (struct cpudata *cpu)
 					//Mar 25 2001
 					break;
 				case 8 ... 0xf:
-					sprintf (cpu->name, "%s", "VIA C3 (Ezra) [C5C]");
+					add_to_cpuname("VIA C3 (Ezra) [C5C]");
 					//pipeline_stages = 12;
 					//1.35V
 					//CPGA/EBGA
@@ -95,7 +98,7 @@ void Identify_IDT (struct cpudata *cpu)
 				}
 				break;
 		/* Ezra-T is much like Ezra but reworked to run in Pentium III Tualatin sockets. */
-		case 0x680:	sprintf (cpu->name, "%s", "VIA C3 (Ezra-T) [C5M/C5N]");
+		case 0x680:	add_to_cpuname("VIA C3 (Ezra-T) [C5M/C5N]");
 					//pipeline_stages = 12;
 					//CPGA/EBGA/uPGA2/uFCPGA
 					//900-1200MHz
@@ -105,7 +108,7 @@ void Identify_IDT (struct cpudata *cpu)
 					//C5N=copper interconnectrs
 					//2002
 					break;
-		case 0x690:	sprintf (cpu->name, "%s", "VIA C3 (Nehemiah) [C5XL]");
+		case 0x690:	add_to_cpuname("VIA C3 (Nehemiah) [C5XL]");
 					//pipeline_stages = 16;
 					//2 SSE units
 					//first C3 to run FPU at full clock speed (previous ran at 50%)
@@ -118,10 +121,10 @@ void Identify_IDT (struct cpudata *cpu)
 		case 0x6A0:	switch (cpu->stepping) {
 					case 0:
 					case 8 ... 0xF:
-							sprintf (cpu->name, "%s", "VIA C3 (Esther) [C7-M]");
+							add_to_cpuname("VIA C3 (Esther) [C7-M]");
 							break;
 					case 1 ... 7:
-							sprintf (cpu->name, "%s", "VIA C3 (Ruth) [C7-M]");
+							add_to_cpuname("VIA C3 (Ruth) [C7-M]");
 							break;
 					}
 					break;
@@ -131,7 +134,7 @@ void Identify_IDT (struct cpudata *cpu)
 	// C5X
 	// CZA
 
-		default:	sprintf (cpu->name, "%s", "Unknown VIA CPU");
+		default:	add_to_cpuname("Unknown VIA CPU");
 					break;
 	}
 }

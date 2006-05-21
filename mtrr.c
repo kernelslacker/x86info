@@ -22,7 +22,7 @@ static void dump_mtrr (int cpu, int msr)
 
 void dump_mtrrs (struct cpudata *cpu)
 {
-	int i;
+	unsigned int i;
 
 	if (!(cpu->flags_edx & (X86_FEATURE_MTRR)))
 		return;
@@ -33,9 +33,9 @@ void dump_mtrrs (struct cpudata *cpu)
 	dump_mtrr (cpu->number, 0xfe);
 
 	for (i=0; i<16; i+=2) {
-		printf ("MTRRphysBase%d (0x%x): ", i/2, 0x200+i);
+		printf ("MTRRphysBase%u (0x%x): ", i/2, (unsigned int) 0x200+i);
 		dump_mtrr(cpu->number, 0x200+i);
-		printf ("MTRRphysMask%d (0x%x): ", i/2, 0x201+i);
+		printf ("MTRRphysMask%u (0x%x): ", i/2, (unsigned int) 0x201+i);
 		dump_mtrr(cpu->number, 0x201+i);
 	}
 

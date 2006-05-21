@@ -12,6 +12,9 @@
 #include "../x86info.h"
 #include "Cyrix.h"
 
+static char *cyrix_nameptr;
+#define add_to_cpuname(x)   cyrix_nameptr += snprintf(cyrix_nameptr, sizeof(x), "%s", x);
+
 /* Decode TLB and cache info descriptors */
 void decode_Cyrix_TLB (int x)
 {
@@ -32,6 +35,7 @@ void Identify_Cyrix (struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 
+	cyrix_nameptr = cpu->name;
 	cpu->vendor = VENDOR_CYRIX;
 
 	/* Do standard stuff */
@@ -44,19 +48,19 @@ void Identify_Cyrix (struct cpudata *cpu)
 	cpu->family = (eax >> 8) & 0xf;
 
 	switch (tuple(cpu) & 0xff0) {
-		case 0x450:	sprintf (cpu->name, "%s", "MediaGX");
+		case 0x450:	add_to_cpuname("MediaGX");
 					break;
 
-		case 0x520:	sprintf (cpu->name, "%s", "6x86");
+		case 0x520:	add_to_cpuname("6x86");
 					break;
-		case 0x524:	sprintf (cpu->name, "%s", "GXm");
+		case 0x524:	add_to_cpuname("GXm");
 					break;
 
-		case 0x600:	sprintf (cpu->name, "%s", "6x86/MX");
+		case 0x600:	add_to_cpuname("6x86/MX");
 					break;
-		case 0x620:	sprintf (cpu->name, "%s", "MII");
+		case 0x620:	add_to_cpuname("MII");
 					break;
-		default:	sprintf (cpu->name, "%s", "Unknown CPU");
+		default:	add_to_cpuname("Unknown CPU");
 					break;
 	}
 
@@ -71,11 +75,11 @@ void Identify_Cyrix (struct cpudata *cpu)
 		cpu->family = (eax >> 8) & 0xf;
 
 		switch (cpu->family) {
-			case 4:	sprintf (cpu->name, "MediaGX");
+			case 4:	add_to_cpuname("MediaGX");
 					break;
-			case 5:	sprintf (cpu->name, "6x86/GXm");
+			case 5:	add_to_cpuname("6x86/GXm");
 					break;
-			case 6:	sprintf (cpu->name, "6x86/MX");
+			case 6:	add_to_cpuname("6x86/MX");
 					break;
 		}
 	}
@@ -86,7 +90,7 @@ void display_Cyrix_info(struct cpudata *cpu)
 	unsigned int i, ntlb;
 	unsigned long eax, ebx, ecx, edx;
 
-	printf ("Family: %d Model: %d Stepping: %d\n",
+	printf ("Family: %u Model: %u Stepping: %u\n",
 		cpu->family, cpu->model, cpu->stepping);
 	printf ("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);

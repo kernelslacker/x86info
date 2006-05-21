@@ -13,7 +13,7 @@
 #include <string.h>
 #include "x86info.h"
 
-void get_model_name (struct cpudata *cpu)
+void get_model_name(struct cpudata *cpu)
 {
 	unsigned int i, j;
 	unsigned long eax, ebx, ecx, edx;
@@ -24,8 +24,8 @@ void get_model_name (struct cpudata *cpu)
 
 	cp = namestring;
 	for (j = 0x80000002; j <= 0x80000004; j++) {
-		cpuid (cpu->number, j, &eax, &ebx, &ecx, &edx);
-		if (eax==0)
+		cpuid(cpu->number, j, &eax, &ebx, &ecx, &edx);
+		if (eax == 0)
 			return;
 
 		for (i = 0; i < 4; i++)
@@ -44,12 +44,12 @@ void get_model_name (struct cpudata *cpu)
 	/* Broken BIOS? Try to determine the model name ourselves.  */
 	if (strstr(cp, "unknown") != NULL) {
 		unsigned long vendor;
-		cpuid (cpu->number, 0, NULL, &vendor, NULL, NULL);
+		cpuid(cpu->number, 0, NULL, &vendor, NULL, NULL);
 		if (vendor == 0x68747541 && cpu->maxi >= 1 && cpu->maxei >= 0x80000001) { /* AMD defined flags */
 			unsigned long bid, ebid;
-			cpuid (cpu->number, 0x00000001, NULL, &bid, NULL, NULL);
+			cpuid(cpu->number, 0x00000001, NULL, &bid, NULL, NULL);
 			bid &= 0xff;
-			cpuid (cpu->number, 0x80000001, NULL, &ebid, NULL, NULL);
+			cpuid(cpu->number, 0x80000001, NULL, &ebid, NULL, NULL);
 
 			/* 8BitBrandId == 0, BrandId == non-zero */
 			if (bid == 0 && ebid != 0) {
@@ -121,12 +121,12 @@ void get_model_name (struct cpudata *cpu)
 
 				cp = namestring;
 				if (model_number)
-					sprintf (cp, name, model_number);
+					(void)snprintf(cp, sizeof(namestring), "%s %d", name, model_number);
 				else
-					strcpy (cp, name);
+					strcpy(cp, name);
 			}
 		}
 	}
 
-	printf ("Processor name string: %s\n\n", cp);
+	printf("Processor name string: %s\n\n", cp);
 }

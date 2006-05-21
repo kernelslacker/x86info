@@ -41,7 +41,7 @@ void dump_centrino_MSRs (struct cpudata *cpu)
 		 */
 		unsigned uv = (unsigned)val & 0xffff;
 		int volt = (uv & 0xff) * 16 + 700;
-		int mhz = 100 * (uv & 0xff00) >> 8;
+		int mhz = 100 * (uv & 0xff00) >> 8UL;
 		printf ("  Current performance mode is 0x%04x: %dMHz, %d.%dV\n",
 			uv, mhz, volt/1000, volt%1000);
 	}

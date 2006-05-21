@@ -110,7 +110,7 @@ void decode_Intel_bluesmoke(int cpunum, int family)
 	printf ("\n");
 
 	for (i=0; i<banks; i++) {
-		printf ("Bank: %d (0x%x)\n", i, MC_CTL+i*4);
+		printf ("Bank: %d (0x%x)\n", i, (unsigned int)MC_CTL+i*4);
 		printf ("MC%dCTL:    ", i);
 		dumpmsr_bin (cpunum, MC_CTL+i*4, 64);
 		printf ("MC%dSTATUS: ", i);

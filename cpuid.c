@@ -5,7 +5,7 @@
  *	Fixes by Arjan van de Ven (arjanv@redhat.com) and
  *	Philipp Rumpf (prumpf@mandrakesoft.com)
  *
- * 	Licensed under the terms of the GNU GPL License version 2.
+ *	Licensed under the terms of the GNU GPL License version 2.
  *
  */
 
@@ -33,30 +33,34 @@ void cpuid (int CPU_number, unsigned int idx,
 	int fh;
 
 	if (nodriver==1) {
-		cpuid_UP (idx, eax, ebx, ecx, edx);
+		cpuid_UP(idx, eax, ebx, ecx, edx);
 		return;
 	}
 
 	/* Ok, use the /dev/CPU interface in preference to the _up code. */
-	snprintf (cpuname,18, "/dev/cpu/%d/cpuid", CPU_number);
-	fh = open (cpuname, O_RDONLY);
+	(void)snprintf(cpuname,18, "/dev/cpu/%d/cpuid", CPU_number);
+	fh = open(cpuname, O_RDONLY);
 	if (fh != -1) {
-		lseek64 (fh, (off64_t)idx, SEEK_CUR);
-		if (read (fh, &buffer[0], 16) == -1) {
+#ifndef S_SPLINT_S
+		lseek64(fh, (off64_t)idx, SEEK_CUR);
+#endif
+		if (read(fh, &buffer[0], 16) == -1) {
 			perror(cpuname);
-			exit(-1);
+			exit(EXIT_FAILURE);
 		}
 		if (eax!=0)	*eax = (*(unsigned *)(buffer   ));
 		if (ebx!=0)	*ebx = (*(unsigned *)(buffer+ 4));
 		if (ecx!=0)	*ecx = (*(unsigned *)(buffer+ 8));
 		if (edx!=0)	*edx = (*(unsigned *)(buffer+12));
-		close (fh);
+		if (close(fh) == -1) {
+			perror("close");
+			exit(EXIT_FAILURE);
+		}
 	} else {
 		/* Something went wrong, just do UP and hope for the best. */
 		nodriver = 1;
-		if (!silent && nrCPUs != 1) {
+		if (!silent && nrCPUs != 1)
 			perror(cpuname);
-		}
 		used_UP = 1;
 		cpuid_UP (idx, eax, ebx, ecx, edx);
 		return;

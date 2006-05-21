@@ -18,6 +18,9 @@
 #include "../x86info.h"
 #include "Intel.h"
 
+static char *intel_nameptr;
+#define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x);
+
 static char p4_423_datasheet[]="http://developer.intel.com/design/pentium4/datashts/24919805.pdf";
 static char p4_478_datasheet[]="http://developer.intel.com/design/pentium4/datashts/24988703.pdf\n\thttp://developer.intel.com/design/pentium4/datashts/29864304.pdf";
 static char p4_errata[]="http://developer.intel.com/design/pentium4/specupdt/249199.htm";
@@ -25,12 +28,11 @@ static char p4_errata[]="http://developer.intel.com/design/pentium4/specupdt/249
 
 void Identify_Intel (struct cpudata *cpu)
 {
-	char *nameptr;
 	unsigned long eax, ebx, ecx, edx;
 	int reserved;
 
 	cpu->vendor = VENDOR_INTEL;
-	nameptr = cpu->name;
+	intel_nameptr = cpu->name;
 
 	if (cpu->maxi < 1)
 		return;
@@ -47,36 +49,36 @@ void Identify_Intel (struct cpudata *cpu)
 	decode_Intel_caches(cpu, 0);
 
 	switch (cpu->family) {
-	case 4:	nameptr += sprintf (cpu->name, "%s", "i486 ");
+	case 4:	add_to_cpuname("i486 ");
 			break;
-	case 5: nameptr += sprintf (cpu->name, "%s", "Pentium ");
+	case 5: add_to_cpuname("Pentium ");
 			break;
 	}
 
 	switch (tuple(cpu) & 0xff0) {
 	case 0x400:		/* Family 4 */
-		nameptr+=sprintf (nameptr, "%s", "DX-25/33");
+		add_to_cpuname("DX-25/33");
 		break;
 	case 0x410:
-		nameptr+=sprintf (nameptr, "%s", "DX-50");
+		add_to_cpuname("DX-50");
 		break;
 	case 0x420:
-		nameptr+=sprintf (nameptr, "%s", "SX");
+		add_to_cpuname("SX");
 		break;
 	case 0x430:
-		nameptr+=sprintf (nameptr, "%s", "487/DX2");
+		add_to_cpuname("487/DX2");
 		break;
 	case 0x440:
-		nameptr+=sprintf (nameptr, "%s", "SL");
+		add_to_cpuname("SL");
 		break;
 	case 0x450:
-		nameptr+=sprintf (nameptr, "%s", "SX2");
+		add_to_cpuname("SX2");
 		break;
 	case 0x470:
-		nameptr+=sprintf (nameptr, "%s", "write-back enhanced DX2");
+		add_to_cpuname("write-back enhanced DX2");
 		break;
 	case 0x480:
-		nameptr+=sprintf (nameptr, "%s", "DX4");
+		add_to_cpuname("DX4");
 		cpu->connector = CONN_SOCKET_3;
 		//transistors = 1600000;
 		//fab_process = "0.6 micron CMOS";
@@ -84,28 +86,28 @@ void Identify_Intel (struct cpudata *cpu)
 		//introduction_date = "March 1994";
 		break;
 	case 0x490:
-		nameptr+=sprintf (nameptr, "%s", "write-back enhanced DX4");
+		add_to_cpuname("write-back enhanced DX4");
 		cpu->connector = CONN_SOCKET_3;
 		break;
 
 	case 0x500:
-		nameptr+=sprintf (nameptr, "%s", "A-step");
+		add_to_cpuname("A-step");
 		cpu->connector = CONN_SOCKET_4;
 		break;
 	case 0x510:
-		nameptr+=sprintf (nameptr, "%s", "60/66");
+		add_to_cpuname("60/66");
 		cpu->connector = CONN_SOCKET_4;
 		break;
 	case 0x520:
-		nameptr+=sprintf (nameptr, "%s", "75-200");
+		add_to_cpuname("75-200");
 		cpu->connector = CONN_SOCKET_5_7;
 		break;
 	case 0x530:
-		nameptr+=sprintf (nameptr, "%s", "Overdrive");
+		add_to_cpuname("Overdrive");
 		cpu->connector = CONN_SOCKET_4;
 		break;
 	case 0x540:
-		nameptr+=sprintf (nameptr, "%s", "MMX");
+		add_to_cpuname("MMX");
 		cpu->connector = CONN_SOCKET_7;
 		//transistors = 4500000;
 		//fab_process = "0.35 micron CMOS";
@@ -113,23 +115,23 @@ void Identify_Intel (struct cpudata *cpu)
 		//introduction_date = "June 1997";
 		break;
 	case 0x570:
-		nameptr+=sprintf (nameptr, "%s", "Mobile");
+		add_to_cpuname("Mobile");
 		cpu->connector = CONN_SOCKET_7;
 		break;
 	case 0x580:
-		nameptr+=sprintf (nameptr, "%s", "MMX Mobile");
+		add_to_cpuname("MMX Mobile");
 		cpu->connector = CONN_SOCKET_7;
 		break;
 	case 0x600:
-		nameptr+=sprintf (cpu->name, "%s", "Pentium Pro A-Step");
+		add_to_cpuname("Pentium Pro A-Step");
 		cpu->connector = CONN_SOCKET_8;
 		break;
 	case 0x610:
-		nameptr+=sprintf (cpu->name, "%s", "Pentium Pro");
+		add_to_cpuname("Pentium Pro");
 		cpu->connector = CONN_SOCKET_8;
 		switch (cpu->stepping) {
 		case 1:
-			nameptr+=sprintf (nameptr, "%s", " [B0]");
+			add_to_cpuname(" [B0]");
 			switch (cpu->MHz) {
 				case 133:
 					//sSpec# Q0812, Q0815
@@ -140,11 +142,11 @@ void Identify_Intel (struct cpudata *cpu)
 			}
 			break;
 		case 2:
-			nameptr+=sprintf (nameptr, "%s", " [C0]");
+			add_to_cpuname(" [C0]");
 			//sSpec# Q0822, Q0825, Q0826, SY010
 			break;
 		case 6:
-			nameptr+=sprintf (nameptr, "%s", " [sA0]");
+			add_to_cpuname(" [sA0]");
 			switch (cpu->MHz) {
 				case 166:
 					//sSpec# Q0864
@@ -155,11 +157,11 @@ void Identify_Intel (struct cpudata *cpu)
 				case 200:
 					//cache = 256 sSpec# SY013, Q0859, Q0874
 					//cache = 512 sSpec# Q0865
-					break;				
+					break;
 			}
 			break;
 		case 7:
-			nameptr+=sprintf (nameptr, "%s", " [sA1]");
+			add_to_cpuname(" [sA1]");
 			switch (cpu->MHz) {
 				case 166:
 					//sSpec# SY034, SY047, Q0918, Q0929, Q935
@@ -174,7 +176,7 @@ void Identify_Intel (struct cpudata *cpu)
 			}
 			break;
 		case 9:
-			nameptr+=sprintf (nameptr, "%s", " [sB1]");
+			add_to_cpuname(" [sB1]");
 			switch (cpu->MHz) {
 				case 166:
 					//sSpec# Q008, Q009, SL2FJ, SL22X
@@ -192,14 +194,14 @@ void Identify_Intel (struct cpudata *cpu)
 		}
 		break;
 	case 0x630:
-		nameptr+=sprintf (cpu->name, "%s", "Pentium II ");
+		add_to_cpuname("Pentium II ");
 		cpu->connector = CONN_SLOT_1;
 		switch (cpu->stepping) {
 		case 2:
-			nameptr+=sprintf (nameptr, "%s", "Overdrive [tdB0]");
+			add_to_cpuname("Overdrive [tdB0]");
 			break;
 		case 3:
-			nameptr+=sprintf (nameptr, "%s", "(Klamath) [C0]");
+			add_to_cpuname("(Klamath) [C0]");
 			switch (cpu->MHz) {
 				case 233:
 					//sSpec# SL264, SL268, SL28K
@@ -213,7 +215,7 @@ void Identify_Intel (struct cpudata *cpu)
 			}
 			break;
 		case 4:
-			nameptr+=sprintf (nameptr, "%s", "(Klamath) [C1]");
+			add_to_cpuname("(Klamath) [C1]");
 			switch (cpu->MHz) {
 				case 233:
 					//sSpec# SL2HD, SL2HF, SL2QA
@@ -231,23 +233,23 @@ void Identify_Intel (struct cpudata *cpu)
 	case 0x640:
 		//Does this exist? Its not in Intels spec update.
 		cpu->connector = CONN_SLOT_1;
-		nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes?)");
+		add_to_cpuname("Pentium II (Deschutes?)");
 		break;
 	case 0x650:
 		cpu->connector = CONN_SLOT_1;
 		switch (cpu->cachesize_L2) {
 			case 0:
-				nameptr+=sprintf (cpu->name, "%s", "Celeron (Covington)");
+				add_to_cpuname("Celeron (Covington)");
 				break;
 
 			case 256:
-				nameptr+=sprintf (cpu->name, "%s", "Mobile Pentium II (Dixon)");
+				add_to_cpuname("Mobile Pentium II (Dixon)");
 				break;
 
 			case 512:
 				switch (cpu->stepping) {
 				case 0:
-					nameptr+=sprintf (cpu->name, "%s", "Pentium II [dA0]");
+					add_to_cpuname("Pentium II [dA0]");
 					switch (cpu->MHz) {
 						case 266:
 							//sSpec# SL2K9
@@ -258,7 +260,7 @@ void Identify_Intel (struct cpudata *cpu)
 					}
 					break;
 				case 1:
-					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dA1]");
+					add_to_cpuname("Pentium II (Deschutes) [dA1]");
 					switch (cpu->MHz) {
 						case 300:
 							//66 bus sSpec# SL35V, SL2VY
@@ -275,7 +277,7 @@ void Identify_Intel (struct cpudata *cpu)
 					}
 					break;
 				case 2:
-					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dB0]");
+					add_to_cpuname("Pentium II (Deschutes) [dB0]");
 					switch (cpu->MHz) {
 						case 266:
 							//66Bus sSpec# SL33D, SL2W7
@@ -298,7 +300,7 @@ void Identify_Intel (struct cpudata *cpu)
 					}
 					break;
 				case 3:
-					nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes) [dB1]");
+					add_to_cpuname("Pentium II (Deschutes) [dB1]");
 					switch (cpu->MHz) {
 						case 350:
 							//100Bus - SL38M, SL36U, SL3J2
@@ -309,7 +311,7 @@ void Identify_Intel (struct cpudata *cpu)
 					}
 					break;
 				default:
-					nameptr+=sprintf (cpu->name, "%s", "Pentium II");
+					add_to_cpuname("Pentium II");
 					break;
 				}
 		}
@@ -317,21 +319,21 @@ void Identify_Intel (struct cpudata *cpu)
 	case 0x660:
 		cpu->connector = CONN_SOCKET_370;
 		if (cpu->cachesize_L2 == 128) {
-			nameptr+=sprintf (cpu->name, "%s", "Celeron (Mendocino)");
+			add_to_cpuname("Celeron (Mendocino)");
 			break;
 		}
 		switch (cpu->stepping) {
 		case 0:
-			nameptr+=sprintf (cpu->name, "%s", "Celeron-A [mA0]");
+			add_to_cpuname("Celeron-A [mA0]");
 			break;
 		case 5:
-			nameptr+=sprintf (cpu->name, "%s", "Celeron-A [mB0]");
+			add_to_cpuname("Celeron-A [mB0]");
 			break;
 		case 0xA:
-			nameptr+=sprintf (cpu->name, "%s", "Mobile Pentium II [mdA0]");
+			add_to_cpuname("Mobile Pentium II [mdA0]");
 			break;
 		default:
-			nameptr+=sprintf (cpu->name, "%s", "Celeron / Mobile Pentium II");
+			add_to_cpuname("Celeron / Mobile Pentium II");
 			break;
 		}
 		break;
@@ -343,7 +345,7 @@ void Identify_Intel (struct cpudata *cpu)
 			// SL2XU SL3C9 (l2=512)
 			// SL2XV SL3CA (l2=1MB)
 			// SL2XW SL3CB (l2=2MB)
-			nameptr+=sprintf (cpu->name, "%s", "Pentium III (Katmai) [kB0]");
+			add_to_cpuname("Pentium III (Katmai) [kB0]");
 			break;
 		case 3:
 			// Core=550 FSB=100
@@ -355,34 +357,34 @@ void Identify_Intel (struct cpudata *cpu)
 			// SL385 (l2=512)
 			// SL386 (l2=1MB)
 			// SL387 (l2=2MB)
-			nameptr+=sprintf (cpu->name, "%s", "Pentium III (Katmai) [kC0]");
+			add_to_cpuname("Pentium III (Katmai) [kC0]");
 			break;
 		default:
-			nameptr+=sprintf (cpu->name, "%s", "Pentium III/Pentium III Xeon");
+			add_to_cpuname("Pentium III/Pentium III Xeon");
 			break;
 		}
 		break;
 	case 0x680:
 		switch (cpu->brand) {
 		case 2:
-			nameptr+= sprintf (cpu->name, "%s", "Pentium III-M (Coppermine)");
+			add_to_cpuname("Pentium III-M (Coppermine)");
 			switch (cpu->stepping) {
 			case 1:
-				nameptr+=sprintf (nameptr, "%s", " [cA2]");
+				add_to_cpuname(" [cA2]");
 				break;
 			case 3:
-				nameptr+=sprintf (nameptr, "%s", " [cB0]");
+				add_to_cpuname(" [cB0]");
 				break;
 			case 6:
-				nameptr+=sprintf (nameptr, "%s", " [cC0]");
+				add_to_cpuname(" [cC0]");
 				break;
 			case 0xA:
-				nameptr+=sprintf (nameptr, "%s", " [cD0]");
+				add_to_cpuname(" [cD0]");
 				break;
 			}
 			break;
 		case 3:
-			nameptr+= sprintf (cpu->name, "%s", "Pentium III Xeon");
+			add_to_cpuname("Pentium III Xeon");
 			switch (cpu->stepping) {
 			case 1:
 				// l2=256KB FSB=133
@@ -390,7 +392,7 @@ void Identify_Intel (struct cpudata *cpu)
 				// Core=667		SL3BL SL3DC SL3ST
 				// Core=733		SL3SF SL3SG SL3SU
 				// Core=800		SL3V2 SL3V3 SL3VU
-				nameptr+=sprintf (nameptr, "%s", " [A2]");
+				add_to_cpuname(" [A2]");
 				break;
 			case 3:
 				// l2=256 FSB=133
@@ -400,7 +402,7 @@ void Identify_Intel (struct cpudata *cpu)
 				// Core=800		SL3WT SL3WU
 				// Core=866		SL3WV SL3WW SL4PZ
 				// Core=933		SL3WX SL3WY
-				nameptr+=sprintf (nameptr, "%s", " [B0]");
+				add_to_cpuname(" [B0]");
 				break;
 			case 6:
 				// l2=256 FSB=133
@@ -409,36 +411,37 @@ void Identify_Intel (struct cpudata *cpu)
 				// Core=866		SL4HA SL4HB SL4U2
 				// Core=933		SL4HC SL4HD SL4R9
 				// Core=1000	SL4HE SL4HF
-				nameptr+=sprintf (nameptr, "%s", " [C0]");
+				add_to_cpuname(" [C0]");
 				break;
 			}
 			break;
 
 		case 8:
 			// cpu->connector = CONN_BGA2; - Could also be Micro-PGA2
-			nameptr+= sprintf (cpu->name, "%s", "Mobile Pentium III");
+			add_to_cpuname("Mobile Pentium III");
 			break;
 
 		default:
 			cpu->connector = CONN_SOCKET_370_FCPGA;
 			if (cpu->cachesize_L2 == 128) {
-				nameptr+=sprintf (cpu->name, "%s", "Celeron");
+				add_to_cpuname("Celeron");
 			} else {
-				nameptr+=sprintf (cpu->name, "%s", "Pentium III");
+				add_to_cpuname("Pentium III");
 			}
-			nameptr+=sprintf (nameptr, "%s", " (Coppermine)");
+
+			add_to_cpuname(" (Coppermine)");
 			switch (cpu->stepping) {
 			case 1:
-				nameptr+=sprintf (nameptr, "%s", " [cA2]");
+				add_to_cpuname(" [cA2]");
 				break;
 			case 3:
-				nameptr+=sprintf (nameptr, "%s", " [cB0]");
+				add_to_cpuname(" [cB0]");
 				break;
 			case 6:
-				nameptr+=sprintf (nameptr, "%s", " [cC0]");
+				add_to_cpuname(" [cC0]");
 				break;
 			case 0xA:
-				nameptr+=sprintf (nameptr, "%s", " [cD0]");
+				add_to_cpuname(" [cD0]");
 				break;
 			}
 			break;
@@ -447,36 +450,36 @@ void Identify_Intel (struct cpudata *cpu)
 
 	case 0x690:
 //		cpu->connector = 
-		nameptr += sprintf (cpu->name, "%s", "Pentium M (Banias)");
+		add_to_cpuname("Pentium M (Banias)");
 		break;
 
 	case 0x6A0:
 		cpu->connector = CONN_SLOT_1;
 		switch (cpu->brand) {
 		case 0:
-			nameptr+=sprintf (cpu->name, "%s", "Pentium II (Deschutes)");
+			add_to_cpuname("Pentium II (Deschutes)");
 			break;
 		case 1:
-			nameptr+=sprintf (cpu->name, "%s", "Celeron");
+			add_to_cpuname("Celeron");
 			break;
 		case 2:
-			nameptr+=sprintf (cpu->name, "%s", "Pentium III");
+			add_to_cpuname("Pentium III");
 			break;
 		case 3:
 			// FSB=100
-			nameptr+=sprintf (cpu->name, "%s", "Pentium III Xeon");
+			add_to_cpuname("Pentium III Xeon");
 			switch (cpu->stepping) {
 				case 0:
 					// Core=700
 					//    L2=1MB		SL3U4 SL3U5 SL4GD SL4GE
 					//    L2=2MB		SL3WZ SL3X2 SL4GF SL4GG
-					nameptr+=sprintf (cpu->name, "%s", " [A0]");
+					add_to_cpuname(" [A0]");
 					break;
 				case 1:
 					// Core=700
 					//    L2=1MB		SL49P SL49Q SL4RZ
 					//    L2=2MB		SL49R SL49S SL4R3
-					nameptr+=sprintf (cpu->name, "%s", " [A1]");
+					add_to_cpuname(" [A1]");
 					break;
 				case 4:
 					// Core=700
@@ -484,15 +487,15 @@ void Identify_Intel (struct cpudata *cpu)
 					//    L2=2MB		SL4XW SL5D5 SL4XX
 					// Core=900
 					//    L2=2MB		SL4XY SL4XZ SL5D3
-					nameptr+=sprintf (cpu->name, "%s", " [B0]");
+					add_to_cpuname(" [B0]");
 					break;
 			}
 			break;
 		case 4:
-			nameptr+=sprintf (cpu->name, "%s", "Pentium III (Cascades)");
+			add_to_cpuname("Pentium III (Cascades)");
 			break;
 		default:
-			nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
+			add_to_cpuname("Unknown CPU");
 			break;
 		}
 		break;
@@ -501,35 +504,35 @@ void Identify_Intel (struct cpudata *cpu)
 			case 1:
 			case 3:
 				cpu->connector = CONN_SLOT_1;
-				nameptr += sprintf (cpu->name, "%s", "Celeron (Tualatin) [tA1/cA2]");
+				add_to_cpuname("Celeron (Tualatin) [tA1/cA2]");
 				break;
 			case 6:
 				cpu->connector = CONN_MICROFCBGA;
-				nameptr += sprintf (cpu->name, "%s", "Pentium III-M");
+				add_to_cpuname("Pentium III-M");
 				break;
 			default:
 				cpu->connector = CONN_SLOT_1;
 				switch (cpu->stepping) {
 				case 1:
-					nameptr+=sprintf (cpu->name, "%s", "Pentium III (Tualatin) [tA1/cA2]");
+					add_to_cpuname("Pentium III (Tualatin) [tA1/cA2]");
 					break;
 				case 4:
-					nameptr+=sprintf (cpu->name, "%s", "Pentium III [B-1]");
+					add_to_cpuname("Pentium III [B-1]");
 					break;
 				default:
-					nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
+					add_to_cpuname("Unknown CPU");
 					break;
 				}
 		}
 		break;
 	case 0x6d0:
-		nameptr += sprintf (cpu->name, "%s", "Pentium M ");
+		add_to_cpuname("Pentium M ");
 		cpu->connector = CONN_MICROFCBGA;
 		switch (cpu->stepping) {
-			case 1:	nameptr+=sprintf (cpu->name, "%s", "(Dothan) [A-1]");
+			case 1:	add_to_cpuname("(Dothan) [A-1]");
 					break;
 
-			case 2:	nameptr+=sprintf (cpu->name, "%s", "(Dothan) [A-2]");
+			case 2:	add_to_cpuname("(Dothan) [A-2]");
 					break;
 
 			/*
@@ -550,7 +553,7 @@ void Identify_Intel (struct cpudata *cpu)
 				SL7VD	733			1.1GHz	600MHz
 				SL7V2	723			1.0GHz	600MHz
 			 */
-			case 6:	nameptr+=sprintf (cpu->name, "%s", "(Dothan) [B-1]");
+			case 6:	add_to_cpuname("(Dothan) [B-1]");
 					break;
 
 			/*
@@ -590,28 +593,28 @@ void Identify_Intel (struct cpudata *cpu)
 				SL89N	738			1.4GHz	600MHz
 				SL89Y	738			1.4GHz	600MHz
 		     */
-			case 8:	nameptr+=sprintf (cpu->name, "%s", "(Dothan) [C-0]");
+			case 8:	add_to_cpuname("(Dothan) [C-0]");
 					break;
 		}
 		break;
 
 	case 0x700:		/* Family 7 */
-		nameptr += sprintf (cpu->name, "%s", "Itanium");
+		add_to_cpuname("Itanium");
 		break;
 
 //FIXME: What is SL4X5 ? 
 
 	case 0xF00:	/* Family 15 */
 		cpu->connector = CONN_SOCKET_423;
-		cpu->datasheet_url = strdup (p4_423_datasheet);
-		cpu->errata_url = strdup (p4_errata);
-		nameptr += sprintf (cpu->name, "%s", "Pentium 4");
+		cpu->datasheet_url = strdup(p4_423_datasheet);
+		cpu->errata_url = strdup(p4_errata);
+		add_to_cpuname("Pentium 4");
 		switch (cpu->stepping) {
 		case 7:
 			//SL4QD SL4SF = 1.3GHz
 			//SL4SG SL4SC = 1.4GHz
 			//SL4SH SL4TY = 1.5GHz
-			nameptr+=sprintf (nameptr, "%s", " [B2]");
+			add_to_cpuname(" [B2]");
 			break;
 		case 0xA:
 			//SL5FW SL5GC 1.3GHz
@@ -620,16 +623,16 @@ void Identify_Intel (struct cpudata *cpu)
 			//SL4WU SL4X4 SL5US SL5UW 1.6GHz
 			//SL57W SL57V SL59X SL5N9 1.7GHz
 			//SL4WV SL4X5 SL5UT SL5UV 1.8GHz
-			nameptr+=sprintf (nameptr, "%s", " [C1]");
+			add_to_cpuname(" [C1]");
 			break;
 		}
 		break;
 
 	case 0xF10:
 		cpu->connector = CONN_SOCKET_423;
-		nameptr += sprintf (cpu->name, "%s", "Pentium 4 (Willamette)");
-		cpu->datasheet_url = strdup (p4_423_datasheet);
-		cpu->errata_url = strdup (p4_errata);
+		add_to_cpuname("Pentium 4 (Willamette)");
+		cpu->datasheet_url = strdup(p4_423_datasheet);
+		cpu->errata_url = strdup(p4_errata);
 		switch (cpu->stepping) {
 		case 1:
 			//400FSB 256K L2
@@ -640,7 +643,7 @@ void Identify_Intel (struct cpudata *cpu)
 			//SL5RZ 1.4 512K
 			//SL5G2 1.5 512K
 			//SL5RW 1.5 512K
-			nameptr+=sprintf (nameptr, "%s", " [C0]");
+			add_to_cpuname(" [C0]");
 			break;
 		case 2:
 			//SL5TG SL5UE 1.4GHz
@@ -650,28 +653,28 @@ void Identify_Intel (struct cpudata *cpu)
 			//SL5VM SL5VM SL5VJ SL5UK 1.8GHz
 			//SL5VN SL5WH SL5VK SL5WG 1.9GHz
 			//SL5SZ SL5TQ SL5TL 2GHz
-			nameptr+=sprintf (nameptr, "%s", " [D0]");
+			add_to_cpuname(" [D0]");
 			break;
 		case 3:
 			//SL6BC SL679 1.6GHz
 			//SL6BD SL67A 1.7GHz
 			//SL6BE SL78B 1.8GHz
 			//SL6BF SL67C 1.9GHz
-			nameptr+=sprintf (nameptr, "%s", " [E0]");
+			add_to_cpuname(" [E0]");
 			break;
 		}
 		break;
 	case 0xF20:
 		cpu->connector = CONN_SOCKET_478;
-		cpu->datasheet_url = strdup (p4_478_datasheet);
-		cpu->errata_url = strdup (p4_errata);
+		cpu->datasheet_url = strdup(p4_478_datasheet);
+		cpu->errata_url = strdup(p4_errata);
 		switch (cpu->brand) {
 			case 15:
-				nameptr += sprintf (cpu->name, "%s", "Celeron (P4 core)");
+				add_to_cpuname("Celeron (P4 core)");
 				break;
 			case 7:
 			default:
-				nameptr += sprintf (cpu->name, "%s", "Pentium 4 (Northwood)");
+				add_to_cpuname("Pentium 4 (Northwood)");
 				break;
 		}
 		switch (cpu->stepping) {
@@ -684,7 +687,7 @@ void Identify_Intel (struct cpudata *cpu)
 			//SL6KC 1.9 2M
 			//SL66Z 2.0 1M
 			//SL6KD 2.0 1M
-			nameptr+=sprintf (nameptr, "%s", " [A0]");
+			add_to_cpuname(" [A0]");
 			break;
 		case 4:
 			//SL66B 1.6GHz
@@ -695,7 +698,7 @@ void Identify_Intel (struct cpudata *cpu)
 			//SL6BT SL65R SL67R 2.4GHz (400MHz FSB)
 			//SL6B4 SL67Z 2.4GHz (533MHz FSB)
 			//SL6B5 SL6B2 2.53GHz (533MHz FSB)
-			nameptr+=sprintf (nameptr, "%s", " [B0]");
+			add_to_cpuname(" [B0]");
 			break;
 		case 5:
 			/*[M0] */
@@ -712,14 +715,14 @@ void Identify_Intel (struct cpudata *cpu)
 			//SL6Z7 2.5 1M L3
 			//SL6YL 2.8 2M L3
 			//SL6Z8 2.8 2M L3
-			nameptr+=sprintf (nameptr, "%s", " [M0]");
+			add_to_cpuname(" [M0]");
 			break;
 		case 6:
 			//400FSB 512K L2
 			//SL79V 3.0 4M L3
 			//SL79Z 2.7 2M L3
 			//SL7A5 2.2 2M L3
-			nameptr+=sprintf (nameptr, "%s", " [C0]");
+			add_to_cpuname(" [C0]");
 			break;
 		case 7:
 			//SL6HL SL6K6 2.8GHz (533MHz FSB)
@@ -734,7 +737,7 @@ void Identify_Intel (struct cpudata *cpu)
 			//SL6S3 SL6SK 2.66GHz (533FSB)
 			//SL6S4 SL6SL 2.8GHz (533FSB)
 			//SL6S5 SL6K7 SL6SM SL6JJ 3.06GHz (533FSB)
-			nameptr+=sprintf (nameptr, "%s", " [C1]");
+			add_to_cpuname(" [C1]");
 			break;
 		case 9:
 			//SL6QL 1.8GHz
@@ -755,7 +758,7 @@ void Identify_Intel (struct cpudata *cpu)
 			//SL6QC SL6PG 3.06GHz (533FSB)
 			//SL6WG SL6WE 3.2GHz (800FSB)
 			//SL793 3.4GHz (800FSB)
-			nameptr+=sprintf (nameptr, "%s", " [D1]");
+			add_to_cpuname(" [D1]");
 			break;
 		}
 		break;
@@ -781,7 +784,7 @@ void Identify_Intel (struct cpudata *cpu)
 			112mm2 die size
 			pipeline_stages=31
 			*/
-			nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [C0]");
+			add_to_cpuname("Pentium 4 (Prescott) [C0]");
 			break;
 		case 4:
 			/*
@@ -818,13 +821,13 @@ void Identify_Intel (struct cpudata *cpu)
 			SL7KN 3.6GHz  800
 			SL7L9 3.6GHz  800
 			 */
-			nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [D0]");
+			add_to_cpuname("Pentium 4 (Prescott) [D0]");
 			break;
 		}
 		break;
 
 	case 0xF40:
-		nameptr+=sprintf (cpu->name, "%s", "Pentium 4 ");
+		add_to_cpuname("Pentium 4 ");
 		switch (cpu->stepping) {
 		case 1:
 			/*
@@ -879,7 +882,7 @@ void Identify_Intel (struct cpudata *cpu)
 			 4MB L3
 			 SL8ED 2.8GHz 667
 			 */
-			nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [E0]");
+			add_to_cpuname("(Prescott) [E0]");
 			break;
 		case 3:
 			/*
@@ -891,7 +894,7 @@ void Identify_Intel (struct cpudata *cpu)
 			 SL7Z4 3.73GHz 800
 			 SL7Z3 3.8GHz  800
 			 */
-			nameptr+=sprintf (cpu->name, "%s", "Pentium 4 (Prescott) [N0]");
+			add_to_cpuname("(Prescott) [N0]");
 			break;
 		case 4:
 			/*
@@ -901,37 +904,37 @@ void Identify_Intel (struct cpudata *cpu)
 			   SL88R	3.2GHz
 			   SL8FK	3.2GHz
 			 */
-			nameptr+=sprintf (cpu->name, "%s", "Extreme Edition [A0]");
+			add_to_cpuname("Extreme Edition [A0]");
 			break;
 		default:
-			nameptr+=sprintf (cpu->name, "%s", "D (Foster)");
+			add_to_cpuname("D (Foster)");
 			break;
 		}
 		break;
 
 	case 0xF50:
 		cpu->connector = CONN_SOCKET_603;
-//		cpu->datasheet_url = strdup (p4_478_datasheet);
-//		cpu->errata_url = strdup (p4_errata);
-		nameptr+=sprintf (cpu->name, "%s", "Pentium 4 Xeon (Foster)");
+//		cpu->datasheet_url = strdup(p4_478_datasheet);
+//		cpu->errata_url = strdup(p4_errata);
+		add_to_cpuname("Pentium 4 Xeon (Foster)");
 		break;
 	default:
-		nameptr+=sprintf (cpu->name, "%s", "Unknown CPU");
+		add_to_cpuname("Unknown CPU");
 		break;
 	}
 
 	switch (cpu->type) {
 	case 0:
-		sprintf (nameptr, "%s", " Original OEM");
+		add_to_cpuname(" Original OEM");
 		break;
 	case 1:
-		sprintf (nameptr, "%s", " Overdrive");
+		add_to_cpuname(" Overdrive");
 		break;
 	case 2:
-		sprintf (nameptr, "%s", " Dual-capable");
+		add_to_cpuname(" Dual-capable");
 		break;
 	case 3:
-		sprintf (nameptr, "%s", " Reserved");
+		add_to_cpuname(" Reserved");
 		break;
 	}
 }

@@ -65,16 +65,16 @@ typedef unsigned long vm_offset_t;
 #define MAXPNSTR				132
 
 /* global data */
-int	pfd;			/* physical /dev/mem fd */
+static int pfd;			/* physical /dev/mem fd */
 
-int	busses[16];
-int	apics[16];
+static int	busses[16];
+static int	apics[16];
 
-int	ncpu;
-int	nbus;
-int	napic;
-int	nintr;
-int	verbose;
+static int	ncpu;
+static int	nbus;
+static int	napic;
+static int	nintr;
+static int verbose_mp;
 
 typedef struct TABLE_ENTRY {
 	u8	type;
@@ -82,7 +82,7 @@ typedef struct TABLE_ENTRY {
 	char	name[32];
 } tableEntry;
 
-tableEntry basetableEntryTypes[] =
+static tableEntry basetableEntryTypes[] =
 {
 	{ 0, 20, "Processor" },
 	{ 1,  8, "Bus" },
@@ -138,7 +138,7 @@ static void seekEntry(vm_offset_t addr)
 {
 	if (lseek(pfd, (off_t)addr, SEEK_SET) < 0) {
 		perror("/dev/mem seek");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -146,22 +146,22 @@ static void readEntry(void* entry, int size)
 {
 	if (read(pfd, entry, size) != size) {
 		perror("readEntry");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 }
 
 static int readType(void)
 {
-	u_char type;
+	unsigned char type;
 
-	if (read(pfd, &type, sizeof(u_char)) != sizeof(u_char)) {
+	if (read(pfd, &type, sizeof(unsigned char)) != sizeof(unsigned char)) {
 		perror("type read");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	if (lseek(pfd, -1, SEEK_CUR) < 0) {
 		perror("type seek");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	return (int)type;
@@ -177,19 +177,19 @@ static void processorEntry(void)
 	/* count it */
 	++ncpu;
 
-	if (verbose) {
-		printf("#\t%2d", entry.apicID);
-		printf("\t 0x%2x", entry.apicVersion);
-		
+	if (verbose_mp) {
+		printf("#\t%2d", (int) entry.apicID);
+		printf("\t 0x%2x", (unsigned int) entry.apicVersion);
+
 		printf("\t %s, %s",
 				(entry.cpuFlags & PROCENTRY_FLAG_BP) ? "BSP" : "AP",
 				(entry.cpuFlags & PROCENTRY_FLAG_EN) ? "usable" : "unusable");
-		
+
 		printf("\t %d\t %d\t %d",
-				(entry.cpuSignature >> 8) & 0x0f,
-				(entry.cpuSignature >> 4) & 0x0f,
-				entry.cpuSignature & 0x0f);
-		
+				(int) (entry.cpuSignature >> 8) & 0x0f,
+				(int) (entry.cpuSignature >> 4) & 0x0f,
+				(int)  entry.cpuSignature & 0x0f);
+
 		printf("\t 0x%04x\n", entry.featureFlags);
 	}
 }
@@ -228,16 +228,16 @@ static int MPConfigTableHeader(u32 pap)
 	nintr = 0;
 
 	/* process all the CPUs */
-	if (verbose)
+	if (verbose_mp)
 		printf("MP Table:\n#\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
 	for (t = totalSize, c = count; c; c--) {
 		if (readType() == 0)
 			processorEntry();
 		totalSize -= basetableEntryTypes[ 0 ].length;
 	}
-	if (verbose)
+	if (verbose_mp)
 		printf ("\n");
-	
+
 	return SMP_YES;
 }
 
@@ -371,9 +371,10 @@ int enumerate_cpus(void)
 
 	/* check whether an MP config table exists */
 	if (!mpfps.mpfb1)
-		MPConfigTableHeader(mpfps.pap);
+		if (MPConfigTableHeader(mpfps.pap) == SMP_YES)
+			return ncpu;
 
-	return ncpu;
+	return 1;
 }
 
 int issmp(int verb)
@@ -381,7 +382,7 @@ int issmp(int verb)
 	vm_offset_t paddr;
 	mpfps_t mpfps;
 
-	verbose=verb;
+	verbose_mp=verb;
 	/* open physical memory for access to MP structures */
 	if ((pfd = open("/dev/mem", O_RDONLY)) < 0) {
 		fprintf(stderr, "issmp(): /dev/mem: %s\n", strerror(errno));
@@ -398,9 +399,9 @@ int issmp(int verb)
 
 	/* check whether an MP config table exists */
 	if (!mpfps.mpfb1)
-		MPConfigTableHeader(mpfps.pap);
+		return MPConfigTableHeader(mpfps.pap);
 
-	return SMP_YES;
+	return SMP_NO;
 }
 
 #ifdef STANDALONE

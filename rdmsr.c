@@ -27,23 +27,28 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 	if (nodriver==1)
 		return 0;
 
-	sprintf (cpuname, "/dev/cpu/%d/msr", cpu);
+	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%d/msr", cpu);
 
-	fh = open (cpuname, O_RDONLY);
+	fh = open(cpuname, O_RDONLY);
 	if (fh==-1) {
 		if (!silent)
 			perror(cpuname);
 		nodriver=1;
-		return (0);
+		return 0;
 	}
 
-	lseek (fh, idx, SEEK_CUR);
+	if (lseek(fh, idx, SEEK_CUR)==-1) {
+		perror("lseek");
+		exit(EXIT_FAILURE);
+	}
 
 	if (fh != -1) {
-
-		if (read (fh, &buffer[0], 8) != 8) {
-			close (fh);
-			return (0);
+		if (read(fh, &buffer[0], 8) != 8) {
+			if (close(fh) == -1) {
+				perror("close");
+				exit(EXIT_FAILURE);
+			}
+			return 0;
 		}
 
 		lo = (*(unsigned long *)buffer);
@@ -51,8 +56,11 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 		*val = hi;
 		*val = (*val<<32) | lo;
 	}
-	close (fh);
-	return (1);
+	if (close(fh)==-1) {
+		perror("close");
+		exit(EXIT_FAILURE);
+	}
+	return 1;
 }
 
 

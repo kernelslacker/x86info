@@ -21,7 +21,6 @@ int show_bugs=0;
 int show_cacheinfo=0;
 int show_connector=0;
 int show_eblcr=0;
-int show_flags=0;
 int show_msr=0;
 int show_microcode=0;
 int show_mtrr=0;
@@ -30,17 +29,19 @@ int show_registers=0;
 int show_urls=0;
 
 static int show_mptable=0;
+static int show_flags=0;
 static int show_MHz=0;
 
 int verbose=0;
 int silent = 0;
 int used_UP = 0;
 int user_is_root = 1;
-int need_root = 0;
+static int need_root = 0;
 
-unsigned int nrCPUs=1, nrSMPCPUs;
+unsigned int nrCPUs=1;
+static unsigned int nrSMPCPUs;
 
-void usage (char *programname)
+static void usage (char *programname)
 {
 	printf ("Usage: %s [<switches>]\n\
 -a,   --all\n\
@@ -161,7 +162,7 @@ static void parse_command_line (int argc, char **argv)
 }
 
 
-void separator(void)
+static void separator(void)
 {
 	int j;
 
@@ -206,7 +207,7 @@ int main (int argc, char **argv)
 		if (user_is_root) {
 			nrSMPCPUs = enumerate_cpus();
 			if (nrSMPCPUs > nrCPUs)
-				printf (", but found %d CPUs in MPTable.", nrSMPCPUs);
+				printf (", but found %ud CPUs in MPTable.", nrSMPCPUs);
 		}
 		printf ("\n");
 	}
@@ -261,9 +262,9 @@ int main (int argc, char **argv)
 		 */
 		if (show_MHz) {
 			if (cpu->MHz < 1000)
-				printf("%dMHz", cpu->MHz);
+				printf("%udMHz", cpu->MHz);
 			else
-				printf("%d.%dGhz", cpu->MHz / 1000, (cpu->MHz % 1000)/100);
+				printf("%ud.%udGhz", cpu->MHz / 1000, (cpu->MHz % 1000)/100);
 			printf (" processor (estimate).\n\n");
 		}
 		if (show_bench)
@@ -284,7 +285,7 @@ int main (int argc, char **argv)
 		if (cpu->errata_url)
 			free(cpu->errata_url);
 		tmp = cpu->next;
-		free (cpu);
+		free(cpu);
 		cpu = tmp;
 	}
 

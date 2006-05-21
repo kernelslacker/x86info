@@ -74,46 +74,46 @@ struct cpudata {
 #define CONN_SOCKET_939		27
 #define CONN_SOCKET_940		28
 
-void cpuid (int, unsigned int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
-void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
+extern void cpuid (int, unsigned int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
+extern void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 
-void Identify_AMD (struct cpudata *cpu);
-void Identify_Cyrix (struct cpudata *cpu);
-void Identify_IDT (struct cpudata *cpu);
-void Identify_Intel (struct cpudata *cpu);
-void Identify_RiSE (struct cpudata *cpu);
-void Identify_NatSemi (struct cpudata *cpu);
-void Identify_SiS (struct cpudata *cpu);
+extern void Identify_AMD (struct cpudata *cpu);
+extern void Identify_Cyrix (struct cpudata *cpu);
+extern void Identify_IDT (struct cpudata *cpu);
+extern void Identify_Intel (struct cpudata *cpu);
+extern void Identify_RiSE (struct cpudata *cpu);
+extern void Identify_NatSemi (struct cpudata *cpu);
+extern void Identify_SiS (struct cpudata *cpu);
 
-void display_AMD_info(struct cpudata *cpu);
-void display_Cyrix_info(struct cpudata *cpu);
-void display_IDT_info(struct cpudata *cpu);
-void display_Intel_info(struct cpudata *cpu);
-void display_NatSemi_info(struct cpudata *cpu);
-void display_RiSE_info(struct cpudata *cpu);
-void display_SiS_info(struct cpudata *cpu);
+extern void display_AMD_info(struct cpudata *cpu);
+extern void display_Cyrix_info(struct cpudata *cpu);
+extern void display_IDT_info(struct cpudata *cpu);
+extern void display_Intel_info(struct cpudata *cpu);
+extern void display_NatSemi_info(struct cpudata *cpu);
+extern void display_RiSE_info(struct cpudata *cpu);
+extern void display_SiS_info(struct cpudata *cpu);
 
-void decode_feature_flags (struct cpudata *cpu);
-void identify (struct cpudata *cpu);
-void show_info (struct cpudata *cpu);
+extern void decode_feature_flags (struct cpudata *cpu);
+extern void identify (struct cpudata *cpu);
+extern void show_info (struct cpudata *cpu);
 
-int read_msr(int cpu, unsigned int idx, unsigned long long *val);
-void binary(unsigned int n, unsigned long value);
-void binary32(unsigned long value);
-void binary64(unsigned long long value);
-void dumpmsr (int cpunum, unsigned int msr, int size);
-void dumpmsr_bin (int cpunum, unsigned int msr, int size);
+extern int read_msr(int cpu, unsigned int idx, unsigned long long *val);
+extern void binary(unsigned int n, unsigned long value);
+extern void binary32(unsigned long value);
+extern void binary64(unsigned long long value);
+extern void dumpmsr (int cpunum, unsigned int msr, int size);
+extern void dumpmsr_bin (int cpunum, unsigned int msr, int size);
 
-void dump_mtrrs (struct cpudata *cpu);
+extern void dump_mtrrs (struct cpudata *cpu);
 
-void estimate_MHz(struct cpudata *cpu);
-int HaveCPUID(void);
-void interpret_eblcr(u32 lo);
-int issmp(int verb);
-int enumerate_cpus(void);
-void get_model_name (struct cpudata *cpu);
-void decode_connector (unsigned int type);
-void show_benchmarks (void);
+extern void estimate_MHz(struct cpudata *cpu);
+extern int HaveCPUID(void);
+extern void interpret_eblcr(u32 lo);
+extern int issmp(int verb);
+extern int enumerate_cpus(void);
+extern void get_model_name (struct cpudata *cpu);
+extern void decode_connector (unsigned int type);
+extern void show_benchmarks (void);
 
 extern int show_bench;
 extern int show_bios;
@@ -122,7 +122,6 @@ extern int show_bugs;
 extern int show_cacheinfo;
 extern int show_connector;
 extern int show_eblcr;
-extern int show_flags;
 extern int verbose;
 extern int show_microcode;
 extern int show_msr;

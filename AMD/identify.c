@@ -16,15 +16,15 @@
 #include "../x86info.h"
 #include "AMD.h"
 
-static char *amd_nameptr, *namebegin;
-#define add_to_cpuname(x)	amd_nameptr += sprintf(amd_nameptr, "%s", x);
+static char *amd_nameptr;
+#define add_to_cpuname(x)	amd_nameptr += snprintf(amd_nameptr, sizeof(x), "%s", x);
 
 static void do_assoc(unsigned long assoc)
 {
 	if ((assoc & 0xff) == 255)
 		printf("Fully");
 	else
-		printf("%ld-way", assoc);
+		printf("%lu-way", assoc);
 	printf(" associative. ");
 }
 
@@ -38,36 +38,36 @@ static void decode_AMD_cacheinfo(struct cpudata *cpu)
 
 		printf("Instruction TLB: ");
 		do_assoc((ebx >> 8) & 0xff);
-		printf("%ld entries.\n", ebx & 0xff);
+		printf("%lu entries.\n", ebx & 0xff);
 
 		printf("Data TLB: ");
 		do_assoc(ebx >> 24);
-		printf("%ld entries.\n", (ebx >> 16) & 0xff);
+		printf("%lu entries.\n", (ebx >> 16) & 0xff);
 
 		printf("L1 Data cache:\n\t");
-		printf("Size: %ldKb\t", ecx >> 24);
+		printf("Size: %luKb\t", ecx >> 24);
 		do_assoc((ecx >> 16) & 0xff);
 		printf("\n\t");
-		printf("lines per tag=%ld\t", (ecx >> 8) & 0xff);
-		printf("line size=%ld bytes.\n", ecx & 0xff);
+		printf("lines per tag=%lu\t", (ecx >> 8) & 0xff);
+		printf("line size=%lu bytes.\n", ecx & 0xff);
 
 		printf("L1 Instruction cache:\n\t");
-		printf("Size: %ldKb\t", edx >> 24);
+		printf("Size: %luKb\t", edx >> 24);
 		do_assoc((edx >> 16) & 0xff);
 		printf("\n\t");
-		printf("lines per tag=%ld\t", (edx >> 8) & 0xff);
-		printf("line size=%ld bytes.\n", edx & 0xff);
+		printf("lines per tag=%lu\t", (edx >> 8) & 0xff);
+		printf("line size=%lu bytes.\n", edx & 0xff);
 	}
 
 	/* check K6-III (and later) on-chip L2 cache size */
 	if (cpu->maxei >= 0x80000006) {
 		cpuid(cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
 		printf("L2 (on CPU) cache:\n\t");
-		printf("Size: %ldKb\t", ecx >> 16);
+		printf("Size: %luKb\t", ecx >> 16);
 		do_assoc((ecx >> 12) & 0x0f);
 		printf("\n\t");
-		printf("lines per tag=%ld\t", (ecx >> 8) & 0x0f);
-		printf("line size=%ld bytes.\n", ecx & 0xff);
+		printf("lines per tag=%lu\t", (ecx >> 8) & 0x0f);
+		printf("line size=%lu bytes.\n", ecx & 0xff);
 	}
 	printf("\n");
 }
@@ -112,9 +112,9 @@ static void determine_xp_mp(struct cpudata *cpu)
 
 	cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 	if ((edx & (1 << 19)) == 0) {
-		add_to_cpuname ("XP");
+		add_to_cpuname("XP");
 	} else {
-		add_to_cpuname ("MP");
+		add_to_cpuname("MP");
 	}
 }
 
@@ -123,7 +123,7 @@ void Identify_AMD(struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 
-	namebegin = amd_nameptr = cpu->name;
+	amd_nameptr = cpu->name;
 	cpu->vendor = VENDOR_AMD;
 
 	if (cpu->maxi < 1)
@@ -144,129 +144,129 @@ void Identify_AMD(struct cpudata *cpu)
 
 	switch (tuple(cpu) & 0xff0) {
 	case 0x430:
-		sprintf(cpu->name, "%s", "Am486DX2-WT");
+		add_to_cpuname("Am486DX2-WT");
 		break;
 	case 0x470:
-		sprintf(cpu->name, "%s", "Am486DX2-WB");
+		add_to_cpuname("Am486DX2-WB");
 		break;
 	case 0x480:
-		sprintf(cpu->name, "%s", "Am486DX4-WT / Am5x86-WT");
+		add_to_cpuname("Am486DX4-WT / Am5x86-WT");
 		break;
 	case 0x490:
-		sprintf(cpu->name, "%s", "Am486DX4-WB / Am5x86-WB");
+		add_to_cpuname("Am486DX4-WB / Am5x86-WB");
 		break;
 	case 0x4a0:
-		sprintf(cpu->name, "%s", "Elan SC400");
+		add_to_cpuname("Elan SC400");
 		break;
 	case 0x4e0:
-		sprintf(cpu->name, "%s", "Am5x86-WT");
+		add_to_cpuname("Am5x86-WT");
 		break;
 	case 0x4f0:
-		sprintf(cpu->name, "%s", "Am5x86-WB");
+		add_to_cpuname("Am5x86-WB");
 		break;
 
 	case 0x500:
-		sprintf(cpu->name, "%s", "SSA5 (PR75/PR90/PR100)");
+		add_to_cpuname("SSA5 (PR75/PR90/PR100)");
 		cpu->connector = CONN_SOCKET_5_7;
 		break;
 	case 0x510:
-		sprintf(cpu->name, "%s", "K5 (PR120/PR133)");
+		add_to_cpuname("K5 (PR120/PR133)");
 		cpu->connector = CONN_SOCKET_5_7;
 		break;
 	case 0x520:
-		sprintf(cpu->name, "%s", "K5 (PR166)");
+		add_to_cpuname("K5 (PR166)");
 		cpu->connector = CONN_SOCKET_5_7;
 		break;
 	case 0x530:
-		sprintf(cpu->name, "%s", "K5 (PR200)");
+		add_to_cpuname("K5 (PR200)");
 		cpu->connector = CONN_SOCKET_5_7;
 		break;
 	case 0x560:
-		sprintf(cpu->name, "%s", "K6 (0.30 um)");
+		add_to_cpuname("K6 (0.30 um)");
 		cpu->connector = CONN_SOCKET_7;
 		break;
 	case 0x570:
-		sprintf(cpu->name, "%s", "K6 (0.25 um)");
+		add_to_cpuname("K6 (0.25 um)");
 		cpu->connector = CONN_SOCKET_7;
 		break;
 	case 0x580:
 		add_to_cpuname("K6-2");
 		cpu->connector = CONN_SUPER_SOCKET_7;
 		if (cpu->stepping >= 8)
-			add_to_cpuname (" (CXT core)");
+			add_to_cpuname(" (CXT core)");
 		break;
 	case 0x590:
-		sprintf(cpu->name, "%s", "K6-III");
+		add_to_cpuname("K6-III");
 		cpu->connector = CONN_SUPER_SOCKET_7;
 		break;
 	case 0x5c0:
-		sprintf(cpu->name, "%s", "K6-2+ (0.18um)");
+		add_to_cpuname("K6-2+ (0.18um)");
 		cpu->connector = CONN_SUPER_SOCKET_7;
 		break;
 	case 0x5d0:
-		sprintf(cpu->name, "%s", "K6-3+ (0.18um)");
+		add_to_cpuname("K6-3+ (0.18um)");
 		cpu->connector = CONN_SUPER_SOCKET_7;
 		break;
 
 	case 0x600:
 		cpu->connector = CONN_SLOT_A;
-		sprintf(cpu->name, "%s", "K7 ES");
+		add_to_cpuname("K7 ES");
 		break;
 
 	case 0x610:
 		cpu->connector = CONN_SLOT_A;
-		add_to_cpuname ("Athlon (0.25um)");
+		add_to_cpuname("Athlon (0.25um)");
 		switch (cpu->stepping) {
 		case 1:
-			add_to_cpuname (" [C1]");
+			add_to_cpuname(" [C1]");
 			break;
 		case 2:
-			add_to_cpuname (" [C2]");
+			add_to_cpuname(" [C2]");
 			break;
 		}
 		break;
 
 	case 0x620:
 		cpu->connector = CONN_SLOT_A;
-		add_to_cpuname ("Athlon (0.18um)");
+		add_to_cpuname("Athlon (0.18um)");
 		switch (cpu->stepping) {
 		case 1:
-			add_to_cpuname (" [A1]");
+			add_to_cpuname(" [A1]");
 			break;
 		case 2:
-			add_to_cpuname (" [A2]");
+			add_to_cpuname(" [A2]");
 			break;
 		}
 		break;
 
 	case 0x630:
 		cpu->connector = CONN_SOCKET_A;
-		add_to_cpuname ("Duron (spitfire)");
+		add_to_cpuname("Duron (spitfire)");
 		switch (cpu->stepping) {
 		case 0:
-			add_to_cpuname (" [A0]");
+			add_to_cpuname(" [A0]");
 			break;
 		case 1:
-			add_to_cpuname (" [A2]");
+			add_to_cpuname(" [A2]");
 			break;
 		}
 		break;
 
 	case 0x640:
 		cpu->connector = CONN_SOCKET_A;
-		add_to_cpuname ("Athlon (Thunderbird)");
+		add_to_cpuname("Athlon (Thunderbird)");
 		switch (cpu->stepping) {
 		case 0:
-			add_to_cpuname (" [A1]");
+			add_to_cpuname(" [A1]");
 			break;
 		case 1:
-			add_to_cpuname (" [A2]");
+			add_to_cpuname(" [A2]");
 			break;
 		case 2:
-			add_to_cpuname (" [A4-A8]");
+			add_to_cpuname(" [A4-A8]");
 			break;
 		case 3:
-			add_to_cpuname (" [A9]");
+			add_to_cpuname(" [A9]");
 			break;
 		}
 		break;
@@ -275,13 +275,13 @@ void Identify_AMD(struct cpudata *cpu)
 		cpu->connector = CONN_SOCKET_A;
 
 		if (is_mobile(cpu)) {
-			add_to_cpuname ("Mobile Athlon 4");
+			add_to_cpuname("Mobile Athlon 4");
 			goto out_660;
 		}
 		if (getL2size(cpu->number) < 256) {
-			add_to_cpuname ("Duron (Morgan)");
+			add_to_cpuname("Duron (Morgan)");
 		} else {
-			add_to_cpuname ("Athlon ");
+			add_to_cpuname("Athlon ");
 			determine_xp_mp(cpu);
 			/* Palomino
 			 * 0.18u L2=256KB
@@ -296,18 +296,15 @@ void Identify_AMD(struct cpudata *cpu)
 			 * Athlon XP 2000+ (Jan 2002)
 			 * Athlon XP 2100+ (Mar 2002)
 			 */
-			add_to_cpuname (" (Palomino)");
+			add_to_cpuname(" (Palomino)");
 		}
 out_660:
 		switch (cpu->stepping) {
 		case 0:
-			add_to_cpuname (" [A0-A1]");
+			add_to_cpuname(" [A0-A1]");
 			break;
 		case 1:
-			add_to_cpuname (" [A2]");
-			break;
-		case 2:
-			//add_to_cpuname (" []");
+			add_to_cpuname(" [A2]");
 			break;
 		}
 		break;
@@ -315,14 +312,14 @@ out_660:
 	case 0x670:
 		cpu->connector = CONN_SOCKET_A;
 		if (is_mobile(cpu))
-			add_to_cpuname ("Mobile ");
-		add_to_cpuname ("Duron (Morgan core)");
+			add_to_cpuname("Mobile ");
+		add_to_cpuname("Duron (Morgan core)");
 		switch (cpu->stepping) {
 		case 0:
-			add_to_cpuname (" [A0]");
+			add_to_cpuname(" [A0]");
 			break;
 		case 1:
-			add_to_cpuname (" [A1]");
+			add_to_cpuname(" [A1]");
 			break;
 		}
 		break;
@@ -330,11 +327,11 @@ out_660:
 	case 0x680:
 		cpu->connector = CONN_SOCKET_A;
 		if (is_mobile(cpu))
-			add_to_cpuname ("Mobile ");
+			add_to_cpuname("Mobile ");
 		if (getL2size(cpu->number) < 256) {
-			add_to_cpuname ("Duron ");
+			add_to_cpuname("Duron ");
 		} else {
-			add_to_cpuname ("Athlon ");
+			add_to_cpuname("Athlon ");
 			determine_xp_mp(cpu);
 		}
 		/*
@@ -357,12 +354,12 @@ out_660:
 		 * Athlon XP2700+ (                       B2: Oct 2002)
 		 * Athlon XP2800+ (                       B2: Oct 2002)
 		 */
-		add_to_cpuname (" (Thoroughbred)");
+		add_to_cpuname(" (Thoroughbred)");
 
 		if (cpu->stepping == 0)
-			add_to_cpuname ("[A0]");
+			add_to_cpuname("[A0]");
 		if (cpu->stepping == 1)
-			add_to_cpuname ("[B0]");
+			add_to_cpuname("[B0]");
 		//fab_process = ".13 micron";
 		//transistors = 37600000;
 		//die_size = "84 sq.mm";
@@ -372,9 +369,9 @@ out_660:
 		cpu->connector = CONN_SOCKET_A;
 		if (is_mobile(cpu))
 			add_to_cpuname("Mobile ");
-		add_to_cpuname ("Athlon ");
+		add_to_cpuname("Athlon ");
 		determine_xp_mp(cpu);
-		add_to_cpuname (" (Barton)");
+		add_to_cpuname(" (Barton)");
 		//fab_process = ".13 micron copper";
 		//transistors = 54300000;
 		//die_size = "101 sq. mm";
@@ -457,33 +454,33 @@ out_660:
 
 	case 0xF00:
 		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname ("Athlon 64 ");
+		add_to_cpuname("Athlon 64 ");
 		switch (cpu->stepping) {
 		case 0:
-			add_to_cpuname ("[SH7-A0]");
+			add_to_cpuname("[SH7-A0]");
 			break;
 		case 1:
-			add_to_cpuname ("[SH7-A2]");
+			add_to_cpuname("[SH7-A2]");
 			break;
 		}
 		break;
 
 	case 0xF10:
-		add_to_cpuname ("Opteron ES ");
+		add_to_cpuname("Opteron ES ");
 		cpu->connector = CONN_SOCKET_940;
 		switch (cpu->stepping) {
 		case 0:
-			add_to_cpuname ("[SH7-A0]");
+			add_to_cpuname("[SH7-A0]");
 			break;
 		case 1:
-			add_to_cpuname ("[SH7-A2]");
+			add_to_cpuname("[SH7-A2]");
 			break;
 		}
 		break;
 
 	case 0xF40:
 		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname ("Athlon 64 ");
+		add_to_cpuname("Athlon 64 ");
 		switch (cpu->stepping) {
 		case 0:
 			if (cpu->emodel==0) {
@@ -508,7 +505,7 @@ out_660:
 	// Gar, these could also be athlon 64fx
 	case 0xF50:
 		cpu->connector = CONN_SOCKET_940;
-		add_to_cpuname ("Opteron");
+		add_to_cpuname("Opteron");
 		switch (cpu->stepping) {
 		case 0:
 			if (cpu->emodel==0) {
@@ -518,20 +515,21 @@ out_660:
 			}
 			break;
 		case 1:
-			add_to_cpuname ("[SH7-B3]");
+			add_to_cpuname("[SH7-B3]");
 			break;
 		case 8:
-			add_to_cpuname ("[SH7-C0]");
+			add_to_cpuname("[SH7-C0]");
 			break;
 		case 0xA:
-			add_to_cpuname ("[SH7-CG]");
+			add_to_cpuname("[SH7-CG]");
+			break;
 		default:
 			break;
 		}
 		break;
 
 	case 0xF70:
-		add_to_cpuname ("Athlon 64 ");
+		add_to_cpuname("Athlon 64 ");
 		cpu->connector = CONN_SOCKET_939;
 		switch (cpu->stepping) {
 		case 0x0:
@@ -545,7 +543,7 @@ out_660:
 
 	case 0xF80:
 		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname ("Athlon 64 ");
+		add_to_cpuname("Athlon 64 ");
 		switch (cpu->stepping) {
 		case 2:
 			//might be mobile
@@ -556,7 +554,7 @@ out_660:
 
 	case 0xFB0:
 		cpu->connector = CONN_SOCKET_939;
-		add_to_cpuname ("Athlon 64 ");
+		add_to_cpuname("Athlon 64 ");
 		switch (cpu->stepping) {
 		case 2:
 			add_to_cpuname("CH7-CG");
@@ -566,11 +564,11 @@ out_660:
 
 	case 0xFC0:
 		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname ("Athlon 64 ");
+		add_to_cpuname("Athlon 64 ");
 		switch (cpu->stepping) {
 		case 0:
 			//might be mobile
-			add_to_cpuname ("DH7-CG");
+			add_to_cpuname("DH7-CG");
 			break;
 		}
 		break;
@@ -578,10 +576,10 @@ out_660:
 	case 0xFE0:
 		//might be mobile
 		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname ("Athlon 64 ");
+		add_to_cpuname("Athlon 64 ");
 		switch (cpu->stepping) {
 		case 0:
-			add_to_cpuname ("DH7-CG");
+			add_to_cpuname("DH7-CG");
 			break;
 		}
 		break;
@@ -589,16 +587,16 @@ out_660:
 
 	case 0xFF0:
 		cpu->connector = CONN_SOCKET_939;
-		add_to_cpuname ("Athlon 64 ");
+		add_to_cpuname("Athlon 64 ");
 		switch (cpu->stepping) {
 		case 0:
-			add_to_cpuname ("DH7-CG");
+			add_to_cpuname("DH7-CG");
 			break;
 		}
 		break;
 
 	default:
-		add_to_cpuname ("Unknown CPU");
+		add_to_cpuname("Unknown CPU");
 		break;
 	}
 }
@@ -606,7 +604,7 @@ out_660:
 
 void display_AMD_info(struct cpudata *cpu)
 {
-	printf("Family: %d Model: %d Stepping: %d\n",
+	printf("Family: %u Model: %u Stepping: %u\n",
 	       cpu->family, cpu->model, cpu->stepping);
 	printf ("CPU Model : %s\n", cpu->name);
 	get_model_name(cpu);
