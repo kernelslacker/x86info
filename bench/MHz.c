@@ -17,7 +17,7 @@
 
 #include "../x86info.h"
 
-__inline__ unsigned long long int rdtsc()
+unsigned long long int rdtsc(void)
 {
 	unsigned long long int x;
 	__asm__ volatile (".byte 0x0f, 0x31" : "=A" (x));
@@ -50,7 +50,7 @@ void estimate_MHz(struct cpudata *cpu)
 
 	/* we don't trust that this is any specific length of time */
 	usleep(250000);
-	
+
 	gettimeofday(&tvstop, &tz);
 	cycles[1] = rdtsc();
 	gettimeofday(&tvstop, &tz);
@@ -59,7 +59,6 @@ void estimate_MHz(struct cpudata *cpu)
 		(tvstop.tv_usec-tvstart.tv_usec);
 
 	cpu->MHz = (int) (cycles[1]-cycles[0]) / (microseconds/freq);
-
 
 	if ((cpu->MHz % 50) > 15)
 		cpu->MHz = ((cpu->MHz / 50) * 50) + 50;

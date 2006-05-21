@@ -31,7 +31,7 @@ static struct _cache_table TRACE_cache_table[] =
 	{ 0x71, 16, "Instruction trace cache:\n\tSize: 16K uOps\t8-way associative." },
 	{ 0x72, 32, "Instruction trace cache:\n\tSize: 32K uOps\t8-way associative." },
 	{ 0x73, 64, "Instruction trace cache:\n\tSize: 64K uOps\t8-way associative." },
-	{ 0, 0, 0 }
+	{ 0, 0, NULL }
 };
 
 static struct _cache_table L1I_cache_table[] =
@@ -39,7 +39,7 @@ static struct _cache_table L1I_cache_table[] =
 	{ 0x6,  8, "L1 Instruction cache:\n\tSize: 8KB\t4-way associative.\n\tline size=32 bytes." },
 	{ 0x8,  16, "L1 Instruction cache:\n\tSize: 16KB\t4-way associative.\n\tline size=32 bytes." },
 	{ 0x30, 32,	"L1 Instruction cache:\n\tSize 32KB\t8-way associative.\n\tline size=64 bytes." },
-	{ 0, 0, 0 }
+	{ 0, 0, NULL }
 };
 
 static struct _cache_table L1D_cache_table[] =
@@ -51,7 +51,7 @@ static struct _cache_table L1D_cache_table[] =
 	{ 0x66, 8, "L1 Data cache:\n\tSize: 8KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
 	{ 0x67, 16, "L1 Data cache:\n\tSize: 16KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
 	{ 0x68, 32, "L1 Data cache:\n\tSize: 32KB\tSectored, 4-way associative.\n\tline size=64 bytes." },
-	{ 0, 0, 0 }
+	{ 0, 0, NULL }
 };
 
 static struct _cache_table L2_cache_table[] =
@@ -87,7 +87,7 @@ static struct _cache_table L2_cache_table[] =
 	{ 0x85, 2048, "L2 unified cache:\n\tSize: 2MB\t8-way associative.\n\tline size=32 bytes." },
 	{ 0x86, 512, "L2 unified cache:\n\tSize: 512KB\t4-way associative\n\tline size=64 bytes." },
 	{ 0x87, 1024, "L2 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=64 bytes." },
-	{ 0, 0, 0 }
+	{ 0, 0, NULL }
 };
 
 static struct _cache_table L3_cache_table[] =
@@ -96,7 +96,7 @@ static struct _cache_table L3_cache_table[] =
 	{ 0x23, 1024, "L3 unified cache:\n\tSize: 1MB\t8-way associative.\n\tline size=64 bytes." },
 	{ 0x25, 2048, "L3 unified cache:\n\tSize: 2MB\t8-way associative.\n\tline size=64 bytes." },
 	{ 0x29, 4096, "L3 unified cache:\n\tSize: 4MB\t8-way associative.\n\tline size=64 bytes." },
-	{ 0, 0, 0 }
+	{ 0, 0, NULL }
 };
 
 static struct _cache_table ITLB_cache_table[] =
@@ -107,7 +107,7 @@ static struct _cache_table ITLB_cache_table[] =
 	{ 0x51, 128, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 128 entries." },
 	{ 0x52, 256, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 256 entries." },
 	{ 0xb0, 128, "Instruction TLB: 4K pages, 4-way associative, 128 entries." },
-	{ 0, 0, 0 }
+	{ 0, 0, NULL }
 };
 
 static struct _cache_table DTLB_cache_table[] =
@@ -118,7 +118,7 @@ static struct _cache_table DTLB_cache_table[] =
 	{ 0x5c, 128, "Data TLB: 4KB or 4MB pages, fully associative, 128 entries." },
 	{ 0x5d, 256, "Data TLB: 4KB or 4MB pages, fully associative, 256 entries." },
 	{ 0xb3, 128, "Data TLB: 4K pages, 4-way associative, 128 entries." },
-	{ 0, 0, 0 }
+	{ 0, 0, NULL }
 };
 
 static char found_unknown=0;

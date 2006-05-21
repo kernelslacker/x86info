@@ -6,7 +6,7 @@
 #include "../x86info.h"
 #include "bench.h"
 
-void show_benchmarks()
+void show_benchmarks(void)
 {
 	int ret, tmp=0;
 
