@@ -171,7 +171,7 @@ void decode_IDT_cacheinfo(struct cpudata *cpu)
 
 void display_IDT_info(struct cpudata *cpu)
 {
-	printf ("Family: %d Model: %d Stepping: %d\n",
+	printf ("Family: %u Model: %u Stepping: %u\n",
 		cpu->family, cpu->model, cpu->stepping);
 	printf ("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);
