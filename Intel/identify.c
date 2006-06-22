@@ -598,6 +598,10 @@ void Identify_Intel (struct cpudata *cpu)
 		}
 		break;
 
+	case 0x6e0:
+		add_to_cpuname("Core Solo/Duo ");
+		break;
+
 	case 0x700:		/* Family 7 */
 		add_to_cpuname("Itanium");
 		break;
