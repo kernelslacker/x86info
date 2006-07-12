@@ -179,7 +179,7 @@ int main (int argc, char **argv)
 
 	parse_command_line(argc, argv);
 	if (!silent) {
-		printf ("x86info v1.17.  Dave Jones 2001-2006\n");
+		printf ("x86info v1.18.  Dave Jones 2001-2006\n");
 		printf ("Feedback to <davej@redhat.com>.\n\n");
 	}
 
