@@ -263,8 +263,13 @@ int main (int argc, char **argv)
 		if (show_MHz) {
 			if (cpu->MHz < 1000)
 				printf("%uMHz", cpu->MHz);
-			else
-				printf("%u.%uGhz", cpu->MHz / 1000, (cpu->MHz % 1000)/100);
+			else {
+				int a = (cpu->MHz / 1000);
+				int b = ((cpu->MHz % 1000)/100);
+				int c = (a*1000)+(b*100);
+
+				printf("%u.%u%uGHz", a, b, cpu->MHz - c);
+			}
 			printf (" processor (estimate).\n\n");
 		}
 		if (show_bench)
