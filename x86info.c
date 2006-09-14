@@ -268,7 +268,7 @@ int main (int argc, char **argv)
 				int b = ((cpu->MHz % 1000)/100);
 				int c = (a*1000)+(b*100);
 
-				printf("%u.%u%uGHz", a, b, cpu->MHz - c);
+				printf("%u.%u%uGHz", a, b, (cpu->MHz - c)/10);
 			}
 			printf (" processor (estimate).\n\n");
 		}
