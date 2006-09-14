@@ -612,11 +612,17 @@ void Identify_Intel (struct cpudata *cpu)
 				switch (cpu->MHz) {
 				case 2000:
 					// SL9SF/SL9SL 667FSB
+					add_to_cpuname("mobile T7200");
+					cpu->connector = CONN_MICROFCBGA;
+					break;
 				case 2100:
 					// SL9SE/SL9SK 667FSB
+					add_to_cpuname("mobile T7400");
+					cpu->connector = CONN_MICROFCBGA;
+					break;
 				case 2300:
 					// SL9SD/SL9SJ 667FSB
-					add_to_cpuname("mobile");
+					add_to_cpuname("mobile T7600");
 					cpu->connector = CONN_MICROFCBGA;
 					break;
 				case 2400:
@@ -635,15 +641,13 @@ void Identify_Intel (struct cpudata *cpu)
 			if (cpu->cachesize_L2 == 2048) {
 				switch (cpu->MHz) {
 				case 1600:
-					// SL9SH 1.6GHz 667FSB
-					// SL9SQ 1.6GHz 667FSB
+					// SL9SH/SL9SQ 1.6GHz 667FSB
 					cpu->connector = CONN_MICROFCBGA;
-					add_to_cpuname("mobile");
+					add_to_cpuname("mobile T5500");
 					break;
 				case 1800:
-					// SL9SG 1.8GHz 667FSB
-					// SL9SP 1.8GHz 667FSB
-// 					add_to_cpuname("mobile");
+					// SL9SG/SL9SP 1.8GHz 667FSB
+// 					add_to_cpuname("mobile T5600");
 					// SL9S? 1066FSB
 //					add_to_cpuname("E6300");
 //					cpu->connector = CONN_MICROFCBGA;
