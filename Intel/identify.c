@@ -605,23 +605,56 @@ void Identify_Intel (struct cpudata *cpu)
 	case 0x6f0:
 		add_to_cpuname("Core 2 Duo ");
 		cpu->connector = CONN_LGA775;
-		switch (cpu->MHz) {
-			case 2600:
-				// 65nm 4MB L2 1066 MHz FSB
-				add_to_cpuname("E6700");
-				break;
-			case 2400:
-				// 65nm 4MB L2 1066 MHz FSB
-				add_to_cpuname("E6600");
-				break;
-			case 2100:
-				// 65nm 2MB L2 1066 MHz FSB
-				add_to_cpuname("E6400");
-				break;
-			case 1800:
-				// 65nm 2MB L2 1066 MHz FSB
-				add_to_cpuname("E6300");
-				break;
+		if (cpu->stepping == 6) {
+			// 65nm
+			// 4MB L2
+			if (cpu->cachesize_L2 == 4096) {
+				switch (cpu->MHz) {
+				case 2000:
+					// SL9SF/SL9SL 667FSB
+				case 2100:
+					// SL9SE/SL9SK 667FSB
+				case 2300:
+					// SL9SD/SL9SJ 667FSB
+					add_to_cpuname("mobile");
+					cpu->connector = CONN_MICROFCBGA;
+					break;
+				case 2400:
+					// 1066FSB
+					add_to_cpuname("E6600");
+					break;
+				case 2600:
+					// 1066FSB
+					add_to_cpuname("E6700");
+					break;
+				}
+			}
+
+			// 65nm 1066MHz FSB
+			// 2MB L2
+			if (cpu->cachesize_L2 == 2048) {
+				switch (cpu->MHz) {
+				case 1600:
+					// SL9SH 1.6GHz 667FSB
+					// SL9SQ 1.6GHz 667FSB
+					cpu->connector = CONN_MICROFCBGA;
+					add_to_cpuname("mobile");
+					break;
+				case 1800:
+					// SL9SG 1.8GHz 667FSB
+					// SL9SP 1.8GHz 667FSB
+// 					add_to_cpuname("mobile");
+					// SL9S? 1066FSB
+//					add_to_cpuname("E6300");
+//					cpu->connector = CONN_MICROFCBGA;
+// FIXME: Need to discriminate mobile/desktop
+					break;
+				case 2100:
+					// SL9S? 1066FSB
+					add_to_cpuname("E6400");
+					break;
+				}
+			}
 		}
 		break;
 
