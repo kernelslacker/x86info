@@ -599,7 +599,56 @@ void Identify_Intel (struct cpudata *cpu)
 		break;
 
 	case 0x6e0:
-		add_to_cpuname("Core Solo/Duo ");
+		add_to_cpuname("Core ");
+		switch (cpu->stepping) {
+			case 8:
+				switch (cpu->MHz) {
+				case 1000:
+					// SL99W/SL8W7 533FSB
+					add_to_cpuname("Duo U2400/Solo U1300 [C-0]");
+					break;
+				case 1200:
+					// SL8W6 533FSB
+					add_to_cpuname("Solo U1400 [C-0]");
+					break;
+				case 1500:
+					// SL8VX 667FSB
+					add_to_cpuname("Duo L2300 [C-0]");
+					break;
+				case 1600:
+					// SL9JE/SL9JV/SL8VR/SL8VV/SL8VY/SL8W3/SL8VW 667FSB
+					add_to_cpuname("Solo T1300/Duo T2300(E)/Duo L2400");
+					break;
+				case 1800:
+					// SL92X/SL8VQ/SL8VU/SL92V/SL92X 667FSB
+					add_to_cpuname("Solo T1400/Duo T2400 [C-0]");
+					break;
+				case 2000:
+					// SL8VP/SL8VT/SL92U/SL92W 667FSB
+					add_to_cpuname("Solo T1500/Duo T2500 [C-0]");
+					break;
+				case 2150:
+					// SL8VN/SL8VS 667FSB
+					add_to_cpuname("Duo T2600 [C-0]");
+					break;
+				}
+				break;
+			case 0xc:
+				switch (cpu->MHz) {
+				case 1200:
+					// SL99V 533FSB
+					add_to_cpuname("Duo U2500 [D-0]");
+					break;
+				case 1800:
+					// SL9JU 667FSB
+					add_to_cpuname("Duo L2500 [D-0]");
+					break;
+				case 2300:
+					// SL9JP/SL9K4 667FSB
+					add_to_cpuname("Duo T2700 [D-0]");
+					break;
+				}
+		}
 		break;
 
 	case 0x6f0:
