@@ -73,6 +73,7 @@ struct cpudata {
 #define CONN_MICROFCBGA		26
 #define CONN_SOCKET_939		27
 #define CONN_SOCKET_940		28
+#define CONN_LGA775		29
 
 extern void cpuid (int, unsigned int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 extern void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);

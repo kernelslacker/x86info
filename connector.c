@@ -35,6 +35,7 @@ void decode_connector(unsigned int type)
 	char conn_MMC[] = "Mobile Module Connector (BGA)";
 	char conn_MMC2[] = "Mobile Module Connector (MMC-2)";
 	char conn_MICROFCBGA[] = "Micro-FCBGA";
+	char conn_LGA775[] = "LGA775";
 	/* Transmeta specific sockets */
 	char conn_BGA474[] = "474 Pin BGA";
 	/* natsemi specific (Geode) */
@@ -151,6 +152,10 @@ void decode_connector(unsigned int type)
 
 	case CONN_BGA:
 		printf("%s", conn_BGA);
+		break;
+
+	case CONN_LGA775:
+		printf("%s", conn_LGA775);
 		break;
 
 	default:

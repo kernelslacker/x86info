@@ -604,6 +604,7 @@ void Identify_Intel (struct cpudata *cpu)
 
 	case 0x6f0:
 		add_to_cpuname("Core 2 Duo ");
+		cpu->connector = CONN_LGA775;
 		switch (cpu->MHz) {
 			case 2600:
 				// 65nm 4MB L2 1066 MHz FSB
