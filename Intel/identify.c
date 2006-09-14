@@ -603,7 +603,25 @@ void Identify_Intel (struct cpudata *cpu)
 		break;
 
 	case 0x6f0:
-		add_to_cpuname("Core 2 ");
+		add_to_cpuname("Core 2 Duo ");
+		switch (cpu->MHz) {
+			case 2600:
+				// 65nm 4MB L2 1066 MHz FSB
+				add_to_cpuname("E6700");
+				break;
+			case 2400:
+				// 65nm 4MB L2 1066 MHz FSB
+				add_to_cpuname("E6600");
+				break;
+			case 2100:
+				// 65nm 2MB L2 1066 MHz FSB
+				add_to_cpuname("E6400");
+				break;
+			case 1800:
+				// 65nm 2MB L2 1066 MHz FSB
+				add_to_cpuname("E6300");
+				break;
+		}
 		break;
 
 	case 0x700:		/* Family 7 */
