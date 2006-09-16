@@ -45,7 +45,7 @@ void Identify_Intel (struct cpudata *cpu)
 	cpu->type = (eax >> 12) & 0x3;
 	cpu->brand = (ebx & 0xf);
 	reserved = eax >> 14;
-	
+
 	cpu->flags_ecx = ecx; // Used for identification of Core 2
 	cpu->flags_edx = edx;
 
@@ -686,9 +686,8 @@ void Identify_Intel (struct cpudata *cpu)
 				// SL9S7 1066FSB 4MB L2
 				add_to_cpuname("E6700");
 				break;
-// FIXME: What i? Not listed in sSPEC finder
 			case 2900:
-				// SLS9S5 1066FSB 4MB L2
+				// SL9S5 1066FSB 4MB L2
 				add_to_cpuname("X6800");
 				break;
 			}
@@ -702,7 +701,7 @@ void Identify_Intel (struct cpudata *cpu)
 				break;
 			case 1800:
 				// SL9SG/SL9SP 1.8GHz 667FSB
- 				add_to_cpuname("T5600");
+				add_to_cpuname("T5600");
 			case 2000:
 				// SL9SF/SL9SL 667FSB
 				add_to_cpuname("T7200");
@@ -715,7 +714,7 @@ void Identify_Intel (struct cpudata *cpu)
 				// SL9SD/SL9SJ 667FSB
 				add_to_cpuname("T7600");
 				break;
-			} 
+			}
 		}
 		// TODO: Check that the Mobile chips really are stepping 6 as well.
 		// The Sept 06 Core 2 Intel Errata documentation says there are
@@ -724,8 +723,10 @@ void Identify_Intel (struct cpudata *cpu)
 		// TODO: B1 as stepping 5 is a 100% guess
 		case 5:
 			add_to_cpuname(" [B1]");
+			break;
 		case 6:
 			add_to_cpuname(" [B2]");
+			break;
 		}
 		break;
 
@@ -766,7 +767,7 @@ void Identify_Intel (struct cpudata *cpu)
 		case 1:
 			//400FSB 256K L2
 			//SSpec MHz L3
-			//SL5G8 1.6 1M 
+			//SL5G8 1.6 1M
 			//SL5S4 1.6 1M
 			//SL5FZ 1.4 512K
 			//SL5RZ 1.4 512K
