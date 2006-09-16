@@ -40,3 +40,4 @@
 
 - libx86info for other apps
 
+- Be able to tell the user when we have failed to identify the chip, so they can send us information!

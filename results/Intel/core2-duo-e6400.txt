@@ -1,0 +1,335 @@
+x86info v1.18.  Dave Jones 2001-2006
+Feedback to <davej@redhat.com>.
+
+Found 2 CPUs
+MP Table:
+#	APIC ID	Version	State		Family	Model	Step	Flags
+#	 0	 0x14	 BSP, usable	 6	 15	 6	 0xbfebfbff
+
+--------------------------------------------------------------------------
+CPU #1
+Found unknown cache descriptors: 05 2c 30 56 57 7d b0 b1 b4 f0 
+eax in: 0x00000000, eax = 0000000a ebx = 756e6547 ecx = 6c65746e edx = 49656e69
+eax in: 0x00000001, eax = 000006f6 ebx = 00020800 ecx = 0000e3bd edx = bfebfbff
+eax in: 0x00000002, eax = 05b0b101 ebx = 005657f0 ecx = 00000000 edx = 2cb4307d
+eax in: 0x00000003, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x00000004, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x00000005, eax = 00000040 ebx = 00000040 ecx = 00000003 edx = 00000020
+eax in: 0x00000006, eax = 00000001 ebx = 00000002 ecx = 00000001 edx = 00000000
+eax in: 0x00000007, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x00000008, eax = 00000400 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x00000009, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x0000000a, eax = 07280202 ebx = 00000000 ecx = 00000000 edx = 00000000
+
+eax in: 0x80000000, eax = 80000008 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x80000001, eax = 00000000 ebx = 00000000 ecx = 00000001 edx = 20100800
+eax in: 0x80000002, eax = 65746e49 ebx = 2952286c ecx = 726f4320 edx = 4d542865
+eax in: 0x80000003, eax = 43203229 ebx = 20205550 ecx = 20202020 edx = 20202020
+eax in: 0x80000004, eax = 30303436 ebx = 20402020 ecx = 33312e32 edx = 007a4847
+eax in: 0x80000005, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x80000006, eax = 00000000 ebx = 00000000 ecx = 08006040 edx = 00000000
+eax in: 0x80000007, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x80000008, eax = 00003024 ebx = 00000000 ecx = 00000000 edx = 00000000
+
+Family: 6 Model: 15 Stepping: 6 Type: 0 Brand: 0
+CPU Model: Core 2 Duo E6400 [B2] Original OEM
+Feature flags:
+	Onboard FPU
+	Virtual Mode Extensions
+	Debugging Extensions
+	Page Size Extensions
+	Time Stamp Counter
+	Model-Specific Registers
+	Physical Address Extensions
+	Machine Check Architecture
+	CMPXCHG8 instruction
+	Onboard APIC
+	SYSENTER/SYSEXIT
+	Memory Type Range Registers
+	Page Global Enable
+	Machine Check Architecture
+	CMOV instruction
+	Page Attribute Table
+	36-bit PSEs
+	CLFLUSH instruction
+	Debug Trace Store
+	ACPI via MSR
+	MMX support
+	FXSAVE and FXRESTORE instructions
+	SSE support
+	SSE2 support
+	CPU self snoop
+	Hyper-Threading
+	Thermal Monitor
+	Pending Break Enable
+ sse3 monitor ds-cpl vmx est tm2 cx16 xTPR
+Extended feature flags:
+ SYSCALL xd em64t lahf_lm
+L1 Instruction cache:
+	Size 32KB	8-way associative.
+	line size=64 bytes.
+L1 Data cache:
+	Size: 32KB	8-way associative.
+	line size=64 bytes.
+L2 unified cache:
+	Size: 2MB	Sectored, 8-way associative.
+	line size=64 bytes.
+Instruction TLB: 4K pages, 4-way associative, 128 entries.
+Found unknown cache descriptors: 05 2c 30 56 57 7d b0 b1 b4 f0 
+Processor serial: 0000-06F6-0000-0000-0000-0000
+
+Number of reporting banks : 6
+
+Erk, MCG_CTL not present! :0000000000000006:
+
+Bank: 0 (0x400)
+MC0CTL:    00000000 00000000 00000000 00000000
+           01111111 11111111 11111111 11111111
+MC0STATUS: 00011111 11111111 11111111 11111111
+           11110000 00000000 00000000 00000000
+MC0ADDR:   00000000 00000000 00000000 00000000
+           01111111 11111111 11111111 11111111
+
+Bank: 1 (0x404)
+MC1CTL:    00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000001
+MC1STATUS: 00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000000
+MC1ADDR:   00000000 00000000 00000011 11111111
+           11111111 11111111 11111111 11111111
+
+Bank: 2 (0x408)
+MC2CTL:    00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000001
+MC2STATUS: 00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000000
+MC2ADDR:   00000000 00000000 00000011 11111111
+           11111111 11111111 11111111 11111111
+
+Bank: 3 (0x40c)
+MC3CTL:    00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000001
+MC3STATUS: 00000000 00111111 11111111 11111111
+           11111111 11100000 00000000 00000000
+MC3ADDR:   00000000 00000000 00000000 01111111
+           11111111 11111111 11111111 11111111
+
+Bank: 4 (0x410)
+MC4CTL:    00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00001111
+MC4STATUS: 00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00011111
+MC4ADDR:   00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000000
+
+Bank: 5 (0x414)
+MC5CTL:    00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000001
+MC5STATUS: 00011111 11111111 11111111 11111111
+           11111111 11111111 11111111 11111111
+MC5ADDR:   Couldn't read MSR 0x416
+
+The physical package supports 2 logical processors 
+
+Microcode version: 0x0000000000000044
+
+Connector type: LGA775
+
+
+MTRR registers:
+MTRRcap (0xfe): 0x0000000000000508
+MTRRphysBase0 (0x200): 0x0000000000000006
+MTRRphysMask0 (0x201): 0x0000000f80000800
+MTRRphysBase1 (0x202): 0x000000007f000000
+MTRRphysMask1 (0x203): 0x0000000fff000800
+MTRRphysBase2 (0x204): 0x000000007e800000
+MTRRphysMask2 (0x205): 0x0000000fff800800
+MTRRphysBase3 (0x206): 0x000000007e700000
+MTRRphysMask3 (0x207): 0x0000000ffff00800
+MTRRphysBase4 (0x208): 0x0000000000000000
+MTRRphysMask4 (0x209): 0x0000000000000000
+MTRRphysBase5 (0x20a): 0x0000000000000000
+MTRRphysMask5 (0x20b): 0x0000000000000000
+MTRRphysBase6 (0x20c): 0x0000000000000000
+MTRRphysMask6 (0x20d): 0x0000000000000000
+MTRRphysBase7 (0x20e): 0x0000000000000000
+MTRRphysMask7 (0x20f): 0x0000000000000000
+MTRRfix64K_00000 (0x250): 0x0606060606060606
+MTRRfix16K_80000 (0x258): 0x0606060606060606
+MTRRfix16K_A0000 (0x259): 0x0000000000000000
+MTRRfix4K_C8000 (0x269): 0x0000000000000000
+MTRRfix4K_D0000 0x26a: 0x0000000000000000
+MTRRfix4K_D8000 0x26b: 0x0000000000000000
+MTRRfix4K_E0000 0x26c: 0x0000000000000000
+MTRRfix4K_E8000 0x26d: 0x0000000000000000
+MTRRfix4K_F0000 0x26e: 0x0000000000000000
+MTRRfix4K_F8000 0x26f: 0x0000000000000000
+MTRRdefType (0x2ff): 0x0000000000000c00
+
+
+2.15GHz processor (estimate).
+
+--------------------------------------------------------------------------
+CPU #2
+Found unknown cache descriptors: 05 2c 30 56 57 7d b0 b1 b4 f0 
+eax in: 0x00000000, eax = 0000000a ebx = 756e6547 ecx = 6c65746e edx = 49656e69
+eax in: 0x00000001, eax = 000006f6 ebx = 01020800 ecx = 0000e3bd edx = bfebfbff
+eax in: 0x00000002, eax = 05b0b101 ebx = 005657f0 ecx = 00000000 edx = 2cb4307d
+eax in: 0x00000003, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x00000004, eax = 04000121 ebx = 01c0003f ecx = 0000003f edx = 00000001
+eax in: 0x00000005, eax = 00000040 ebx = 00000040 ecx = 00000003 edx = 00000020
+eax in: 0x00000006, eax = 00000001 ebx = 00000002 ecx = 00000001 edx = 00000000
+eax in: 0x00000007, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x00000008, eax = 00000400 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x00000009, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x0000000a, eax = 07280202 ebx = 00000000 ecx = 00000000 edx = 00000000
+
+eax in: 0x80000000, eax = 80000008 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x80000001, eax = 00000000 ebx = 00000000 ecx = 00000001 edx = 20100800
+eax in: 0x80000002, eax = 65746e49 ebx = 2952286c ecx = 726f4320 edx = 4d542865
+eax in: 0x80000003, eax = 43203229 ebx = 20205550 ecx = 20202020 edx = 20202020
+eax in: 0x80000004, eax = 30303436 ebx = 20402020 ecx = 33312e32 edx = 007a4847
+eax in: 0x80000005, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x80000006, eax = 00000000 ebx = 00000000 ecx = 08006040 edx = 00000000
+eax in: 0x80000007, eax = 00000000 ebx = 00000000 ecx = 00000000 edx = 00000000
+eax in: 0x80000008, eax = 00003024 ebx = 00000000 ecx = 00000000 edx = 00000000
+
+Family: 6 Model: 15 Stepping: 6 Type: 0 Brand: 0
+CPU Model: Core 2 Duo E6400 [B2] Original OEM
+Feature flags:
+	Onboard FPU
+	Virtual Mode Extensions
+	Debugging Extensions
+	Page Size Extensions
+	Time Stamp Counter
+	Model-Specific Registers
+	Physical Address Extensions
+	Machine Check Architecture
+	CMPXCHG8 instruction
+	Onboard APIC
+	SYSENTER/SYSEXIT
+	Memory Type Range Registers
+	Page Global Enable
+	Machine Check Architecture
+	CMOV instruction
+	Page Attribute Table
+	36-bit PSEs
+	CLFLUSH instruction
+	Debug Trace Store
+	ACPI via MSR
+	MMX support
+	FXSAVE and FXRESTORE instructions
+	SSE support
+	SSE2 support
+	CPU self snoop
+	Hyper-Threading
+	Thermal Monitor
+	Pending Break Enable
+ sse3 monitor ds-cpl vmx est tm2 cx16 xTPR
+Extended feature flags:
+ SYSCALL xd em64t lahf_lm
+L1 Instruction cache:
+	Size 32KB	8-way associative.
+	line size=64 bytes.
+L1 Data cache:
+	Size: 32KB	8-way associative.
+	line size=64 bytes.
+L2 unified cache:
+	Size: 2MB	Sectored, 8-way associative.
+	line size=64 bytes.
+Instruction TLB: 4K pages, 4-way associative, 128 entries.
+Found unknown cache descriptors: 05 2c 30 56 57 7d b0 b1 b4 f0 
+Processor serial: 0000-06F6-0000-0000-0000-0000
+
+Number of reporting banks : 6
+
+Erk, MCG_CTL not present! :0000000000000006:
+
+Bank: 0 (0x400)
+MC0CTL:    00000000 00000000 00000000 00000000
+           01111111 11111111 11111111 11111111
+MC0STATUS: 00011111 11111111 11111111 11111111
+           11110000 00000000 00000000 00000000
+MC0ADDR:   00000000 00000000 00000000 00000000
+           01111111 11111111 11111111 11111111
+
+Bank: 1 (0x404)
+MC1CTL:    00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000001
+MC1STATUS: 00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000000
+MC1ADDR:   00000000 00000000 00000011 11111111
+           11111111 11111111 11111111 11111111
+
+Bank: 2 (0x408)
+MC2CTL:    00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000001
+MC2STATUS: 00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000000
+MC2ADDR:   00000000 00000000 00000011 11111111
+           11111111 11111111 11111111 11111111
+
+Bank: 3 (0x40c)
+MC3CTL:    00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000001
+MC3STATUS: 00000000 00111111 11111111 11111111
+           11111111 11100000 00000000 00000000
+MC3ADDR:   00000000 00000000 00000000 01111111
+           11111111 11111111 11111111 11111111
+
+Bank: 4 (0x410)
+MC4CTL:    00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00001111
+MC4STATUS: 00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00011111
+MC4ADDR:   00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000000
+
+Bank: 5 (0x414)
+MC5CTL:    00000000 00000000 00000000 00000000
+           00000000 00000000 00000000 00000001
+MC5STATUS: 00011111 11111111 11111111 11111111
+           11111111 11111111 11111111 11111111
+MC5ADDR:   Couldn't read MSR 0x416
+
+The physical package supports 2 logical processors 
+
+Microcode version: 0x0000000000000044
+
+Connector type: LGA775
+
+
+MTRR registers:
+MTRRcap (0xfe): 0x0000000000000508
+MTRRphysBase0 (0x200): 0x0000000000000006
+MTRRphysMask0 (0x201): 0x0000000f80000800
+MTRRphysBase1 (0x202): 0x000000007f000000
+MTRRphysMask1 (0x203): 0x0000000fff000800
+MTRRphysBase2 (0x204): 0x000000007e800000
+MTRRphysMask2 (0x205): 0x0000000fff800800
+MTRRphysBase3 (0x206): 0x000000007e700000
+MTRRphysMask3 (0x207): 0x0000000ffff00800
+MTRRphysBase4 (0x208): 0x0000000000000000
+MTRRphysMask4 (0x209): 0x0000000000000000
+MTRRphysBase5 (0x20a): 0x0000000000000000
+MTRRphysMask5 (0x20b): 0x0000000000000000
+MTRRphysBase6 (0x20c): 0x0000000000000000
+MTRRphysMask6 (0x20d): 0x0000000000000000
+MTRRphysBase7 (0x20e): 0x0000000000000000
+MTRRphysMask7 (0x20f): 0x0000000000000000
+MTRRfix64K_00000 (0x250): 0x0606060606060606
+MTRRfix16K_80000 (0x258): 0x0606060606060606
+MTRRfix16K_A0000 (0x259): 0x0000000000000000
+MTRRfix4K_C8000 (0x269): 0x0000000000000000
+MTRRfix4K_D0000 0x26a: 0x0000000000000000
+MTRRfix4K_D8000 0x26b: 0x0000000000000000
+MTRRfix4K_E0000 0x26c: 0x0000000000000000
+MTRRfix4K_E8000 0x26d: 0x0000000000000000
+MTRRfix4K_F0000 0x26e: 0x0000000000000000
+MTRRfix4K_F8000 0x26f: 0x0000000000000000
+MTRRdefType (0x2ff): 0x0000000000000c00
+
+
+2.15GHz processor (estimate).
+
+--------------------------------------------------------------------------

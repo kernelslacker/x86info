@@ -45,6 +45,9 @@ void Identify_Intel (struct cpudata *cpu)
 	cpu->type = (eax >> 12) & 0x3;
 	cpu->brand = (ebx & 0xf);
 	reserved = eax >> 14;
+	
+	cpu->flags_ecx = ecx; // Used for identification of Core 2
+	cpu->flags_edx = edx;
 
 	decode_Intel_caches(cpu, 0);
 
@@ -652,70 +655,83 @@ void Identify_Intel (struct cpudata *cpu)
 		break;
 
 	case 0x6f0:
-		add_to_cpuname("Core 2 Duo ");
-		cpu->connector = CONN_LGA775;
-		if (cpu->stepping == 6) {
-			// 65nm
-			// 4MB L2
-			if (cpu->cachesize_L2 == 4096) {
-				switch (cpu->MHz) {
-				case 2000:
-					// SL9SF/SL9SL 667FSB
-					add_to_cpuname("mobile T7200");
-					cpu->connector = CONN_MICROFCBGA;
-					break;
-				case 2100:
-					// SL9SE/SL9SK 667FSB
-					add_to_cpuname("mobile T7400");
-					cpu->connector = CONN_MICROFCBGA;
-					break;
-				case 2300:
-					// SL9SD/SL9SJ 667FSB
-					add_to_cpuname("mobile T7600");
-					cpu->connector = CONN_MICROFCBGA;
-					break;
-				case 2400:
-					// 1066FSB
-					add_to_cpuname("E6600");
-					break;
-				case 2600:
-					// 1066FSB
-					add_to_cpuname("E6700");
-					break;
-				}
+		add_to_cpuname("Core 2 ");
+		// Do a numerical hack, because they aren't exactly 2100Mhz etc.
+		// FIXME: Come up with a better way to do this, easiest if
+		// Intel gives us an Extreme chip to compare against others ;-)
+		if(cpu->MHz/100 >= 29) {
+			add_to_cpuname("Extreme ");
+		} else {
+			add_to_cpuname("Duo ");
+		}
+		// Check for Thermal Monitor 2 feature bit, because only the
+		// non-mobile processors have it
+		// TODO: Clean up Feature bit handling
+		if(cpu->flags_ecx & (1 << 8)) {
+			cpu->connector = CONN_LGA775;
+			switch (cpu->MHz) {
+			case 1800:
+				// SL9SA 1066FSB 2MB L2
+				add_to_cpuname("E6300");
+				break;
+			case 2150:
+				// SL9S9 1066FSB 2MB L2
+				add_to_cpuname("E6400");
+				break;
+			case 2400:
+				// SL9S8 1066FSB 4MB L2
+				add_to_cpuname("E6600");
+				break;
+			case 2600:
+				// SL9S7 1066FSB 4MB L2
+				add_to_cpuname("E6700");
+				break;
+// FIXME: What i? Not listed in sSPEC finder
+			case 2900:
+				// SLS9S5 1066FSB 4MB L2
+				add_to_cpuname("X6800");
+				break;
 			}
-
-			// 65nm 1066MHz FSB
-			// 2MB L2
-			if (cpu->cachesize_L2 == 2048) {
-				switch (cpu->MHz) {
-				case 1600:
-					// SL9SH/SL9SQ 1.6GHz 667FSB
-					cpu->connector = CONN_MICROFCBGA;
-					add_to_cpuname("mobile T5500");
-					break;
-				case 1800:
-					// SL9SG/SL9SP 1.8GHz 667FSB
-// 					add_to_cpuname("mobile T5600");
-					// SL9S? 1066FSB
-//					add_to_cpuname("E6300");
-//					cpu->connector = CONN_MICROFCBGA;
-// FIXME: Need to discriminate mobile/desktop
-					break;
-				case 2100:
-					// SL9S? 1066FSB
-					add_to_cpuname("E6400");
-					break;
-				}
-			}
+		} else {
+			cpu->connector = CONN_MICROFCBGA;
+			add_to_cpuname("Mobile ");
+			switch (cpu->MHz) {
+			case 1600:
+				// SL9SH/SL9SQ 1.6GHz 667FSB
+				add_to_cpuname("T5500");
+				break;
+			case 1800:
+				// SL9SG/SL9SP 1.8GHz 667FSB
+ 				add_to_cpuname("T5600");
+			case 2000:
+				// SL9SF/SL9SL 667FSB
+				add_to_cpuname("T7200");
+				break;
+			case 2100:
+				// SL9SE/SL9SK 667FSB
+				add_to_cpuname("T7400");
+				break;
+			case 2300:
+				// SL9SD/SL9SJ 667FSB
+				add_to_cpuname("T7600");
+				break;
+			} 
+		}
+		// TODO: Check that the Mobile chips really are stepping 6 as well.
+		// The Sept 06 Core 2 Intel Errata documentation says there are
+		// at least B1 and B2 steppings.
+		switch(cpu->stepping) {
+		// TODO: B1 as stepping 5 is a 100% guess
+		case 5:
+			add_to_cpuname(" [B1]");
+		case 6:
+			add_to_cpuname(" [B2]");
 		}
 		break;
 
 	case 0x700:		/* Family 7 */
 		add_to_cpuname("Itanium");
 		break;
-
-//FIXME: What is SL4X5 ? 
 
 	case 0xF00:	/* Family 15 */
 		cpu->connector = CONN_SOCKET_423;
