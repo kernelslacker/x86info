@@ -18,9 +18,43 @@
 #include "../x86info.h"
 #include "Intel.h"
 
-void display_Intel_info (struct cpudata *cpu)
+/* Decode Pentium III CPU serial number */
+void decode_serial_number(struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
+	unsigned long signature;
+
+	if (cpu->family!=6)
+		return;
+
+	switch (cpu->model) {
+	case 7:
+	case 8:
+	case 10:
+	case 11:
+		if (cpu->maxi < 3)
+			return;
+
+		cpuid (cpu->number, 1, &eax, NULL, NULL, NULL);
+		signature = eax;
+
+		cpuid (cpu->number, 3, &eax, &ebx, &ecx, &edx);
+		printf ("Processor serial: ");
+		printf ("%04lX", signature >> 16);
+		printf ("-%04lX", signature & 0xffff);
+		printf ("-%04lX", edx >> 16);
+		printf ("-%04lX", edx & 0xffff);
+		printf ("-%04lX", ecx >> 16);
+		printf ("-%04lX\n", ecx & 0xffff);
+		return;
+	default:
+		return;
+	}
+}
+
+void display_Intel_info (struct cpudata *cpu)
+{
+	unsigned long ebx;
 
 	printf ("Family: %u Model: %u Stepping: %u Type: %u Brand: %u\n",
 		cpu->family, cpu->model, cpu->stepping, cpu->type, cpu->brand);
@@ -42,21 +76,7 @@ void display_Intel_info (struct cpudata *cpu)
 	//show_Intel_caches(cpu);
 	decode_Intel_caches(cpu, 1);
 
-	if (cpu->maxi >= 3) {
-		/* Pentium III CPU serial number */
-		unsigned long signature;
-		cpuid (cpu->number, 1, &eax, NULL, NULL, NULL);
-		signature = eax;
-
-		cpuid (cpu->number, 3, &eax, &ebx, &ecx, &edx);
-		printf ("Processor serial: ");
-		printf ("%04lX", signature >> 16);
-		printf ("-%04lX", signature & 0xffff);
-		printf ("-%04lX", edx >> 16);
-		printf ("-%04lX", edx & 0xffff);
-		printf ("-%04lX", ecx >> 16);
-		printf ("-%04lX\n", ecx & 0xffff);
-	}
+	decode_serial_number(cpu);
 
 	if (show_eblcr) {
 		if (cpu->family == 6 && cpu->model >= 3) {
