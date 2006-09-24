@@ -67,7 +67,7 @@ nodes:
 test:
 	scripts/testnodes
 
-VERSION=1.18
+VERSION=1.19
 	
 release:
 	git repack -a -d

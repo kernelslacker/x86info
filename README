@@ -1,4 +1,4 @@
-x86info v1.18            http://www.codemonkey.org.uk/projects/x86info
+x86info v1.19            http://www.codemonkey.org.uk/projects/x86info
 Dave Jones <davej@redhat.com>
 
 Somewhere in the mists of time, there was a program by Phil Karn (KA9Q)
@@ -21,7 +21,7 @@ Features:
 
 Caveats:
 *  For usage of the MSR / SMP functions, x86info needs the
-   x86 cpuid driver provided with the Linux kernel 2.2.18 / 2.4.0,
+   x86 cpuid driver provided with the Linux kernel since 2.2.18 / 2.4.0,
    and the appropriate nodes in /dev
 
    To set up these devices, do the following..
