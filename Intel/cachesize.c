@@ -121,6 +121,12 @@ static struct _cache_table DTLB_cache_table[] =
 	{ 0, 0, NULL }
 };
 
+static struct _cache_table prefetch_table[] =
+{
+	{0xf0, 64, "64 byte prefetching."},
+	{0xf1, 64, "128 byte prefetching."},
+};
+
 static char found_unknown=0;
 static char unknown_array[256];
 
@@ -228,6 +234,7 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 	decode_cache(cpu, L3_cache_table, output);
 	decode_cache(cpu, ITLB_cache_table, output);
 	decode_cache(cpu, DTLB_cache_table, output);
+	decode_cache(cpu, prefetch_table, output);
 
 	if (found_unknown == 0)
 		return;
@@ -241,6 +248,7 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 		clean_unknowns(L3_cache_table);
 		clean_unknowns(ITLB_cache_table);
 		clean_unknowns(DTLB_cache_table);
+		clean_unknowns(prefetch_table);
 	}
 
 	if (found_unknown == 0)
