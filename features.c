@@ -60,8 +60,8 @@ void decode_feature_flags (struct cpudata *cpu)
 	/* CPUID 0x00000001 ECX flags */
 	const char *intel_cap_generic_ecx_flags[] = {
 		"sse3", NULL, NULL, "monitor", "ds-cpl", "vmx", NULL, "est",
-		"tm2", NULL, "cntx-id", NULL, NULL, "cx16", "xTPR", NULL,
-		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		"tm2", "ssse3", "cntx-id", NULL, NULL, "cx16", "xTPR", NULL,
+		NULL, NULL, "dca", NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};
 	/* CPUID 0x80000001 EDX flags */
