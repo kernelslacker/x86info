@@ -126,13 +126,17 @@ static char unknown_array[256];
 
 /* Decode Intel TLB and cache info descriptors */
 //TODO : Errata workaround. http://www.sandpile.org/post/msgs/20002736.htm
-static void decode_Intel_cache (int des, struct cpudata *cpu, int output,
+static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
 			struct _cache_table *table)
 {
 	int k=0;
 
+	/* "No 2nd-level cache or, if processor contains a valid 2nd-level
+	   cache, no 3rd-level cache". Skip this pointless entry.*/
+	if (des == 0x40)
+		return;
+
 	//TODO: Add description to link-list in cpu->
-	//TODO: print unknown descriptors.
 
 	while (table[k].descriptor != 0) {
 		if (table[k].descriptor == des) {
@@ -158,8 +162,10 @@ static void decode_Intel_cache (int des, struct cpudata *cpu, int output,
 		k++;
 	}
 	if (table[k].descriptor == 0) {
-		unknown_array[des]=1;
-		found_unknown=1;
+		if (unknown_array[des]==0) {
+			unknown_array[des]=1;
+			found_unknown++;
+		}
 	}
 }
 
@@ -169,12 +175,12 @@ static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int ou
 	unsigned long regs[4];
 
 	/* Decode TLB and cache info */
-	cpuid (cpu->number, 2, &regs[0], &regs[1], &regs[2], &regs[3]);
+	cpuid(cpu->number, 2, &regs[0], &regs[1], &regs[2], &regs[3]);
 
 	/* Number of times to iterate */
 	n = regs[0] & 0xff;
 
-	for (i=0 ; i<n ; i++) {
+	for (i=0; i<n; i++) {
 		cpuid(cpu->number, 2, &regs[0], &regs[1], &regs[2], &regs[3]);
 
 		/* If bit 31 is set, this is an unknown format */
@@ -186,7 +192,21 @@ static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int ou
 		for (j=1; j<16; j++) {
 			unsigned char val = regs[j / 4] >> (unsigned int)(8 * (j % 4));
 			if (val)
-				decode_Intel_cache (val, cpu, output, table);
+				decode_Intel_cache(val, cpu, output, table);
+		}
+	}
+}
+
+void clean_unknowns(struct _cache_table *table)
+{
+	int j=0;
+	int des;
+
+	while (table[j].descriptor != 0) {
+		des = table[j++].descriptor;
+		if (unknown_array[des]==1) {
+			unknown_array[des]=0;
+			found_unknown--;
 		}
 	}
 }
@@ -199,14 +219,29 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 	if (cpu->maxi < 2)
 		return;
 
-	memset (&unknown_array, 0, sizeof(unknown_array));
+	memset(&unknown_array, 0, sizeof(unknown_array));
 
-	decode_cache (cpu, TRACE_cache_table, output);
-	decode_cache (cpu, L1I_cache_table, output);
-	decode_cache (cpu, L1D_cache_table, output);
-	decode_cache (cpu, L2_cache_table, output);
-	decode_cache (cpu, L3_cache_table, output);
-	decode_cache (cpu, ITLB_cache_table, output);
+	decode_cache(cpu, TRACE_cache_table, output);
+	decode_cache(cpu, L1I_cache_table, output);
+	decode_cache(cpu, L1D_cache_table, output);
+	decode_cache(cpu, L2_cache_table, output);
+	decode_cache(cpu, L3_cache_table, output);
+	decode_cache(cpu, ITLB_cache_table, output);
+	decode_cache(cpu, DTLB_cache_table, output);
+
+	if (found_unknown == 0)
+		return;
+
+	/* Remove any known entries */
+	for (i=0; i<256; i++) {
+		clean_unknowns(TRACE_cache_table);
+		clean_unknowns(L1I_cache_table);
+		clean_unknowns(L1D_cache_table);
+		clean_unknowns(L2_cache_table);
+		clean_unknowns(L3_cache_table);
+		clean_unknowns(ITLB_cache_table);
+		clean_unknowns(DTLB_cache_table);
+	}
 
 	if (found_unknown == 0)
 		return;
@@ -218,7 +253,7 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 			printf ("%02x ", i);
 	}
 	printf ("\n");
-	decode_cache (cpu, DTLB_cache_table, output);
+	found_unknown = 0;
 }
 
 /*
