@@ -168,7 +168,7 @@ static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
 				cpu->cachesize_L3 += table[k].size;
 
 			if (output)
-				printf ("%s\n", table[k].string);
+				printf (" %s\n", table[k].string);
 		}
 		k++;
 	}
@@ -232,11 +232,15 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 
 	memset(&unknown_array, 0, sizeof(unknown_array));
 
+	if (output)
+		printf("Cache info\n");
 	decode_cache(cpu, TRACE_cache_table, output);
 	decode_cache(cpu, L1I_cache_table, output);
 	decode_cache(cpu, L1D_cache_table, output);
 	decode_cache(cpu, L2_cache_table, output);
 	decode_cache(cpu, L3_cache_table, output);
+	if (output)
+		printf("TLB info\n");
 	decode_cache(cpu, ITLB_cache_table, output);
 	decode_cache(cpu, DTLB_cache_table, output);
 	decode_cache(cpu, prefetch_table, output);
@@ -259,13 +263,16 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 	if (found_unknown == 0)
 		return;
 
-	printf ("Found unknown cache descriptors: ");
+	if (output)
+		printf ("Found unknown cache descriptors: ");
 
 	for (i=0; i<256; i++) {
 		if (unknown_array[i]==1)
-			printf ("%02x ", i);
+			if (output)
+				printf ("%02x ", i);
 	}
-	printf ("\n");
+	if (output)
+		printf ("\n");
 	found_unknown = 0;
 }
 
