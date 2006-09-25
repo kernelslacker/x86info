@@ -686,9 +686,9 @@ void Identify_Intel (struct cpudata *cpu)
 				// SL9S7 1066FSB 4MB L2
 				add_to_cpuname("E6700");
 				break;
-			case 2900:
+			case 2950:
 				// SL9S5 1066FSB 4MB L2
-				add_to_cpuname("X6800");
+				add_to_cpuname("E6800/X6800");
 				break;
 			}
 		} else {
