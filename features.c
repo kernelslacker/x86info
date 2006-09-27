@@ -1,7 +1,6 @@
 /*
- *  $Id: features.c,v 1.26 2004/03/19 14:44:41 davej Exp $
  *  This file is part of x86info
- *  (C) 2001 Dave Jones.
+ *  (C) 2001-2006 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
@@ -11,7 +10,22 @@
 #include <stdio.h>
 #include "x86info.h"
 
-void decode_feature_flags (struct cpudata *cpu)
+void flag_decode(unsigned long reg, const char *flags[])
+{
+	unsigned int i;
+
+	for (i=0; i<32; i++) {
+		if (reg & (1<<i)) {
+			if (flags[i])
+				printf(" %s", flags[i]);
+			else
+				printf(" [%u]", i);
+		}
+	}
+}
+
+
+void decode_feature_flags(struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 	unsigned int i;
@@ -79,7 +93,6 @@ void decode_feature_flags (struct cpudata *cpu)
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	};
 
-
 	const char *amd_cap_generic_ecx_flags[] = {
 		"sse3", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, "cmpxchg16b", NULL, NULL,
@@ -111,6 +124,7 @@ void decode_feature_flags (struct cpudata *cpu)
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};
+
 	const char *transmeta_cap_flags[] = {
 		"recovery", "longrun", NULL, "lrti", NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -134,7 +148,7 @@ void decode_feature_flags (struct cpudata *cpu)
 	for (i=0; i<32; i++) {
 		if (cpu->flags_edx & (1 << i)) {
 			if (!(generic_cap_flags_desc[i]))
-				printf(" [%d]", i);
+				printf(" [%u]", i);
 			if (verbose)
 				printf ("\t%s\n", generic_cap_flags_desc[i]);
 			else
@@ -153,61 +167,26 @@ void decode_feature_flags (struct cpudata *cpu)
 			if (cpu->maxei < 0x80000001)
 				break;
 			printf ("Extended feature flags:\n");
-			for (i=0; i<32; i++) {
-				if (cpu->eflags_edx & (1 << i)) {
-					if (amd_cap_extended_edx_flags[i])
-						printf(" %s", amd_cap_extended_edx_flags[i]);
-					else
-						printf(" [%d]", i);
-				}
-			}
-			for (i=0; i<32; i++) {
-				if (cpu->eflags_ecx & (1 << i)) {
-					if (amd_cap_extended_ecx_flags[i])
-						printf (" %s", amd_cap_extended_ecx_flags[i]);
-					else
-						printf(" [%d]", i);
-				}
-			}
+			flag_decode(cpu->eflags_edx, &amd_cap_extended_edx_flags);
+			flag_decode(cpu->eflags_ecx, &amd_cap_extended_ecx_flags);
 			break;
 
 		case VENDOR_CENTAUR:
 			printf ("\n");
 			printf ("Extended feature flags:\n");
-			for (i=0; i<32; i++) {
-				if (cpu->flags_ecx & (1<<i)) {
-					if (centaur_cap_extended_ecx_flags[i])
-						printf (" %s", centaur_cap_extended_ecx_flags[i]);
-					else
-						printf (" [%d]", i);
-				}
-			}
+			flag_decode(cpu->flags_ecx, &centaur_cap_extended_ecx_flags);
 			cpuid(cpu->number, 0xc0000000, &eax, &ebx, &ecx, &edx);
 			if (eax >=0xc0000001) {
 				cpuid(cpu->number, 0xc0000001, &eax, &ebx, &ecx, &edx);
 				cpu->flags_edx = edx;
-				for (i=0; i<32; i++) {
-					if (cpu->flags_edx & (1<<i)) {
-						if (centaur_cap_extended_edx_flags[i])
-							printf (" %s", centaur_cap_extended_edx_flags[i]);
-						else
-							printf (" [%d]", i);
-					}
-				}
+				flag_decode(cpu->flags_edx, &centaur_cap_extended_edx_flags);
 			}
 			break;
 
 		case VENDOR_TRANSMETA:
 			printf ("\n");
 			printf ("Extended feature flags:\n");
-			for (i = 0; i < 32; i++) {
-				if (cpu->flags_ecx & (1 << i)) {
-					if (transmeta_cap_flags[i])
-						printf (" %s", transmeta_cap_flags[i]);
-					else
-						printf (" [%d]", i);
-				}
-			}
+			flag_decode(cpu->flags_ecx, &transmeta_cap_flags);
 			break;
 
 		case VENDOR_CYRIX:
@@ -215,34 +194,14 @@ void decode_feature_flags (struct cpudata *cpu)
 			break;
 
 		case VENDOR_INTEL:
-			for (i=0; i<32; i++) {
-				if (cpu->flags_ecx & (1 << i)) {
-					if (intel_cap_generic_ecx_flags[i])
-						printf (" %s", intel_cap_generic_ecx_flags[i]);
-					else
-						printf (" [%d]", i);
-				}
-			}
 			printf ("\n");
+			printf ("Extended feature flags:\n");
+			flag_decode(cpu->flags_ecx, &intel_cap_generic_ecx_flags);
 			if (cpu->maxei < 0x80000001)
 				break;
-			printf ("Extended feature flags:\n");
-			for (i=0; i<32; i++) {
-				if (cpu->eflags_edx & (1 << i)) {
-					if (intel_cap_extended_edx_flags[i])
-						printf (" %s", intel_cap_extended_edx_flags[i]);
-					else
-						printf (" [%d]", i);
-				}
-			}
-			for (i = 0; i < 32; i++) {
-				if (cpu->eflags_ecx & (1 << i)) {
-					if (intel_cap_extended_ecx_flags[i])
-						printf (" %s", intel_cap_extended_ecx_flags[i]);
-					else
-						printf (" [%d]", i);
-				}
-			}
+			printf ("\n");
+			flag_decode(cpu->eflags_edx, &intel_cap_extended_edx_flags);
+			flag_decode(cpu->eflags_ecx, &intel_cap_extended_ecx_flags);
 			break;
 
 		default:
