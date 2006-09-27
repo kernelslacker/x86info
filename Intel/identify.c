@@ -370,7 +370,7 @@ void Identify_Intel (struct cpudata *cpu)
 	case 0x680:
 		switch (cpu->brand) {
 		case 2:
-			add_to_cpuname("Pentium III-M (Coppermine)");
+			add_to_cpuname("Pentium III/Pentium III-M (Coppermine)");
 			switch (cpu->stepping) {
 			case 1:
 				add_to_cpuname(" [cA2]");
