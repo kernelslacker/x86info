@@ -146,26 +146,29 @@ void decode_IDT_cacheinfo(struct cpudata *cpu)
 
 	if (cpu->maxei >= 0x80000005) {
 		/* TLB and cache info */
-		cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
-		printf ("Instruction TLB: %ld-way associative. %ld entries.\n", (ebx >> 8) & 0xff, ebx & 0xff);
-		printf ("Data TLB: %ld-way associative. %ld entries.\n", ebx >> 24, (ebx >> 16) & 0xff);
-		printf ("L1 Data cache:\n\tSize: %ldKb\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes.\n",
-			ecx >> 24, (ecx >> 16) & 0xff, (ecx >> 8) & 0xff, ecx & 0xff);
-		printf ("L1 Instruction cache:\n\tSize: %ldKb\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes.\n",
+		cpuid(cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
+		printf("Cache info\n");
+		printf(" L1 Instruction cache: %ldKB, %ld-way associative, %ld lines per tag, line size=%ld bytes.\n",
 			edx >> 24, (edx >> 16) & 0xff, (edx >> 8) & 0xff, edx & 0xff);
+		printf(" L1 Data cache: %ldKB %ld-way associative, %ld lines per tag, line size=%ld bytes.\n",
+			ecx >> 24, (ecx >> 16) & 0xff, (ecx >> 8) & 0xff, ecx & 0xff);
+		if (cpu->maxei >= 0x80000006) {
+			cpuid (cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
+			if ((cpu->family==6) && (cpu->model==7 || cpu->model==8))
+				/* Work around errata. */
+				printf (" L2 (on CPU) cache: %ldKB %ld-way associative, %ld lines per tag, line size=%ld bytes.\n",
+					ecx >> 24, (ecx >> 16) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
+			else
+				printf (" L2 (on CPU) cache: %ldKB %ld-way associative, %ld lines per tag, line size=%ld bytes.\n",
+					ecx >> 16, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
+		}
+		printf("TLB info\n");
+		cpuid(cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
+		printf(" Instruction TLB: %ld-way associative. %ld entries.\n", (ebx >> 8) & 0xff, ebx & 0xff);
+		printf(" Data TLB: %ld-way associative. %ld entries.\n", ebx >> 24, (ebx >> 16) & 0xff);
 	}
 
 	/* check on-chip L2 cache size */
-	if (cpu->maxei >= 0x80000006) {
-		cpuid (cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
-		if ((cpu->family==6) && (cpu->model==7 || cpu->model==8)) {
-			printf ("L2 cache size errata detected. Using workaround\n");
-			printf ("L2 (on CPU) cache:\n\tSize: %ldKb\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes.\n",
-				ecx >> 24, (ecx >> 16) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
-		} else
-			printf ("L2 (on CPU) cache:\n\tSize: %ldKb\t%ld-way associative.\n\tlines per tag=%ld\tline size=%ld bytes.\n",
-				ecx >> 16, (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
-	}
 }
 
 
