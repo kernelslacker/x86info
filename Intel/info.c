@@ -73,7 +73,6 @@ void display_Intel_info (struct cpudata *cpu)
 			dump_centrino_MSRs(cpu);
 	}
 
-	//show_Intel_caches(cpu);
 	decode_Intel_caches(cpu, 1);
 
 	decode_serial_number(cpu);

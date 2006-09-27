@@ -276,23 +276,3 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 	found_unknown = 0;
 }
 
-/*
-void show_Intel_caches(struct cpudata *cpu)
-{
-	if (!show_cacheinfo)
-		return;
-
-	if (cpu->cachesize_L1_I)
-		printf ("L1I:%d\n", cpu->cachesize_L1_I);
-	if (cpu->cachesize_L1_D)
-		printf ("L1D:%d\n",cpu->cachesize_L1_D);
-	if (cpu->cachesize_L2)
-		printf ("L2:%d\n", cpu->cachesize_L2);
-	if (cpu->cachesize_L3)
-		printf ("L3:%d\n", cpu->cachesize_L3);
-	if (cpu->cachesize_trace)
-		printf ("Trace cache: %d\n", cpu->cachesize_trace);
-	printf ("\n");
-}
-*/
-
