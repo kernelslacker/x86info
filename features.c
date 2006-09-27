@@ -105,6 +105,12 @@ void decode_feature_flags (struct cpudata *cpu)
 		NULL, NULL, NULL, NULL, NULL, NULL, "mmxext", NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, "3dnowext", "3dnow"
 	};
+	const char *centaur_cap_extended_edx_flags[] = {
+		NULL, NULL, "RNGp", "RNGe", NULL, NULL, "ACEp", "ACEe",
+		"ACE2p", "ACE2e", "PHEp", "PHEe", "PMMp", "PMMe", NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+	};
 	const char *transmeta_cap_flags[] = {
 		"recovery", "longrun", NULL, "lrti", NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -174,6 +180,19 @@ void decode_feature_flags (struct cpudata *cpu)
 						printf (" %s", centaur_cap_extended_ecx_flags[i]);
 					else
 						printf (" [%d]", i);
+				}
+			}
+			cpuid(cpu->number, 0xc0000000, &eax, &ebx, &ecx, &edx);
+			if (eax >=0xc0000001) {
+				cpuid(cpu->number, 0xc0000001, &eax, &ebx, &ecx, &edx);
+				cpu->flags_edx = edx;
+				for (i=0; i<32; i++) {
+					if (cpu->flags_edx & (1<<i)) {
+						if (centaur_cap_extended_edx_flags[i])
+							printf (" %s", centaur_cap_extended_edx_flags[i]);
+						else
+							printf (" [%d]", i);
+					}
 				}
 			}
 			break;
