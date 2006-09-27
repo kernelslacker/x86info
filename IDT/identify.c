@@ -186,8 +186,7 @@ void display_IDT_info(struct cpudata *cpu)
 	if (cpu->maxei == 0)
 		return;
 
-	if (show_cacheinfo)
-		decode_IDT_cacheinfo(cpu);
+	decode_IDT_cacheinfo(cpu);
 
 	if (cpu->family == 6 && show_registers)
 		dump_C3_MSR(cpu);
