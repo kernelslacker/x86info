@@ -14,7 +14,7 @@
 static char *idt_nameptr;
 #define add_to_cpuname(x)   idt_nameptr += snprintf(idt_nameptr, sizeof(x), "%s", x);
 
-void Identify_IDT (struct cpudata *cpu)
+void Identify_IDT(struct cpudata *cpu)
 {
 	char *nameptr;
 	unsigned long eax, ebx, ecx, edx;
@@ -27,7 +27,7 @@ void Identify_IDT (struct cpudata *cpu)
 	if (cpu->maxi < 1)
 		return;
 
-	cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
+	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
 	cpu->stepping = eax & 0xf;
 	cpu->model = (eax >> 4) & 0xf;
 	cpu->family = (eax >> 8) & 0xf;
@@ -121,11 +121,11 @@ void Identify_IDT (struct cpudata *cpu)
 		case 0x6A0:	switch (cpu->stepping) {
 					case 0:
 					case 8 ... 0xF:
-							add_to_cpuname("VIA C3 (Esther) [C7-M]");
-							break;
+						add_to_cpuname("VIA C3 (Esther) [C7-M]");
+						break;
 					case 1 ... 7:
-							add_to_cpuname("VIA C3 (Ruth) [C7-M]");
-							break;
+						add_to_cpuname("VIA C3 (Ruth) [C7-M]");
+						break;
 					}
 					break;
 
@@ -134,8 +134,9 @@ void Identify_IDT (struct cpudata *cpu)
 	// C5X
 	// CZA
 
-		default:	add_to_cpuname("Unknown VIA CPU");
-					break;
+		default:
+			add_to_cpuname("Unknown VIA CPU");
+			break;
 	}
 }
 
@@ -174,14 +175,14 @@ void decode_IDT_cacheinfo(struct cpudata *cpu)
 
 void display_IDT_info(struct cpudata *cpu)
 {
-	printf ("Family: %u Model: %u Stepping: %u\n",
+	printf("Family: %u Model: %u Stepping: %u\n",
 		cpu->family, cpu->model, cpu->stepping);
 	printf ("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);
 
 
 	/* Check for presence of extended info */
-	decode_feature_flags (cpu);
+	decode_feature_flags(cpu);
 
 	if (cpu->maxei == 0)
 		return;
