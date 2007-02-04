@@ -19,7 +19,60 @@
 #include <unistd.h>
 #include <errno.h>
 
+#if defined(__FreeBSD__)
+# include <sys/ioctl.h>
+# include <cpu.h>
+#endif
+
 #include "x86info.h"
+
+#if defined(__FreeBSD__)
+void cpuid (int CPU_number, unsigned int idx,
+	unsigned long *eax,
+	unsigned long *ebx,
+	unsigned long *ecx,
+	unsigned long *edx)
+{
+	static int nodriver=0;
+	char cpuname[20];
+	unsigned char buffer[16];
+	int fh;
+	cpu_cpuid_args_t args;
+
+	if (nodriver==1) {
+		cpuid_UP(idx, eax, ebx, ecx, edx);
+		return;
+	}
+
+	args.level = idx;
+	/* Ok, use the /dev/CPU interface in preference to the _up code. */
+	(void)snprintf(cpuname,18, "/dev/cpu%d", CPU_number);
+	fh = open(cpuname, O_RDONLY);
+	if (fh != -1) {
+		if (ioctl(fh, CPU_CPUID, &args) != 0) {
+			perror(cpuname);
+			exit(EXIT_FAILURE);
+		}
+		if (eax!=0)	*eax = args.data[0];
+		if (ebx!=0)	*ebx = args.data[1];
+		if (ecx!=0)	*ecx = args.data[2];
+		if (edx!=0)	*edx = args.data[3];
+		if (close(fh) == -1) {
+			perror("close");
+			exit(EXIT_FAILURE);
+		}
+	} else {
+		/* Something went wrong, just do UP and hope for the best. */
+		nodriver = 1;
+		if (!silent && nrCPUs != 1)
+			perror(cpuname);
+		used_UP = 1;
+		cpuid_UP (idx, eax, ebx, ecx, edx);
+		return;
+	}
+}
+
+#else /* !__FreeBSD__ */
 
 void cpuid (int CPU_number, unsigned int idx,
 	unsigned long *eax,
@@ -66,3 +119,5 @@ void cpuid (int CPU_number, unsigned int idx,
 		return;
 	}
 }
+
+#endif /* __FreeBSD__ */
