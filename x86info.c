@@ -193,7 +193,7 @@ int main (int argc, char **argv)
 	if (need_root && !user_is_root)
 		printf ("Need to be root to use specified options.\n");
 
-	nrCPUs = sysconf (_SC_NPROCESSORS_CONF);
+	nrCPUs = sysconf (_SC_NPROCESSORS_ONLN);
 
 	if (!silent) {
 		printf ("Found %u CPU", nrCPUs);
