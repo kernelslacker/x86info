@@ -662,7 +662,11 @@ void Identify_Intel (struct cpudata *cpu)
 		if(cpu->MHz/100 >= 29) {
 			add_to_cpuname("Extreme ");
 		} else {
-			add_to_cpuname("Duo ");
+			if (cpu->stepping == 7) {
+				add_to_cpuname("Quad (Kentsfield)");
+			} else {
+				add_to_cpuname("Duo ");
+			}
 		}
 		// Check for Thermal Monitor 2 feature bit, because only the
 		// non-mobile processors have it
