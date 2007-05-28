@@ -69,7 +69,7 @@ test:
 	scripts/testnodes
 
 VERSION=1.20
-	
+
 release:
 	git repack -a -d
 	git-prune-packed
@@ -80,6 +80,10 @@ clean:
 	@find . -name "*~" -exec rm {} \;
 	@rm -f x86info x86info.exe
 
-splint:
-	splint +posixlib -badflag -fileextensions -type -nullassign -boolops -showcolumn -sysunrecog -fullinitblock -onlytrans -unrecog -usedef -statictrans -compdestroy -predboolint -predboolothers -D__`uname -m`__ *.c  AMD/*.c  Cyrix/*.c Intel/*.c NatSemi/*.c RiSE/*.c SiS/*.c IDT/*.c
+C_SRC = *.c AMD/*.c Cyrix/*.c Intel/*.c NatSemi/*.c RiSE/*.c SiS/*.c IDT/*.c
 
+splint:
+	splint +posixlib -badflag -fileextensions -type -nullassign -boolops -showcolumn -sysunrecog -fullinitblock -onlytrans -unrecog -usedef -statictrans -compdestroy -predboolint -predboolothers -D__`uname -m`__ $(C_SRC)
+
+sparse:
+	sparse $(C_SRC)
