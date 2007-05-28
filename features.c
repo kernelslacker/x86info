@@ -167,26 +167,26 @@ void decode_feature_flags(struct cpudata *cpu)
 			if (cpu->maxei < 0x80000001)
 				break;
 			printf ("Extended feature flags:\n");
-			flag_decode(cpu->eflags_edx, &amd_cap_extended_edx_flags);
-			flag_decode(cpu->eflags_ecx, &amd_cap_extended_ecx_flags);
+			flag_decode(cpu->eflags_edx, amd_cap_extended_edx_flags);
+			flag_decode(cpu->eflags_ecx, amd_cap_extended_ecx_flags);
 			break;
 
 		case VENDOR_CENTAUR:
 			printf ("\n");
 			printf ("Extended feature flags:\n");
-			flag_decode(cpu->flags_ecx, &centaur_cap_extended_ecx_flags);
+			flag_decode(cpu->flags_ecx, centaur_cap_extended_ecx_flags);
 			cpuid(cpu->number, 0xc0000000, &eax, &ebx, &ecx, &edx);
 			if (eax >=0xc0000001) {
 				cpuid(cpu->number, 0xc0000001, &eax, &ebx, &ecx, &edx);
 				cpu->flags_edx = edx;
-				flag_decode(cpu->flags_edx, &centaur_cap_extended_edx_flags);
+				flag_decode(cpu->flags_edx, centaur_cap_extended_edx_flags);
 			}
 			break;
 
 		case VENDOR_TRANSMETA:
 			printf ("\n");
 			printf ("Extended feature flags:\n");
-			flag_decode(cpu->flags_ecx, &transmeta_cap_flags);
+			flag_decode(cpu->flags_ecx, transmeta_cap_flags);
 			break;
 
 		case VENDOR_CYRIX:
@@ -196,12 +196,12 @@ void decode_feature_flags(struct cpudata *cpu)
 		case VENDOR_INTEL:
 			printf ("\n");
 			printf ("Extended feature flags:\n");
-			flag_decode(cpu->flags_ecx, &intel_cap_generic_ecx_flags);
+			flag_decode(cpu->flags_ecx, intel_cap_generic_ecx_flags);
 			if (cpu->maxei < 0x80000001)
 				break;
 			printf ("\n");
-			flag_decode(cpu->eflags_edx, &intel_cap_extended_edx_flags);
-			flag_decode(cpu->eflags_ecx, &intel_cap_extended_ecx_flags);
+			flag_decode(cpu->eflags_edx, intel_cap_extended_edx_flags);
+			flag_decode(cpu->eflags_ecx, intel_cap_extended_ecx_flags);
 			break;
 
 		default:
