@@ -1,4 +1,5 @@
 CFLAGS = -Wall -W -Wshadow -g -O2
+CC = gcc
 
 SHELL = /bin/sh
 

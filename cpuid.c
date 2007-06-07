@@ -90,8 +90,14 @@ void cpuid (int CPU_number, unsigned int idx,
 		return;
 	}
 
-	/* Ok, use the /dev/CPU interface in preference to the _up code. */
-	(void)snprintf(cpuname,18, "/dev/cpu/%d/cpuid", CPU_number);
+#ifdef __sun__
+	/* Solaris doesn't (yet) have per-CPU interface */
+	(void)snprintf(cpuname,20, "/dev/cpu/self/cpuid");
+#else
+	/* Ok, use the /dev/cpu interface in preference to the _up code. */
+	(void)snprintf(cpuname,20, "/dev/cpu/%d/cpuid", CPU_number);
+#endif
+
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1) {
 #ifndef S_SPLINT_S

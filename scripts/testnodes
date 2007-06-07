@@ -1,5 +1,6 @@
-#!/bin/sh
-# FIXME: Don't spit out these warnings on *BSD / Win32.
+#!/bin/bash
+
+[ `uname -s` != "Linux" ] && exit 0
 
 NRNODES=`grep processor /proc/cpuinfo | wc -l`
 need=0
