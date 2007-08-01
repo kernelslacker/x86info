@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -74,6 +75,11 @@ void cpuid (int CPU_number, unsigned int idx,
 
 #else /* !__FreeBSD__ */
 
+/* Kernel CPUID driver's minimum supported read size
+ * (see linux/arch/i386/kernel/cpuid.c)
+ */
+#define CPUID_CHUNK_SIZE (16)
+
 void cpuid (int CPU_number, unsigned int idx,
 	unsigned long *eax,
 	unsigned long *ebx,
@@ -82,7 +88,7 @@ void cpuid (int CPU_number, unsigned int idx,
 {
 	static int nodriver=0;
 	char cpuname[20];
-	unsigned char buffer[16];
+	unsigned char buffer[CPUID_CHUNK_SIZE];
 	int fh;
 
 	if (nodriver==1) {
@@ -90,20 +96,20 @@ void cpuid (int CPU_number, unsigned int idx,
 		return;
 	}
 
+	memset(cpuname, 0, sizeof(cpuname));
 #ifdef __sun__
 	/* Solaris doesn't (yet) have per-CPU interface */
-	(void)snprintf(cpuname,20, "/dev/cpu/self/cpuid");
+	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/self/cpuid");
 #else
 	/* Ok, use the /dev/cpu interface in preference to the _up code. */
-	(void)snprintf(cpuname,20, "/dev/cpu/%d/cpuid", CPU_number);
+	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%d/cpuid", CPU_number);
 #endif
-
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1) {
 #ifndef S_SPLINT_S
 		lseek64(fh, (off64_t)idx, SEEK_CUR);
 #endif
-		if (read(fh, &buffer[0], 16) == -1) {
+		if (read(fh, &buffer[0], CPUID_CHUNK_SIZE) == -1) {
 			perror(cpuname);
 			exit(EXIT_FAILURE);
 		}
