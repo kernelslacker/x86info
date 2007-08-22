@@ -724,11 +724,30 @@ void Identify_Intel (struct cpudata *cpu)
 		// The Sept 06 Core 2 Intel Errata documentation says there are
 		// at least B1 and B2 steppings.
 		switch(cpu->stepping) {
+		case 2:
+			// 2M L2
+			// SL9TB E4300 1.86GHz
+			// SLA3F E4400 2GHz
+			// SL9TA E6300 1.86GHz
+			// SL9T9 E6400 2.13GHz
+			add_to_cpuname(" [L2]");
+			break;
 		// TODO: B1 as stepping 5 is a 100% guess
 		case 5:
 			add_to_cpuname(" [B1]");
 			break;
 		case 6:
+			// 2M L2
+			// SL9SA E6300 1.86GHz
+			// SL9S9 E6400 2.13GHz
+			//
+			// 4M L2
+			// SLA4U E6320 1.86GHz
+			// SLA4T E6420 2.13GHz
+			// SL9S8 E6600 2.4GHz
+			// SL9ZL E6700 2.66GHz
+			// SL9ZF E6700 2.66GHz
+			// SL9S5 X6800 2.93GHz
 			add_to_cpuname(" [B2]");
 			break;
 		case 7:
@@ -738,10 +757,19 @@ void Identify_Intel (struct cpudata *cpu)
 			// SLACP [G0] 2.93GHz  QX6800
 			break;
 		case 0xb:
+			// SLAA5 2.33GHz E6540
+			// SLA9X 2.33GHz E6550
+			// SLA9V 2.66GHz E6750
+			// SLA9U 3GHz    E6850
 			// SLAFN 3GHz    QX6850
 			// SLACQ 2.66GHz Q6700
 			// SLACR 2.4GHz  Q6600
 			add_to_cpuname(" [G0]");
+			break;
+		case 0xd:
+			// SLA98 E4400 2GHz
+			// SLA95 E4500 2GHz
+			add_to_cpuname(" [M0]");
 			break;
 		}
 		break;
