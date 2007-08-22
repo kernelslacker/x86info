@@ -731,6 +731,18 @@ void Identify_Intel (struct cpudata *cpu)
 		case 6:
 			add_to_cpuname(" [B2]");
 			break;
+		case 7:
+			// SL9UK [B3] 2.93GHz  QX6800
+			// SL9UL [B3] 2.66GHz  QX6700
+			// SL9UM [B3] 2.4GHz   Q6600
+			// SLACP [G0] 2.93GHz  QX6800
+			break;
+		case 0xb:
+			// SLAFN 3GHz    QX6850
+			// SLACQ 2.66GHz Q6700
+			// SLACR 2.4GHz  Q6600
+			add_to_cpuname(" [G0]");
+			break;
 		}
 		break;
 
