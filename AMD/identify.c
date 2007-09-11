@@ -665,11 +665,12 @@ out_660:
 	}
 }
 
-
 void display_AMD_info(struct cpudata *cpu)
 {
+	unsigned long eax, ebx, ecx, edx;
+
 	printf("Family: %u Model: %u Stepping: %u\n",
-	       cpu->family, cpu->model, cpu->stepping);
+	       family(cpu), model(cpu), cpu->stepping);
 	printf ("CPU Model : %s\n", cpu->name);
 	get_model_name(cpu);
 
@@ -694,16 +695,48 @@ void display_AMD_info(struct cpudata *cpu)
 	if (show_bugs)
 		show_amd_bugs(cpu);
 
+	if (cpu->maxi >= 0x05) {
+		cpuid (cpu->number, 0x05, &eax, &ebx, &ecx, NULL);
+		printf("Monitor/Mwait: min/max line size %d/%d%s%s\n",
+		       (int) (eax & 0xffff), (int) (ebx & 0xffff),
+		       (ecx & 0x2) ? ", ecx bit 0 support" : "",
+		       (ecx & 0x1) ? ", enumeration extension" : "");
+	}
+
+	if (cpu->maxei >= 0x8000000a) {
+		cpuid (cpu->number, 0x8000000a, &eax, &ebx, NULL, &edx);
+		printf("SVM: revision %d, %d ASIDs,",
+		       (int) (eax & 0xff), (int) ebx);
+		if (edx & 1)
+			printf(" np,");
+		if (edx & 2)
+			printf(" lbrVirt,");
+		if (edx & 4)
+			printf(" SVMLock,");
+		if (edx & 8)
+			printf(" NRIPSave");
+		printf("\n");
+	}
+
 	/* AMD Multicore characterisation */
 	if (cpu->maxei >= 0x80000008) {
-		int nr_cores;
-		unsigned long ecx;
+		int n, p;
+		cpuid (cpu->number, 0x80000008, &eax, NULL, &ecx, NULL);
+		printf("Address Size: %d bits virtual, %d bits physical\n",
+		       (int) (eax >> 8) & 0xff, (int) eax & 0xff);
 
-		cpuid (cpu->number, 0x80000008, NULL, NULL, &ecx, NULL);
-		nr_cores = 1 + (ecx & 0xff);
+		p = (ecx >> 12) & 0xf;
+		n = (ecx & 0xff) + 1;
+		if (p)
+			p = 1 << p;
+		else
+			p = n;
 
-		if (nr_cores > 1)
-			printf ("The physical package has %d cores\n", nr_cores);
+		if (p > 1)
+			printf("The physical package has %d of %d "
+			       "possible cores implemented.\n", n, p);
 	}
+
+
 }
 
