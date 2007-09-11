@@ -170,6 +170,7 @@ static int readType(void)
 static void processorEntry(void)
 {
 	ProcEntry entry;
+	int t, family, model;
 
 	/* read it into local memory */
 	readEntry(&entry, sizeof(entry));
@@ -185,11 +186,14 @@ static void processorEntry(void)
 				(entry.cpuFlags & PROCENTRY_FLAG_BP) ? "BSP" : "AP",
 				(entry.cpuFlags & PROCENTRY_FLAG_EN) ? "usable" : "unusable");
 
-		printf("\t %d\t %d\t %d",
-				(int) (entry.cpuSignature >> 8) & 0x0f,
-				(int) (entry.cpuSignature >> 4) & 0x0f,
-				(int)  entry.cpuSignature & 0x0f);
-
+		t = (int) entry.cpuSignature;
+		family = (t >> 8) & 0xf;
+		model = (t >> 4) & 0xf;
+		if (family == 0xf) {
+			family += (t >> 20) & 0xff;
+			model += (t >> 12) & 0xf0;
+		}
+		printf("\t %d\t %d\t %d", family, model, t & 0xf);
 		printf("\t 0x%04x\n", entry.featureFlags);
 	}
 }
