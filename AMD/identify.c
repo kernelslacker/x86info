@@ -103,28 +103,103 @@ void set_fam10h_revinfo(int id, struct cpudata *c)
 
 static void do_assoc(unsigned long assoc)
 {
-	if ((assoc & 0xff) == 255)
-		printf("Fully");
-	else
-		printf("%lu-way", assoc);
-	printf(" associative. ");
+	switch (assoc & 0xff) {
+	case 0x0:
+		break;
+	case 0x1:
+		printf("Direct mapped.");
+		break;
+	case 0xff:
+		printf("Fully associative.");
+		break;
+	default:
+		printf("%lu-way associative", assoc);
+	}
+}
+
+static void do_l2assoc(unsigned long assoc)
+{
+	unsigned long a;
+
+	a = 0;
+	switch (assoc) {
+	case 0x0:
+		printf("Disabled. ");
+		break;
+	case 0x1:
+		printf("Direct mapped. ");
+		break;
+	case 0xf:
+		printf("Fully associative. ");
+		break;
+	case 0x2:
+		a = 2;
+		break;
+	case 0x4:
+		a = 4;
+		break;
+	case 0x6:
+		a = 8;
+		break;
+	case 0x8:
+		a = 16;
+		break;
+	case 0xa:
+		a = 32;
+		break;
+	case 0xb:
+		a = 48;
+		break;
+	case 0xc:
+		a = 64;
+		break;
+	case 0xd:
+		a = 96;
+		break;
+	case 0xe:
+		a = 128;
+		break;
+	default:
+		break;
+	}
+
+	if (a)
+		printf("%lu-way associative. ", a);
 }
 
 static void decode_AMD_cacheinfo(struct cpudata *cpu)
 {
 	unsigned long eax, ebx, ecx, edx;
 
+	if ((cpu->eflags_edx & 1<<26) && cpu->maxei >= 0x80000019) {
+		/* 1GB page TLB info */
+		cpuid(cpu->number, 0x80000019, &eax, &ebx, &ecx, &edx);
+
+		printf("L1 Data TLB (1G):           ");
+		do_l2assoc(eax >> 28);
+		printf("%lu entries.\n", (eax >> 16) & 0xfff);
+		printf("L1 Instruction TLB (1G):    ");
+		do_l2assoc((eax >> 12) & 0xf);
+		printf("%lu entries.\n", eax & 0xfff);
+	}
+
 	if (cpu->maxei >= 0x80000005) {
 		/* TLB and cache info */
 		cpuid(cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
 
-		printf("Instruction TLB: ");
-		do_assoc((ebx >> 8) & 0xff);
-		printf("%lu entries.\n", ebx & 0xff);
+		printf("L1 Data TLB (2M/4M):        ");
+		do_assoc(eax >> 24);
+		printf("%lu entries.\n", (eax >> 16) & 0xff);
+		printf("L1 Instruction TLB (2M/4M): ");
+		do_assoc((eax >> 8) & 0xff);
+		printf("%lu entries.\n", eax & 0xff);
 
-		printf("Data TLB: ");
+		printf("L1 Data TLB (4K):           ");
 		do_assoc(ebx >> 24);
 		printf("%lu entries.\n", (ebx >> 16) & 0xff);
+		printf("L1 Instruction TLB (4K):    ");
+		do_assoc((ebx >> 8) & 0xff);
+		printf("%lu entries.\n", ebx & 0xff);
 
 		printf("L1 Data cache:\n\t");
 		printf("Size: %luKb\t", ecx >> 24);
@@ -141,16 +216,54 @@ static void decode_AMD_cacheinfo(struct cpudata *cpu)
 		printf("line size=%lu bytes.\n", edx & 0xff);
 	}
 
-	/* check K6-III (and later) on-chip L2 cache size */
+	if ((cpu->eflags_edx & 1<<26) && cpu->maxei >= 0x80000019) {
+		/* 1GB page TLB info */
+		cpuid(cpu->number, 0x80000019, &eax, &ebx, &ecx, &edx);
+
+		printf("L2 Data TLB (1G):           ");
+		do_l2assoc(ebx >> 28);
+		printf("%lu entries.\n", (ebx >> 16) & 0xfff);
+		printf("L2 Instruction TLB (1G):    ");
+		do_l2assoc((ebx >> 12) & 0xf);
+		printf("%lu entries.\n", ebx & 0xfff);
+	}
+
 	if (cpu->maxei >= 0x80000006) {
+		/* K6-III (and later) on-chip L2 cache size */
 		cpuid(cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
-		printf("L2 (on CPU) cache:\n\t");
+
+		printf("L2 Data TLB (2M/4M):        ");
+		do_l2assoc(eax >> 28);
+		printf("%lu entries.\n", (eax >> 16) & 0xfff);
+		printf("L2 Instruction TLB (2M/4M): ");
+		do_l2assoc((eax >> 12) & 0xf);
+		printf("%lu entries.\n", eax & 0xfff);
+
+		printf("L2 Data TLB (4K):           ");
+		do_l2assoc(ebx >> 28);
+		printf("%lu entries.\n", (ebx >> 16) & 0xfff);
+		printf("L2 Instruction TLB (4K):    ");
+		do_l2assoc((ebx >> 12) & 0xf);
+		printf("%lu entries.\n", ebx & 0xfff);
+
+		printf("L2 cache:\n\t");
 		printf("Size: %luKb\t", ecx >> 16);
-		do_assoc((ecx >> 12) & 0x0f);
+		do_l2assoc((ecx >> 12) & 0x0f);
 		printf("\n\t");
 		printf("lines per tag=%lu\t", (ecx >> 8) & 0x0f);
 		printf("line size=%lu bytes.\n", ecx & 0xff);
+		if (family(cpu) == 0x10) {
+			/* family 0x10 has shared L3  cache */
+			printf("L3 (shared) cache:\n\t");
+			printf("Size: %luKb\t",
+			       (edx >> 18) * 512);
+			do_l2assoc((edx >> 12) & 0x0f);
+			printf("\n\t");
+			printf("lines per tag=%lu\t", (edx >> 8) & 0x0f);
+			printf("line size=%lu bytes.\n", edx & 0xff);
+		}
 	}
+
 	printf("\n");
 }
 
