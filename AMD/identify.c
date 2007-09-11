@@ -3,6 +3,9 @@
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
+ *  Copyright (C) 2007 Advanced Micro Devices, Inc.
+ *                     Andreas Herrmann <andreas.herrmann3@amd.com>
+ *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  AMD-specific information
@@ -12,12 +15,91 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/types.h>
 #include "../x86info.h"
 #include "AMD.h"
+#include "revision.h"
 
 static char *amd_nameptr;
-#define add_to_cpuname(x)	amd_nameptr += snprintf(amd_nameptr, sizeof(x), "%s", x);
+#define add_to_cpuname(x) \
+do { \
+	amd_nameptr += snprintf(amd_nameptr, sizeof(x), "%s", x); \
+} while(0)
+
+static void set_k8_name(struct k8_rev *r, struct cpudata *c)
+{
+	int i, id, cont;
+	char s[CPU_NAME_LEN];
+	const char *p;
+
+	s[0] = 0;
+	cont = 0;
+	for (i=0; (r!=NULL) && (i<ARRAY_SIZE(k8_names)); i++) {
+		p = NULL;
+		id = 1<<i;
+		if (r->nameid & id)
+			p = get_k8_name(id);
+		if (p) {
+			if (cont)
+				strncat(s, "/", CPU_NAME_LEN-1);
+			else
+				cont = 1;
+			strncat(s, p, CPU_NAME_LEN-1);
+		}
+	}
+	if (r)
+		snprintf(c->name, CPU_NAME_LEN, "%s (%s)", s, r->rev);
+	else
+		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
+}
+
+void set_k8_revinfo(int id, struct cpudata *c)
+{
+	int i;
+	struct k8_rev *r;
+
+	c->connector = 0;
+	r = NULL;
+	for (i=0; i<ARRAY_SIZE(k8_revisions); i++) {
+		if (k8_revisions[i].eax == id) {
+			r = &k8_revisions[i];
+			break;
+		}
+	}
+
+	set_k8_name(r, c);
+	c->connector = r ? r->socketid : 0;
+}
+
+void set_fam10h_revinfo(int id, struct cpudata *c)
+{
+	unsigned long eax, ebx, ecx, edx;
+	int pkg_id;
+	const char *p;
+	
+
+	p = get_fam10h_revision_name(id);
+	if (p)
+		snprintf(c->name, CPU_NAME_LEN,
+			 "Quad-Core/Dual-Core/Embedded Opteron (%s)", p);
+	else
+		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
+
+	cpuid(c->number, 0x80000001, &eax, &ebx, &ecx, &edx);
+	pkg_id = (ebx >> 28) & 0xf;
+
+	switch (pkg_id) {
+	case 0:
+		c->connector = CONN_SOCKET_F;
+		break;
+	case 1:
+		c->connector = CONN_SOCKET_AM2;
+		break;
+	default:
+		c->connector = 0;
+	}
+}
 
 static void do_assoc(unsigned long assoc)
 {
@@ -133,15 +215,28 @@ void Identify_AMD(struct cpudata *cpu)
 	cpu->stepping = eax & 0xf;
 	cpu->model = (eax >> 4) & 0xf;
 	cpu->family = (eax >> 8) & 0xf;
-	cpu->emodel = (eax >> 16) & 0xff;
-	cpu->efamily= (eax >> 20) & 0xf;
+	if (cpu->family == 0xf) {
+		cpu->emodel = (eax >> 16) & 0xf;
+		cpu->efamily= (eax >> 20) & 0xff;
+	} else {
+		cpu->emodel = 0;
+		cpu->efamily = 0;
+	}
+
+	if (family(cpu) == 0xf) {
+		set_k8_revinfo(eax, cpu);
+		return;
+	} else if (family(cpu) == 0x10) {
+		set_fam10h_revinfo(eax, cpu);
+		return;
+	}
 
 	switch (cpu->family) {
 	case 4:
 		cpu->connector = CONN_SOCKET_3;
 		break;
 	}
-
+	
 	switch (tuple(cpu) & 0xff0) {
 	case 0x430:
 		add_to_cpuname("Am486DX2-WT");
@@ -451,150 +546,6 @@ out_660:
   * Registered DIMM not required
   * Athlon64 3x00+ (Q3 2004)
   */
-
-	case 0xF00:
-		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname("Athlon 64 ");
-		switch (cpu->stepping) {
-		case 0:
-			add_to_cpuname("[SH7-A0]");
-			break;
-		case 1:
-			add_to_cpuname("[SH7-A2]");
-			break;
-		}
-		break;
-
-	case 0xF10:
-		add_to_cpuname("Opteron ES ");
-		cpu->connector = CONN_SOCKET_940;
-		switch (cpu->stepping) {
-		case 0:
-			add_to_cpuname("[SH7-A0]");
-			break;
-		case 1:
-			add_to_cpuname("[SH7-A2]");
-			break;
-		}
-		break;
-
-	case 0xF40:
-		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname("Athlon 64 ");
-		switch (cpu->stepping) {
-		case 0:
-			if (cpu->emodel==0) {
-				add_to_cpuname("[SH7-B0]");
-			} else {
-				add_to_cpuname("[SH8-D0]");
-			}
-			break;
-		case 8:
-			// need to check for longmode bit. could be athlon xp 3000+.
-			//  (These are 32bit only amd64's)
-			//might be mobile
-			add_to_cpuname("[SH7-C0]");
-			break;
-		case 0xa:
-			//might be mobile
-			add_to_cpuname("[SH7-CG]");
-			break;
-		}
-		break;
-
-	// Gar, these could also be athlon 64fx
-	case 0xF50:
-		cpu->connector = CONN_SOCKET_940;
-		add_to_cpuname("Opteron");
-		switch (cpu->stepping) {
-		case 0:
-			if (cpu->emodel==0) {
-				add_to_cpuname("[SH7-B0]");
-			} else {
-				add_to_cpuname("[SH8-D0]");
-			}
-			break;
-		case 1:
-			add_to_cpuname("[SH7-B3]");
-			break;
-		case 8:
-			add_to_cpuname("[SH7-C0]");
-			break;
-		case 0xA:
-			add_to_cpuname("[SH7-CG]");
-			break;
-		default:
-			break;
-		}
-		break;
-
-	case 0xF70:
-		add_to_cpuname("Athlon 64 ");
-		cpu->connector = CONN_SOCKET_939;
-		switch (cpu->stepping) {
-		case 0x0:
-			add_to_cpuname("[SH8-D0]");
-			break;
-		case 0xa:
-			add_to_cpuname("[SH7-CG]");
-			break;
-		}
-		break;
-
-	case 0xF80:
-		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname("Athlon 64 ");
-		switch (cpu->stepping) {
-		case 2:
-			//might be mobile
-			add_to_cpuname("CH7-CG");
-			break;
-		}
-		break;
-
-	case 0xFB0:
-		cpu->connector = CONN_SOCKET_939;
-		add_to_cpuname("Athlon 64 ");
-		switch (cpu->stepping) {
-		case 2:
-			add_to_cpuname("CH7-CG");
-			break;
-		}
-		break;
-
-	case 0xFC0:
-		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname("Athlon 64 ");
-		switch (cpu->stepping) {
-		case 0:
-			//might be mobile
-			add_to_cpuname("DH7-CG");
-			break;
-		}
-		break;
-
-	case 0xFE0:
-		//might be mobile
-		cpu->connector = CONN_SOCKET_754;
-		add_to_cpuname("Athlon 64 ");
-		switch (cpu->stepping) {
-		case 0:
-			add_to_cpuname("DH7-CG");
-			break;
-		}
-		break;
-
-
-	case 0xFF0:
-		cpu->connector = CONN_SOCKET_939;
-		add_to_cpuname("Athlon 64 ");
-		switch (cpu->stepping) {
-		case 0:
-			add_to_cpuname("DH7-CG");
-			break;
-		}
-		break;
-
 	default:
 		add_to_cpuname("Unknown CPU");
 		break;
