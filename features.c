@@ -56,20 +56,20 @@ void decode_feature_flags(struct cpudata *cpu)
 		"CMOV instruction",
 		"Page Attribute Table",
 		"36-bit PSEs",
-		"Processor serial number",
+		"Processor serial number",	/* reserved on AMD */
 		"CLFLUSH instruction",
 		NULL,
-		"Debug Trace Store",
-		"ACPI via MSR",
+		"Debug Trace Store",		/* reserved on AMD */
+		"ACPI via MSR",			/* reserved on AMD */
 		"MMX support",
 		"FXSAVE and FXRESTORE instructions",
 		"SSE support",
 		"SSE2 support",
-		"CPU self snoop",
+		"CPU self snoop",		/* reserved on AMD */
 		"Hyper-Threading",
-		"Thermal Monitor",
+		"Thermal Monitor",		/* reserved on AMD */
 		NULL,
-		"Pending Break Enable"
+		"Pending Break Enable"		/* reserved on AMD */
 	};
 	/* CPUID 0x00000001 ECX flags */
 	const char *intel_cap_generic_ecx_flags[] = {
@@ -94,20 +94,23 @@ void decode_feature_flags(struct cpudata *cpu)
 	};
 
 	const char *amd_cap_generic_ecx_flags[] = {
-		"sse3", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		"sse3", NULL, NULL, "mwait", NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, "cmpxchg16b", NULL, NULL,
-		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, "popcnt",
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};
 	const char *amd_cap_extended_edx_flags[] = {
-		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-		NULL, NULL, NULL, "syscall", NULL, NULL, NULL, NULL,
-		NULL, NULL, NULL, "mp/sempron", "nx", NULL, "mmxext", NULL,
-		NULL, "Fast fxsave/fxrstor", NULL, "rdtscp", NULL, "lm", "3dnowext", "3dnow"
-	};
+		"fpu", "vme", "de", "pse", "tsc", "msr", "pae", "mce",
+		"cx8", "apic", NULL, "sep", "mtrr", "pge", "mca", "cmov",
+		"pat", "pse36", NULL, "mp", "nx", NULL, "mmxext", "mmx",
+		"fxsr", "ffxsr", "page1gb", "rdtscp",
+		NULL, "lm", "3dnowext",	"3dnow"
+	}; /* "mp" defined for CPUs prior to AMD family 0xf */
+
 	const char *amd_cap_extended_ecx_flags[] = {
-		"lahf/sahf", "CMP legacy", "svm", "ExtApicSpace", "LockMovCr0", NULL, NULL, NULL,
-		"3DNowPrefetch", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		"lahf/sahf", "CmpLegacy", "svm", "ExtApicSpace",
+		"LockMovCr0", "abm", "sse4a", "misalignsse",
+		"3dnowPref", "osvw", "ibs", NULL, "skinit", "wdt", NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};
@@ -169,6 +172,7 @@ void decode_feature_flags(struct cpudata *cpu)
 			printf ("Extended feature flags:\n");
 			flag_decode(cpu->eflags_edx, amd_cap_extended_edx_flags);
 			flag_decode(cpu->eflags_ecx, amd_cap_extended_ecx_flags);
+			printf("\n");
 			break;
 
 		case VENDOR_CENTAUR:
