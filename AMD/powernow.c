@@ -30,85 +30,43 @@ double fid_codes[32] = {
 	15.0, 22.5, 16.0, 16.5, 17.0, 18.0, -1, -1,
 };
 
-void decode_powernow(struct cpudata *cpu)
+static void decode_fidvid(struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
 	union msr_vidctl vidctl;
 	union msr_fidvidstatus fidvidstatus;
-	int can_scale_vid=0, can_scale_bus=0;
-
-	if (cpu->maxei < 0x80000007)
-		return;
-
-	cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
-	printf("PowerNOW! Technology information\n");
-	printf("Available features:");
-
-	if (edx & (1<<0))
-		printf("\n\tTemperature sensing diode present.");
-
-	if (edx & (1<<1)) {
-		printf("\n\tBus divisor control");
-		can_scale_bus=1;
-	}
-
-	if (edx & (1<<2)) {
-		printf("\n\tVoltage ID control\n");
-		can_scale_vid=1;
-	}
-
-	if (edx & (1<<3))
-		printf ("\n\tThermal Trip\n");
-
-	if (edx & (1<<4))
-		printf ("\n\tThermal Monitoring\n");
-
-	if (edx & (1<<5))
-		printf ("\n\tSoftware Thermal Control\n");
-	if (edx & (1<<6))
-		printf ("100MHz multiplier control\n");
-
-	if (!(edx & (1<<0 | 1<<1 | 1<<2 | 1<<3 | 1<<4 | 1<<5 | 1<<6)))
-		printf(" None\n");
-	printf("\n");
-
-	if (can_scale_bus==0 && can_scale_vid==0)
-		return;
-
-	if (!user_is_root)
-		return;
 
 	dumpmsr(cpu->number, MSR_FID_VID_CTL, 64);
 	dumpmsr(cpu->number, MSR_FID_VID_STATUS, 64);
 	printf("\n");
 
 	if (read_msr(cpu->number, MSR_FID_VID_CTL, &vidctl.val) != 1) {
-		printf ("Something went wrong reading MSR_FID_VID_CTL\n");
+		printf("Something went wrong reading MSR_FID_VID_CTL\n");
 		return;
 	}
 
-	printf ("FID changes %s happen\n", vidctl.bits.FIDC ? "will" : "won't");
-	printf ("VID changes %s happen\n", vidctl.bits.VIDC ? "will" : "won't");
+	printf("FID changes %s happen\n", vidctl.bits.FIDC ? "will" : "won't");
+	printf("VID changes %s happen\n", vidctl.bits.VIDC ? "will" : "won't");
 
 	if (vidctl.bits.VIDC)
-		printf ("Current VID multiplier code: %0.3f\n", mobile_vid_table[vidctl.bits.VID]);
+		printf("Current VID multiplier code: %0.3f\n",
+			mobile_vid_table[vidctl.bits.VID]);
 	if (vidctl.bits.FIDC)
-		printf ("Current FSB multiplier code: %.1f\n", fid_codes[vidctl.bits.FID]);
+		printf("Current FSB multiplier code: %.1f\n",
+			fid_codes[vidctl.bits.FID]);
 
 	/* Now dump the status */
-
 	if (read_msr(cpu->number, MSR_FID_VID_STATUS, &fidvidstatus.val) != 1) {
-		printf ("Something went wrong reading MSR_FID_VID_STATUS\n");
+		printf("Something went wrong reading MSR_FID_VID_STATUS\n");
 		return;
 	}
 
 
-	printf ("Voltage ID codes: Maximum=%0.3fV Startup=%0.3fV Currently=%0.3fV\n",
+	printf("Voltage ID codes: Maximum=%0.3fV Startup=%0.3fV Currently=%0.3fV\n",
 		mobile_vid_table[fidvidstatus.bits.MVID],
 		mobile_vid_table[fidvidstatus.bits.SVID],
 		mobile_vid_table[fidvidstatus.bits.CVID]);
 
-	printf ("Frequency ID codes: Maximum=%.1fx Startup=%.1fx Currently=%.1fx\n",
+	printf("Frequency ID codes: Maximum=%.1fx Startup=%.1fx Currently=%.1fx\n",
 		fid_codes[fidvidstatus.bits.MFID],
 		fid_codes[fidvidstatus.bits.SFID],
 		fid_codes[fidvidstatus.bits.CFID]);
@@ -119,9 +77,141 @@ void decode_powernow(struct cpudata *cpu)
 //		fidvidstatus.MFID, fidvidstatus.SFID, fidvidstatus.CFID);
 
 	if (show_bios) {
-		printf ("Decoding BIOS PST tables (maxfid=%x, startvid=%x)\n",
-					fidvidstatus.bits.MFID, fidvidstatus.bits.SVID);
+		printf("Decoding BIOS PST tables (maxfid=%x, startvid=%x)\n",
+			fidvidstatus.bits.MFID, fidvidstatus.bits.SVID);
 		dump_PSB(cpu, fidvidstatus.bits.MFID, fidvidstatus.bits.SVID);
 	}
 }
 
+static double k8_vid_table[32] = {
+	1.550, 1.525, 1.500, 1.475, 1.450, 1.425, 1.400, 1.375,
+	1.350, 1.325, 1.300, 1.275, 1.250, 1.225, 1.200, 1.175,
+	1.150, 1.125, 1.100, 1.075, 1.050, 1.025, 1.000, 0.975,
+	0.950, 0.925, 0.900, 0.875, 0.850, 0.825, 0.800, 0.000,
+};
+
+static int k8_fid_codes[43] = {
+	4, -1, 5, -1, 6, -1, 7, -1, 8, -1, 9, -1, 10, -1, 11, -1,
+	12, -1, 13, -1, 14, -1, 15, -1, 16, -1, 17, -1, 18, -1, 19, -1,
+	20, -1, 21, -1, 22, -1, 23, -1, 24, -1, -25
+};
+
+static void k8_decode_fidvid(struct cpudata *cpu)
+{
+	union k8_msr_fidvidstatus fidvidstatus;
+
+	dumpmsr(cpu->number, MSR_FID_VID_CTL, 64);
+	dumpmsr(cpu->number, MSR_FID_VID_STATUS, 64);
+	printf("\n");
+
+	if (read_msr(cpu->number, MSR_FID_VID_STATUS, &fidvidstatus.val) != 1) {
+		printf ("Something went wrong reading MSR_FID_VID_STATUS\n");
+		return;
+	}
+
+	printf("Voltage ID codes: Maximum=%0.3fV Startup=%0.3fV Currently=%0.3fV\n",
+		k8_vid_table[fidvidstatus.bits.maxvid],
+		k8_vid_table[fidvidstatus.bits.svid],
+		k8_vid_table[fidvidstatus.bits.cvid]);
+
+	printf("Frequency ID codes: Maximum=%dx Startup=%dx Currently=%dx\n",
+		k8_fid_codes[fidvidstatus.bits.mfid],
+		k8_fid_codes[fidvidstatus.bits.sfid],
+		k8_fid_codes[fidvidstatus.bits.cfid]);
+}
+
+static int get_cof(int fid, int did, int family)
+{
+	int t = 0x10;
+	if (family == 0x10)
+		t = 0x10;
+	else
+		t = 0x8;
+	return (100*(fid+t)>>did);
+}
+
+static void decode_pstates(struct cpudata *cpu)
+{
+	int i, psmax, pscur;
+	union msr_pstate pstate;
+	unsigned long long val;
+
+	if (read_msr(cpu->number, MSR_PSTATE_LIMIT, &val) != 1) {
+		printf("Something went wrong reading MSR_PSTATE_CUR_LIMIT\n");
+		return;
+	}
+	psmax = (val >> 4) & 0x7;
+
+	if (read_msr(cpu->number, MSR_PSTATE_STATUS, &val) != 1) {
+		printf("Something went wrong reading MSR_PSTATE_STATUS\n");
+		return;
+	}
+	pscur = val & 0x7;
+
+	for (i=0; i<=psmax; i++) {
+		if (read_msr(cpu->number, MSR_PSTATE + i, &pstate.val) != 1) {
+			printf("Something went wrong reading MSR_PSTATE_%d\n",
+				i);
+			return;
+		}
+		printf("Pstate-%d: fid=%x, did=%x, vid=%x (%dMHz)%s\n", i,
+		       pstate.bits.fid, pstate.bits.did, pstate.bits.vid,
+		       get_cof(pstate.bits.fid, pstate.bits.did, family(cpu)),
+		       (i == pscur) ? " (current)"  : "");
+	}
+	printf("\n");
+}
+
+void decode_powernow(struct cpudata *cpu)
+{
+	unsigned long eax, ebx, ecx, edx;
+	int can_scale_vid=0, can_scale_fid=0;
+
+	if (cpu->maxei < 0x80000007)
+		return;
+
+	cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
+	printf("PowerNOW! Technology information\n");
+	printf("Available features:");
+
+	if (edx & (1<<0))
+		printf("\n\tTemperature sensing diode present.");
+	if (edx & (1<<1)) {
+		printf("\n\tFrequency ID control");
+		can_scale_fid=1;
+	}
+	if (edx & (1<<2)) {
+		printf("\n\tVoltage ID control");
+		can_scale_vid=1;
+	}
+	if (edx & (1<<3))
+		printf ("\n\tThermal Trip");
+	if (edx & (1<<4))
+		printf ("\n\tThermal Monitoring");
+	if (edx & (1<<5))
+		printf ("\n\tSoftware Thermal Control");
+	if (edx & (1<<6))
+		printf ("\n\t100MHz multiplier control");
+	if (edx & (1<<7)) {
+		printf ("\n\tHardware P-state control");
+		can_scale_fid = can_scale_vid = 1;
+	}
+	if (edx & (1<<8))
+		printf ("\n\tinvariant TSC");
+	if (!(edx & 0x1f))
+		printf(" None");
+	printf("\n\n");
+
+	if (can_scale_fid==0 && can_scale_vid==0)
+		return;
+
+	if (!user_is_root)
+		return;
+
+	if (family(cpu) < 0xf)
+		decode_fidvid(cpu);
+	else if (family(cpu) == 0xf)
+		k8_decode_fidvid(cpu);
+	else if (family(cpu) >= 0x10)
+		decode_pstates(cpu);
+}
