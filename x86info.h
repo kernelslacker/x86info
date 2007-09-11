@@ -14,6 +14,7 @@ typedef unsigned int u32;
 #define VENDOR_TRANSMETA 7
 #define VENDOR_SIS 8
 
+#define CPU_NAME_LEN 80
 struct cpudata {
 	struct cpudata *next;
 	unsigned int number;
@@ -30,7 +31,7 @@ struct cpudata {
 	unsigned int cachesize_L3;
 	unsigned int cachesize_trace;
 	unsigned int maxi, maxei, maxei2;
-	char name[80];
+	char name[CPU_NAME_LEN];
 	unsigned char connector;
 	unsigned int flags_ecx;
 	unsigned int flags_edx;
@@ -40,6 +41,9 @@ struct cpudata {
 	char * datasheet_url;
 	char * errata_url;
 };
+
+#define family(c) (c->family + c->efamily)
+#define model(c) ((c->emodel << 4) + c->model)
 
 #define tuple(c) ((c->family<<8)|(c->model<<4)|(c->stepping))
 #define etuple(c) ((c->efamily<<8)|(c->model<<4)|(c->stepping))
@@ -74,6 +78,9 @@ struct cpudata {
 #define CONN_SOCKET_939		27
 #define CONN_SOCKET_940		28
 #define CONN_LGA775		29
+#define CONN_SOCKET_F		30
+#define CONN_SOCKET_AM2		31
+#define CONN_SOCKET_S1G1	32
 
 extern void cpuid (int, unsigned int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 extern void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
