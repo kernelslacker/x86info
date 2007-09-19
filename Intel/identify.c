@@ -756,6 +756,20 @@ void Identify_Intel (struct cpudata *cpu)
 			// SL9UM [B3] 2.4GHz   Q6600
 			// SLACP [G0] 2.93GHz  QX6800
 			break;
+		case 0xa:
+			// sCode Procname (IDA/HFM)
+			// SLA43 T7700 (2.6GHz/2.4GHz)
+			// SLA3M T7700 (2.6GHz/2.4GHz)
+			// SLA44 T7500 (2.4GHz/2.2GHz)
+			// SLA3N T7500 (2.4GHz/2.2GHz)
+			// SLA45 T7300 (2.4GHz/2.0GHz)
+			// SLA3P T7300 (2.2GHz/2.0GHz)
+			// SLA3R L7500 (1.8GHz/1.6GHz)
+			// SLA3S L7300 (1.6GHz/1.4GHz)
+			// SLA33 X7900 (2.8GHz)
+			// SLA6Z X7800 (2.6GHz)
+			add_to_cpuname(" [E1]");
+			break;
 		case 0xb:
 			// SLAA5 2.33GHz E6540
 			// SLA9X 2.33GHz E6550
