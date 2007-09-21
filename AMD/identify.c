@@ -107,13 +107,13 @@ static void do_assoc(unsigned long assoc)
 	case 0x0:
 		break;
 	case 0x1:
-		printf("Direct mapped.");
+		printf("Direct mapped. ");
 		break;
 	case 0xff:
-		printf("Fully associative.");
+		printf("Fully associative. ");
 		break;
 	default:
-		printf("%lu-way associative", assoc);
+		printf("%lu-way associative. ", assoc);
 	}
 }
 
@@ -705,16 +705,16 @@ void display_AMD_info(struct cpudata *cpu)
 
 	if (cpu->maxei >= 0x8000000a) {
 		cpuid (cpu->number, 0x8000000a, &eax, &ebx, NULL, &edx);
-		printf("SVM: revision %d, %d ASIDs,",
+		printf("SVM: revision %d, %d ASIDs",
 		       (int) (eax & 0xff), (int) ebx);
 		if (edx & 1)
-			printf(" np,");
+			printf(", np");
 		if (edx & 2)
-			printf(" lbrVirt,");
+			printf(", lbrVirt");
 		if (edx & 4)
-			printf(" SVMLock,");
+			printf(", SVMLock");
 		if (edx & 8)
-			printf(" NRIPSave");
+			printf(", NRIPSave");
 		printf("\n");
 	}
 
