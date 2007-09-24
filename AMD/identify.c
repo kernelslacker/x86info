@@ -390,10 +390,12 @@ void Identify_AMD(struct cpudata *cpu)
 		cpu->connector = CONN_SOCKET_5_7;
 		break;
 	case 0x560:
+		// 166,200,233 MHz
 		add_to_cpuname("K6 (0.30 um)");
 		cpu->connector = CONN_SOCKET_7;
 		break;
 	case 0x570:
+		// 200,233,266,300 MHz
 		add_to_cpuname("K6 (0.25 um)");
 		cpu->connector = CONN_SOCKET_7;
 		break;
