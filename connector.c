@@ -28,6 +28,8 @@ static struct {
 	{CONN_SOCKET_S1G1, "Socket S1g1"},
 	{CONN_SOCKET_F, "Socket F (1207)"},
 	{CONN_SOCKET_AM2, "Socket AM2"},
+	{CONN_SOCKET_F_R2, "Socket Fr2 (1207)"},
+	{CONN_SOCKET_AM2_R2, "Socket AM2r2"},
 	/* Intel specific sockets */
 	{CONN_SOCKET_57B, "Socket 5/7 (320 Pin PGA)"},
 	{CONN_MOBILE_7, "Mobile Module (320 Lead TCP)"},

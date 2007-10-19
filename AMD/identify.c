@@ -91,10 +91,10 @@ void set_fam10h_revinfo(int id, struct cpudata *c)
 
 	switch (pkg_id) {
 	case 0:
-		c->connector = CONN_SOCKET_F;
+		c->connector = CONN_SOCKET_F_R2;
 		break;
 	case 1:
-		c->connector = CONN_SOCKET_AM2;
+		c->connector = CONN_SOCKET_AM2_R2;
 		break;
 	default:
 		c->connector = 0;
