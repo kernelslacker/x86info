@@ -23,22 +23,10 @@
 #define _TURION		0x0200
 #define _TURION_X2	0x0400
 
-#define ARRAY_SIZE(x) ((int)(sizeof(x)/sizeof(x[0])))
-
 struct id_string {
 	int id;
 	const char *name;
 };
-
-#define _get_name(title,table) \
-static const char *get_##title##_name(int id) \
-{ \
-        int i; \
-        for (i = 0; i < ARRAY_SIZE(table); i++) \
-                if (id == table[i].id) \
-                        return table[i].name;   \
-        return NULL; \
-}
 
 struct id_string k8_names[] = {
 	{_OPTERON, "Opteron"},
@@ -53,7 +41,7 @@ struct id_string k8_names[] = {
 	{_TURION, "Turion"},
 	{_TURION_X2, "Turion 64 X2"},
 };
-_get_name(k8, k8_names);
+get_name(k8, int, k8_names);
 
 struct k8_rev {
 	int eax;
@@ -115,6 +103,6 @@ struct id_string fam10h_revisions[] = {
 	{0x0100f2a, "DR-BA"},
 	{0x0100f22, "DR-B2"},
 };
-_get_name(fam10h_revision, fam10h_revisions);
+get_name(fam10h_revision, int, fam10h_revisions);
 
 #endif /* _amd_revision_h_ */

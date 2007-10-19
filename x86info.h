@@ -14,6 +14,42 @@ typedef unsigned int u32;
 #define VENDOR_TRANSMETA 7
 #define VENDOR_SIS 8
 
+enum connector {
+	CONN_UNKNOWN = 0,
+	CONN_SOCKET_3,
+	CONN_SOCKET_4,
+	CONN_SOCKET_5,
+	CONN_SOCKET_7,
+	CONN_SOCKET_370,
+	CONN_SOCKET_370_FCPGA,
+	CONN_SOCKET_5_7,
+	CONN_SUPER_SOCKET_7,
+	CONN_SLOT_A,
+	CONN_SOCKET_A,
+	CONN_SOCKET_A_SLOT_A,
+	CONN_SOCKET_A_OR_SLOT_A,
+	CONN_SOCKET_57B,
+	CONN_MOBILE_7,
+	CONN_SOCKET_8,
+	CONN_SLOT_1,
+	CONN_SLOT_2,
+	CONN_SOCKET_423,
+	CONN_MMC,
+	CONN_MMC2,
+	CONN_BGA474,
+	CONN_BGA,
+	CONN_SOCKET_754,
+	CONN_SOCKET_478,
+	CONN_SOCKET_603,
+	CONN_MICROFCBGA,
+	CONN_SOCKET_939,
+	CONN_SOCKET_940,
+	CONN_LGA775,
+	CONN_SOCKET_F,
+	CONN_SOCKET_AM2,
+	CONN_SOCKET_S1G1,
+};
+
 #define CPU_NAME_LEN 80
 struct cpudata {
 	struct cpudata *next;
@@ -32,7 +68,7 @@ struct cpudata {
 	unsigned int cachesize_trace;
 	unsigned int maxi, maxei, maxei2;
 	char name[CPU_NAME_LEN];
-	unsigned char connector;
+	enum connector connector;
 	unsigned int flags_ecx;
 	unsigned int flags_edx;
 	unsigned int eflags_ecx;
@@ -48,39 +84,17 @@ struct cpudata {
 #define tuple(c) ((c->family<<8)|(c->model<<4)|(c->stepping))
 #define etuple(c) ((c->efamily<<8)|(c->model<<4)|(c->stepping))
 
-#define CONN_UNKNOWN		0
-#define CONN_SOCKET_3		1
-#define CONN_SOCKET_4		2
-#define CONN_SOCKET_5		3
-#define CONN_SOCKET_7		4
-#define CONN_SOCKET_370		5
-#define CONN_SOCKET_370_FCPGA	6
-#define CONN_SOCKET_5_7		7
-#define CONN_SUPER_SOCKET_7	8
-#define CONN_SLOT_A		9
-#define CONN_SOCKET_A		10
-#define CONN_SOCKET_A_SLOT_A	11
-#define CONN_SOCKET_A_OR_SLOT_A	12
-#define CONN_SOCKET_57B		13
-#define CONN_MOBILE_7		14
-#define CONN_SOCKET_8		15
-#define CONN_SLOT_1		16
-#define CONN_SLOT_2		17
-#define CONN_SOCKET_423		18
-#define CONN_MMC		19
-#define CONN_MMC2		20
-#define CONN_BGA474		21
-#define CONN_BGA		22
-#define CONN_SOCKET_754		23
-#define CONN_SOCKET_478		24
-#define CONN_SOCKET_603		25
-#define CONN_MICROFCBGA		26
-#define CONN_SOCKET_939		27
-#define CONN_SOCKET_940		28
-#define CONN_LGA775		29
-#define CONN_SOCKET_F		30
-#define CONN_SOCKET_AM2		31
-#define CONN_SOCKET_S1G1	32
+#define ARRAY_SIZE(x) ((int)(sizeof(x)/sizeof(x[0])))
+
+#define get_name(title,type,table) \
+static const char *get_##title##_name(type id) \
+{ \
+	int i; \
+        for (i = 0; i < ARRAY_SIZE(table); i++) \
+                if (id == table[i].id) \
+                        return table[i].name;   \
+        return NULL; \
+}
 
 extern void cpuid (int, unsigned int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
 extern void cpuid_UP (int, unsigned long *, unsigned long *, unsigned long *, unsigned long *);
@@ -120,7 +134,7 @@ extern void interpret_eblcr(u32 lo);
 extern int issmp(int verb);
 extern int enumerate_cpus(void);
 extern void get_model_name (struct cpudata *cpu);
-extern void decode_connector (unsigned int type);
+extern void decode_connector(enum connector type);
 extern void show_benchmarks (void);
 
 extern int show_bench;
