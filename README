@@ -36,7 +36,7 @@ Caveats:
 
 *  If you are using the cpuid / msr drivers built as modules
    as opposed to built into the kernel, then you should ensure
-   the following is in your /etc/modules.conf
+   the following is in your /etc/modprobe.conf:
 
 	alias char-major-202 msr
 	alias char-major-203 cpuid
