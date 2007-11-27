@@ -73,7 +73,7 @@ VERSION=1.21
 release:
 	git repack -a -d
 	git-prune-packed
-	git-tar-tree HEAD x86info-$(VERSION) | gzip -9 > x86info-$(VERSION).tgz
+	git-archive --format=tar --prefix=x86info-$(VERSION)/ HEAD | gzip -9 > x86info-$(VERSION).tgz
 
 clean:
 	@find . -name "*.o" -exec rm {} \;
