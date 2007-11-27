@@ -778,6 +778,16 @@ void Identify_Intel (struct cpudata *cpu)
 			// SLAFN 3GHz    QX6850
 			// SLACQ 2.66GHz Q6700
 			// SLACR 2.4GHz  Q6600
+			//
+			// Xeon 7200/7300 series
+			// SLA67 2.93GHz X7350 [8M L2]
+			// SLA68 2.4GHz  E7340 [8M L2]
+			// SLA77 2.4GHz  E7330 [8M L2]
+			// SLA69 2.13GHz E7320 [4M L2]
+			// SLA6A 1.6GHz  E7310 [4M L2]
+			// SLA6B 1.86GHz L7345 [8M L2]
+			// SLA6C 2.93GHz E7220 [8M L2]
+			// SLA6D 2.4GHz  E7210 [8M L2]
 			add_to_cpuname(" [G0]");
 			break;
 		case 0xd:
