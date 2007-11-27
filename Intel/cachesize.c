@@ -67,14 +67,6 @@ static struct _cache_table L2_cache_table[] =
 	{ 0x43, 512, "L2 unified cache: 512KB, 4-way associative. 32 byte line size." },
 	{ 0x44, 1024, "L2 unified cache: 1MB, 4-way associative. 32 byte line size." },
 	{ 0x45, 2048, "L2 unified cache: 2MB, 4-way associative. 32 byte line size." },
-	{ 0x46, 4096, "L3 unified cache: 4MB, 4-way associative. 64 byte line size." },
-	{ 0x47, 8192, "L3 unified cache: 8MB, 8-way associative. 64 byte line size." },
-	{ 0x49, 4096, "L3 unified cache: 4MB, 16-way associative. 64 byte line size." },
-	{ 0x4a, 6144, "L3 unified cache: 6MB, 12-way associative. 64 byte line size." },
-	{ 0x4b, 8192, "L3 unified cache: 8MB, 16-way associative. 64 byte line size." },
-	{ 0x4c, 12288, "L3 unified cache: 12MB, 12-way associative. 64 byte line size." },
-	{ 0x4d, 16384, "L3 unified cache: 16MB, 16-way associative. 64 byte line size." },
-	{ 0x78, 1024, "L3 unified cache: 1MB, sectored, 8-way associative. 64 byte line size." },
 	{ 0x79, 128, "L2 unified cache: 128KB, sectored, 8-way associative. 64 byte line size." },
 	{ 0x7a, 256, "L2 unified cache: 256KB, sectored, 8-way associative. 64 byte line size." },
 	{ 0x7b, 512, "L2 unified cache: 512KB, sectored, 8-way associative. 64 byte line size." },
@@ -87,6 +79,31 @@ static struct _cache_table L2_cache_table[] =
 	{ 0x85, 2048, "L2 unified cache: 2MB, 8-way associative. 32 byte line size." },
 	{ 0x86, 512, "L2 unified cache: 512KB, 4-way associative. 64 byte line size." },
 	{ 0x87, 1024, "L2 unified cache: 1MB, 8-way associative. 64 byte line size." },
+	{ 0, 0, NULL }
+};
+
+static struct _cache_table L2L3_cache_table[] =
+{
+	{ 0x46, 4096, "L2 unified cache: 4MB, 4-way associative. 64 byte line size." },
+	{ 0x47, 8192, "L2 unified cache: 8MB, 8-way associative. 64 byte line size." },
+	{ 0x49, 4096, "L2 unified cache: 4MB, 16-way associative. 64 byte line size." },
+	{ 0x4a, 6144, "L2 unified cache: 6MB, 12-way associative. 64 byte line size." },
+	{ 0x4b, 8192, "L2 unified cache: 8MB, 16-way associative. 64 byte line size." },
+	{ 0x4c, 12288, "L2 unified cache: 12MB, 12-way associative. 64 byte line size." },
+	{ 0x4d, 16384, "L2 unified cache: 16MB, 16-way associative. 64 byte line size." },
+	{ 0x78, 1024, "L2 unified cache: 1MB, sectored, 8-way associative. 64 byte line size." },
+	{ 0, 0, NULL }
+};
+static struct _cache_table L3L2_cache_table[] =
+{
+	{ 0x46, 4096, "L3 unified cache: 4MB, 4-way associative. 64 byte line size." },
+	{ 0x47, 8192, "L3 unified cache: 8MB, 8-way associative. 64 byte line size." },
+	{ 0x49, 4096, "L3 unified cache: 4MB, 16-way associative. 64 byte line size." },
+	{ 0x4a, 6144, "L3 unified cache: 6MB, 12-way associative. 64 byte line size." },
+	{ 0x4b, 8192, "L3 unified cache: 8MB, 16-way associative. 64 byte line size." },
+	{ 0x4c, 12288, "L3 unified cache: 12MB, 12-way associative. 64 byte line size." },
+	{ 0x4d, 16384, "L3 unified cache: 16MB, 16-way associative. 64 byte line size." },
+	{ 0x78, 1024, "L3 unified cache: 1MB, sectored, 8-way associative. 64 byte line size." },
 	{ 0, 0, NULL }
 };
 
@@ -132,8 +149,8 @@ static struct _cache_table prefetch_table[] =
 	{0xf1, 64, "128 byte prefetching."},
 };
 
-static char found_unknown=0;
-static char unknown_array[256];
+static unsigned char found_unknown=0;
+static unsigned char unknown_array[256];
 
 /* Decode Intel TLB and cache info descriptors */
 //TODO : Errata workaround. http://www.sandpile.org/post/msgs/20002736.htm
@@ -141,6 +158,7 @@ static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
 			struct _cache_table *table)
 {
 	int k=0;
+	int found=0;
 
 	/* "No 2nd-level cache or, if processor contains a valid 2nd-level
 	   cache, no 3rd-level cache". Skip this pointless entry.*/
@@ -149,7 +167,7 @@ static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
 
 	//TODO: Add description to link-list in cpu->
 
-	while (table[k].descriptor != 0) {
+	while ((table[k].descriptor != 0) && (found==0)) {
 		if (table[k].descriptor == des) {
 
 			if (table == TRACE_cache_table)
@@ -163,20 +181,24 @@ static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
 
 			if (table == L2_cache_table)
 				cpu->cachesize_L2 += table[k].size;
+			if (table == L2L3_cache_table)
+				cpu->cachesize_L2 += table[k].size;
 
 			if (table == L3_cache_table)
+				cpu->cachesize_L3 += table[k].size;
+			if (table == L3L2_cache_table)
 				cpu->cachesize_L3 += table[k].size;
 
 			if (output)
 				printf (" %s\n", table[k].string);
+			found = 1;
 		}
 		k++;
 	}
-	if (table[k].descriptor == 0) {
-		if (unknown_array[des]==0) {
-			unknown_array[des]=1;
-			found_unknown++;
-		}
+
+	if ((found==0) && (unknown_array[des]==0)) {
+		unknown_array[des]=1;
+		found_unknown++;
 	}
 }
 
@@ -223,9 +245,10 @@ void clean_unknowns(struct _cache_table *table)
 }
 
 
-void decode_Intel_caches (struct cpudata *cpu, int output)
+void decode_Intel_caches(struct cpudata *cpu, int output)
 {
-	unsigned int i;
+	unsigned int i = 0;
+	unsigned char oldknown;
 
 	if (cpu->maxi < 2)
 		return;
@@ -234,10 +257,20 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 
 	if (output)
 		printf("Cache info\n");
+
 	decode_cache(cpu, TRACE_cache_table, output);
 	decode_cache(cpu, L1I_cache_table, output);
 	decode_cache(cpu, L1D_cache_table, output);
+	oldknown = found_unknown;
 	decode_cache(cpu, L2_cache_table, output);
+	if (found_unknown > 0) {
+		if (oldknown == found_unknown) {
+			 decode_cache(cpu, L2L3_cache_table, output);
+		} else {
+			 decode_cache(cpu, L3L2_cache_table, output);
+		}
+	}
+
 	decode_cache(cpu, L3_cache_table, output);
 	if (output)
 		printf("TLB info\n");
@@ -249,16 +282,15 @@ void decode_Intel_caches (struct cpudata *cpu, int output)
 		return;
 
 	/* Remove any known entries */
-	for (i=0; i<256; i++) {
-		clean_unknowns(TRACE_cache_table);
-		clean_unknowns(L1I_cache_table);
-		clean_unknowns(L1D_cache_table);
-		clean_unknowns(L2_cache_table);
-		clean_unknowns(L3_cache_table);
-		clean_unknowns(ITLB_cache_table);
-		clean_unknowns(DTLB_cache_table);
-		clean_unknowns(prefetch_table);
-	}
+	clean_unknowns(TRACE_cache_table);
+	clean_unknowns(L1I_cache_table);
+	clean_unknowns(L1D_cache_table);
+	clean_unknowns(L2_cache_table);
+	clean_unknowns(L3_cache_table);
+	clean_unknowns(L2L3_cache_table);
+	clean_unknowns(ITLB_cache_table);
+	clean_unknowns(DTLB_cache_table);
+	clean_unknowns(prefetch_table);
 
 	if (found_unknown == 0)
 		return;
