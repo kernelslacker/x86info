@@ -16,24 +16,28 @@
 #define _ATHLON64	0x0004
 #define _ATHLON64_X2	0x0008
 #define _ATHLON64_FX	0x0010
-#define _ATHLON64_M	0x0020
-#define _SEMPRON	0x0040
-#define _SEMPRON_M	0x0080
-#define _ATHLON_XPM	0x0100
-#define _TURION		0x0200
-#define _TURION_X2	0x0400
+#define _ATHLON64_FX_DC	0x0020
+#define _ATHLON64_M	0x0040
+#define _SEMPRON	0x0080
+#define _SEMPRON_M	0x0100
+#define _ATHLON_XPM	0x0200
+#define _TURION		0x0400
+#define _TURION_X2	0x0800
 
 struct id_string {
 	int id;
 	const char *name;
 };
 
+/* Note: For newer K8 NPT parts naming switched from "Athlon 64"
+   to "Athlon" etc., but we stick to the old naming here. */
 struct id_string k8_names[] = {
 	{_OPTERON, "Opteron"},
 	{_OPTERON_DC, "Dual-Core Opteron"},
 	{_ATHLON64, "Athlon 64"},
 	{_ATHLON64_X2, "Athlon 64 X2 Dual-Core"},
 	{_ATHLON64_FX, "Athlon 64 FX"},
+	{_ATHLON64_FX_DC, "Athlon 64 FX Dual-Core"},
 	{_ATHLON64_M, "Mobile Athlon 64"},
 	{_SEMPRON, "Sempron"},
 	{_SEMPRON_M, "Mobile Sempron"},
@@ -91,12 +95,30 @@ struct k8_rev k8_revisions[] = {
 	{0x20ff2, CONN_SOCKET_939, _ATHLON64|_SEMPRON, "DH-E6"},
 	{0x20f12, CONN_SOCKET_940, _OPTERON_DC, "JH-E6"},
 	{0x20f32, CONN_SOCKET_939, _OPTERON_DC|_ATHLON64_X2, "JH-E6"},
+
+	/* K8 NPT */
 	{0x40f12, CONN_SOCKET_F, _OPTERON_DC, "JH-F2"},
-	{0x40f32, CONN_SOCKET_AM2, _ATHLON64_X2|_OPTERON_DC, "JH-F2"},
+	{0x40f13, CONN_SOCKET_F, _OPTERON_DC, "JH-F3"},
+	{0x40f32, CONN_SOCKET_AM2,
+	 _ATHLON64_X2|_ATHLON64_FX_DC|_OPTERON_DC, "JH-F2"},
+	{0x40f33, CONN_SOCKET_AM2,
+	 _ATHLON64_X2|_ATHLON64_FX_DC|_OPTERON_DC, "JH-F3"},
 	{0x40f82, CONN_SOCKET_S1G1, _TURION_X2, "BH-F2"},
 	{0x40fb2, CONN_SOCKET_AM2, _ATHLON64_X2, "BH-F2"},
-	{0x40ff2, CONN_SOCKET_AM2, _SEMPRON|_ATHLON64, "DH-F2"},
-	{0x50ff2, CONN_SOCKET_AM2, _SEMPRON|_ATHLON64, "DH-F2"},
+	{0x40fc2, CONN_SOCKET_S1G1,_ATHLON64|_SEMPRON|_SEMPRON_M, "DH-F2"},
+	{0x40ff2, CONN_SOCKET_AM2, _ATHLON64|_SEMPRON, "DH-F2"},
+	{0x50ff2, CONN_SOCKET_AM2, _ATHLON64|_SEMPRON, "DH-F2"},
+	{0x50ff3, CONN_SOCKET_AM2, _ATHLON64, "DH-F3"},
+	{0x60f81, CONN_SOCKET_S1G1,_ATHLON64_X2, "BH-G1"},
+	{0x60f82, CONN_SOCKET_S1G1,_ATHLON64_X2|_TURION_X2, "BH-G2"},
+	{0x60fb1, CONN_SOCKET_AM2,_ATHLON64_X2, "BH-G1"},
+	{0x60fb2, CONN_SOCKET_AM2,_ATHLON64_X2, "BH-G2"},
+	{0x60fc2, CONN_SOCKET_S1G1,_SEMPRON_M, "DH-G2"},
+	{0x60ff2, CONN_SOCKET_AM2,_SEMPRON|_ATHLON64, "DH-G2"},
+	{0x70fc2, CONN_SOCKET_S1G1,_SEMPRON_M, "DH-G2"},
+	{0x70ff1, CONN_SOCKET_AM2,_SEMPRON|_ATHLON64, "DH-G1"},
+	{0x70ff2, CONN_SOCKET_AM2,_SEMPRON, "DH-G2"},
+	{0xc0f13, CONN_SOCKET_F, _ATHLON64_FX, "JH-F3"},
 };
 
 struct id_string fam10h_revisions[] = {
