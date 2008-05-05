@@ -68,6 +68,7 @@ static struct _cache_table L2_cache_table[] =
 	{ 0x43, 512, "L2 unified cache: 512KB, 4-way associative. 32 byte line size." },
 	{ 0x44, 1024, "L2 unified cache: 1MB, 4-way associative. 32 byte line size." },
 	{ 0x45, 2048, "L2 unified cache: 2MB, 4-way associative. 32 byte line size." },
+	{ 0x4e, 6144, "L2 unified cache: 6MB, 24-way set associative, 64-byte line size." },
 	{ 0x79, 128, "L2 unified cache: 128KB, sectored, 8-way associative. 64 byte line size." },
 	{ 0x7a, 256, "L2 unified cache: 256KB, sectored, 8-way associative. 64 byte line size." },
 	{ 0x7b, 512, "L2 unified cache: 512KB, sectored, 8-way associative. 64 byte line size." },
