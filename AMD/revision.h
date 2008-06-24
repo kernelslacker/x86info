@@ -136,4 +136,9 @@ struct fam10h_rev fam10h_revisions[] = {
 	{0x0100f23, _OPTERON|_PHENOM, "DR-B3"},
 };
 
+struct id_string fam11h_revisions[] = {
+	{0x0200f31, "LG-B1"},
+};
+get_name(fam11h_revision, int, fam11h_revisions);
+
 #endif /* _amd_revision_h_ */

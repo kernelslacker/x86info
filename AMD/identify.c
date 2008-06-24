@@ -89,7 +89,7 @@ static void set_fam10h_name(struct fam10h_rev *r, struct cpudata *c)
 			 "Quad-Core Opteron (%s)", r->rev);
 }
 
-static void set_fam10h_connector(struct cpudata *c)
+static void set_connector(struct cpudata *c)
 {
 	unsigned long eax, ebx, ecx, edx;
 	int pkg_id;
@@ -103,6 +103,9 @@ static void set_fam10h_connector(struct cpudata *c)
 		break;
 	case 1:
 		c->connector = CONN_SOCKET_AM2_R2;
+		break;
+	case 2:
+		c->connector = CONN_SOCKET_S1G2;
 		break;
 	default:
 		c->connector = 0;
@@ -121,7 +124,21 @@ void set_fam10h_revinfo(int id, struct cpudata *c)
 		}
 	}
 	set_fam10h_name(r, c);
-	set_fam10h_connector(c);
+	set_connector(c);
+}
+
+void set_fam11h_revinfo(int id, struct cpudata *c)
+{
+	const char *p;
+
+	p = get_fam11h_revision_name(id);
+	if(p)
+		snprintf(c->name, CPU_NAME_LEN,
+			 "AMD Turion X2 Ultra Dual-Core (%s)", p);
+	else
+		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
+
+	set_connector(c);
 }
 
 static void do_assoc(unsigned long assoc)
@@ -364,6 +381,9 @@ void Identify_AMD(struct cpudata *cpu)
 		return;
 	} else if (family(cpu) == 0x10) {
 		set_fam10h_revinfo(eax, cpu);
+		return;
+	} else if (family(cpu) == 0x11) {
+		set_fam11h_revinfo(eax, cpu);
 		return;
 	}
 

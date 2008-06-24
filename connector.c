@@ -26,6 +26,7 @@ static struct {
 	{CONN_SOCKET_939, "Socket 939"},
 	{CONN_SOCKET_940, "Socket 940"},
 	{CONN_SOCKET_S1G1, "Socket S1g1"},
+	{CONN_SOCKET_S1G2, "Socket S1g2"},
 	{CONN_SOCKET_F, "Socket F (1207)"},
 	{CONN_SOCKET_AM2, "Socket AM2"},
 	{CONN_SOCKET_F_R2, "Socket Fr2 (1207)"},
