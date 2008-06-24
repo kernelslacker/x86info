@@ -72,19 +72,27 @@ void set_k8_revinfo(int id, struct cpudata *c)
 	c->connector = r ? r->socketid : 0;
 }
 
-void set_fam10h_revinfo(int id, struct cpudata *c)
+
+static void set_fam10h_name(struct fam10h_rev *r, struct cpudata *c)
+{
+	if (!r) {
+		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
+		return;
+	}
+
+	if (r->nameid & _PHENOM)
+		snprintf(c->name, CPU_NAME_LEN,
+			 "Quad-Core Opteron/Phenom (%s)",
+			 r->rev);
+	else if (r->nameid)
+		snprintf(c->name, CPU_NAME_LEN,
+			 "Quad-Core Opteron (%s)", r->rev);
+}
+
+static void set_fam10h_connector(struct cpudata *c)
 {
 	unsigned long eax, ebx, ecx, edx;
 	int pkg_id;
-	const char *p;
-	
-
-	p = get_fam10h_revision_name(id);
-	if (p)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "Quad-Core/Dual-Core/Embedded Opteron (%s)", p);
-	else
-		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
 
 	cpuid(c->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 	pkg_id = (ebx >> 28) & 0xf;
@@ -99,6 +107,21 @@ void set_fam10h_revinfo(int id, struct cpudata *c)
 	default:
 		c->connector = 0;
 	}
+}
+
+void set_fam10h_revinfo(int id, struct cpudata *c)
+{
+	int i;
+	struct fam10h_rev *r = NULL;
+	
+	for (i=0; i<ARRAY_SIZE(fam10h_revisions); i++) {
+		if (fam10h_revisions[i].eax == id) {
+			r = &fam10h_revisions[i];
+			break;
+		}
+	}
+	set_fam10h_name(r, c);
+	set_fam10h_connector(c);
 }
 
 static void do_assoc(unsigned long assoc)

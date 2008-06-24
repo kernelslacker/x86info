@@ -121,10 +121,19 @@ struct k8_rev k8_revisions[] = {
 	{0xc0f13, CONN_SOCKET_F, _ATHLON64_FX, "JH-F3"},
 };
 
-struct id_string fam10h_revisions[] = {
-	{0x0100f2a, "DR-BA"},
-	{0x0100f22, "DR-B2"},
+#define _OPTERON	0x0001
+#define _PHENOM		0x0002
+
+struct fam10h_rev {
+	int eax;
+	int nameid;
+	const char* rev;
 };
-get_name(fam10h_revision, int, fam10h_revisions);
+
+struct fam10h_rev fam10h_revisions[] = {
+	{0x0100f2a, _OPTERON, "DR-BA"},
+	{0x0100f22, _OPTERON|_PHENOM, "DR-B2"},
+	{0x0100f23, _OPTERON|_PHENOM, "DR-B3"},
+};
 
 #endif /* _amd_revision_h_ */
