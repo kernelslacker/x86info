@@ -15,7 +15,6 @@ static char *centaur_nameptr;
 void identify_centaur(struct cpudata *cpu)
 {
 	char *nameptr;
-	unsigned int eax, ebx, ecx, edx;
 
 	centaur_nameptr = nameptr = cpu->name;
 

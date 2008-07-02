@@ -11,10 +11,8 @@
 static char *NatSemi_nameptr;
 #define add_to_cpuname(x)   NatSemi_nameptr += snprintf(NatSemi_nameptr, sizeof(x), "%s", x);
 
-void Identify_NatSemi (struct cpudata *cpu)
+void identify_natsemi(struct cpudata *cpu)
 {
-	unsigned int eax, ebx, ecx, edx;
-
 	NatSemi_nameptr = cpu->name;
 
 	switch (tuple(cpu) & 0xff0) {
@@ -23,10 +21,4 @@ void Identify_NatSemi (struct cpudata *cpu)
 		default:	add_to_cpuname("Unknown CPU");
 					break;
 	}
-}
-
-
-void display_NatSemi_info(struct cpudata *cpu)
-{
-	get_model_name (cpu);
 }

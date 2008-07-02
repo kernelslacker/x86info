@@ -112,17 +112,14 @@ extern void Identify_AMD (struct cpudata *cpu);
 extern void Identify_Cyrix (struct cpudata *cpu);
 extern void identify_centaur(struct cpudata *cpu);
 extern void Identify_Intel (struct cpudata *cpu);
-extern void Identify_RiSE (struct cpudata *cpu);
-extern void Identify_NatSemi (struct cpudata *cpu);
-extern void Identify_SiS (struct cpudata *cpu);
+extern void identify_RiSE(struct cpudata *cpu);
+extern void identify_natsemi(struct cpudata *cpu);
+extern void identify_sis(struct cpudata *cpu);
 
 extern void display_AMD_info(struct cpudata *cpu);
 extern void display_Cyrix_info(struct cpudata *cpu);
 extern void display_centaur_info(struct cpudata *cpu);
 extern void display_Intel_info(struct cpudata *cpu);
-extern void display_NatSemi_info(struct cpudata *cpu);
-extern void display_RiSE_info(struct cpudata *cpu);
-extern void display_SiS_info(struct cpudata *cpu);
 
 extern void get_feature_flags(struct cpudata *cpu);
 extern void show_feature_flags(struct cpudata *cpu);

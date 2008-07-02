@@ -75,13 +75,13 @@ void identify(struct cpudata *cpu)
 		identify_centaur(cpu);
 		break;
 	case VENDOR_NATSEMI:
-		Identify_NatSemi(cpu);
+		identify_natsemi(cpu);
 		break;
 	case VENDOR_RISE:
-		Identify_RiSE(cpu);
+		identify_RiSE(cpu);
 		break;
 	case VENDOR_SIS:
-		Identify_SiS(cpu);
+		identify_sis(cpu);
 		break;
 	}
 }
@@ -113,15 +113,15 @@ void show_info(struct cpudata *cpu)
 		break;
 
 	case VENDOR_NATSEMI:
-		display_NatSemi_info(cpu);
+		get_model_name(cpu);
 		break;
 
 	case VENDOR_RISE:
-		display_RiSE_info(cpu);
+		get_model_name(cpu);
 		break;
 
 	case VENDOR_SIS:
-		display_SiS_info(cpu);
+		get_model_name(cpu);
 		break;
 
 	default:
