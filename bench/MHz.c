@@ -16,16 +16,7 @@
 #include <signal.h>
 
 #include "../x86info.h"
-
-static inline unsigned long long int rdtsc(void)
-{
-	unsigned int low, high;
-	unsigned long tsc;
-
-	__asm__ __volatile__("rdtsc" : "=a" (low), "=d" (high));
-	tsc = ((unsigned long long) high << 32) | low;
-	return tsc;
-}
+#include "bench.h"
 
 static volatile int nosignal = 0;
 

@@ -145,9 +145,9 @@ extern int HaveCPUID(void);
 extern void interpret_eblcr(u32 lo);
 extern int issmp(int verb);
 extern int enumerate_cpus(void);
-extern void get_model_name (struct cpudata *cpu);
+extern void get_model_name(struct cpudata *cpu);
 extern void decode_connector(enum connector type);
-extern void show_benchmarks (void);
+extern void show_benchmarks(struct cpudata *cpu);
 extern void decode_serial_number(struct cpudata *cpu);
 
 extern int show_bench;

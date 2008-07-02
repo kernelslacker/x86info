@@ -43,7 +43,7 @@ static void usage (char *programname)
 	printf("Usage: %s [<switches>]\n\
 -a,   --all\n\
       --bench\n\
-	  --bios\n\
+      --bios\n\
       --bugs\n\
 -c,   --cache\n\
       --connector\n\
@@ -88,8 +88,8 @@ static void parse_command_line (int argc, char **argv)
 			need_root = 1;
 		}
 
-//		if (!strcmp(arg, "--bench"))
-//			show_bench = 1;
+		if (!strcmp(arg, "--bench"))
+			show_bench = 1;
 
 		if (!strcmp(arg, "--bios")) {
 			need_root = 1;
@@ -294,7 +294,7 @@ int main (int argc, char **argv)
 			printf(" processor (estimate).\n\n");
 		}
 		if (show_bench)
-			show_benchmarks();
+			show_benchmarks(cpu);
 
 		if (nrCPUs > 1)
 			separator();
