@@ -17,6 +17,7 @@ C_SRC =\
 	Cyrix/identify.c\
 \
 	Intel/identify.c\
+	Intel/identify-family15.c\
 	Intel/info.c\
 	Intel/bluesmoke.c\
 	Intel/cachesize.c\
