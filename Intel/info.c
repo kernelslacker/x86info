@@ -39,12 +39,13 @@ void decode_serial_number(struct cpudata *cpu)
 	printf("Processor serial: %s\n", cpu->serialno);
 }
 
-void display_Intel_info (struct cpudata *cpu)
+void display_Intel_info(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
 	printf("Family: %u Model: %u Stepping: %u Type: %u Brand: %u\n",
-		cpu->family, cpu->model, cpu->stepping, cpu->type, cpu->brand);
+		family(cpu), model(cpu),
+		cpu->stepping, cpu->type, cpu->brand);
 	printf("CPU Model: %s\n", cpu->name);
 
 	/* Pentium4 and Banias have cpu name. */
