@@ -29,7 +29,7 @@
 
 #include "x86info.h"
 
-static void native_cpuid(unsigned int cpunr,
+static void native_cpuid(unsigned int cpunr, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx,
 	unsigned int *ecx, unsigned int *edx)
 {
@@ -56,7 +56,7 @@ static void native_cpuid(unsigned int cpunr,
 		  "=b" (b),
 		  "=c" (c),
 		  "=d" (d)
-		: "0" (a), "2" (c));
+		: "0" (idx), "2" (c));
 
 	if (eax!=NULL)
 		*eax = a;
@@ -82,7 +82,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	cpu_cpuid_args_t args;
 
 	if (nodriver == 1) {
-		native_cpuid(CPU_number, eax,ebx,ecx,edx);
+		native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 		return;
 	}
 
@@ -109,7 +109,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 		if (!silent && nrCPUs != 1)
 			perror(cpuname);
 		used_UP = 1;
-		native_cpuid(CPU_number, eax,ebx,ecx,edx);
+		native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 		return;
 	}
 }
@@ -139,7 +139,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	}
 
 	if (nodriver == 1) {
-		native_cpuid(CPU_number, eax,ebx,ecx,edx);
+		native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 		return;
 	}
 
@@ -174,7 +174,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 		if (!silent && nrCPUs != 1)
 			perror(cpuname);
 		used_UP = 1;
-		native_cpuid(CPU_number, eax,ebx,ecx,edx);
+		native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 		return;
 	}
 }
