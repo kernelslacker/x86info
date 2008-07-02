@@ -9,26 +9,14 @@
 #include <asm/unistd.h>
 #endif
 
-#define _GNU_SOURCE
-#define __USE_GNU
-#include <sched.h>
-
 #include <sys/types.h>
 #include <unistd.h>
 
 void show_benchmarks(struct cpudata *cpu)
 {
 	int tmp = 0;
-	cpu_set_t set;
 
-	if (show_bench != 1)
-		return;
-
-	if (sched_getaffinity(getpid(), sizeof(set), &set) == 0) {
-		CPU_ZERO(&set);
-		CPU_SET(cpu->number, &set);
-		sched_setaffinity(getpid(), sizeof(set), &set);
-	}
+	bind_cpu(cpu);
 
 #ifdef __linux__
 	TIME(asm volatile("int $0x80" :"=a" (tmp) :"0" (__NR_getppid)), "int 0x80");

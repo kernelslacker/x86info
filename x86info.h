@@ -173,4 +173,20 @@ extern int user_is_root;
 
 #define X86_FEATURE_MTRR	1<<12
 
+#define _GNU_SOURCE
+#define __USE_GNU
+#include <sched.h>
+#include <sys/types.h>
+#include <unistd.h>
+static inline void bind_cpu(struct cpudata *cpu)
+{
+	cpu_set_t set;
+
+	if (sched_getaffinity(getpid(), sizeof(set), &set) == 0) {
+		CPU_ZERO(&set);
+		CPU_SET(cpu->number, &set);
+		sched_setaffinity(getpid(), sizeof(set), &set);
+	}
+}
+
 #endif /* _X86INFO_H */

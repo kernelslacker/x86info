@@ -9,9 +9,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#define _GNU_SOURCE
-#define __USE_GNU
-#include <sched.h>
 #include <string.h>
 #include <signal.h>
 
@@ -27,7 +24,6 @@ static void sighandler(int sig __attribute__((unused)))
 
 void estimate_MHz(struct cpudata *cpu)
 {
-	cpu_set_t set;
 	unsigned long long int cycles[2]; /* gotta be 64 bit */
 	unsigned int eax, ebx, ecx, edx;
 	unsigned long r;
@@ -40,11 +36,7 @@ void estimate_MHz(struct cpudata *cpu)
 		return;
 	}
 
-	if (sched_getaffinity(getpid(), sizeof(set), &set) == 0) {
-		CPU_ZERO(&set);
-		CPU_SET(cpu->number, &set);
-		sched_setaffinity(getpid(), sizeof(set), &set);
-	}
+	bind_cpu(cpu);
 
 	if (signal(SIGALRM, sighandler) == SIG_ERR) {
 		printf("Some kind of signal failure.\n");
