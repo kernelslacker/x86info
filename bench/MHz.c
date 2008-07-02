@@ -32,9 +32,9 @@ void estimate_MHz(struct cpudata *cpu)
 	unsigned long freq = 1;
 
 	/* Make sure we have a TSC (and hence RDTSC) */
-	cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
+	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
 	if ((edx & (1<<4))==0) {
-		printf ("No TSC, MHz calculation cannot be performed.\n");
+		printf("No TSC, MHz calculation cannot be performed.\n");
 		cpu->MHz = 0;
 		return;
 	}

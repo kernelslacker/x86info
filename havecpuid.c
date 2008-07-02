@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 
-static __inline__ int flag_is_changeable_p(unsigned long flag)
+static int flag_is_changeable_p(unsigned long flag)
 {
 	unsigned long f1, f2;
 	__asm__ volatile("pushf\n\t"

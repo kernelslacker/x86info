@@ -36,16 +36,16 @@ void decode_serial_number(struct cpudata *cpu)
 	p += sprintf(p, "-%04lX", ecx >> 16);
 	p += sprintf(p, "-%04lX\n", ecx & 0xffff);
 
-	printf ("Processor serial: %s\n", cpu->serialno);
+	printf("Processor serial: %s\n", cpu->serialno);
 }
 
 void display_Intel_info (struct cpudata *cpu)
 {
 	unsigned long ebx;
 
-	printf ("Family: %u Model: %u Stepping: %u Type: %u Brand: %u\n",
+	printf("Family: %u Model: %u Stepping: %u Type: %u Brand: %u\n",
 		cpu->family, cpu->model, cpu->stepping, cpu->type, cpu->brand);
-	printf ("CPU Model: %s\n", cpu->name);
+	printf("CPU Model: %s\n", cpu->name);
 
 	/* Pentium4 and Banias have cpu name. */
 	if (cpu->family == 0xF || (cpu->family == 6 && cpu->model == 9))
@@ -54,9 +54,9 @@ void display_Intel_info (struct cpudata *cpu)
 	decode_feature_flags (cpu);
 
 	if (show_msr) {
-		if (cpu->family==0xf)
+		if (cpu->family == 0xf)
 			dump_p4_MSRs(cpu);
-		if (cpu->family==0x6 && (cpu->model == 9 || cpu->model == 13))
+		if (cpu->family == 0x6 && (cpu->model == 9 || cpu->model == 13))
 			dump_centrino_MSRs(cpu);
 	}
 
@@ -85,7 +85,7 @@ void display_Intel_info (struct cpudata *cpu)
 
 		if (!nr_ht)
 			nr_ht = 1;
-		printf ("The physical package supports "
+		printf("The physical package supports "
 			"%d logical processors \n\n", nr_ht);
 	}
 

@@ -24,61 +24,61 @@ void decode_powersaver(struct cpudata *cpu)
 	printf("\n");
 
 	if (read_msr(cpu->number, MSR_POWERSAVER, &ps.val) != 1) {
-		printf ("Something went wrong reading MSR_POWERSAVER\n");
+		printf("Something went wrong reading MSR_POWERSAVER\n");
 		return;
 	}
 
-	printf (" RevisionID: %x : ", ps.bits.RevisionID);
+	printf(" RevisionID: %x : ", ps.bits.RevisionID);
 	switch (ps.bits.RevisionID) {
-		case 0x0:	printf ("Initial revision (Software clock multiplier only, no SoftVID)\n");
+		case 0x0:	printf("Initial revision (Software clock multiplier only, no SoftVID)\n");
 					break;
-		case 0x1:	printf ("SoftVID support\n");
+		case 0x1:	printf("SoftVID support\n");
 					break;
-		default:	printf ("Unknown (0x%x).\n", ps.bits.RevisionID);
+		default:	printf("Unknown (0x%x).\n", ps.bits.RevisionID);
 					break;
 	}
 
-	printf (" Software clock multiplier is ");
+	printf(" Software clock multiplier is ");
 	if (ps.bits.EnableSoftBusRatio == 0)
-		printf ("disabled\n");
+		printf("disabled\n");
 	else {
-		printf ("enabled\n");
-		printf ("\tMaxMHzBR4: %s\n", ps.bits.MaxMHzBR4 ? "1" : "0");
-		printf ("\tMaxMHzBR: ");
+		printf("enabled\n");
+		printf("\tMaxMHzBR4: %s\n", ps.bits.MaxMHzBR4 ? "1" : "0");
+		printf("\tMaxMHzBR: ");
 		binary (4, ps.bits.MaxMHzBR);
-		printf ("\tMinMHzBR4: %s\n", ps.bits.MinMHzBR4 ? "1" : "0");
-		printf ("\tMinMHzBR: ");
+		printf("\tMinMHzBR4: %s\n", ps.bits.MinMHzBR4 ? "1" : "0");
+		printf("\tMinMHzBR: ");
 		binary (4, ps.bits.MinMHzBR);
 	}
 
 	/* these bits invalid if revision == 0*/
 	if (ps.bits.RevisionID != 0) {
-		printf (" Software VID is ");
+		printf(" Software VID is ");
 		if (ps.bits.EnableSoftVID == 0)
-			printf ("disabled\n");
+			printf("disabled\n");
 		else {
-			printf ("enabled\n");
-			printf ("\tVRM Rev=%s\n",
+			printf("enabled\n");
+			printf("\tVRM Rev=%s\n",
 				ps.bits.VRMRev ? "Mobile VRM" : "VRM 8.5");
-			printf ("\tMinimumVID: ");
+			printf("\tMinimumVID: ");
 			binary (4, ps.bits.MinimumVID);
-			printf ("\tMaximumVID: ");
+			printf("\tMaximumVID: ");
 			binary (5, ps.bits.MaximumVID);
 		}
 
 		if (ps.bits.EnableSoftBusRatio==1) {
-			printf ("\tEnableSoftBusRatio=Enabled\n");
-			printf ("\tMaxMHzFSB: ");
+			printf("\tEnableSoftBusRatio=Enabled\n");
+			printf("\tMaxMHzFSB: ");
 			binary (2, ps.bits.MaxMHzFSB);
-			printf ("\tMinMHzFSB: ");
+			printf("\tMinMHzFSB: ");
 			binary (2, ps.bits.MinMHzFSB);
 		}
 
 		//if (ps.bits.EnableSoftBSEL==1)
-		//	printf ("\tEnableSoftBSEL=Enabled\n");
+		//	printf("\tEnableSoftBSEL=Enabled\n");
 
-		printf ("\tSoftBusRatio4=%s\n", ps.bits.SoftBusRatio4 ? "1" : "0");
-		printf ("\tSoftBusRatio=");
+		printf("\tSoftBusRatio4=%s\n", ps.bits.SoftBusRatio4 ? "1" : "0");
+		printf("\tSoftBusRatio=");
 		binary (4, ps.bits.SoftBusRatio);
 	}
 }

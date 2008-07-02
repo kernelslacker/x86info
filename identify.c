@@ -57,10 +57,10 @@ static void dumpregs (int cpunum, unsigned int begin, unsigned int end)
 
 	/* Dump all the CPUID results in raw hex */
 	for (i=begin; i<=end; i++) {
-		cpuid (cpunum, i, &eax, &ebx, &ecx, &edx);
-		printf ("eax in: 0x%08x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
+		cpuid(cpunum, i, &eax, &ebx, &ecx, &edx);
+		printf("eax in: 0x%08x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
 	}
-	printf ("\n");
+	printf("\n");
 }
 
 void show_info(struct cpudata *cpu)
@@ -69,7 +69,7 @@ void show_info(struct cpudata *cpu)
 		return;
 
 	if (show_registers) {
-		dumpregs (cpu->number, 0, cpu->maxi);
+		dumpregs(cpu->number, 0, cpu->maxi);
 		if (cpu->maxei >=0x80000000)
 			dumpregs (cpu->number, 0x80000000, cpu->maxei);
 
@@ -111,16 +111,16 @@ void show_info(struct cpudata *cpu)
 	}
 
 	if (show_connector)
-		decode_connector (cpu->connector);
+		decode_connector(cpu->connector);
 
 	if (show_urls) {
 		if (cpu->datasheet_url != NULL)
-			printf ("Datasheet: %s\n", cpu->datasheet_url);
+			printf("Datasheet: %s\n", cpu->datasheet_url);
 
 		if (cpu->errata_url != NULL)
-			printf ("Errata: %s\n", cpu->errata_url);
+			printf("Errata: %s\n", cpu->errata_url);
 
-		printf ("\n");
+		printf("\n");
 	}
 
 	if (!user_is_root)

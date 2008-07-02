@@ -47,20 +47,20 @@ typedef unsigned long vm_offset_t;
 
 #define DEFAULT_TOPOFMEM		0xa0000
 
-#define BIOS_BASE			   0xf0000
-#define BIOS_BASE2			  0xe0000
-#define BIOS_SIZE			   0x10000
-#define ONE_KBYTE			   1024
+#define BIOS_BASE			0xf0000
+#define BIOS_BASE2			0xe0000
+#define BIOS_SIZE			0x10000
+#define ONE_KBYTE			1024
 
-#define GROPE_AREA1			 0x80000
-#define GROPE_AREA2			 0x90000
-#define GROPE_SIZE			  0x10000
+#define GROPE_AREA1			0x80000
+#define GROPE_AREA2			0x90000
+#define GROPE_SIZE			0x10000
 
-#define PROCENTRY_FLAG_EN	   0x01
-#define PROCENTRY_FLAG_BP	   0x02
-#define IOAPICENTRY_FLAG_EN	 0x01
+#define PROCENTRY_FLAG_EN	0x01
+#define PROCENTRY_FLAG_BP	0x02
+#define IOAPICENTRY_FLAG_EN	0x01
 
-#define MAXPNSTR				132
+#define MAXPNSTR		132
 
 /* global data */
 static int pfd;			/* physical /dev/mem fd */
@@ -92,7 +92,7 @@ static tableEntry basetableEntryTypes[] =
 /* MP Floating Pointer Structure */
 typedef struct MPFPS {
 	char	signature[4];
-	u32		pap;
+	u32	pap;
 	u8	length;
 	u8	spec_rev;
 	u8	checksum;
@@ -111,7 +111,7 @@ typedef struct MPCTH {
 	u8	checksum;
 	u8	oem_id[8];
 	u8	product_id[12];
-	u32 oem_table_pointer;
+	u32	oem_table_pointer;
 	u16	oem_table_size;
 	u16	entry_count;
 	u32	apic_address;
@@ -200,7 +200,7 @@ static void processorEntry(void)
 static int MPConfigTableHeader(u32 pap)
 {
 	vm_offset_t paddr;
-	mpcth_t	 cth;
+	mpcth_t cth;
 	int x;
 	int totalSize, t;
 	int count, c;
@@ -238,7 +238,7 @@ static int MPConfigTableHeader(u32 pap)
 		totalSize -= basetableEntryTypes[ 0 ].length;
 	}
 	if (verbose_mp)
-		printf ("\n");
+		printf("\n");
 
 	return SMP_YES;
 }
@@ -276,7 +276,7 @@ static int apic_probe(vm_offset_t* paddr)
 	/* read CMOS for real top of mem */
 	seekEntry((vm_offset_t)TOPOFMEM_POINTER);
 	readEntry(&segment, 2);
-	--segment;						  /* less ONE_KBYTE */
+	--segment;				/* less ONE_KBYTE */
 	target = segment * 1024;
 	seekEntry(target);
 	readEntry(buffer, ONE_KBYTE);
@@ -409,9 +409,9 @@ int issmp(int verb)
 #ifdef STANDALONE
 int main()
 {
-	int	numcpu, smp;
+	int numcpu, smp;
 	numcpu = enumerate_cpus();
-	smp=issmp(1);
+	smp = issmp(1);
 	printf("SMP: %d\nCPU: %d\n", smp, numcpu);
 	return 0;
 }

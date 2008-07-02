@@ -50,9 +50,9 @@ void Identify_Intel (struct cpudata *cpu)
 
 	switch (cpu->family) {
 	case 4:	add_to_cpuname("i486 ");
-			break;
+		break;
 	case 5: add_to_cpuname("Pentium ");
-			break;
+		break;
 	}
 
 	switch (tuple(cpu) & 0xff0) {
@@ -424,11 +424,10 @@ void Identify_Intel (struct cpudata *cpu)
 
 		default:
 			cpu->connector = CONN_SOCKET_370_FCPGA;
-			if (cpu->cachesize_L2 == 128) {
+			if (cpu->cachesize_L2 == 128)
 				add_to_cpuname("Celeron");
-			} else {
+			else
 				add_to_cpuname("Pentium III");
-			}
 
 			add_to_cpuname(" (Coppermine)");
 			switch (cpu->stepping) {
@@ -667,11 +666,10 @@ void Identify_Intel (struct cpudata *cpu)
 		if(cpu->MHz/100 >= 29) {
 			add_to_cpuname("Extreme ");
 		} else {
-			if (cpu->stepping == 7) {
+			if (cpu->stepping == 7)
 				add_to_cpuname("Quad (Kentsfield)");
-			} else {
+			else
 				add_to_cpuname("Duo ");
-			}
 		}
 		// Check for Thermal Monitor 2 feature bit, because only the
 		// non-mobile processors have it

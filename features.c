@@ -146,15 +146,15 @@ void decode_feature_flags(struct cpudata *cpu)
 	if (silent != 0)
 		return;
 
-	printf ("Feature flags:\n");
+	printf("Feature flags:\n");
 	for (i=0; i<32; i++) {
 		if (cpu->flags_edx & (1 << i)) {
 			if (!(generic_cap_flags_desc[i]))
 				printf(" [%u]", i);
 			if (verbose)
-				printf ("\t%s\n", generic_cap_flags_desc[i]);
+				printf("\t%s\n", generic_cap_flags_desc[i]);
 			else
-				printf (" %s", generic_cap_flags[i]);
+				printf(" %s", generic_cap_flags[i]);
 		}
 	}
 
@@ -163,20 +163,20 @@ void decode_feature_flags(struct cpudata *cpu)
 		case VENDOR_AMD:
 			for (i=0; i<32; i++) {
 				if (cpu->flags_ecx & (1 << i) && amd_cap_generic_ecx_flags[i])
-					printf (" %s", amd_cap_generic_ecx_flags[i]);
+					printf(" %s", amd_cap_generic_ecx_flags[i]);
 			}
 			printf("\n");
 			if (cpu->maxei < 0x80000001)
 				break;
-			printf ("Extended feature flags:\n");
+			printf("Extended feature flags:\n");
 			flag_decode(cpu->eflags_edx, amd_cap_extended_edx_flags);
 			flag_decode(cpu->eflags_ecx, amd_cap_extended_ecx_flags);
 			printf("\n");
 			break;
 
 		case VENDOR_CENTAUR:
-			printf ("\n");
-			printf ("Extended feature flags:\n");
+			printf("\n");
+			printf("Extended feature flags:\n");
 			flag_decode(cpu->flags_ecx, centaur_cap_extended_ecx_flags);
 			cpuid(cpu->number, 0xc0000000, &eax, &ebx, &ecx, &edx);
 			if (eax >=0xc0000001) {
@@ -187,22 +187,22 @@ void decode_feature_flags(struct cpudata *cpu)
 			break;
 
 		case VENDOR_TRANSMETA:
-			printf ("\n");
-			printf ("Extended feature flags:\n");
+			printf("\n");
+			printf("Extended feature flags:\n");
 			flag_decode(cpu->flags_ecx, transmeta_cap_flags);
 			break;
 
 		case VENDOR_CYRIX:
-			printf ("\n");
+			printf("\n");
 			break;
 
 		case VENDOR_INTEL:
-			printf ("\n");
-			printf ("Extended feature flags:\n");
+			printf("\n");
+			printf("Extended feature flags:\n");
 			flag_decode(cpu->flags_ecx, intel_cap_generic_ecx_flags);
 			if (cpu->maxei < 0x80000001)
 				break;
-			printf ("\n");
+			printf("\n");
 			flag_decode(cpu->eflags_edx, intel_cap_extended_edx_flags);
 			flag_decode(cpu->eflags_ecx, intel_cap_extended_ecx_flags);
 			break;
@@ -212,5 +212,5 @@ void decode_feature_flags(struct cpudata *cpu)
 			break;
 	}
 
-	printf ("\n");
+	printf("\n");
 }

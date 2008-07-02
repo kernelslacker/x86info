@@ -68,9 +68,9 @@ static void decode_fidvid(struct cpudata *cpu)
 		fid_codes[fidvidstatus.bits.SFID],
 		fid_codes[fidvidstatus.bits.CFID]);
 
-//	printf ("Voltage ID codes: Maximum=0x%x Startup=0x%x Currently=0x%x\n",
+//	printf("Voltage ID codes: Maximum=0x%x Startup=0x%x Currently=0x%x\n",
 //		fidvidstatus.MVID, fidvidstatus.SVID, fidvidstatus.CVID);
-//	printf ("Frequency ID codes: Maximum=0x%x Startup=0x%x Currently=0x%x\n",
+//	printf("Frequency ID codes: Maximum=0x%x Startup=0x%x Currently=0x%x\n",
 //		fidvidstatus.MFID, fidvidstatus.SFID, fidvidstatus.CFID);
 
 	if (show_bios) {
@@ -102,7 +102,7 @@ static void k8_decode_fidvid(struct cpudata *cpu)
 	printf("\n");
 
 	if (read_msr(cpu->number, MSR_FID_VID_STATUS, &fidvidstatus.val) != 1) {
-		printf ("Something went wrong reading MSR_FID_VID_STATUS\n");
+		printf("Something went wrong reading MSR_FID_VID_STATUS\n");
 		return;
 	}
 
@@ -182,19 +182,19 @@ void decode_powernow(struct cpudata *cpu)
 		can_scale_vid=1;
 	}
 	if (edx & (1<<3))
-		printf ("\n\tThermal Trip");
+		printf("\n\tThermal Trip");
 	if (edx & (1<<4))
-		printf ("\n\tThermal Monitoring");
+		printf("\n\tThermal Monitoring");
 	if (edx & (1<<5))
-		printf ("\n\tSoftware Thermal Control");
+		printf("\n\tSoftware Thermal Control");
 	if (edx & (1<<6))
-		printf ("\n\t100MHz multiplier control");
+		printf("\n\t100MHz multiplier control");
 	if (edx & (1<<7)) {
-		printf ("\n\tHardware P-state control");
+		printf("\n\tHardware P-state control");
 		can_scale_fid = can_scale_vid = 1;
 	}
 	if (edx & (1<<8))
-		printf ("\n\tinvariant TSC");
+		printf("\n\tinvariant TSC");
 	if (!(edx & 0x1f))
 		printf(" None");
 	printf("\n\n");

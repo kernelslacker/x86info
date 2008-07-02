@@ -44,9 +44,9 @@ void Identify_RiSE (struct cpudata *cpu)
 
 void display_RiSE_info(struct cpudata *cpu)
 {
-	printf ("Family: %u Model: %u Stepping: %u\n",
+	printf("Family: %u Model: %u Stepping: %u\n",
 		cpu->family, cpu->model, cpu->stepping);
-	printf ("CPU Model : %s\n", cpu->name);
+	printf("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);
 
 	decode_feature_flags (cpu);

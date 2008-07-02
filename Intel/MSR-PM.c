@@ -15,15 +15,15 @@
 
 void dump_centrino_MSRs (struct cpudata *cpu)
 {
-	unsigned long long val=0;
+	unsigned long long val = 0;
 	int tcc = 0;
 
 	if (!user_is_root)
 		return;
 
-	printf ("Pentium M MSRs:\n");
+	printf("Pentium M MSRs:\n");
 
-	if (read_msr (cpu->number, MSR_IA32_PERF_STATUS, &val)==1) {
+	if (read_msr (cpu->number, MSR_IA32_PERF_STATUS, &val) == 1) {
 		/*
 		   Voltage and frequency values derived from 1300MHz
 		   Pentium M in an IBM ThinkPad X31.  Constants for
@@ -39,11 +39,11 @@ void dump_centrino_MSRs (struct cpudata *cpu)
 		unsigned uv = (unsigned)val & 0xffff;
 		int volt = (uv & 0xff) * 16 + 700;
 		int mhz = 100 * (uv & 0xff00) >> 8UL;
-		printf ("  Current performance mode is 0x%04x: %dMHz, %d.%dV\n",
+		printf("  Current performance mode is 0x%04x: %dMHz, %d.%dV\n",
 			uv, mhz, volt/1000, volt%1000);
 	}
-	if (read_msr (cpu->number, MSR_IA32_MISC_ENABLE, &val)==1) {
-		printf ("  Enabled: ");
+	if (read_msr (cpu->number, MSR_IA32_MISC_ENABLE, &val) == 1) {
+		printf("  Enabled: ");
 		if (val & (1<<3)) {
 			printf("TCC ");
 			tcc = 1;
@@ -61,17 +61,17 @@ void dump_centrino_MSRs (struct cpudata *cpu)
 
 		printf("\n");
 	}
-	if (tcc && read_msr (cpu->number, MSR_PM_THERM2_CTL, &val)==1) { /* THERM2_CTL */
+	if (tcc && read_msr (cpu->number, MSR_PM_THERM2_CTL, &val) == 1) { /* THERM2_CTL */
 		printf("  Thermal monitor %d\n", (val & (1<<16)) ? 2 : 1);
 	}
-	if (read_msr (cpu->number, MSR_IA32_THERM_CONTROL, &val)==1) {
+	if (read_msr (cpu->number, MSR_IA32_THERM_CONTROL, &val) == 1) {
 		if (val & (1<<4)) {
 			printf("  Software-controlled clock: %f%% duty cycle\n",
 			       ((val >> 1) & 7) / 8.);
 		} else
 			printf("  Software-controlled clock disabled (full speed)\n");
 	}
-	if (read_msr (cpu->number, MSR_IA32_THERM_STATUS, &val)==1) { /* THERM_STATUS */
+	if (read_msr (cpu->number, MSR_IA32_THERM_STATUS, &val) == 1) { /* THERM_STATUS */
 		printf("  Thermal status: ");
 		if (val & (1<<0))
 			printf("TooHot ");
@@ -79,5 +79,5 @@ void dump_centrino_MSRs (struct cpudata *cpu)
 			printf("WasTooHot ");
 		printf("\n");
 	}
-	printf ("\n");
+	printf("\n");
 }

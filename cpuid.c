@@ -27,7 +27,7 @@
 #include "x86info.h"
 
 #if defined(__FreeBSD__)
-void cpuid (int CPU_number, unsigned int idx,
+void cpuid(int CPU_number, unsigned int idx,
 	unsigned long *eax,
 	unsigned long *ebx,
 	unsigned long *ecx,
@@ -67,7 +67,7 @@ void cpuid (int CPU_number, unsigned int idx,
 		if (!silent && nrCPUs != 1)
 			perror(cpuname);
 		used_UP = 1;
-		cpuid_UP (idx, eax, ebx, ecx, edx);
+		cpuid_UP(idx, eax, ebx, ecx, edx);
 		return;
 	}
 }
@@ -126,7 +126,7 @@ void cpuid (int CPU_number, unsigned int idx,
 		if (!silent && nrCPUs != 1)
 			perror(cpuname);
 		used_UP = 1;
-		cpuid_UP (idx, eax, ebx, ecx, edx);
+		cpuid_UP(idx, eax, ebx, ecx, edx);
 		return;
 	}
 }

@@ -21,10 +21,10 @@ void decode_Cyrix_TLB (int x)
 	case 0:
 		break;
 	case 0x70:
-		printf ("TLB: 32 entries 4-way associative 4KB pages\n");
+		printf("TLB: 32 entries 4-way associative 4KB pages\n");
 		break;
 	case 0x80:
-		printf ("L1 Cache: 16KB 4-way associative 16 bytes/line\n");
+		printf("L1 Cache: 16KB 4-way associative 16 bytes/line\n");
 		break;
 	}
 }
@@ -89,14 +89,14 @@ void display_Cyrix_info(struct cpudata *cpu)
 	unsigned int i, ntlb;
 	unsigned long eax, ebx, ecx, edx;
 
-	printf ("Family: %u Model: %u Stepping: %u\n",
+	printf("Family: %u Model: %u Stepping: %u\n",
 		cpu->family, cpu->model, cpu->stepping);
-	printf ("CPU Model : %s\n", cpu->name);
+	printf("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);
 
 	decode_feature_flags (cpu);
 
-	printf ("TLB & L1 Cache info\n");
+	printf("TLB & L1 Cache info\n");
 	if (cpu->maxi >= 2 && show_cacheinfo) {
 		/* TLB and L1 Cache info */
 		ntlb = 255;
@@ -117,7 +117,7 @@ void display_Cyrix_info(struct cpudata *cpu)
 		}
 	}
 
-	printf ("TLB & L1 Cache info from extended info\n");
+	printf("TLB & L1 Cache info from extended info\n");
 	if (cpu->maxei >= 0x80000005 && show_cacheinfo) {
 		/* TLB and L1 Cache info */
 		ntlb = 255;

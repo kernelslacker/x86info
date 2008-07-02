@@ -40,7 +40,7 @@ static unsigned int nrSMPCPUs;
 
 static void usage (char *programname)
 {
-	printf ("Usage: %s [<switches>]\n\
+	printf("Usage: %s [<switches>]\n\
 -a,   --all\n\
       --bench\n\
 	  --bios\n\
@@ -164,8 +164,8 @@ static void separator(void)
 	int j;
 
 	for (j=0; j<74; j++)
-		printf ("-");
-	printf ("\n");
+		printf("-");
+	printf("\n");
 }
 
 
@@ -176,37 +176,37 @@ int main (int argc, char **argv)
 
 	parse_command_line(argc, argv);
 	if (!silent) {
-		printf ("x86info v1.21.  Dave Jones 2001-2008\n");
-		printf ("Feedback to <davej@redhat.com>.\n\n");
+		printf("x86info v1.21.  Dave Jones 2001-2008\n");
+		printf("Feedback to <davej@redhat.com>.\n\n");
 	}
 
-	if ((HaveCPUID())==0) {
-		printf ("No CPUID instruction available.\n");
-		printf ("No further information available for this CPU.\n");
+	if ((HaveCPUID()) == 0) {
+		printf("No CPUID instruction available.\n");
+		printf("No further information available for this CPU.\n");
 		return 0;
 	}
 
-	if (getuid()!=0)
+	if (getuid() != 0)
 		user_is_root=0;
 
 	if (need_root && !user_is_root)
-		printf ("Need to be root to use specified options.\n");
+		printf("Need to be root to use specified options.\n");
 
-	nrCPUs = sysconf (_SC_NPROCESSORS_ONLN);
+	nrCPUs = sysconf(_SC_NPROCESSORS_ONLN);
 
 	if (!silent) {
-		printf ("Found %u CPU", nrCPUs);
+		printf("Found %u CPU", nrCPUs);
 		if (nrCPUs > 1)
-			printf ("s");
+			printf("s");
 
 		/* Check mptable if present. This way we get number of CPUs
 		   on SMP systems that have booted UP kernels. */
 		if (user_is_root) {
 			nrSMPCPUs = enumerate_cpus();
 			if (nrSMPCPUs > nrCPUs)
-				printf (", but found %ud CPUs in MPTable.", nrSMPCPUs);
+				printf(", but found %ud CPUs in MPTable.", nrSMPCPUs);
 		}
-		printf ("\n");
+		printf("\n");
 	}
 
 	/*
@@ -228,11 +228,11 @@ int main (int argc, char **argv)
 	for (i=0; i<nrCPUs; i++) {
 		cpu = malloc (sizeof (struct cpudata));
 		if (!cpu) {
-			printf ("Out of memory\n");
+			printf("Out of memory\n");
 			return -1;
 		}
 
-		memset (cpu, 0, sizeof(struct cpudata));
+		memset(cpu, 0, sizeof(struct cpudata));
 
 		if (!head) {
 			head = cpu;
@@ -243,12 +243,12 @@ int main (int argc, char **argv)
 
 		cpu->number = i;
 
-		if (!silent && nrCPUs!=1)
-			printf ("CPU #%u\n", i+1);
+		if (!silent && nrCPUs != 1)
+			printf("CPU #%u\n", i+1);
 
 		estimate_MHz(cpu);
-		identify (cpu);
-		show_info (cpu);
+		identify(cpu);
+		show_info(cpu);
 
 		/*
 		 * Doing this per-cpu is a problem, as we can't
@@ -267,12 +267,12 @@ int main (int argc, char **argv)
 
 				printf("%u.%u%uGHz", a, b, (cpu->MHz - c)/10);
 			}
-			printf (" processor (estimate).\n\n");
+			printf(" processor (estimate).\n\n");
 		}
 		if (show_bench)
 			show_benchmarks();
 
-		if (nrCPUs>1)
+		if (nrCPUs > 1)
 			separator();
 
 		if (cpu->next)
@@ -291,9 +291,9 @@ int main (int argc, char **argv)
 		cpu = tmp;
 	}
 
-	if (nrCPUs > 1 && used_UP==1 && (!silent)) {
-		printf ("WARNING: Detected SMP, but unable to access cpuid driver.\n");
-		printf ("Used Uniprocessor CPU routines. Results inaccurate.\n");
+	if (nrCPUs > 1 && (used_UP == 1) && (!silent)) {
+		printf("WARNING: Detected SMP, but unable to access cpuid driver.\n");
+		printf("Used Uniprocessor CPU routines. Results inaccurate.\n");
 	}
 
 	return (0);

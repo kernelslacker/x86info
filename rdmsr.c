@@ -17,7 +17,7 @@
 #include "x86info.h"
 
 #if defined(__FreeBSD__)
-# include <sys/ioctl.h>                                                         
+# include <sys/ioctl.h>
 # include <cpu.h>
 #endif
 
@@ -45,17 +45,17 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 		return 0;
 	}
 
-	args.msr = idx;                                                         
-	if (ioctl(fh, CPU_RDMSR, &args) != 0) {                                 
-		if (close(fh) == -1) {                                          
-			perror("close");                                        
+	args.msr = idx;
+	if (ioctl(fh, CPU_RDMSR, &args) != 0) {
+		if (close(fh) == -1) {
+			perror("close");
 			exit(EXIT_FAILURE);
 		}
 
 		return 0;
 	}
 
-	*val = args.data; 
+	*val = args.data;
 
 	if (close(fh)==-1) {
 		perror("close");
@@ -116,25 +116,25 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 #endif /* __FreeBSD__ */
 
 
-void dumpmsr (int cpu, unsigned int msr, int size)
+void dumpmsr(int cpu, unsigned int msr, int size)
 {
 	unsigned long long val=0;
 
 	if (read_msr(cpu, msr, &val) == 1) {
 		if (size==32){
-			printf ("MSR: 0x%08x=0x%08lx : ", msr, (unsigned long) val);
+			printf("MSR: 0x%08x=0x%08lx : ", msr, (unsigned long) val);
 			binary32(val);
 		}
 		if (size==64) {
-			printf ("MSR: 0x%08x=0x%016llx : ", msr, val);
+			printf("MSR: 0x%08x=0x%016llx : ", msr, val);
 			binary64(val);
 		}
 		return;
 	}
-	printf ("Couldn't read MSR 0x%x\n", msr);
+	printf("Couldn't read MSR 0x%x\n", msr);
 }
 
-void dumpmsr_bin (int cpu, unsigned int msr, int size)
+void dumpmsr_bin(int cpu, unsigned int msr, int size)
 {
 	unsigned long long val=0;
 
@@ -145,5 +145,5 @@ void dumpmsr_bin (int cpu, unsigned int msr, int size)
 			binary64(val);
 		return;
 	}
-	printf ("Couldn't read MSR 0x%x\n", msr);
+	printf("Couldn't read MSR 0x%x\n", msr);
 }

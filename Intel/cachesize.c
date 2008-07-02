@@ -156,8 +156,8 @@ static unsigned char unknown_array[256];
 static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
 			struct _cache_table *table)
 {
-	int k=0;
-	int found=0;
+	int k = 0;
+	int found = 0;
 
 	/* "No 2nd-level cache or, if processor contains a valid 2nd-level
 	   cache, no 3rd-level cache". Skip this pointless entry.*/
@@ -166,7 +166,7 @@ static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
 
 	//TODO: Add description to link-list in cpu->
 
-	while ((table[k].descriptor != 0) && (found==0)) {
+	while ((table[k].descriptor != 0) && (found == 0)) {
 		if (table[k].descriptor == des) {
 
 			if (table == TRACE_cache_table)
@@ -189,14 +189,14 @@ static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
 				cpu->cachesize_L3 += table[k].size;
 
 			if (output)
-				printf (" %s\n", table[k].string);
+				printf(" %s\n", table[k].string);
 			found = 1;
 		}
 		k++;
 	}
 
-	if ((found==0) && (unknown_array[des]==0)) {
-		unknown_array[des]=1;
+	if ((found == 0) && (unknown_array[des] == 0)) {
+		unknown_array[des] = 1;
 		found_unknown++;
 	}
 }
@@ -236,8 +236,8 @@ void clean_unknowns(struct _cache_table *table)
 
 	while (table[j].descriptor != 0) {
 		des = table[j++].descriptor;
-		if (unknown_array[des]==1) {
-			unknown_array[des]=0;
+		if (unknown_array[des] == 1) {
+			unknown_array[des] = 0;
 			found_unknown--;
 		}
 	}
@@ -263,11 +263,10 @@ void decode_Intel_caches(struct cpudata *cpu, int output)
 	oldknown = found_unknown;
 	decode_cache(cpu, L2_cache_table, output);
 	if (found_unknown > 0) {
-		if (oldknown == found_unknown) {
+		if (oldknown == found_unknown)
 			 decode_cache(cpu, L2L3_cache_table, output);
-		} else {
+		else
 			 decode_cache(cpu, L3L2_cache_table, output);
-		}
 	}
 
 	decode_cache(cpu, L3_cache_table, output);
@@ -295,15 +294,15 @@ void decode_Intel_caches(struct cpudata *cpu, int output)
 		return;
 
 	if (output)
-		printf ("Found unknown cache descriptors: ");
+		printf("Found unknown cache descriptors: ");
 
 	for (i=0; i<256; i++) {
-		if (unknown_array[i]==1)
+		if (unknown_array[i] == 1)
 			if (output)
-				printf ("%02x ", i);
+				printf("%02x ", i);
 	}
 	if (output)
-		printf ("\n");
+		printf("\n");
 	found_unknown = 0;
 }
 

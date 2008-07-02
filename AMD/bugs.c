@@ -21,7 +21,7 @@ static void show_k7_bugs(struct cpudata *cpu)
 	if (tuple(cpu) > 0x681) {
 		if (read_msr (cpu->number, MSR_CLKCTL, &val) == 1) {
 			if ((val & 0xfff00000) != 0x20000000) {
-				printf ("CLK_CTL is programmed to %08llx, instead of %08llx\n",
+				printf("CLK_CTL is programmed to %08llx, instead of %08llx\n",
 						val, ((val&~0xfff00000)|0x20000000));
 			}
 		}

@@ -22,5 +22,5 @@ void dump_athlon_MSR(struct cpudata *cpu)
 	dumpmsr(cpu->number, 0xC0010010, 32);
 	dumpmsr(cpu->number, 0xC0010015, 32);
 	dumpmsr(cpu->number, MSR_CLKCTL, 32);
-	printf ("\n");
+	printf("\n");
 }

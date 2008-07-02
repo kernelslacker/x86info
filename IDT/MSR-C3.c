@@ -14,17 +14,17 @@ void dump_C3_MSR (struct cpudata *cpu)
 	if (!user_is_root)
 		return;
 
-	printf ("FCR: ");
+	printf("FCR: ");
 	dumpmsr (cpu->number, 0x1107, 32);
 
-	printf ("Power management: ");
+	printf("Power management: ");
 	if (cpu->model==6 || cpu->model==7) {
-		printf ("Longhaul\n");
+		printf("Longhaul\n");
 		decode_longhaul(cpu);
 	}
 
 	if (cpu->model==8 || cpu->model==9) {
-		printf ("Powersaver\n");
+		printf("Powersaver\n");
 		decode_powersaver(cpu);
 	}
 }

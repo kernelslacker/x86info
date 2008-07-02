@@ -31,7 +31,7 @@ static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 
 	s[0] = 0;
 	cont = 0;
-	for (i=0; (r!=NULL) && (i<ARRAY_SIZE(k8_names)); i++) {
+	for (i=0; (r != NULL) && (i<ARRAY_SIZE(k8_names)); i++) {
 		p = NULL;
 		id = 1<<i;
 		if (r->nameid & id)
@@ -112,7 +112,7 @@ void set_fam10h_revinfo(int id, struct cpudata *c)
 {
 	int i;
 	struct fam10h_rev *r = NULL;
-	
+
 	for (i=0; i<ARRAY_SIZE(fam10h_revisions); i++) {
 		if (fam10h_revisions[i].eax == id) {
 			r = &fam10h_revisions[i];
@@ -388,7 +388,7 @@ void Identify_AMD(struct cpudata *cpu)
 		cpu->connector = CONN_SOCKET_3;
 		break;
 	}
-	
+
 	switch (tuple(cpu) & 0xff0) {
 	case 0x430:
 		add_to_cpuname("Am486DX2-WT");
@@ -712,7 +712,7 @@ void display_AMD_info(struct cpudata *cpu)
 
 	printf("Family: %u Model: %u Stepping: %u\n",
 	       family(cpu), model(cpu), cpu->stepping);
-	printf ("CPU Model : %s\n", cpu->name);
+	printf("CPU Model : %s\n", cpu->name);
 	get_model_name(cpu);
 
 	decode_feature_flags(cpu);
@@ -777,7 +777,5 @@ void display_AMD_info(struct cpudata *cpu)
 			printf("The physical package has %d of %d "
 			       "possible cores implemented.\n", n, p);
 	}
-
-
 }
 
