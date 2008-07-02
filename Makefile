@@ -5,58 +5,66 @@ SHELL = /bin/sh
 
 all: x86info test
 
-OBJS =\
-	AMD/identify.o\
-	AMD/bluesmoke.o\
-	AMD/MSR-Athlon.o\
-	AMD/MSR-K6.o\
-	AMD/powernow.o\
-	AMD/dumppsb.o\
-	AMD/bugs.o\
+C_SRC =\
+	AMD/identify.c\
+	AMD/bluesmoke.c\
+	AMD/MSR-Athlon.c\
+	AMD/MSR-K6.c\
+	AMD/powernow.c\
+	AMD/dumppsb.c\
+	AMD/bugs.c\
 \
-	Cyrix/identify.o\
+	Cyrix/identify.c\
 \
-	Intel/identify.o\
-	Intel/info.o\
-	Intel/bluesmoke.o\
-	Intel/cachesize.o\
-	Intel/eblcr.o\
-	Intel/MSR-P4.o\
-	Intel/MSR-P6.o\
-	Intel/MSR-PM.o\
-	Intel/microcode.o\
+	Intel/identify.c\
+	Intel/info.c\
+	Intel/bluesmoke.c\
+	Intel/cachesize.c\
+	Intel/eblcr.c\
+	Intel/MSR-P4.c\
+	Intel/MSR-P6.c\
+	Intel/MSR-PM.c\
+	Intel/microcode.c\
 \
-	IDT/identify.o\
-	IDT/MSR-C3.o\
-	IDT/longhaul.o\
-	IDT/powersaver.o\
+	IDT/identify.c\
+	IDT/MSR-C3.c\
+	IDT/longhaul.c\
+	IDT/powersaver.c\
 \
-	NatSemi/identify.o\
+	NatSemi/identify.c\
 \
-	RiSE/identify.o\
+	RiSE/identify.c\
 \
-	SiS/identify.o\
+	SiS/identify.c\
 \
-	x86info.o\
-	havecpuid.o\
-	cpuid.o\
-	features.o\
-	identify.o\
-	rdmsr.o\
-	binary.o\
-	mptable.o\
-	get_model_name.o\
-	mtrr.o \
-	connector.o\
+	x86info.c\
+	havecpuid.c\
+	cpuid.c\
+	features.c\
+	identify.c\
+	rdmsr.c\
+	binary.c\
+	mptable.c\
+	get_model_name.c\
+	mtrr.c \
+	connector.c\
 \
-	bench/benchmarks.o\
-	bench/MHz.o
+	bench/benchmarks.c\
+	bench/MHz.c
+
+OBJS = $(C_SRC:%.c=%.o)
 
 x86info: $(OBJS)
 	$(CC) $(CFLAGS) -o x86info $(OBJS)
 
 .c.o:
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -MMD -o $@ -c $<
+	@cp $*.d $*.P; \
+	 sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	     -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> $*.P; \
+	rm -f $*.d
+
+-include $(C_SRC:%.c=%.P)
 
 .S.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
@@ -77,9 +85,8 @@ release:
 clean:
 	@find . -name "*.o" -exec rm {} \;
 	@find . -name "*~" -exec rm {} \;
+	@find . -name "*.P" -exec rm {} \;
 	@rm -f x86info x86info.exe
-
-C_SRC = *.c AMD/*.c Cyrix/*.c Intel/*.c NatSemi/*.c RiSE/*.c SiS/*.c IDT/*.c
 
 splint:
 	splint +posixlib -badflag -fileextensions -type -nullassign -boolops -showcolumn -sysunrecog -fullinitblock -onlytrans -unrecog -usedef -statictrans -compdestroy -predboolint -predboolothers -D__`uname -m`__ $(C_SRC)
