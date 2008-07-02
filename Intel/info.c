@@ -43,7 +43,18 @@ void display_Intel_info(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
-	printf("Type: %u Brand: %u\n", cpu->type, cpu->brand);
+	printf("Type: %u (", cpu->type);
+	switch (cpu->type) {
+	case 0:	printf("Original OEM");
+		break;
+	case 1:	printf("Overdrive");
+		break;
+	case 2:	printf("Dual-capable");
+		break;
+	case 3:	printf("Reserved");
+		break;
+	}
+	printf(")\tBrand: %u\n", cpu->brand);
 
 	if (show_msr) {
 		if (cpu->family == 0xf)

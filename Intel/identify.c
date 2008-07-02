@@ -125,19 +125,4 @@ void Identify_Intel(struct cpudata *cpu)
 		intel_nameptr += strlen(cpu->name);	// EWW
 		break;
 	}
-
-	switch (cpu->type) {
-	case 0:
-		add_to_cpuname(" Original OEM");
-		break;
-	case 1:
-		add_to_cpuname(" Overdrive");
-		break;
-	case 2:
-		add_to_cpuname(" Dual-capable");
-		break;
-	case 3:
-		add_to_cpuname(" Reserved");
-		break;
-	}
 }
