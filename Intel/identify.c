@@ -23,7 +23,7 @@ static char p4_478_datasheet[]="http://developer.intel.com/design/pentium4/datas
 static char p4_errata[]="http://developer.intel.com/design/pentium4/specupdt/249199.htm";
 
 
-void Identify_Intel (struct cpudata *cpu)
+void Identify_Intel(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 	int reserved;
