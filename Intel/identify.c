@@ -126,7 +126,7 @@ void Identify_Intel(struct cpudata *cpu)
 		intel_nameptr += strlen(cpu->name);	// EWW
 		break;
 
-	case 0x700:		/* Family 7 */
+	case 0x700:
 		add_to_cpuname("Itanium");
 		break;
 
