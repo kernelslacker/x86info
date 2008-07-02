@@ -41,8 +41,6 @@ void decode_serial_number(struct cpudata *cpu)
 
 void display_Intel_info(struct cpudata *cpu)
 {
-	unsigned int eax, ebx, ecx, edx;
-
 	printf("Type: %u (", cpu->type);
 	switch (cpu->type) {
 	case 0:	printf("Original OEM");
@@ -128,35 +126,6 @@ void display_Intel_info(struct cpudata *cpu)
 	/* FIXME: Bit test for MCA here!*/
 	if (show_bluesmoke)
 		decode_Intel_bluesmoke(cpu->number, cpu->family);
-
-	/* Stash the APIC ID for this logical CPU */
-	cpuid(cpu->number, 1, NULL, &ebx, NULL, NULL);
-	cpu->apicid = ebx >> 24;
-	printf("APIC ID: %x\n", cpu->apicid);
-
-	/* Figure out number of cores on this package. */
-	cpu->nr_cores = 1;
-	if (cpu->maxi >= 4) {
-		cpuid4(cpu->number, 0, &eax, &ebx, &ecx, &edx);
-		if (eax & 0x1f)
-			cpu->nr_cores = ((eax >> 26) + 1);
-printf("NUMBER CORES=%d eax=%x\n", cpu->nr_cores, eax);
-	}
-
-	/* Hyper-Threading Technology */
-	if (cpu->flags_edx & (1 << 28)) {
-		int nr_ht;
-		int phys_id;
-		cpuid(cpu->number, 1, NULL, &ebx, NULL, NULL);
-
-		nr_ht = (ebx >> 16) & 0xFF;
-		phys_id = (ebx >> 24) & 0xFF;
-
-		if (!nr_ht)
-			nr_ht = 1;
-		printf("The physical package supports "
-			"%d logical processors \n\n", nr_ht);
-	}
 
 	if (show_microcode)
 		decode_microcode(cpu);

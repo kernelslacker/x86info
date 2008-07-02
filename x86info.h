@@ -77,7 +77,7 @@ struct cpudata {
 	unsigned int eflags_edx;
 	unsigned int MHz;
 	unsigned int nr_cores;
-	unsigned int nr_siblings;
+	unsigned int nr_logical;
 	char *datasheet_url;
 	char *errata_url;
 	/* Intel specific bits */

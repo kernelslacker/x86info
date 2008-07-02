@@ -21,7 +21,6 @@ static char *intel_nameptr;
 void Identify_Intel(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
-	int reserved;
 
 	intel_nameptr = cpu->name;
 
@@ -29,11 +28,26 @@ void Identify_Intel(struct cpudata *cpu)
 	cpu->emodel = (eax >> 16) & 0xf;
 	cpu->efamily= (eax >> 20) & 0xff;
 	cpu->type = (eax >> 12) & 0x3;
-	cpu->brand = (ebx & 0xf);
-	reserved = eax >> 14;
+
+	cpu->brand = ebx & 0xf;
+	cpu->apicid = ebx >> 24;
+	cpu->nr_logical = (ebx >> 16) & 0xff;
 
 	cpu->flags_ecx = ecx; // Used for identification of Core 2
 	cpu->flags_edx = edx;
+
+	/* Figure out number of cores on this package. */
+	cpu->nr_cores = 1;
+	if (cpu->maxi >= 4) {
+		cpuid4(cpu->number, 0, &eax, &ebx, &ecx, &edx);
+		if (eax & 0x1f)
+			cpu->nr_cores = ((eax >> 26) + 1);
+	}
+	 /* Hyper-Threading Technology */
+//if (cpu->flags_edx & (1 << 28)) {
+//      }
+
+
 
 	decode_Intel_caches(cpu, 0);
 
