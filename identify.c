@@ -114,23 +114,4 @@ void show_info(struct cpudata *cpu)
 	default:
 		break;
 	}
-
-	if (show_connector)
-		decode_connector(cpu->connector);
-
-	if (show_urls) {
-		if (cpu->datasheet_url != NULL)
-			printf("Datasheet: %s\n", cpu->datasheet_url);
-
-		if (cpu->errata_url != NULL)
-			printf("Errata: %s\n", cpu->errata_url);
-
-		printf("\n");
-	}
-
-	if (!user_is_root)
-		return;
-
-	if (show_mtrr)
-		dump_mtrrs(cpu);
 }

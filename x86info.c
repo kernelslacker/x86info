@@ -264,6 +264,23 @@ int main (int argc, char **argv)
 		if (show_flags == 1)
 			show_feature_flags(cpu);
 
+		if (show_connector)
+			decode_connector(cpu->connector);
+
+		if (show_urls) {
+			if (cpu->datasheet_url != NULL)
+				printf("Datasheet: %s\n", cpu->datasheet_url);
+			if (cpu->errata_url != NULL)
+				printf("Errata: %s\n", cpu->errata_url);
+		}
+
+		/* Info that requires root access (eg, reading MSRs etc) */
+		if (user_is_root) {
+			if (show_mtrr)
+				dump_mtrrs(cpu);
+		}
+
+		/* Show MHz last. */
 		if (show_MHz) {
 			if (cpu->MHz < 1000)
 				printf("%uMHz", cpu->MHz);
