@@ -7,13 +7,22 @@
 #include <stdio.h>
 #include "x86info.h"
 
-void get_cpu_vendor(struct cpudata *cpu)
+void get_cpu_info_basics(struct cpudata *cpu)
 {
 	unsigned int maxi, maxei, vendor;
+	unsigned int eax;
 
 	cpuid(cpu->number, 0, &maxi, &vendor, NULL, NULL);
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
 	cpu->maxi = maxi;
+	if (cpu->maxi < 1)
+		return;
+
+	/* Everything that supports cpuid supports these. */
+	cpuid(cpu->number, 1, &eax, NULL, NULL, NULL);
+	cpu->stepping = eax & 0xf;
+	cpu->model = (eax >> 4) & 0xf;
+	cpu->family = (eax >> 8) & 0xf;
 
 	cpuid(cpu->number, 0x80000000, &maxei, NULL, NULL, NULL);
 	cpu->maxei = maxei;
@@ -81,6 +90,10 @@ void show_info(struct cpudata *cpu)
 {
 	if (silent)
 		return;
+
+	printf("Family: %u Model: %u Stepping: %u\n",
+		family(cpu), model(cpu), cpu->stepping);
+	printf("CPU Model: %s\n", cpu->name);
 
 	switch (cpu->vendor) {
 	case VENDOR_AMD:

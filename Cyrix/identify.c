@@ -29,36 +29,27 @@ void decode_Cyrix_TLB (int x)
 }
 
 /* Cyrix-specific information */
-void Identify_Cyrix (struct cpudata *cpu)
+void Identify_Cyrix(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
 	cyrix_nameptr = cpu->name;
 
-	/* Do standard stuff */
-	if (cpu->maxi < 1)
-		return;
-
-	cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
-	cpu->stepping = eax & 0xf;
-	cpu->model = (eax >> 4) & 0xf;
-	cpu->family = (eax >> 8) & 0xf;
-
 	switch (tuple(cpu) & 0xff0) {
 		case 0x450:	add_to_cpuname("MediaGX");
-					break;
+				break;
 
 		case 0x520:	add_to_cpuname("6x86");
-					break;
+				break;
 		case 0x524:	add_to_cpuname("GXm");
-					break;
+				break;
 
 		case 0x600:	add_to_cpuname("6x86/MX");
-					break;
+				break;
 		case 0x620:	add_to_cpuname("MII");
-					break;
+				break;
 		default:	add_to_cpuname("Unknown CPU");
-					break;
+				break;
 	}
 
 	/* Check for presence of extended info */
@@ -87,10 +78,7 @@ void display_Cyrix_info(struct cpudata *cpu)
 	unsigned int i, ntlb;
 	unsigned int eax, ebx, ecx, edx;
 
-	printf("Family: %u Model: %u Stepping: %u\n",
-		cpu->family, cpu->model, cpu->stepping);
-	printf("CPU Model : %s\n", cpu->name);
-	get_model_name (cpu);
+	get_model_name(cpu);
 
 	printf("TLB & L1 Cache info\n");
 	if (cpu->maxi >= 2 && show_cacheinfo) {

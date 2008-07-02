@@ -17,15 +17,6 @@ void Identify_RiSE (struct cpudata *cpu)
 
 	rise_nameptr = cpu->name;
 
-	/* Do standard stuff */
-	if (cpu->maxi < 1)
-		return;
-
-	cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
-	cpu->stepping = eax & 0xf;
-	cpu->model = (eax >> 4) & 0xf;
-	cpu->family = (eax >> 8) & 0xf;
-
 	switch (tuple(cpu) & 0xff0) {
 		case 0x500:	add_to_cpuname("iDragon (0.25um)");
 					break;
@@ -43,8 +34,5 @@ void Identify_RiSE (struct cpudata *cpu)
 
 void display_RiSE_info(struct cpudata *cpu)
 {
-	printf("Family: %u Model: %u Stepping: %u\n",
-		cpu->family, cpu->model, cpu->stepping);
-	printf("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);
 }

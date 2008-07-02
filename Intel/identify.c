@@ -25,18 +25,9 @@ void Identify_Intel(struct cpudata *cpu)
 
 	intel_nameptr = cpu->name;
 
-	if (cpu->maxi < 1)
-		return;
-
-	/* Family/model/type etc */
-	cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
-	cpu->stepping = eax & 0xf;
-	cpu->model = (eax >> 4) & 0xf;
-	cpu->family = (eax >> 8) & 0xf;
-
+	cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
 	cpu->emodel = (eax >> 16) & 0xf;
 	cpu->efamily= (eax >> 20) & 0xff;
-
 	cpu->type = (eax >> 12) & 0x3;
 	cpu->brand = (ebx & 0xf);
 	reserved = eax >> 14;
@@ -54,7 +45,7 @@ void Identify_Intel(struct cpudata *cpu)
 	}
 
 	switch (tuple(cpu) & 0xff0) {
-	case 0x400:		/* Family 4 */
+	case 0x400:
 		add_to_cpuname("DX-25/33");
 		break;
 	case 0x410:

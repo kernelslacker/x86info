@@ -17,15 +17,6 @@ void Identify_SiS (struct cpudata *cpu)
 
 	sis_nameptr = cpu->name;
 
-	/* Do standard stuff */
-	if (cpu->maxi < 1)
-		return;
-
-	cpuid (cpu->number, 1, &eax, &ebx, &ecx, &edx);
-	cpu->stepping = eax & 0xf;
-	cpu->model = (eax >> 4) & 0xf;
-	cpu->family = (eax >> 8) & 0xf;
-
 	switch (tuple(cpu)) {
 		case 0x505:	add_to_cpuname("SiS55x");
 					break;
@@ -37,8 +28,5 @@ void Identify_SiS (struct cpudata *cpu)
 
 void display_SiS_info(struct cpudata *cpu)
 {
-	printf("Family: %u Model: %u Stepping: %u\n",
-		cpu->family, cpu->model, cpu->stepping);
-	printf("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);
 }

@@ -43,10 +43,7 @@ void display_Intel_info(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
-	printf("Family: %u Model: %u Stepping: %u Type: %u Brand: %u\n",
-		family(cpu), model(cpu),
-		cpu->stepping, cpu->type, cpu->brand);
-	printf("CPU Model: %s\n", cpu->name);
+	printf("Type: %u Brand: %u\n", cpu->type, cpu->brand);
 
 	/* Pentium4 and Banias have cpu name. */
 	if (cpu->family == 0xF || (cpu->family == 6 && cpu->model == 9))

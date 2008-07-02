@@ -359,11 +359,8 @@ void Identify_AMD(struct cpudata *cpu)
 	if (cpu->maxi < 1)
 		return;
 
-	cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
-	cpu->stepping = eax & 0xf;
-	cpu->model = (eax >> 4) & 0xf;
-	cpu->family = (eax >> 8) & 0xf;
 	if (cpu->family == 0xf) {
+		cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
 		cpu->emodel = (eax >> 16) & 0xf;
 		cpu->efamily= (eax >> 20) & 0xff;
 	} else {
@@ -709,9 +706,6 @@ void display_AMD_info(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
-	printf("Family: %u Model: %u Stepping: %u\n",
-	       family(cpu), model(cpu), cpu->stepping);
-	printf("CPU Model : %s\n", cpu->name);
 	get_model_name(cpu);
 
 	if (show_msr) {
