@@ -124,9 +124,10 @@ extern void display_NatSemi_info(struct cpudata *cpu);
 extern void display_RiSE_info(struct cpudata *cpu);
 extern void display_SiS_info(struct cpudata *cpu);
 
-extern void decode_feature_flags (struct cpudata *cpu);
-extern void identify (struct cpudata *cpu);
-extern void show_info (struct cpudata *cpu);
+extern void get_feature_flags(struct cpudata *cpu);
+extern void show_feature_flags(struct cpudata *cpu);
+extern void identify(struct cpudata *cpu);
+extern void show_info(struct cpudata *cpu);
 
 extern int read_msr(int cpu, unsigned int idx, unsigned long long *val);
 extern void binary(unsigned int n, unsigned long value);

@@ -24,7 +24,21 @@ void flag_decode(unsigned long reg, const char *flags[])
 }
 
 
-void decode_feature_flags(struct cpudata *cpu)
+void get_feature_flags(struct cpudata *cpu)
+{
+	unsigned int eax, ebx, ecx, edx;
+
+	cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
+	cpu->flags_ecx = ecx;
+	cpu->flags_edx = edx;
+	if (cpu->maxei >= 0x80000001) {
+		cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
+		cpu->eflags_ecx = ecx;
+		cpu->eflags_edx = edx;
+	}
+}
+
+void show_feature_flags(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 	unsigned int i;
@@ -133,18 +147,6 @@ void decode_feature_flags(struct cpudata *cpu)
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};
-
-	cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
-	cpu->flags_ecx = ecx;
-	cpu->flags_edx = edx;
-	if (cpu->maxei >= 0x80000001) {
-		cpuid(cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
-		cpu->eflags_ecx = ecx;
-		cpu->eflags_edx = edx;
-	}
-
-	if (silent != 0)
-		return;
 
 	printf("Feature flags:\n");
 	for (i=0; i<32; i++) {

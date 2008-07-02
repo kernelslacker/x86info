@@ -247,6 +247,7 @@ int main (int argc, char **argv)
 			printf("CPU #%u\n", i+1);
 
 		estimate_MHz(cpu);
+		get_feature_flags(cpu);
 		identify(cpu);
 		show_info(cpu);
 
@@ -260,7 +261,7 @@ int main (int argc, char **argv)
 		}
 
 		if (show_flags == 1)
-			decode_feature_flags(cpu);
+			show_feature_flags(cpu);
 
 		if (show_MHz) {
 			if (cpu->MHz < 1000)
