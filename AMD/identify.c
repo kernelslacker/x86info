@@ -706,8 +706,6 @@ void display_AMD_info(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
-	get_model_name(cpu);
-
 	if (show_msr) {
 		if (cpu->family == 5)
 			dump_k6_MSR(cpu);

@@ -95,6 +95,8 @@ void show_info(struct cpudata *cpu)
 		family(cpu), model(cpu), cpu->stepping);
 	printf("CPU Model: %s\n", cpu->name);
 
+	get_model_name(cpu);
+
 	switch (cpu->vendor) {
 	case VENDOR_AMD:
 		display_AMD_info(cpu);
@@ -110,18 +112,6 @@ void show_info(struct cpudata *cpu)
 
 	case VENDOR_INTEL:
 		display_Intel_info(cpu);
-		break;
-
-	case VENDOR_NATSEMI:
-		get_model_name(cpu);
-		break;
-
-	case VENDOR_RISE:
-		get_model_name(cpu);
-		break;
-
-	case VENDOR_SIS:
-		get_model_name(cpu);
 		break;
 
 	default:

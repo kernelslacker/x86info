@@ -45,10 +45,6 @@ void display_Intel_info(struct cpudata *cpu)
 
 	printf("Type: %u Brand: %u\n", cpu->type, cpu->brand);
 
-	/* Pentium4 and Banias have cpu name. */
-	if (cpu->family == 0xF || (cpu->family == 6 && cpu->model == 9))
-		get_model_name(cpu);
-
 	if (show_msr) {
 		if (cpu->family == 0xf)
 			dump_p4_MSRs(cpu);

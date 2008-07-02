@@ -161,8 +161,6 @@ void decode_centaur_cacheinfo(struct cpudata *cpu)
 
 void display_centaur_info(struct cpudata *cpu)
 {
-	get_model_name (cpu);
-
 	if (cpu->maxei == 0)
 		return;
 
