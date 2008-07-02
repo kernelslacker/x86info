@@ -171,8 +171,6 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	} else {
 		/* Something went wrong, just do UP and hope for the best. */
 		nodriver = 1;
-		if (!silent && nrCPUs != 1)
-			perror(cpuname);
 		used_UP = 1;
 		native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 		return;
