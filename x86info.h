@@ -64,7 +64,6 @@ struct cpudata {
 	unsigned int emodel;
 	unsigned int stepping;
 	unsigned int type;
-	unsigned int brand;
 	unsigned int cachesize_L1_I, cachesize_L1_D;
 	unsigned int cachesize_L2;
 	unsigned int cachesize_L3;
@@ -82,6 +81,7 @@ struct cpudata {
 	char *datasheet_url;
 	char *errata_url;
 	/* Intel specific bits */
+	unsigned int brand;
 	unsigned int apicid;
 	char serialno[30];
 };
