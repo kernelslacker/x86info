@@ -16,7 +16,6 @@ void Identify_NatSemi (struct cpudata *cpu)
 	unsigned int eax, ebx, ecx, edx;
 
 	NatSemi_nameptr = cpu->name;
-	cpu->vendor = VENDOR_NATSEMI;
 
 	/* Do standard stuff */
 	if (cpu->maxi < 1)

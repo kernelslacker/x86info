@@ -23,7 +23,6 @@ void Identify_Intel(struct cpudata *cpu)
 	unsigned int eax, ebx, ecx, edx;
 	int reserved;
 
-	cpu->vendor = VENDOR_INTEL;
 	intel_nameptr = cpu->name;
 
 	if (cpu->maxi < 1)

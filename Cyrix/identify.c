@@ -34,7 +34,6 @@ void Identify_Cyrix (struct cpudata *cpu)
 	unsigned int eax, ebx, ecx, edx;
 
 	cyrix_nameptr = cpu->name;
-	cpu->vendor = VENDOR_CYRIX;
 
 	/* Do standard stuff */
 	if (cpu->maxi < 1)

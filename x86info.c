@@ -248,6 +248,7 @@ int main (int argc, char **argv)
 
 		estimate_MHz(cpu);
 		get_feature_flags(cpu);
+		get_cpu_vendor(cpu);
 		identify(cpu);
 		show_info(cpu);
 

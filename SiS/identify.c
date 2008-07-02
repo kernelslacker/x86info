@@ -16,7 +16,6 @@ void Identify_SiS (struct cpudata *cpu)
 	unsigned int eax, ebx, ecx, edx;
 
 	sis_nameptr = cpu->name;
-	cpu->vendor = VENDOR_SIS;
 
 	/* Do standard stuff */
 	if (cpu->maxi < 1)

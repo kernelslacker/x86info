@@ -355,7 +355,6 @@ void Identify_AMD(struct cpudata *cpu)
 	unsigned int eax, ebx, ecx, edx;
 
 	amd_nameptr = cpu->name;
-	cpu->vendor = VENDOR_AMD;
 
 	if (cpu->maxi < 1)
 		return;

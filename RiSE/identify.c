@@ -16,7 +16,6 @@ void Identify_RiSE (struct cpudata *cpu)
 	unsigned int eax, ebx, ecx, edx;
 
 	rise_nameptr = cpu->name;
-	cpu->vendor = VENDOR_RISE;
 
 	/* Do standard stuff */
 	if (cpu->maxi < 1)

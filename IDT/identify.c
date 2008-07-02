@@ -19,8 +19,6 @@ void Identify_IDT(struct cpudata *cpu)
 
 	idt_nameptr = nameptr = cpu->name;
 
-	cpu->vendor = VENDOR_CENTAUR;
-
 	/* Do standard stuff */
 	if (cpu->maxi < 1)
 		return;

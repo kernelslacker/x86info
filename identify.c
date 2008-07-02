@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include "x86info.h"
 
-void identify(struct cpudata *cpu)
+void get_cpu_vendor(struct cpudata *cpu)
 {
 	unsigned int maxi, maxei, vendor;
 
@@ -22,31 +22,58 @@ void identify(struct cpudata *cpu)
 	cpu->maxei2 = maxei;
 
 	switch (vendor) {
-	case 0x756e6547:	/* Intel */
-		Identify_Intel(cpu);
+	case 0x756e6547:
+		cpu->vendor = VENDOR_INTEL;
 		break;
-	case 0x68747541:	/* AMD */
-		Identify_AMD(cpu);
+	case 0x68747541:
+		cpu->vendor = VENDOR_AMD;
 		break;
-	case 0x69727943:	/* Cyrix */
-		Identify_Cyrix(cpu);
+	case 0x69727943:
+		cpu->vendor = VENDOR_CYRIX;
 		break;
-	case 0x746e6543:	/* IDT */
-		Identify_IDT(cpu);
+	case 0x746e6543:
+		cpu->vendor = VENDOR_CENTAUR;
 		break;
-	case 0x646f6547:	/* Natsemi Geode */
-		Identify_NatSemi(cpu);
+	case 0x646f6547:
+		cpu->vendor = VENDOR_NATSEMI;
 		break;
-	case 0x52697365:	/* Rise This should be checked. Why 2 ? */
-	case 0x65736952:	/* Rise */
-		Identify_RiSE(cpu);
+	case 0x52697365:
+	case 0x65736952:
+		cpu->vendor = VENDOR_RISE;
 		break;
-	case 0x20536953:	/* SiS */
-		Identify_SiS(cpu);
+	case 0x20536953:
+		cpu->vendor = VENDOR_SIS;
 		break;
 	default:
 		printf("Unknown vendor (%x)\n", vendor);
 		return;
+	}
+}
+
+void identify(struct cpudata *cpu)
+{
+	switch (cpu->vendor) {
+	case VENDOR_INTEL:
+		Identify_Intel(cpu);
+		break;
+	case VENDOR_AMD:
+		Identify_AMD(cpu);
+		break;
+	case VENDOR_CYRIX:
+		Identify_Cyrix(cpu);
+		break;
+	case VENDOR_CENTAUR:
+		Identify_IDT(cpu);
+		break;
+	case VENDOR_NATSEMI:
+		Identify_NatSemi(cpu);
+		break;
+	case VENDOR_RISE:
+		Identify_RiSE(cpu);
+		break;
+	case VENDOR_SIS:
+		Identify_SiS(cpu);
+		break;
 	}
 }
 

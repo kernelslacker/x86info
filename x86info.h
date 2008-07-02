@@ -126,6 +126,7 @@ extern void display_SiS_info(struct cpudata *cpu);
 
 extern void get_feature_flags(struct cpudata *cpu);
 extern void show_feature_flags(struct cpudata *cpu);
+extern void get_cpu_vendor(struct cpudata *cpu);
 extern void identify(struct cpudata *cpu);
 extern void show_info(struct cpudata *cpu);
 
