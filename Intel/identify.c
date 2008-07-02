@@ -743,7 +743,6 @@ void Identify_Intel (struct cpudata *cpu)
 		// TODO: B1 as stepping 5 is a 100% guess
 		case 5:
 			add_to_cpuname(" [B1]");
-decode_serial_number(cpu);
 			break;
 		case 6:
 			// 2M L2
