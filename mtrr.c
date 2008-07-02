@@ -1,6 +1,4 @@
 /*
- *  $Id: mtrr.c,v 1.4 2002/10/30 03:18:07 davej Exp $
- *  This file is part of x86info
  *  (C) 2002 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.

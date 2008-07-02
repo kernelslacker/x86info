@@ -1,13 +1,10 @@
 /*
- *  $Id: MSR-P6.c,v 1.1 2002/11/12 17:19:17 davej Exp $
- *  This file is part of x86info.
  *  (C) 2002 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  Intel P6 specific MSR information
  *  See 24547203.pdf for more details.
- *
  */
 
 #include <stdio.h>

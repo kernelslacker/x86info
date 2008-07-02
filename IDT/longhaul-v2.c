@@ -1,11 +1,9 @@
 /*
- *  $Id: longhaul-v2.c,v 1.3 2003/07/15 19:04:53 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- *  IDT/Centaur specific parts.
+ *  Longhaul v2 register definitions.
  */
 #include <stdio.h>
 #include "../x86info.h"

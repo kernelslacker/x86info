@@ -1,12 +1,9 @@
 /*
- *  $Id: powernow.h,v 1.4 2003/01/16 17:09:18 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- *  AMD-specific information
- *
+ *  Powernow register definitions.
  */
 
 #include <sys/types.h>

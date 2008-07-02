@@ -1,6 +1,4 @@
 /*
- *  $Id: cachesize.c,v 1.14 2005/08/07 18:42:37 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
@@ -10,7 +8,6 @@
  * References:
  *	http://developer.intel.com/
  *	http://microcodes.sourceforge.net/CPUID.htm
- *
  */
 
 #include <stdio.h>

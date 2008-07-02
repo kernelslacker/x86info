@@ -1,3 +1,11 @@
+/*
+ *  (C) 2001 Dave Jones.
+ *
+ *  Licensed under the terms of the GNU GPL License version 2.
+ *
+ *  AMD specific prototypes.
+ */
+
 #ifndef _AMD_H
 #define _AMD_H
 extern void decode_athlon_bluesmoke(int cpunum);

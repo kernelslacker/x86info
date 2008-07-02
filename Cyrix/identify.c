@@ -1,11 +1,10 @@
 /*
- *  $Id: identify.c,v 1.14 2002/11/11 20:02:55 davej Exp $
  *  This file is part of x86info. 
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- * Cyrix bits.
+ *  Cyrix specific information.
  */
 
 #include <stdio.h>

@@ -1,6 +1,4 @@
 /*
- *  $Id: info.c,v 1.10 2004/10/06 21:19:05 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
@@ -10,7 +8,6 @@
  * References:
  *	http://developer.intel.com/
  *	http://microcodes.sourceforge.net/CPUID.htm
- *
  */
 
 #include <stdio.h>

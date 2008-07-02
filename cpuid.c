@@ -1,12 +1,11 @@
 /*
- *  $Id: cpuid.c,v 1.12 2005/04/25 20:54:12 davej Exp $
- *	This file is part of x86info
- *	(C) 2000, 2001 Dave Jones.
- *	Fixes by Arjan van de Ven (arjanv@redhat.com) and
- *	Philipp Rumpf (prumpf@mandrakesoft.com)
+ *  (C) 2000, 2001 Dave Jones.
+ *  Fixes by Arjan van de Ven (arjanv@redhat.com) and
+ *  Philipp Rumpf (prumpf@mandrakesoft.com)
  *
- *	Licensed under the terms of the GNU GPL License version 2.
+ *  Licensed under the terms of the GNU GPL License version 2.
  *
+ *  Routines for retrieving cpuid registers.
  */
 
 #define _LARGEFILE64_SOURCE

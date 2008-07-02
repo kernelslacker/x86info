@@ -1,11 +1,11 @@
 /*
- *  $Id: rdmsr.c,v 1.16 2003/06/09 22:15:20 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  Contributions by Arjan van de Ven & Philipp Rumpf.
+ *
+ *  Routines for reading MSRs.
  */
 
 #include <stdio.h>

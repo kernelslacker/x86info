@@ -1,6 +1,4 @@
 /*
- *  $Id: bugs.c,v 1.5 2004/06/02 22:29:29 davej Exp $
- *  This file is part of x86info.
  *  (C) 2002 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.

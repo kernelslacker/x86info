@@ -1,5 +1,4 @@
 /*
- *  This file is part of x86info
  *  (C) 2001-2006 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.

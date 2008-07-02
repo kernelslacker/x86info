@@ -1,12 +1,9 @@
 /*
- *  $Id: MSR-Athlon.c,v 1.5 2002/12/04 18:07:03 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  AMD-Athlon specific MSR information
- *
  */
 
 #include <stdio.h>

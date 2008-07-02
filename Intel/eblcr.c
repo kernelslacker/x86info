@@ -1,3 +1,11 @@
+/*
+ *  (C) 2001 Dave Jones.
+ *
+ *  Licensed under the terms of the GNU GPL License version 2.
+ *
+ *  Bus speed parsing.
+ */
+
 #include <stdio.h>
 #include "../x86info.h"
 

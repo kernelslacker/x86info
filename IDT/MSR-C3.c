@@ -1,6 +1,4 @@
 /*
- *  $Id: MSR-C3.c,v 1.5 2003/11/04 01:36:43 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.

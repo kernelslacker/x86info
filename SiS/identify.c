@@ -1,6 +1,4 @@
 /*
- *  $Id: identify.c,v 1.1 2003/04/11 00:10:42 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.

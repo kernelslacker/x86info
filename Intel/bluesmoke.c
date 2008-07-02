@@ -1,12 +1,9 @@
 /*
- *  $Id: bluesmoke.c,v 1.9 2003/04/11 00:17:20 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- *  Dump MCA registers.
- *
+ *  Dump machine check registers.
  */
 
 #include <stdio.h>

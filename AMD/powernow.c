@@ -1,12 +1,9 @@
 /*
- *  $Id: powernow.c,v 1.10 2003/03/11 13:57:39 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- *  AMD-specific information
- *
+ *  Decode powernow registers.
  */
 
 #include <stdio.h>

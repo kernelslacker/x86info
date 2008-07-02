@@ -1,5 +1,9 @@
 /*
- * Decode and print the name of the connector the CPU plugs into.
+ *  (C) 2001 Dave Jones.
+ *
+ *  Licensed under the terms of the GNU GPL License version 2.
+ *
+ *  Decode and print the name of the connector the CPU plugs into.
  */
 
 #include <stdio.h>

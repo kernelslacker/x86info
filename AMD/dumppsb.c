@@ -1,3 +1,10 @@
+/*
+ *  (C) 2001 Dave Jones.
+ *
+ *  Licensed under the terms of the GNU GPL License version 2.
+ *
+ *  PSB decoding routines.
+ */
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>

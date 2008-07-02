@@ -1,13 +1,10 @@
 /*
- *  $Id: MSR-K6.c,v 1.10 2002/11/25 15:34:30 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  AMD-K6 specific MSR information
  *  See 21329h1.pdf for more details.
- *
  */
 
 #include <stdio.h>

@@ -1,12 +1,9 @@
 /*
- *  $Id: powersaver.h,v 1.1 2003/01/27 17:33:16 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- *  AMD-specific information
- *
+ *  Powersaver MSR definitions.
  */
 
 #include <sys/types.h>

@@ -1,12 +1,9 @@
 /*
- *  $Id: get_model_name.c,v 1.4 2003/06/13 11:36:20 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  Get CPU name string from cpuid.
- *
  */
 
 #include <stdio.h>

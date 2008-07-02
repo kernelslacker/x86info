@@ -1,6 +1,4 @@
 /*
- *  $Id: identify.c,v 1.54 2004/06/11 12:35:05 davej Exp $
- *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
  *  Copyright (C) 2007 Advanced Micro Devices, Inc.
@@ -9,8 +7,6 @@
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  AMD-specific information
- *
- * http://www.pbase.com/image/17079307/original
  */
 
 #include <stdio.h>

@@ -1,5 +1,4 @@
 /*
- *  $Id: MHz.c,v 1.3 2003/06/09 22:02:36 davej Exp $
  *  This file is part of x86info.
  *  (C) 2001 Dave Jones.
  *
@@ -7,7 +6,6 @@
  *
  * Estimate CPU MHz routine by Andrea Arcangeli <andrea@suse.de>
  * Small changes by David Sterba <sterd9am@ss1000.ms.mff.cuni.cz>
- *
  */
 
 #include <stdio.h>

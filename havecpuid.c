@@ -1,3 +1,9 @@
+/*
+ *  (C) 2001 Dave Jones.
+ *
+ *  Licensed under the terms of the GNU GPL License version 2.
+ */
+
 #include <stdio.h>
 
 static __inline__ int flag_is_changeable_p(unsigned long flag)
