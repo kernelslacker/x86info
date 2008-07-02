@@ -150,6 +150,9 @@ extern void decode_connector(enum connector type);
 extern void show_benchmarks(struct cpudata *cpu);
 extern void decode_serial_number(struct cpudata *cpu);
 
+void decode_AMD_cacheinfo(struct cpudata *cpu);
+void decode_Intel_caches(struct cpudata *cpu, int output);
+
 extern int show_bench;
 extern int show_bios;
 extern int show_bluesmoke;

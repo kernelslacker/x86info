@@ -261,6 +261,15 @@ int main (int argc, char **argv)
 				dumpregs (cpu->number, 0xC0000000, cpu->maxei2);
 		}
 
+		if (show_cacheinfo == 1) {
+			switch (cpu->vendor) {
+			case VENDOR_INTEL:	decode_Intel_caches(cpu, 1);
+						break;
+			case VENDOR_AMD:	decode_AMD_cacheinfo(cpu);
+						break;
+			}
+		}
+
 		if (show_flags == 1)
 			show_feature_flags(cpu);
 

@@ -203,7 +203,7 @@ static void do_l2assoc(unsigned long assoc)
 		printf("%lu-way associative. ", a);
 }
 
-static void decode_AMD_cacheinfo(struct cpudata *cpu)
+void decode_AMD_cacheinfo(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
@@ -723,9 +723,6 @@ void display_AMD_info(struct cpudata *cpu)
 
 	if (show_bluesmoke)
 		decode_athlon_bluesmoke(cpu->number);
-
-	if (show_cacheinfo)
-		decode_AMD_cacheinfo(cpu);
 
 	if (show_pm)
 		decode_powernow(cpu);

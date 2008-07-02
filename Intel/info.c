@@ -50,7 +50,7 @@ void display_Intel_info(struct cpudata *cpu)
 
 	/* Pentium4 and Banias have cpu name. */
 	if (cpu->family == 0xF || (cpu->family == 6 && cpu->model == 9))
-		get_model_name (cpu);
+		get_model_name(cpu);
 
 	if (show_msr) {
 		if (cpu->family == 0xf)
@@ -58,8 +58,6 @@ void display_Intel_info(struct cpudata *cpu)
 		if (cpu->family == 0x6 && (cpu->model == 9 || cpu->model == 13))
 			dump_centrino_MSRs(cpu);
 	}
-
-	decode_Intel_caches(cpu, 1);
 
 	if (show_eblcr) {
 		if (cpu->family == 6 && cpu->model >= 3) {
