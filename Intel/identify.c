@@ -39,6 +39,10 @@ void Identify_Intel (struct cpudata *cpu)
 	cpu->stepping = eax & 0xf;
 	cpu->model = (eax >> 4) & 0xf;
 	cpu->family = (eax >> 8) & 0xf;
+
+	cpu->emodel = (eax >> 16) & 0xf;
+	cpu->efamily= (eax >> 20) & 0xff;
+
 	cpu->type = (eax >> 12) & 0x3;
 	cpu->brand = (ebx & 0xf);
 	reserved = eax >> 14;
