@@ -259,6 +259,9 @@ int main (int argc, char **argv)
 				dumpregs (cpu->number, 0xC0000000, cpu->maxei2);
 		}
 
+		if (show_flags == 1)
+			decode_feature_flags(cpu);
+
 		if (show_MHz) {
 			if (cpu->MHz < 1000)
 				printf("%uMHz", cpu->MHz);

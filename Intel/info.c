@@ -52,8 +52,6 @@ void display_Intel_info(struct cpudata *cpu)
 	if (cpu->family == 0xF || (cpu->family == 6 && cpu->model == 9))
 		get_model_name (cpu);
 
-	decode_feature_flags (cpu);
-
 	if (show_msr) {
 		if (cpu->family == 0xf)
 			dump_p4_MSRs(cpu);

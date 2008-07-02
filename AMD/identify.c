@@ -715,8 +715,6 @@ void display_AMD_info(struct cpudata *cpu)
 	printf("CPU Model : %s\n", cpu->name);
 	get_model_name(cpu);
 
-	decode_feature_flags(cpu);
-
 	if (show_msr) {
 		if (cpu->family == 5)
 			dump_k6_MSR(cpu);

@@ -178,10 +178,6 @@ void display_IDT_info(struct cpudata *cpu)
 	printf("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);
 
-
-	/* Check for presence of extended info */
-	decode_feature_flags(cpu);
-
 	if (cpu->maxei == 0)
 		return;
 

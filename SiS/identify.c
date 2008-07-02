@@ -42,6 +42,4 @@ void display_SiS_info(struct cpudata *cpu)
 		cpu->family, cpu->model, cpu->stepping);
 	printf("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);
-
-	decode_feature_flags (cpu);
 }

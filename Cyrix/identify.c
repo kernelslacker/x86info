@@ -93,8 +93,6 @@ void display_Cyrix_info(struct cpudata *cpu)
 	printf("CPU Model : %s\n", cpu->name);
 	get_model_name (cpu);
 
-	decode_feature_flags (cpu);
-
 	printf("TLB & L1 Cache info\n");
 	if (cpu->maxi >= 2 && show_cacheinfo) {
 		/* TLB and L1 Cache info */
