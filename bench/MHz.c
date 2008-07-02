@@ -17,11 +17,14 @@
 
 #include "../x86info.h"
 
-static unsigned long long int rdtsc(void)
+static inline unsigned long long int rdtsc(void)
 {
-	unsigned long long int x;
-	__asm__ volatile (".byte 0x0f, 0x31" : "=A" (x));
-	return x;
+	unsigned int low, high;
+	unsigned long tsc;
+
+	__asm__ __volatile__("rdtsc" : "=a" (low), "=d" (high));
+	tsc = ((unsigned long long) high << 32) | low;
+	return tsc;
 }
 
 static volatile int nosignal = 0;
@@ -34,13 +37,9 @@ static void sighandler(int sig __attribute__((unused)))
 void estimate_MHz(struct cpudata *cpu)
 {
 	cpu_set_t set;
-	struct timezone tz;
-	struct timeval tvstart, tvstop;
 	unsigned long long int cycles[2]; /* gotta be 64 bit */
-	unsigned long microseconds; /* total time taken */
 	unsigned int eax, ebx, ecx, edx;
-	unsigned long freq = 1;
-	unsigned long i;
+	unsigned long r;
 
 	/* Make sure we have a TSC (and hence RDTSC) */
 	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
@@ -49,8 +48,6 @@ void estimate_MHz(struct cpudata *cpu)
 		cpu->MHz = 0;
 		return;
 	}
-
-	memset(&tz, 0, sizeof(tz));
 
 	if (sched_getaffinity(getpid(), sizeof(set), &set) == 0) {
 		CPU_ZERO(&set);
@@ -64,25 +61,19 @@ void estimate_MHz(struct cpudata *cpu)
 	}
 
 	cycles[0] = rdtsc();
-	gettimeofday(&tvstart, &tz);
 
-	alarm(3);
-	while (!nosignal) {
-		i = i * rand();
-	}
+	alarm(1);
+	while (!nosignal)
+		r = r * rand();
+
+	nosignal = 0;
 
 	cycles[1] = rdtsc();
-	gettimeofday(&tvstop, &tz);
 
-	microseconds = ((tvstop.tv_sec-tvstart.tv_sec)*1000000) +
-		(tvstop.tv_usec-tvstart.tv_usec);
-
-	cpu->MHz = (int) (cycles[1]-cycles[0]) / (microseconds/freq);
+	cpu->MHz = (cycles[1] - cycles[0]) / 1000000;
 
 	if ((cpu->MHz % 50) > 15)
 		cpu->MHz = ((cpu->MHz / 50) * 50) + 50;
 	else
 		cpu->MHz = ((cpu->MHz / 50) * 50);
-
-	nosignal = 0;
 }
