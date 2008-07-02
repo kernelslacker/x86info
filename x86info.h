@@ -82,6 +82,7 @@ struct cpudata {
 	char *datasheet_url;
 	char *errata_url;
 	/* Intel specific bits */
+	unsigned int apicid;
 	char serialno[30];
 };
 
@@ -106,6 +107,7 @@ static const char *get_##title##_name(type id) \
 extern void cpuid_UP (unsigned int idx, unsigned long *eax, unsigned long *ebx, unsigned long *ecx, unsigned long *edx);
 extern void cpuid(unsigned int CPU_number, unsigned long long idx, unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
 extern void cpuid4(unsigned int CPU_number, unsigned long long idx, unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
+extern void native_cpuid(unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
 
 extern void Identify_AMD (struct cpudata *cpu);
 extern void Identify_Cyrix (struct cpudata *cpu);
@@ -168,37 +170,5 @@ extern int silent;
 extern int user_is_root;
 
 #define X86_FEATURE_MTRR	1<<12
-
-static inline void native_cpuid(unsigned int *eax, unsigned int *ebx,
-                                unsigned int *ecx, unsigned int *edx)
-{
-	unsigned int a = 0, b = 0, c = 0, d = 0;
-
-	if (eax != NULL)
-		a = *eax;
-	if (ebx != NULL)
-		b = *ebx;
-	if (ecx != NULL)
-		c = *ecx;
-	if (edx != NULL)
-		d = *edx;
-
-	asm("cpuid"
-		: "=a" (a),
-		  "=b" (b),
-		  "=c" (c),
-		  "=d" (d)
-		: "0" (a), "2" (c));
-
-	if (eax!=NULL)
-		*eax = a;
-	if (ebx!=NULL)
-		*ebx = b;
-	if (ecx!=NULL)
-		*ecx = c;
-	if (edx!=NULL)
-		*edx = d;
-}
-
 
 #endif /* _X86INFO_H */
