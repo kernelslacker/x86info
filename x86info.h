@@ -107,7 +107,6 @@ static const char *get_##title##_name(type id) \
 extern void cpuid_UP (unsigned int idx, unsigned long *eax, unsigned long *ebx, unsigned long *ecx, unsigned long *edx);
 extern void cpuid(unsigned int CPU_number, unsigned long long idx, unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
 extern void cpuid4(unsigned int CPU_number, unsigned long long idx, unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
-extern void native_cpuid(unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
 
 extern void Identify_AMD (struct cpudata *cpu);
 extern void Identify_Cyrix (struct cpudata *cpu);

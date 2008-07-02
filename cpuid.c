@@ -19,12 +19,54 @@
 #include <unistd.h>
 #include <errno.h>
 
+#define __USE_GNU
+#include <sched.h>
+
 #if defined(__FreeBSD__)
 # include <sys/ioctl.h>
 # include <cpu.h>
 #endif
 
 #include "x86info.h"
+
+static void native_cpuid(unsigned int cpunr,
+	unsigned int *eax, unsigned int *ebx,
+	unsigned int *ecx, unsigned int *edx)
+{
+	cpu_set_t set;
+	unsigned int a = 0, b = 0, c = 0, d = 0;
+
+	if (eax != NULL)
+		a = *eax;
+	if (ebx != NULL)
+		b = *ebx;
+	if (ecx != NULL)
+		c = *ecx;
+	if (edx != NULL)
+		d = *edx;
+
+	if (sched_getaffinity(getpid(), sizeof(set), &set) == 0) {
+		CPU_ZERO(&set);
+		CPU_SET(cpunr, &set);
+		sched_setaffinity(getpid(), sizeof(set), &set);
+	}
+
+	asm("cpuid"
+		: "=a" (a),
+		  "=b" (b),
+		  "=c" (c),
+		  "=d" (d)
+		: "0" (a), "2" (c));
+
+	if (eax!=NULL)
+		*eax = a;
+	if (ebx!=NULL)
+		*ebx = b;
+	if (ecx!=NULL)
+		*ecx = c;
+	if (edx!=NULL)
+		*edx = d;
+}
 
 #if defined(__FreeBSD__)
 void cpuid(unsigned int CPU_number, unsigned long long idx,
@@ -40,7 +82,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	cpu_cpuid_args_t args;
 
 	if (nodriver == 1) {
-		native_cpuid(eax,ebx,ecx,edx);
+		native_cpuid(CPU_number, eax,ebx,ecx,edx);
 		return;
 	}
 
@@ -67,7 +109,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 		if (!silent && nrCPUs != 1)
 			perror(cpuname);
 		used_UP = 1;
-		native_cpuid(eax,ebx,ecx,edx);
+		native_cpuid(CPU_number, eax,ebx,ecx,edx);
 		return;
 	}
 }
@@ -97,7 +139,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	}
 
 	if (nodriver == 1) {
-		native_cpuid(eax,ebx,ecx,edx);
+		native_cpuid(CPU_number, eax,ebx,ecx,edx);
 		return;
 	}
 
@@ -132,7 +174,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 		if (!silent && nrCPUs != 1)
 			perror(cpuname);
 		used_UP = 1;
-		native_cpuid(eax,ebx,ecx,edx);
+		native_cpuid(CPU_number, eax,ebx,ecx,edx);
 		return;
 	}
 }
@@ -143,35 +185,4 @@ void cpuid4(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx)
 {
 	cpuid(CPU_number, 4 | (idx << 32), eax, ebx, ecx, edx);
-}
-
-void native_cpuid(unsigned int *eax, unsigned int *ebx,
-                                unsigned int *ecx, unsigned int *edx)
-{
-	unsigned int a = 0, b = 0, c = 0, d = 0;
-
-	if (eax != NULL)
-		a = *eax;
-	if (ebx != NULL)
-		b = *ebx;
-	if (ecx != NULL)
-		c = *ecx;
-	if (edx != NULL)
-		d = *edx;
-
-	asm("cpuid"
-		: "=a" (a),
-		  "=b" (b),
-		  "=c" (c),
-		  "=d" (d)
-		: "0" (a), "2" (c));
-
-	if (eax!=NULL)
-		*eax = a;
-	if (ebx!=NULL)
-		*ebx = b;
-	if (ecx!=NULL)
-		*ecx = c;
-	if (edx!=NULL)
-		*edx = d;
 }
