@@ -22,8 +22,8 @@ void Identify_Intel_family15(struct cpudata *cpu)
 {
 	intel_nameptr = cpu->name;
 
-	switch (tuple(cpu) & 0xff0) {
-	case 0xF00:	/* Family 15 */
+	switch (model(cpu)) {
+	case 0x0:	/* Family 15 */
 		cpu->connector = CONN_SOCKET_423;
 		cpu->datasheet_url = strdup(p4_423_datasheet);
 		cpu->errata_url = strdup(p4_errata);
@@ -47,7 +47,7 @@ void Identify_Intel_family15(struct cpudata *cpu)
 		}
 		break;
 
-	case 0xF10:
+	case 0x1:
 		cpu->connector = CONN_SOCKET_423;
 		add_to_cpuname("Pentium 4 (Willamette)");
 		cpu->datasheet_url = strdup(p4_423_datasheet);
@@ -83,7 +83,7 @@ void Identify_Intel_family15(struct cpudata *cpu)
 			break;
 		}
 		break;
-	case 0xF20:
+	case 0x2:
 		cpu->connector = CONN_SOCKET_478;
 		cpu->datasheet_url = strdup(p4_478_datasheet);
 		cpu->errata_url = strdup(p4_errata);
@@ -181,7 +181,7 @@ void Identify_Intel_family15(struct cpudata *cpu)
 			break;
 		}
 		break;
-	case 0xF30:
+	case 0x3:
 		switch (cpu->stepping) {
 		case 3:
 			/*
@@ -245,7 +245,7 @@ void Identify_Intel_family15(struct cpudata *cpu)
 		}
 		break;
 
-	case 0xF40:
+	case 0x4:
 		add_to_cpuname("Pentium 4 ");
 		switch (cpu->stepping) {
 		case 1:
@@ -331,7 +331,7 @@ void Identify_Intel_family15(struct cpudata *cpu)
 		}
 		break;
 
-	case 0xF50:
+	case 0x5:
 		cpu->connector = CONN_SOCKET_603;
 //		cpu->datasheet_url = strdup(p4_478_datasheet);
 //		cpu->errata_url = strdup(p4_errata);

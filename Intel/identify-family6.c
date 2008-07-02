@@ -18,12 +18,12 @@ void Identify_Intel_family6(struct cpudata *cpu)
 {
 	intel_nameptr = cpu->name;
 
-	switch (tuple(cpu) & 0xff0) {
-	case 0x600:
+	switch (model(cpu)) {
+	case 0x0:
 		add_to_cpuname("Pentium Pro A-Step");
 		cpu->connector = CONN_SOCKET_8;
 		break;
-	case 0x610:
+	case 0x1:
 		add_to_cpuname("Pentium Pro");
 		cpu->connector = CONN_SOCKET_8;
 		switch (cpu->stepping) {
@@ -90,7 +90,7 @@ void Identify_Intel_family6(struct cpudata *cpu)
 			break;
 		}
 		break;
-	case 0x630:
+	case 0x3:
 		add_to_cpuname("Pentium II ");
 		cpu->connector = CONN_SLOT_1;
 		switch (cpu->stepping) {
@@ -127,12 +127,12 @@ void Identify_Intel_family6(struct cpudata *cpu)
 			break;
 		}
 		break;
-	case 0x640:
+	case 0x4:
 		//Does this exist? Its not in Intels spec update.
 		cpu->connector = CONN_SLOT_1;
 		add_to_cpuname("Pentium II (Deschutes?)");
 		break;
-	case 0x650:
+	case 0x5:
 		cpu->connector = CONN_SLOT_1;
 		switch (cpu->cachesize_L2) {
 			case 0:
@@ -213,7 +213,7 @@ void Identify_Intel_family6(struct cpudata *cpu)
 				}
 		}
 		break;
-	case 0x660:
+	case 0x6:
 		cpu->connector = CONN_SOCKET_370;
 		if (cpu->cachesize_L2 == 128) {
 			add_to_cpuname("Celeron (Mendocino)");
@@ -234,7 +234,7 @@ void Identify_Intel_family6(struct cpudata *cpu)
 			break;
 		}
 		break;
-	case 0x670:
+	case 0x7:
 		cpu->connector = CONN_SLOT_1;
 		switch (cpu->stepping) {
 		case 2:
@@ -262,7 +262,7 @@ void Identify_Intel_family6(struct cpudata *cpu)
 		}
 		decode_serial_number(cpu);
 		break;
-	case 0x680:
+	case 0x8:
 		switch (cpu->brand) {
 		case 2:
 			add_to_cpuname("Pentium III/Pentium III-M (Coppermine)");
@@ -346,12 +346,12 @@ void Identify_Intel_family6(struct cpudata *cpu)
 		decode_serial_number(cpu);
 		break;
 
-	case 0x690:
+	case 0x9:
 //		cpu->connector = 
 		add_to_cpuname("Pentium M (Banias)");
 		break;
 
-	case 0x6a0:
+	case 0xa:
 		cpu->connector = CONN_SLOT_1;
 		switch (cpu->brand) {
 		case 0:
@@ -401,7 +401,7 @@ void Identify_Intel_family6(struct cpudata *cpu)
 		}
 		break;
 
-	case 0x6b0:
+	case 0xb:
 		switch (cpu->brand) {
 			case 1:
 			case 3:
@@ -431,7 +431,7 @@ void Identify_Intel_family6(struct cpudata *cpu)
 		}
 		break;
 
-	case 0x6d0:
+	case 0xd:
 		add_to_cpuname("Pentium M ");
 		cpu->connector = CONN_MICROFCBGA;
 		switch (cpu->stepping) {
@@ -504,7 +504,7 @@ void Identify_Intel_family6(struct cpudata *cpu)
 		}
 		break;
 
-	case 0x6e0:
+	case 0xe:
 		add_to_cpuname("Core ");
 		switch (cpu->stepping) {
 			case 8:
@@ -557,7 +557,7 @@ void Identify_Intel_family6(struct cpudata *cpu)
 		}
 		break;
 
-	case 0x6f0:
+	case 0xf:
 		add_to_cpuname("Core 2 ");
 		// Do a numerical hack, because they aren't exactly 2100Mhz etc.
 		// FIXME: Come up with a better way to do this, easiest if
@@ -700,5 +700,7 @@ void Identify_Intel_family6(struct cpudata *cpu)
 			break;
 		}
 		break;
+	default:
+                add_to_cpuname("Unknown model. ");
 	}
 }
