@@ -250,6 +250,15 @@ int main (int argc, char **argv)
 		identify(cpu);
 		show_info(cpu);
 
+		if (show_registers) {
+			dumpregs(cpu->number, 0, cpu->maxi);
+			if (cpu->maxei >=0x80000000)
+				dumpregs (cpu->number, 0x80000000, cpu->maxei);
+
+			if (cpu->maxei2 >=0xC0000000)
+				dumpregs (cpu->number, 0xC0000000, cpu->maxei2);
+		}
+
 		if (show_MHz) {
 			if (cpu->MHz < 1000)
 				printf("%uMHz", cpu->MHz);

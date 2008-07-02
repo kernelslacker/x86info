@@ -134,6 +134,7 @@ extern void binary32(unsigned long value);
 extern void binary64(unsigned long long value);
 extern void dumpmsr (int cpunum, unsigned int msr, int size);
 extern void dumpmsr_bin (int cpunum, unsigned int msr, int size);
+extern void dumpregs(int cpunum, unsigned int begin, unsigned int end);
 
 extern void dump_mtrrs (struct cpudata *cpu);
 

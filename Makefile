@@ -42,6 +42,7 @@ C_SRC =\
 	x86info.c\
 	havecpuid.c\
 	cpuid.c\
+	dumpregs.c\
 	features.c\
 	identify.c\
 	rdmsr.c\
