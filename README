@@ -14,7 +14,7 @@ has been added, such as support for SMP, and building on non-Linux platforms.
 
 Features:
  - SMP support.
- - Recognition of all Intel/AMD/IDT/Cyrix/VIA CPUs.
+ - Recognition of all Intel/AMD/Centaur/Cyrix/VIA CPUs.
  - Parsing of model specific registers.
  - Approximation of current CPU MHz.
 
@@ -42,4 +42,3 @@ Caveats:
 	alias char-major-203 cpuid
 
 Info on the command line switches can be found in the man page.
-

@@ -110,7 +110,7 @@ extern void cpuid4(unsigned int CPU_number, unsigned long long idx, unsigned int
 
 extern void Identify_AMD (struct cpudata *cpu);
 extern void Identify_Cyrix (struct cpudata *cpu);
-extern void Identify_IDT (struct cpudata *cpu);
+extern void identify_centaur(struct cpudata *cpu);
 extern void Identify_Intel (struct cpudata *cpu);
 extern void Identify_RiSE (struct cpudata *cpu);
 extern void Identify_NatSemi (struct cpudata *cpu);
@@ -118,7 +118,7 @@ extern void Identify_SiS (struct cpudata *cpu);
 
 extern void display_AMD_info(struct cpudata *cpu);
 extern void display_Cyrix_info(struct cpudata *cpu);
-extern void display_IDT_info(struct cpudata *cpu);
+extern void display_centaur_info(struct cpudata *cpu);
 extern void display_Intel_info(struct cpudata *cpu);
 extern void display_NatSemi_info(struct cpudata *cpu);
 extern void display_RiSE_info(struct cpudata *cpu);

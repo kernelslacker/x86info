@@ -63,7 +63,7 @@ void identify(struct cpudata *cpu)
 		Identify_Cyrix(cpu);
 		break;
 	case VENDOR_CENTAUR:
-		Identify_IDT(cpu);
+		identify_centaur(cpu);
 		break;
 	case VENDOR_NATSEMI:
 		Identify_NatSemi(cpu);
@@ -92,7 +92,7 @@ void show_info(struct cpudata *cpu)
 		break;
 
 	case VENDOR_CENTAUR:
-		display_IDT_info(cpu);
+		display_centaur_info(cpu);
 		break;
 
 	case VENDOR_INTEL:

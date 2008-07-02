@@ -28,10 +28,10 @@ C_SRC =\
 	Intel/MSR-PM.c\
 	Intel/microcode.c\
 \
-	IDT/identify.c\
-	IDT/MSR-C3.c\
-	IDT/longhaul.c\
-	IDT/powersaver.c\
+	Centaur/identify.c\
+	Centaur/MSR-C3.c\
+	Centaur/longhaul.c\
+	Centaur/powersaver.c\
 \
 	NatSemi/identify.c\
 \

@@ -3,11 +3,11 @@
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- *  IDT/Centaur specific parts.
+ *  Centaur specific parts.
  */
 #include <stdio.h>
 #include "../x86info.h"
-#include "IDT.h"
+#include "centaur.h"
 
 void dump_C3_MSR (struct cpudata *cpu)
 {

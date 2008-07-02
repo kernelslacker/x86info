@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include "../x86info.h"
-#include "IDT.h"
+#include "centaur.h"
 #include "powersaver.h"
 
 void decode_powersaver(struct cpudata *cpu)

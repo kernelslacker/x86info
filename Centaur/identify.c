@@ -3,21 +3,21 @@
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- *  IDT/Centaur specific parts.
+ *  Centaur specific parts.
  */
 #include <stdio.h>
 #include "../x86info.h"
-#include "IDT.h"
+#include "centaur.h"
 
-static char *idt_nameptr;
-#define add_to_cpuname(x)   idt_nameptr += snprintf(idt_nameptr, sizeof(x), "%s", x);
+static char *centaur_nameptr;
+#define add_to_cpuname(x)   centaur_nameptr += snprintf(centaur_nameptr, sizeof(x), "%s", x);
 
-void Identify_IDT(struct cpudata *cpu)
+void identify_centaur(struct cpudata *cpu)
 {
 	char *nameptr;
 	unsigned int eax, ebx, ecx, edx;
 
-	idt_nameptr = nameptr = cpu->name;
+	centaur_nameptr = nameptr = cpu->name;
 
 	/* Do standard stuff */
 	if (cpu->maxi < 1)
@@ -54,7 +54,7 @@ void Identify_IDT(struct cpudata *cpu)
 			add_to_cpuname("Winchip 3");
 			break;
 
-		/* Family 6 is when VIA bought out Cyrix & IDT
+		/* Family 6 is when VIA bought out Cyrix & Centaur
 		 * This is the CyrixIII family. */
 		case 0x660:
 			add_to_cpuname("VIA Cyrix 3 (Samuel) [C5A]");
@@ -137,7 +137,7 @@ void Identify_IDT(struct cpudata *cpu)
 }
 
 
-void decode_IDT_cacheinfo(struct cpudata *cpu)
+void decode_centaur_cacheinfo(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
@@ -169,7 +169,7 @@ void decode_IDT_cacheinfo(struct cpudata *cpu)
 }
 
 
-void display_IDT_info(struct cpudata *cpu)
+void display_centaur_info(struct cpudata *cpu)
 {
 	printf("Family: %u Model: %u Stepping: %u\n",
 		cpu->family, cpu->model, cpu->stepping);
@@ -179,7 +179,7 @@ void display_IDT_info(struct cpudata *cpu)
 	if (cpu->maxei == 0)
 		return;
 
-	decode_IDT_cacheinfo(cpu);
+	decode_centaur_cacheinfo(cpu);
 
 	if (cpu->family == 6 && show_registers)
 		dump_C3_MSR(cpu);
