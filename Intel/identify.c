@@ -121,20 +121,7 @@ void Identify_Intel(struct cpudata *cpu)
 		add_to_cpuname("MMX Mobile");
 		cpu->connector = CONN_SOCKET_7;
 		break;
-	case 0x600:
-	case 0x610:
-	case 0x630:
-	case 0x640:
-	case 0x650:
-	case 0x660:
-	case 0x670:
-	case 0x680:
-	case 0x690:
-	case 0x6A0:
-	case 0x6B0:
-	case 0x6d0:
-	case 0x6e0:
-	case 0x6f0:
+	case 0x600 ... 0x6f0:
 		Identify_Intel_family6(cpu);
 		intel_nameptr += strlen(cpu->name);	// EWW
 		break;
