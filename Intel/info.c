@@ -74,6 +74,11 @@ void display_Intel_info (struct cpudata *cpu)
 	if (show_bluesmoke)
 		decode_Intel_bluesmoke(cpu->number, cpu->family);
 
+	/* Stash the APIC ID for this logical CPU */
+	cpuid(cpu->number, 1, NULL, &ebx, NULL, NULL);
+	cpu->apicid = ebx >> 24;
+	printf("APIC ID: %x\n", cpu->apicid);
+
 	/* Figure out number of cores on this package. */
 	cpu->nr_cores = 1;
 	if (cpu->maxi >= 4) {
