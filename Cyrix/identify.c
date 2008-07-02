@@ -32,7 +32,7 @@ void decode_Cyrix_TLB (int x)
 /* Cyrix-specific information */
 void Identify_Cyrix (struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 
 	cyrix_nameptr = cpu->name;
 	cpu->vendor = VENDOR_CYRIX;
@@ -87,7 +87,7 @@ void Identify_Cyrix (struct cpudata *cpu)
 void display_Cyrix_info(struct cpudata *cpu)
 {
 	unsigned int i, ntlb;
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 
 	printf("Family: %u Model: %u Stepping: %u\n",
 		cpu->family, cpu->model, cpu->stepping);

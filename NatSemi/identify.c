@@ -13,7 +13,7 @@ static char *NatSemi_nameptr;
 
 void Identify_NatSemi (struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 
 	NatSemi_nameptr = cpu->name;
 	cpu->vendor = VENDOR_NATSEMI;

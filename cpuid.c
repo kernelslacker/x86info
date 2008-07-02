@@ -27,11 +27,11 @@
 #include "x86info.h"
 
 #if defined(__FreeBSD__)
-void cpuid(int CPU_number, unsigned int idx,
-	unsigned long *eax,
-	unsigned long *ebx,
-	unsigned long *ecx,
-	unsigned long *edx)
+void cpuid(unsigned int CPU_number, unsigned long long idx,
+	unsigned int *eax,
+	unsigned int *ebx,
+	unsigned int *ecx,
+	unsigned int *edx)
 {
 	static int nodriver=0;
 	char cpuname[20];
@@ -39,8 +39,8 @@ void cpuid(int CPU_number, unsigned int idx,
 	int fh;
 	cpu_cpuid_args_t args;
 
-	if (nodriver==1) {
-		cpuid_UP(idx, eax, ebx, ecx, edx);
+	if (nodriver == 1) {
+		native_cpuid(eax,ebx,ecx,edx);
 		return;
 	}
 
@@ -67,7 +67,7 @@ void cpuid(int CPU_number, unsigned int idx,
 		if (!silent && nrCPUs != 1)
 			perror(cpuname);
 		used_UP = 1;
-		cpuid_UP(idx, eax, ebx, ecx, edx);
+		native_cpuid(eax,ebx,ecx,edx);
 		return;
 	}
 }
@@ -79,19 +79,25 @@ void cpuid(int CPU_number, unsigned int idx,
  */
 #define CPUID_CHUNK_SIZE (16)
 
-void cpuid (int CPU_number, unsigned int idx,
-	unsigned long *eax,
-	unsigned long *ebx,
-	unsigned long *ecx,
-	unsigned long *edx)
+void cpuid(unsigned int CPU_number, unsigned long long idx,
+	unsigned int *eax,
+	unsigned int *ebx,
+	unsigned int *ecx,
+	unsigned int *edx)
 {
 	static int nodriver=0;
 	char cpuname[20];
 	unsigned char buffer[CPUID_CHUNK_SIZE];
 	int fh;
 
-	if (nodriver==1) {
-		cpuid_UP(idx, eax, ebx, ecx, edx);
+	if (eax != NULL) {
+		*eax = (unsigned int) idx;
+		if (*eax == 4)
+			*ecx = idx >> 32;
+	}
+
+	if (nodriver == 1) {
+		native_cpuid(eax,ebx,ecx,edx);
 		return;
 	}
 
@@ -126,9 +132,15 @@ void cpuid (int CPU_number, unsigned int idx,
 		if (!silent && nrCPUs != 1)
 			perror(cpuname);
 		used_UP = 1;
-		cpuid_UP(idx, eax, ebx, ecx, edx);
+		native_cpuid(eax,ebx,ecx,edx);
 		return;
 	}
 }
 
 #endif /* __FreeBSD__ */
+
+void cpuid4(unsigned int CPU_number, unsigned long long idx,
+	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx)
+{
+	cpuid(CPU_number, 4 | (idx << 32), eax, ebx, ecx, edx);
+}

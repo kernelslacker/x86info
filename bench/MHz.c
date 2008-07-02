@@ -28,7 +28,7 @@ void estimate_MHz(struct cpudata *cpu)
 	struct timeval tvstart, tvstop;
 	unsigned long long int cycles[2]; /* gotta be 64 bit */
 	unsigned long microseconds; /* total time taken */
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 	unsigned long freq = 1;
 
 	/* Make sure we have a TSC (and hence RDTSC) */

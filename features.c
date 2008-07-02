@@ -26,7 +26,7 @@ void flag_decode(unsigned long reg, const char *flags[])
 
 void decode_feature_flags(struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 	unsigned int i;
 
 	/* CPUID 0x00000001 EDX flags */

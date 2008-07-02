@@ -40,7 +40,6 @@ OBJS =\
 	x86info.o\
 	havecpuid.o\
 	cpuid.o\
-	cpuid_UP.o\
 	features.o\
 	identify.o\
 	rdmsr.o\

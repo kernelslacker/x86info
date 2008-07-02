@@ -87,7 +87,7 @@ static void set_fam10h_name(struct fam10h_rev *r, struct cpudata *c)
 
 static void set_connector(struct cpudata *c)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 	int pkg_id;
 
 	cpuid(c->number, 0x80000001, &eax, &ebx, &ecx, &edx);
@@ -205,7 +205,7 @@ static void do_l2assoc(unsigned long assoc)
 
 static void decode_AMD_cacheinfo(struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 
 	if ((cpu->eflags_edx & 1<<26) && cpu->maxei >= 0x80000019) {
 		/* 1GB page TLB info */
@@ -213,10 +213,10 @@ static void decode_AMD_cacheinfo(struct cpudata *cpu)
 
 		printf("L1 Data TLB (1G):           ");
 		do_l2assoc(eax >> 28);
-		printf("%lu entries.\n", (eax >> 16) & 0xfff);
+		printf("%u entries.\n", (eax >> 16) & 0xfff);
 		printf("L1 Instruction TLB (1G):    ");
 		do_l2assoc((eax >> 12) & 0xf);
-		printf("%lu entries.\n", eax & 0xfff);
+		printf("%u entries.\n", eax & 0xfff);
 	}
 
 	if (cpu->maxei >= 0x80000005) {
@@ -225,31 +225,31 @@ static void decode_AMD_cacheinfo(struct cpudata *cpu)
 
 		printf("L1 Data TLB (2M/4M):        ");
 		do_assoc(eax >> 24);
-		printf("%lu entries.\n", (eax >> 16) & 0xff);
+		printf("%u entries.\n", (eax >> 16) & 0xff);
 		printf("L1 Instruction TLB (2M/4M): ");
 		do_assoc((eax >> 8) & 0xff);
-		printf("%lu entries.\n", eax & 0xff);
+		printf("%u entries.\n", eax & 0xff);
 
 		printf("L1 Data TLB (4K):           ");
 		do_assoc(ebx >> 24);
-		printf("%lu entries.\n", (ebx >> 16) & 0xff);
+		printf("%u entries.\n", (ebx >> 16) & 0xff);
 		printf("L1 Instruction TLB (4K):    ");
 		do_assoc((ebx >> 8) & 0xff);
-		printf("%lu entries.\n", ebx & 0xff);
+		printf("%u entries.\n", ebx & 0xff);
 
 		printf("L1 Data cache:\n\t");
-		printf("Size: %luKb\t", ecx >> 24);
+		printf("Size: %uKb\t", ecx >> 24);
 		do_assoc((ecx >> 16) & 0xff);
 		printf("\n\t");
-		printf("lines per tag=%lu\t", (ecx >> 8) & 0xff);
-		printf("line size=%lu bytes.\n", ecx & 0xff);
+		printf("lines per tag=%u\t", (ecx >> 8) & 0xff);
+		printf("line size=%u bytes.\n", ecx & 0xff);
 
 		printf("L1 Instruction cache:\n\t");
-		printf("Size: %luKb\t", edx >> 24);
+		printf("Size: %uKb\t", edx >> 24);
 		do_assoc((edx >> 16) & 0xff);
 		printf("\n\t");
-		printf("lines per tag=%lu\t", (edx >> 8) & 0xff);
-		printf("line size=%lu bytes.\n", edx & 0xff);
+		printf("lines per tag=%u\t", (edx >> 8) & 0xff);
+		printf("line size=%u bytes.\n", edx & 0xff);
 	}
 
 	if ((cpu->eflags_edx & 1<<26) && cpu->maxei >= 0x80000019) {
@@ -258,10 +258,10 @@ static void decode_AMD_cacheinfo(struct cpudata *cpu)
 
 		printf("L2 Data TLB (1G):           ");
 		do_l2assoc(ebx >> 28);
-		printf("%lu entries.\n", (ebx >> 16) & 0xfff);
+		printf("%u entries.\n", (ebx >> 16) & 0xfff);
 		printf("L2 Instruction TLB (1G):    ");
 		do_l2assoc((ebx >> 12) & 0xf);
-		printf("%lu entries.\n", ebx & 0xfff);
+		printf("%u entries.\n", ebx & 0xfff);
 	}
 
 	if (cpu->maxei >= 0x80000006) {
@@ -270,33 +270,33 @@ static void decode_AMD_cacheinfo(struct cpudata *cpu)
 
 		printf("L2 Data TLB (2M/4M):        ");
 		do_l2assoc(eax >> 28);
-		printf("%lu entries.\n", (eax >> 16) & 0xfff);
+		printf("%u entries.\n", (eax >> 16) & 0xfff);
 		printf("L2 Instruction TLB (2M/4M): ");
 		do_l2assoc((eax >> 12) & 0xf);
-		printf("%lu entries.\n", eax & 0xfff);
+		printf("%u entries.\n", eax & 0xfff);
 
 		printf("L2 Data TLB (4K):           ");
 		do_l2assoc(ebx >> 28);
-		printf("%lu entries.\n", (ebx >> 16) & 0xfff);
+		printf("%u entries.\n", (ebx >> 16) & 0xfff);
 		printf("L2 Instruction TLB (4K):    ");
 		do_l2assoc((ebx >> 12) & 0xf);
-		printf("%lu entries.\n", ebx & 0xfff);
+		printf("%u entries.\n", ebx & 0xfff);
 
 		printf("L2 cache:\n\t");
-		printf("Size: %luKb\t", ecx >> 16);
+		printf("Size: %uKb\t", ecx >> 16);
 		do_l2assoc((ecx >> 12) & 0x0f);
 		printf("\n\t");
-		printf("lines per tag=%lu\t", (ecx >> 8) & 0x0f);
-		printf("line size=%lu bytes.\n", ecx & 0xff);
+		printf("lines per tag=%u\t", (ecx >> 8) & 0x0f);
+		printf("line size=%u bytes.\n", ecx & 0xff);
 		if (family(cpu) == 0x10) {
 			/* family 0x10 has shared L3  cache */
 			printf("L3 (shared) cache:\n\t");
-			printf("Size: %luKb\t",
+			printf("Size: %uKb\t",
 			       (edx >> 18) * 512);
 			do_l2assoc((edx >> 12) & 0x0f);
 			printf("\n\t");
-			printf("lines per tag=%lu\t", (edx >> 8) & 0x0f);
-			printf("line size=%lu bytes.\n", edx & 0xff);
+			printf("lines per tag=%u\t", (edx >> 8) & 0x0f);
+			printf("line size=%u bytes.\n", edx & 0xff);
 		}
 	}
 
@@ -310,7 +310,7 @@ static void decode_AMD_cacheinfo(struct cpudata *cpu)
  */
 static int getL2size(int cpunum)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 	cpuid(cpunum, 0x80000006, &eax, &ebx, &ecx, &edx);
 	return (ecx >> 16);
 }
@@ -318,7 +318,7 @@ static int getL2size(int cpunum)
 
 static int is_mobile(struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 	if (cpu->maxei >= 0x80000007) {
 		cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
 		if ((edx & (1<<1|1<<2)) == 0)
@@ -333,7 +333,7 @@ static int is_mobile(struct cpudata *cpu)
 
 static void determine_xp_mp(struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 
 	/* There are no mobile MPs. */
 	if (is_mobile(cpu)) {
@@ -352,7 +352,7 @@ static void determine_xp_mp(struct cpudata *cpu)
 
 void Identify_AMD(struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 
 	amd_nameptr = cpu->name;
 	cpu->vendor = VENDOR_AMD;
@@ -708,7 +708,7 @@ out_660:
 
 void display_AMD_info(struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 
 	printf("Family: %u Model: %u Stepping: %u\n",
 	       family(cpu), model(cpu), cpu->stepping);

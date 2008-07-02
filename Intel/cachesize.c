@@ -204,7 +204,7 @@ static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
 static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int output)
 {
 	unsigned int i, j, n;
-	unsigned long regs[4];
+	unsigned int regs[4];
 
 	/* Decode TLB and cache info */
 	cpuid(cpu->number, 2, &regs[0], &regs[1], &regs[2], &regs[3]);

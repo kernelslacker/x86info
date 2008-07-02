@@ -13,7 +13,7 @@ static char *sis_nameptr;
 
 void Identify_SiS (struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 
 	sis_nameptr = cpu->name;
 	cpu->vendor = VENDOR_SIS;

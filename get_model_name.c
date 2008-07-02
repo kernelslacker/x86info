@@ -13,7 +13,7 @@
 void get_model_name(struct cpudata *cpu)
 {
 	unsigned int i, j;
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 	char namestring[49], *cp;
 
 	if (cpu->maxei < 0x80000004)
@@ -40,10 +40,10 @@ void get_model_name(struct cpudata *cpu)
 
 	/* Broken BIOS? Try to determine the model name ourselves.  */
 	if (strstr(cp, "unknown") != NULL) {
-		unsigned long vendor;
+		unsigned int vendor;
 		cpuid(cpu->number, 0, NULL, &vendor, NULL, NULL);
 		if (vendor == 0x68747541 && cpu->maxi >= 1 && cpu->maxei >= 0x80000001) { /* AMD defined flags */
-			unsigned long bid, ebid;
+			unsigned int bid, ebid;
 			cpuid(cpu->number, 0x00000001, NULL, &bid, NULL, NULL);
 			bid &= 0xff;
 			cpuid(cpu->number, 0x80000001, NULL, &ebid, NULL, NULL);

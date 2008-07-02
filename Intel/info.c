@@ -19,8 +19,8 @@
 void decode_serial_number(struct cpudata *cpu)
 {
 	char *p = cpu->serialno;
-	unsigned long eax, ebx, ecx, edx;
-	unsigned long signature;
+	unsigned int eax, ebx, ecx, edx;
+	unsigned int signature;
 
 	if (cpu->maxi < 3)
 		return;
@@ -29,19 +29,19 @@ void decode_serial_number(struct cpudata *cpu)
 	signature = eax;
 
 	cpuid(cpu->number, 3, &eax, &ebx, &ecx, &edx);
-	p += sprintf(p, "%04lX", signature >> 16);
-	p += sprintf(p, "-%04lX", signature & 0xffff);
-	p += sprintf(p, "-%04lX", edx >> 16);
-	p += sprintf(p, "-%04lX", edx & 0xffff);
-	p += sprintf(p, "-%04lX", ecx >> 16);
-	p += sprintf(p, "-%04lX\n", ecx & 0xffff);
+	p += sprintf(p, "%04X", signature >> 16);
+	p += sprintf(p, "-%04X", signature & 0xffff);
+	p += sprintf(p, "-%04X", edx >> 16);
+	p += sprintf(p, "-%04X", edx & 0xffff);
+	p += sprintf(p, "-%04X", ecx >> 16);
+	p += sprintf(p, "-%04X\n", ecx & 0xffff);
 
 	printf("Processor serial: %s\n", cpu->serialno);
 }
 
 void display_Intel_info (struct cpudata *cpu)
 {
-	unsigned long ebx;
+	unsigned int eax, ebx, ecx, edx;
 
 	printf("Family: %u Model: %u Stepping: %u Type: %u Brand: %u\n",
 		cpu->family, cpu->model, cpu->stepping, cpu->type, cpu->brand);
@@ -73,6 +73,15 @@ void display_Intel_info (struct cpudata *cpu)
 	/* FIXME: Bit test for MCA here!*/
 	if (show_bluesmoke)
 		decode_Intel_bluesmoke(cpu->number, cpu->family);
+
+	/* Figure out number of cores on this package. */
+	cpu->nr_cores = 1;
+	if (cpu->maxi >= 4) {
+		cpuid4(cpu->number, 0, &eax, &ebx, &ecx, &edx);
+		if (eax & 0x1f)
+			cpu->nr_cores = ((eax >> 26) + 1);
+printf("NUMBER CORES=%d eax=%x\n", cpu->nr_cores, eax);
+	}
 
 	/* Hyper-Threading Technology */
 	if (cpu->flags_edx & (1 << 28)) {

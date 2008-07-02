@@ -25,7 +25,7 @@ static char p4_errata[]="http://developer.intel.com/design/pentium4/specupdt/249
 
 void Identify_Intel (struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 	int reserved;
 
 	cpu->vendor = VENDOR_INTEL;

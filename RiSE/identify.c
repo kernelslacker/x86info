@@ -13,7 +13,7 @@ static char *rise_nameptr;
 
 void Identify_RiSE (struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 
 	rise_nameptr = cpu->name;
 	cpu->vendor = VENDOR_RISE;

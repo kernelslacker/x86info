@@ -161,7 +161,7 @@ static void decode_pstates(struct cpudata *cpu)
 
 void decode_powernow(struct cpudata *cpu)
 {
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 	int can_scale_vid=0, can_scale_fid=0;
 
 	if (cpu->maxei < 0x80000007)

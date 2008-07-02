@@ -9,7 +9,7 @@
 
 void identify(struct cpudata *cpu)
 {
-	unsigned long maxi, maxei, vendor;
+	unsigned int maxi, maxei, vendor;
 
 	cpuid(cpu->number, 0, &maxi, &vendor, NULL, NULL);
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
@@ -45,20 +45,20 @@ void identify(struct cpudata *cpu)
 		Identify_SiS(cpu);
 		break;
 	default:
-		printf("Unknown vendor (%lx)\n", vendor);
+		printf("Unknown vendor (%x)\n", vendor);
 		return;
 	}
 }
 
-static void dumpregs (int cpunum, unsigned int begin, unsigned int end)
+static void dumpregs(int cpunum, unsigned int begin, unsigned int end)
 {
 	unsigned int i;
-	unsigned long eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx;
 
 	/* Dump all the CPUID results in raw hex */
 	for (i=begin; i<=end; i++) {
 		cpuid(cpunum, i, &eax, &ebx, &ecx, &edx);
-		printf("eax in: 0x%08x, eax = %08lx ebx = %08lx ecx = %08lx edx = %08lx\n", i, eax, ebx, ecx, edx);
+		printf("eax in: 0x%08x, eax = %08x ebx = %08x ecx = %08x edx = %08x\n", i, eax, ebx, ecx, edx);
 	}
 	printf("\n");
 }
@@ -129,4 +129,3 @@ void show_info(struct cpudata *cpu)
 	if (show_mtrr)
 		dump_mtrrs(cpu);
 }
-
