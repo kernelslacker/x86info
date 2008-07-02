@@ -77,8 +77,10 @@ struct cpudata {
 	unsigned int eflags_ecx;
 	unsigned int eflags_edx;
 	unsigned int MHz;
-	char * datasheet_url;
-	char * errata_url;
+	char *datasheet_url;
+	char *errata_url;
+	/* Intel specific bits */
+	char serialno[30];
 };
 
 #define family(c) (c->family + c->efamily)
@@ -139,6 +141,7 @@ extern int enumerate_cpus(void);
 extern void get_model_name (struct cpudata *cpu);
 extern void decode_connector(enum connector type);
 extern void show_benchmarks (void);
+extern void decode_serial_number(struct cpudata *cpu);
 
 extern int show_bench;
 extern int show_bios;

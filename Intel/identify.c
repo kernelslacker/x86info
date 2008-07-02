@@ -366,6 +366,7 @@ void Identify_Intel (struct cpudata *cpu)
 			add_to_cpuname("Pentium III/Pentium III Xeon");
 			break;
 		}
+		decode_serial_number(cpu);
 		break;
 	case 0x680:
 		switch (cpu->brand) {
@@ -449,6 +450,7 @@ void Identify_Intel (struct cpudata *cpu)
 			}
 			break;
 		}
+		decode_serial_number(cpu);
 		break;
 
 	case 0x690:
@@ -467,10 +469,12 @@ void Identify_Intel (struct cpudata *cpu)
 			break;
 		case 2:
 			add_to_cpuname("Pentium III");
+			decode_serial_number(cpu);
 			break;
 		case 3:
 			// FSB=100
 			add_to_cpuname("Pentium III Xeon");
+			decode_serial_number(cpu);
 			switch (cpu->stepping) {
 				case 0:
 					// Core=700
@@ -496,6 +500,7 @@ void Identify_Intel (struct cpudata *cpu)
 			break;
 		case 4:
 			add_to_cpuname("Pentium III (Cascades)");
+			decode_serial_number(cpu);
 			break;
 		default:
 			add_to_cpuname("Unknown CPU");
@@ -512,6 +517,7 @@ void Identify_Intel (struct cpudata *cpu)
 			case 6:
 				cpu->connector = CONN_MICROFCBGA;
 				add_to_cpuname("Pentium III-M");
+				decode_serial_number(cpu);
 				break;
 			default:
 				cpu->connector = CONN_SLOT_1;
@@ -526,6 +532,8 @@ void Identify_Intel (struct cpudata *cpu)
 					add_to_cpuname("Unknown CPU");
 					break;
 				}
+				decode_serial_number(cpu);
+				break;
 		}
 		break;
 	case 0x6d0:
@@ -735,6 +743,7 @@ void Identify_Intel (struct cpudata *cpu)
 		// TODO: B1 as stepping 5 is a 100% guess
 		case 5:
 			add_to_cpuname(" [B1]");
+decode_serial_number(cpu);
 			break;
 		case 6:
 			// 2M L2
