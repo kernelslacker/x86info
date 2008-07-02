@@ -250,13 +250,6 @@ int main (int argc, char **argv)
 		identify(cpu);
 		show_info(cpu);
 
-		/*
-		 * Doing this per-cpu is a problem, as we can't
-		 * schedule userspace code per-cpu.
-		 * Although running nrCPUs * threads would probably work.
-		 *
-		 * Could also experiment with the new scheduler binding syscalls.
-		 */
 		if (show_MHz) {
 			if (cpu->MHz < 1000)
 				printf("%uMHz", cpu->MHz);
