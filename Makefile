@@ -27,6 +27,7 @@ C_SRC =\
 	Intel/MSR-P6.c\
 	Intel/MSR-PM.c\
 	Intel/microcode.c\
+	Intel/topology.c\
 \
 	Centaur/identify.c\
 	Centaur/MSR-C3.c\

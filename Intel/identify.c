@@ -43,11 +43,6 @@ void Identify_Intel(struct cpudata *cpu)
 		if (eax & 0x1f)
 			cpu->nr_cores = ((eax >> 26) + 1);
 	}
-	 /* Hyper-Threading Technology */
-//if (cpu->flags_edx & (1 << 28)) {
-//      }
-
-
 
 	decode_Intel_caches(cpu, 0);
 
