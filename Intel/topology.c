@@ -66,7 +66,7 @@ static unsigned char GetSubID(unsigned char FullID, unsigned char MaxSubIDvalue,
 
 	MaskWidth = find_maskwidth(MaxSubIDvalue);
 	MaskBits = ((unsigned char) (0xff << ShiftCount)) ^ ((unsigned char) (0xff << (ShiftCount + MaskWidth))) ;
-	SubID = FullID & MaskBits;
+	SubID = (FullID & MaskBits) >> ShiftCount;
 	return SubID;
 }
 
@@ -112,10 +112,8 @@ void show_intel_topology(struct cpudata *cpu)
 	shift = find_maskwidth(cpu->nr_logical);
 	core_id = GetSubID(cpu->apicid, cpu->nr_cores, shift);
 	shift += find_maskwidth(cpu->nr_cores);
-//	package_id = GetSubID(cpu->apicid, ??, shift);
-//	packageIDMask = (unsigned char) (0xff << find_maskwidth(cpu->nr_logical));
-//	package_id = cpu->apicid & packageIDMask;
+	package_id = GetSubID(cpu->apicid, MaxLPPerCore, shift);
 
-	printf("APIC ID: %x\t", cpu->apicid);
+	printf("APIC ID: 0x%x\t", cpu->apicid);
 	printf("Package: %u  Core: %u   SMT ID %u\n", package_id, core_id, smt_id);
 }
