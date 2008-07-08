@@ -98,9 +98,9 @@ void show_intel_topology(struct cpudata *cpu)
 
 	//MaxLPPerCore = MaxLogicalProcPerPhysicalProc() / MaxCorePerPhysicalProc();
 	MaxLPPerCore = cpu->nr_logical / cpu->nr_cores;
-	printf("Number of cores per physical package=%d\n", cpu->nr_cores);			// 8
-	printf("Number of logical processors per socket=%d\n", cpu->nr_logical);		// 16
-	printf("Number of logical processors per physical package=%d\n", MaxLPPerCore);		// 2
+	printf("Number of cores per physical package=%d\n", cpu->nr_cores);		// 8
+	printf("Number of logical processors per socket=%d\n", cpu->nr_logical);	// 16
+	printf("Number of logical processors per core=%d\n", MaxLPPerCore);		// 2
 
 	/* test for hyperthreading. */
 	if (cpu->flags_edx & (1 << 28)) {
