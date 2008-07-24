@@ -3,9 +3,39 @@ CC = gcc
 
 SHELL = /bin/sh
 
-all: x86info test
 
-C_SRC =\
+.c.o:
+	$(CC) $(CFLAGS) -MMD -o $@ -c $<
+	@cp $*.d $*.P; \
+	 sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	     -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> $*.P; \
+	rm -f $*.d
+
+.S.o:
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+
+all: x86info test lsmsr
+
+
+LSMSR_TMP_HEADERS=AMD/k8.h AMD/fam10h.h generic_msr.h
+
+%.h: %.regs scripts/createheader.py
+	python scripts/createheader.py $< `basename $< .regs` >$@
+
+LSMSR_SRC =\
+	lsmsr.c\
+	cpuid.c\
+	havecpuid.c
+
+LSMSR_OBJS = $(LSMSR_SRC:%.c=%.o)
+
+lsmsr: $(LSMSR_TMP_HEADERS) $(LSMSR_OBJS)
+	$(CC) $(CFLAGS) -o lsmsr $(LSMSR_OBJS)
+
+-include $(LSMSR_SRC:%.c=%.P)
+
+X86INFO_SRC =\
 	AMD/identify.c\
 	AMD/bluesmoke.c\
 	AMD/MSR-Athlon.c\
@@ -57,22 +87,13 @@ C_SRC =\
 	bench/benchmarks.c\
 	bench/MHz.c
 
-OBJS = $(C_SRC:%.c=%.o)
+X86INFO_OBJS = $(X86INFO_SRC:%.c=%.o)
 
-x86info: $(OBJS)
-	$(CC) $(CFLAGS) -o x86info $(OBJS)
+x86info: $(X86INFO_OBJS)
+	$(CC) $(CFLAGS) -o x86info $(X86INFO_OBJS)
 
-.c.o:
-	$(CC) $(CFLAGS) -MMD -o $@ -c $<
-	@cp $*.d $*.P; \
-	 sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-	     -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> $*.P; \
-	rm -f $*.d
+-include $(X86INFO_SRC:%.c=%.P)
 
--include $(C_SRC:%.c=%.P)
-
-.S.o:
-	$(CC) $(CFLAGS) -o $@ -c $<
 
 nodes:
 	scripts/makenodes
@@ -92,9 +113,10 @@ clean:
 	@find . -name "*~" -exec rm {} \;
 	@find . -name "*.P" -exec rm {} \;
 	@rm -f x86info x86info.exe
+	@rm -f lsmsr $(LSMSR_TMP_HEADERS)
 
 splint:
-	splint +posixlib -badflag -fileextensions -type -nullassign -boolops -showcolumn -sysunrecog -fullinitblock -onlytrans -unrecog -usedef -statictrans -compdestroy -predboolint -predboolothers -D__`uname -m`__ $(C_SRC)
+	splint +posixlib -badflag -fileextensions -type -nullassign -boolops -showcolumn -sysunrecog -fullinitblock -onlytrans -unrecog -usedef -statictrans -compdestroy -predboolint -predboolothers -D__`uname -m`__ $(X86INFO_SRC)
 
 sparse:
-	sparse $(C_SRC)
+	sparse $(X86INFO_SRC)
