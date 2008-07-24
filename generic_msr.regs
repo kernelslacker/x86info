@@ -1,0 +1,386 @@
+# Author: Andreas Herrmann <andreas.herrmann3@amd.com>
+#
+# Copyright (C) 2008 Advanced Micro Devices, Inc.
+
+# This file contains information from:
+#   "24593 Rev 3.14 - September 2007, AMD64 Technology - AMD64
+#   Architecture Programmer's Manual Volume 2: System Programming"
+# and
+#    "The Intel Architecture Software Developer's Manual, Volume 3:
+#    System Programing Guide (Order Number 243192)"
+# and
+#    "The Intel 64 and IA-32 Architectures Software Developer's Manual:
+#     System Programming Guide Part 1, (Order Number 253668),
+#     System Programming Guide Part 2, (Order Number 253669)"
+
+
+
+# See scripts/createheader.py for the general format of this register
+# definitions.
+
+{TSC=0x0010;time-stamp counter
+    TSC:64
+}
+
+{APIC_BASE=0x001b;APIC base address
+    :8
+    BSC:1
+    :2
+    ApicEn:1
+    ApicBar:36;;20 for 32-bit, 24 for Intel, 28 for AMD K8, 36 for AMD fam10h
+    :16
+}
+
+{EBL_CR_POWERON=0x002a;cluster ID
+    :16
+    ClusterID:2
+    :46
+}
+
+{MTRRcap=0x00fe;MTRR capabilities
+    MtrrCapVCnt:8
+    MtrrCapFix:1
+    :1
+    MtrrCapWc:1
+    :53
+}
+
+{MCG_CAP=0x0179;global MC capabilities
+    Count:8
+    MCG_CTL_P:1
+    :55
+}
+
+{MCG_STAT=0x017a;global MC status
+    RIPV:1
+    EIPV:1
+    MCIP:1
+    :61
+}
+
+{MCG_CTL=0x017b;global MC control
+    val:64
+}
+
+{DBG_CTL_MSR=0x01d9;debug control
+    LBR:1
+    BTF:1
+    :62
+}
+
+{LastBranchFromIP=0x01db;last branch from IP
+    LastBranchFromIP:64;;32 bits on Intel
+}
+
+{LastBranchToIP=0x01dc;last branch to IP
+    LastBranchToIP:64;;32 bits on Intel
+}
+
+{LastExceptionFromIP=0x01dd;last exception from IP
+    LastExceptionFromIP:64;;32 bits on Intel
+}
+
+{LastExceptionToIP=0x01de;last exception to IP
+    LastExceptionToIP:64;;32 bits on Intel
+}
+
+{MTRRphysBase0=0x0200;base of variable-size MTRR (0)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask0=0x0201;mask of variable-size MTRR (0)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase1=0x0202;base of variable-size MTRR (1)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask1=0x0203;mask of variable-size MTRR (1)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase2=0x0204;base of variable-size MTRR (2)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask2=0x0205;mask of variable-size MTRR (2)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase3=0x0206;base of variable-size MTRR (3)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask3=0x0207;mask of variable-size MTRR (3)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase4=0x0208;base of variable-size MTRR (4)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask4=0x0209;mask of variable-size MTRR (4)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase5=0x020a;base of variable-size MTRR (5)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask5=0x020b;mask of variable-size MTRR (5)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase6=0x020c;base of variable-size MTRR (6)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask6=0x020d;mask of variable-size MTRR (6)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase7=0x020e;base of variable-size MTRR (7)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask7=0x020f;mask of variable-size MTRR (7)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRfix64K_00000=0x0250;fixed range MTRR
+    0xxxxType:8
+    1xxxxType:8
+    2xxxxType:8
+    3xxxxType:8
+    4xxxxType:8
+    5xxxxType:8
+    6xxxxType:8
+    7xxxxType:8
+}
+
+{MTRRfix16K_80000=0x0258;fixed range MTRR
+    80xxxType:8
+    84xxxType:8
+    88xxxType:8
+    8CxxxType:8
+    90xxxType:8
+    94xxxType:8
+    98xxxType:8
+    9CxxxType:8
+}
+
+{MTRRfix16K_A0000=0x0259;fixed range MTRR
+    A0xxxType:8
+    A4xxxType:8
+    A8xxxType:8
+    ACxxxType:8
+    B0xxxType:8
+    B4xxxType:8
+    B8xxxType:8
+    BCxxxType:8
+}
+
+{MTRRfix4K_C0000=0x0268;fixed range MTRR
+    C0xxxType:8
+    C1xxxType:8
+    C2xxxType:8
+    C3xxxType:8
+    C4xxxType:8
+    C5xxxType:8
+    C6xxxType:8
+    C7xxxType:8
+}
+
+{MTRRfix4K_C8000=0x0269;fixed range MTRR
+    C8xxxType:8
+    C9xxxType:8
+    CAxxxType:8
+    CBxxxType:8
+    CCxxxType:8
+    CDxxxType:8
+    CExxxType:8
+    CFxxxType:8
+}
+
+{MTRRfix4K_D0000=0x026a;fixed range MTRR
+    D0xxxType:8
+    D1xxxType:8
+    D2xxxType:8
+    D3xxxType:8
+    D4xxxType:8
+    D5xxxType:8
+    D6xxxType:8
+    D7xxxType:8
+}
+
+{MTRRfix4K_D8000=0x026b;fixed range MTRR
+    D8xxxType:8
+    D9xxxType:8
+    DAxxxType:8
+    DBxxxType:8
+    DCxxxType:8
+    DDxxxType:8
+    DExxxType:8
+    DFxxxType:8
+}
+
+{MTRRfix4K_E0000=0x026c;fixed range MTRR
+    E0xxxType:8
+    E1xxxType:8
+    E2xxxType:8
+    E3xxxType:8
+    E4xxxType:8
+    E5xxxType:8
+    E6xxxType:8
+    E7xxxType:8
+}
+
+{MTRRfix4K_E8000=0x026d;fixed range MTRR
+    E8xxxType:8
+    E9xxxType:8
+    EAxxxType:8
+    EBxxxType:8
+    ECxxxType:8
+    EDxxxType:8
+    EExxxType:8
+    EFxxxType:8
+}
+
+{MTRRfix4K_F0000=0x026e;fixed range MTRR
+    F0xxxType:8
+    F1xxxType:8
+    F2xxxType:8
+    F3xxxType:8
+    F4xxxType:8
+    F5xxxType:8
+    F6xxxType:8
+    F7xxxType:8
+}
+
+{MTRRfix4K_F8000=0x026f;fixed range MTRR
+    F8xxxType:8
+    F9xxxType:8
+    FAxxxType:8
+    FBxxxType:8
+    FCxxxType:8
+    FDxxxType:8
+    FExxxType:8
+    FFxxxType:8
+}
+
+{PAT=0x0277;page attribute table
+    PA0MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA1MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA2MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA3MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA4MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA5MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA6MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA7MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+}
+
+{MTRRdefType=0x02ff;MTRR default memory type
+    MemType:8;;just 3 bits for older 32-bit CPUs
+    :2
+    MtrrDefTypeFixEn:1
+    MtrrDefTypeEn:1
+    :52
+}
+
+{EFER=0xc0000080;extended feature enable
+    SYSCALL:1
+    :7
+    LME:1
+    :1
+    LMA:1
+    NXE:1
+    :52
+} # just for newer CPUs, supporting 64-bit
+
+{STAR=0xc0000081;SYSCALL target address
+    res:32;;target on AMD64
+    SysCallSel:16
+    SysRetSel:16
+} # just for newer CPUs, supporting 64-bit
+
+{LSTAR=0xc0000082;long mode SYSCALL target address
+    LSTAR:64
+} # just for newer CPUs, supporting 64-bit
+
+{SYSCALL_FLAG_MASK=0xc0000084;SYSCALL flag mask
+    MASK:32
+    :32
+}
+
+{FS_BASE=0xc0000100;FS base
+    FS_BASE:64
+}
+
+{GS_BASE=0xc0000101;GS base
+    GS_BASE:64
+}
+
+{KernelGSbase=0xc0000102;kernel GS base
+    KernelGSBase:64
+}
+
+### Local Variables: ###
+### mode:shell-script ###
+### End: ###
