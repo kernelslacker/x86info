@@ -83,6 +83,9 @@ void identify(struct cpudata *cpu)
 	case VENDOR_SIS:
 		identify_sis(cpu);
 		break;
+	case VENDOR_TRANSMETA:
+	case VENDOR_UNKNOWN:
+		break;
 	}
 }
 

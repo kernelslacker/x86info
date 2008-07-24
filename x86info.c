@@ -265,10 +265,14 @@ int main (int argc, char **argv)
 
 		if (show_cacheinfo == 1) {
 			switch (cpu->vendor) {
-			case VENDOR_INTEL:	decode_Intel_caches(cpu, 1);
-						break;
-			case VENDOR_AMD:	decode_AMD_cacheinfo(cpu);
-						break;
+			case VENDOR_INTEL:
+				decode_Intel_caches(cpu, 1);
+				break;
+			case VENDOR_AMD:
+				decode_AMD_cacheinfo(cpu);
+				break;
+			default:
+				break;
 			}
 		}
 

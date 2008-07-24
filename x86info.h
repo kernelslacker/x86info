@@ -1,18 +1,23 @@
 #ifndef _X86INFO_H
 #define _X86INFO_H
 
+#include "cpuid.h"
+
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
 
-#define VENDOR_AMD	1
-#define VENDOR_CENTAUR 2
-#define VENDOR_CYRIX 3
-#define VENDOR_INTEL 4
-#define VENDOR_NATSEMI 5
-#define VENDOR_RISE 6
-#define VENDOR_TRANSMETA 7
-#define VENDOR_SIS 8
+enum vendor {
+	VENDOR_UNKNOWN = 0 ,
+	VENDOR_AMD,
+	VENDOR_CENTAUR,
+	VENDOR_CYRIX,
+	VENDOR_INTEL,
+	VENDOR_NATSEMI,
+	VENDOR_RISE,
+	VENDOR_TRANSMETA,
+	VENDOR_SIS,
+};
 
 enum connector {
 	CONN_UNKNOWN = 0,
@@ -57,7 +62,7 @@ enum connector {
 struct cpudata {
 	struct cpudata *next;
 	unsigned int number;
-	unsigned int vendor;
+	enum vendor vendor;
 	unsigned int efamily;
 	unsigned int family;
 	unsigned int model;
@@ -103,10 +108,6 @@ static const char *get_##title##_name(type id) \
                         return table[i].name;   \
         return NULL; \
 }
-
-extern void cpuid_UP (unsigned int idx, unsigned long *eax, unsigned long *ebx, unsigned long *ecx, unsigned long *edx);
-extern void cpuid(unsigned int CPU_number, unsigned long long idx, unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
-extern void cpuid4(unsigned int CPU_number, unsigned long long idx, unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
 
 extern void Identify_AMD (struct cpudata *cpu);
 extern void Identify_Cyrix (struct cpudata *cpu);
