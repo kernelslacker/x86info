@@ -16,8 +16,6 @@ void show_benchmarks(struct cpudata *cpu)
 {
 	int tmp = 0;
 
-	bind_cpu(cpu);
-
 #ifdef __linux__
 	TIME(asm volatile("int $0x80" :"=a" (tmp) :"0" (__NR_getppid)), "int 0x80");
 #endif

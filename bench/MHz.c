@@ -36,8 +36,6 @@ void estimate_MHz(struct cpudata *cpu)
 		return;
 	}
 
-	bind_cpu(cpu);
-
 	if (signal(SIGALRM, sighandler) == SIG_ERR) {
 		printf("Some kind of signal failure.\n");
 		return;

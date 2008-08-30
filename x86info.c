@@ -246,6 +246,8 @@ int main (int argc, char **argv)
 		if (!silent && nrCPUs != 1)
 			printf("CPU #%u\n", i+1);
 
+		bind_cpu(cpu);
+
 		estimate_MHz(cpu);
 		get_feature_flags(cpu);
 		get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
