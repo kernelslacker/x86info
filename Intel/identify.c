@@ -48,88 +48,90 @@ void Identify_Intel(struct cpudata *cpu)
 
 	switch (cpu->family) {
 	case 4:	add_to_cpuname("i486 ");
+		switch (cpu->model) {
+		case 0:
+			add_to_cpuname("DX-25/33");
+			break;
+		case 1:
+			add_to_cpuname("DX-50");
+			break;
+		case 2:
+			add_to_cpuname("SX");
+			break;
+		case 3:
+			add_to_cpuname("487/DX2");
+			break;
+		case 4:
+			add_to_cpuname("SL");
+			break;
+		case 5:
+			add_to_cpuname("SX2");
+			break;
+		case 7:
+			add_to_cpuname("write-back enhanced DX2");
+			break;
+		case 8:
+			add_to_cpuname("DX4");
+			cpu->connector = CONN_SOCKET_3;
+			//transistors = 1600000;
+			//fab_process = "0.6 micron CMOS";
+			//die_size = "345 sq. mm";
+			//introduction_date = "March 1994";
+			break;
+		case 9:
+			add_to_cpuname("write-back enhanced DX4");
+			cpu->connector = CONN_SOCKET_3;
+			break;
+		}
 		break;
+
 	case 5: add_to_cpuname("Pentium ");
-		break;
-	}
-
-	switch (tuple(cpu) & 0xff0) {
-	case 0x400:
-		add_to_cpuname("DX-25/33");
-		break;
-	case 0x410:
-		add_to_cpuname("DX-50");
-		break;
-	case 0x420:
-		add_to_cpuname("SX");
-		break;
-	case 0x430:
-		add_to_cpuname("487/DX2");
-		break;
-	case 0x440:
-		add_to_cpuname("SL");
-		break;
-	case 0x450:
-		add_to_cpuname("SX2");
-		break;
-	case 0x470:
-		add_to_cpuname("write-back enhanced DX2");
-		break;
-	case 0x480:
-		add_to_cpuname("DX4");
-		cpu->connector = CONN_SOCKET_3;
-		//transistors = 1600000;
-		//fab_process = "0.6 micron CMOS";
-		//die_size = "345 sq. mm";
-		//introduction_date = "March 1994";
-		break;
-	case 0x490:
-		add_to_cpuname("write-back enhanced DX4");
-		cpu->connector = CONN_SOCKET_3;
+		switch (cpu->model) {
+		case 0:
+			add_to_cpuname("A-step");
+			cpu->connector = CONN_SOCKET_4;
+			break;
+		case 1:
+			add_to_cpuname("60/66");
+			cpu->connector = CONN_SOCKET_4;
+			break;
+		case 2:
+			add_to_cpuname("75-200");
+			cpu->connector = CONN_SOCKET_5_7;
+			break;
+		case 3:
+			add_to_cpuname("Overdrive");
+			cpu->connector = CONN_SOCKET_4;
+			break;
+		case 4:
+			add_to_cpuname("MMX");
+			cpu->connector = CONN_SOCKET_7;
+			//transistors = 4500000;
+			//fab_process = "0.35 micron CMOS";
+			//die_size = "140 sq.mm";
+			//introduction_date = "June 1997";
+			break;
+		case 7:
+			add_to_cpuname("Mobile");
+			cpu->connector = CONN_SOCKET_7;
+			break;
+		case 8:
+			add_to_cpuname("MMX Mobile");
+			cpu->connector = CONN_SOCKET_7;
+			break;
+		}
 		break;
 
-	case 0x500:
-		add_to_cpuname("A-step");
-		cpu->connector = CONN_SOCKET_4;
-		break;
-	case 0x510:
-		add_to_cpuname("60/66");
-		cpu->connector = CONN_SOCKET_4;
-		break;
-	case 0x520:
-		add_to_cpuname("75-200");
-		cpu->connector = CONN_SOCKET_5_7;
-		break;
-	case 0x530:
-		add_to_cpuname("Overdrive");
-		cpu->connector = CONN_SOCKET_4;
-		break;
-	case 0x540:
-		add_to_cpuname("MMX");
-		cpu->connector = CONN_SOCKET_7;
-		//transistors = 4500000;
-		//fab_process = "0.35 micron CMOS";
-		//die_size = "140 sq.mm";
-		//introduction_date = "June 1997";
-		break;
-	case 0x570:
-		add_to_cpuname("Mobile");
-		cpu->connector = CONN_SOCKET_7;
-		break;
-	case 0x580:
-		add_to_cpuname("MMX Mobile");
-		cpu->connector = CONN_SOCKET_7;
-		break;
-	case 0x600 ... 0x6f0:
+	case 0x6:
 		Identify_Intel_family6(cpu);
 		intel_nameptr += strlen(cpu->name);	// EWW
 		break;
 
-	case 0x700:
+	case 0x7:
 		add_to_cpuname("Itanium");
 		break;
 
-	case 0xF00:
+	case 0xF:
 		Identify_Intel_family15(cpu);
 		intel_nameptr += strlen(cpu->name);	// EWW
 		break;
