@@ -700,6 +700,15 @@ void Identify_Intel_family6(struct cpudata *cpu)
 			break;
 		}
 		break;
+	case 23:
+		add_to_cpuname("Core 2 Duo ");
+		switch (cpu->stepping) {
+		case 4:	add_to_cpuname("(Penryn)");
+			break;
+		case 6:	add_to_cpuname("P8600");
+			break;
+		}
+		break;
 	default:
                 add_to_cpuname("Unknown model. ");
 	}
