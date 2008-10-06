@@ -17,7 +17,8 @@ C_SRC =\
 	Cyrix/identify.c\
 \
 	Intel/identify.c\
-	Intel/identify-family6.c\
+	Intel/identify-family6-pentium.c\
+	Intel/identify-family6-core.c\
 	Intel/identify-family15.c\
 	Intel/info.c\
 	Intel/bluesmoke.c\

@@ -7,7 +7,8 @@ extern void dump_p4_MSRs(struct cpudata *cpu);
 extern void dump_p6_MSRs(struct cpudata *cpu);
 extern void dump_centrino_MSRs(struct cpudata *cpu);
 extern void decode_microcode(struct cpudata *cpu);
-extern void Identify_Intel_family6(struct cpudata *cpu);
+extern void Identify_Intel_family6pentium(struct cpudata *cpu);
+extern void Identify_Intel_family6core(struct cpudata *cpu);
 extern void Identify_Intel_family15(struct cpudata *cpu);
 
 #define MSR_IA32_PLATFORM_ID	0x17

@@ -123,7 +123,11 @@ void Identify_Intel(struct cpudata *cpu)
 		break;
 
 	case 0x6:
-		Identify_Intel_family6(cpu);
+		if (cpu->emodel == 0)
+			Identify_Intel_family6pentium(cpu);
+		else
+			Identify_Intel_family6core(cpu);
+
 		intel_nameptr += strlen(cpu->name);	// EWW
 		break;
 

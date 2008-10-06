@@ -86,7 +86,7 @@ struct cpudata {
 	char serialno[30];
 };
 
-#define family(c) (c->family + c->efamily)
+#define family(c) (c->family)
 #define model(c) ((c->emodel << 4) + c->model)
 
 #define tuple(c) ((c->family<<8)|(c->model<<4)|(c->stepping))
