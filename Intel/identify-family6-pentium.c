@@ -503,6 +503,103 @@ void Identify_Intel_family6pentium(struct cpudata *cpu)
 					break;
 		}
 		break;
+	/*
+	 * ARGH. Intel made some Core CPUs without setting the efamily or emodel to 1.
+	 */
+	case 0xf:
+		add_to_cpuname("Core 2 ");
+		switch (cpu->stepping) {
+		/*
+		 * 2M Level2 cache
+		 * SL9TB L2 E4300 1.8GHz/800Mhz
+		 * SLA3F L2 E4400 2GHz/800MHz
+		 * SL9TA L2 E6300 1.86GHz/1066MHz
+		 * SL9T9 L2 E6400 2.13GHz/1066MHz
+		 */
+		case 2:	add_to_cpuname("Duo [L2]");
+			break;
+		case 5:
+			add_to_cpuname("Duo ");
+			break;
+		/*
+		 * 2MB L2 cache
+		 * - SL9SA B2 E6300 1.86GHz/1066MHz
+		 * - SL9S9 B2 E6400 2.13GHz/1066MHz
+		 * 4MB L2 cache
+		 * - SLA4U B2 E6320 1.86GHz/1066MHz
+		 * - SLA4T B2 E6420 2.13GHz/1066MHz
+		 * - SL9S8 B2 E6600 2.4GHz/1066MHz
+		 * - SL9ZL B2 E6600 2.4GHz/1066MHz
+		 * - SL9S7 B2 E6700 2.66GHz/1066MHz
+		 * - SL9ZF B2 E6700 2.66GHz/1066MHz
+		 * - SLAA5 G0 E6540 2.33GHz/1.333MHz
+		 * - SLA9X G0 E6550 2.33GHz/1.333MHz
+		 * - SLA9V G0 E6750 2.66GHz/1.333MHz
+		 * - SLA9U G0 E6850 3GHz/1.333MHz
+		 * - SL9S5 B2 X6800 2.93GHz/1066MHz
+		 */
+		case 6:
+			add_to_cpuname("Duo ");
+			switch (cpu->cachesize_L2) {
+			case 2048:
+				add_to_cpuname("[B2]");
+				if (cpu->MHz/100 == 1860)
+					add_to_cpuname("[SL9SA] E6300");
+				if (cpu->MHz/100 == 2130)
+					add_to_cpuname("[SL9S9] E6400");
+				break;
+			case 4096:
+				break;
+			}
+			break;
+		/*
+		 * All quad-core.
+		 * SL9UK B3 8MB QX6800 2.93GHz/1066MHz
+		 * SL9UL B3 8MB QX6700 2.66GHz/1066MHz
+		 * SL9UM B3 8MB QX6600 2.4GHz/1066MHz
+		 * SLACP G0 8MB QX6800 2.93GHz/1066MHz
+		 */
+		case 7:
+			add_to_cpuname("Quad (Kentsfield)");
+			break;
+		/* sCode Procname (IDA/HFM)
+		 * SLA43 T7700 (2.6GHz/2.4GHz)
+		 * SLA3M T7700 (2.6GHz/2.4GHz)
+		 * SLA44 T7500 (2.4GHz/2.2GHz)
+		 * SLA3N T7500 (2.4GHz/2.2GHz)
+		 * SLA45 T7300 (2.4GHz/2.0GHz)
+		 * SLA3P T7300 (2.2GHz/2.0GHz)
+		 * SLA3R L7500 (1.8GHz/1.6GHz)
+		 * SLA3S L7300 (1.6GHz/1.4GHz)
+		 * SLA33 X7900 (2.8GHz)
+		 * SLA6Z X7800 (2.6GHz)
+		 */
+		case 0xa:
+			add_to_cpuname(" [E1]");
+			break;
+		/*
+		 * SLALT G0 2M E4700 2.6GHz/800MHz
+		 *
+		 * SLAFN G0 8M QX6850 3GHz/1333MHz
+		 * SLACQ G0 8M Q6700 2.66GHz/1066MHz
+		 * SLACR G0 8M Q6600 2.4GHz/1066MHz
+		 */
+		case 0xb:
+			if (cpu->cachesize_L2 == 2048) {
+				add_to_cpuname("Duo [G0]");
+			} else
+				add_to_cpuname("Quad ");
+			break;
+		/*
+		 * SLA98 M0 2M E4400 2GHz/800MHz
+		 * SLA95 M0 2M E4500 2.2GHz/800MHz
+		 * SLA94 M0 2M E4600 2.4GHz/800MHz
+		 */
+		case 0xd:
+			add_to_cpuname("Duo [M0]");
+			break;
+		}
+		break;
 
 	default:
                 add_to_cpuname("Unknown model. ");
