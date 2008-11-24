@@ -134,6 +134,7 @@ struct fam10h_rev fam10h_revisions[] = {
 	{0x0100f2a, _OPTERON, "DR-BA"},
 	{0x0100f22, _OPTERON|_PHENOM, "DR-B2"},
 	{0x0100f23, _OPTERON|_PHENOM, "DR-B3"},
+	{0x0100f42, _OPTERON, "RB-C2"},
 };
 
 struct id_string fam11h_revisions[] = {
