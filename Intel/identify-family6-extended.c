@@ -19,6 +19,13 @@ void Identify_Intel_family6core(struct cpudata *cpu)
 	intel_nameptr = cpu->name;
 
 	switch (model(cpu)) {
+	case 0xa:
+		add_to_cpuname("Core i7 ");
+		//sSpec step CoreFreq/QuickpathGTs/DDR3	cache
+		//SLBCJ C-0	3.2/6.40/1066		8MB
+		//SLBCK C-0	2.93/4.80/1066		8MB
+		//SLBCH C-0	2.66/4.80/1066		8MB
+		break;
 	case 0xe:
 		add_to_cpuname("Core ");
 		switch (cpu->stepping) {
