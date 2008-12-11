@@ -120,7 +120,7 @@ void version(void)
 	fprintf(stdout, "%s version %s\n", g.prog, VERSION);
 }
 
-int get_msr_val(unsigned int msr, unsigned long *val)
+int get_msr_val(unsigned int msr, unsigned long long *val)
 {
 	off64_t off;
 	int err;

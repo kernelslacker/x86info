@@ -54,9 +54,9 @@ static void native_cpuid(unsigned int cpunr, unsigned long long idx,
 	asm("cpuid"
 		: "=a" (a),
 		  "=b" (b),
-		  "=c" (c),
+		  "+c" (c),
 		  "=d" (d)
-		: "0" (idx), "2" (c));
+		: "0" ((unsigned int)idx));
 
 	if (eax!=NULL)
 		*eax = a;

@@ -122,7 +122,7 @@ static void print_reg(struct reg_spec *reg, uint64_t val, uint8_t list,
 				reg->name, reg->address);
 
 	} else
-		fprintf(stdout, "%-*s = 0x%16.16lx", all ? 20 : 0,
+		fprintf(stdout, "%-*s = 0x%16.16llx", all ? 20 : 0,
 			reg->name, val);
 
 	if (verb)
