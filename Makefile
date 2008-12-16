@@ -101,7 +101,7 @@ nodes:
 test:
 	scripts/testnodes
 
-VERSION=1.21
+VERSION=1.22
 
 release:
 	git repack -a -d
