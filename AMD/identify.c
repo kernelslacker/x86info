@@ -50,7 +50,7 @@ static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
 }
 
-void set_k8_revinfo(int id, struct cpudata *c)
+static void set_k8_revinfo(int id, struct cpudata *c)
 {
 	int i;
 	struct k8_rev *r;
@@ -108,7 +108,7 @@ static void set_connector(struct cpudata *c)
 	}
 }
 
-void set_fam10h_revinfo(int id, struct cpudata *c)
+static void set_fam10h_revinfo(int id, struct cpudata *c)
 {
 	int i;
 	struct fam10h_rev *r = NULL;
@@ -123,7 +123,7 @@ void set_fam10h_revinfo(int id, struct cpudata *c)
 	set_connector(c);
 }
 
-void set_fam11h_revinfo(int id, struct cpudata *c)
+static void set_fam11h_revinfo(int id, struct cpudata *c)
 {
 	const char *p;
 

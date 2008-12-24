@@ -229,7 +229,7 @@ static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int ou
 	}
 }
 
-void clean_unknowns(struct _cache_table *table)
+static void clean_unknowns(struct _cache_table *table)
 {
 	int j=0;
 	int des;

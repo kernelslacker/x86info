@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "x86info.h"
 
-void flag_decode(unsigned long reg, const char *flags[])
+static void flag_decode(unsigned long reg, const char *flags[])
 {
 	unsigned int i;
 

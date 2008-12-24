@@ -7,6 +7,7 @@
  */
 
 #include <stdio.h>
+#include "x86info.h"
 
 void binary(unsigned int n, unsigned long value)
 {

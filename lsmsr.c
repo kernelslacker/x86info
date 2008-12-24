@@ -102,25 +102,25 @@ extern int optind, opterr, optopt;
 " \" -r <name|addr>\" overrules \"<MSR>\" overrules \"-a\".\n"\
 "\n"
 
-void usage(void)
+static void usage(void)
 {
 	fprintf(stderr, "Usage: %s "_USAGE, g.prog);
 	fprintf(stderr, "Try '%s --help' for more information\n", g.prog);
 	exit(1);
 }
 
-void help(void)
+static void help(void)
 {
 	fprintf(stdout, "Usage: %s "_USAGE, g.prog);
 	fprintf(stdout, "Help:\n"_HELP);
 }
 
-void version(void)
+static void version(void)
 {
 	fprintf(stdout, "%s version %s\n", g.prog, VERSION);
 }
 
-int get_msr_val(unsigned int msr, unsigned long long *val)
+static int get_msr_val(unsigned int msr, unsigned long long *val)
 {
 	off64_t off;
 	int err;

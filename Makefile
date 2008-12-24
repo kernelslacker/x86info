@@ -1,4 +1,4 @@
-CFLAGS = -g -O2 -Werror -Wall -W -Wshadow
+CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement
 CC = gcc
 
 SHELL = /bin/sh

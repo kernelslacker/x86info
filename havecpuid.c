@@ -5,6 +5,7 @@
  */
 
 #include <stdio.h>
+#include "x86info.h"
 
 static int flag_is_changeable_p(unsigned long flag)
 {

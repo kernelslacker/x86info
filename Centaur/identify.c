@@ -127,7 +127,7 @@ void identify_centaur(struct cpudata *cpu)
 }
 
 
-void decode_centaur_cacheinfo(struct cpudata *cpu)
+static void decode_centaur_cacheinfo(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
