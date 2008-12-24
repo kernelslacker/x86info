@@ -1,4 +1,4 @@
-CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement
+CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls
 CC = gcc
 
 SHELL = /bin/sh

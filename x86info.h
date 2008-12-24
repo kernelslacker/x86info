@@ -141,7 +141,6 @@ extern void dump_mtrrs (struct cpudata *cpu);
 extern void estimate_MHz(struct cpudata *cpu);
 extern int HaveCPUID(void);
 extern void interpret_eblcr(u32 lo);
-extern int issmp(int verb);
 extern int enumerate_cpus(void);
 extern void get_model_name(struct cpudata *cpu);
 extern void decode_connector(enum connector type);
@@ -151,7 +150,6 @@ extern void decode_serial_number(struct cpudata *cpu);
 extern void show_intel_topology(struct cpudata *cpu);
 
 void decode_AMD_cacheinfo(struct cpudata *cpu);
-void decode_Intel_caches(struct cpudata *cpu, int output);
 
 extern int show_bench;
 extern int show_bios;

@@ -76,9 +76,6 @@ static struct option lopts[] = {
 
 #define OPTSTRING "ac:C:f:hlm:r:vV:"
 
-extern char *optarg;
-extern int optind, opterr, optopt;
-
 #define _USAGE "[OPTION] <MSR>\n"
 
 #define _HELP \

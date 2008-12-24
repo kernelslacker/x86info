@@ -10,6 +10,9 @@
 #include <unistd.h>
 
 #include "x86info.h"
+#include "mptable.h"
+
+#include "Intel/Intel.h"
 
 int show_bench=0;
 int show_bios=0;
