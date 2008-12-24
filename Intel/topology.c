@@ -75,7 +75,6 @@ void show_intel_topology(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 	unsigned int MaxLPPerCore;
-	unsigned int packageIDMask;
 	unsigned int smt_id, core_id, package_id;
 	unsigned int shift;
 

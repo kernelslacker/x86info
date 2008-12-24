@@ -12,7 +12,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void show_benchmarks(struct cpudata *cpu)
+void show_benchmarks(struct cpudata *cpu __attribute__((unused)))
 {
 	int tmp = 0;
 

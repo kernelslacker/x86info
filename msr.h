@@ -123,7 +123,7 @@ static void print_reg(struct reg_spec *reg, uint64_t val, uint8_t list,
 
 	} else
 		fprintf(stdout, "%-*s = 0x%16.16llx", all ? 20 : 0,
-			reg->name, val);
+			reg->name, (unsigned long long) val);
 
 	if (verb)
 		print_reg_bits(reg, val, list, verb);

@@ -165,7 +165,7 @@ do { \
 
 static int _show_msr(struct reg_spec *reg)
 {
-	uint64_t val;
+	unsigned long long val;
 	if (!g.list)
 		if (get_msr_val(reg->address, &val))
 			return 1;

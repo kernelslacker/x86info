@@ -1,4 +1,4 @@
-CFLAGS = -Wall -W -Wshadow -g -O2
+CFLAGS = -g -O2 -Werror -Wall -W -Wshadow
 CC = gcc
 
 SHELL = /bin/sh
