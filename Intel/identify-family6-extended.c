@@ -19,6 +19,54 @@ void Identify_Intel_family6core(struct cpudata *cpu)
 	intel_nameptr = cpu->name;
 
 	switch (model(cpu)) {
+	case 7:
+		switch (cpu->stepping) {
+		case 6:
+			// sSpec step CoreFreq Bus cache
+			// SLAN3  C0  3.00    1333  12MB (2x6)
+			add_to_cpuname("Core 2 quad (QX9650) [C0] ");
+			break;
+		case 7:
+			// sSpec step CoreFreq Bus cache
+			// SLAWM C1   3.2    1600  12MB (2x6)	QX9770
+			// SLAWQ C1   2.83   1600  12MB (2x6)	Q9550
+			// SLAWR C1   2.66   1333  12MB (2x6)	Q9450
+			// SLAWE M1   2.50   1333  6MB (2x3)	Q9300
+			// SLB5M M1   2.33   1333  4MB (2x2)    Q8200
+			add_to_cpuname("Core 2 quad ");
+			switch (cpu->MHz) {
+			case 3200:	add_to_cpuname("(QX9770) [C1] ");
+					break;
+			case 2830:	add_to_cpuname("(Q9550) [C1] ");
+					break;
+			case 2660:	add_to_cpuname("(Q9450) [C1] ");
+					break;
+			case 2500:	add_to_cpuname("(Q9300) [M1] ");
+					break;
+			case 2330:	add_to_cpuname("(Q8200) [M1] ");
+					break;
+			}
+			break;
+		case 0xa:
+			// sSpec step CoreFreq Bus cache
+			// SLB8W E0  3.00     1333 12MB (2x6) Q9650
+			// SLB8V E0  2.83     1333 12MB (2x6) Q9550
+			// SLB6B R0  2.66     1333 6MB  (2x3) Q9400
+			// SLB5W R0  2.5      1333 4MB  (2x2) Q8300
+			add_to_cpuname("Core 2 quad ");
+			switch (cpu->MHz) {
+			case 3000:	add_to_cpuname("(Q9650) [E0] ");
+					break;
+			case 2830:	add_to_cpuname("(Q9550) [E0] ");
+					break;
+			case 2660:	add_to_cpuname("(Q9400) [R0] ");
+					break;
+			case 2500:	add_to_cpuname("(Q8300) [R0] ");
+					break;
+			}
+			break;
+		}
+		break;
 	case 0xa:
 		add_to_cpuname("Core i7 ");
 		//sSpec step CoreFreq/QuickpathGTs/DDR3	cache
