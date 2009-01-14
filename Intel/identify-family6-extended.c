@@ -4,6 +4,7 @@
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  Intel family 6 specific decoding (Core family).
+ *  All the CPUs described in this file have cpu->emodel set to 1
  */
 
 #include <stdio.h>
@@ -203,6 +204,24 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 			break;
 		}
 		break;
+
+	case 26:
+		/*
+		 * SLBCJ C-0 0x000106A4 3.20 / 6.40/ 1066 8MB
+		 * SLBCK C-0 0x000106A4 2.93 / 4.80/ 1066 8MB
+		 * SLBCH C-0 0x000106A4 2.66 / 4.80/ 1066 8MB
+		 */
+		add_to_cpuname("Core i7 (Nehalem)");
+		switch (cpu->MHz) {
+		case 3200:	add_to_cpuname(" [C-0][SLBCJ]");
+				break;
+		case 2930:	add_to_cpuname(" [C-0][SLBCK]");
+				break;
+		case 2660:	add_to_cpuname(" [C-0][SLBCH]");
+				break;
+		}
+		break;
+
 
 	default:
                 add_to_cpuname("Unknown model. ");
