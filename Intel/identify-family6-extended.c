@@ -142,6 +142,29 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		//SLBCK C-0	2.93/4.80/1066		8MB
 		//SLBCH C-0	2.66/4.80/1066		8MB
 		break;
+	case 0xc:
+		/*
+		 * sSpec step TDP Name FSB EFMS  HFM     LFM    Package
+		 * SLB6Q C0 0.65W Z500 400 106C2 0.8GHz  600Mhz FCBGA8
+		 * SLB2C C0    2W Z510 400 106C2 1.1GHz  600Mhz FCBGA8
+		 * SLB2H C0    2W Z520 533 106C2 1.33GHz 800Mhz FCBGA8
+		 * SLB6P C0    2W Z530 533 106C2 1.60GHz 800Mhz FCBGA8
+		 * SLB2M C0  2.4W Z540 533 106C2 1.86GHz 800Mhz FCBGA8
+		 */
+		add_to_cpuname("Atom ");
+		switch (cpu->MHz) {
+		case 800:	add_to_cpuname("Z500 [SLB6Q][C0]")
+				break;
+		case 1100:	add_to_cpuname("Z510 [SLB2C][C0]")
+				break;
+		case 1330:	add_to_cpuname("Z520 [SLB2H][C0]")
+				break;
+		case 1600:	add_to_cpuname("Z530 [SLB6P][C0]")
+				break;
+		case 1860:	add_to_cpuname("Z540 [SLB2M][C0]")
+				break;
+		}
+		break;
 	case 0xe:
 		add_to_cpuname("Core ");
 		switch (cpu->stepping) {
