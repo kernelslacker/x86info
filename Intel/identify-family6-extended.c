@@ -161,7 +161,8 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 			 * SLB2C C0    2W Z510 400 106C2 1.1GHz  600Mhz FCBGA8
 			 * SLB2H C0    2W Z520 533 106C2 1.33GHz 800Mhz FCBGA8
 			 * SLB6P C0    2W Z530 533 106C2 1.60GHz 800Mhz FCBGA8
-			 * QGZT  C0  2.5W N270 533 106C2 1.6GHz  800MHz FCBGA8
+			 * QGZT  C0  2.5W N270 533 106C2 1.60GHz 800MHz FCBGA8
+			 * QKGY1 C0    8W  300 533 106C2 1.60GHz ------ FCBGA 437
 			 * SLB2M C0  2.4W Z540 533 106C2 1.86GHz 800Mhz FCBGA8
 			 */
 			switch (cpu->MHz) {
@@ -171,7 +172,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 					break;
 			case 1330:	add_to_cpuname("Z520 [SLB2H][C0]")
 					break;
-			case 1600:	// could be a Z530 or an N270
+			case 1600:	// could be a Z530 or an N270 or a QKGY1
 					break;
 			case 1860:	add_to_cpuname("Z540 [SLB2M][C0]")
 					break;
