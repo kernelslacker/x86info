@@ -23,8 +23,16 @@ void Identify_Intel_family6core(struct cpudata *cpu)
 		switch (cpu->stepping) {
 		case 6:
 			// sSpec step CoreFreq Bus cache
-			// SLAN3  C0  3.00    1333  12MB (2x6)
-			add_to_cpuname("Core 2 quad (QX9650) [C0] ");
+			// SLAN3  C0  3.00    1333  12MB (2x6) QX9650
+			// SLANY  C0  3.2     1600  12MB (2x6) QX9775
+			add_to_cpuname("Core 2 quad ");
+			switch (cpu->MHz) {
+			case 3000:	add_to_cpuname("Core 2 quad (QX9650) ");
+				break;
+			case 3200:	add_to_cpuname("Core 2 Extreme quad (QX9775) ");
+				break;
+			}
+			add_to_cpuname("[C0] ");
 			break;
 		case 7:
 			// sSpec step CoreFreq Bus cache
