@@ -147,9 +147,10 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		switch (cpu->stepping) {
 		case 1:
 			/*
-			 * sSpec step TDP Name FSB EFMS  HFM    LFM    Package
+			 * sSpec step TDP Name FSB EFMS  HFM    LFM    Package  MCU
 			 * QDTD  B0   2.5   x  533 106C1 1.6GHz 800MHz FCBGA8 M01106C1109
 			 * QDTB  B0   2.5   x  533 106C1 1.6GHz 800MHz FCBGA8 M01106C1109
+			 * QGFD1 B0     X   X  533 106C1 1.33GHz ----  FCBGA437 M01106C1109
 			 */
 			break;
 		case 2:
@@ -163,6 +164,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 			 * SLB6P C0    2W Z530 533 106C2 1.60GHz 800Mhz FCBGA8
 			 * QGZT  C0  2.5W N270 533 106C2 1.60GHz 800MHz FCBGA8
 			 * QKGY1 C0    8W  300 533 106C2 1.60GHz ------ FCBGA 437
+			 * QGZR2 C0    4W  230 533 106C2 1.60GHz -----  FCBGA437 M01106C2208
 			 * SLB2M C0  2.4W Z540 533 106C2 1.86GHz 800Mhz FCBGA8
 			 */
 			switch (cpu->MHz) {
@@ -172,7 +174,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 					break;
 			case 1330:	add_to_cpuname("Z520 [SLB2H][C0]")
 					break;
-			case 1600:	// could be a Z530 or an N270 or a QKGY1
+			case 1600:	// could be a Z530,an N270,a QKGY1 or a QGZR2
 					break;
 			case 1860:	add_to_cpuname("Z540 [SLB2M][C0]")
 					break;
