@@ -18,8 +18,9 @@ Features:
  - Parsing of model specific registers.
  - Approximation of current CPU MHz.
 
+Requirements:
+* On Linux, at least version 2.4 of glibc is required.
 
-Caveats:
 *  For usage of the MSR / SMP functions, x86info needs the
    x86 cpuid driver provided with the Linux kernel since 2.2.18 / 2.4.0,
    and the appropriate nodes in /dev
