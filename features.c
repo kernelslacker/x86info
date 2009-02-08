@@ -58,7 +58,7 @@ void show_feature_flags(struct cpudata *cpu)
 		"Time Stamp Counter",
 		"Model-Specific Registers",
 		"Physical Address Extensions",
-		"Machine Check Architecture",
+		"Machine Check Exception",
 		"CMPXCHG8 instruction",
 		"Onboard APIC",
 		NULL,
