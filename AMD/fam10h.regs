@@ -1,6 +1,6 @@
 # Author: Andreas Herrmann <andreas.herrmann3@amd.com>
 #
-# Copyright (C) 2008 Advanced Micro Devices, Inc.
+# Copyright (C) 2008, 2009 Advanced Micro Devices, Inc.
 
 # This file contains information from:
 # - "31116 Rev 3.06 - March 2008, BIOS and Kernel Developer's Guide (BKDG)
@@ -48,6 +48,11 @@
     :16
     ClusterID:2
     :46
+}
+
+{PATCH_LEVEL=0x008b;microcode patch level
+    PATCH_LEVEL:32
+    :32
 }
 
 {MTRRcap=0x00fe;MTRR capabilities
