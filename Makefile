@@ -18,7 +18,7 @@ SHELL = /bin/sh
 all: x86info test lsmsr
 
 
-LSMSR_TMP_HEADERS=AMD/k8.h AMD/fam10h.h generic_msr.h
+LSMSR_TMP_HEADERS=AMD/k8.h AMD/fam10h.h AMD/fam11h.h generic_msr.h
 
 %.h: %.regs scripts/createheader.py
 	python scripts/createheader.py $< `basename $< .regs` >$@

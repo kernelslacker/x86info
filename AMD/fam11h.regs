@@ -1,0 +1,1246 @@
+# Author: Andreas Herrmann <andreas.herrmann3@amd.com>
+#
+# Copyright (C) 2009 Advanced Micro Devices, Inc.
+
+# This source file contains information based on:
+# - "41526 Rev 3.00 - July 07, 2008, AMD Family 11h Processor BKDG"
+
+# See scripts/createheader.py for the general format of this register
+# definitions.
+
+{LSMCAaddr=0x0000;load-store MCA address
+    ADDR:48
+    :16
+} # alias of MC3_ADDR
+
+{LSMCAstatus=0x0001;load-store MCA status
+    ErrorCode:16
+    :29
+    UECC:1
+    CECC:1
+    :10
+    PCC:1
+    ADDRV:1
+    MISCV:1
+    EN:1
+    UC:1
+    OVER:1
+    VAL:1
+} # alias of MC3_STATUS
+
+{TSC=0x0010;time-stamp counter
+    TSC:64
+}
+
+{APIC_BASE=0x001b;APIC base address
+    :8
+    BSC:1
+    :2
+    ApicEn:1
+    ApicBar:36
+    :16
+}
+
+{EBL_CR_POWERON=0x002a;cluster ID
+    :16
+    ClusterID:2
+    :46
+}
+
+{PATCH_LEVEL=0x008b;microcode patch level
+    PATCH_LEVEL:32
+    :32
+}
+
+{MTRRcap=0x00fe;MTRR capabilities
+    MtrrCapVCnt:8
+    MtrrCapFix:1
+    :1
+    MtrrCapWc:1
+    :53
+}
+
+{SYSENTER_CS=0x0174;SYSENTER/SYSEXIT code segment selector
+    SYSENTER_CS:16
+    :48
+}
+
+{SYSENTER_ESP=0x0175;SYSENTER/SYSEXIT stack pointer
+    SYSENTER_ESP:32
+    :32
+}
+
+{SYSENTER_EIP=0x0176;SYSENTER/SYSEXIT instruction pointer
+    SYSENTER_EIP:32
+    :32
+}
+
+{MCG_CAP=0x0179;global MC capabilities
+    Count:8
+    MCG_CTL_P:1
+    :55
+}
+
+{MCG_STAT=0x017a;global MC status
+    RIPV:1
+    EIPV:1
+    MCIP:1
+    :61
+}
+
+{MCG_CTL=0x017b;global MC control
+    DCE:1
+    ICE:1
+    BUE:1
+    LSE:1
+    NBE:1
+    FRE:1
+    :58
+}
+
+{DBG_CTL_MSR=0x01d9;debug control
+    LBR:1
+    BTF:1
+    PB0:1
+    PB1:1
+    PB2:1
+    PB3:1
+    :58
+}
+
+{BR_FROM=0x01db;last branch from IP
+    LastBranchFromIP:64
+}
+
+{BR_TO=0x01dc;last branch to IP
+    LastBranchToIP:64
+}
+
+{LastExceptionFromIP=0x01dd;last exception from IP
+    LastIntFromIP:64
+}
+
+{LastExceptionToIP=0x01de;last exception to IP
+    LastIntToIP:64
+}
+
+{MTRRphysBase0=0x0200;base of variable-size MTRR (0)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask0=0x0201;mask of variable-size MTRR (0)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase1=0x0202;base of variable-size MTRR (1)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask1=0x0203;mask of variable-size MTRR (1)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase2=0x0204;base of variable-size MTRR (2)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask2=0x0205;mask of variable-size MTRR (2)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase3=0x0206;base of variable-size MTRR (3)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask3=0x0207;mask of variable-size MTRR (3)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase4=0x0208;base of variable-size MTRR (4)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask4=0x0209;mask of variable-size MTRR (4)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase5=0x020a;base of variable-size MTRR (5)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask5=0x020b;mask of variable-size MTRR (5)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase6=0x020c;base of variable-size MTRR (6)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask6=0x020d;mask of variable-size MTRR (6)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRphysBase7=0x020e;base of variable-size MTRR (7)
+    MemType:8;0=UC;1=WC;4=WT;5=WP;6=WB
+    :4
+    PhyBase:36
+    :16
+}
+
+{MTRRphysMask7=0x020f;mask of variable-size MTRR (7)
+    :11
+    Valid:1
+    PhysMask:36
+    :16
+}
+
+{MTRRfix64K_00000=0x0250;fixed range MTRR
+    0xxxxType:8
+    1xxxxType:8
+    2xxxxType:8
+    3xxxxType:8
+    4xxxxType:8
+    5xxxxType:8
+    6xxxxType:8
+    7xxxxType:8
+}
+
+{MTRRfix16K_80000=0x0258;fixed range MTRR
+    80xxxType:8
+    84xxxType:8
+    88xxxType:8
+    8CxxxType:8
+    90xxxType:8
+    94xxxType:8
+    98xxxType:8
+    9CxxxType:8
+}
+
+{MTRRfix16K_A0000=0x0259;fixed range MTRR
+    A0xxxType:8
+    A4xxxType:8
+    A8xxxType:8
+    ACxxxType:8
+    B0xxxType:8
+    B4xxxType:8
+    B8xxxType:8
+    BCxxxType:8
+}
+
+{MTRRfix4K_C0000=0x0268;fixed range MTRR
+    C0xxxType:8
+    C1xxxType:8
+    C2xxxType:8
+    C3xxxType:8
+    C4xxxType:8
+    C5xxxType:8
+    C6xxxType:8
+    C7xxxType:8
+}
+
+{MTRRfix4K_C8000=0x0269;fixed range MTRR
+    C8xxxType:8
+    C9xxxType:8
+    CAxxxType:8
+    CBxxxType:8
+    CCxxxType:8
+    CDxxxType:8
+    CExxxType:8
+    CFxxxType:8
+}
+
+{MTRRfix4K_D0000=0x026a;fixed range MTRR
+    D0xxxType:8
+    D1xxxType:8
+    D2xxxType:8
+    D3xxxType:8
+    D4xxxType:8
+    D5xxxType:8
+    D6xxxType:8
+    D7xxxType:8
+}
+
+{MTRRfix4K_D8000=0x026b;fixed range MTRR
+    D8xxxType:8
+    D9xxxType:8
+    DAxxxType:8
+    DBxxxType:8
+    DCxxxType:8
+    DDxxxType:8
+    DExxxType:8
+    DFxxxType:8
+}
+
+{MTRRfix4K_E0000=0x026c;fixed range MTRR
+    E0xxxType:8
+    E1xxxType:8
+    E2xxxType:8
+    E3xxxType:8
+    E4xxxType:8
+    E5xxxType:8
+    E6xxxType:8
+    E7xxxType:8
+}
+
+{MTRRfix4K_E8000=0x026d;fixed range MTRR
+    E8xxxType:8
+    E9xxxType:8
+    EAxxxType:8
+    EBxxxType:8
+    ECxxxType:8
+    EDxxxType:8
+    EExxxType:8
+    EFxxxType:8
+}
+
+{MTRRfix4K_F0000=0x026e;fixed range MTRR
+    F0xxxType:8
+    F1xxxType:8
+    F2xxxType:8
+    F3xxxType:8
+    F4xxxType:8
+    F5xxxType:8
+    F6xxxType:8
+    F7xxxType:8
+}
+
+{MTRRfix4K_F8000=0x026f;fixed range MTRR
+    F8xxxType:8
+    F9xxxType:8
+    FAxxxType:8
+    FBxxxType:8
+    FCxxxType:8
+    FDxxxType:8
+    FExxxType:8
+    FFxxxType:8
+}
+
+{PAT=0x0277;page attribute table
+    PA0MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA1MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA2MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA3MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA4MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA5MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA6MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+    PA7MemType:3;0=UC;1=WC;4=WT;5=WP;6=WB;7=UC-
+    :5
+}
+
+{MTRRdefType=0x02ff;MTRR default memory type
+    MemType:8
+    :2
+    MtrrDefTypeFixEn:1
+    MtrrDefTypeEn:1
+    :52
+}
+
+{MC0_CTL=0x0400;data cache MC control
+    ECCI:1
+    ECCM:1
+    DECC:1
+    DMTP:1
+    DSTP:1
+    L1TP:1
+    L2TP:1
+    :57
+}
+
+{MC0_STATUS=0x0401;data cache MC status
+    ErrorCode:16
+    ErrorCodeExt:4
+    :20
+    Scrub:1
+    :4
+    UECC:1
+    CECC:1
+    Syndrome:8
+    :2
+    PCC:1
+    AddrV:1
+    MiscV:1
+    En:1
+    UC:1
+    OVER:1
+    VAL:1
+}
+
+{MC0_ADDR=0x0402;data cache MC address
+    ADDR:48
+    :16
+}
+
+{MC0_MISC=0x0403;data cache MC miscellaneous
+    :64
+}
+
+{MC1_CTL=0x0404;instruction cache MC control
+    ECCI:1
+    ECCM:1
+    IDP:1
+    IMTP:1
+    ISTP:1
+    L1TP:1
+    L2TP:1
+    :2
+    RDDE:1
+    :54
+}
+
+{MC1_STATUS=0x0405;instruction cache MC status
+    ErrorCode:16
+    ErrorCodeExt:4
+    :25
+    UECC:1
+    CECC:1
+    :10
+    PCC:1
+    AddrV:1
+    MiscV:1
+    En:1
+    UC:1
+    OVER:1
+    VAL:1
+}
+
+{MC1_ADDR=0x0406;instruction cache MC address
+    ADDR:48
+    :16
+}
+
+{MC1_MISC=0x0407;instruction cache MC miscellaneous
+    :64
+}
+
+{MC2_CTL=0x0408;bus unit MC control
+    S_RDE_HP:1
+    S_RDE_TLB:1
+    S_RDE_ALL:1
+    S_ECC1_TLB:1
+    S_ECC1_HP:1
+    S_ECCM_TLB:1
+    S_ECCM_HP:1
+    L2T_PAR_ICDC:1
+    L2T_PAR_TLB:1
+    L2_PAR_SNP:1
+    L2_PAR_CPB:1
+    L2_PAR_SCR:1
+    L2D_ECC1_TLB:1
+    L2D_ECC1_SNP:1
+    L2D_ECC1_CPB:1
+    L2D_ECCM_TLB:1
+    L2D_ECCM_SNP:1
+    L2D_ECCM_CPB:1
+    L2T_ECC1_SCR:1
+    L2T_ECCM_SCR:1
+    :44
+}
+
+{MC2_STATUS=0x0409;bus unit MC status
+    ErrorCode:16
+    ErrorCodeExt:4
+    :25
+    UECC:1
+    CECC:1
+    :10
+    PCC:1
+    AddrV:1
+    MiscV:1
+    En:1
+    UC:1
+    OVER:1
+    VAL:1
+}
+
+{MC2_ADDR=0x040a;bus unit MC address register
+    ADDR:48
+    :16
+}
+
+{MC2_MISC=0x040b;bus unit MC miscellaneous
+    :64
+}
+
+{MC3_CTL=0x040c;load store unit MC control
+    S_RDE_L:1
+    S_RDE_S:1
+    :62
+}
+
+{MC3_STATUS=0x040d;load store unit MC status
+    ErrorCode:16
+    :29
+    UECC:1
+    CECC:1
+    :10
+    PCC:1
+    ADDRV:1
+    MISCV:1
+    EN:1
+    UC:1
+    OVER:1
+    VAL:1
+}
+
+{MC3_ADDR=0x040e;load store unit MC address
+    ADDR:48
+    :16
+}
+
+{MC3_MISC=0x040f;load store unit MC miscellaneous
+    :64
+}
+
+{MC4_CTL=0x0410;northbridge MC control
+    :2
+    CrcErr0En:1
+    :2
+    SyncPkt0En:1
+    :2
+    MstrAbrtEn:1
+    TgtAbrtEn:1
+    :1
+    AtomicRMWEn:1
+    WDTRptEn:1
+    DevErrEn:1
+    :2
+    HtProtEn:1
+    HtDataEn:1
+    :1
+    RtryHt0En:1
+    :5
+    McaUsPwDatErrEn:1
+    :1
+    TblWlkDatErrEn:1
+    :36
+}
+
+{MC4_STATUS=0x0411;northbridge MC status
+    ErrorCode:16
+    ErrorCodeExt:5
+    :11
+    ErrCpu0:1
+    ErrCpu1:1
+    :2
+    LDTLink:1
+    :4
+    SubLink:1
+    :15
+    PCC:1
+    AddrV:1
+    :1
+    En:1
+    UC:1
+    Over:1
+    Val:1
+}
+
+{MC4_ADDR=0x0412;northbridge MC address
+    NBaddr:64    
+}
+
+# 0x0413 reserved (was MC4_MISC0)
+
+{EFER=0xc0000080;extended feature enable
+    SYSCALL:1
+    :7
+    LME:1
+    :1
+    LMA:1
+    NXE:1
+    SVME:1
+    LMSLE:1
+    FFXSE:1
+    :49
+}
+
+{STAR=0xc0000081;SYSCALL target address
+    Target:32
+    SysCallSel:16
+    SysRetSel:16
+}
+
+{STAR64=0xc0000082;long mode SYSCALL target address
+    LSTAR:64
+}
+
+{STARCOMPAT=0xc0000083;compat mode SYSCALL target address
+    CSTAR:64
+}
+
+{SYSCALL_FLAG_MASK=0xc0000084;SYSCALL flag mask
+    MASK:32
+    :32
+}
+
+{FS_BASE=0xc0000100;FS base
+    FS_BASE:64
+}
+
+{GS_BASE=0xc0000101;GS base
+    GS_BASE:64
+}
+
+{KernelGSbase=0xc0000102;kernel GS base
+    KernelGSBase:64
+}
+
+{TSC_AUX=0xc0000103;auxiliary time stamp counter data
+    TscAux:32
+    :32
+}
+
+{PERF_CTL0=0xc0010000;performance event select (0)
+    EventSelect:8
+    UnitMask:8
+    User:1
+    OS:1
+    Edge:1
+    PC:1
+    Int:1
+    :1
+    En:1
+    Inv:1
+    CntMask:8
+    EventSelect:4
+    :28
+}
+
+{PERF_CTL1=0xc0010001;performance event select (1)
+    EventSelect:8
+    UnitMask:8
+    User:1
+    OS:1
+    Edge:1
+    PC:1
+    Int:1
+    :1
+    En:1
+    Inv:1
+    CntMask:8
+    EventSelect:4
+    :28
+}
+
+{PERF_CTL2=0xc0010002;performance event select (2)
+    EventSelect:8
+    UnitMask:8
+    User:1
+    OS:1
+    Edge:1
+    PC:1
+    Int:1
+    :1
+    En:1
+    Inv:1
+    CntMask:8
+    EventSelect:4
+    :28
+}
+
+{PERF_CTL3=0xc0010003;performance event select (3)
+    EventSelect:8
+    UnitMask:8
+    User:1
+    OS:1
+    Edge:1
+    :1
+    Int:1
+    :1
+    En:1
+    Inv:1
+    CntMask:8
+    EventSelect:4
+    :28
+}
+
+{PERF_CTR0=0xc0010004;performance event counter (0)
+    CTR:48
+    :16
+}
+
+{PERF_CTR1=0xc0010005;performance event counter (1)
+    CTR:48
+    :16
+}
+
+{PERF_CTR2=0xc0010006;performance event counter (2)
+    CTR:48
+    :16
+}
+
+{PERF_CTR3=0xc0010007;performance event counter (3)
+    CTR:48
+    :16
+}
+
+{SYS_CFG=0xc0010010;system configuration
+    SysAckLimit:5
+    SysVicLimit:3
+    :1
+    SetDirtyEnS:1
+    SetDirtyEnO:1
+    :5
+    ChxToDirtyDis:1
+    SysUcLockEn:1
+    MtrrFixDramEn:1
+    MtrrFixDramModeEn:1
+    MtrrVarDramEn:1
+    MtrrTom2En:1
+    Tom2ForceMemTypeWB:1
+    :41
+}
+
+{HWCR=0xc0010015;hardware configuration
+    SmmLock:1
+    SlowFence:1
+    :1
+    TlbCacheDis:1
+    INVD_WBINVD:1
+    :1
+    FFDIS:1
+    DisLock:1
+    IgnneEm:1
+    :4
+    SmiSpCycDis:1
+    RsmSpCycDis:1
+    SseDis:1
+    :1
+    Wrap32Dis:1
+    McStatusWrEn:1
+    :1
+    IoCfgGpFault:1
+    :2
+    ForceUsRdWrSzPrb:1
+    TscFreqSel:1
+    :39
+}
+
+{IORR_BASE0=0xc0010016;base of variable I/O range (0)
+    :3
+    WrMem:1
+    RdMem:1
+    :7
+    PhyBase:36
+    :16
+}
+
+{IORR_MASK0=0xc0010017;mask of variable I/O range (0)
+    :11
+    Valid:1
+    PhyMask:36
+    :16
+}
+
+{IORR_BASE1=0xc0010018;base of variable I/O range (1)
+    :3
+    WrMem:1
+    RdMem:1
+    :7
+    PhyBase:36
+    :16
+}
+
+{IORR_MASK1=0xc0010019;mask of variable I/O range (1)
+    :11
+    Valid:1
+    PhyMask:36
+    :16
+}
+
+{TOP_MEM=0xc001001a;top of memory address
+    :23
+    TOM:17
+    :24
+}
+
+{TOM2=0xc001001d;second top of memory address
+    :23
+    TOM2:17
+    :24
+}
+
+{NB_CFG=0xc001001f;northbridge configuration
+    :42
+    EnaPStateSpyCyc:1
+    :2
+    DisUsSysMgtReqToNcHt:1
+    EnableCf8ExtCfg:1
+    :3
+    DisOrderRdRsp:1
+    :7
+    EnConvertToNonIsoc:1
+    :5
+}
+
+{ProcessorNameString0=0xc0010030;processor name string (0)
+    CpuNameString:64
+}
+
+{ProcessorNameString1=0xc0010031;processor name string (1)
+    CpuNameString:64
+}
+
+{ProcessorNameString2=0xc0010032;processor name string (2)
+    CpuNameString:64
+}
+
+{ProcessorNameString3=0xc0010033;processor name string (3)
+    CpuNameString:64
+}
+
+{ProcessorNameString4=0xc0010034;processor name string (4)
+    CpuNameString:64
+}
+
+{ProcessorNameString5=0xc0010035;processor name string (5)
+    CpuNameString:64
+}
+
+{MC0_CTL_MASK=0xc0010044;data cache MC control mask
+    ECCI:1
+    ECCM:1
+    DECC:1
+    DMTP:1
+    DSTP:1
+    L1TP:1
+    L2TP:1
+    :57
+}
+
+{MC1_CTL_MASK=0xc0010045;instruction cache MC control mask
+    ECCI:1
+    ECCM:1
+    IDP:1
+    IMTP:1
+    ISTP:1
+    L1TP:1
+    L2TP:1
+    :2
+    RDDE:1
+    :54
+}
+
+{MC2_CTL_MASK=0xc0010046;bus unit MC control mask
+    S_RDE_HP:1
+    S_RDE_TLB:1
+    S_RDE_ALL:1
+    S_ECC1_TLB:1
+    S_ECC1_HP:1
+    S_ECCM_TLB:1
+    S_ECCM_HP:1
+    L2T_PAR_ICDC:1
+    L2T_PAR_TLB:1
+    L2_PAR_SNP:1
+    L2_PAR_CPB:1
+    L2_PAR_SCR:1
+    L2D_ECC1_TLB:1
+    L2D_ECC1_SNP:1
+    L2D_ECC1_CPB:1
+    L2D_ECCM_TLB:1
+    L2D_ECCM_SNP:1
+    L2D_ECCM_CPB:1
+    L2T_ECC1_SCR:1
+    L2T_ECCM_SCR:1
+    :44
+}
+
+{MC3_CTL_MASK=0xc0010047;load store unit MC control mask
+    S_RDE_L:1
+    S_RDE_S:1
+    :62
+}
+
+{MC4_CTL_MASK=0xc0010048;northbridge MC control mask
+    :2
+    CrcErr0En:1
+    :2
+    SyncPkt0En:1
+    :2
+    MstrAbrtEn:1
+    TgtAbrtEn:1
+    :1
+    AtomicRMWEn:1
+    WDTRptEn:1
+    DevErrEn:1
+    :2
+    HtProtEn:1
+    HtDataEn:1
+    :1
+    RtryHt0En:1
+    :5
+    McaUsPwDatErrEn:1
+    :1
+    TblWlkDatErrEn:1
+    :36
+}
+
+{SMI_ON_IO_TRAP_0=0xc0010050;IO trap address (0)
+    SmiAddr:32
+    SmiMask:24
+    :5
+    ConfigSmi:1
+    SmiOnWrEn:1
+    SmiOnRdEn:1
+}
+
+{SMI_ON_IO_TRAP_1=0xc0010051;IO trap address (1)
+    SmiAddr:32
+    SmiMask:24
+    :5
+    ConfigSmi:1
+    SmiOnWrEn:1
+    SmiOnRdEn:1
+}
+
+{SMI_ON_IO_TRAP_2=0xc0010052;IO trap address (2)
+    SmiAddr:32
+    SmiMask:24
+    :5
+    ConfigSmi:1
+    SmiOnWrEn:1
+    SmiOnRdEn:1
+}
+
+{SMI_ON_IO_TRAP_3=0xc0010053;IO trap address (3)
+    SmiAddr:32
+    SmiMask:24
+    :5
+    ConfigSmi:1
+    SmiOnWrEn:1
+    SmiOnRdEn:1
+}
+
+{SMI_ON_IO_TRAP_CTL_STS=0xc0010054;IO trap control
+    :1
+    SmiEn_0:1
+    :1
+    SmiEn_1:1
+    :1
+    SmiEn_2:1
+    :1
+    SmiEn_3:1
+    :7
+    IoTrapEn:1
+    :48
+}
+
+{IntPendingMessage=0xc0010055;interrupt pending and CMP-halt
+    IOMsgAddr:16
+    IOMsgData:8
+    IntrPndMsgDis:1
+    IntrPndMsg:1
+    IORd:1
+    SmiOnCmpHalt:1
+    C1eOnCmpHalt:1
+    :35
+}
+
+{SmiTriggerIoCycle=0xc0010056;SMI trigger IO cycle
+    IoPortAddress:16
+    IoData:8
+    :1
+    IoCycleEn:1
+    IoRd:1
+    :37
+}
+
+{MmioConfigBase=0xc0010058;MMIO configuration base address
+    Enable:1
+    :1
+    BusRange:4;0=1;1=2;2;4;3=8;4=16;5=32;6=64;7=128;8=256
+    :14
+    MmiocCfgBaseAddr:20
+    :24
+}
+
+{BISTresults=0xc0010060;BIST results register
+    ICFT:1
+    ICST:1
+    ICTLB2:1
+    BTA:1
+    BSA:1
+    ICD:1
+    PDA:1
+    BH:1
+    ICTLB1:1
+    ICLRU:1
+    BSR:1
+    DCD:1
+    DCECC:1
+    DCTLB1:1
+    DCT:1
+    DCTLB2:1
+    DCLRU:1
+    FPCR:1
+    FPRR:1
+    FPRQ:1
+    :2
+    ROBD:1
+    L2D:1
+    L2T:1
+    WDB:1
+    VDB:1
+    L2LRU:1
+    FF:1
+    PDC:1
+    :1
+    MC:1
+    :32
+}
+    
+{PstateCurrentLimit=0xc0010061;P-state current limit
+    CurPstateLimit:3
+    :1
+    PstateMaxVal:3
+    :57
+}
+
+{PstateControl=0xc0010062;P-state control
+    PstateCmd:3
+    :61
+}
+
+{PstateStatus=0xc0010063;P-state status
+    CurPstate:3
+    :61
+}
+
+{Pstate0=0xc0010064;P-state 0
+    CpuFid:6
+    CpuDid:3
+    CpuVid:7
+    :16
+    IddValue:8
+    IddDiv:2
+    :21
+    PstateEn:1
+}
+
+{Pstate1=0xc0010065;P-state 1
+    CpuFid:6
+    CpuDid:3
+    CpuVid:7
+    :16
+    IddValue:8
+    IddDiv:2
+    :21
+    PstateEn:1
+}
+
+{Pstate2=0xc0010066;P-state 2
+    CpuFid:6
+    CpuDid:3
+    CpuVid:7
+    :16
+    IddValue:8
+    IddDiv:2
+    :21
+    PstateEn:1
+}
+
+{Pstate3=0xc0010067;P-state 3
+    CpuFid:6
+    CpuDid:3
+    CpuVid:7
+    :16
+    IddValue:8
+    IddDiv:2
+    :21
+    PstateEn:1
+}
+
+{Pstate4=0xc0010068;P-state 4
+    CpuFid:6
+    CpuDid:3
+    CpuVid:7
+    :16
+    IddValue:8
+    IddDiv:2
+    :21
+    PstateEn:1
+}
+
+{Pstate5=0xc0010069;P-state 5
+    CpuFid:6
+    CpuDid:3
+    CpuVid:7
+    :16
+    IddValue:8
+    IddDiv:2
+    :21
+    PstateEn:1
+}
+
+{Pstate6=0xc001006a;P-state 6
+    CpuFid:6
+    CpuDid:3
+    CpuVid:7
+    :16
+    IddValue:8
+    IddDiv:2
+    :21
+    PstateEn:1
+}
+
+{Pstate7=0xc001006b;P-state 7
+    CpuFid:6
+    CpuDid:3
+    CpuVid:7
+    :16
+    IddValue:8
+    IddDiv:2
+    :21
+    PstateEn:1
+}
+
+{COFVIDcontrol=0xc0010070;COFVID control
+    CpuFid:6
+    CpuDid:3
+    CpuVid:7
+    PstateId:3
+    :45
+}
+
+{COFVIDstatus=0xc0010071;COFVID status
+    CurCpuFid:6
+    CurCpuDid:3
+    CurCpuVid:7
+    CurPstate:3
+    :6
+    CurNbVid:7
+    StartupPstate:3
+    MaxVid:7
+    MinVid:7
+    MainPllOpFreqIdMax:6
+    :1
+    CurPstateLimit:3
+    :5
+}
+
+{SMM_BASE=0xc0010111;SMM base address
+    SMM_BASE:32
+    :32
+}
+
+{SMMAddr=0xc0010112;SMM TSeg base address
+    :17
+    TSegBase:23
+    :24
+}
+
+{SMMMask=0xc0010113;SMM Tseg mask
+    AValid:1
+    TValid:1
+    AClose:1
+    TClose:1
+    AMTypeIoWc:1
+    TMTypeIoWc:1
+    :2
+    AMTypeDram:3
+    :1
+    TMTypeDram:3
+    :2
+    TSegMask:23
+    :24
+}
+
+{VM_CR=0xc0010114;virtual machine control
+    dpd:1
+    r_init:1
+    dis_a20m:1
+    Lock:1
+    Svme_Disable:1
+    :59
+}
+
+{IGNNE=0xc0010115;IGNNE
+    IGNNE:1
+    :63
+}
+
+# 0xc0010116 SMM_CTL, write-only
+
+{VM_HSAVE_PA=0xc0010117;virtual machine host save physical address
+    VM_HSAVE_PA:64
+}
+
+# 0xc0010118 SVM Lock key, write-only
+
+{OSVW_ID_Length=0xc0010140;OS visible work-around ID length
+    OSVW_ID_Length:16
+    :48
+}
+
+{OsvwStatus=0xc0010141;OS visible work-around status
+    OsvwStatusBits:64
+}
+
+{DC_CFG=0xc0011022;data cache configuration register
+    :8
+    DIS_CLR_WBTOL2_SMC_HIT:1
+    :4
+    DIS_HW_PF:1
+    :1
+    DIS_PF_HW_FOR_SW:1
+    :48
+}
+
+{BU_CFG=0xc0011023;bus unit configuration register
+    :48
+    WbEnhWsbDis:1
+    :15
+}
+
+### Local Variables: ###
+### mode:shell-script ###
+### End: ###

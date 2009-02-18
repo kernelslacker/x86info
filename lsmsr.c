@@ -29,6 +29,7 @@
 #include "x86info.h"
 #include "AMD/k8.h"
 #include "AMD/fam10h.h"
+#include "AMD/fam11h.h"
 #include "generic_msr.h"
 
 /* Todos:
@@ -38,7 +39,7 @@
  * - add support for generic MSRs for non-Intel/AMD CPUs
  */
 
-#define VERSION "0.815"
+#define VERSION "0.816"
 
 struct {
 	int fd;
@@ -281,6 +282,9 @@ static int set_msr_table(void)
 			break;
 		case 0x10:
 			g.msr_table = fam10h_spec;
+			break;
+		case 0x11:
+			g.msr_table = fam11h_spec;
 			break;
 		default:
 			g.msr_table = generic_msr_spec;
