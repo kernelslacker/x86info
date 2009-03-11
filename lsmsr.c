@@ -177,14 +177,16 @@ static int show_matching(const char *name)
 	int ret = 0;
 
 	t = strlen(name);
-	if (t<n)
+	if (t < n)
 		n = t;
 
 	g.show_all = 1;
 	for (i = 0; g.msr_table[i].name; i++) {
 		t = strlen(g.msr_table[i].name);
-		if (n<t)
+		if (n < t)
 			t = n;
+		if (t < n)
+			continue;
 		if (strncmp(name, g.msr_table[i].name, t) == 0)
 			if (_show_msr(&(g.msr_table[i]))) {
 				ret = 1;
@@ -360,7 +362,7 @@ int main(int argc, char *argv[])
 		if ((argc - optind) != 1)
 			usage();
 		if (strlen(argv[optind]) >= OPT_MAX) {
-			fprintf(stderr,"error: invlalid command line\n");
+			fprintf(stderr,"error: invalid command line\n");
 			goto out;
 		}
 		g.msr_search = argv[optind];
