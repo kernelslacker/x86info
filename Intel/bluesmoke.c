@@ -26,7 +26,7 @@
 void decode_Intel_bluesmoke(int cpunum, int family)
 {
 	unsigned long long val, val2;
-	int banks, i, extcount = 0;
+	int banks, i, extcount = 0, ctlp = 0;
 
 	if (!user_is_root)
 		return;
@@ -47,10 +47,10 @@ void decode_Intel_bluesmoke(int cpunum, int family)
 			printf("Erk, MCG_EXT not present! :%016llx:\n", val);
 	}
 	else
-	if ((val & (1<<MCG_CTL_PBIT)) == 0)
+	ctlp = val & (1<<MCG_CTL_PBIT);
+	if (ctlp == 0)
 		printf("Erk, MCG_CTL not present! :%016llx:\n", val);
-
-	if (read_msr(cpunum, MCG_CTL, &val) == 1) {
+	else if (read_msr(cpunum, MCG_CTL, &val) == 1) {
 		printf("MCG_CTL:\n");
 
 		printf(" Data cache check %sabled\n", val & (1<<0) ? "en" : "dis");

@@ -24,7 +24,7 @@
 void decode_athlon_bluesmoke(int cpunum)
 {
 	unsigned long long val, val2;
-	unsigned int banks, i;
+	unsigned int banks, i, ctlp = 0;
 
 	if (!user_is_root)
 		return;
@@ -32,7 +32,8 @@ void decode_athlon_bluesmoke(int cpunum)
 	if (read_msr(cpunum, MCG_CAP, &val) != 1)
 		return;
 
-	if ((val & (1<<8)) == 0)
+	ctlp = val & (1<<8);
+	if (ctlp == 0)
 		printf("Erk, MCG_CTL not present! :%016llx:\n", val);
 
 	banks = val & 0xf;
@@ -47,7 +48,7 @@ void decode_athlon_bluesmoke(int cpunum)
 		}
 	}
 
-	if (read_msr(cpunum, MCG_CTL, &val) == 1) {
+	if ( ctlp && read_msr(cpunum, MCG_CTL, &val) == 1) {
 		printf("MCG_CTL:\n");
 
 		printf(" Data cache check %sabled\n", val & (1<<0) ? "en" : "dis");
