@@ -2,6 +2,7 @@
 *.P
 x86info
 AMD/fam10h.h
+AMD/fam11h.h
 AMD/k8.h
 generic_msr.h
 lsmsr
