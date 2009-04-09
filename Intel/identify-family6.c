@@ -12,7 +12,7 @@
 #include "Intel.h"
 
 static char *intel_nameptr;
-#define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x);
+#define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x)
 
 void Identify_Intel_family6pentium(struct cpudata *cpu)
 {

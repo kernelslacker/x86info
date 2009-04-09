@@ -9,7 +9,7 @@
 #include "../x86info.h"
 
 static char *sis_nameptr;
-#define add_to_cpuname(x)   sis_nameptr += snprintf(sis_nameptr, sizeof(x), "%s", x);
+#define add_to_cpuname(x)   sis_nameptr += snprintf(sis_nameptr, sizeof(x), "%s", x)
 
 void identify_sis(struct cpudata *cpu)
 {

@@ -9,7 +9,7 @@
 #include "../x86info.h"
 
 static char *NatSemi_nameptr;
-#define add_to_cpuname(x)   NatSemi_nameptr += snprintf(NatSemi_nameptr, sizeof(x), "%s", x);
+#define add_to_cpuname(x)   NatSemi_nameptr += snprintf(NatSemi_nameptr, sizeof(x), "%s", x)
 
 void identify_natsemi(struct cpudata *cpu)
 {

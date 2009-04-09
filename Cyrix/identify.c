@@ -11,7 +11,7 @@
 #include "Cyrix.h"
 
 static char *cyrix_nameptr;
-#define add_to_cpuname(x)   cyrix_nameptr += snprintf(cyrix_nameptr, sizeof(x), "%s", x);
+#define add_to_cpuname(x)   cyrix_nameptr += snprintf(cyrix_nameptr, sizeof(x), "%s", x)
 
 /* Decode TLB and cache info descriptors */
 void decode_Cyrix_TLB (int x)

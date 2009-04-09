@@ -10,7 +10,7 @@
 #include "centaur.h"
 
 static char *centaur_nameptr;
-#define add_to_cpuname(x)   centaur_nameptr += snprintf(centaur_nameptr, sizeof(x), "%s", x);
+#define add_to_cpuname(x)   centaur_nameptr += snprintf(centaur_nameptr, sizeof(x), "%s", x)
 
 void identify_centaur(struct cpudata *cpu)
 {

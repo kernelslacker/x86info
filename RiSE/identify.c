@@ -9,7 +9,7 @@
 #include "../x86info.h"
 
 static char *rise_nameptr;
-#define add_to_cpuname(x)   rise_nameptr += snprintf(rise_nameptr, sizeof(x), "%s", x);
+#define add_to_cpuname(x)   rise_nameptr += snprintf(rise_nameptr, sizeof(x), "%s", x)
 
 void identify_RiSE(struct cpudata *cpu)
 {

@@ -18,10 +18,7 @@
 #include "revision.h"
 
 static char *amd_nameptr;
-#define add_to_cpuname(x) \
-do { \
-	amd_nameptr += snprintf(amd_nameptr, sizeof(x), "%s", x); \
-} while(0)
+#define add_to_cpuname(x) amd_nameptr += snprintf(amd_nameptr, sizeof(x), "%s", x)
 
 static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 {
