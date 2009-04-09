@@ -13,7 +13,7 @@
 #include "Intel.h"
 
 static char *intel_nameptr;
-#define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x);
+#define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x)
 
 void Identify_Intel_family6core(struct cpudata *cpu)
 {
@@ -158,25 +158,29 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 			 * sSpec step TDP Name FSB EFMS  HFM     LFM    Package
 			 *
 			 *
-			 * SLB6Q C0 0.65W Z500 400 106C2 0.8GHz  600Mhz FCBGA8
-			 * SLB2C C0    2W Z510 400 106C2 1.1GHz  600Mhz FCBGA8
-			 * SLB2H C0    2W Z520 533 106C2 1.33GHz 800Mhz FCBGA8
-			 * SLB6P C0    2W Z530 533 106C2 1.60GHz 800Mhz FCBGA8
+			 * SLB6Q C0 0.65W Z500 400 106C2 800GHz  600MHz FCBGA8
+			 * SLB2C C0    2W Z510 400 106C2 1.1GHz  600MHz FCBGA8
+			 * SLGMG C0 0.65W Z515 400 106C2 800MHz  600MHz FCBGA8
+			 * SLB2H C0    2W Z520 533 106C2 1.33GHz 800MHz FCBGA8
+			 * SLB6P C0    2W Z530 533 106C2 1.60GHz 800MHz FCBGA8
 			 * QGZT  C0  2.5W N270 533 106C2 1.60GHz 800MHz FCBGA8
-			 * QKGY1 C0    8W  300 533 106C2 1.60GHz ------ FCBGA 437
-			 * QGZR2 C0    4W  230 533 106C2 1.60GHz -----  FCBGA437 M01106C2208
-			 * SLB2M C0  2.4W Z540 533 106C2 1.86GHz 800Mhz FCBGA8
+			 * QKGY1 C0    8W  300 533 106C2 1.60GHz ------ FCBGA437
+			 * QGZR2 C0    4W  230 533 106C2 1.60GHz -----  FCBGA437
+			 * SLB2M C0  2.4W Z540 533 106C2 1.86GHz 800MHz FCBGA8
+			 * SLGPT C0  2.4W Z550 533 106C2 2.0GHz  800MHz FCBGA8
 			 */
 			switch (cpu->MHz) {
-			case 800:	add_to_cpuname("Z500 [SLB6Q][C0]")
+			case 800:	add_to_cpuname("Z500/Z515 [SLB6Q/SLGMG][C0]");
 					break;
-			case 1100:	add_to_cpuname("Z510 [SLB2C][C0]")
+			case 1100:	add_to_cpuname("Z510 [SLB2C][C0]");
 					break;
-			case 1330:	add_to_cpuname("Z520 [SLB2H][C0]")
+			case 1330:	add_to_cpuname("Z520 [SLB2H][C0]");
 					break;
 			case 1600:	// could be a Z530,an N270,a QKGY1 or a QGZR2
 					break;
-			case 1860:	add_to_cpuname("Z540 [SLB2M][C0]")
+			case 1860:	add_to_cpuname("Z540 [SLB2M][C0]");
+					break;
+			case 2000:	add_to_cpuname("Z550 [SLGPT][C0]");
 					break;
 			}
 			break;
