@@ -20,9 +20,17 @@ static void dump_mtrr(int cpu, int msr)
 
 void dump_mtrrs(struct cpudata *cpu)
 {
+	unsigned long long val = 0;
 	unsigned int i;
 
 	if (!(cpu->flags_edx & (X86_FEATURE_MTRR)))
+		return;
+
+	/*
+	 * If MTRR registers are not accessible like in some
+	 * virtualization systems then return
+	 */
+	if (!read_msr(cpu->number, 0xfe, &val))
 		return;
 
 	printf("MTRR registers:\n");
