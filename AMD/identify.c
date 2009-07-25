@@ -22,7 +22,7 @@ static char *amd_nameptr;
 
 static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 {
-	int i, id, cont;
+	unsigned int i, id, cont;
 	char s[CPU_NAME_LEN];
 	const char *p;
 
