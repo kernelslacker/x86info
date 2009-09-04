@@ -202,7 +202,7 @@ static int MPConfigTableHeader(u32 pap)
 	vm_offset_t paddr;
 	mpcth_t cth;
 	int x;
-	int totalSize, t;
+	int totalSize;
 	int count, c;
 
 	if (pap == 0) {
@@ -232,7 +232,7 @@ static int MPConfigTableHeader(u32 pap)
 	/* process all the CPUs */
 	if (verbose_mp)
 		printf("MP Table:\n#\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
-	for (t = totalSize, c = count; c; c--) {
+	for (c = count; c; c--) {
 		if (readType() == 0)
 			processorEntry();
 		totalSize -= basetableEntryTypes[ 0 ].length;
