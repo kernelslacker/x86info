@@ -14,9 +14,7 @@ static char *centaur_nameptr;
 
 void identify_centaur(struct cpudata *cpu)
 {
-	char *nameptr;
-
-	centaur_nameptr = nameptr = cpu->name;
+	centaur_nameptr = cpu->name;
 
 	switch (tuple(cpu) & 0xff0) {
 		case 0x540:
