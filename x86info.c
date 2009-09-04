@@ -316,9 +316,6 @@ int main (int argc, char **argv)
 
 		if (nrCPUs > 1)
 			separator();
-
-		if (cpu->next)
-			cpu = cpu->next;
 	}
 
 	/* Tear down the linked list. */
