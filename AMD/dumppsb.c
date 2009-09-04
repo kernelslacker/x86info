@@ -88,8 +88,6 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 
 			p += sizeof (struct psb_s);
 
-			pst = (struct pst_s *) p;
-
 			for (i=0 ; i<psb->numpst; i++) {
 				pst = (struct pst_s *) p;
 				numpstates = pst->numpstates;
