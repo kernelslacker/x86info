@@ -123,6 +123,9 @@ struct k8_rev k8_revisions[] = {
 
 #define _OPTERON	0x0001
 #define _PHENOM		0x0002
+#define _PHENOM_II	0x0004
+#define _ATHLON_II	0x0008
+#define _OPTERON_SC	0x0010
 
 struct fam10h_rev {
 	int eax;
@@ -134,7 +137,9 @@ struct fam10h_rev fam10h_revisions[] = {
 	{0x0100f2a, _OPTERON, "DR-BA"},
 	{0x0100f22, _OPTERON|_PHENOM, "DR-B2"},
 	{0x0100f23, _OPTERON|_PHENOM, "DR-B3"},
-	{0x0100f42, _OPTERON, "RB-C2"},
+	{0x0100f42, _OPTERON|_PHENOM_II, "RB-C2"},
+	{0x0100f62, _ATHLON_II, "DA-C2"},
+	{0x0100f80, _OPTERON_SC, "HY-D0"},
 };
 
 struct id_string fam11h_revisions[] = {
