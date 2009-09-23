@@ -708,6 +708,19 @@ out_660:
 	}
 }
 
+static void show_patch_level(struct cpudata *cpu)
+{
+	unsigned long long val = 0;
+	if (!user_is_root)
+		return;
+
+	if (read_msr(cpu->number, 0x8b, &val) == 1) {
+		if (val>0)
+			printf("Microcode patch level: 0x%llx\n", val);
+		printf("\n");
+	}
+}
+
 void display_AMD_info(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
@@ -721,6 +734,9 @@ void display_AMD_info(struct cpudata *cpu)
 
 	if (show_bluesmoke)
 		decode_athlon_bluesmoke(cpu->number);
+
+	if (show_microcode && family(cpu) >= 0xf)
+		show_patch_level(cpu);
 
 	if (show_pm)
 		decode_powernow(cpu);
