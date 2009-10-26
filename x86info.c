@@ -335,5 +335,5 @@ int main (int argc, char **argv)
 		printf("Used Uniprocessor CPU routines. Results inaccurate.\n");
 	}
 
-	return (0);
+	return 0;
 }
