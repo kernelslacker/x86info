@@ -1,9 +1,11 @@
-static unsigned long long rdtsc(void)
+static inline unsigned long long int rdtsc(void)
 {
-	unsigned long low, high;
+	unsigned int low, high;
+	unsigned long tsc;
 
 	__asm__ __volatile__("rdtsc" : "=a" (low), "=d" (high));
-	return (high << 32) | low;
+	tsc = ((unsigned long long) high << 32) | low;
+	return tsc;
 }
 
 #define NREPS 1000
