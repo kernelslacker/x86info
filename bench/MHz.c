@@ -51,7 +51,12 @@ void estimate_MHz(struct cpudata *cpu)
 
 	cycles[1] = rdtsc();
 
-	cpu->MHz = (cycles[1] - cycles[0]) / 1000000;
+	/* Check to see if rdtsc wrapped */
+	if (cycles[1] < cycles[0])
+		/* yes we did. */
+		cpu->MHz = ((-1ULL - cycles[0]) + cycles[1]) / 1000000;
+	else
+		cpu->MHz = (cycles[1] - cycles[0]) / 1000000;
 
 	if ((cpu->MHz % 50) > 15)
 		cpu->MHz = ((cpu->MHz / 50) * 50) + 50;
