@@ -106,8 +106,8 @@ VERSION=1.25
 
 release:
 	git repack -a -d
-	git-prune-packed
-	git-archive --format=tar --prefix=x86info-$(VERSION)/ HEAD | gzip -9 > x86info-$(VERSION).tgz
+	git prune-packed
+	git archive --format=tar --prefix=x86info-$(VERSION)/ HEAD | gzip -9 > x86info-$(VERSION).tgz
 
 clean:
 	@find . -name "*.o" -exec rm {} \;
