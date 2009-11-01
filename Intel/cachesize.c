@@ -139,8 +139,10 @@ static struct _cache_table ITLB_cache_table[] =
 	{ 0x50,  64, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 64 entries." },
 	{ 0x51, 128, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 128 entries." },
 	{ 0x52, 256, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 256 entries." },
+	{ 0x55,	  7, "Instruction TLB: 2MB or 4MB pages, fully associative, 7 entries" },
 	{ 0xb0, 128, "Instruction TLB: 4K pages, 4-way associative, 128 entries." },
 	{ 0xb1,   4, "Instruction TLB: 4x 4MB page entries, or 8x 2MB pages entries, 4-way associative" },
+	{ 0xb2,  64, "Instruction TLB: 4K pages, 4-way associative, 64 entries." },
 	{ 0, 0, NULL }
 };
 
@@ -151,11 +153,13 @@ static struct _cache_table DTLB_cache_table[] =
 	{ 0x5,   32, "Data TLB: 4MB pages, 4-way associative, 32 entries" },
 	{ 0x56,	 16, "L1 Data TLB: 4MB pages, 4-way set associative, 16 entries" },
 	{ 0x57,	 16, "L1 Data TLB: 4KB pages, 4-way set associative, 16 entries" },
+	{ 0x5a,  32, "Data TLB: 4KB or 4MB pages, fully associative, 32 entries." },
 	{ 0x5b,  64, "Data TLB: 4KB or 4MB pages, fully associative, 64 entries." },
 	{ 0x5c, 128, "Data TLB: 4KB or 4MB pages, fully associative, 128 entries." },
 	{ 0x5d, 256, "Data TLB: 4KB or 4MB pages, fully associative, 256 entries." },
 	{ 0xb3, 128, "Data TLB: 4K pages, 4-way associative, 128 entries." },
 	{ 0xb4, 256, "Data TLB: 4K pages, 4-way associative, 256 entries." },
+	{ 0xca, 512, "Data TLB: 4K pages, 4-way associative, 512 entries." },
 	{ 0, 0, NULL }
 };
 
