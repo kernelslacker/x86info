@@ -394,11 +394,10 @@ int main (int argc, char **argv)
 	}
 
 	for (i=0; i<nrCPUs; i++) {
-		if (sockets[i]==0)
-			break;
 		if (debug == 1)
 			printf("Socket %d: %d threads\n", i, sockets[i]);
-		num_sockets++;
+		if (sockets[i] != 0)	/* only count populated sockets */
+			num_sockets++;
 	}
 
 	/* Print a summary */
