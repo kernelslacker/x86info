@@ -115,6 +115,7 @@ clean:
 	@find . -name "*.P" -exec rm {} \;
 	@rm -f x86info x86info.exe
 	@rm -f lsmsr $(LSMSR_TMP_HEADERS)
+	@rm -f core.*
 
 splint:
 	splint +posixlib -badflag -fileextensions -type -nullassign -boolops -showcolumn -sysunrecog -fullinitblock -onlytrans -unrecog -usedef -statictrans -compdestroy -predboolint -predboolothers -D__`uname -m`__ $(X86INFO_SRC)
