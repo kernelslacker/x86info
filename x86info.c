@@ -194,7 +194,7 @@ int main (int argc, char **argv)
 	if ((HaveCPUID()) == 0) {
 		printf("No CPUID instruction available.\n");
 		printf("No further information available for this CPU.\n");
-		return 0;
+		exit(EXIT_SUCCESS);
 	}
 
 	if (getuid() != 0)
@@ -240,7 +240,7 @@ int main (int argc, char **argv)
 		cpu = malloc (sizeof (struct cpudata));
 		if (!cpu) {
 			printf("Out of memory\n");
-			return -1;
+			goto out;
 		}
 
 		memset(cpu, 0, sizeof(struct cpudata));
@@ -384,6 +384,13 @@ int main (int argc, char **argv)
 
 	printf("Total processor threads: %d\n", sockets[0] * num_sockets);
 
+
+	if (nrCPUs > 1 && (used_UP == 1) && (!silent)) {
+		printf("WARNING: Detected SMP, but unable to access cpuid driver.\n");
+		printf("Used Uniprocessor CPU routines. Results inaccurate.\n");
+	}
+
+out:
 	/* Tear down the linked list. */
 	cpu = head;
 	for (i=0; i<nrCPUs; i++) {
@@ -396,10 +403,5 @@ int main (int argc, char **argv)
 		cpu = tmp;
 	}
 
-	if (nrCPUs > 1 && (used_UP == 1) && (!silent)) {
-		printf("WARNING: Detected SMP, but unable to access cpuid driver.\n");
-		printf("Used Uniprocessor CPU routines. Results inaccurate.\n");
-	}
-
-	return 0;
+	exit(EXIT_SUCCESS);
 }
