@@ -28,6 +28,13 @@ void estimate_MHz(struct cpudata *cpu)
 	unsigned int eax, ebx, ecx, edx;
 	unsigned long r;
 
+	if (cpu->number != 0) {
+		if (all_cpus == 0) {
+			cpu->MHz = firstcpu->MHz;
+			return;
+		}
+	}
+
 	/* Make sure we have a TSC (and hence RDTSC) */
 	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
 	if ((edx & (1<<4)) == 0) {

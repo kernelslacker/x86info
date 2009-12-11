@@ -32,6 +32,8 @@ static int show_mptable=0;
 static int show_flags=0;
 static int show_MHz=0;
 
+unsigned int all_cpus = 0;
+
 static int num_sockets = 0;
 
 int debug = 0;
@@ -44,10 +46,13 @@ static int need_root = 0;
 unsigned int nrCPUs=1;
 static unsigned int nrSMPCPUs;
 
+struct cpudata *firstcpu;
+
 static void usage (char *programname)
 {
 	printf("Usage: %s [<switches>]\n\
 -a,   --all\n\
+      --all-cpus\n\
       --bench\n\
       --bios\n\
       --bugs\n\
@@ -94,6 +99,9 @@ static void parse_command_line (int argc, char **argv)
 			show_urls = 1;
 			need_root = 1;
 		}
+
+		if (!strcmp(arg, "--all-cpus"))
+			all_cpus = 1;
 
 		if (!strcmp(arg, "--bench"))
 			show_bench = 1;
@@ -269,6 +277,8 @@ int main (int argc, char **argv)
 			printf("Out of memory\n");
 			goto out;
 		}
+		if (!firstcpu)
+			firstcpu = cpu;
 
 		memset(cpu, 0, sizeof(struct cpudata));
 
