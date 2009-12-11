@@ -371,6 +371,9 @@ int main (int argc, char **argv)
 		num_sockets++;
 	}
 
+
+	/* Print a summary */
+	printf("Summary:\n");
 	cpu = head;
 	printf("This is a %d socket ", num_sockets);
 	if (cpu->flags_edx & X86_FEATURE_HT)
@@ -378,6 +381,8 @@ int main (int argc, char **argv)
 	else
 		printf("%d core processor ", sockets[0]);
 	printf("system.\n");
+
+	printf("Total processor threads: %d\n", sockets[0] * num_sockets);
 
 	/* Tear down the linked list. */
 	cpu = head;
