@@ -34,7 +34,8 @@ static int show_MHz=0;
 
 static int num_sockets = 0;
 
-int verbose=0;
+int debug = 0;
+int verbose = 0;
 int silent = 0;
 int used_UP = 0;
 int user_is_root = 1;
@@ -52,6 +53,7 @@ static void usage (char *programname)
       --bugs\n\
 -c,   --cache\n\
       --connector\n\
+      --debug\n\
 -f,   --flags\n\
 -mhz, --mhz\n\
       --microcode\n\
@@ -110,6 +112,9 @@ static void parse_command_line (int argc, char **argv)
 		if (!strcmp(arg, "--connector"))
 			show_connector = 1;
 
+		if (!strcmp(arg, "--debug"))
+			debug = 1;
+
 		if ((!strcmp(arg, "-f") || !strcmp(arg, "--flags")))
 			show_flags = 1;
 
@@ -159,7 +164,7 @@ static void parse_command_line (int argc, char **argv)
 			verbose = 1;
 
 		if ((!strcmp(arg, "?") || !strcmp(arg, "--help")))
-			usage(argv[0]);	
+			usage(argv[0]);
 	}
 }
 
@@ -320,30 +325,32 @@ int main (int argc, char **argv)
 		if (nrCPUs > 1)
 			separator();
 	}
-	cpu = head;
-	printf("cpu->phys_proc_id: ");
-	for (i=0; i<nrCPUs; i++) {
-		printf("%d, ", cpu->phys_proc_id);
-		cpu = cpu->next;
-	}
-	printf("\n");
 
-	cpu = head;
-	printf("cpu->x86_max_cores: ");
-	for (i=0; i<nrCPUs; i++) {
-		printf("%d, ", cpu->x86_max_cores);
-		cpu = cpu->next;
-	}
-	printf("\n");
+	if (debug == 1) {
+		cpu = head;
+		printf("cpu->phys_proc_id: ");
+		for (i=0; i<nrCPUs; i++) {
+			printf("%d, ", cpu->phys_proc_id);
+			cpu = cpu->next;
+		}
+		printf("\n");
 
-	cpu = head;
-	printf("cpu->cpu_core_id: ");
-	for (i=0; i<nrCPUs; i++) {
-		printf("%d, ", cpu->cpu_core_id);
-		cpu = cpu->next;
-	}
-	printf("\n");
+		cpu = head;
+		printf("cpu->x86_max_cores: ");
+		for (i=0; i<nrCPUs; i++) {
+			printf("%d, ", cpu->x86_max_cores);
+			cpu = cpu->next;
+		}
+		printf("\n");
 
+		cpu = head;
+		printf("cpu->cpu_core_id: ");
+		for (i=0; i<nrCPUs; i++) {
+			printf("%d, ", cpu->cpu_core_id);
+			cpu = cpu->next;
+		}
+		printf("\n");
+	}
 
 	sockets = malloc(nrCPUs);
 	if (sockets==NULL)
@@ -359,7 +366,8 @@ int main (int argc, char **argv)
 	for (i=0; i<nrCPUs; i++) {
 		if (sockets[i]==0)
 			break;
-		printf("Socket %d: %d threads\n", i, sockets[i]);
+		if (debug == 1)
+			printf("Socket %d: %d threads\n", i, sockets[i]);
 		num_sockets++;
 	}
 
