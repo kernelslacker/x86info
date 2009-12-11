@@ -178,6 +178,18 @@ static void separator(void)
 	printf("\n");
 }
 
+static void display_MHz(struct cpudata *cpu)
+{
+	if (cpu->MHz < 1000)
+		printf("%uMHz", cpu->MHz);
+	else {
+		int a = (cpu->MHz / 1000);
+		int b = ((cpu->MHz % 1000)/100);
+		int c = (a*1000)+(b*100);
+
+		printf("%u.%u%uGHz", a, b, (cpu->MHz - c)/10);
+	}
+}
 
 int main (int argc, char **argv)
 {
@@ -306,17 +318,8 @@ int main (int argc, char **argv)
 				dump_mtrrs(cpu);
 		}
 
-		/* Show MHz last. */
 		if (show_MHz) {
-			if (cpu->MHz < 1000)
-				printf("%uMHz", cpu->MHz);
-			else {
-				int a = (cpu->MHz / 1000);
-				int b = ((cpu->MHz % 1000)/100);
-				int c = (a*1000)+(b*100);
-
-				printf("%u.%u%uGHz", a, b, (cpu->MHz - c)/10);
-			}
+			display_MHz(cpu);
 			printf(" processor (estimate).\n\n");
 		}
 		if (show_bench)
@@ -375,12 +378,14 @@ int main (int argc, char **argv)
 	/* Print a summary */
 	printf("Summary:\n");
 	cpu = head;
-	printf("This is a %d socket ", num_sockets);
+	printf("This system has %d ", num_sockets);
 	if (cpu->flags_edx & X86_FEATURE_HT)
-		printf("%d core processor with hyper-threading ", sockets[0]/2);
+		printf("%d core processors with hyper-threading ", sockets[0]/2);
 	else
-		printf("%d core processor ", sockets[0]);
-	printf("system.\n");
+		printf("%d core processors ", sockets[0]);
+	printf ("running at an estimated ");
+	display_MHz(cpu);
+	printf("\n");
 
 	printf("Total processor threads: %d\n", sockets[0] * num_sockets);
 
