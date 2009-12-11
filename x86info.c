@@ -191,11 +191,27 @@ static void display_MHz(struct cpudata *cpu)
 	}
 }
 
+static char * corenum(int num)
+{
+	switch (num) {
+	case 1:	return ("single");
+	case 2:	return ("dual");
+	case 3:	return ("tri");
+	case 4:	return ("quad");
+	case 6:	return ("six");
+	case 8:	return ("eight");
+	default:
+		return ("?");
+	}
+}
+
 int main (int argc, char **argv)
 {
 	unsigned int i;
+	unsigned int threads_per_socket;
 	struct cpudata *cpu, *head=NULL, *tmp;
 	int *sockets;
+	char *p;
 
 	parse_command_line(argc, argv);
 	if (!silent) {
@@ -374,15 +390,24 @@ int main (int argc, char **argv)
 		num_sockets++;
 	}
 
-
 	/* Print a summary */
 	printf("Summary:\n");
 	cpu = head;
 	printf("This system has %d ", num_sockets);
 	if (cpu->flags_edx & X86_FEATURE_HT)
-		printf("%d core processors with hyper-threading ", sockets[0]/2);
+		threads_per_socket = sockets[0]/2;
 	else
-		printf("%d core processors ", sockets[0]);
+		threads_per_socket = sockets[0];
+
+	p = corenum(threads_per_socket);
+	if (strncmp("?", p, 1))
+		printf("%s-core processors ", corenum(threads_per_socket));
+	else
+		printf("%d-core processors ", threads_per_socket);
+
+	if (cpu->flags_edx & X86_FEATURE_HT)
+		printf("with hyper-threading ");
+
 	printf ("running at an estimated ");
 	display_MHz(cpu);
 	printf("\n");
