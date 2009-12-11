@@ -211,7 +211,6 @@ int main (int argc, char **argv)
 	unsigned int threads_per_socket;
 	struct cpudata *cpu, *head=NULL, *tmp;
 	char *sockets;
-	char *p;
 
 	parse_command_line(argc, argv);
 	if (!silent) {
@@ -401,11 +400,18 @@ int main (int argc, char **argv)
 	else
 		threads_per_socket = sockets[0];
 
-	p = corenum(threads_per_socket);
-	if (strncmp("?", p, 1))
-		printf("%s-core processors ", corenum(threads_per_socket));
-	else
-		printf("%d-core processors ", threads_per_socket);
+	if (num_sockets == 1) {
+		/* Handle the single CPU case */
+		printf("processor ");
+	} else {
+		char *p;
+		p = corenum(threads_per_socket);
+
+		if (strncmp("?", p, 1))
+			printf("%s-core processors ", corenum(threads_per_socket));
+		else
+			printf("%d-core processors ", threads_per_socket);
+	}
 
 	if (cpu->flags_edx & X86_FEATURE_HT)
 		printf("with hyper-threading ");
