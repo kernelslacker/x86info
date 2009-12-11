@@ -1,8 +1,6 @@
 #ifndef _X86INFO_H
 #define _X86INFO_H
 
-#include "cpuid.h"
-
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
@@ -73,7 +71,7 @@ struct cpudata {
 	unsigned int cachesize_L2;
 	unsigned int cachesize_L3;
 	unsigned int cachesize_trace;
-	unsigned int maxi, maxei, maxei2;
+	unsigned int cpuid_level, maxei, maxei2;
 	char name[CPU_NAME_LEN];
 	enum connector connector;
 	unsigned int flags_ecx;
@@ -89,7 +87,24 @@ struct cpudata {
 	unsigned int brand;
 	unsigned int apicid;
 	char serialno[30];
+
+	unsigned int phys_proc_id;
+	unsigned int initial_apicid;
+	unsigned int x86_max_cores;
+	unsigned int cpu_core_id;
+
 };
+
+extern void cpuid_UP (unsigned int idx, unsigned long *eax, unsigned long *ebx,
+	unsigned long *ecx, unsigned long *edx);
+extern void cpuid(unsigned int cpu, unsigned long long idx, unsigned int *eax,
+	unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
+extern void cpuid4(unsigned int cpu, unsigned long long idx, unsigned int *eax,
+	unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
+extern void cpuid_count(struct cpudata *cpu, unsigned int op, int count,
+	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
+extern unsigned int cpuid_ebx(struct cpudata *cpu, unsigned int op);
+
 
 #define family(c) (c->family + c->efamily)
 #define model(c) ((c->emodel << 4) + c->model)

@@ -14,8 +14,8 @@ void get_cpu_info_basics(struct cpudata *cpu)
 
 	cpuid(cpu->number, 0, &maxi, &vendor, NULL, NULL);
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
-	cpu->maxi = maxi;
-	if (cpu->maxi < 1)
+	cpu->cpuid_level = maxi;
+	if (maxi < 1)
 		return;
 
 	/* Everything that supports cpuid supports these. */

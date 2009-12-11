@@ -49,70 +49,85 @@ static int fls(int x)
 	return r;
 }
 
-
-/* Determine the width of the bit field that can represent the value item. */
-static unsigned int find_maskwidth(unsigned int item)
+static int get_count_order(unsigned int count)
 {
-	unsigned int MaskWidth = 0;
+	int order;
 
-	MaskWidth = fls(item)-1;
-	return MaskWidth;
+	order = fls(count) - 1;
+	if (count & (count - 1))
+		order++;
+	return order;
 }
 
-/* Extract the subset of bit field from the 8-bit value FullID.  It returns the 8-bit sub ID value */
-static unsigned char GetSubID(unsigned char FullID, unsigned char MaxSubIDvalue, unsigned char ShiftCount)
+static int intel_num_cpu_cores(struct cpudata *cpu)
 {
-	unsigned int MaskWidth, MaskBits, SubID;
+	unsigned int eax, ebx, ecx, edx;
 
-	MaskWidth = find_maskwidth(MaxSubIDvalue);
-	MaskBits = ((unsigned char) (0xff << ShiftCount)) ^ ((unsigned char) (0xff << (ShiftCount + MaskWidth))) ;
-	SubID = (FullID & MaskBits) >> ShiftCount;
-	return SubID;
+	if (cpu->cpuid_level < 4)
+		return 1;
+
+	/* Intel has a non-standard dependency on %ecx for this CPUID level. */
+	cpuid_count(cpu, 4, 0, &eax, &ebx, &ecx, &edx);
+	if (eax & 0x1f)
+		return (eax >> 26) + 1;
+	else
+		return 1;
 }
 
+static int phys_pkg_id(int cpuid_apic, int index_msb)
+{
+	return cpuid_apic >> index_msb;
+}
+
+#define X86_FEATURE_HT
+#define X86_FEATURE_CMP_LEGACY
+#define X86_FEATURE_XTOPOLOGY
 
 void show_intel_topology(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
-	unsigned int MaxLPPerCore;
-	unsigned int smt_id, core_id, package_id;
-	unsigned int shift;
+	unsigned int index_msb, core_bits;
+	unsigned int smp_num_siblings;
+/*
+	if (!cpu_has(cpu, X86_FEATURE_HT))
+		return;
 
-	cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
+	if (cpu_has(cpu, X86_FEATURE_CMP_LEGACY))
+		goto out;
 
-	/* Find the max number of logical processors per physical package. */
-	if (cpu->flags_edx & (1 << 28))
-		cpu->nr_logical = (ebx >> 16) & 0xff;
-	else
-		cpu->nr_logical = 1;
+	if (cpu_has(cpu, X86_FEATURE_XTOPOLOGY))
+		return;
+*/
 
-	/* Find the max number of processor cores per physical processor package. */
-	if (cpu->maxi >= 4) {
-		cpuid4(cpu->number, 0, &eax, &ebx, &ecx, &edx);
-		if (eax & 0x1f)
-			cpu->nr_cores = ((eax >> 26) + 1);
-	} else {
-		cpu->nr_cores = 1;
+
+	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
+	smp_num_siblings = (ebx & 0xff0000) >> 16;
+
+	if (smp_num_siblings == 1) {
+		printf("Hyper-Threading is disabled\n");
+		goto out;
 	}
 
-	//MaxLPPerCore = MaxLogicalProcPerPhysicalProc() / MaxCorePerPhysicalProc();
-	MaxLPPerCore = cpu->nr_logical / cpu->nr_cores;
-	printf("Number of cores per physical package=%d\n", cpu->nr_cores);		// 8
-	printf("Number of logical processors per socket=%d\n", cpu->nr_logical);	// 16
-	printf("Number of logical processors per core=%d\n", MaxLPPerCore);		// 2
+	if (smp_num_siblings <= 1)
+		goto out;
 
-	/* test for hyperthreading. */
-	if (cpu->flags_edx & (1 << 28)) {
-		// test that there's more logical processor IDs with the same physical ID
-		// than the number of cores per physical processors.
+	index_msb = get_count_order(smp_num_siblings);
+	cpu->initial_apicid = (cpuid_ebx(cpu, 1) >> 24) & 0xFF;
+	cpu->phys_proc_id = phys_pkg_id(cpu->initial_apicid, index_msb);
+
+	cpu->x86_max_cores = intel_num_cpu_cores(cpu);
+	smp_num_siblings = smp_num_siblings / cpu->x86_max_cores;
+
+	index_msb = get_count_order(smp_num_siblings);
+
+	core_bits = get_count_order(cpu->x86_max_cores);
+
+	cpu->cpu_core_id = phys_pkg_id(cpu->apicid, index_msb) &
+		((1 << core_bits) - 1);
+
+out:
+	if ((cpu->x86_max_cores * smp_num_siblings) > 1) {
+		printf("Physical Processor ID: %d\n", cpu->phys_proc_id);
+		printf("Processor Core ID: %d\n", cpu->cpu_core_id);
 	}
-
-	smt_id = GetSubID(cpu->apicid, cpu->nr_logical, 0);
-	shift = find_maskwidth(cpu->nr_logical);
-	core_id = GetSubID(cpu->apicid, cpu->nr_cores, shift);
-	shift += find_maskwidth(cpu->nr_cores);
-	package_id = GetSubID(cpu->apicid, MaxLPPerCore, shift);
-
-	printf("APIC ID: 0x%x\t", cpu->apicid);
-	printf("Package: %u  Core: %u   SMT ID %u\n", package_id, core_id, smt_id);
 }

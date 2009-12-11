@@ -25,7 +25,6 @@
 #include <getopt.h>
 
 #include "msr.h"
-#include "cpuid.h"
 #include "x86info.h"
 #include "AMD/k8.h"
 #include "AMD/fam10h.h"

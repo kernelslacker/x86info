@@ -258,7 +258,7 @@ int main (int argc, char **argv)
 		show_info(cpu);
 
 		if (show_registers) {
-			dumpregs(cpu->number, 0, cpu->maxi);
+			dumpregs(cpu->number, 0, cpu->cpuid_level);
 			if (cpu->maxei >=0x80000000)
 				dumpregs (cpu->number, 0x80000000, cpu->maxei);
 

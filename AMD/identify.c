@@ -353,7 +353,7 @@ void Identify_AMD(struct cpudata *cpu)
 
 	amd_nameptr = cpu->name;
 
-	if (cpu->maxi < 1)
+	if (cpu->cpuid_level < 1)
 		return;
 
 	if (cpu->family == 0xf) {
@@ -719,7 +719,7 @@ void display_AMD_info(struct cpudata *cpu)
 	if (show_bugs)
 		show_amd_bugs(cpu);
 
-	if (cpu->maxi >= 0x05) {
+	if (cpu->cpuid_level >= 0x05) {
 		cpuid (cpu->number, 0x05, &eax, &ebx, &ecx, NULL);
 		printf("Monitor/Mwait: min/max line size %d/%d%s%s\n",
 		       (int) (eax & 0xffff), (int) (ebx & 0xffff),

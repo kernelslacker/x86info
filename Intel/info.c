@@ -22,7 +22,7 @@ void decode_serial_number(struct cpudata *cpu)
 	unsigned int eax, ebx, ecx, edx;
 	unsigned int signature;
 
-	if (cpu->maxi < 3)
+	if (cpu->cpuid_level < 3)
 		return;
 
 	cpuid(cpu->number, 1, &eax, NULL, NULL, NULL);

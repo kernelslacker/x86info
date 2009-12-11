@@ -38,7 +38,7 @@ void Identify_Intel(struct cpudata *cpu)
 
 	/* Figure out number of cores on this package. */
 	cpu->nr_cores = 1;
-	if (cpu->maxi >= 4) {
+	if (cpu->cpuid_level >= 4) {
 		cpuid4(cpu->number, 0, &eax, &ebx, &ecx, &edx);
 		if (eax & 0x1f)
 			cpu->nr_cores = ((eax >> 26) + 1);

@@ -270,7 +270,7 @@ void decode_Intel_caches(struct cpudata *cpu, int output)
 	unsigned int i = 0;
 	unsigned char oldknown;
 
-	if (cpu->maxi < 2)
+	if (cpu->cpuid_level < 2)
 		return;
 
 	memset(&unknown_array, 0, sizeof(unknown_array));
