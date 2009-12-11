@@ -425,7 +425,7 @@ int main (int argc, char **argv)
 	}
 
 	if (cpu->flags_edx & X86_FEATURE_HT && cpu->num_siblings > 1)
-		printf(" with hyper-threading (%d siblings)", cpu->num_siblings-1);
+		printf(" with hyper-threading (%d threads per core)", cpu->num_siblings);
 
 	printf (" running at an estimated ");
 	display_MHz(cpu);
