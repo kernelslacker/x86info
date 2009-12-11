@@ -373,8 +373,10 @@ int main (int argc, char **argv)
 
 	sockets = malloc(nrCPUs);
 	if (sockets==NULL)
-		exit(EXIT_FAILURE);
-	bzero(sockets, nrCPUs);
+		goto out;
+
+	for (i=0; i<nrCPUs; i++)
+		sockets[i]=0;
 
 	cpu = head;
 	for (i=0; i<nrCPUs; i++) {
