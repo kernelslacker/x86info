@@ -92,7 +92,7 @@ struct cpudata {
 	unsigned int initial_apicid;
 	unsigned int x86_max_cores;
 	unsigned int cpu_core_id;
-
+	unsigned int num_siblings;
 };
 
 extern void cpuid_UP (unsigned int idx,

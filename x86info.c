@@ -400,7 +400,7 @@ int main (int argc, char **argv)
 	else
 		threads_per_socket = sockets[0];
 
-	if (num_sockets == 1) {
+	if (nrCPUs == 1) {
 		/* Handle the single CPU case */
 		printf("processor ");
 	} else {
