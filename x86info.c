@@ -32,6 +32,8 @@ static int show_mptable=0;
 static int show_flags=0;
 static int show_MHz=0;
 
+static int num_sockets = 0;
+
 int verbose=0;
 int silent = 0;
 int used_UP = 0;
@@ -176,6 +178,7 @@ int main (int argc, char **argv)
 {
 	unsigned int i;
 	struct cpudata *cpu, *head=NULL, *tmp;
+	int *sockets;
 
 	parse_command_line(argc, argv);
 	if (!silent) {
@@ -317,6 +320,56 @@ int main (int argc, char **argv)
 		if (nrCPUs > 1)
 			separator();
 	}
+	cpu = head;
+	printf("cpu->phys_proc_id: ");
+	for (i=0; i<nrCPUs; i++) {
+		printf("%d, ", cpu->phys_proc_id);
+		cpu = cpu->next;
+	}
+	printf("\n");
+
+	cpu = head;
+	printf("cpu->x86_max_cores: ");
+	for (i=0; i<nrCPUs; i++) {
+		printf("%d, ", cpu->x86_max_cores);
+		cpu = cpu->next;
+	}
+	printf("\n");
+
+	cpu = head;
+	printf("cpu->cpu_core_id: ");
+	for (i=0; i<nrCPUs; i++) {
+		printf("%d, ", cpu->cpu_core_id);
+		cpu = cpu->next;
+	}
+	printf("\n");
+
+
+	sockets = malloc(nrCPUs);
+	if (sockets==NULL)
+		exit(EXIT_FAILURE);
+	bzero(sockets, nrCPUs);
+
+	cpu = head;
+	for (i=0; i<nrCPUs; i++) {
+		sockets[cpu->phys_proc_id]++;
+		cpu = cpu->next;
+	}
+
+	for (i=0; i<nrCPUs; i++) {
+		if (sockets[i]==0)
+			break;
+		printf("Socket %d: %d threads\n", i, sockets[i]);
+		num_sockets++;
+	}
+
+	cpu = head;
+	printf("This is a %d socket ", num_sockets);
+	if (cpu->flags_edx & X86_FEATURE_HT)
+		printf("%d core processor with hyper-threading ", sockets[0]/2);
+	else
+		printf("%d core processor ", sockets[0]);
+	printf("system.\n");
 
 	/* Tear down the linked list. */
 	cpu = head;

@@ -79,19 +79,15 @@ static int phys_pkg_id(int cpuid_apic, int index_msb)
 	return cpuid_apic >> index_msb;
 }
 
-#define X86_FEATURE_HT
-#define X86_FEATURE_CMP_LEGACY
-#define X86_FEATURE_XTOPOLOGY
-
 void show_intel_topology(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 	unsigned int index_msb, core_bits;
 	unsigned int smp_num_siblings;
-/*
-	if (!cpu_has(cpu, X86_FEATURE_HT))
-		return;
 
+	if (!(cpu->flags_edx & X86_FEATURE_HT))
+		return;
+/*
 	if (cpu_has(cpu, X86_FEATURE_CMP_LEGACY))
 		goto out;
 
