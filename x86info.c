@@ -210,7 +210,7 @@ int main (int argc, char **argv)
 	unsigned int i;
 	unsigned int threads_per_socket;
 	struct cpudata *cpu, *head=NULL, *tmp;
-	int *sockets;
+	char *sockets;
 	char *p;
 
 	parse_command_line(argc, argv);
