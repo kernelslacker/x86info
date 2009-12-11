@@ -402,7 +402,7 @@ int main (int argc, char **argv)
 
 	if (nrCPUs == 1) {
 		/* Handle the single CPU case */
-		printf("processor ");
+		printf("processor");
 	} else {
 		char *p;
 		p = corenum(threads_per_socket);
