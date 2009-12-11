@@ -395,10 +395,10 @@ int main (int argc, char **argv)
 	printf("Summary:\n");
 	cpu = head;
 	printf("This system has %d ", num_sockets);
+	threads_per_socket = sockets[0];
 	if (cpu->flags_edx & X86_FEATURE_HT)
-		threads_per_socket = sockets[0]/2;
-	else
-		threads_per_socket = sockets[0];
+		if (cpu->num_siblings > 1)
+			threads_per_socket = sockets[0]/2;
 
 	if (nrCPUs == 1) {
 		/* Handle the single CPU case */
@@ -408,15 +408,17 @@ int main (int argc, char **argv)
 		p = corenum(threads_per_socket);
 
 		if (strncmp("?", p, 1))
-			printf("%s-core processors ", corenum(threads_per_socket));
+			printf("%s-core processor", corenum(threads_per_socket));
 		else
-			printf("%d-core processors ", threads_per_socket);
+			printf("%d-core processor", threads_per_socket);
+		if (num_sockets > 1)
+			printf("s");
 	}
 
-	if (cpu->flags_edx & X86_FEATURE_HT)
-		printf("with hyper-threading ");
+	if (cpu->flags_edx & X86_FEATURE_HT && cpu->num_siblings > 1)
+		printf(" with hyper-threading (%d siblings)", cpu->num_siblings-1);
 
-	printf ("running at an estimated ");
+	printf (" running at an estimated ");
 	display_MHz(cpu);
 	printf("\n");
 
