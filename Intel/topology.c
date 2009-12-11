@@ -67,7 +67,7 @@ static int intel_num_cpu_cores(struct cpudata *cpu)
 		return 1;
 
 	/* Intel has a non-standard dependency on %ecx for this CPUID level. */
-	cpuid_count(cpu, 4, 0, &eax, &ebx, &ecx, &edx);
+	cpuid_count(cpu->number, 4, 0, &eax, &ebx, &ecx, &edx);
 	if (eax & 0x1f)
 		return (eax >> 26) + 1;
 	else
@@ -112,7 +112,7 @@ void show_intel_topology(struct cpudata *cpu)
 		goto out;
 
 	index_msb = get_count_order(smp_num_siblings);
-	cpu->initial_apicid = (cpuid_ebx(cpu, 1) >> 24) & 0xFF;
+	cpu->initial_apicid = (cpuid_ebx(cpu->number, 1) >> 24) & 0xFF;
 	cpu->phys_proc_id = phys_pkg_id(cpu->initial_apicid, index_msb);
 
 	cpu->x86_max_cores = intel_num_cpu_cores(cpu);

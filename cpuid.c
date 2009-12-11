@@ -197,19 +197,19 @@ void cpuid4(unsigned int CPU_number, unsigned long long idx,
 }
 
 /* Some CPUID calls want 'count' to be placed in ecx */
-void cpuid_count(struct cpudata *cpu, unsigned int op, int count,
+void cpuid_count(unsigned int CPU_number, unsigned int op, int count,
 	unsigned int *eax, unsigned int *ebx,
 	unsigned int *ecx, unsigned int *edx)
 {
 	*ecx = count;
-	cpuid(cpu->number, op, eax, ebx, ecx, edx);
+	cpuid(CPU_number, op, eax, ebx, ecx, edx);
 }
 
-unsigned int cpuid_ebx(struct cpudata *cpu, unsigned int op)
+unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op)
 {
 	unsigned int eax, ebx, ecx, edx;
 
-	cpuid(cpu->number, op, &eax, &ebx, &ecx, &edx);
+	cpuid(CPU_number, op, &eax, &ebx, &ecx, &edx);
 
 	return ebx;
 }
