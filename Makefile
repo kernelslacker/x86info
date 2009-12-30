@@ -1,4 +1,5 @@
 CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls -fno-strict-aliasing
+CFLAGS += -Wl,-z,relro,-z,now
 # -Wstrict-overflow=5
 CC = gcc
 
