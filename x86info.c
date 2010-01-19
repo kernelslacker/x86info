@@ -297,8 +297,8 @@ int main (int argc, char **argv)
 		bind_cpu(cpu);
 
 		estimate_MHz(cpu);
-		get_feature_flags(cpu);
 		get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
+		get_feature_flags(cpu);
 		identify(cpu);
 		show_info(cpu);
 
