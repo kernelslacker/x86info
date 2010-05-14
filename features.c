@@ -86,10 +86,10 @@ void show_feature_flags(struct cpudata *cpu)
 	};
 	/* CPUID 0x00000001 ECX flags */
 	const char *intel_cap_generic_ecx_flags[] = {
-		"sse3", NULL, NULL, "monitor", "ds-cpl", "vmx", NULL, "est",
-		"tm2", "ssse3", "cntx-id", NULL, NULL, "cx16", "xTPR", NULL,
-		NULL, NULL, "dca", NULL, NULL, NULL, NULL, NULL,
-		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+		"sse3", "pclmuldq", "dtes64", "monitor", "ds-cpl", "vmx", "smx", "est",
+		"tm2", "ssse3", "cid", NULL, NULL, "cx16", "xTPR", "pdcm",
+		NULL, NULL, "dca", "sse4_1", "sse4_2", "x2apic", "movbe", "popcnt",
+		NULL, "aes", "xsave", "osxsave", NULL, NULL, NULL, NULL
 	};
 	/* CPUID 0x80000001 EDX flags */
 	const char *intel_cap_extended_edx_flags[] = {
