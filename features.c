@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "x86info.h"
 
-static void flag_decode(unsigned long reg, const char *flags[], const char *flags_desc[])
+static void flag_decode(unsigned long reg, const char * reg_desc, const char *flags[], const char *flags_desc[])
 {
 	unsigned int i;
 
@@ -19,12 +19,12 @@ static void flag_decode(unsigned long reg, const char *flags[], const char *flag
 			    if (flags[i])
 				    printf(" %s", flags[i]);
 			    else
-				    printf(" [%u]", i);
+				    printf(" [%s:%u]", reg_desc, i);
 			} else {
 			    if (flags[i])
 				    printf(" %-8s", flags[i]);
 			    else
-				    printf(" [%u]     ", i);
+				    printf(" [%s:%u]     ", reg_desc, i);
 			    if (flags_desc)
 				    printf("\t%s\n", flags_desc[i]);
 			    else
@@ -294,37 +294,37 @@ void show_feature_flags(struct cpudata *cpu)
 	};
 
 	printf("Feature flags:\n");
-	flag_decode(cpu->flags_edx, generic_cap_flags, generic_cap_flags_desc);
+	flag_decode(cpu->flags_edx, "1:edx", generic_cap_flags, generic_cap_flags_desc);
 
 	/* Vendor specific extensions. */
 	switch (cpu->vendor) {
 		case VENDOR_AMD:
-			flag_decode(cpu->flags_ecx, amd_cap_generic_ecx_flags, amd_cap_generic_ecx_flags_desc);
+			flag_decode(cpu->flags_ecx, "1:ecx", amd_cap_generic_ecx_flags, amd_cap_generic_ecx_flags_desc);
 			printf("\n");
 			if (cpu->maxei < 0x80000001)
 				break;
 			printf("Extended feature flags:\n");
-			flag_decode(cpu->eflags_edx, amd_cap_extended_edx_flags, NULL);
-			flag_decode(cpu->eflags_ecx, amd_cap_extended_ecx_flags, NULL);
+			flag_decode(cpu->eflags_edx, "80000001:edx", amd_cap_extended_edx_flags, NULL);
+			flag_decode(cpu->eflags_ecx, "80000001:ecx", amd_cap_extended_ecx_flags, NULL);
 			printf("\n");
 			break;
 
 		case VENDOR_CENTAUR:
 			printf("\n");
 			printf("Extended feature flags:\n");
-			flag_decode(cpu->flags_ecx, centaur_cap_extended_ecx_flags, NULL);
+			flag_decode(cpu->flags_ecx, "1:ecx", centaur_cap_extended_ecx_flags, NULL);
 			cpuid(cpu->number, 0xc0000000, &eax, &ebx, &ecx, &edx);
 			if (eax >=0xc0000001) {
 				cpuid(cpu->number, 0xc0000001, &eax, &ebx, &ecx, &edx);
 				cpu->flags_edx = edx;
-				flag_decode(cpu->flags_edx, centaur_cap_extended_edx_flags, NULL);
+				flag_decode(cpu->flags_edx, "1:edx", centaur_cap_extended_edx_flags, NULL);
 			}
 			break;
 
 		case VENDOR_TRANSMETA:
 			printf("\n");
 			printf("Extended feature flags:\n");
-			flag_decode(cpu->flags_ecx, transmeta_cap_flags, NULL);
+			flag_decode(cpu->flags_ecx, "1:ecx", transmeta_cap_flags, NULL);
 			break;
 
 		case VENDOR_CYRIX:
@@ -334,12 +334,12 @@ void show_feature_flags(struct cpudata *cpu)
 		case VENDOR_INTEL:
 			printf("\n");
 			printf("Extended feature flags:\n");
-			flag_decode(cpu->flags_ecx, intel_cap_generic_ecx_flags, intel_cap_generic_ecx_flags_desc);
+			flag_decode(cpu->flags_ecx, "1:ecx", intel_cap_generic_ecx_flags, intel_cap_generic_ecx_flags_desc);
 			if (cpu->maxei < 0x80000001)
 				break;
 			printf("\n");
-			flag_decode(cpu->eflags_edx, intel_cap_extended_edx_flags, intel_cap_extended_edx_flags_desc);
-			flag_decode(cpu->eflags_ecx, intel_cap_extended_ecx_flags, intel_cap_extended_ecx_flags_desc);
+			flag_decode(cpu->eflags_edx, "80000001:edx", intel_cap_extended_edx_flags, intel_cap_extended_edx_flags_desc);
+			flag_decode(cpu->eflags_ecx, "80000001:ecx", intel_cap_extended_ecx_flags, intel_cap_extended_ecx_flags_desc);
 			break;
 
 		default:
