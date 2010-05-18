@@ -52,7 +52,6 @@ void get_feature_flags(struct cpudata *cpu)
 void show_feature_flags(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
-	unsigned int i;
 
 	/* CPUID 0x00000001 EDX flags */
 	const char *generic_cap_flags[] = {
@@ -62,45 +61,45 @@ void show_feature_flags(struct cpudata *cpu)
 		"fxsr", "sse", "sse2", "ss", "ht", "tm", NULL, "pbe"
 	};
 	const char *generic_cap_flags_desc[] = {
-		"Onboard FPU",
-		"Virtual Mode Extensions",
-		"Debugging Extensions",
-		"Page Size Extensions",
-		"Time Stamp Counter",
-		"Model-Specific Registers",
-		"Physical Address Extensions",
-		"Machine Check Exception",
-		"CMPXCHG8 instruction",
-		"Onboard APIC",
-		NULL,
-		"SYSENTER/SYSEXIT",
-		"Memory Type Range Registers",
-		"Page Global Enable",
-		"Machine Check Architecture",
-		"CMOV instruction",
-		"Page Attribute Table",
-		"36-bit PSEs",
-		"Processor serial number",	/* reserved on AMD */
-		"CLFLUSH instruction",
-		NULL,
-		"Debug Trace Store",		/* reserved on AMD */
-		"ACPI via MSR",			/* reserved on AMD */
-		"MMX support",
-		"FXSAVE and FXRESTORE instructions",
-		"SSE support",
-		"SSE2 support",
-		"CPU self snoop",		/* reserved on AMD */
-		"Hyper-Threading",
-		"Thermal Monitor",		/* reserved on AMD */
-		NULL,
-		"Pending Break Enable"		/* reserved on AMD */
+		"Onboard FPU",						// 0
+		"Virtual Mode Extensions",				// 1
+		"Debugging Extensions",					// 2
+		"Page Size Extensions",					// 3
+		"Time Stamp Counter",					// 4
+		"Model-Specific Registers",				// 5
+		"Physical Address Extensions",				// 6
+		"Machine Check Exception",				// 7
+		"CMPXCHG8 instruction",					// 8
+		"Onboard APIC",						// 9
+		NULL,							// 10
+		"SYSENTER/SYSEXIT instructions",			// 11
+		"Memory Type Range Registers",				// 12
+		"Page Global Enable",					// 13
+		"Machine Check Architecture",				// 14
+		"CMOV instruction",					// 15
+		"Page Attribute Table",					// 16
+		"36-bit PSEs",						// 17
+		"Processor serial number",	/* reserved on AMD */	// 18
+		"CLFLUSH instruction",					// 19
+		NULL,							// 20
+		"Debug Trace Store",		/* reserved on AMD */	// 21
+		"ACPI via MSR",			/* reserved on AMD */	// 22
+		"MMX support",						// 23
+		"FXSAVE and FXRSTOR instructions",			// 24
+		"SSE support",						// 25
+		"SSE2 support",						// 26
+		"CPU self snoop",		/* reserved on AMD */	// 27
+		"Hyper-Threading",					// 28
+		"Thermal Monitor",		/* reserved on AMD */	// 29
+		NULL,							// 30
+		"Pending Break Enable"		/* reserved on AMD */	// 31
 	};
 	/* CPUID 0x00000001 ECX flags */
 	const char *intel_cap_generic_ecx_flags[] = {
 		"sse3", "pclmuldq", "dtes64", "monitor", "ds-cpl", "vmx", "smx", "est",
 		"tm2", "ssse3", "cid", NULL, NULL, "cx16", "xTPR", "pdcm",
-		NULL, NULL, "dca", "sse4_1", "sse4_2", "x2apic", "movbe", "popcnt",
-		NULL, "aes", "xsave", "osxsave", NULL, NULL, NULL, NULL
+		NULL, "pcid", "dca", "sse4_1", "sse4_2", "x2apic", "movbe", "popcnt",
+		NULL, "aes", "xsave", "osxsave", "avx", NULL, NULL, NULL
 	};
 	const char *intel_cap_generic_ecx_flags_desc[] = {
 		"Streaming SIMD Extensions 3",		    // 0
@@ -120,7 +119,7 @@ void show_feature_flags(struct cpudata *cpu)
 		"xTPR Update Control",			    // 14
 		"Perfmon and Debug Capability",		    // 15
 		NULL,					    // 16
-		NULL,					    // 17
+		"Process-context identifiers",		    // 17
 		"Direct Cache Access",			    // 18
 		"Streaming SIMD Extensions 4.1",	    // 19
 		"Streaming SIMD Extensions 4.2",	    // 20
@@ -131,7 +130,7 @@ void show_feature_flags(struct cpudata *cpu)
 		"AES Instruction",			    // 25
 		"XSAVE/XSTOR States",			    // 26
 		"OS-Enabled Extended State Management",	    // 27
-		NULL,					    // 28
+		"AVX instruction extensions",		    // 28
 		NULL,					    // 29
 		NULL,					    // 30
 		NULL					    // 31
@@ -155,7 +154,7 @@ void show_feature_flags(struct cpudata *cpu)
 		NULL,					    // 8
 		NULL,					    // 9
 		NULL,					    // 10
-		"SYSCALL/SYSRET",			    // 11
+		"SYSCALL/SYSRET instructions",		    // 11
 		NULL,					    // 12
 		NULL,					    // 13
 		NULL,					    // 14
@@ -170,8 +169,8 @@ void show_feature_flags(struct cpudata *cpu)
 		NULL,					    // 23
 		NULL,					    // 24
 		NULL,					    // 25
-		"1-GByte pages are available",		    // 26
-		"RDTSCP and IA32_TSC_AUX are available",    // 27
+		"1-GByte pages",			    // 26
+		"RDTSCP and IA32_TSC_AUX",		    // 27
 		NULL,					    // 28
 		"Intel 64 Instruction Set Architecture",    // 29
 		NULL,					    // 30
@@ -221,9 +220,42 @@ void show_feature_flags(struct cpudata *cpu)
 
 	const char *amd_cap_generic_ecx_flags[] = {
 		"sse3", NULL, NULL, "mwait", NULL, NULL, NULL, NULL,
-		NULL, NULL, NULL, NULL, NULL, "cmpxchg16b", NULL, NULL,
-		NULL, NULL, NULL, NULL, NULL, NULL, NULL, "popcnt",
+		NULL, "ssse3", NULL, NULL, NULL, "cmpxchg16b", NULL, NULL,
+		NULL, NULL, NULL, "sse4_1", NULL, NULL, NULL, "popcnt",
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+	};
+	const char *amd_cap_generic_ecx_flags_desc[] = {
+		"Streaming SIMD Extensions 3",		    // 0
+		NULL,					    // 1
+		NULL,					    // 2
+		"MONITOR/MWAIT instructions",		    // 3
+		NULL,					    // 4
+		NULL,					    // 5
+		NULL,					    // 6
+		NULL,					    // 7
+		NULL,					    // 8
+		"Supplemental Streaming SIMD Extensions 3", // 9
+		NULL,					    // 10
+		NULL,					    // 11
+		NULL,					    // 12
+		"CMPXCHG16B instruction",		    // 13
+		NULL,					    // 14
+		NULL,					    // 15
+		NULL,					    // 16
+		NULL,					    // 17
+		NULL,					    // 18
+		"Streaming SIMD Extensions 4.1",	    // 19
+		NULL,					    // 20
+		NULL,					    // 22
+		"POPCNT instruction",			    // 23
+		NULL,					    // 24
+		NULL,					    // 25
+		NULL,					    // 26
+		NULL,					    // 27
+		NULL,					    // 28
+		NULL,					    // 29
+		NULL,					    // 30
+		NULL					    // 31
 	};
 	const char *amd_cap_extended_edx_flags[] = {
 		"fpu", "vme", "de", "pse", "tsc", "msr", "pae", "mce",
@@ -262,23 +294,12 @@ void show_feature_flags(struct cpudata *cpu)
 	};
 
 	printf("Feature flags:\n");
-	for (i=0; i<32; i++) {
-		if (cpu->flags_edx & (1 << i)) {
-			if (!(generic_cap_flags_desc[i]))
-				printf(" [%u]", i);
-			printf(" %s", generic_cap_flags[i]);
-			if (verbose)
-				printf("\t%s\n", generic_cap_flags_desc[i]);
-		}
-	}
+	flag_decode(cpu->flags_edx, generic_cap_flags, generic_cap_flags_desc);
 
 	/* Vendor specific extensions. */
 	switch (cpu->vendor) {
 		case VENDOR_AMD:
-			for (i=0; i<32; i++) {
-				if (cpu->flags_ecx & (1 << i) && amd_cap_generic_ecx_flags[i])
-					printf(" %s", amd_cap_generic_ecx_flags[i]);
-			}
+			flag_decode(cpu->flags_ecx, amd_cap_generic_ecx_flags, amd_cap_generic_ecx_flags_desc);
 			printf("\n");
 			if (cpu->maxei < 0x80000001)
 				break;
