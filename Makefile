@@ -1,5 +1,5 @@
 CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls -fno-strict-aliasing
-CFLAGS += -Wl,-z,relro,-z,now
+LDFLAGS = -Wl,-z,relro,-z,now
 # -Wstrict-overflow=5
 CC = gcc
 
@@ -33,7 +33,7 @@ LSMSR_SRC =\
 LSMSR_OBJS = $(LSMSR_SRC:%.c=%.o)
 
 lsmsr: $(LSMSR_TMP_HEADERS) $(LSMSR_OBJS)
-	$(CC) $(CFLAGS) -o lsmsr $(LSMSR_OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o lsmsr $(LSMSR_OBJS)
 
 -include $(LSMSR_SRC:%.c=%.P)
 
@@ -92,7 +92,7 @@ X86INFO_SRC =\
 X86INFO_OBJS = $(X86INFO_SRC:%.c=%.o)
 
 x86info: $(X86INFO_OBJS)
-	$(CC) $(CFLAGS) -o x86info $(X86INFO_OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS)
 
 -include $(X86INFO_SRC:%.c=%.P)
 
