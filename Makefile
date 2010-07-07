@@ -7,7 +7,7 @@ SHELL = /bin/sh
 
 
 .c.o:
-	$(CC) $(CFLAGS) -MMD -o $@ -c $<
+	$(CC) $(CFLAGS) -MMD -MF $(patsubst %.c,%.d,$<) -o $@ -c $<
 	@cp $*.d $*.P; \
 	 sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
 	     -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> $*.P; \
