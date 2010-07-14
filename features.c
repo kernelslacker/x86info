@@ -49,6 +49,105 @@ void get_feature_flags(struct cpudata *cpu)
 	}
 }
 
+void show_extra_intel_flags(struct cpudata *cpu)
+{
+	unsigned int eax = 0, ebx = 0, ecx = 0, edx = 0;
+	/* CPUID 0x00000006 EAX flags */
+	const char *intel_cpuid_06_eax_flags[] = {
+		"dts", "ida", "arat", NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+	};
+	const char *intel_cpuid_06_eax_flags_desc[] = {
+		"Digital temperature sensor supported",			// 0
+		"Intel Dynamic Acceleration Technology (Turbo Boost)",	// 1
+		"Always Running APIC Timer",				// 2
+		NULL,							// 3
+		NULL,							// 4
+		NULL,							// 5
+		NULL,							// 6
+		NULL,							// 7
+		NULL,							// 8
+		NULL,							// 9
+		NULL,							// 10
+		NULL,							// 11
+		NULL,							// 12
+		NULL,							// 13
+		NULL,							// 14
+		NULL,							// 15
+		NULL,							// 16
+		NULL,							// 17
+		NULL,							// 18
+		NULL,							// 19
+		NULL,							// 20
+		NULL,							// 21
+		NULL,							// 22
+		NULL,							// 23
+		NULL,							// 24
+		NULL,							// 25
+		NULL,							// 26
+		NULL,							// 27
+		NULL,							// 28
+		NULL,							// 29
+		NULL,							// 30
+		NULL							// 31
+	};
+
+	/* CPUID 0x80000007 EDX flags */
+	const char *intel_cpuid_80000007_edx_flags[] = {
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		"nonstop_tsc", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+	};
+	const char *intel_cpuid_80000007_edx_flags_desc[] = {
+		NULL,							// 0
+		NULL,							// 1
+		NULL,							// 2
+		NULL,							// 3
+		NULL,							// 4
+		NULL,							// 5
+		NULL,							// 6
+		NULL,							// 7
+		"Invariant/nonstop/constant TSC",			// 8
+		NULL,							// 9
+		NULL,							// 10
+		NULL,							// 11
+		NULL,							// 12
+		NULL,							// 13
+		NULL,							// 14
+		NULL,							// 15
+		NULL,							// 16
+		NULL,							// 17
+		NULL,							// 18
+		NULL,							// 19
+		NULL,							// 20
+		NULL,							// 21
+		NULL,							// 22
+		NULL,							// 23
+		NULL,							// 24
+		NULL,							// 25
+		NULL,							// 26
+		NULL,							// 27
+		NULL,							// 28
+		NULL,							// 29
+		NULL,							// 30
+		NULL							// 31
+	};
+
+	// Intel CPUID 0x06
+	if (cpu->cpuid_level >= 0x06) {
+		cpuid(cpu->number, 0x06, &eax, &ebx, &ecx, &edx);
+		flag_decode(eax, "6:eax", intel_cpuid_06_eax_flags, intel_cpuid_06_eax_flags_desc);
+	}
+	// Intel CPUID 0x80000007
+	if (cpu->maxei >= 0x80000007) {
+		cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
+		flag_decode(edx, "80000007:edx", intel_cpuid_80000007_edx_flags, intel_cpuid_80000007_edx_flags_desc);
+	}
+}
+
 void show_feature_flags(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
@@ -332,14 +431,14 @@ void show_feature_flags(struct cpudata *cpu)
 			break;
 
 		case VENDOR_INTEL:
-			printf("\n");
-			printf("Extended feature flags:\n");
 			flag_decode(cpu->flags_ecx, "1:ecx", intel_cap_generic_ecx_flags, intel_cap_generic_ecx_flags_desc);
+			printf("\n");
 			if (cpu->maxei < 0x80000001)
 				break;
-			printf("\n");
+			printf("Extended feature flags:\n");
 			flag_decode(cpu->eflags_edx, "80000001:edx", intel_cap_extended_edx_flags, intel_cap_extended_edx_flags_desc);
 			flag_decode(cpu->eflags_ecx, "80000001:ecx", intel_cap_extended_ecx_flags, intel_cap_extended_ecx_flags_desc);
+			show_extra_intel_flags(cpu);
 			break;
 
 		default:

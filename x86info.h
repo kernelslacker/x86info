@@ -139,6 +139,7 @@ extern void display_Intel_info(struct cpudata *cpu);
 
 extern void get_feature_flags(struct cpudata *cpu);
 extern void show_feature_flags(struct cpudata *cpu);
+extern void show_extra_intel_flags(struct cpudata *cpu);
 #define X86_FEATURE_HT (1<<28)
 
 extern void get_cpu_info_basics(struct cpudata *cpu);
