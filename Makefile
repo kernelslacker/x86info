@@ -123,3 +123,6 @@ splint:
 
 sparse:
 	sparse $(X86INFO_SRC)
+
+cscope:
+	cscope -Rb
