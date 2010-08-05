@@ -433,12 +433,6 @@ int main (int argc, char **argv)
 
 	printf("Total processor threads: %d\n", sockets[0] * num_sockets);
 
-
-	if (nrCPUs > 1 && (used_UP == 1) && (!silent)) {
-		printf("WARNING: Detected SMP, but unable to access cpuid driver.\n");
-		printf("Used Uniprocessor CPU routines. Results inaccurate.\n");
-	}
-
 out:
 	/* Tear down the linked list. */
 	cpu = head;
