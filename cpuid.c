@@ -40,12 +40,14 @@
 #endif
 #endif
 
-static void native_cpuid(unsigned int cpunr, unsigned long long idx,
+/* returns zero on success */
+static int native_cpuid(unsigned int cpunr, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx,
 	unsigned int *ecx, unsigned int *edx)
 {
-	cpu_set_t set;
+	cpu_set_t set, tmp_set;
 	unsigned int a = 0, b = 0, c = 0, d = 0;
+	int ret;
 
 	if (eax != NULL)
 		a = *eax;
@@ -56,11 +58,17 @@ static void native_cpuid(unsigned int cpunr, unsigned long long idx,
 	if (edx != NULL)
 		d = *edx;
 
-	if (sched_getaffinity(getpid(), sizeof(set), &set) == 0) {
-		CPU_ZERO(&set);
-		CPU_SET(cpunr, &set);
-		sched_setaffinity(getpid(), sizeof(set), &set);
-	}
+	ret = sched_getaffinity(getpid(), sizeof(set), &set);
+	if (ret)
+		return ret;
+
+	/* man CPU_SET(3): To duplicate a CPU set, use memcpy(3) */
+	memcpy(&tmp_set, &set, sizeof(cpu_set_t));
+	CPU_ZERO(&set);
+	CPU_SET(cpunr, &set);
+	ret = sched_setaffinity(getpid(), sizeof(set), &set);
+	if (ret)
+		return ret;
 
 	asm("cpuid"
 		: "=a" (a),
@@ -77,7 +85,15 @@ static void native_cpuid(unsigned int cpunr, unsigned long long idx,
 		*ecx = c;
 	if (edx!=NULL)
 		*edx = d;
+
+	/* Restore initial sched affinity */
+	ret = sched_setaffinity(getpid(), sizeof(tmp_set), &tmp_set);
+	if (ret)
+		return ret;
+	return 0;
 }
+
+static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
 
 #if defined(__FreeBSD__)
 void cpuid(unsigned int CPU_number, unsigned long long idx,
@@ -93,7 +109,8 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	cpu_cpuid_args_t args;
 
 	if (nodriver == 1) {
-		native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
+		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
+			printf(NATIVE_CPUID_FAILED_MSG);
 		return;
 	}
 
@@ -119,8 +136,12 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 		nodriver = 1;
 		if (!silent && nrCPUs != 1)
 			perror(cpuname);
-		used_UP = 1;
-		native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
+		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx)) {
+			printf(NATIVE_CPUID_FAILED_MSG);
+			used_UP = 1;
+		}
+			used_UP = 1;
+
 		return;
 	}
 }
@@ -150,7 +171,8 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	}
 
 	if (nodriver == 1) {
-		native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
+		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
+			printf(NATIVE_CPUID_FAILED_MSG);
 		return;
 	}
 
@@ -182,8 +204,10 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	} else {
 		/* Something went wrong, just do UP and hope for the best. */
 		nodriver = 1;
-		used_UP = 1;
-		native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
+		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx)) {
+			printf(NATIVE_CPUID_FAILED_MSG);
+			used_UP = 1;
+		}
 		return;
 	}
 }
