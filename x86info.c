@@ -302,7 +302,7 @@ int main (int argc, char **argv)
 
 	parse_command_line(argc, argv);
 	if (!silent) {
-		printf("x86info v1.26-beta.  Dave Jones 2001-2010\n");
+		printf("x86info v1.26.  Dave Jones 2001-2010\n");
 		printf("Feedback to <davej@redhat.com>.\n\n");
 	}
 
