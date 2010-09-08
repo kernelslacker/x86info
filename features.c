@@ -54,7 +54,7 @@ void show_extra_intel_flags(struct cpudata *cpu)
 	unsigned int eax = 0, ebx = 0, ecx = 0, edx = 0;
 	/* CPUID 0x00000006 EAX flags */
 	const char *intel_cpuid_06_eax_flags[] = {
-		"dts", "ida", "arat", NULL, NULL, NULL, NULL, NULL,
+		"dts", "ida", "arat", NULL, "pln", "ecmd", "ptm", NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
@@ -64,9 +64,9 @@ void show_extra_intel_flags(struct cpudata *cpu)
 		"Intel Dynamic Acceleration Technology (Turbo Boost)",	// 1
 		"Always Running APIC Timer",				// 2
 		NULL,							// 3
-		NULL,							// 4
-		NULL,							// 5
-		NULL,							// 6
+		"Power limit notification controls",			// 4
+		"Clock modulation duty cycle extension",		// 5
+		"Package thermal management",				// 6
 		NULL,							// 7
 		NULL,							// 8
 		NULL,							// 9
@@ -196,9 +196,9 @@ void show_feature_flags(struct cpudata *cpu)
 	/* CPUID 0x00000001 ECX flags */
 	const char *intel_cap_generic_ecx_flags[] = {
 		"sse3", "pclmuldq", "dtes64", "monitor", "ds-cpl", "vmx", "smx", "est",
-		"tm2", "ssse3", "cid", NULL, NULL, "cx16", "xTPR", "pdcm",
+		"tm2", "ssse3", "cid", NULL, "fma", "cx16", "xTPR", "pdcm",
 		NULL, "pcid", "dca", "sse4_1", "sse4_2", "x2apic", "movbe", "popcnt",
-		NULL, "aes", "xsave", "osxsave", "avx", NULL, NULL, NULL
+		"tsc-deadline", "aes", "xsave", "osxsave", "avx", NULL, NULL, NULL
 	};
 	const char *intel_cap_generic_ecx_flags_desc[] = {
 		"Streaming SIMD Extensions 3",		    // 0
@@ -213,7 +213,7 @@ void show_feature_flags(struct cpudata *cpu)
 		"Supplemental Streaming SIMD Extensions 3", // 9
 		"L1 Context ID",			    // 10
 		NULL,					    // 11
-		NULL,					    // 12
+		"Fused Multiply Add",			    // 12
 		"CMPXCHG16B",				    // 13
 		"xTPR Update Control",			    // 14
 		"Perfmon and Debug Capability",		    // 15
@@ -225,7 +225,7 @@ void show_feature_flags(struct cpudata *cpu)
 		"Extended xAPIC Support",		    // 21
 		"MOVBE Instruction",			    // 22
 		"POPCNT Instruction",			    // 23
-		NULL,					    // 24
+		"TSC Deadline support",			    // 24
 		"AES Instruction",			    // 25
 		"XSAVE/XSTOR States",			    // 26
 		"OS-Enabled Extended State Management",	    // 27
