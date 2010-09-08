@@ -32,6 +32,8 @@ LSMSR_SRC =\
 
 LSMSR_OBJS = $(LSMSR_SRC:%.c=%.o)
 
+lsmsr.c: $(LSMSR_TMP_HEADERS)
+
 lsmsr: $(LSMSR_TMP_HEADERS) $(LSMSR_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o lsmsr $(LSMSR_OBJS)
 
