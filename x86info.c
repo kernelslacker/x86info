@@ -331,6 +331,8 @@ int main (int argc, char **argv)
 			decode_connector(cpu->connector);
 
 		if (show_urls) {
+			if (cpu->info_url != NULL)
+				printf("Info URL: %s\n", cpu->info_url);
 			if (cpu->datasheet_url != NULL)
 				printf("Datasheet: %s\n", cpu->datasheet_url);
 			if (cpu->errata_url != NULL)
@@ -437,6 +439,8 @@ out:
 	/* Tear down the linked list. */
 	cpu = head;
 	for (i=0; i<nrCPUs; i++) {
+		if (cpu->info_url)
+			free(cpu->info_url);
 		if (cpu->datasheet_url)
 			free(cpu->datasheet_url);
 		if (cpu->errata_url)

@@ -11,6 +11,8 @@
 #include "../x86info.h"
 #include "Intel.h"
 
+static char pm_90nm_info_url[] = "http://www.intel.com/design/intarch/pentiumm/docs_pentiumm_90nm.htm";
+
 static char *intel_nameptr;
 #define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x)
 
@@ -500,6 +502,7 @@ void Identify_Intel_family6pentium(struct cpudata *cpu)
 				SL89Y	738			1.4GHz	600MHz
 		     */
 			case 8:	add_to_cpuname("(Dothan) [C-0]");
+					cpu->info_url = strdup(pm_90nm_info_url);
 					break;
 		}
 		break;
