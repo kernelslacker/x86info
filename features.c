@@ -1,5 +1,5 @@
 /*
- *  (C) 2001-2006 Dave Jones.
+ *  (C) 2001-2010 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
@@ -7,6 +7,8 @@
  */
 
 #include <stdio.h>
+#include <signal.h>
+#include <setjmp.h>
 #include "x86info.h"
 
 static void flag_decode(unsigned long reg, const char * reg_desc, const char *flags[], const char *flags_desc[])
@@ -148,7 +150,7 @@ void show_extra_intel_flags(struct cpudata *cpu)
 	}
 }
 
-void show_feature_flags(struct cpudata *cpu)
+static void show_feature_flags(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
@@ -448,3 +450,32 @@ void show_feature_flags(struct cpudata *cpu)
 
 	printf("\n");
 }
+
+static sigjmp_buf out;
+
+static void sigill(__attribute__((__unused__))int sig)
+{
+	siglongjmp(out, 1);
+}
+
+static void test_longnop(void)
+{
+	int died;
+
+	signal(SIGILL, sigill);
+
+	died = sigsetjmp(out, 1);
+
+	if (!died)
+		asm volatile("nopl 0(%eax)");
+
+	printf("Long NOPs supported: %s\n", died ? "no" : "yes");
+}
+
+void display_features(struct cpudata *cpu)
+{
+	show_feature_flags(cpu);
+	test_longnop();
+}
+
+

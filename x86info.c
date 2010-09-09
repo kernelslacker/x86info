@@ -302,7 +302,7 @@ int main (int argc, char **argv)
 
 	parse_command_line(argc, argv);
 	if (!silent) {
-		printf("x86info v1.27.  Dave Jones 2001-2010\n");
+		printf("x86info v1.28beta.  Dave Jones 2001-2010\n");
 		printf("Feedback to <davej@redhat.com>.\n\n");
 	}
 
@@ -405,7 +405,7 @@ int main (int argc, char **argv)
 		}
 
 		if (show_flags == 1)
-			show_feature_flags(cpu);
+			display_features(cpu);
 
 		if (show_connector)
 			decode_connector(cpu->connector);
