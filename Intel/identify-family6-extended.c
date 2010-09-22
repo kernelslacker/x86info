@@ -269,6 +269,10 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
+	case 0x1c:
+		add_to_cpuname("Atom");
+		break;
+
 	case 0x1e:
 		add_to_cpuname("Core i7 (Nehalem) [Lynnfield/Clarksfield/Jasper Forest]");
 		break;
