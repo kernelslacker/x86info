@@ -241,7 +241,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
-	case 23:
+	case 0x17:
 		add_to_cpuname("Core 2 Duo ");
 		switch (cpu->stepping) {
 		case 4:	add_to_cpuname("(Penryn)");
@@ -251,13 +251,13 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
-	case 26:
+	case 0x1a:
 		/*
 		 * SLBCJ C-0 0x000106A4 3.20 / 6.40/ 1066 8MB
 		 * SLBCK C-0 0x000106A4 2.93 / 4.80/ 1066 8MB
 		 * SLBCH C-0 0x000106A4 2.66 / 4.80/ 1066 8MB
 		 */
-		add_to_cpuname("Core i7 (Nehalem)");
+		add_to_cpuname("Core i7 (Nehalem) [bloomfield/gainestown]");
 		cpu->info_url = strdup(nehalem_info_url);
 		switch (cpu->MHz) {
 		case 3200:	add_to_cpuname(" [C-0][SLBCJ]");
@@ -269,6 +269,21 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
+	case 0x1e:
+		add_to_cpuname("Core i7 (Nehalem) [Lynnfield/Clarksfield/Jasper Forest]");
+		break;
+
+	case 0x25:
+		add_to_cpuname("Core i7 (Nehalem) [Clarkdale/Arrandale]");
+		break;
+
+	case 0x2c:
+		add_to_cpuname("Core i7 (Nehalem) [Gulftown/Westmere-EP]");
+		break;
+
+	case 0x2e:
+		add_to_cpuname("Core i7 (Nehalem) [Beckton]");
+		break;
 
 	default:
                 add_to_cpuname("Unknown model. ");
