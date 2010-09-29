@@ -523,7 +523,7 @@ void Identify_Intel_family6pentium(struct cpudata *cpu)
 			add_to_cpuname("Duo [L2]");
 			break;
 		case 5:
-			add_to_cpuname("Duo ");
+			add_to_cpuname("Duo (Conroe XE)");
 			break;
 		case 6:
 			/*
