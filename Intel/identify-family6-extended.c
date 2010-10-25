@@ -271,6 +271,10 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 
 	case 0x1c:
 		add_to_cpuname("Atom");
+		switch (cpu->stepping) {
+		case 10:	add_to_cpuname(" D510");
+				break;
+		}
 		break;
 
 	case 0x1e:
