@@ -8,7 +8,36 @@
  */
 
 #include <stdio.h>
+#include <asm/mtrr.h>
 #include "x86info.h"
+
+#define IA32_MTRRCAP_SMRR 0x800
+#define IA32_MTRRCAP_WC   0x400
+#define IA32_MTRRCAP_FIX  0x100
+#define IA32_MTRRCAP_VCNT 0xFF
+
+#define IA32_MTRR_DEFTYPE_E    0x800
+#define IA32_MTRR_DEFTYPE_FE   0x400
+#define IA32_MTRR_DEFTYPE_TYPE 0xFF
+
+static char * mtrr_types[MTRR_NUM_TYPES] =
+{
+    "uncacheable",
+    "write-combining",
+    "?",
+    "?",
+    "write-through",
+    "write-protect",
+    "write-back",
+};
+
+static int mtrr_value(int cpu, int msr, unsigned long long * val)
+{
+	if (read_msr(cpu, msr, val) == 1)
+		return 1;
+	else
+		return 0;
+}
 
 static void dump_mtrr(int cpu, int msr)
 {
@@ -16,6 +45,36 @@ static void dump_mtrr(int cpu, int msr)
 
 	if (read_msr(cpu, msr, &val) == 1)
 		printf("0x%016llx\n", val);
+}
+
+static void decode_mtrrcap(int cpu, int msr)
+{
+	unsigned long long val;
+	int ret;
+
+	ret = mtrr_value(cpu,msr,&val);
+	if(ret){
+		printf("0x%016llx ", val);
+		printf("(smrr flag: 0x%01x, ",(unsigned int) (val & IA32_MTRRCAP_SMRR) >> 11 );
+		printf("wc flag: 0x%01x, ",(unsigned int) (val&IA32_MTRRCAP_WC) >> 10);
+		printf("fix flag: 0x%01x, ",(unsigned int) (val&IA32_MTRRCAP_FIX) >> 8);
+		printf("vcnt field: 0x%02x (%d))\n",(unsigned int) (val&IA32_MTRRCAP_VCNT) , (int) (val&IA32_MTRRCAP_VCNT));
+	}
+}
+
+static void decode_mtrr_deftype(int cpu, int msr)
+{
+	unsigned long long val;
+	int ret;
+
+	ret = mtrr_value(cpu,msr,&val);
+	if(ret){
+		printf("0x%016llx ", val);
+		printf("(fixed-range flag: 0x%01x, ",(unsigned int) (val&IA32_MTRR_DEFTYPE_FE) >> 10);
+		printf("mtrr flag: 0x%01x, ",(unsigned int) (val&IA32_MTRR_DEFTYPE_E) >> 11);
+		printf("type field: 0x%02x (%s))\n", (unsigned int) (val&IA32_MTRR_DEFTYPE_TYPE) >> 8,
+				mtrr_types[((val&IA32_MTRR_DEFTYPE_TYPE) >> 8)]);
+	}
 }
 
 void dump_mtrrs(struct cpudata *cpu)
@@ -36,7 +95,7 @@ void dump_mtrrs(struct cpudata *cpu)
 	printf("MTRR registers:\n");
 
 	printf("MTRRcap (0xfe): ");
-	dump_mtrr(cpu->number, 0xfe);
+	decode_mtrrcap(cpu->number, 0xfe);
 
 	for (i=0; i<16; i+=2) {
 		printf("MTRRphysBase%u (0x%x): ", i/2, (unsigned int) 0x200+i);
@@ -68,7 +127,7 @@ void dump_mtrrs(struct cpudata *cpu)
 	dump_mtrr (cpu->number, 0x26f);
 
 	printf("MTRRdefType (0x2ff): ");
-	dump_mtrr (cpu->number, 0x2ff);
+	decode_mtrr_deftype(cpu->number, 0x2ff);
 
 	printf("\n\n");
 }
