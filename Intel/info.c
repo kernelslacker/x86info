@@ -39,23 +39,10 @@ void decode_serial_number(struct cpudata *cpu)
 	printf("Processor serial: %s\n", cpu->serialno);
 }
 
-void display_Intel_info(struct cpudata *cpu)
+static void decode_brand(struct cpudata *cpu)
 {
-	printf("Type: %u (", cpu->type);
-	switch (cpu->type) {
-	case 0:	printf("Original OEM");
-		break;
-	case 1:	printf("Overdrive");
-		break;
-	case 2:	printf("Dual-capable");
-		break;
-	case 3:	printf("Reserved");
-		break;
-	}
 	printf(")\tBrand: %u (", cpu->brand);
 	switch (cpu->brand) {
-	case 0:		printf("Unsupported");
-			break;
 	case 1:
 	case 0xA:
 	case 0x14:	printf("Intel® Celeron® processor");
@@ -107,6 +94,24 @@ void display_Intel_info(struct cpudata *cpu)
 			break;
 	}
 	printf(")\n");
+}
+
+void display_Intel_info(struct cpudata *cpu)
+{
+	printf("Type: %u (", cpu->type);
+	switch (cpu->type) {
+	case 0:	printf("Original OEM");
+		break;
+	case 1:	printf("Overdrive");
+		break;
+	case 2:	printf("Dual-capable");
+		break;
+	case 3:	printf("Reserved");
+		break;
+	}
+
+	if (cpu->brand > 0)
+		decode_brand(cpu);
 
 	if (show_msr) {
 		if (cpu->family == 0xf)
