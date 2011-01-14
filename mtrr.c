@@ -20,6 +20,11 @@
 #define IA32_MTRR_DEFTYPE_FE   0x400
 #define IA32_MTRR_DEFTYPE_TYPE 0xFF
 
+#define IA32_PHYBASE_TYPE   0XFF
+#define IA32_PHYMASK_VALID  0X800
+
+static unsigned int max_phy_addr = 0;
+
 static char * mtrr_types[MTRR_NUM_TYPES] =
 {
     "uncacheable",
@@ -30,6 +35,29 @@ static char * mtrr_types[MTRR_NUM_TYPES] =
     "write-protect",
     "write-back",
 };
+
+static void decode_address(unsigned long long val)
+{
+	switch (max_phy_addr) {
+		case 40:
+			printf("0x%07x ", (unsigned int) ((val >> 12) & 0xFFFFFFF));
+			break;
+		case 36:
+		default:
+			printf("0x%06x ", (unsigned int) ((val >> 12) & 0xFFFFFF));
+			break;
+	}
+}
+
+static void set_max_phy_addr(struct cpudata *cpu)
+{
+	unsigned int value;
+
+	if(!max_phy_addr){
+		cpuid(cpu->number, 0x80000008,&value, NULL, NULL, NULL);
+		max_phy_addr = (value & 0xFF);
+	}
+}
 
 static int mtrr_value(int cpu, int msr, unsigned long long * val)
 {
@@ -77,6 +105,40 @@ static void decode_mtrr_deftype(int cpu, int msr)
 	}
 }
 
+static void decode_mtrr_physbase(int cpu, int msr)
+{
+	unsigned long long val;
+	int ret;
+
+	ret = mtrr_value(cpu,msr,&val);
+	if(ret){
+		printf("0x%016llx ", val);
+
+		printf("(physbase field:");
+		decode_address(val);
+
+		printf("type field: 0x%02x (%s))\n",(unsigned int) (val&IA32_PHYBASE_TYPE),
+				mtrr_types[((val&IA32_PHYBASE_TYPE))]);
+	}
+}
+
+static void decode_mtrr_physmask(int cpu, int msr)
+{
+	unsigned long long val;
+	int ret;
+
+	ret = mtrr_value(cpu,msr,&val);
+	if(ret){
+		printf("0x%016llx ", val);
+
+		printf("(physmask field:");
+		decode_address(val);
+
+		printf("valid flag: %d)\n",(int) (val&IA32_PHYMASK_VALID)>>11);
+	}
+}
+
+
 void dump_mtrrs(struct cpudata *cpu)
 {
 	unsigned long long val = 0;
@@ -97,11 +159,13 @@ void dump_mtrrs(struct cpudata *cpu)
 	printf("MTRRcap (0xfe): ");
 	decode_mtrrcap(cpu->number, 0xfe);
 
+	set_max_phy_addr(cpu);
+
 	for (i=0; i<16; i+=2) {
 		printf("MTRRphysBase%u (0x%x): ", i/2, (unsigned int) 0x200+i);
-		dump_mtrr(cpu->number, 0x200+i);
+		decode_mtrr_physbase(cpu->number, 0x200+i);
 		printf("MTRRphysMask%u (0x%x): ", i/2, (unsigned int) 0x201+i);
-		dump_mtrr(cpu->number, 0x201+i);
+		decode_mtrr_physmask(cpu->number, 0x201+i);
 	}
 
 	printf("MTRRfix64K_00000 (0x250): ");
