@@ -9,7 +9,7 @@
 
 void get_cpu_info_basics(struct cpudata *cpu)
 {
-	unsigned int maxi, maxei, vendor;
+	unsigned int maxi, maxei, vendor, address_bits;
 	unsigned int eax;
 
 	cpuid(cpu->number, 0, &maxi, &vendor, NULL, NULL);
@@ -29,6 +29,10 @@ void get_cpu_info_basics(struct cpudata *cpu)
 
 	cpuid(cpu->number, 0xC0000000, &maxei, NULL, NULL, NULL);
 	cpu->maxei2 = maxei;
+
+	cpuid(cpu->number, 0x80000008,&address_bits, NULL, NULL, NULL);
+	cpu->phyaddr_bits = address_bits & 0xFF;
+	cpu->viraddr_bits = (address_bits >> 8) & 0xFF;
 
 	switch (vendor) {
 	case 0x756e6547:

@@ -31,6 +31,7 @@ int show_urls=0;
 static int show_mptable=0;
 static int show_flags=0;
 static int show_MHz=0;
+static int show_addr_sizes=0;
 
 unsigned int all_cpus = 0;
 
@@ -53,6 +54,7 @@ static void usage (char *programname)
 	printf("Usage: %s [<switches>]\n\
 -a,   --all\n\
       --all-cpus\n\
+      --addr\n\
       --bench\n\
       --bios\n\
       --bugs\n\
@@ -82,6 +84,7 @@ static void parse_command_line (int argc, char **argv)
 	for (argp = argv+1; argp <= argv + argc && (arg = *argp); argp++) {
 		if ((!strcmp(arg, "-a") || !strcmp(arg, "--all"))) {
 //			show_bench = 1;
+			show_addr_sizes = 1;
 			show_bios = 1;
 			show_bluesmoke = 1;
 			show_bugs = 1;
@@ -102,6 +105,9 @@ static void parse_command_line (int argc, char **argv)
 
 		if (!strcmp(arg, "--all-cpus"))
 			all_cpus = 1;
+
+		if (!strcmp(arg, "--addr"))
+			show_addr_sizes = 1;
 
 		if (!strcmp(arg, "--bench"))
 			show_bench = 1;
@@ -198,6 +204,12 @@ static void display_MHz(struct cpudata *cpu)
 		printf("%u.%u%uGHz", a, b, (cpu->MHz - c)/10);
 	}
 }
+
+static void display_address_sizes(struct cpudata *cpu)
+{
+	printf("Address sizes : %u bits physical, %u bits virtual\n",cpu->phyaddr_bits,cpu->viraddr_bits);
+}
+
 
 static char * corenum(int num)
 {
@@ -425,10 +437,14 @@ int main (int argc, char **argv)
 				dump_mtrrs(cpu);
 		}
 
+		if (show_addr_sizes)
+			display_address_sizes(cpu);
+
 		if (show_MHz) {
 			display_MHz(cpu);
 			printf(" processor (estimate).\n\n");
 		}
+
 		if (show_bench)
 			show_benchmarks(cpu);
 

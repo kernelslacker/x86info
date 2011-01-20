@@ -71,6 +71,8 @@ struct cpudata {
 	unsigned int cachesize_L2;
 	unsigned int cachesize_L3;
 	unsigned int cachesize_trace;
+	unsigned int phyaddr_bits;
+	unsigned int viraddr_bits;
 	unsigned int cpuid_level, maxei, maxei2;
 	char name[CPU_NAME_LEN];
 	enum connector connector;
