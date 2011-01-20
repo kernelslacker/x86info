@@ -1,13 +1,12 @@
 /*
- *  (C) 2001 Dave Jones.
+ *  (C) 2001-2011 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  * Intel specific parts
  *
  * References:
- *	http://developer.intel.com/
- *	http://microcodes.sourceforge.net/CPUID.htm
+ *	http://www.intel.com/Assets/PDF/appnote/241618.pdf
  */
 
 #include <stdio.h>
@@ -45,6 +44,7 @@ static struct _cache_table L1D_cache_table[] =
 	{ 0xa,   8, "L1 Data cache: 8KB, 2-way associative. 32 byte line size." },
 	{ 0xc,  16, "L1 Data cache: 16KB, 4-way associative. 32 byte line size." },
 	{ 0xd,  16, "L1 Data cache: 16KB, 4-way associative. 64 byte line size. ECC." },
+	{ 0xe,  24, "L1 Data cache: 24KB, 6-way associative. 64 byte line size. ECC." },
 	{ 0x2c, 32, "L1 Data cache: 32KB, 8-way associative. 64 byte line size." },
 	{ 0x60, 16, "L1 Data cache: 16KB, sectored, 8-way associative. 64 byte line size." },
 	{ 0x66 , 8, "L1 Data cache: 8KB, sectored, 4-way associative. 64 byte line size." },
@@ -57,13 +57,13 @@ static struct _cache_table L2_cache_table[] =
 {
 	{ 0x21,  256, "L2 (MLC): 256KB, 8-way associative. 64 byte line size." },
 	{ 0x39,  128, "L2 cache: 128KB, 4-way associative. Sectored. 64 byte line size." },
-	{ 0x3a,  192, "L2 cache: 192KB, 6-way associative. Sectored. 64 byte line size." },
+/*	{ 0x3a,  192, "L2 cache: 192KB, 6-way associative. Sectored. 64 byte line size." },
 	{ 0x3b,  128, "L2 cache: 128KB, 2-way associative. Sectored. 64 byte line size." },
 	{ 0x3c,  256, "L2 cache: 256KB, 4-way associative. Sectored. 64 byte line size." },
 	{ 0x3d,  384, "L2 cache: 384KB, 6-way associative. Sectored. 64 byte line size." },
 	{ 0x3e,  512, "L2 cache: 512KB, 4-way associative. Sectored. 64 byte line size." },
-/*	{ 0x3f, 256, "L2 cache: 256KB, 2-way associative. Sectored. 64 byte line size." },	*/
-/* 3f is no longer listed. */
+	{ 0x3f, 256, "L2 cache: 256KB, 2-way associative. Sectored. 64 byte line size." },	*/
+/* 3a->3f are no longer listed. */
 	{ 0x41,  128, "L2 cache: 128KB, 4-way associative. 32 byte line size." },
 	{ 0x42,  256, "L2 cache: 256KB, 4-way associative. 32 byte line size." },
 	{ 0x43,  512, "L2 cache: 512KB, 4-way associative. 32 byte line size." },
@@ -77,6 +77,7 @@ static struct _cache_table L2_cache_table[] =
 	{ 0x7c, 1024, "L2 cache: 1MB, sectored, 8-way associative. 64 byte line size." },
 	{ 0x7d, 2048, "L2 cache: 2MB, 8-way associative. 64 byte line size." },
 	{ 0x7f,  512, "L2 cache: 512KB, 2-way associative. 64 byte line size." },
+	{ 0x80,  512, "L2 cache: 512KB, 8-way associative. 64 byte line size." },
 	{ 0x82,  256, "L2 cache: 256KB, 8-way associative. 32 byte line size." },
 	{ 0x83,  512, "L2 cache: 512KB, 8-way associative. 32 byte line size." },
 	{ 0x84, 1024, "L2 cache: 1MB, 8-way associative. 32 byte line size." },
@@ -90,6 +91,7 @@ static struct _cache_table L2L3_cache_table[] =
 {
 	{ 0x46,  4096, "L2 cache: 4MB, 4-way associative. 64 byte line size." },
 	{ 0x47,  8192, "L2 cache: 8MB, 8-way associative. 64 byte line size." },
+	{ 0x48,  3072, "L2 cache: 3MB, 12-way associative. 64 byte line size." },
 	{ 0x49,  4096, "L2 cache: 4MB, 16-way associative. 64 byte line size." },
 	{ 0x4a,  6144, "L2 cache: 6MB, 12-way associative. 64 byte line size." },
 	{ 0x4b,  8192, "L2 cache: 8MB, 16-way associative. 64 byte line size." },
@@ -119,6 +121,9 @@ static struct _cache_table L3L2_cache_table[] =
 	{ 0xe2,  2048, "L3 cache: 2MB, 16-way associative. 64 byte line size." },
 	{ 0xe3,  4096, "L3 cache: 4MB, 16-way associative. 64 byte line size." },
 	{ 0xe4,  8192, "L3 cache: 8MB, 16-way associative. 64 byte line size." },
+	{ 0xea, 12288, "L3 cache: 12MB, 24-way associative. 64 byte line size." },
+	{ 0xeb, 18432, "L3 cache: 18MB, 24-way associative. 64 byte line size." },
+	{ 0xec, 24576, "L3 cache: 24MB, 24-way associative. 64 byte line size." },
 	{ 0xde,  8192, "L3 cache: 8MB, 12-way associative. 64 byte line size." },
 	{ 0, 0, NULL }
 };
