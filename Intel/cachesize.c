@@ -14,6 +14,8 @@
 #include "../x86info.h"
 #include "Intel.h"
 
+#define MB(x)   ((x) * 1024)
+
 struct _cache_table
 {
 	unsigned char descriptor;
@@ -67,73 +69,73 @@ static struct _cache_table L2_cache_table[] =
 	{ 0x41,  128, "L2 cache: 128KB, 4-way associative. 32 byte line size." },
 	{ 0x42,  256, "L2 cache: 256KB, 4-way associative. 32 byte line size." },
 	{ 0x43,  512, "L2 cache: 512KB, 4-way associative. 32 byte line size." },
-	{ 0x44, 1024, "L2 cache: 1MB, 4-way associative. 32 byte line size." },
-	{ 0x45, 2048, "L2 cache: 2MB, 4-way associative. 32 byte line size." },
-	{ 0x48, 3072, "L2 cache: 3MB, 12-way associative. 64 byte line size. Unified on-die." },
-	{ 0x4e, 6144, "L2 cache: 6MB, 24-way set associative, 64-byte line size." },
+	{ 0x44, MB(1), "L2 cache: 1MB, 4-way associative. 32 byte line size." },
+	{ 0x45, MB(2), "L2 cache: 2MB, 4-way associative. 32 byte line size." },
+	{ 0x48, MB(3), "L2 cache: 3MB, 12-way associative. 64 byte line size. Unified on-die." },
+	{ 0x4e, MB(6), "L2 cache: 6MB, 24-way set associative, 64-byte line size." },
 	{ 0x79,  128, "L2 cache: 128KB, sectored, 8-way associative. 64 byte line size." },
 	{ 0x7a,  256, "L2 cache: 256KB, sectored, 8-way associative. 64 byte line size." },
 	{ 0x7b,  512, "L2 cache: 512KB, sectored, 8-way associative. 64 byte line size." },
-	{ 0x7c, 1024, "L2 cache: 1MB, sectored, 8-way associative. 64 byte line size." },
-	{ 0x7d, 2048, "L2 cache: 2MB, 8-way associative. 64 byte line size." },
+	{ 0x7c, MB(1), "L2 cache: 1MB, sectored, 8-way associative. 64 byte line size." },
+	{ 0x7d, MB(2), "L2 cache: 2MB, 8-way associative. 64 byte line size." },
 	{ 0x7f,  512, "L2 cache: 512KB, 2-way associative. 64 byte line size." },
 	{ 0x80,  512, "L2 cache: 512KB, 8-way associative. 64 byte line size." },
 	{ 0x82,  256, "L2 cache: 256KB, 8-way associative. 32 byte line size." },
 	{ 0x83,  512, "L2 cache: 512KB, 8-way associative. 32 byte line size." },
-	{ 0x84, 1024, "L2 cache: 1MB, 8-way associative. 32 byte line size." },
-	{ 0x85, 2048, "L2 cache: 2MB, 8-way associative. 32 byte line size." },
+	{ 0x84, MB(1), "L2 cache: 1MB, 8-way associative. 32 byte line size." },
+	{ 0x85, MB(2), "L2 cache: 2MB, 8-way associative. 32 byte line size." },
 	{ 0x86,  512, "L2 cache: 512KB, 4-way associative. 64 byte line size." },
-	{ 0x87, 1024, "L2 cache: 1MB, 8-way associative. 64 byte line size." },
+	{ 0x87, MB(1), "L2 cache: 1MB, 8-way associative. 64 byte line size." },
 	{ 0, 0, NULL }
 };
 
 static struct _cache_table L2L3_cache_table[] =
 {
-	{ 0x46,  4096, "L2 cache: 4MB, 4-way associative. 64 byte line size." },
-	{ 0x47,  8192, "L2 cache: 8MB, 8-way associative. 64 byte line size." },
-	{ 0x48,  3072, "L2 cache: 3MB, 12-way associative. 64 byte line size." },
-	{ 0x49,  4096, "L2 cache: 4MB, 16-way associative. 64 byte line size." },
-	{ 0x4a,  6144, "L2 cache: 6MB, 12-way associative. 64 byte line size." },
-	{ 0x4b,  8192, "L2 cache: 8MB, 16-way associative. 64 byte line size." },
-	{ 0x4c, 12288, "L2 cache: 12MB, 12-way associative. 64 byte line size." },
-	{ 0x4d, 16384, "L2 cache: 16MB, 16-way associative. 64 byte line size." },
-	{ 0x78,  1024, "L2 cache: 1MB, sectored, 8-way associative. 64 byte line size." },
+	{ 0x46,  MB(4), "L2 cache: 4MB, 4-way associative. 64 byte line size." },
+	{ 0x47,  MB(8), "L2 cache: 8MB, 8-way associative. 64 byte line size." },
+	{ 0x48,  MB(3), "L2 cache: 3MB, 12-way associative. 64 byte line size." },
+	{ 0x49,  MB(4), "L2 cache: 4MB, 16-way associative. 64 byte line size." },
+	{ 0x4a,  MB(6), "L2 cache: 6MB, 12-way associative. 64 byte line size." },
+	{ 0x4b,  MB(8), "L2 cache: 8MB, 16-way associative. 64 byte line size." },
+	{ 0x4c, MB(12), "L2 cache: 12MB, 12-way associative. 64 byte line size." },
+	{ 0x4d, MB(16), "L2 cache: 16MB, 16-way associative. 64 byte line size." },
+	{ 0x78,  MB(1), "L2 cache: 1MB, sectored, 8-way associative. 64 byte line size." },
 	{ 0, 0, NULL }
 };
 static struct _cache_table L3L2_cache_table[] =
 {
-	{ 0x46,  4096, "L3 cache: 4MB, 4-way associative. 64 byte line size." },
-	{ 0x47,  8192, "L3 cache: 8MB, 8-way associative. 64 byte line size." },
-	{ 0x49,  4096, "L3 cache: 4MB, 16-way associative. 64 byte line size." },
-	{ 0x4a,  6144, "L3 cache: 6MB, 12-way associative. 64 byte line size." },
-	{ 0x4b,  8192, "L3 cache: 8MB, 16-way associative. 64 byte line size." },
-	{ 0x4c, 12288, "L3 cache: 12MB, 12-way associative. 64 byte line size." },
-	{ 0x4d, 16384, "L3 cache: 16MB, 16-way associative. 64 byte line size." },
-	{ 0x78,  1024, "L3 cache: 1MB, sectored, 8-way associative. 64 byte line size." },
+	{ 0x46,  MB(4), "L3 cache: 4MB, 4-way associative. 64 byte line size." },
+	{ 0x47,  MB(8), "L3 cache: 8MB, 8-way associative. 64 byte line size." },
+	{ 0x49,  MB(4), "L3 cache: 4MB, 16-way associative. 64 byte line size." },
+	{ 0x4a,  MB(6), "L3 cache: 6MB, 12-way associative. 64 byte line size." },
+	{ 0x4b,  MB(8), "L3 cache: 8MB, 16-way associative. 64 byte line size." },
+	{ 0x4c, MB(12), "L3 cache: 12MB, 12-way associative. 64 byte line size." },
+	{ 0x4d, MB(16), "L3 cache: 16MB, 16-way associative. 64 byte line size." },
+	{ 0x78,  MB(1), "L3 cache: 1MB, sectored, 8-way associative. 64 byte line size." },
 	{ 0xd0,   512, "L3 cache: 512KB, 4-way associative. 64 byte line size." },
-	{ 0xd1,  1024, "L3 cache: 1MB, 4-way associative. 64 byte line size." },
-	{ 0xd2,  2048, "L3 cache: 2MB, 4-way associative. 64 byte line size." },
-	{ 0xd6,  1024, "L3 cache: 1MB, 8-way associative. 64 byte line size." },
-	{ 0xd7,  2048, "L3 cache: 2MB, 8-way associative. 64 byte line size." },
-	{ 0xd8,  4096, "L3 cache: 4MB, 8-way associative. 64 byte line size." },
-	{ 0xdc,  2048, "L3 cache: 2MB, 12-way associative. 64 byte line size." },
-	{ 0xdd,  4096, "L3 cache: 4MB, 12-way associative. 64 byte line size." },
-	{ 0xe2,  2048, "L3 cache: 2MB, 16-way associative. 64 byte line size." },
-	{ 0xe3,  4096, "L3 cache: 4MB, 16-way associative. 64 byte line size." },
-	{ 0xe4,  8192, "L3 cache: 8MB, 16-way associative. 64 byte line size." },
-	{ 0xea, 12288, "L3 cache: 12MB, 24-way associative. 64 byte line size." },
-	{ 0xeb, 18432, "L3 cache: 18MB, 24-way associative. 64 byte line size." },
-	{ 0xec, 24576, "L3 cache: 24MB, 24-way associative. 64 byte line size." },
-	{ 0xde,  8192, "L3 cache: 8MB, 12-way associative. 64 byte line size." },
+	{ 0xd1,  MB(1), "L3 cache: 1MB, 4-way associative. 64 byte line size." },
+	{ 0xd2,  MB(2), "L3 cache: 2MB, 4-way associative. 64 byte line size." },
+	{ 0xd6,  MB(1), "L3 cache: 1MB, 8-way associative. 64 byte line size." },
+	{ 0xd7,  MB(2), "L3 cache: 2MB, 8-way associative. 64 byte line size." },
+	{ 0xd8,  MB(4), "L3 cache: 4MB, 8-way associative. 64 byte line size." },
+	{ 0xdc,  MB(2), "L3 cache: 2MB, 12-way associative. 64 byte line size." },
+	{ 0xdd,  MB(4), "L3 cache: 4MB, 12-way associative. 64 byte line size." },
+	{ 0xe2,  MB(2), "L3 cache: 2MB, 16-way associative. 64 byte line size." },
+	{ 0xe3,  MB(4), "L3 cache: 4MB, 16-way associative. 64 byte line size." },
+	{ 0xe4,  MB(8), "L3 cache: 8MB, 16-way associative. 64 byte line size." },
+	{ 0xea, MB(12), "L3 cache: 12MB, 24-way associative. 64 byte line size." },
+	{ 0xeb, MB(18), "L3 cache: 18MB, 24-way associative. 64 byte line size." },
+	{ 0xec, MB(24), "L3 cache: 24MB, 24-way associative. 64 byte line size." },
+	{ 0xde,  MB(8), "L3 cache: 8MB, 12-way associative. 64 byte line size." },
 	{ 0, 0, NULL }
 };
 
 static struct _cache_table L3_cache_table[] =
 {
 	{ 0x22,  512, "L3 cache: 512KB, 4-way associative. 64 byte line size." },
-	{ 0x23, 1024, "L3 cache: 1MB, 8-way associative. 64 byte line size." },
-	{ 0x25, 2048, "L3 cache: 2MB, 8-way associative. 64 byte line size." },
-	{ 0x29, 4096, "L3 cache: 4MB, 8-way associative. 64 byte line size." },
+	{ 0x23, MB(1), "L3 cache: 1MB, 8-way associative. 64 byte line size." },
+	{ 0x25, MB(2), "L3 cache: 2MB, 8-way associative. 64 byte line size." },
+	{ 0x29, MB(4), "L3 cache: 4MB, 8-way associative. 64 byte line size." },
 	{ 0, 0, NULL }
 };
 
