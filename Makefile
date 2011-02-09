@@ -86,6 +86,7 @@ X86INFO_SRC =\
 	mptable.c\
 	get_model_name.c\
 	mtrr.c \
+	apic.c \
 	connector.c\
 \
 	bench/benchmarks.c\

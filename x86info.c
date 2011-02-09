@@ -14,6 +14,7 @@
 
 #include "Intel/Intel.h"
 
+int show_apic=0;
 int show_bench=0;
 int show_bios=0;
 int show_bluesmoke=0;
@@ -55,6 +56,7 @@ static void usage (char *programname)
 -a,   --all\n\
       --all-cpus\n\
       --addr\n\
+      --apic\n\
       --bench\n\
       --bios\n\
       --bugs\n\
@@ -84,6 +86,7 @@ static void parse_command_line (int argc, char **argv)
 	for (argp = argv+1; argp <= argv + argc && (arg = *argp); argp++) {
 		if ((!strcmp(arg, "-a") || !strcmp(arg, "--all"))) {
 //			show_bench = 1;
+			show_apic = 1;
 			show_addr_sizes = 1;
 			show_bios = 1;
 			show_bluesmoke = 1;
@@ -108,6 +111,11 @@ static void parse_command_line (int argc, char **argv)
 
 		if (!strcmp(arg, "--addr"))
 			show_addr_sizes = 1;
+
+		if (!strcmp(arg, "--apic")) {
+			need_root = 1;
+			show_apic = 1;
+		}
 
 		if (!strcmp(arg, "--bench"))
 			show_bench = 1;
@@ -435,6 +443,12 @@ int main (int argc, char **argv)
 		if (user_is_root) {
 			if (show_mtrr)
 				dump_mtrrs(cpu);
+		}
+
+		/* Info that requires root access */
+		if (user_is_root) {
+			if (show_apic)
+				dump_apics(cpu);
 		}
 
 		if (show_addr_sizes)

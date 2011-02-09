@@ -158,6 +158,7 @@ extern void dumpmsr_bin (int cpunum, unsigned int msr, int size);
 extern void dumpregs(int cpunum, unsigned int begin, unsigned int end);
 
 extern void dump_mtrrs (struct cpudata *cpu);
+extern void dump_apics (struct cpudata *cpu);
 
 extern void estimate_MHz(struct cpudata *cpu);
 extern int HaveCPUID(void);
@@ -198,6 +199,7 @@ extern int silent;
 extern int user_is_root;
 
 #define X86_FEATURE_MTRR	1<<12
+#define X86_FEATURE_APIC	1<<9
 
 #define _GNU_SOURCE
 #define __USE_GNU
