@@ -116,7 +116,7 @@ void display_Intel_info(struct cpudata *cpu)
 	if (show_msr) {
 		if (cpu->family == 0xf)
 			dump_p4_MSRs(cpu);
-		if (cpu->family == 0x6 && (cpu->model == 9 || cpu->model == 13))
+		if (cpu->family == 0x6 && (cpu->model == 9 || model(cpu) >= 13))
 			dump_centrino_MSRs(cpu);
 	}
 
