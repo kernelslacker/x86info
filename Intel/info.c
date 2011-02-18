@@ -98,17 +98,19 @@ static void decode_brand(struct cpudata *cpu)
 
 void display_Intel_info(struct cpudata *cpu)
 {
-	printf("Type: %u (", cpu->type);
-	switch (cpu->type) {
-	case 0:	printf("Original OEM");
-		break;
-	case 1:	printf("Overdrive");
-		break;
-	case 2:	printf("Dual-capable");
-		break;
-	case 3:	printf("Reserved");
-		break;
+	if (cpu->type != 3) {
+		printf("Type: %u (", cpu->type);
+		switch (cpu->type) {
+		case 0:	printf("Original OEM");
+			break;
+		case 1:	printf("Overdrive");
+			break;
+		case 2:	printf("Dual-capable");
+			break;
+		}
+		printf(")\n");
 	}
+
 
 	if (cpu->brand > 0)
 		decode_brand(cpu);
