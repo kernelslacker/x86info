@@ -23,10 +23,10 @@ void dump_centrino_MSRs(struct cpudata *cpu)
 
 	printf("Performance MSRs:\n");
 	if (read_msr(cpu->number, MSR_IA32_PERF_STATUS, &val) == 1)
-		printf("  MSR_IA32_PERF_STATUS: %llx\n", val);
+		printf("  MSR_IA32_PERF_STATUS: 0x%llx\n", val);
 
 	if (read_msr(cpu->number, MSR_IA32_MISC_ENABLE, &val) == 1) {
-		printf("  MSR_IA32_MISC_ENABLE: %llx", val);
+		printf("  MSR_IA32_MISC_ENABLE: 0x%llx", val);
 		printf(" [Enabled: ");
 		if (val & (1<<3)) {
 			printf("TCC ");
@@ -50,11 +50,11 @@ void dump_centrino_MSRs(struct cpudata *cpu)
 
 	printf("Thermal MSRs:\n");
 	if (tcc && read_msr(cpu->number, MSR_PM_THERM2_CTL, &val) == 1) { /* THERM2_CTL */
-		printf("  MSR_PM_THERM2_CTL: %llx, [Thermal monitor: %d]\n",
+		printf("  MSR_PM_THERM2_CTL: 0x%llx [Thermal monitor: %d]\n",
 			val, (val & (1<<16)) ? 2 : 1);
 	}
 	if (read_msr(cpu->number, MSR_IA32_THERM_CONTROL, &val) == 1) {
-		printf("  MSR_IA32_THERM_CONTROL: %llx", val);
+		printf("  MSR_IA32_THERM_CONTROL: 0x%llx ", val);
 		if (val & (1<<4)) {
 			printf("[Software-controlled clock: %f%% duty cycle]\n",
 			       ((val >> 1) & 7) / 8.);
@@ -62,7 +62,7 @@ void dump_centrino_MSRs(struct cpudata *cpu)
 			printf("[Software-controlled clock disabled (full speed)]\n");
 	}
 	if (read_msr (cpu->number, MSR_IA32_THERM_STATUS, &val) == 1) { /* THERM_STATUS */
-		printf("  MSR_IA32_THERM_STATUS: %llx", val);
+		printf("  MSR_IA32_THERM_STATUS: 0x%llx", val);
 		if (val & (1<<0|1<<1)) {
 			printf(" [");
 			if (val & (1<<0))
