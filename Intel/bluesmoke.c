@@ -23,34 +23,13 @@
 #define MC_STATUS 0x0401
 #define MC_ADDR 0x402
 
-void decode_Intel_bluesmoke(int cpunum, int family)
+static int nr_msr_banks;
+
+static void decode_mcg_ctl(int cpunum)
 {
 	unsigned long long val, val2;
-	int banks, i, extcount = 0, ctlp = 0;
 
-	if (!user_is_root)
-		return;
-
-	if (read_msr(cpunum, MCG_CAP, &val) != 1)
-		return;
-
-	banks = val & 0xff;
-
-	printf("\nNumber of reporting banks : %d\n\n", banks);
-
-	if (family == 0xf) {
-		if ((val & (1<<MCG_EXT_PBIT))) {
-			extcount = (val >> 16) & 0xff;
-			printf("Number of extended MC registers : %d\n\n", extcount);
-		}
-		else
-			printf("Erk, MCG_EXT not present! :%016llx:\n", val);
-	}
-	else
-	ctlp = val & (1<<MCG_CTL_PBIT);
-	if (ctlp == 0)
-		printf("Erk, MCG_CTL not present! :%016llx:\n", val);
-	else if (read_msr(cpunum, MCG_CTL, &val) == 1) {
+	if (read_msr(cpunum, MCG_CTL, &val) == 1) {
 		printf("MCG_CTL:\n");
 
 		printf(" Data cache check %sabled\n", val & (1<<0) ? "en" : "dis");
@@ -67,7 +46,7 @@ void decode_Intel_bluesmoke(int cpunum, int family)
 		}
 
 		printf(" Instruction cache check %sabled\n", val & (1<<1) ? "en" : "dis");
-		if (((val & (1<<1)) == 2) && (banks>1)) {
+		if (((val & (1<<1)) == 2) && (nr_msr_banks>1)) {
 			if (read_msr(cpunum, MC_CTL+4, &val2) == 1) {
 				printf("  ECC 1 bit error reporting %sabled\n", val2 & (1<<0) ? "en" : "dis");
 				printf("  ECC multi bit error reporting %sabled\n", val2 & (1<<1) ? "en" : "dis");
@@ -83,7 +62,7 @@ void decode_Intel_bluesmoke(int cpunum, int family)
 		}
 
 		printf(" Bus unit check %sabled\n", val & (1<<2) ? "en" : "dis");
-		if ((val & (1<<2)) == 4 && (banks>2)) {
+		if ((val & (1<<2)) == 4 && (nr_msr_banks>2)) {
 			if (read_msr(cpunum, MC_CTL+8, &val2) == 1) {
 				printf("  External L2 tag parity error %sabled\n", val2 & (1<<0) ? "en" : "dis");
 				printf("  L2 partial tag parity error %sabled\n", val2 & (1<<1) ? "en" : "dis");
@@ -96,7 +75,7 @@ void decode_Intel_bluesmoke(int cpunum, int family)
 		}
 
 		printf(" Load/Store unit check %sabled\n", val & (1<<3) ? "en" : "dis");
-		if ((val & (1<<3)) == 8 && (banks>3)) {
+		if ((val & (1<<3)) == 8 && (nr_msr_banks>3)) {
 			if (read_msr(cpunum, MC_CTL+12, &val2) == 1) {
 				printf("  Read data error enable (loads) %sabled\n", val2 & (1<<0) ? "en" : "dis");
 				printf("  Read data error enable (stores) %sabled\n", val2 & (1<<1) ? "en" : "dis");
@@ -104,8 +83,38 @@ void decode_Intel_bluesmoke(int cpunum, int family)
 		}
 	}
 	printf("\n");
+}
 
-	for (i=0; i<banks; i++) {
+
+void decode_Intel_bluesmoke(int cpunum, int family)
+{
+	unsigned long long val;
+	int i, extcount = 0;
+
+	if (!user_is_root)
+		return;
+
+	if (read_msr(cpunum, MCG_CAP, &val) != 1)
+		return;
+
+	nr_msr_banks = val & 0xff;
+
+	printf("Machine check MSRs:\n");
+	printf("Number of reporting banks : %d\n\n", nr_msr_banks);
+
+	if (family == 0xf) {
+		if ((val & (1<<MCG_EXT_PBIT))) {
+			extcount = (val >> 16) & 0xff;
+			printf("Number of extended MC registers : %d\n\n", extcount);
+		}
+		else
+			printf("Erk, MCG_EXT not present! :%016llx:\n", val);
+	}
+	else
+	if (val & (1<<MCG_CTL_PBIT))
+		decode_mcg_ctl(cpunum);
+
+	for (i=0; i < nr_msr_banks; i++) {
 		printf("Bank: %d (0x%x)\n", i, (unsigned int)MC_CTL+i*4);
 		printf("MC%dCTL:    ", i);
 		dumpmsr_bin (cpunum, MC_CTL+i*4, 64);
