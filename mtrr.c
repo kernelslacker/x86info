@@ -193,5 +193,5 @@ void dump_mtrrs(struct cpudata *cpu)
 	printf("MTRRdefType (0x2ff): ");
 	decode_mtrr_deftype(cpu->number, 0x2ff);
 
-	printf("\n\n");
+	printf("\n");
 }

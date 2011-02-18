@@ -476,6 +476,5 @@ void display_features(struct cpudata *cpu)
 {
 	show_feature_flags(cpu);
 	test_longnop();
+	printf("\n");
 }
-
-

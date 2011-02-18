@@ -187,5 +187,5 @@ void dump_apics(struct cpudata *cpu)
 
 	unmapping_apic_registers(apic_reg_buffer, APIC_REGISTER_SPACE);
 
-	printf("\n\n");
+	printf("\n");
 }

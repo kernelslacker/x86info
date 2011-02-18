@@ -110,10 +110,11 @@ void display_Intel_info(struct cpudata *cpu)
 		}
 		printf(")\n");
 	}
-
-
 	if (cpu->brand > 0)
 		decode_brand(cpu);
+	printf("\n");
+	/*end of basic identify info*/
+
 
 	if (show_msr) {
 		if (cpu->family == 0xf)

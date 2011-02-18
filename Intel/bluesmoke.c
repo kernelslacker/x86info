@@ -100,7 +100,7 @@ void decode_Intel_bluesmoke(int cpunum, int family)
 	nr_msr_banks = val & 0xff;
 
 	printf("Machine check MSRs:\n");
-	printf("Number of reporting banks : %d\n\n", nr_msr_banks);
+	printf("Number of reporting banks : %d\n", nr_msr_banks);
 
 	if (family == 0xf) {
 		if ((val & (1<<MCG_EXT_PBIT))) {
@@ -122,6 +122,6 @@ void decode_Intel_bluesmoke(int cpunum, int family)
 		dumpmsr_bin (cpunum, MC_STATUS+i*4, 64);
 		printf("MC%dADDR:   ", i);
 		dumpmsr_bin (cpunum, MC_ADDR+i*4, 64);
-		printf("\n");
 	}
+	printf("\n");
 }
