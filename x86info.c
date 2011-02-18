@@ -1,5 +1,5 @@
 /*
- *  (C) 2001-2010 Dave Jones.
+ *  (C) 2001-2011 Dave Jones.
  *
  *  Licensed under the terms of the GNU GPL License version 2.
  */
@@ -322,7 +322,7 @@ int main (int argc, char **argv)
 
 	parse_command_line(argc, argv);
 	if (!silent) {
-		printf("x86info v1.28beta.  Dave Jones 2001-2010\n");
+		printf("x86info v1.28beta.  Dave Jones 2001-2011\n");
 		printf("Feedback to <davej@redhat.com>.\n\n");
 	}
 
