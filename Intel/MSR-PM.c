@@ -54,11 +54,15 @@ void dump_centrino_MSRs(struct cpudata *cpu)
 			printf("  Software-controlled clock disabled (full speed)\n");
 	}
 	if (read_msr (cpu->number, MSR_IA32_THERM_STATUS, &val) == 1) { /* THERM_STATUS */
-		printf("  Thermal status: ");
-		if (val & (1<<0))
-			printf("TooHot ");
-		if (val & (1<<1))
-			printf("WasTooHot ");
+		printf("  Thermal status: %llx", val);
+		if (val & (1<<0|1<<1)) {
+			printf(" [");
+			if (val & (1<<0))
+				printf("TooHot ");
+			if (val & (1<<1))
+				printf("WasTooHot ");
+			printf("]");
+		}
 		printf("\n");
 	}
 	printf("\n");
