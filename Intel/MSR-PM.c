@@ -13,7 +13,7 @@
 #include "../x86info.h"
 #include "Intel.h"
 
-void dump_centrino_MSRs (struct cpudata *cpu)
+void dump_centrino_MSRs(struct cpudata *cpu)
 {
 	unsigned long long val = 0;
 	int tcc = 0;
@@ -21,28 +21,10 @@ void dump_centrino_MSRs (struct cpudata *cpu)
 	if (!user_is_root)
 		return;
 
-	printf("Pentium M MSRs:\n");
+	if (read_msr(cpu->number, MSR_IA32_PERF_STATUS, &val) == 1)
+		printf("MSR_IA32_PERF_STATUS: %llx\n", val);
 
-	if (read_msr (cpu->number, MSR_IA32_PERF_STATUS, &val) == 1) {
-		/*
-		   Voltage and frequency values derived from 1300MHz
-		   Pentium M in an IBM ThinkPad X31.  Constants for
-		   voltage function derived from voltage points documented
-		   in Pentium M datasheet (Intel document 25261201.pdf,
-		   table 5), and ACPI power management tables.
-
-		   This register is specifically documented as
-		   implementation-defined, so it may not apply to
-		   other Enhanced SpeedStep enabled CPUs, or even other
-		   Pentium Ms.
-		 */
-		unsigned uv = (unsigned)val & 0xffff;
-		int volt = (uv & 0xff) * 16 + 700;
-		int mhz = 100 * (uv & 0xff00) >> 8UL;
-		printf("  Current performance mode is 0x%04x: %dMHz, %d.%dV\n",
-			uv, mhz, volt/1000, volt%1000);
-	}
-	if (read_msr (cpu->number, MSR_IA32_MISC_ENABLE, &val) == 1) {
+	if (read_msr(cpu->number, MSR_IA32_MISC_ENABLE, &val) == 1) {
 		printf("  Enabled: ");
 		if (val & (1<<3)) {
 			printf("TCC ");
