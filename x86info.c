@@ -32,13 +32,6 @@ static void separator(void)
 }
 
 
-static void display_address_sizes(struct cpudata *cpu)
-{
-	printf("Address sizes : %u bits physical, %u bits virtual\n",
-		cpu->phyaddr_bits, cpu->viraddr_bits);
-}
-
-
 static void display_detailed_info(struct cpudata *cpu)
 {
 	bind_cpu(cpu);	/* FIXME: Eventually remove once 'gather' has all the per-cpu stuff */
@@ -91,7 +84,8 @@ static void display_detailed_info(struct cpudata *cpu)
 	}
 
 	if (show_addr_sizes)
-		display_address_sizes(cpu);
+		printf("Address sizes : %u bits physical, %u bits virtual\n",
+			cpu->phyaddr_bits, cpu->viraddr_bits);
 
 	if (show_MHz) {
 		display_MHz(cpu);
