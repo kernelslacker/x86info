@@ -169,6 +169,7 @@ extern void decode_connector(enum connector type);
 extern void show_benchmarks(struct cpudata *cpu);
 extern void decode_serial_number(struct cpudata *cpu);
 
+extern void display_topology(struct cpudata *head);
 extern void show_intel_topology(struct cpudata *cpu);
 
 void decode_AMD_cacheinfo(struct cpudata *cpu);
@@ -196,6 +197,8 @@ extern struct cpudata *firstcpu;
 
 extern int used_UP;
 extern int user_is_root;
+
+extern int debug;
 
 #define X86_FEATURE_MTRR	1<<12
 #define X86_FEATURE_APIC	1<<9

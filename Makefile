@@ -89,6 +89,7 @@ X86INFO_SRC =\
 	mtrr.c \
 	apic.c \
 	connector.c\
+	topology.c\
 \
 	bench/benchmarks.c\
 	bench/MHz.c
