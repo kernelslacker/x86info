@@ -58,7 +58,6 @@ struct {
 	.reg = -1,
 };
 
-int used_UP = 0;
 
 /* getopt_long stuff */
 static struct option lopts[] = {

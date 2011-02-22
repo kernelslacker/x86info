@@ -14,8 +14,7 @@
 
 #include "Intel/Intel.h"
 
-int used_UP = 0;
-int user_is_root = 0;
+unsigned int user_is_root = 0;
 
 unsigned int nrCPUs=1;
 static unsigned int nrSMPCPUs;

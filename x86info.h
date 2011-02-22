@@ -179,8 +179,7 @@ extern unsigned int nrCPUs;
 
 extern struct cpudata *firstcpu;
 
-extern int used_UP;
-extern int user_is_root;
+extern unsigned int user_is_root;
 extern unsigned int need_root;
 
 

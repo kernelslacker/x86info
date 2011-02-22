@@ -138,7 +138,6 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 			perror(cpuname);
 		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
 			printf("%s", NATIVE_CPUID_FAILED_MSG);
-		used_UP = 1;
 
 		return;
 	}
@@ -202,10 +201,8 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	} else {
 		/* Something went wrong, just do UP and hope for the best. */
 		nodriver = 1;
-		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx)) {
+		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
 			printf("%s", NATIVE_CPUID_FAILED_MSG);
-			used_UP = 1;
-		}
 		return;
 	}
 }
