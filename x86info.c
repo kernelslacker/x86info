@@ -39,7 +39,7 @@ unsigned int all_cpus = 0;
 int debug = 0;
 int verbose = 0;
 int used_UP = 0;
-int user_is_root = 1;
+int user_is_root = 0;
 static int need_root = 0;
 
 unsigned int nrCPUs=1;
@@ -323,8 +323,8 @@ int main (int argc, char **argv)
 	unsigned int i;
 	unsigned int display_one_cpu = 1;
 
-	if (getuid() != 0)
-		user_is_root=0;
+	if (getuid() == 0)
+		user_is_root = 1;
 
 	parse_command_line(argc, argv);
 
