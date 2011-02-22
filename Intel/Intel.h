@@ -2,7 +2,7 @@
 #define _INTEL_H
 extern void decode_Intel_caches (struct cpudata *cpu, int output);
 extern void show_Intel_caches(struct cpudata *cpu);
-extern void decode_Intel_bluesmoke(int cpunum, int family);
+extern void decode_Intel_machine_check(int cpunum, int family);
 extern void dump_p4_MSRs(struct cpudata *cpu);
 extern void dump_p6_MSRs(struct cpudata *cpu);
 extern void dump_performance_MSRs(struct cpudata *cpu);

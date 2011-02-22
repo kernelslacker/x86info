@@ -175,7 +175,7 @@ void decode_AMD_cacheinfo(struct cpudata *cpu);
 
 extern int show_bench;
 extern int show_bios;
-extern int show_bluesmoke;
+extern int show_machine_check;
 extern int show_bugs;
 extern int show_cacheinfo;
 extern int show_connector;

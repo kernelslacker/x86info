@@ -732,8 +732,8 @@ void display_AMD_info(struct cpudata *cpu)
 			dump_athlon_MSR(cpu);
 	}
 
-	if (show_bluesmoke)
-		decode_athlon_bluesmoke(cpu->number);
+	if (show_machine_check)
+		decode_athlon_machine_check(cpu->number);
 
 	if (show_microcode && family(cpu) >= 0xf)
 		show_patch_level(cpu);

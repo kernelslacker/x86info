@@ -41,7 +41,7 @@ lsmsr: $(LSMSR_TMP_HEADERS) $(LSMSR_OBJS)
 
 X86INFO_SRC =\
 	AMD/identify.c\
-	AMD/bluesmoke.c\
+	AMD/machine_check.c\
 	AMD/MSR-Athlon.c\
 	AMD/MSR-K6.c\
 	AMD/powernow.c\
@@ -55,7 +55,7 @@ X86INFO_SRC =\
 	Intel/identify-family6-extended.c\
 	Intel/identify-family15.c\
 	Intel/info.c\
-	Intel/bluesmoke.c\
+	Intel/machine_check.c\
 	Intel/cachesize.c\
 	Intel/eblcr.c\
 	Intel/MSR-P4.c\

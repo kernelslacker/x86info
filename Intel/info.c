@@ -134,8 +134,8 @@ void display_Intel_info(struct cpudata *cpu)
 	}
 
 	/* FIXME: Bit test for MCA here!*/
-	if (show_bluesmoke)
-		decode_Intel_bluesmoke(cpu->number, cpu->family);
+	if (show_machine_check)
+		decode_Intel_machine_check(cpu->number, cpu->family);
 
 	if (show_microcode)
 		decode_microcode(cpu);

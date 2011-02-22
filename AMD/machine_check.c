@@ -21,7 +21,7 @@
 #define MC_ADDR 0x402
 #define MC_MISC 0x403
 
-void decode_athlon_bluesmoke(int cpunum)
+void decode_athlon_machine_check(int cpunum)
 {
 	unsigned long long val, val2;
 	unsigned int banks, i, ctlp = 0;

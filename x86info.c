@@ -17,7 +17,7 @@
 int show_apic=0;
 int show_bench=0;
 int show_bios=0;
-int show_bluesmoke=0;
+int show_machine_check=0;
 int show_bugs=0;
 int show_cacheinfo=0;
 int show_connector=0;
@@ -63,6 +63,7 @@ static void usage (char *programname)
       --connector\n\
       --debug\n\
 -f,   --flags\n\
+-mce, --show-machine-check\n\
 -mhz, --mhz\n\
       --microcode\n\
 -mp,  --mptable\n\
@@ -71,7 +72,6 @@ static void usage (char *programname)
       --mtrr\n\
       --pm\n\
 -r,   --registers\n\
--s,   --show-bluesmoke\n\
 -u,   --urls\n\
 -v,   --verbose\n\
 \n", programname);
@@ -93,7 +93,7 @@ static void parse_command_line (int argc, char **argv)
 				need_root = 1;
 				show_mptable =1;
 				show_mtrr = 1;
-				show_bluesmoke = 1;
+				show_machine_check = 1;
 				show_eblcr =1;
 			}
 			show_addr_sizes = 1;
@@ -175,9 +175,9 @@ static void parse_command_line (int argc, char **argv)
 		if ((!strcmp(arg, "-r") || !strcmp(arg, "--registers")))
 			show_registers = 1;
 
-		if ((!strcmp(arg, "-s") || !strcmp(arg, "--show-bluesmoke"))) {
+		if ((!strcmp(arg, "-mce") || !strcmp(arg, "--show-machine-check"))) {
 			need_root = 1;
-			show_bluesmoke = 1;
+			show_machine_check = 1;
 		}
 
 		if ((!strcmp(arg, "-u") || !strcmp(arg, "--urls")))
