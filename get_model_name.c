@@ -125,5 +125,5 @@ void get_model_name(struct cpudata *cpu)
 		}
 	}
 
-	printf("Processor name string: %s\n", cp);
+	printf("Processor name string (BIOS programmed): %s\n", cp);
 }

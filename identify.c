@@ -98,12 +98,12 @@ void show_info(struct cpudata *cpu)
 	printf("EFamily: %u EModel: %u Family: %u Model: %u Stepping: %u\n",
 	       cpu->efamily, cpu->emodel, cpu->family,
 	       model(cpu), cpu->stepping);
-	printf("CPU Model: %s\n", cpu->name);
+	printf("CPU Model (x86info's best guess): %s\n", cpu->name);
+	get_model_name(cpu);
+	printf("\n");
 
 	if (!verbose)
 		return;
-
-	get_model_name(cpu);
 
 	switch (cpu->vendor) {
 	case VENDOR_AMD:
