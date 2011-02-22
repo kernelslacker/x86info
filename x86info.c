@@ -34,7 +34,8 @@ static void separator(void)
 
 static void display_address_sizes(struct cpudata *cpu)
 {
-	printf("Address sizes : %u bits physical, %u bits virtual\n",cpu->phyaddr_bits,cpu->viraddr_bits);
+	printf("Address sizes : %u bits physical, %u bits virtual\n",
+		cpu->phyaddr_bits, cpu->viraddr_bits);
 }
 
 
