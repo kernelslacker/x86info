@@ -84,25 +84,27 @@ static void parse_command_line (int argc, char **argv)
 
 	for (argp = argv+1; argp <= argv + argc && (arg = *argp); argp++) {
 		if ((!strcmp(arg, "-a") || !strcmp(arg, "--all"))) {
-//			show_bench = 1;
-			show_apic = 1;
+
+			if (user_is_root == 1) {
+				show_apic = 1;
+				show_bios = 1;
+				show_msr = 1;
+				show_microcode = 1;
+				need_root = 1;
+				show_mptable =1;
+				show_mtrr = 1;
+				show_bluesmoke = 1;
+				show_eblcr =1;
+			}
 			show_addr_sizes = 1;
-			show_bios = 1;
-			show_bluesmoke = 1;
 			show_bugs = 1;
 			show_cacheinfo = 1;
 			show_connector = 1;
-			show_eblcr =1;
 			show_flags = 1;
-			show_microcode = 1;
-			show_mptable =1;
-			show_msr = 1;
 			show_MHz = 1;
-			show_mtrr = 1;
 			show_pm = 1;
 			show_registers = 1;
 			show_urls = 1;
-			need_root = 1;
 		}
 
 		if (!strcmp(arg, "--all-cpus"))
@@ -319,6 +321,9 @@ int main (int argc, char **argv)
 	unsigned int i;
 	struct cpudata *cpu=NULL, *head=NULL, *tmp;
 
+	if (getuid() != 0)
+		user_is_root=0;
+
 	parse_command_line(argc, argv);
 
 	printf("x86info v1.28beta.  Dave Jones 2001-2011\n");
@@ -329,9 +334,6 @@ int main (int argc, char **argv)
 		printf("No further information available for this CPU.\n");
 		exit(EXIT_SUCCESS);
 	}
-
-	if (getuid() != 0)
-		user_is_root=0;
 
 	if (need_root && !user_is_root) {
 		printf("Need to be root to use specified options.\n");
