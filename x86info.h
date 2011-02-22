@@ -161,7 +161,9 @@ void dumpregs(int cpunum, unsigned int begin, unsigned int end);
 void dump_mtrrs(struct cpudata *cpu);
 void dump_apics(struct cpudata *cpu);
 
+void display_MHz(struct cpudata *cpu);
 void estimate_MHz(struct cpudata *cpu);
+
 int HaveCPUID(void);
 void interpret_eblcr(u32 lo);
 int enumerate_cpus(void);

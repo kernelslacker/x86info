@@ -15,6 +15,18 @@
 #include "../x86info.h"
 #include "bench.h"
 
+void display_MHz(struct cpudata *cpu)
+{
+	if (cpu->MHz < 1000)
+		printf("%uMHz", cpu->MHz);
+	else {
+		int a = (cpu->MHz / 1000);
+		int b = ((cpu->MHz % 1000)/100);
+		int c = (a*1000)+(b*100);
+		printf("%u.%u%uGHz", a, b, (cpu->MHz - c)/10);
+	}
+}
+
 static volatile int nosignal = 0;
 
 static void sighandler(int sig __attribute__((unused)))
