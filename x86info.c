@@ -407,20 +407,6 @@ int main (int argc, char **argv)
 	}
 
 	nrCPUs = sysconf(_SC_NPROCESSORS_ONLN);
-
-	printf("Found %u CPU", nrCPUs);
-	if (nrCPUs > 1)
-		printf("s");
-
-	/* Check mptable if present. This way we get number of CPUs
-	   on SMP systems that have booted UP kernels. */
-	if (user_is_root) {
-		nrSMPCPUs = enumerate_cpus();
-		if (nrSMPCPUs > nrCPUs)
-			printf(", but found %ud CPUs in MPTable.", nrSMPCPUs);
-	}
-	printf("\n");
-
 	/*
 	 * can't have less than 1 CPU, or more than
 	 * 65535 (some arbitrary large number)
@@ -429,11 +415,6 @@ int main (int argc, char **argv)
 		printf("CPU count is bogus: defaulting to 1 CPU.\n");
 		nrCPUs = 1;
 	}
-
-	if (show_mptable && user_is_root)
-		display_mptable();
-
-	separator();
 
 
 	/* First we gather information */
@@ -465,14 +446,10 @@ int main (int argc, char **argv)
 		identify(cpu);
 	}
 
-
-	cpu = firstcpu;
-
-	/* Now we display the info we gathered */
-
-	/* First check to see if all CPUs are the same. */
+	/* check to see if all CPUs are the same. */
 	display_one_cpu = 1;
 
+	cpu = firstcpu;
 	if (nrCPUs > 1) {
 		for (i = 0; i < nrCPUs; i++) {
 			cpu = cpu->next;
@@ -489,24 +466,42 @@ int main (int argc, char **argv)
 			if (cpu->stepping != firstcpu->stepping)
 				display_one_cpu = 0;
 
-			if (display_one_cpu == 0) {
+			if (display_one_cpu == 0)
 				break;
-			}
 		}
 	}
 
-	/* force to display all cpus. */
+	/* force to display all cpus if the user requested it. */
 	if (all_cpus == 1)
 		display_one_cpu = 0;
 
+
+	if (show_mptable && user_is_root)
+		display_mptable();
+
+
+	/* Now we display the info we gathered */
 	cpu = firstcpu;
 
 	if (display_one_cpu == 1) {
-		printf("All CPUs:\n");
+		if (nrCPUs >= 2)
+			printf("Found %d identical CPUs", nrCPUs);
+
+		/* Check mptable if present. This way we get number of CPUs
+		   on SMP systems that have booted UP kernels. */
+		if (user_is_root) {
+			nrSMPCPUs = enumerate_cpus();
+
+			if (nrSMPCPUs > nrCPUs)
+				printf(" (but found %ud CPUs in MPTable!)", nrSMPCPUs);
+		}
+		printf("\n");
+
 		display_detailed_info(cpu);
 	} else {
+		printf("Found %d CPUs.\n", nrCPUs);
 		for (i = 0; i < nrCPUs; i++) {
-			printf("CPU #%u\n", i+1);
+			printf("CPU #%u:\n", i+1);
 
 			display_detailed_info(cpu);
 
