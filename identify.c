@@ -103,6 +103,9 @@ void show_info(struct cpudata *cpu)
 	       model(cpu), cpu->stepping);
 	printf("CPU Model: %s\n", cpu->name);
 
+	if (!verbose)
+		return;
+
 	get_model_name(cpu);
 
 	switch (cpu->vendor) {
