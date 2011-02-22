@@ -380,12 +380,47 @@ static void display_detailed_info(struct cpudata *cpu)
 		show_benchmarks(cpu);
 }
 
+/*
+ * check to see if all CPUs are the same.
+ * returns 1 if all cpus are the same, 0 if something is different
+ */
+static int check_cpu_similarity()
+{
+	struct cpudata *cpu;
+	unsigned int i;
+
+	/* force to display all cpus if the user requested it. */
+	if (all_cpus == 1)
+		return 0;
+
+	cpu = firstcpu;
+	if (nrCPUs > 1) {
+		for (i = 0; i < nrCPUs; i++) {
+			cpu = cpu->next;
+			if (!cpu)
+				return 1;
+
+			if (cpu->efamily != firstcpu->efamily)
+				return 0;
+			if (cpu->emodel != firstcpu->emodel)
+				return 0;
+			if (cpu->family != firstcpu->family)
+				return 0;
+			if (model(cpu) != model(firstcpu))
+				return 0;
+			if (cpu->stepping != firstcpu->stepping)
+				return 0;
+		}
+	}
+	return 1;
+}
+
 
 int main (int argc, char **argv)
 {
 	struct cpudata *cpu=NULL, *head=NULL, *tmp;
 	unsigned int i;
-	unsigned int display_one_cpu;
+	unsigned int display_one_cpu = 1;
 
 	if (getuid() != 0)
 		user_is_root=0;
@@ -446,35 +481,7 @@ int main (int argc, char **argv)
 		identify(cpu);
 	}
 
-	/* check to see if all CPUs are the same. */
-	display_one_cpu = 1;
-
-	cpu = firstcpu;
-	if (nrCPUs > 1) {
-		for (i = 0; i < nrCPUs; i++) {
-			cpu = cpu->next;
-			if (!cpu)
-				break;
-			if (cpu->efamily != firstcpu->efamily)
-				display_one_cpu = 0;
-			if (cpu->emodel != firstcpu->emodel)
-				display_one_cpu = 0;
-			if (cpu->family != firstcpu->family)
-				display_one_cpu = 0;
-			if (model(cpu) != model(firstcpu))
-				display_one_cpu = 0;
-			if (cpu->stepping != firstcpu->stepping)
-				display_one_cpu = 0;
-
-			if (display_one_cpu == 0)
-				break;
-		}
-	}
-
-	/* force to display all cpus if the user requested it. */
-	if (all_cpus == 1)
-		display_one_cpu = 0;
-
+	display_one_cpu = check_cpu_similarity();
 
 	if (show_mptable && user_is_root)
 		display_mptable();
