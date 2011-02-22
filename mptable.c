@@ -72,7 +72,6 @@ static int	ncpu;
 static int	nbus;
 static int	napic;
 static int	nintr;
-static int verbose_mp;
 
 typedef struct TABLE_ENTRY {
 	u8	type;
@@ -176,24 +175,22 @@ static void processorEntry(void)
 	/* count it */
 	++ncpu;
 
-	if (verbose_mp) {
-		printf("#\t%2d", (int) entry.apicID);
-		printf("\t 0x%2x", (unsigned int) entry.apicVersion);
+	printf("#\t%2d", (int) entry.apicID);
+	printf("\t 0x%2x", (unsigned int) entry.apicVersion);
 
-		printf("\t %s, %s",
-				(entry.cpuFlags & PROCENTRY_FLAG_BP) ? "BSP" : "AP",
-				(entry.cpuFlags & PROCENTRY_FLAG_EN) ? "usable" : "unusable");
+	printf("\t %s, %s",
+		(entry.cpuFlags & PROCENTRY_FLAG_BP) ? "BSP" : "AP",
+		(entry.cpuFlags & PROCENTRY_FLAG_EN) ? "usable" : "unusable");
 
-		t = (int) entry.cpuSignature;
-		family = (t >> 8) & 0xf;
-		model = (t >> 4) & 0xf;
-		if (family == 0xf) {
-			family += (t >> 20) & 0xff;
-			model += (t >> 12) & 0xf0;
-		}
-		printf("\t %d\t %d\t %d", family, model, t & 0xf);
-		printf("\t 0x%04x\n", entry.featureFlags);
+	t = (int) entry.cpuSignature;
+	family = (t >> 8) & 0xf;
+	model = (t >> 4) & 0xf;
+	if (family == 0xf) {
+		family += (t >> 20) & 0xff;
+		model += (t >> 12) & 0xf0;
 	}
+	printf("\t %d\t %d\t %d", family, model, t & 0xf);
+	printf("\t 0x%04x\n", entry.featureFlags);
 }
 
 
@@ -230,15 +227,13 @@ static int MPConfigTableHeader(u32 pap)
 	nintr = 0;
 
 	/* process all the CPUs */
-	if (verbose_mp)
-		printf("MP Table:\n#\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
+	printf("MP Table:\n#\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
 	for (c = count; c; c--) {
 		if (readType() == 0)
 			processorEntry();
 		totalSize -= basetableEntryTypes[ 0 ].length;
 	}
-	if (verbose_mp)
-		printf("\n");
+	printf("\n");
 
 	return SMP_YES;
 }
@@ -379,40 +374,26 @@ int enumerate_cpus(void)
 	return 1;
 }
 
-int issmp(int verb)
+void display_mptable()
 {
 	vm_offset_t paddr;
 	mpfps_t mpfps;
 
-	verbose_mp=verb;
 	/* open physical memory for access to MP structures */
 	if ((pfd = open("/dev/mem", O_RDONLY)) < 0) {
-		fprintf(stderr, "issmp(): /dev/mem: %s\n", strerror(errno));
-		return -1;
+		fprintf(stderr, "%s(): /dev/mem: %s\n", __func__, strerror(errno));
+		return;
 	}
 
 	/* probe for MP structures */
 	if (apic_probe(&paddr) <= 0)
-		return SMP_NO;
+		return;
 
 	/* read in mpfps structure*/
 	seekEntry(paddr);
 	readEntry(&mpfps, sizeof(mpfps_t));
 
-	/* check whether an MP config table exists */
+	/* parse an MP config table if it exists */
 	if (!mpfps.mpfb1)
-		return MPConfigTableHeader(mpfps.pap);
-
-	return SMP_NO;
+		(void) MPConfigTableHeader(mpfps.pap);
 }
-
-#ifdef STANDALONE
-int main()
-{
-	int numcpu, smp;
-	numcpu = enumerate_cpus();
-	smp = issmp(1);
-	printf("SMP: %d\nCPU: %d\n", smp, numcpu);
-	return 0;
-}
-#endif

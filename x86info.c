@@ -361,7 +361,7 @@ int main (int argc, char **argv)
 	}
 
 	if (show_mptable && user_is_root)
-		(void)issmp(1);		// FIXME: issmp should become 'show_mptable'
+		display_mptable();
 
 	separator();
 
