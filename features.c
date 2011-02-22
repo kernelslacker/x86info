@@ -15,7 +15,7 @@ static void flag_decode(unsigned long reg, const char * reg_desc, const char *fl
 {
 	unsigned int i;
 
-	for (i=0; i<32; i++) {
+	for (i = 0; i < 32; i++) {
 		if (reg & (1<<i)) {
 			if (!verbose) {
 			    if (flags[i])

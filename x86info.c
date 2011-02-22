@@ -196,7 +196,7 @@ static void separator(void)
 {
 	int j;
 
-	for (j=0; j<74; j++)
+	for (j = 0; j < 74; j++)
 		printf("-");
 	printf("\n");
 }
@@ -244,7 +244,7 @@ static void display_topology(struct cpudata *head)
 	if (debug == 1) {
 		cpu = head;
 		printf("cpu->phys_proc_id: ");
-		for (i=0; i<nrCPUs; i++) {
+		for (i = 0; i < nrCPUs; i++) {
 			printf("%d, ", cpu->phys_proc_id);
 			cpu = cpu->next;
 		}
@@ -252,7 +252,7 @@ static void display_topology(struct cpudata *head)
 
 		cpu = head;
 		printf("cpu->x86_max_cores: ");
-		for (i=0; i<nrCPUs; i++) {
+		for (i = 0; i < nrCPUs; i++) {
 			printf("%d, ", cpu->x86_max_cores);
 			cpu = cpu->next;
 		}
@@ -260,7 +260,7 @@ static void display_topology(struct cpudata *head)
 
 		cpu = head;
 		printf("cpu->cpu_core_id: ");
-		for (i=0; i<nrCPUs; i++) {
+		for (i = 0; i < nrCPUs; i++) {
 			printf("%d, ", cpu->cpu_core_id);
 			cpu = cpu->next;
 		}
@@ -268,19 +268,19 @@ static void display_topology(struct cpudata *head)
 	}
 
 	sockets = malloc(nrCPUs);
-	if (sockets==NULL)
+	if (sockets == NULL)
 		return;
 
-	for (i=0; i<nrCPUs; i++)
+	for (i = 0; i < nrCPUs; i++)
 		sockets[i]=0;
 
 	cpu = head;
-	for (i=0; i<nrCPUs; i++) {
+	for (i = 0; i < nrCPUs; i++) {
 		sockets[cpu->phys_proc_id]++;
 		cpu = cpu->next;
 	}
 
-	for (i=0; i<nrCPUs; i++) {
+	for (i = 0; i < nrCPUs; i++) {
 		if (debug == 1)
 			printf("Socket %d: %d threads\n", i, sockets[i]);
 		if (sockets[i] != 0)	/* only count populated sockets */
@@ -371,7 +371,7 @@ int main (int argc, char **argv)
 
 	/* Iterate over the linked list. */
 
-	for (i=0; i<nrCPUs; i++) {
+	for (i = 0; i < nrCPUs; i++) {
 		cpu = malloc (sizeof (struct cpudata));
 		if (!cpu) {
 			printf("Out of memory\n");
@@ -467,14 +467,14 @@ int main (int argc, char **argv)
 	if (cpu->vendor == VENDOR_INTEL)
 		display_topology(head);
 
-	printf (" running at an estimated ");
+	printf(" running at an estimated ");
 	display_MHz(cpu);
 	printf("\n");
 
 out:
 	/* Tear down the linked list. */
 	cpu = head;
-	for (i=0; i<nrCPUs; i++) {
+	for (i = 0; i < nrCPUs; i++) {
 		if (cpu->info_url)
 			free(cpu->info_url);
 		if (cpu->datasheet_url)

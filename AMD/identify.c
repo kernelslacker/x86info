@@ -28,7 +28,7 @@ static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 
 	s[0] = 0;
 	cont = 0;
-	for (i=0; (r != NULL) && (i<ARRAY_SIZE(k8_names)); i++) {
+	for (i = 0; (r != NULL) && (i < ARRAY_SIZE(k8_names)); i++) {
 		p = NULL;
 		id = 1<<i;
 		if (r->nameid & id)
@@ -54,7 +54,7 @@ static void set_k8_revinfo(int id, struct cpudata *c)
 
 	c->connector = 0;
 	r = NULL;
-	for (i=0; i<ARRAY_SIZE(k8_revisions); i++) {
+	for (i = 0; i < ARRAY_SIZE(k8_revisions); i++) {
 		if (k8_revisions[i].eax == id) {
 			r = &k8_revisions[i];
 			break;
@@ -119,7 +119,7 @@ static void set_fam10h_revinfo(int id, struct cpudata *c)
 	int i;
 	struct fam10h_rev *r = NULL;
 
-	for (i=0; i<ARRAY_SIZE(fam10h_revisions); i++) {
+	for (i = 0; i < ARRAY_SIZE(fam10h_revisions); i++) {
 		if (fam10h_revisions[i].eax == id) {
 			r = &fam10h_revisions[i];
 			break;
@@ -134,7 +134,7 @@ static void set_fam11h_revinfo(int id, struct cpudata *c)
 	const char *p;
 
 	p = get_fam11h_revision_name(id);
-	if(p)
+	if (p)
 		snprintf(c->name, CPU_NAME_LEN,
 			 "AMD Turion X2 Ultra Dual-Core (%s)", p);
 	else

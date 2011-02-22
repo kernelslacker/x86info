@@ -80,7 +80,7 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%d/msr", cpu);
 
 	fh = open(cpuname, O_RDONLY);
-	if (fh==-1) {
+	if (fh == -1) {
 		perror(cpuname);
 		nodriver=1;
 		return 0;
@@ -105,7 +105,7 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 		*val = hi;
 		*val = (*val<<32) | lo;
 	}
-	if (close(fh)==-1) {
+	if (close(fh) == -1) {
 		perror("close");
 		exit(EXIT_FAILURE);
 	}
@@ -120,11 +120,11 @@ void dumpmsr(int cpu, unsigned int msr, int size)
 	unsigned long long val=0;
 
 	if (read_msr(cpu, msr, &val) == 1) {
-		if (size==32){
+		if (size == 32){
 			printf("MSR: 0x%08x=0x%08lx : ", msr, (unsigned long) val);
 			binary32(val);
 		}
-		if (size==64) {
+		if (size == 64) {
 			printf("MSR: 0x%08x=0x%016llx : ", msr, val);
 			binary64(val);
 		}
@@ -138,9 +138,9 @@ void dumpmsr_bin(int cpu, unsigned int msr, int size)
 	unsigned long long val=0;
 
 	if (read_msr(cpu, msr, &val) == 1) {
-		if (size==32)
+		if (size == 32)
 			binary32(val);
-		if (size==64)
+		if (size == 64)
 			binary64(val);
 		return;
 	}

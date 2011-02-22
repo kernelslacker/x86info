@@ -13,7 +13,7 @@ void dumpregs(int cpunum, unsigned int begin, unsigned int end)
         unsigned int eax, ebx, ecx, edx;
 
         /* Dump all the CPUID results in raw hex */
-        for (i=begin; i<=end; i++) {
+        for (i = begin; i <= end; i++) {
                 cpuid(cpunum, i, &eax, &ebx, &ecx, &edx);
                 printf("eax in: 0x%08x, eax = %08x ebx = %08x ecx = %08x edx = %08x\n", i, eax, ebx, ecx, edx);
         }
