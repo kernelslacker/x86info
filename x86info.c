@@ -333,8 +333,10 @@ int main (int argc, char **argv)
 	if (getuid() != 0)
 		user_is_root=0;
 
-	if (need_root && !user_is_root)
+	if (need_root && !user_is_root) {
 		printf("Need to be root to use specified options.\n");
+		exit(EXIT_FAILURE);
+	}
 
 	nrCPUs = sysconf(_SC_NPROCESSORS_ONLN);
 
