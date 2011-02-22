@@ -486,7 +486,6 @@ int main (int argc, char **argv)
 	if (show_mptable && user_is_root)
 		display_mptable();
 
-
 	/* Now we display the info we gathered */
 	cpu = firstcpu;
 

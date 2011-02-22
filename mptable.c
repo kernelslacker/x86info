@@ -72,6 +72,7 @@ static int	ncpu;
 static int	nbus;
 static int	napic;
 static int	nintr;
+static int	silent;
 
 typedef struct TABLE_ENTRY {
 	u8	type;
@@ -175,22 +176,25 @@ static void processorEntry(void)
 	/* count it */
 	++ncpu;
 
-	printf("#\t%2d", (int) entry.apicID);
-	printf("\t 0x%2x", (unsigned int) entry.apicVersion);
+	if (!silent) {
+		printf("#\t%2d", (int) entry.apicID);
+		printf("\t 0x%2x", (unsigned int) entry.apicVersion);
 
-	printf("\t %s, %s",
-		(entry.cpuFlags & PROCENTRY_FLAG_BP) ? "BSP" : "AP",
-		(entry.cpuFlags & PROCENTRY_FLAG_EN) ? "usable" : "unusable");
+		printf("\t %s, %s",
+			(entry.cpuFlags & PROCENTRY_FLAG_BP) ? "BSP" : "AP",
+			(entry.cpuFlags & PROCENTRY_FLAG_EN) ? "usable" : "unusable");
 
-	t = (int) entry.cpuSignature;
-	family = (t >> 8) & 0xf;
-	model = (t >> 4) & 0xf;
-	if (family == 0xf) {
-		family += (t >> 20) & 0xff;
-		model += (t >> 12) & 0xf0;
+		t = (int) entry.cpuSignature;
+		family = (t >> 8) & 0xf;
+		model = (t >> 4) & 0xf;
+		if (family == 0xf) {
+			family += (t >> 20) & 0xff;
+			model += (t >> 12) & 0xf0;
+		}
+
+		printf("\t %d\t %d\t %d", family, model, t & 0xf);
+		printf("\t 0x%04x\n", entry.featureFlags);
 	}
-	printf("\t %d\t %d\t %d", family, model, t & 0xf);
-	printf("\t 0x%04x\n", entry.featureFlags);
 }
 
 
@@ -227,7 +231,8 @@ static int MPConfigTableHeader(u32 pap)
 	nintr = 0;
 
 	/* process all the CPUs */
-	printf("MP Table:\n#\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
+	if (!silent)
+		printf("MP Table:\n#\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
 	for (c = count; c; c--) {
 		if (readType() == 0)
 			processorEntry();
@@ -352,6 +357,8 @@ int enumerate_cpus(void)
 	vm_offset_t paddr;
 	mpfps_t mpfps;
 
+	silent = 1;
+
 	/* open physical memory for access to MP structures */
 	if ((pfd = open("/dev/mem", O_RDONLY)) < 0) {
 		fprintf(stderr, "enumerate_cpus(): /dev/mem: %s\n", strerror(errno));
@@ -378,6 +385,8 @@ void display_mptable()
 {
 	vm_offset_t paddr;
 	mpfps_t mpfps;
+
+	silent = 0;
 
 	/* open physical memory for access to MP structures */
 	if ((pfd = open("/dev/mem", O_RDONLY)) < 0) {
