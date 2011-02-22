@@ -138,7 +138,8 @@ void identify_sis(struct cpudata *cpu);
 void display_AMD_info(struct cpudata *cpu);
 void display_Cyrix_info(struct cpudata *cpu);
 void display_centaur_info(struct cpudata *cpu);
-void display_Intel_info(struct cpudata *cpu);
+void display_basic_Intel_info(struct cpudata *cpu);
+void display_extended_Intel_info(struct cpudata *cpu);
 
 void get_feature_flags(struct cpudata *cpu);
 void display_features(struct cpudata *cpu);

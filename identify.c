@@ -100,9 +100,13 @@ void show_info(struct cpudata *cpu)
 			cpu->efamily, cpu->emodel);
 	printf("Family: %u Model: %u Stepping: %u\n",
 	       cpu->family, model(cpu), cpu->stepping);
+	if (cpu->vendor == VENDOR_INTEL)
+		display_basic_Intel_info(cpu);
 	printf("CPU Model (x86info's best guess): %s\n", cpu->name);
 	get_model_name(cpu);
 	printf("\n");
+
+
 
 	if (!verbose)
 		return;
@@ -121,7 +125,7 @@ void show_info(struct cpudata *cpu)
 		break;
 
 	case VENDOR_INTEL:
-		display_Intel_info(cpu);
+		display_extended_Intel_info(cpu);
 		break;
 
 	default:

@@ -96,7 +96,7 @@ static void decode_brand(struct cpudata *cpu)
 	printf(")\n");
 }
 
-void display_Intel_info(struct cpudata *cpu)
+void display_basic_Intel_info(struct cpudata *cpu)
 {
 	if (cpu->type != 3) {
 		printf("Type: %u (", cpu->type);
@@ -112,10 +112,11 @@ void display_Intel_info(struct cpudata *cpu)
 	}
 	if (cpu->brand > 0)
 		decode_brand(cpu);
-	printf("\n");
-	/*end of basic identify info*/
+}
 
 
+void display_extended_Intel_info(struct cpudata *cpu)
+{
 	if (show_msr) {
 		if (cpu->family == 0xf)
 			dump_p4_MSRs(cpu);
