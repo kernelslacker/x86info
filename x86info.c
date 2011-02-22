@@ -316,10 +316,76 @@ static void display_topology(struct cpudata *head)
 		printf(" with hyper-threading (%d threads per core)", cpu->num_siblings);
 }
 
+
+static void display_detailed_info(struct cpudata *cpu)
+{
+	bind_cpu(cpu);	/* FIXME: Eventually remove once 'gather' has all the per-cpu stuff */
+	show_info(cpu);
+
+	if (show_registers) {
+		dumpregs(cpu->number, 0, cpu->cpuid_level);
+		if (cpu->maxei >=0x80000000)
+			dumpregs (cpu->number, 0x80000000, cpu->maxei);
+
+		if (cpu->maxei2 >=0xC0000000)
+			dumpregs (cpu->number, 0xC0000000, cpu->maxei2);
+	}
+
+	if (show_cacheinfo == 1) {
+		switch (cpu->vendor) {
+		case VENDOR_INTEL:
+			decode_Intel_caches(cpu, 1);
+			break;
+		case VENDOR_AMD:
+			decode_AMD_cacheinfo(cpu);
+			break;
+		default:
+			break;
+		}
+	}
+
+	if (show_flags == 1)
+		display_features(cpu);
+
+	if (show_connector)
+		decode_connector(cpu->connector);
+
+	if (show_urls) {
+		if (cpu->info_url != NULL)
+			printf("Info URL: %s\n", cpu->info_url);
+		if (cpu->datasheet_url != NULL)
+			printf("Datasheet: %s\n", cpu->datasheet_url);
+		if (cpu->errata_url != NULL)
+			printf("Errata: %s\n", cpu->errata_url);
+	}
+
+	/* Info that requires root access (eg, reading MSRs etc) */
+	if (user_is_root) {
+		if (show_mtrr)
+			dump_mtrrs(cpu);
+
+		if (show_apic)
+			dump_apics(cpu);
+	}
+
+	if (show_addr_sizes)
+		display_address_sizes(cpu);
+
+	if (show_MHz) {
+		display_MHz(cpu);
+		printf(" processor (estimate).\n\n");
+	}
+
+	if (show_bench)
+		show_benchmarks(cpu);
+}
+
+
 int main (int argc, char **argv)
 {
-	unsigned int i;
 	struct cpudata *cpu=NULL, *head=NULL, *tmp;
+	unsigned int i;
+	unsigned int display_one_cpu;
 
 	if (getuid() != 0)
 		user_is_root=0;
@@ -369,13 +435,13 @@ int main (int argc, char **argv)
 
 	separator();
 
-	/* Iterate over the linked list. */
 
+	/* First we gather information */
 	for (i = 0; i < nrCPUs; i++) {
 		cpu = malloc (sizeof (struct cpudata));
 		if (!cpu) {
 			printf("Out of memory\n");
-			goto out;
+			exit(EXIT_FAILURE);
 		}
 		if (!firstcpu)
 			firstcpu = cpu;
@@ -391,76 +457,62 @@ int main (int argc, char **argv)
 
 		cpu->number = i;
 
-		if (nrCPUs != 1)
-			printf("CPU #%u\n", i+1);
-
 		bind_cpu(cpu);
 
 		estimate_MHz(cpu);
 		get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
 		get_feature_flags(cpu);
 		identify(cpu);
-		show_info(cpu);
+	}
 
-		if (show_registers) {
-			dumpregs(cpu->number, 0, cpu->cpuid_level);
-			if (cpu->maxei >=0x80000000)
-				dumpregs (cpu->number, 0x80000000, cpu->maxei);
 
-			if (cpu->maxei2 >=0xC0000000)
-				dumpregs (cpu->number, 0xC0000000, cpu->maxei2);
-		}
+	cpu = firstcpu;
 
-		if (show_cacheinfo == 1) {
-			switch (cpu->vendor) {
-			case VENDOR_INTEL:
-				decode_Intel_caches(cpu, 1);
+	/* Now we display the info we gathered */
+
+	/* First check to see if all CPUs are the same. */
+	display_one_cpu = 1;
+
+	if (nrCPUs > 1) {
+		for (i = 0; i < nrCPUs; i++) {
+			cpu = cpu->next;
+			if (!cpu)
 				break;
-			case VENDOR_AMD:
-				decode_AMD_cacheinfo(cpu);
-				break;
-			default:
+			if (cpu->efamily != firstcpu->efamily)
+				display_one_cpu = 0;
+			if (cpu->emodel != firstcpu->emodel)
+				display_one_cpu = 0;
+			if (cpu->family != firstcpu->family)
+				display_one_cpu = 0;
+			if (model(cpu) != model(firstcpu))
+				display_one_cpu = 0;
+			if (cpu->stepping != firstcpu->stepping)
+				display_one_cpu = 0;
+
+			if (display_one_cpu == 0) {
 				break;
 			}
 		}
+	}
 
-		if (show_flags == 1)
-			display_features(cpu);
+	/* force to display all cpus. */
+	if (all_cpus == 1)
+		display_one_cpu = 0;
 
-		if (show_connector)
-			decode_connector(cpu->connector);
+	cpu = firstcpu;
 
-		if (show_urls) {
-			if (cpu->info_url != NULL)
-				printf("Info URL: %s\n", cpu->info_url);
-			if (cpu->datasheet_url != NULL)
-				printf("Datasheet: %s\n", cpu->datasheet_url);
-			if (cpu->errata_url != NULL)
-				printf("Errata: %s\n", cpu->errata_url);
+	if (display_one_cpu == 1) {
+		printf("All CPUs:\n");
+		display_detailed_info(cpu);
+	} else {
+		for (i = 0; i < nrCPUs; i++) {
+			printf("CPU #%u\n", i+1);
+
+			display_detailed_info(cpu);
+
+			if (nrCPUs > 1)
+				separator();
 		}
-
-		/* Info that requires root access (eg, reading MSRs etc) */
-		if (user_is_root) {
-			if (show_mtrr)
-				dump_mtrrs(cpu);
-
-			if (show_apic)
-				dump_apics(cpu);
-		}
-
-		if (show_addr_sizes)
-			display_address_sizes(cpu);
-
-		if (show_MHz) {
-			display_MHz(cpu);
-			printf(" processor (estimate).\n\n");
-		}
-
-		if (show_bench)
-			show_benchmarks(cpu);
-
-		if (nrCPUs > 1)
-			separator();
 	}
 
 	/* For now, we only support topology parsing on Intel. */
@@ -471,7 +523,7 @@ int main (int argc, char **argv)
 	display_MHz(cpu);
 	printf("\n");
 
-out:
+
 	/* Tear down the linked list. */
 	cpu = head;
 	for (i = 0; i < nrCPUs; i++) {
