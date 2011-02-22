@@ -109,32 +109,57 @@ static int check_cpu_similarity()
 	if (all_cpus)
 		return 0;
 
-	cpu = firstcpu;
-	if (nrCPUs > 1) {
-		for (i = 0; i < nrCPUs; i++) {
-			cpu = cpu->next;
-			if (!cpu)
-				return 1;
+	if (nrCPUs == 1)
+		return 1;
 
-			if (cpu->efamily != firstcpu->efamily)
-				return 0;
-			if (cpu->emodel != firstcpu->emodel)
-				return 0;
-			if (cpu->family != firstcpu->family)
-				return 0;
-			if (model(cpu) != model(firstcpu))
-				return 0;
-			if (cpu->stepping != firstcpu->stepping)
-				return 0;
-		}
+	cpu = firstcpu;
+	for (i = 0; i < nrCPUs; i++) {
+		cpu = cpu->next;
+		if (!cpu)
+			return 1;
+
+		if (cpu->efamily != firstcpu->efamily)
+			return 0;
+		if (cpu->emodel != firstcpu->emodel)
+			return 0;
+		if (cpu->family != firstcpu->family)
+			return 0;
+		if (model(cpu) != model(firstcpu))
+			return 0;
+		if (cpu->stepping != firstcpu->stepping)
+			return 0;
 	}
+
 	return 1;
+}
+
+static struct cpudata *alloc_cpu()
+{
+	struct cpudata *newcpu;
+
+	newcpu = malloc (sizeof (struct cpudata));
+	if (!newcpu) {
+		printf("Out of memory\n");
+		exit(EXIT_FAILURE);
+	}
+	memset(newcpu, 0, sizeof(struct cpudata));
+
+	return newcpu;
+}
+
+static void fill_in_cpu_info(struct cpudata *cpu)
+{
+	bind_cpu(cpu);
+	estimate_MHz(cpu);
+	get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
+	get_feature_flags(cpu);
+	identify(cpu);
 }
 
 
 int main (int argc, char **argv)
 {
-	struct cpudata *cpu=NULL, *head=NULL, *tmp;
+	struct cpudata *cpu=NULL, *newcpu=NULL, *tmp;
 	unsigned int i;
 	unsigned int display_one_cpu = 1;
 
@@ -167,34 +192,21 @@ int main (int argc, char **argv)
 		nrCPUs = 1;
 	}
 
+	/* Allocate a cpu for boot cpu. */
+	cpu = firstcpu = alloc_cpu();
+	fill_in_cpu_info(cpu);
 
-	/* First we gather information */
-	for (i = 0; i < nrCPUs; i++) {
-		cpu = malloc (sizeof (struct cpudata));
-		if (!cpu) {
-			printf("Out of memory\n");
-			exit(EXIT_FAILURE);
+	/* Allocate structs for non-boot CPUs if present */
+	if (nrCPUs > 1) {
+		for (i = 1; i < nrCPUs; i++) {
+			newcpu = alloc_cpu();
+			cpu->next = newcpu;
+
+			cpu = newcpu;
+			cpu->number = i;
+
+			fill_in_cpu_info(cpu);
 		}
-		if (!firstcpu)
-			firstcpu = cpu;
-
-		memset(cpu, 0, sizeof(struct cpudata));
-
-		if (!head) {
-			head = cpu;
-		} else {
-			cpu->next = head;
-			head = cpu;
-		}
-
-		cpu->number = i;
-
-		bind_cpu(cpu);
-
-		estimate_MHz(cpu);
-		get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
-		get_feature_flags(cpu);
-		identify(cpu);
 	}
 
 	display_one_cpu = check_cpu_similarity();
@@ -230,12 +242,13 @@ int main (int argc, char **argv)
 
 			if (nrCPUs > 1)
 				separator();
+			cpu = cpu->next;
 		}
 	}
 
 	/* For now, we only support topology parsing on Intel. */
 	if (cpu->vendor == VENDOR_INTEL)
-		display_topology(head);
+		display_topology(firstcpu);
 
 	printf(" running at an estimated ");
 	display_MHz(cpu);
@@ -243,7 +256,7 @@ int main (int argc, char **argv)
 
 
 	/* Tear down the linked list. */
-	cpu = head;
+	cpu = firstcpu;
 	for (i = 0; i < nrCPUs; i++) {
 		if (cpu->info_url)
 			free(cpu->info_url);
