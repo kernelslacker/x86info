@@ -238,7 +238,8 @@ static int MPConfigTableHeader(u32 pap)
 			processorEntry();
 		totalSize -= basetableEntryTypes[ 0 ].length;
 	}
-	printf("\n");
+	if (!silent)
+		printf("\n");
 
 	return SMP_YES;
 }
