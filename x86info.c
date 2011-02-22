@@ -402,7 +402,8 @@ int main (int argc, char **argv)
 			if (nrSMPCPUs > nrCPUs)
 				printf(" (but found %ud CPUs in MPTable!)", nrSMPCPUs);
 		}
-		printf("\n");
+		if (nrCPUs >= 2)
+			printf("\n");
 
 		display_detailed_info(cpu);
 	} else {
