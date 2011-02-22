@@ -244,10 +244,8 @@ int main (int argc, char **argv)
 		}
 	}
 
-	/* For now, we only support topology parsing on Intel. */
 	cpu = firstcpu;
-	if (cpu->vendor == VENDOR_INTEL)
-		display_topology(firstcpu);
+	display_topology(firstcpu);
 
 	printf(" running at an estimated ");
 	display_MHz(cpu);

@@ -32,6 +32,13 @@ void display_topology(struct cpudata *head)
 
 	int num_sockets = 0;
 
+	/* For now, we only support topology parsing on Intel. */
+	if (head->vendor == VENDOR_INTEL)
+		get_intel_topology(head);
+	else
+		return;
+
+
 	if (debug == 1) {
 		cpu = head;
 		printf("cpu->phys_proc_id: ");

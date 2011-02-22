@@ -139,6 +139,4 @@ void display_Intel_info(struct cpudata *cpu)
 
 	if (show_microcode)
 		decode_microcode(cpu);
-
-	show_intel_topology(cpu);
 }
