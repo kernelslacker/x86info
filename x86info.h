@@ -195,7 +195,6 @@ extern unsigned int all_cpus;
 extern struct cpudata *firstcpu;
 
 extern int used_UP;
-extern int silent;
 extern int user_is_root;
 
 #define X86_FEATURE_MTRR	1<<12

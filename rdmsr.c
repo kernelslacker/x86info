@@ -40,8 +40,7 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 
 	fh = open(cpuname, O_RDONLY);
 	if (fh==-1) {
-		if (!silent)
-			perror(cpuname);
+		perror(cpuname);
 		nodriver=1;
 		return 0;
 	}
@@ -82,8 +81,7 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 
 	fh = open(cpuname, O_RDONLY);
 	if (fh==-1) {
-		if (!silent)
-			perror(cpuname);
+		perror(cpuname);
 		nodriver=1;
 		return 0;
 	}

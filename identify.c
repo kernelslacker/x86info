@@ -95,9 +95,6 @@ void identify(struct cpudata *cpu)
 
 void show_info(struct cpudata *cpu)
 {
-	if (silent)
-		return;
-
 	printf("EFamily: %u EModel: %u Family: %u Model: %u Stepping: %u\n",
 	       cpu->efamily, cpu->emodel, cpu->family,
 	       model(cpu), cpu->stepping);

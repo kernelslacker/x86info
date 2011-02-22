@@ -40,7 +40,6 @@ static int num_sockets = 0;
 
 int debug = 0;
 int verbose = 0;
-int silent = 0;
 int used_UP = 0;
 int user_is_root = 1;
 static int need_root = 0;
@@ -321,10 +320,9 @@ int main (int argc, char **argv)
 	struct cpudata *cpu=NULL, *head=NULL, *tmp;
 
 	parse_command_line(argc, argv);
-	if (!silent) {
-		printf("x86info v1.28beta.  Dave Jones 2001-2011\n");
-		printf("Feedback to <davej@redhat.com>.\n\n");
-	}
+
+	printf("x86info v1.28beta.  Dave Jones 2001-2011\n");
+	printf("Feedback to <davej@redhat.com>.\n\n");
 
 	if ((HaveCPUID()) == 0) {
 		printf("No CPUID instruction available.\n");
@@ -340,20 +338,18 @@ int main (int argc, char **argv)
 
 	nrCPUs = sysconf(_SC_NPROCESSORS_ONLN);
 
-	if (!silent) {
-		printf("Found %u CPU", nrCPUs);
-		if (nrCPUs > 1)
-			printf("s");
+	printf("Found %u CPU", nrCPUs);
+	if (nrCPUs > 1)
+		printf("s");
 
-		/* Check mptable if present. This way we get number of CPUs
-		   on SMP systems that have booted UP kernels. */
-		if (user_is_root) {
-			nrSMPCPUs = enumerate_cpus();
-			if (nrSMPCPUs > nrCPUs)
-				printf(", but found %ud CPUs in MPTable.", nrSMPCPUs);
-		}
-		printf("\n");
+	/* Check mptable if present. This way we get number of CPUs
+	   on SMP systems that have booted UP kernels. */
+	if (user_is_root) {
+		nrSMPCPUs = enumerate_cpus();
+		if (nrSMPCPUs > nrCPUs)
+			printf(", but found %ud CPUs in MPTable.", nrSMPCPUs);
 	}
+	printf("\n");
 
 	/*
 	 * can't have less than 1 CPU, or more than
@@ -391,7 +387,7 @@ int main (int argc, char **argv)
 
 		cpu->number = i;
 
-		if (!silent && nrCPUs != 1)
+		if (nrCPUs != 1)
 			printf("CPU #%u\n", i+1);
 
 		bind_cpu(cpu);
@@ -443,10 +439,7 @@ int main (int argc, char **argv)
 		if (user_is_root) {
 			if (show_mtrr)
 				dump_mtrrs(cpu);
-		}
 
-		/* Info that requires root access */
-		if (user_is_root) {
 			if (show_apic)
 				dump_apics(cpu);
 		}
