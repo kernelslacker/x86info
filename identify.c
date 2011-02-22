@@ -95,9 +95,11 @@ void identify(struct cpudata *cpu)
 
 void show_info(struct cpudata *cpu)
 {
-	printf("EFamily: %u EModel: %u Family: %u Model: %u Stepping: %u\n",
-	       cpu->efamily, cpu->emodel, cpu->family,
-	       model(cpu), cpu->stepping);
+	if ((cpu->efamily != 0) || (cpu->emodel != 0))
+		printf("Extended Family: %u Extended Model: %u ",
+			cpu->efamily, cpu->emodel);
+	printf("Family: %u Model: %u Stepping: %u\n",
+	       cpu->family, model(cpu), cpu->stepping);
 	printf("CPU Model (x86info's best guess): %s\n", cpu->name);
 	get_model_name(cpu);
 	printf("\n");
