@@ -98,15 +98,15 @@ struct cpudata {
 	unsigned int num_siblings;
 };
 
-extern void cpuid_UP (unsigned int idx,
+void cpuid_UP(unsigned int idx,
 	unsigned long *eax, unsigned long *ebx, unsigned long *ecx, unsigned long *edx);
-extern void cpuid(unsigned int cpu, unsigned long long idx,
+void cpuid(unsigned int cpu, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
-extern void cpuid4(unsigned int CPU_number, unsigned long long idx,
+void cpuid4(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
-extern void cpuid_count(unsigned int CPU_number, unsigned int op, int count,
+void cpuid_count(unsigned int CPU_number, unsigned int op, int count,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
-extern unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op);
+unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op);
 
 
 #define family(c) (c->family + c->efamily)
@@ -127,52 +127,51 @@ static const char *get_##title##_name(type id) \
         return NULL; \
 }
 
-extern void Identify_AMD (struct cpudata *cpu);
-extern void Identify_Cyrix (struct cpudata *cpu);
-extern void identify_centaur(struct cpudata *cpu);
-extern void Identify_Intel (struct cpudata *cpu);
-extern void identify_RiSE(struct cpudata *cpu);
-extern void identify_natsemi(struct cpudata *cpu);
-extern void identify_sis(struct cpudata *cpu);
+void Identify_AMD(struct cpudata *cpu);
+void Identify_Cyrix(struct cpudata *cpu);
+void identify_centaur(struct cpudata *cpu);
+void Identify_Intel(struct cpudata *cpu);
+void identify_RiSE(struct cpudata *cpu);
+void identify_natsemi(struct cpudata *cpu);
+void identify_sis(struct cpudata *cpu);
 
-extern void display_AMD_info(struct cpudata *cpu);
-extern void display_Cyrix_info(struct cpudata *cpu);
-extern void display_centaur_info(struct cpudata *cpu);
-extern void display_Intel_info(struct cpudata *cpu);
+void display_AMD_info(struct cpudata *cpu);
+void display_Cyrix_info(struct cpudata *cpu);
+void display_centaur_info(struct cpudata *cpu);
+void display_Intel_info(struct cpudata *cpu);
 
-extern void get_feature_flags(struct cpudata *cpu);
-extern void display_features(struct cpudata *cpu);
-extern void show_extra_intel_flags(struct cpudata *cpu);
-#define X86_FEATURE_HT (1<<28)
+void get_feature_flags(struct cpudata *cpu);
+void display_features(struct cpudata *cpu);
+void show_extra_intel_flags(struct cpudata *cpu);
 
 void parse_command_line(int argc, char **argv);
 
-extern void get_cpu_info_basics(struct cpudata *cpu);
-extern void identify(struct cpudata *cpu);
-extern void show_info(struct cpudata *cpu);
+void get_cpu_info_basics(struct cpudata *cpu);
+void identify(struct cpudata *cpu);
+void show_info(struct cpudata *cpu);
 
-extern int read_msr(int cpu, unsigned int idx, unsigned long long *val);
-extern void binary(unsigned int n, unsigned long value);
-extern void binary32(unsigned long value);
-extern void binary64(unsigned long long value);
-extern void dumpmsr (int cpunum, unsigned int msr, int size);
-extern void dumpmsr_bin (int cpunum, unsigned int msr, int size);
-extern void dumpregs(int cpunum, unsigned int begin, unsigned int end);
+int read_msr(int cpu, unsigned int idx, unsigned long long *val);
+void binary(unsigned int n, unsigned long value);
+void binary32(unsigned long value);
+void binary64(unsigned long long value);
+void dumpmsr(int cpunum, unsigned int msr, int size);
+void dumpmsr_bin(int cpunum, unsigned int msr, int size);
+void dumpregs(int cpunum, unsigned int begin, unsigned int end);
 
-extern void dump_mtrrs (struct cpudata *cpu);
-extern void dump_apics (struct cpudata *cpu);
+void dump_mtrrs(struct cpudata *cpu);
+void dump_apics(struct cpudata *cpu);
 
-extern void estimate_MHz(struct cpudata *cpu);
-extern int HaveCPUID(void);
-extern void interpret_eblcr(u32 lo);
-extern int enumerate_cpus(void);
-extern void get_model_name(struct cpudata *cpu);
-extern void decode_connector(enum connector type);
-extern void show_benchmarks(struct cpudata *cpu);
-extern void decode_serial_number(struct cpudata *cpu);
+void estimate_MHz(struct cpudata *cpu);
+int HaveCPUID(void);
+void interpret_eblcr(u32 lo);
+int enumerate_cpus(void);
+void get_model_name(struct cpudata *cpu);
+void decode_connector(enum connector type);
+void show_benchmarks(struct cpudata *cpu);
+void decode_serial_number(struct cpudata *cpu);
 
-extern void display_topology(struct cpudata *head);
-extern void show_intel_topology(struct cpudata *cpu);
+void display_topology(struct cpudata *head);
+void show_intel_topology(struct cpudata *cpu);
 
 void decode_AMD_cacheinfo(struct cpudata *cpu);
 
@@ -208,8 +207,9 @@ extern unsigned int all_cpus;
 extern unsigned int debug;
 extern unsigned int verbose;
 
-#define X86_FEATURE_MTRR	1<<12
-#define X86_FEATURE_APIC	1<<9
+#define X86_FEATURE_HT		(1<<28)
+#define X86_FEATURE_MTRR	(1<<12)
+#define X86_FEATURE_APIC	(1<<9)
 
 #define _GNU_SOURCE
 #define __USE_GNU
