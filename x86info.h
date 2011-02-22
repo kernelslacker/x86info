@@ -145,6 +145,8 @@ extern void display_features(struct cpudata *cpu);
 extern void show_extra_intel_flags(struct cpudata *cpu);
 #define X86_FEATURE_HT (1<<28)
 
+void parse_command_line(int argc, char **argv);
+
 extern void get_cpu_info_basics(struct cpudata *cpu);
 extern void identify(struct cpudata *cpu);
 extern void show_info(struct cpudata *cpu);
@@ -174,31 +176,37 @@ extern void show_intel_topology(struct cpudata *cpu);
 
 void decode_AMD_cacheinfo(struct cpudata *cpu);
 
-extern int show_bench;
-extern int show_bios;
-extern int show_machine_check;
-extern int show_bugs;
-extern int show_cacheinfo;
-extern int show_connector;
-extern int show_eblcr;
-extern int verbose;
-extern int show_microcode;
-extern int show_msr;
-extern int show_mtrr;
-extern int show_pm;
-extern int show_registers;
-extern int show_urls;
-
 extern unsigned int nrCPUs;
-
-extern unsigned int all_cpus;
 
 extern struct cpudata *firstcpu;
 
 extern int used_UP;
 extern int user_is_root;
+extern unsigned int need_root;
 
-extern int debug;
+
+/* command line args */
+extern unsigned int show_apic;
+extern unsigned int show_bench;
+extern unsigned int show_bios;
+extern unsigned int show_machine_check;
+extern unsigned int show_bugs;
+extern unsigned int show_cacheinfo;
+extern unsigned int show_connector;
+extern unsigned int show_eblcr;
+extern unsigned int show_msr;
+extern unsigned int show_microcode;
+extern unsigned int show_mtrr;
+extern unsigned int show_pm;
+extern unsigned int show_registers;
+extern unsigned int show_urls;
+extern unsigned int show_mptable;
+extern unsigned int show_flags;
+extern unsigned int show_MHz;
+extern unsigned int show_addr_sizes;
+extern unsigned int all_cpus;
+extern unsigned int debug;
+extern unsigned int verbose;
 
 #define X86_FEATURE_MTRR	1<<12
 #define X86_FEATURE_APIC	1<<9

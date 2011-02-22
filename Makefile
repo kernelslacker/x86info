@@ -77,6 +77,7 @@ X86INFO_SRC =\
 	SiS/identify.c\
 \
 	x86info.c\
+	commandline.c\
 	havecpuid.c\
 	cpuid.c\
 	dumpregs.c\
