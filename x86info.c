@@ -83,7 +83,7 @@ static void parse_command_line (int argc, char **argv)
 	for (argp = argv+1; argp <= argv + argc && (arg = *argp); argp++) {
 		if ((!strcmp(arg, "-a") || !strcmp(arg, "--all"))) {
 
-			if (user_is_root == 1) {
+			if (user_is_root) {
 				show_apic = 1;
 				show_bios = 1;
 				show_msr = 1;
@@ -232,7 +232,7 @@ static void display_detailed_info(struct cpudata *cpu)
 			dumpregs (cpu->number, 0xC0000000, cpu->maxei2);
 	}
 
-	if (show_cacheinfo == 1) {
+	if (show_cacheinfo) {
 		switch (cpu->vendor) {
 		case VENDOR_INTEL:
 			decode_Intel_caches(cpu, 1);
@@ -245,7 +245,7 @@ static void display_detailed_info(struct cpudata *cpu)
 		}
 	}
 
-	if (show_flags == 1)
+	if (show_flags)
 		display_features(cpu);
 
 	if (show_connector)
@@ -291,7 +291,7 @@ static int check_cpu_similarity()
 	unsigned int i;
 
 	/* force to display all cpus if the user requested it. */
-	if (all_cpus == 1)
+	if (all_cpus)
 		return 0;
 
 	cpu = firstcpu;
@@ -390,7 +390,7 @@ int main (int argc, char **argv)
 	/* Now we display the info we gathered */
 	cpu = firstcpu;
 
-	if (display_one_cpu == 1) {
+	if (display_one_cpu) {
 		if (nrCPUs >= 2)
 			printf("Found %d identical CPUs", nrCPUs);
 
