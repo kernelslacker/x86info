@@ -159,7 +159,7 @@ static void fill_in_cpu_info(struct cpudata *cpu)
 
 int main (int argc, char **argv)
 {
-	struct cpudata *cpu=NULL, *newcpu=NULL, *tmp;
+	struct cpudata *cpu=NULL, *tmp;
 	unsigned int i;
 	unsigned int display_one_cpu = 1;
 
@@ -199,10 +199,8 @@ int main (int argc, char **argv)
 	/* Allocate structs for non-boot CPUs if present */
 	if (nrCPUs > 1) {
 		for (i = 1; i < nrCPUs; i++) {
-			newcpu = alloc_cpu();
-			cpu->next = newcpu;
-
-			cpu = newcpu;
+			cpu->next = alloc_cpu();
+			cpu = cpu->next;
 			cpu->number = i;
 
 			fill_in_cpu_info(cpu);
