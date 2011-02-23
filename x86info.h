@@ -203,7 +203,7 @@ extern unsigned int show_pm;
 extern unsigned int show_cpuid;
 extern unsigned int show_urls;
 extern unsigned int show_mptable;
-extern unsigned int show_flags;
+extern unsigned int show_feature_flags;
 extern unsigned int show_MHz;
 extern unsigned int show_addr_sizes;
 extern unsigned int all_cpus;

@@ -25,7 +25,7 @@ unsigned int show_pm = 0;
 unsigned int show_cpuid = 0;
 unsigned int show_urls = 0;
 unsigned int show_mptable = 0;
-unsigned int show_flags = 0;
+unsigned int show_feature_flags = 0;
 unsigned int show_MHz = 0;
 unsigned int show_addr_sizes = 0;
 unsigned int all_cpus = 0;
@@ -86,7 +86,7 @@ void parse_command_line(int argc, char **argv)
 			show_bugs = 1;
 			show_cacheinfo = 1;
 			show_connector = 1;
-			show_flags = 1;
+			show_feature_flags = 1;
 			show_MHz = 1;
 			show_pm = 1;
 			show_cpuid = 1;
@@ -125,7 +125,7 @@ void parse_command_line(int argc, char **argv)
 			debug = 1;
 
 		if ((!strcmp(arg, "-f") || !strcmp(arg, "--flags")))
-			show_flags = 1;
+			show_feature_flags = 1;
 
 		if ((!strcmp(arg, "-m") || !strcmp(arg, "--msr"))) {
 			need_root = 1;

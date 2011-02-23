@@ -59,7 +59,7 @@ static void display_detailed_info(struct cpudata *cpu)
 		}
 	}
 
-	if (show_flags)
+	if (show_feature_flags)
 		display_features(cpu);
 
 	if (show_connector)

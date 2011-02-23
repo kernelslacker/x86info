@@ -150,7 +150,7 @@ void show_extra_intel_flags(struct cpudata *cpu)
 	}
 }
 
-static void show_feature_flags(struct cpudata *cpu)
+static void decode_feature_flags(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
@@ -474,7 +474,7 @@ static void test_longnop(void)
 
 void display_features(struct cpudata *cpu)
 {
-	show_feature_flags(cpu);
+	decode_feature_flags(cpu);
 	test_longnop();
 	printf("\n");
 }
