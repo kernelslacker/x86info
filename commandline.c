@@ -22,7 +22,7 @@ unsigned int show_msr = 0;
 unsigned int show_microcode = 0;
 unsigned int show_mtrr = 0;
 unsigned int show_pm = 0;
-unsigned int show_registers = 0;
+unsigned int show_cpuid = 0;
 unsigned int show_urls = 0;
 unsigned int show_mptable = 0;
 unsigned int show_flags = 0;
@@ -89,7 +89,7 @@ void parse_command_line(int argc, char **argv)
 			show_flags = 1;
 			show_MHz = 1;
 			show_pm = 1;
-			show_registers = 1;
+			show_cpuid = 1;
 			show_urls = 1;
 		}
 
@@ -158,8 +158,8 @@ void parse_command_line(int argc, char **argv)
 		if (!strcmp(arg, "--pm"))
 			show_pm = 1;
 
-		if ((!strcmp(arg, "-r") || !strcmp(arg, "--registers")))
-			show_registers = 1;
+		if ((!strcmp(arg, "-r") || !strcmp(arg, "--raw-cpuid")))
+			show_cpuid = 1;
 
 		if ((!strcmp(arg, "-mce") || !strcmp(arg, "--show-machine-check"))) {
 			need_root = 1;

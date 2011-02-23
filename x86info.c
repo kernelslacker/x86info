@@ -37,7 +37,7 @@ static void display_detailed_info(struct cpudata *cpu)
 	bind_cpu(cpu);	/* FIXME: Eventually remove once 'gather' has all the per-cpu stuff */
 	show_info(cpu);
 
-	if (show_registers) {
+	if (show_cpuid) {
 		dumpregs(cpu->number, 0, cpu->cpuid_level);
 		if (cpu->maxei >=0x80000000)
 			dumpregs (cpu->number, 0x80000000, cpu->maxei);

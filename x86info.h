@@ -200,7 +200,7 @@ extern unsigned int show_msr;
 extern unsigned int show_microcode;
 extern unsigned int show_mtrr;
 extern unsigned int show_pm;
-extern unsigned int show_registers;
+extern unsigned int show_cpuid;
 extern unsigned int show_urls;
 extern unsigned int show_mptable;
 extern unsigned int show_flags;
