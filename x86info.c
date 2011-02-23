@@ -245,11 +245,10 @@ int main (int argc, char **argv)
 		}
 	}
 
-	cpu = firstcpu;
 	display_topology(firstcpu);
 
 	printf(" running at an estimated ");
-	display_MHz(cpu);
+	display_MHz(firstcpu);
 	printf("\n");
 
 
