@@ -142,7 +142,7 @@ void display_basic_Intel_info(struct cpudata *cpu);
 void display_extended_Intel_info(struct cpudata *cpu);
 
 void get_feature_flags(struct cpudata *cpu);
-void display_features(struct cpudata *cpu);
+void display_feature_flags(struct cpudata *cpu);
 void show_extra_intel_flags(struct cpudata *cpu);
 
 void parse_command_line(int argc, char **argv);

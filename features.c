@@ -472,7 +472,7 @@ static void test_longnop(void)
 	printf("Long NOPs supported: %s\n", died ? "no" : "yes");
 }
 
-void display_features(struct cpudata *cpu)
+void display_feature_flags(struct cpudata *cpu)
 {
 	decode_feature_flags(cpu);
 	test_longnop();
