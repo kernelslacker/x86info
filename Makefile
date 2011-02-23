@@ -80,7 +80,6 @@ X86INFO_SRC =\
 	commandline.c\
 	havecpuid.c\
 	cpuid.c\
-	dumpregs.c\
 	features.c\
 	identify.c\
 	rdmsr.c\

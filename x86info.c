@@ -38,12 +38,12 @@ static void display_detailed_info(struct cpudata *cpu)
 	show_info(cpu);
 
 	if (show_cpuid) {
-		dumpregs(cpu->number, 0, cpu->cpuid_level);
+		dump_raw_cpuid(cpu->number, 0, cpu->cpuid_level);
 		if (cpu->maxei >=0x80000000)
-			dumpregs (cpu->number, 0x80000000, cpu->maxei);
+			dump_raw_cpuid(cpu->number, 0x80000000, cpu->maxei);
 
 		if (cpu->maxei2 >=0xC0000000)
-			dumpregs (cpu->number, 0xC0000000, cpu->maxei2);
+			dump_raw_cpuid(cpu->number, 0xC0000000, cpu->maxei2);
 	}
 
 	if (show_cacheinfo) {
