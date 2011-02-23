@@ -23,6 +23,12 @@ static char * corenum(int num)
 	}
 }
 
+void get_topology(struct cpudata *cpu)
+{
+	if (cpu->vendor == VENDOR_INTEL)
+		get_intel_topology(cpu);
+}
+
 void display_topology(struct cpudata *head)
 {
 	struct cpudata *cpu;
@@ -33,11 +39,8 @@ void display_topology(struct cpudata *head)
 	int num_sockets = 0;
 
 	/* For now, we only support topology parsing on Intel. */
-	if (head->vendor == VENDOR_INTEL)
-		get_intel_topology(head);
-	else
+	if (head->vendor != VENDOR_INTEL)
 		return;
-
 
 	if (debug == 1) {
 		cpu = head;

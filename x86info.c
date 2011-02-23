@@ -154,6 +154,7 @@ static void fill_in_cpu_info(struct cpudata *cpu)
 	get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
 	get_feature_flags(cpu);
 	identify(cpu);
+	get_topology(cpu);
 }
 
 

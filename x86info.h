@@ -173,9 +173,9 @@ void decode_connector(enum connector type);
 void show_benchmarks(struct cpudata *cpu);
 void decode_serial_number(struct cpudata *cpu);
 
+void get_topology(struct cpudata *head);
 void display_topology(struct cpudata *head);
 void get_intel_topology(struct cpudata *cpu);
-void show_intel_topology(struct cpudata *cpu);
 
 void decode_AMD_cacheinfo(struct cpudata *cpu);
 
