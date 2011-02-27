@@ -53,7 +53,16 @@ static struct {
 	/* natsemi specific (Geode) */
 	{CONN_BGA, "BGA"},	/*  */
 };
-get_name(connector, enum connector, connector_strings);
+
+static const char * get_connector_name(enum connector id)
+{
+	int i;
+
+	for (i = 0; i < ARRAY_SIZE(connector_strings); i++)
+		if (id == connector_strings[i].id)
+			return connector_strings[i].name;
+	return NULL;
+}
 
 void decode_connector(enum connector type)
 {
