@@ -1,7 +1,5 @@
 higher priority stuff
 ---------------------
-- Don't output same info more than once on SMP, just make a note
-  that there are N identical CPUs.
 - feature flag handling code could use more cleanup.
 - Make intel cache sizing use cpuid(4) where present.
 - After identifying CPU we can associate more info with the CPU.
