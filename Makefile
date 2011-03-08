@@ -25,9 +25,9 @@ LSMSR_TMP_HEADERS=AMD/k8.h AMD/fam10h.h AMD/fam11h.h generic_msr.h
 %.h: %.regs scripts/createheader.py
 	python scripts/createheader.py $< `basename $< .regs` >$@
 
-LSMSR_SRC =\
-	lsmsr.c\
-	cpuid.c\
+LSMSR_SRC = \
+	lsmsr.c \
+	cpuid.c \
 	havecpuid.c
 
 LSMSR_OBJS = $(LSMSR_SRC:%.c=%.o)
@@ -39,60 +39,60 @@ lsmsr: $(LSMSR_TMP_HEADERS) $(LSMSR_OBJS)
 
 -include $(LSMSR_SRC:%.c=%.P)
 
-X86INFO_SRC =\
-	AMD/identify.c\
-	AMD/machine_check.c\
-	AMD/MSR-Athlon.c\
-	AMD/MSR-K6.c\
-	AMD/powernow.c\
-	AMD/dumppsb.c\
-	AMD/bugs.c\
+X86INFO_SRC = \
+	AMD/identify.c \
+	AMD/machine_check.c \
+	AMD/MSR-Athlon.c \
+	AMD/MSR-K6.c \
+	AMD/powernow.c \
+	AMD/dumppsb.c \
+	AMD/bugs.c \
 \
-	Cyrix/identify.c\
+	Cyrix/identify.c \
 \
-	Intel/identify.c\
-	Intel/identify-family6.c\
-	Intel/identify-family6-extended.c\
-	Intel/identify-family15.c\
-	Intel/info.c\
-	Intel/machine_check.c\
-	Intel/cachesize.c\
-	Intel/eblcr.c\
-	Intel/MSR-P4.c\
-	Intel/MSR-P6.c\
-	Intel/MSR-performance.c\
-	Intel/MSR-thermal.c\
-	Intel/MSR-IDA.c\
-	Intel/microcode.c\
-	Intel/topology.c\
+	Intel/identify.c \
+	Intel/identify-family6.c \
+	Intel/identify-family6-extended.c \
+	Intel/identify-family15.c \
+	Intel/info.c \
+	Intel/machine_check.c \
+	Intel/cachesize.c \
+	Intel/eblcr.c \
+	Intel/MSR-P4.c \
+	Intel/MSR-P6.c \
+	Intel/MSR-performance.c \
+	Intel/MSR-thermal.c \
+	Intel/MSR-IDA.c \
+	Intel/microcode.c \
+	Intel/topology.c \
 \
-	Centaur/identify.c\
-	Centaur/MSR-C3.c\
-	Centaur/longhaul.c\
-	Centaur/powersaver.c\
+	Centaur/identify.c \
+	Centaur/MSR-C3.c \
+	Centaur/longhaul.c \
+	Centaur/powersaver.c \
 \
-	NatSemi/identify.c\
+	NatSemi/identify.c \
 \
-	RiSE/identify.c\
+	RiSE/identify.c \
 \
-	SiS/identify.c\
+	SiS/identify.c \
 \
-	x86info.c\
-	commandline.c\
-	havecpuid.c\
-	cpuid.c\
-	features.c\
-	identify.c\
-	rdmsr.c\
-	binary.c\
-	mptable.c\
-	get_model_name.c\
-	mtrr.c \
-	apic.c \
-	connector.c\
-	topology.c\
+	x86info.c \
+	commandline.c \
+	havecpuid.c \
+	cpuid.c \
+	features.c \
+	identify.c \
+	rdmsr.c \
+	binary.c \
+	mptable.c \
+	get_model_name.c \
+	mtrr.c  \
+	apic.c  \
+	connector.c \
+	topology.c \
 \
-	bench/benchmarks.c\
+	bench/benchmarks.c \
 	bench/MHz.c
 
 X86INFO_OBJS = $(X86INFO_SRC:%.c=%.o)
