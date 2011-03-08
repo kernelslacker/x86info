@@ -120,10 +120,12 @@ void display_extended_Intel_info(struct cpudata *cpu)
 	if (show_msr) {
 		if (cpu->family == 0xf)
 			dump_p4_MSRs(cpu);
-		if (cpu->family == 0x6 && (cpu->model == 9 || model(cpu) >= 13)) {
-			dump_performance_MSRs(cpu);
-			dump_thermal_MSRs(cpu);
-		}
+
+		dump_performance_MSRs(cpu);
+
+		dump_thermal_MSRs(cpu);
+
+		dump_IDA_MSRs(cpu);
 	}
 
 	if (show_eblcr) {

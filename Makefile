@@ -62,6 +62,7 @@ X86INFO_SRC =\
 	Intel/MSR-P6.c\
 	Intel/MSR-performance.c\
 	Intel/MSR-thermal.c\
+	Intel/MSR-IDA.c\
 	Intel/microcode.c\
 	Intel/topology.c\
 \
