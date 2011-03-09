@@ -1,21 +1,11 @@
+VERSION=1.28
+
 CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls -fno-strict-aliasing
 LDFLAGS = -Wl,-z,relro,-z,now
 # -Wstrict-overflow=5
 CC = gcc
 
 SHELL = /bin/sh
-
-
-.c.o:
-	$(CC) $(CFLAGS) -MMD -MF $(patsubst %.c,%.d,$<) -o $@ -c $<
-	@cp $*.d $*.P; \
-	 sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-	     -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> $*.P; \
-	rm -f $*.d
-
-.S.o:
-	$(CC) $(CFLAGS) -o $@ -c $<
-
 
 all: x86info test lsmsr
 
@@ -37,7 +27,8 @@ lsmsr.c: $(LSMSR_TMP_HEADERS)
 lsmsr: $(LSMSR_TMP_HEADERS) $(LSMSR_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o lsmsr $(LSMSR_OBJS)
 
--include $(LSMSR_SRC:%.c=%.P)
+
+
 
 X86INFO_SRC = \
 	AMD/identify.c \
@@ -100,7 +91,6 @@ X86INFO_OBJS = $(X86INFO_SRC:%.c=%.o)
 x86info: $(X86INFO_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS)
 
--include $(X86INFO_SRC:%.c=%.P)
 
 
 nodes:
@@ -108,8 +98,6 @@ nodes:
 
 test:
 	scripts/testnodes
-
-VERSION=1.28
 
 release:
 	git repack -a -d
@@ -119,7 +107,6 @@ release:
 clean:
 	@find . -name "*.o" -exec rm {} \;
 	@find . -name "*~" -exec rm {} \;
-	@find . -name "*.P" -exec rm {} \;
 	@rm -f x86info x86info.exe
 	@rm -f lsmsr $(LSMSR_TMP_HEADERS)
 	@rm -f core.*
