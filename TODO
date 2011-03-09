@@ -1,6 +1,7 @@
 higher priority stuff
 ---------------------
 - feature flag handling code could use more cleanup.
+  - Would be nice to have something similar to the kernels CPU_HAS macros too.
 - Make intel cache sizing use cpuid(4) where present.
 - After identifying CPU we can associate more info with the CPU.
   - CPU codename
