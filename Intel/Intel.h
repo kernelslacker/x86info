@@ -25,5 +25,6 @@ extern void Identify_Intel_family15(struct cpudata *cpu);
 #define MSR_IA32_THERM_STATUS		0x19c
 #define MSR_PM_THERM2_CTL		0x19d
 #define MSR_IA32_MISC_ENABLE		0x1a0
+#define MSR_IA32_ENERGY_PERF_BIAS	0x1b0
 
 #endif /* _INTEL_H */

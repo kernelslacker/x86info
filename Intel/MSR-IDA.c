@@ -22,7 +22,8 @@ void dump_IDA_MSRs(struct cpudata *cpu)
 	if (cpu->cpuid_level < 6)
 		return;
 
-	cpuid_count(cpu->number, 6, 0, &eax, &ebx, &ecx, &edx);
+	cpuid(cpu->number, 6, &eax, &ebx, &ecx, &edx);
+
 	printf("Dynamic Acceleration MSRs:\n");
 	printf("  Opportunistic performance operation ");
 	if ((eax & (1 << 1)) == 1)
@@ -38,5 +39,19 @@ void dump_IDA_MSRs(struct cpudata *cpu)
 		return;
 	}
 
-	printf("\n");
+	if (read_msr(cpu->number, MSR_IA32_PERF_CTL, &val) != 1)
+		return;
+	printf("  IA32_PERF_CTL: ");
+	if ((val & (1L << 32)) == 1) {
+		printf("IDA/Turbo DISENGAGE=1, ");
+	}
+	printf("EIST Transition target: 0x%x\n", (unsigned int) val & 0xff);
+
+
+	if (ecx & (1 << 3)) {	/* SETBH present ? */
+		if (read_msr(cpu->number, MSR_IA32_ENERGY_PERF_BIAS, &val) != 1)
+			return;
+		printf("  IA32_ENERGY_PERF_BIAS: ");
+		printf("hint=%d\n", (unsigned int) val & 0xf);
+	}
 }
