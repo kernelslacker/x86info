@@ -107,10 +107,6 @@ void show_info(struct cpudata *cpu)
 	printf("\n");
 
 
-
-	if (!verbose)
-		return;
-
 	switch (cpu->vendor) {
 	case VENDOR_AMD:
 		display_AMD_info(cpu);
