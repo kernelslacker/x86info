@@ -34,7 +34,7 @@ void dump_IDA_MSRs(struct cpudata *cpu)
 	if (read_msr(cpu->number, MSR_IA32_MISC_ENABLE, &val) != 1)
 		return;
 
-	if ((val & (1L << 38)) == 1) {
+	if ((val & (1ULL << 38)) == 1) {
 		printf("  IA32_MISC_ENABLES[38] is 1 (disabled opportunistic performance operation)\n");
 		return;
 	}
@@ -42,7 +42,7 @@ void dump_IDA_MSRs(struct cpudata *cpu)
 	if (read_msr(cpu->number, MSR_IA32_PERF_CTL, &val) != 1)
 		return;
 	printf("  IA32_PERF_CTL: ");
-	if ((val & (1L << 32)) == 1) {
+	if ((val & (1ULL << 32)) == 1) {
 		printf("IDA/Turbo DISENGAGE=1, ");
 	}
 	printf("EIST Transition target: 0x%x\n", (unsigned int) val & 0xff);
