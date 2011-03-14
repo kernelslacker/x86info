@@ -169,7 +169,7 @@ int main (int argc, char **argv)
 
 	parse_command_line(argc, argv);
 
-	printf("x86info v1.28beta.  Dave Jones 2001-2011\n");
+	printf("x86info v1.28.  Dave Jones 2001-2011\n");
 	printf("Feedback to <davej@redhat.com>.\n\n");
 
 	if ((HaveCPUID()) == 0) {
