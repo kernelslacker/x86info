@@ -73,6 +73,7 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 	unsigned long lo, hi;
 	int fh;
 	static int nodriver=0;
+	unsigned long *ptr = (unsigned long *) buffer;
 
 	if (nodriver==1)
 		return 0;
@@ -100,8 +101,8 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 			return 0;
 		}
 
-		lo = (*(unsigned long *)buffer);
-		hi = (*(unsigned long *)(buffer+4));
+		lo = *(ptr)++;
+		hi = *(ptr);
 		*val = hi;
 		*val = (*val<<32) | lo;
 	}

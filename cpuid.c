@@ -159,6 +159,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	static int nodriver=0;
 	char cpuname[20];
 	unsigned char buffer[CPUID_CHUNK_SIZE];
+	unsigned int *ptr = (unsigned int *)buffer;
 	int fh;
 
 	if (eax != NULL) {
@@ -190,10 +191,10 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 			perror(cpuname);
 			exit(EXIT_FAILURE);
 		}
-		if (eax!=0)	*eax = (*(unsigned *)(buffer   ));
-		if (ebx!=0)	*ebx = (*(unsigned *)(buffer+ 4));
-		if (ecx!=0)	*ecx = (*(unsigned *)(buffer+ 8));
-		if (edx!=0)	*edx = (*(unsigned *)(buffer+12));
+		if (eax!=0)	*eax = *(ptr)++;
+		if (ebx!=0)	*ebx = *(ptr)++;
+		if (ecx!=0)	*ecx = *(ptr)++;
+		if (edx!=0)	*edx = *(ptr);
 		if (close(fh) == -1) {
 			perror("close");
 			exit(EXIT_FAILURE);

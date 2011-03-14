@@ -1,8 +1,7 @@
-VERSION=1.28
+VERSION=1.29
 
-CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls -fno-strict-aliasing
+CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls
 LDFLAGS = -Wl,-z,relro,-z,now
-# -Wstrict-overflow=5
 CC = gcc
 
 SHELL = /bin/sh
