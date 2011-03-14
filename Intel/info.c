@@ -125,7 +125,7 @@ void display_extended_Intel_info(struct cpudata *cpu)
 
 		dump_thermal_MSRs(cpu);
 
-		dump_IDA_MSRs(cpu);
+//		dump_IDA_MSRs(cpu);
 	}
 
 	if (show_eblcr) {
