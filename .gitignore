@@ -6,3 +6,4 @@ AMD/fam11h.h
 AMD/k8.h
 generic_msr.h
 lsmsr
+x86info-1.*.tgz
