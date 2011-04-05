@@ -3,7 +3,7 @@
 # Copyright (C) 2008, 2009 Advanced Micro Devices, Inc.
 
 # This file contains information from:
-# - "31116 Rev 3.06 - March 2008, BIOS and Kernel Developer's Guide (BKDG)
+# - "31116 Rev 3.48 - April 2010, BIOS and Kernel Developer's Guide (BKDG)
 #  for AMD Family 10h Processors"
 
 # See scripts/createheader.py for the general format of this register
@@ -14,6 +14,7 @@
     :16
 } # alias of MC3_ADDR
 
+# to be updated 24-31 bits 8:15 of syndrome
 {LSMCAstatus=0x0001;load-store MCE status
     ErrorCode:16
     ErrorCodeExt:4
@@ -577,10 +578,7 @@
     ErrorCodeExt:5
     :3
     Syndrome:8
-    ErrCpu0:1
-    ErrCpu1:1
-    ErrCpu2:1
-    ErrCpu3:1
+    ErrCpu:4
     LDTLink0:1
     LDTLink1:1
     LDTLink2:1
@@ -1116,7 +1114,8 @@
     IntrPndMsg:1
     IORd:1
     SmiOnCmpHalt:1
-    :36
+    C1eOnCmpHalt:1
+    :35
 }
 
 {SmiTriggerIoCycle=0xc0010056;SMI trigger IO cycle
@@ -1315,7 +1314,7 @@
     VM_HSAVE_PA:64
 }
 
-# {SMM_CTL=0xc0010118;SVM lock key
+# {SVMLock=0xc0010118;SVM lock key
 #     SvmLockKey:64
 # } # write-only
 
@@ -1346,17 +1345,38 @@
 }
 
 {CPUIDFeatures=0xc0011004;CPUID features
-    Features:32
-    Features:32
+    FeaturesEdx:32
+    FeaturesEcx:32
 }
 
 {CPUIDExtFeatures=0xc0011005;extended CPUID features
-    ExtFeaturesEcx:32
     ExtFeaturesEdx:32
+    ExtFeaturesEcx:32
+}
+
+{NodeId=0xc001100c;Node ID
+    NodeId:3
+    NodesPerProcessor:3
+    BiosScratch:6
+    :52
+}
+
+{IC_CFG=0xc0011021;instruction cache configuration
+    :9
+    DIS_SPEC_TLB_RLD:1
+    :4
+    DIS_IND:1
+    :39
 }
 
 {DC_CFG=0xc0011022;data cache configuration
-    :34
+    :4
+    DIS_SPEC_TLB_RLD:1
+    :3
+    DIS_CLR_WBTOL2_SMC_HIT:1
+    :4
+    DIS_HW_PF:1
+    :20
     REQ_CTR:2
     :28
 }
@@ -1370,11 +1390,19 @@
 {BU_CFG2=0xc001102A;bus unit configuration 2
     :2
     FrcWTMemTypToWPDis:1
-    :12
+    :3
+    ThrottleNbInterface:2
+    :7
     CILinesToNbDis:1
     :13
     Smash1GPages:1
-    :34
+    :6
+    ThrottleNbInterface:2
+    :4
+    ProbeFilterSupEn:1
+    :7
+    RdMmExtCfgQwEn:1
+    :13
 }
 
 {IbsFetchCtl=0xc0011030;IBS fetch control
@@ -1406,7 +1434,10 @@
     :1
     IbsOpEn:1
     IbsOpVal:1
-    :45
+    IbsOpCntCtl:1
+    :12
+    IbsOpCurCnt:20
+    :12
 }
 
 {IbsOpRip=0xc0011034;IBS Op logical address
@@ -1453,7 +1484,8 @@
     IbsDcMabHit:1
     IbsDcLinAddrValid:1
     IbsDcPhyAddrValid:1
-    :13
+    IbsDcL2tlbHit1G:1
+    :12
     IbsDcMissLat:16
     :16
 }
