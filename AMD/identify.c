@@ -295,14 +295,18 @@ void decode_AMD_cacheinfo(struct cpudata *cpu)
 		printf("lines per tag=%u\t", (ecx >> 8) & 0x0f);
 		printf("line size=%u bytes.\n", ecx & 0xff);
 		if (family(cpu) == 0x10) {
-			/* family 0x10 has shared L3  cache */
 			printf("L3 (shared) cache:\n\t");
-			printf("Size: %uKb\t",
-			       (edx >> 18) * 512);
-			do_l2assoc((edx >> 12) & 0x0f);
-			printf("\n\t");
-			printf("lines per tag=%u\t", (edx >> 8) & 0x0f);
-			printf("line size=%u bytes.\n", edx & 0xff);
+			if (!(edx >> 18))
+				printf("none/disabled\n");
+			else {
+				/* family 0x10 has shared L3  cache */
+				printf("Size: %uKb\t",
+				       (edx >> 18) * 512);
+				do_l2assoc((edx >> 12) & 0x0f);
+				printf("\n\t");
+				printf("lines per tag=%u\t", (edx >> 8) & 0x0f);
+				printf("line size=%u bytes.\n", edx & 0xff);
+			}
 		}
 	}
 
