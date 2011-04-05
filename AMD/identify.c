@@ -73,22 +73,9 @@ static void set_fam10h_name(struct fam10h_rev *r, struct cpudata *c)
 		return;
 	}
 
-	if (r->nameid & _PHENOM)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "Quad-Core Opteron/Phenom (%s)",
-			 r->rev);
-	else if (r->nameid & _PHENOM_II)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "Quad-Core Opteron/Phenom II (%s)", r->rev);
-	else if (r->nameid & _OPTERON)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "Quad-Core Opteron (%s)", r->rev);
-	else if (r->nameid & _OPTERON_SC)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "Six-Core Opteron (%s)", r->rev);
-	else if (r->nameid & _ATHLON_II)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "Athlon II X2 (%s)", r->rev);
+	snprintf(c->name, CPU_NAME_LEN,
+		 "Phenom/Athlon/Sempron/Turion (II)/Opteron (%s)",
+		 r->rev);
 }
 
 static void set_connector(struct cpudata *c)
