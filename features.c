@@ -320,10 +320,10 @@ static void decode_feature_flags(struct cpudata *cpu)
 	};
 
 	const char *amd_cap_generic_ecx_flags[] = {
-		"sse3", NULL, NULL, "mwait", NULL, NULL, NULL, NULL,
-		NULL, "ssse3", NULL, NULL, NULL, "cmpxchg16b", NULL, NULL,
-		NULL, NULL, NULL, "sse4_1", NULL, NULL, NULL, "popcnt",
-		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+		"sse3", "pclmulqdq", NULL, "mwait", NULL, NULL, NULL, NULL,
+		NULL, "ssse3", NULL, NULL, "fma", "cmpxchg16b", NULL, NULL,
+		NULL, NULL, NULL, "sse4_1", "sse4_2", NULL, NULL, "popcnt",
+		NULL, "aes", "xsave", "osxsave", "avx", "f16c", NULL, NULL
 	};
 	const char *amd_cap_generic_ecx_flags_desc[] = {
 		"Streaming SIMD Extensions 3",		    // 0
@@ -369,8 +369,10 @@ static void decode_feature_flags(struct cpudata *cpu)
 	const char *amd_cap_extended_ecx_flags[] = {
 		"lahf/sahf", "CmpLegacy", "svm", "ExtApicSpace",
 		"LockMovCr0", "abm", "sse4a", "misalignsse",
-		"3dnowPref", "osvw", "ibs", NULL, "skinit", "wdt", NULL, NULL,
-		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+		"3dnowPref", "osvw", "ibs", "xop",
+		"skinit", "wdt", NULL, "lwp",
+		"fma4", NULL, NULL, "NodeId",
+		NULL, "tbm", "TopoExt", NULL,
 		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};
 

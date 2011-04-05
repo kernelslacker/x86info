@@ -781,6 +781,18 @@ void display_AMD_info(struct cpudata *cpu)
 			printf(", SVMLock");
 		if (edx & 8)
 			printf(", NRIPSave");
+		if (edx & 0x10)
+			printf(", TscRateMsr");
+		if (edx & 0x20)
+			printf(", VmcbClean");
+		if (edx & 0x40)
+			printf(", FlushByAsid");
+		if (edx & 0x80)
+			printf(", DecodeAssists");
+		if (edx & 0x400)
+			printf(", PauseFilter");
+		if (edx & 0x1000)
+			printf(", PauseFilterThreshold");
 		printf("\n");
 	}
 

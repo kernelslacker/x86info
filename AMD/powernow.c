@@ -195,8 +195,17 @@ void decode_powernow(struct cpudata *cpu)
 	}
 	if (edx & (1<<8))
 		printf("\n\tinvariant TSC");
-	if (!(edx & 0x1f))
+	if (edx & (1<<9))
+		printf("\n\tCore Performance Boost");
+	if (edx & (1<<10))
+		printf("\n\read-only Effective Frequency Interface");
+	if (!(edx & 0x1ff))
 		printf(" None");
+
+	cpuid(cpu->number, 6, &eax, &ebx, &ecx, &edx);
+	if (ecx & 1)
+		printf("\n\tEffective Frequency Interface");
+
 	printf("\n\n");
 
 	if (can_scale_fid==0 && can_scale_vid==0)
