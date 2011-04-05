@@ -96,6 +96,11 @@ static void set_connector(struct cpudata *c)
 	unsigned int eax, ebx, ecx, edx;
 	int pkg_id;
 
+	if (family(c) == 0x11) {
+		c->connector = CONN_SOCKET_S1G2;
+		return;
+	}
+
 	cpuid(c->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 	pkg_id = (ebx >> 28) & 0xf;
 
@@ -104,11 +109,19 @@ static void set_connector(struct cpudata *c)
 		c->connector = CONN_SOCKET_F_R2;
 		break;
 	case 1:
-		c->connector = CONN_SOCKET_AM2_R2;
+		c->connector = CONN_SOCKET_AM3;
 		break;
 	case 2:
-		c->connector = CONN_SOCKET_S1G2;
+		c->connector = CONN_SOCKET_S1G3;
 		break;
+	case 3:
+		c->connector = CONN_SOCKET_G34;
+		break;
+	case 4:
+		c->connector = CONN_SOCKET_ASB2;
+		break;
+	case 5:
+		c->connector = CONN_SOCKET_C32;
 	default:
 		c->connector = 0;
 	}
