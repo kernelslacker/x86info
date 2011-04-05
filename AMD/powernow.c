@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <pci/pci.h>
 #include "../x86info.h"
 #include "AMD.h"
 #include "powernow.h"
@@ -117,21 +118,85 @@ static void k8_decode_fidvid(struct cpudata *cpu)
 		k8_fid_codes[fidvidstatus.bits.cfid]);
 }
 
-static int get_cof(int fid, int did, int family)
+static int get_did(int family, union msr_pstate pstate)
 {
-	int t = 0x10;
-	if (family == 0x10)
-		t = 0x10;
+	int t;
+
+	if (family == 0x14)
+		t = ((pstate.val >> 2) & 0x1f) + 4 + ((pstate.val & 0x3));
+	else if (family == 0x12)
+		t = pstate.val & 0xf;
 	else
-		t = 0x8;
-	return (100*(fid+t)>>did);
+		t = pstate.bits.did;
+
+	return t;
 }
 
-static void decode_pstates(struct cpudata *cpu)
+static int get_cof(int family, union msr_pstate pstate)
 {
-	int i, psmax, pscur;
+	int t;
+	int fid, did;
+
+	did = get_did(family, pstate);
+
+	t = 0x10;
+	fid = pstate.bits.fid;
+	if (family == 0x11)
+		t = 0x8;
+
+	return ((100 * (fid + t)) >> did);
+ }
+
+static int get_num_boost_states(void)
+{
+	struct pci_filter filter_nb_link = { -1, -1, -1, -1, 0x1022, 0};
+	int dev_ids[3] = {0x1204};
+	struct pci_access *pacc;
+	struct pci_dev *z = NULL;
+	u8 val;
+	int i;
+
+	pacc = pci_alloc();
+	pci_init(pacc);
+	pci_scan_bus(pacc);
+
+	for (i=0; i<ARRAY_SIZE(dev_ids); i++) {
+		filter_nb_link.device = dev_ids[i];
+		for (z=pacc->devices; z; z=z->next) {
+			if (pci_filter_match(&filter_nb_link, z))
+				goto match;
+		}
+	}
+
+ match:
+	val = 0;
+	if (z) {
+		val = pci_read_byte(z, 0x15c);
+		if (val & 3)
+			printf("Boosting enabled\n");
+		else
+			printf("Boosting disabled\n");
+		val = (val >> 2) & 1;
+		printf("Number of boost states: %d\n", val);
+	}
+
+	pci_cleanup(pacc);
+	return val;
+}
+
+static void decode_pstates(struct cpudata *cpu, int has_cpb)
+{
+	int i, psmax, pscur, fam;
 	union msr_pstate pstate;
 	unsigned long long val;
+	int boost_states = 0;
+
+	fam = family(cpu);
+	if (fam < 0x10)
+		return;
+
+	if (has_cpb)
+		boost_states = get_num_boost_states();
 
 	if (read_msr(cpu->number, MSR_PSTATE_LIMIT, &val) != 1) {
 		printf("Something went wrong reading MSR_PSTATE_CUR_LIMIT\n");
@@ -145,16 +210,21 @@ static void decode_pstates(struct cpudata *cpu)
 	}
 	pscur = val & 0x7;
 
+	pscur += boost_states;
+	psmax += boost_states;
 	for (i=0; i<=psmax; i++) {
 		if (read_msr(cpu->number, MSR_PSTATE + i, &pstate.val) != 1) {
 			printf("Something went wrong reading MSR_PSTATE_%d\n",
 				i);
 			return;
 		}
-		printf("Pstate-%d: fid=%x, did=%x, vid=%x (%dMHz)%s\n", i,
-		       pstate.bits.fid, pstate.bits.did, pstate.bits.vid,
-		       get_cof(pstate.bits.fid, pstate.bits.did, family(cpu)),
-		       (i == pscur) ? " (current)"  : "");
+		if (i < boost_states)
+			printf("Pstate-Pb%d: %dMHz (boost state)\n",
+			       i, get_cof(fam, pstate));
+		else
+			printf("Pstate-P%d:  %dMHz%s\n",
+			       i - boost_states, get_cof(fam, pstate),
+			       (i == pscur) ? " (current)"  : "");
 	}
 	printf("\n");
 }
@@ -163,6 +233,7 @@ void decode_powernow(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 	int can_scale_vid=0, can_scale_fid=0;
+	int has_cpb = 0;
 
 	if (cpu->maxei < 0x80000007)
 		return;
@@ -195,8 +266,10 @@ void decode_powernow(struct cpudata *cpu)
 	}
 	if (edx & (1<<8))
 		printf("\n\tinvariant TSC");
-	if (edx & (1<<9))
+	if (edx & (1<<9)) {
 		printf("\n\tCore Performance Boost");
+		has_cpb = 1;
+	}
 	if (edx & (1<<10))
 		printf("\n\read-only Effective Frequency Interface");
 	if (!(edx & 0x1ff))
@@ -219,5 +292,5 @@ void decode_powernow(struct cpudata *cpu)
 	else if (family(cpu) == 0xf)
 		k8_decode_fidvid(cpu);
 	else if (family(cpu) >= 0x10)
-		decode_pstates(cpu);
+		decode_pstates(cpu, has_cpb);
 }

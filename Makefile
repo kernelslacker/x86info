@@ -88,7 +88,7 @@ X86INFO_SRC = \
 X86INFO_OBJS = $(X86INFO_SRC:%.c=%.o)
 
 x86info: $(X86INFO_OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS) -lpci
 
 
 
