@@ -191,10 +191,10 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 			perror(cpuname);
 			exit(EXIT_FAILURE);
 		}
-		if (eax!=0)	*eax = *(ptr)++;
-		if (ebx!=0)	*ebx = *(ptr)++;
-		if (ecx!=0)	*ecx = *(ptr)++;
-		if (edx!=0)	*edx = *(ptr);
+		if (eax!=0)	*eax = *ptr;
+		if (ebx!=0)	*ebx = *(++ptr);
+		if (ecx!=0)	*ecx = *(++ptr);
+		if (edx!=0)	*edx = *(++ptr);
 		if (close(fh) == -1) {
 			perror("close");
 			exit(EXIT_FAILURE);
