@@ -293,6 +293,10 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		add_to_cpuname("Core i7 (Nehalem) [Beckton]");
 		break;
 
+	case 0x2f:
+		add_to_cpuname("Core i7 (Nehalem-EX) [Westmere] [Xeon E7]");
+		break;
+
 	default:
                 add_to_cpuname("Unknown model. ");
 	}
