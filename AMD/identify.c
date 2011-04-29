@@ -369,8 +369,8 @@ void Identify_AMD(struct cpudata *cpu)
 	if (cpu->cpuid_level < 1)
 		return;
 
+	cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
 	if (cpu->family == 0xf) {
-		cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
 		cpu->emodel = (eax >> 16) & 0xf;
 		cpu->efamily= (eax >> 20) & 0xff;
 	} else {
