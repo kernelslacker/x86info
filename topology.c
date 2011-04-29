@@ -114,4 +114,6 @@ void display_topology(struct cpudata *head)
 
 	if (cpu->flags_edx & X86_FEATURE_HT && cpu->num_siblings > 1)
 		printf(" with hyper-threading (%d threads per core)", cpu->num_siblings);
+
+	free(sockets);
 }
