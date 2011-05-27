@@ -70,10 +70,10 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 {
 	char cpuname[16];
 	unsigned char buffer[8];
-	unsigned long lo, hi;
+	unsigned long long lo, hi;
 	int fh;
 	static int nodriver=0;
-	unsigned long *ptr = (unsigned long *) buffer;
+	unsigned int *ptr = (unsigned int *) buffer;
 
 	if (nodriver==1)
 		return 0;
@@ -101,10 +101,9 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 			return 0;
 		}
 
-		lo = *(ptr)++;
-		hi = *(ptr);
-		*val = hi;
-		*val = (*val<<32) | lo;
+		lo = *ptr;
+		hi = *(++ptr);
+		*val = (hi << 32) | lo;
 	}
 	if (close(fh) == -1) {
 		perror("close");
