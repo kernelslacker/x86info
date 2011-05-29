@@ -131,8 +131,8 @@ void display_extended_Intel_info(struct cpudata *cpu)
 	if (show_eblcr) {
 		if (cpu->family == 6 && cpu->model >= 3) {
 			unsigned long long eblcr;
-			read_msr(cpu->number, 0x2A, &eblcr);
-			interpret_eblcr(eblcr);
+			if (read_msr(cpu->number, 0x2A, &eblcr) == 1)
+				interpret_eblcr(eblcr);
 		}
 	}
 
