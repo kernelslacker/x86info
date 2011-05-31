@@ -364,7 +364,12 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if((optind > -1) && argv[optind]) {
+	if (argc < 2) {
+		usage();
+		goto out;
+	}
+
+	if ((optind > -1) && argv[optind]) {
 		if ((argc - optind) != 1)
 			usage();
 		if (strlen(argv[optind]) >= OPT_MAX) {
