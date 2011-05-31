@@ -308,6 +308,8 @@ static int set_msr_table(void)
 	return 0;
 }
 
+struct reg_spec unknown_msr = {0, "unknown", "(at your own risk)", NULL, NULL};
+
 #define OPT_MAX 32
 int main(int argc, char *argv[])
 {
@@ -400,8 +402,10 @@ int main(int argc, char *argv[])
 		reg = get_reg_spec(g.reg, g.msr_table);
 		if (!reg) {
 			fflush(stdout);
-			fprintf(stderr, "error: unknown MSR %x\n", g.reg);
-			goto out;
+			fprintf(stderr, "warning: unknown MSR %x\n", g.reg);
+			g.verbosity = 0;
+			unknown_msr.address = g.reg;
+			reg = &unknown_msr;
 		}
 		if (_show_msr(reg))
 			goto out;
