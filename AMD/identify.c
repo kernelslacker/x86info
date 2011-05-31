@@ -91,26 +91,36 @@ static void set_connector(struct cpudata *c)
 	cpuid(c->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 	pkg_id = (ebx >> 28) & 0xf;
 
-	switch (pkg_id) {
-	case 0:
-		c->connector = CONN_SOCKET_F_R2;
-		break;
-	case 1:
-		c->connector = CONN_SOCKET_AM3;
-		break;
-	case 2:
-		c->connector = CONN_SOCKET_S1G3;
-		break;
-	case 3:
-		c->connector = CONN_SOCKET_G34;
-		break;
-	case 4:
-		c->connector = CONN_SOCKET_ASB2;
-		break;
-	case 5:
-		c->connector = CONN_SOCKET_C32;
-	default:
-		c->connector = 0;
+	if ((family(c) == 0x10) || (family(c) == 0x11)) {
+		switch (pkg_id) {
+		case 0:
+			c->connector = CONN_SOCKET_F_R2;
+			break;
+		case 1:
+			c->connector = CONN_SOCKET_AM3;
+			break;
+		case 2:
+			c->connector = CONN_SOCKET_S1G3;
+			break;
+		case 3:
+			c->connector = CONN_SOCKET_G34;
+			break;
+		case 4:
+			c->connector = CONN_SOCKET_ASB2;
+			break;
+		case 5:
+			c->connector = CONN_SOCKET_C32;
+		default:
+			c->connector = 0;
+		}
+	} else if (family(c) == 0x14) {
+		switch (pkg_id) {
+		case 0:
+			c->connector = CONN_SOCKET_FT1;
+			break;
+		default:
+			c->connector = 0;
+		}
 	}
 }
 
@@ -139,6 +149,21 @@ static void set_fam11h_revinfo(int id, struct cpudata *c)
 			 "AMD Turion X2 Ultra Dual-Core (%s)", p);
 	else
 		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
+
+	set_connector(c);
+}
+
+static void set_fam14h_revinfo(int id, struct cpudata *c)
+{
+	const char *p;
+
+	p = get_fam14h_revision_name(id);
+	if (p)
+		snprintf(c->name, CPU_NAME_LEN,
+			 "AMD C/E/G-Series Processor (%s)", p);
+	else
+		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
+
 
 	set_connector(c);
 }
@@ -378,14 +403,26 @@ void Identify_AMD(struct cpudata *cpu)
 		cpu->efamily = 0;
 	}
 
-	if (family(cpu) == 0xf) {
-		set_k8_revinfo(eax, cpu);
-		return;
-	} else if (family(cpu) == 0x10) {
-		set_fam10h_revinfo(eax, cpu);
-		return;
-	} else if (family(cpu) == 0x11) {
-		set_fam11h_revinfo(eax, cpu);
+	if (family(cpu) >= 0xf) {
+		switch family(cpu) {
+		case 0xf:
+			set_k8_revinfo(eax, cpu);
+			break;
+		case 0x10:
+			set_fam10h_revinfo(eax, cpu);
+			break;
+		case 0x11:
+			set_fam11h_revinfo(eax, cpu);
+			break;
+		case 0x14:
+			set_fam14h_revinfo(eax, cpu);
+			break;
+		default:
+			printf("Unknown CPU family: 0x%x\n",
+			       family(cpu));
+			break;
+		}
+
 		return;
 	}
 

@@ -147,4 +147,9 @@ struct id_string fam11h_revisions[] = {
 };
 get_name(fam11h_revision, int, fam11h_revisions);
 
+struct id_string fam14h_revisions[] = {
+	{0x00500f10, "ON-B0"},
+};
+get_name(fam14h_revision, int, fam14h_revisions);
+
 #endif /* _amd_revision_h_ */

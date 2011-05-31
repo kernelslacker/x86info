@@ -132,6 +132,33 @@ static int get_did(int family, union msr_pstate pstate)
 	return t;
 }
 
+static int get_main_pll_fid(void)
+{
+	struct pci_filter filter_nb_misc = { -1, -1, -1, -1, 0x1022, 0x1703};
+	struct pci_access *pacc;
+	struct pci_dev *z = NULL;
+	u8 val;
+
+	pacc = pci_alloc();
+	pci_init(pacc);
+	pci_scan_bus(pacc);
+
+	for (z=pacc->devices; z; z=z->next) {
+		if (pci_filter_match(&filter_nb_misc, z))
+			break;
+	}
+
+	val = 0;
+	if (z) {
+		val = pci_read_byte(z, 0xd4);
+		val &= 0x3f;
+	}
+
+	pci_cleanup(pacc);
+
+	return val;
+}
+
 static int get_cof(int family, union msr_pstate pstate)
 {
 	int t;
@@ -141,16 +168,27 @@ static int get_cof(int family, union msr_pstate pstate)
 
 	t = 0x10;
 	fid = pstate.bits.fid;
-	if (family == 0x11)
-		t = 0x8;
+	if (family == 0x10)
+		goto out;
 
+	if (family == 0x11) {
+		t = 0x8;
+		goto out;
+	}
+
+	if (family == 0x14) {
+		fid = get_main_pll_fid(); //from PCI
+		return (((fid + 0x10) *100) * 4 / did);
+	}
+
+ out:
 	return ((100 * (fid + t)) >> did);
  }
 
 static int get_num_boost_states(void)
 {
 	struct pci_filter filter_nb_link = { -1, -1, -1, -1, 0x1022, 0};
-	int dev_ids[3] = {0x1204};
+	int dev_ids[3] = {0x1204, 0x1704};
 	struct pci_access *pacc;
 	struct pci_dev *z = NULL;
 	u8 val;
@@ -218,13 +256,15 @@ static void decode_pstates(struct cpudata *cpu, int has_cpb)
 				i);
 			return;
 		}
-		if (i < boost_states)
+		if (i < boost_states) {
 			printf("Pstate-Pb%d: %dMHz (boost state)\n",
 			       i, get_cof(fam, pstate));
-		else
+		} else if (pstate.bits.en) {
+			/* show information only if pstate is enabled */
 			printf("Pstate-P%d:  %dMHz%s\n",
 			       i - boost_states, get_cof(fam, pstate),
 			       (i == pscur) ? " (current)"  : "");
+		}
 	}
 	printf("\n");
 }

@@ -58,6 +58,7 @@ enum connector {
 	CONN_SOCKET_G34,
 	CONN_SOCKET_ASB2,
 	CONN_SOCKET_C32,
+	CONN_SOCKET_FT1,
 };
 
 #define CPU_NAME_LEN 80
