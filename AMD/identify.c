@@ -113,6 +113,20 @@ static void set_connector(struct cpudata *c)
 		default:
 			c->connector = 0;
 		}
+	} else if(family(c) == 0x12) {
+		switch (pkg_id) {
+		case 0:
+			c->connector = CONN_SOCKET_FP1;
+			break;
+		case 1:
+			c->connector = CONN_SOCKET_FS1;
+			break;
+		case 2:
+			c->connector = CONN_SOCKET_FM1;
+			break;
+		default:
+			c->connector = 0;
+		}
 	} else if (family(c) == 0x14) {
 		switch (pkg_id) {
 		case 0:
@@ -147,6 +161,20 @@ static void set_fam11h_revinfo(int id, struct cpudata *c)
 	if (p)
 		snprintf(c->name, CPU_NAME_LEN,
 			 "AMD Turion X2 Ultra Dual-Core (%s)", p);
+	else
+		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
+
+	set_connector(c);
+}
+
+static void set_fam12h_revinfo(int id, struct cpudata *c)
+{
+	const char *p;
+
+	p = get_fam12h_revision_name(id);
+	if(p)
+		snprintf(c->name, CPU_NAME_LEN,
+			 "AMD A/E2-Series Processor (%s)", p);
 	else
 		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
 
@@ -413,6 +441,9 @@ void Identify_AMD(struct cpudata *cpu)
 			break;
 		case 0x11:
 			set_fam11h_revinfo(eax, cpu);
+			break;
+		case 0x12:
+			set_fam12h_revinfo(eax, cpu);
 			break;
 		case 0x14:
 			set_fam14h_revinfo(eax, cpu);

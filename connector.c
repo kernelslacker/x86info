@@ -39,6 +39,9 @@ static struct {
 	{CONN_SOCKET_G34, "Socket G34"},
 	{CONN_SOCKET_ASB2, "Socket ASB2"},
 	{CONN_SOCKET_C32, "Socket C32"},
+	{CONN_SOCKET_FP1, "Socket FP1"},
+	{CONN_SOCKET_FS1, "Socket FS1"},
+	{CONN_SOCKET_FM1, "Socket FM1"},
 	{CONN_SOCKET_FT1, "Socket FT1"},
 	/* Intel specific sockets */
 	{CONN_SOCKET_57B, "Socket 5/7 (320 Pin PGA)"},

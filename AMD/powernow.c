@@ -176,6 +176,36 @@ static int get_cof(int family, union msr_pstate pstate)
 		goto out;
 	}
 
+	if (family == 0x12) {
+		int f, d;
+		t = 0x10;
+		fid = (pstate.val >> 4) & 0x1f;
+
+		switch (did) {
+		case 0:
+			goto out;
+		case 2:
+			did = 1; goto out;
+		case 4:
+			did = 2; goto out;
+		case 6:
+			did = 3; goto out;
+		case 8:
+			did = 4; goto out;
+		case 1:
+			f = 2; d = 3; break;
+		case 3:
+			f = 1; d = 3; break;
+		case 5:
+			f = 1; d = 6; break;
+		case 7:
+			f = 1; d = 12; break;
+		default:
+			printf("Invalid divisor ID: %d\n", did);
+			return 0;
+		}
+		return (100 * (fid + t) * f / d);
+	}
 	if (family == 0x14) {
 		fid = get_main_pll_fid(); //from PCI
 		return (((fid + 0x10) *100) * 4 / did);
