@@ -289,6 +289,10 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		add_to_cpuname("Core i7 (Nehalem) [Gulftown/Westmere-EP]");
 		break;
 
+	case 0x2d:
+		add_to_cpuname("Core i7 (Sandybridge) [Romely-EP]");
+		break;
+
 	case 0x2e:
 		add_to_cpuname("Core i7 (Nehalem) [Beckton]");
 		break;
