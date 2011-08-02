@@ -39,27 +39,27 @@ import os
 progname=os.path.basename(sys.argv[0])
 
 if len(sys.argv) < 3:
-    print progname + ": invalid number of argumenst"
-    print "\nUSAGE:"
-    print progname + " <input file> <struct name>"
-    print "\nEXAMPLE:"
-    print progname + " k8regs.txt k8 >k8.h"
+    print(progname + ": invalid number of argumenst")
+    print("\nUSAGE:")
+    print(progname + " <input file> <struct name>")
+    print("\nEXAMPLE:")
+    print(progname + " k8regs.txt k8 >k8.h")
     sys.exit(1)
 
 f=open(sys.argv[1])
 family=sys.argv[2]
 
-print \
+print(\
 "/*\n"\
 " * Licensed under the terms of the GNU GENERAL PUBLIC LICENSE version 2.\n"\
 " * See file COPYING for details.\n"\
-" */\n"
-print "#ifndef " + family + "_h"
-print "#define " + family + "_h\n"
+" */\n")
+print("#ifndef " + family + "_h")
+print("#define " + family + "_h\n")
 if (re.search("/", sys.argv[1])):
-    print "#include \"../msr.h\"\n"
+    print("#include \"../msr.h\"\n")
 else:
-    print "#include \"msr.h\"\n"
+    print("#include \"msr.h\"\n")
 struct=[]
 for line in f:
     if (re.search("^#",line)):
@@ -88,8 +88,8 @@ for line in f:
             str1 += "," + e[1]
         str1 += ",0);"
         str2 += ");"
-        print str1
-        print str2
+        print(str1)
+        print(str2)
         str3 = "_SPEC(" + reg_addr + ", " + reg_name + ", " 
         if reg_desc != "":
             str3 += "\"" + reg_desc + "\", "
@@ -104,10 +104,10 @@ for line in f:
         fwidth=field[1].strip()
         spec.append([fname, fwidth])
 
-print "\nstruct reg_spec " + family + "_spec [] = {"
+print("\nstruct reg_spec " + family + "_spec [] = {")
 for i in struct:
-    print "\t" + i + ","
-print "	{0, NULL, NULL, NULL, NULL},"
-print "};\n"
-print "#endif /* " + family + "_h */"
+    print("\t" + i + ",")
+print("	{0, NULL, NULL, NULL, NULL},")
+print("};\n")
+print("#endif /* " + family + "_h */")
 f.close()
