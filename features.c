@@ -469,7 +469,7 @@ static void test_longnop(void)
 	died = sigsetjmp(out, 1);
 
 	if (!died)
-		asm volatile("nopl 0(%eax)");
+		asm volatile(".byte 0x0f,0x1f,0x00 /* nopl 0(%eax) */");
 
 	printf("Long NOPs supported: %s\n", died ? "no" : "yes");
 }
