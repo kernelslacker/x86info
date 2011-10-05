@@ -140,12 +140,13 @@ static void seekEntry(vm_offset_t addr)
 	}
 }
 
-static void readEntry(void* entry, int size)
+static int readEntry(void* entry, int size)
 {
 	if (read(pfd, entry, size) != size) {
 		perror("readEntry");
-		exit(EXIT_FAILURE);
+		return -1;
 	}
+	return 0;
 }
 
 static int readType(void)
@@ -171,7 +172,10 @@ static void processorEntry(void)
 	int t, family, model;
 
 	/* read it into local memory */
-	readEntry(&entry, sizeof(entry));
+	if (readEntry(&entry, sizeof(entry)) < 0) {
+		printf("Error reading processor entry\n");
+		exit(EXIT_FAILURE);
+	}
 
 	/* count it */
 	++ncpu;
@@ -216,7 +220,10 @@ static int MPConfigTableHeader(u32 pap)
 
 	/* read in cth structure */
 	seekEntry(paddr);
-	readEntry(&cth, sizeof(cth));
+	if(readEntry(&cth, sizeof(cth))) {
+		printf("error reading MP Config table header structure\n");
+		exit(EXIT_FAILURE);
+	}
 
 	totalSize = cth.base_table_length - sizeof(struct MPCTH);
 	count = cth.entry_count;
@@ -260,11 +267,19 @@ static int apic_probe(vm_offset_t* paddr)
 
 	/* search Extended Bios Data Area, if present */
 	seekEntry((vm_offset_t)EBDA_POINTER);
-	readEntry(&segment, 2);
+	if (readEntry(&segment, 2)) {
+		printf("error reading EBDA pointer\n");
+		exit(EXIT_FAILURE);
+	}
+
 	if (segment) {				/* search EBDA */
 		target = (vm_offset_t)segment << 4;
 		seekEntry(target);
-		readEntry(buffer, ONE_KBYTE);
+		if (readEntry(buffer, ONE_KBYTE)) {
+			printf("error reading 1K from %p\n", (void *)target);
+			exit(EXIT_FAILURE);
+		}
+
 
 		for (x = 0; x < ONE_KBYTE / 4; NEXT(x)) {
 			if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
@@ -276,11 +291,19 @@ static int apic_probe(vm_offset_t* paddr)
 
 	/* read CMOS for real top of mem */
 	seekEntry((vm_offset_t)TOPOFMEM_POINTER);
-	readEntry(&segment, 2);
+	if (readEntry(&segment, 2)) {
+		printf("error reading CMOD for real top of mem (%p)\n", (void *) TOPOFMEM_POINTER);
+		exit(EXIT_FAILURE);
+	}
+
 	--segment;				/* less ONE_KBYTE */
 	target = segment * 1024;
 	seekEntry(target);
-	readEntry(buffer, ONE_KBYTE);
+	if (readEntry(buffer, ONE_KBYTE)) {
+		printf("error reading 1KB from %p\n", (void *)target);
+		exit(EXIT_FAILURE);
+	}
+
 
 	for (x = 0; x < ONE_KBYTE/4; NEXT(x)) {
 		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
@@ -293,7 +316,10 @@ static int apic_probe(vm_offset_t* paddr)
 	if (target != (DEFAULT_TOPOFMEM - 1024)) {
 		target = (DEFAULT_TOPOFMEM - 1024);
 		seekEntry(target);
-		readEntry(buffer, ONE_KBYTE);
+		if (readEntry(buffer, ONE_KBYTE)) {
+			printf("error reading DEFAULT_TOPOFMEM - 1024 from %p\n", (void *) target);
+			exit(EXIT_FAILURE);
+		}
 
 		for (x = 0; x < ONE_KBYTE/4; NEXT(x)) {
 			if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
@@ -305,7 +331,11 @@ static int apic_probe(vm_offset_t* paddr)
 
 	/* search the BIOS */
 	seekEntry(BIOS_BASE);
-	readEntry(buffer, BIOS_SIZE);
+	if (readEntry(buffer, BIOS_SIZE)) {
+		printf("error reading BIOS_BASE from %p\n", (void *)BIOS_BASE);
+		exit(EXIT_FAILURE);
+	}
+
 
 	for (x = 0; x < BIOS_SIZE/4; NEXT(x)) {
 		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
@@ -316,7 +346,11 @@ static int apic_probe(vm_offset_t* paddr)
 
 	/* search the extended BIOS */
 	seekEntry(BIOS_BASE2);
-	readEntry(buffer, BIOS_SIZE);
+	if (readEntry(buffer, BIOS_SIZE)) {
+		printf("error reading BIOS_BASE2 from %p\n", (void *)BIOS_BASE2);
+		exit(EXIT_FAILURE);
+	}
+
 
 	for (x = 0; x < BIOS_SIZE/4; NEXT(x)) {
 		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
@@ -328,7 +362,11 @@ static int apic_probe(vm_offset_t* paddr)
 	/* search additional memory */
 	target = GROPE_AREA1;
 	seekEntry(target);
-	readEntry(buffer, GROPE_SIZE);
+	if (readEntry(buffer, GROPE_SIZE)) {
+		printf("error reading GROPE_AREA1 from %p\n", (void *)target);
+		exit(EXIT_FAILURE);
+	}
+
 
 	for (x = 0; x < GROPE_SIZE/4; NEXT(x)) {
 		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
@@ -339,7 +377,11 @@ static int apic_probe(vm_offset_t* paddr)
 
 	target = GROPE_AREA2;
 	seekEntry(target);
-	readEntry(buffer, GROPE_SIZE);
+	if (readEntry(buffer, GROPE_SIZE)) {
+		printf("error reading GROPE_AREA2 from %p\n", (void *)target);
+		exit(EXIT_FAILURE);
+	}
+
 
 	for (x = 0; x < GROPE_SIZE/4; NEXT(x)) {
 		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
@@ -372,7 +414,11 @@ int enumerate_cpus(void)
 
 	/* read in mpfps structure*/
 	seekEntry(paddr);
-	readEntry(&mpfps, sizeof(mpfps_t));
+	if (readEntry(&mpfps, sizeof(mpfps_t))) {
+		printf("error reading mpfpsfrom %p\n", (void *)paddr);
+		exit(EXIT_FAILURE);
+	}
+
 
 	/* check whether an MP config table exists */
 	if (!mpfps.mpfb1)
@@ -401,7 +447,11 @@ void display_mptable()
 
 	/* read in mpfps structure*/
 	seekEntry(paddr);
-	readEntry(&mpfps, sizeof(mpfps_t));
+	if (readEntry(&mpfps, sizeof(mpfps_t))) {
+		printf("error reading mpfps from %p\n", (void *)paddr);
+		exit(EXIT_FAILURE);
+	}
+
 
 	/* parse an MP config table if it exists */
 	if (!mpfps.mpfb1)
