@@ -271,10 +271,14 @@ static int apic_probe(vm_offset_t* paddr)
 		printf("error reading EBDA pointer\n");
 		exit(EXIT_FAILURE);
 	}
+	if (debug)
+		printf("\nEBDA points to: %x\n", segment);
 
 	if (segment) {				/* search EBDA */
 		target = (vm_offset_t)segment << 4;
 		seekEntry(target);
+		if (debug)
+			printf("EBDA segment ptr: %lx\n", target);
 		if (readEntry(buffer, ONE_KBYTE)) {
 			printf("error reading 1K from %p\n", (void *)target);
 			exit(EXIT_FAILURE);
@@ -292,7 +296,7 @@ static int apic_probe(vm_offset_t* paddr)
 	/* read CMOS for real top of mem */
 	seekEntry((vm_offset_t)TOPOFMEM_POINTER);
 	if (readEntry(&segment, 2)) {
-		printf("error reading CMOD for real top of mem (%p)\n", (void *) TOPOFMEM_POINTER);
+		printf("error reading CMOS for real top of mem (%p)\n", (void *) TOPOFMEM_POINTER);
 		exit(EXIT_FAILURE);
 	}
 
