@@ -157,4 +157,10 @@ struct id_string fam14h_revisions[] = {
 };
 get_name(fam14h_revision, int, fam14h_revisions);
 
+struct id_string fam15h_revisions[] = {
+
+	{0x00600f12, "OR-B2"},
+};
+get_name(fam15h_revision, int, fam15h_revisions);
+
 #endif /* _amd_revision_h_ */

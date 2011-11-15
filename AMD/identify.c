@@ -91,7 +91,7 @@ static void set_connector(struct cpudata *c)
 	cpuid(c->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 	pkg_id = (ebx >> 28) & 0xf;
 
-	if ((family(c) == 0x10) || (family(c) == 0x11)) {
+	if ((family(c) == 0x10) || (family(c) == 0x11) || (family(c) == 0x15)) {
 		switch (pkg_id) {
 		case 0:
 			c->connector = CONN_SOCKET_F_R2;
@@ -110,6 +110,7 @@ static void set_connector(struct cpudata *c)
 			break;
 		case 5:
 			c->connector = CONN_SOCKET_C32;
+			break;
 		default:
 			c->connector = 0;
 		}
@@ -195,6 +196,20 @@ static void set_fam14h_revinfo(int id, struct cpudata *c)
 
 	set_connector(c);
 }
+
+static void set_fam15h_revinfo(int id, struct cpudata *c)
+{
+	const char *p;
+
+	p = get_fam15h_revision_name(id);
+	if (p)
+		snprintf(c->name, CPU_NAME_LEN,
+			 "AMD FX Series Processor (%s)", p);
+	else
+		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
+	set_connector(c);
+}
+
 
 static void do_assoc(unsigned long assoc)
 {
@@ -347,12 +362,12 @@ void decode_AMD_cacheinfo(struct cpudata *cpu)
 		printf("\n\t");
 		printf("lines per tag=%u\t", (ecx >> 8) & 0x0f);
 		printf("line size=%u bytes.\n", ecx & 0xff);
-		if (family(cpu) == 0x10) {
+		if ((family(cpu) == 0x10) || (family(cpu) == 0x15)) {
 			printf("L3 (shared) cache:\n\t");
 			if (!(edx >> 18))
 				printf("none/disabled\n");
 			else {
-				/* family 0x10 has shared L3  cache */
+				/* shared L3  cache */
 				printf("Size: %uKb\t",
 				       (edx >> 18) * 512);
 				do_l2assoc((edx >> 12) & 0x0f);
@@ -447,6 +462,9 @@ void Identify_AMD(struct cpudata *cpu)
 			break;
 		case 0x14:
 			set_fam14h_revinfo(eax, cpu);
+			break;
+		case 0x15:
+			set_fam15h_revinfo(eax, cpu);
 			break;
 		default:
 			printf("Unknown CPU family: 0x%x\n",

@@ -168,7 +168,7 @@ static int get_cof(int family, union msr_pstate pstate)
 
 	t = 0x10;
 	fid = pstate.bits.fid;
-	if (family == 0x10)
+	if ((family == 0x10) || (family == 0x15))
 		goto out;
 
 	if (family == 0x11) {
@@ -190,7 +190,7 @@ static int get_cof(int family, union msr_pstate pstate)
 			did = 2; goto out;
 		case 6:
 			did = 3; goto out;
-		case 8:
+		case 8: 
 			did = 4; goto out;
 		case 1:
 			f = 2; d = 3; break;
@@ -218,7 +218,7 @@ static int get_cof(int family, union msr_pstate pstate)
 static int get_num_boost_states(void)
 {
 	struct pci_filter filter_nb_link = { -1, -1, -1, -1, 0x1022, 0};
-	int dev_ids[3] = {0x1204, 0x1704};
+	int dev_ids[3] = {0x1204, 0x1604, 0x1704};
 	struct pci_access *pacc;
 	struct pci_dev *z = NULL;
 	u8 val;
@@ -244,7 +244,7 @@ static int get_num_boost_states(void)
 			printf("Boosting enabled\n");
 		else
 			printf("Boosting disabled\n");
-		val = (val >> 2) & 1;
+		val = (val >> 2) & 7;
 		printf("Number of boost states: %d\n", val);
 	}
 

@@ -372,8 +372,8 @@ static void decode_feature_flags(struct cpudata *cpu)
 		"3dnowPref", "osvw", "ibs", "xop",
 		"skinit", "wdt", NULL, "lwp",
 		"fma4", NULL, NULL, "NodeId",
-		NULL, "tbm", "TopoExt", NULL,
-		NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+		NULL, "tbm", "TopoExt", "PerfCtrExtCore",
+		"PerfCtrExtNB", NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};
 
 	const char *centaur_cap_extended_ecx_flags[] = {
