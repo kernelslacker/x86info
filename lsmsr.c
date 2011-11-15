@@ -31,6 +31,7 @@
 #include "AMD/fam11h.h"
 #include "AMD/fam12h.h"
 #include "AMD/fam14h.h"
+#include "AMD/fam15h.h"
 #include "generic_msr.h"
 
 /* Todos:
@@ -291,6 +292,9 @@ static int set_msr_table(void)
 			break;
 		case 0x14:
 			g.msr_table = fam14h_spec;
+			break;
+		case 0x15:
+			g.msr_table = fam15h_spec;
 			break;
 		default:
 			g.msr_table = generic_msr_spec;
