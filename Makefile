@@ -1,4 +1,4 @@
-VERSION=1.29
+VERSION=1.30
 
 CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls
 LDFLAGS = -Wl,-z,relro,-z,now
