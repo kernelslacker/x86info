@@ -1,6 +1,6 @@
 VERSION=1.30
 
-CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls
+CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls -DVERSION="$(VERSION)"
 LDFLAGS = -Wl,-z,relro,-z,now
 CC = gcc
 

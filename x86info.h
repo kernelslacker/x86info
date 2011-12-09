@@ -238,4 +238,7 @@ static inline void bind_cpu(struct cpudata *cpu)
 	}
 }
 
+#define __stringify_1(x...)     #x
+#define __stringify(x...)       __stringify_1(x)
+
 #endif /* _X86INFO_H */

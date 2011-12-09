@@ -41,7 +41,7 @@
  * - add support for generic MSRs for non-Intel/AMD CPUs
  */
 
-#define VERSION "0.816"
+#define LSMSR_VERSION "0.816"
 
 struct {
 	int fd;
@@ -116,7 +116,7 @@ static void help(void)
 
 static void version(void)
 {
-	fprintf(stdout, "%s version %s\n", g.prog, VERSION);
+	fprintf(stdout, "%s version %s\n", g.prog, LSMSR_VERSION);
 }
 
 static int get_msr_val(unsigned int msr, unsigned long long *val)
