@@ -26,7 +26,7 @@ void dump_IDA_MSRs(struct cpudata *cpu)
 
 	printf("Dynamic Acceleration MSRs:\n");
 	printf("  Opportunistic performance operation ");
-	if ((eax & (1 << 1)) == 1)
+	if (!(eax & (1 << 1)))
 		printf("enabled by BIOS\n");
 	else
 		printf("disabled by BIOS (or not supported)\n");
@@ -34,7 +34,7 @@ void dump_IDA_MSRs(struct cpudata *cpu)
 	if (read_msr(cpu->number, MSR_IA32_MISC_ENABLE, &val) != 1)
 		return;
 
-	if ((val & (1ULL << 38)) == 1) {
+	if (!(val & (1ULL << 38))) {
 		printf("  IA32_MISC_ENABLES[38] is 1 (disabled opportunistic performance operation)\n");
 		return;
 	}
@@ -42,7 +42,7 @@ void dump_IDA_MSRs(struct cpudata *cpu)
 	if (read_msr(cpu->number, MSR_IA32_PERF_CTL, &val) != 1)
 		return;
 	printf("  IA32_PERF_CTL: ");
-	if ((val & (1ULL << 32)) == 1) {
+	if (!(val & (1ULL << 32))) {
 		printf("IDA/Turbo DISENGAGE=1, ");
 	}
 	printf("EIST Transition target: 0x%x\n", (unsigned int) val & 0xff);
