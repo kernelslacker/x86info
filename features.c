@@ -371,7 +371,7 @@ static void decode_feature_flags(struct cpudata *cpu)
 		"LockMovCr0", "abm", "sse4a", "misalignsse",
 		"3dnowPref", "osvw", "ibs", "xop",
 		"skinit", "wdt", NULL, "lwp",
-		"fma4", NULL, NULL, "NodeId",
+		"fma4", "tce", NULL, "NodeId",
 		NULL, "tbm", "TopoExt", "PerfCtrExtCore",
 		"PerfCtrExtNB", NULL, NULL, NULL, NULL, NULL, NULL, NULL
 	};

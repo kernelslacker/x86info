@@ -91,7 +91,9 @@ static void set_connector(struct cpudata *c)
 	cpuid(c->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 	pkg_id = (ebx >> 28) & 0xf;
 
-	if ((family(c) == 0x10) || (family(c) == 0x11) || (family(c) == 0x15)) {
+
+	if ((family(c) == 0x10) || (family(c) == 0x11) ||
+	    ((family(c) == 0x15) && (model(c) <= 0xf))) {
 		switch (pkg_id) {
 		case 0:
 			c->connector = CONN_SOCKET_F_R2;
@@ -110,6 +112,20 @@ static void set_connector(struct cpudata *c)
 			break;
 		case 5:
 			c->connector = CONN_SOCKET_C32;
+			break;
+		default:
+			c->connector = 0;
+		}
+	} else if ((family(c) == 0x15) && (model(c) <= 0x1f)) {
+		switch (pkg_id) {
+		case 0:
+			c->connector = CONN_SOCKET_FP2;
+			break;
+		case 1:
+			c->connector = CONN_SOCKET_FS1r2;
+			break;
+		case 2:
+			c->connector = CONN_SOCKET_FM2;
 			break;
 		default:
 			c->connector = 0;

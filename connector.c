@@ -43,6 +43,9 @@ static struct {
 	{CONN_SOCKET_FS1, "Socket FS1"},
 	{CONN_SOCKET_FM1, "Socket FM1"},
 	{CONN_SOCKET_FT1, "Socket FT1"},
+	{CONN_SOCKET_FP2, "Socket FP2"},
+	{CONN_SOCKET_FS1r2, "Socket FS1r2"},
+	{CONN_SOCKET_FM2, "Socket FM2"},
 	/* Intel specific sockets */
 	{CONN_SOCKET_57B, "Socket 5/7 (320 Pin PGA)"},
 	{CONN_MOBILE_7, "Mobile Module (320 Lead TCP)"},

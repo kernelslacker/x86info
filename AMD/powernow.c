@@ -218,7 +218,7 @@ static int get_cof(int family, union msr_pstate pstate)
 static int get_num_boost_states(void)
 {
 	struct pci_filter filter_nb_link = { -1, -1, -1, -1, 0x1022, 0};
-	int dev_ids[3] = {0x1204, 0x1604, 0x1704};
+	int dev_ids[4] = {0x1204, 0x1404, 0x1604, 0x1704};
 	struct pci_access *pacc;
 	struct pci_dev *z = NULL;
 	u8 val;
@@ -341,7 +341,7 @@ void decode_powernow(struct cpudata *cpu)
 		has_cpb = 1;
 	}
 	if (edx & (1<<10))
-		printf("\n\read-only Effective Frequency Interface");
+		printf("\n\tread-only Effective Frequency Interface");
 	if (!(edx & 0x1ff))
 		printf(" None");
 
