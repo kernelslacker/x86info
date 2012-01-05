@@ -1007,7 +1007,8 @@
     SVME:1
     LMSLE:1
     FFXSE:1
-    :49
+    TCE:1
+    :48
 }
 
 {STAR=0xc0000081;SYSCALL target address
