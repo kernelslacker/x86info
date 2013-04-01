@@ -112,6 +112,15 @@ static struct _cache_table L3L2_cache_table[] =
 	{ 0x4c, MB(12), "L3 cache: 12MB, 12-way associative. 64 byte line size." },
 	{ 0x4d, MB(16), "L3 cache: 16MB, 16-way associative. 64 byte line size." },
 	{ 0x78,  MB(1), "L3 cache: 1MB, sectored, 8-way associative. 64 byte line size." },
+	{ 0, 0, NULL }
+};
+
+static struct _cache_table L3_cache_table[] =
+{
+	{ 0x22,  512, "L3 cache: 512KB, 4-way associative. 64 byte line size." },
+	{ 0x23, MB(1), "L3 cache: 1MB, 8-way associative. 64 byte line size." },
+	{ 0x25, MB(2), "L3 cache: 2MB, 8-way associative. 64 byte line size." },
+	{ 0x29, MB(4), "L3 cache: 4MB, 8-way associative. 64 byte line size." },
 	{ 0xd0,   512, "L3 cache: 512KB, 4-way associative. 64 byte line size." },
 	{ 0xd1,  MB(1), "L3 cache: 1MB, 4-way associative. 64 byte line size." },
 	{ 0xd2,  MB(2), "L3 cache: 2MB, 4-way associative. 64 byte line size." },
@@ -127,15 +136,6 @@ static struct _cache_table L3L2_cache_table[] =
 	{ 0xeb, MB(18), "L3 cache: 18MB, 24-way associative. 64 byte line size." },
 	{ 0xec, MB(24), "L3 cache: 24MB, 24-way associative. 64 byte line size." },
 	{ 0xde,  MB(8), "L3 cache: 8MB, 12-way associative. 64 byte line size." },
-	{ 0, 0, NULL }
-};
-
-static struct _cache_table L3_cache_table[] =
-{
-	{ 0x22,  512, "L3 cache: 512KB, 4-way associative. 64 byte line size." },
-	{ 0x23, MB(1), "L3 cache: 1MB, 8-way associative. 64 byte line size." },
-	{ 0x25, MB(2), "L3 cache: 2MB, 8-way associative. 64 byte line size." },
-	{ 0x29, MB(4), "L3 cache: 4MB, 8-way associative. 64 byte line size." },
 	{ 0, 0, NULL }
 };
 
