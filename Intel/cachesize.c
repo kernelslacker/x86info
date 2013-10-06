@@ -178,6 +178,7 @@ static struct _cache_table prefetch_table[] =
 };
 
 static unsigned char found_unknown=0;
+static unsigned char found_general=0;
 static unsigned char unknown_array[256];
 
 /* Decode Intel TLB and cache info descriptors */
@@ -192,6 +193,11 @@ static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
 	   cache, no 3rd-level cache". Skip this pointless entry.*/
 	if (des == 0x40)
 		return;
+
+	if (des == 0xff) {
+		found_general = 1;
+		return;
+	}
 
 	//TODO: Add description to link-list in cpu->
 
@@ -272,6 +278,51 @@ static void clean_unknowns(struct _cache_table *table)
 	}
 }
 
+static const char *cache_types[32] =
+{
+	NULL,
+	"Data Cache",
+	"Instruction Cache",
+	"Unified Cache",
+};
+
+static void decode_general_cache(struct cpudata *cpu, int output)
+{
+	unsigned int i;
+	unsigned int a, b, c, d;
+	const char *type;
+	unsigned int level;
+	unsigned int associativity;
+	unsigned int partitions;
+	unsigned int line_size;
+	unsigned int sets;
+	unsigned int size;
+
+	if (cpu->cpuid_level < 4)
+		return;
+
+	i = 0;
+	for (;;) {
+		cpuid4(cpu->number, i++, &a, &b, &c, &d);
+		if ((a & 0x1f) == 0)
+			break;
+
+		type = cache_types[a & 0x1f];
+		if (!type)
+			type = "Unknown Cache Type";
+		level = (a >> 5) & 0x7;
+		associativity = ((b >> 22) & 0x3ff) + 1;
+		partitions = ((b >> 12) & 0x3ff) + 1;
+		line_size = ((b >> 0) & 0xfff) + 1;
+		sets = c + 1;
+
+		size = (associativity * partitions * line_size * sets) / 1024;
+
+		if (output)
+			printf(" L%d %s: %dKB, %d-way associative, %d byte line size\n",
+			       level, type, size, associativity, line_size);
+	}
+}
 
 void decode_Intel_caches(struct cpudata *cpu, int output)
 {
@@ -299,6 +350,14 @@ void decode_Intel_caches(struct cpudata *cpu, int output)
 	}
 
 	decode_cache(cpu, L3_cache_table, output);
+	/* The cache descriptor 0xff means the CPU doesn't provide any
+	 * cache information in cpuid.2. It is instead provided in
+	 * cpuid.4.
+	 */
+	if (found_general) {
+		decode_general_cache (cpu, output);
+		found_general = 0;
+	};
 	if (output)
 		printf("TLB info\n");
 	decode_cache(cpu, ITLB_cache_table, output);
