@@ -147,6 +147,7 @@ static struct _cache_table ITLB_cache_table[] =
 	{ 0x51, 128, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 128 entries." },
 	{ 0x52, 256, "Instruction TLB: 4K, 2MB or 4MB pages, fully associative, 256 entries." },
 	{ 0x55,	  7, "Instruction TLB: 2MB or 4MB pages, fully associative, 7 entries" },
+	{ 0x76,   8, "Instruction TLB: 2M/4M pages, fully associative, 8 entries" },
 	{ 0xb0, 128, "Instruction TLB: 4K pages, 4-way associative, 128 entries." },
 	{ 0xb1,   4, "Instruction TLB: 4x 4MB page entries, or 8x 2MB pages entries, 4-way associative" },
 	{ 0xb2,  64, "Instruction TLB: 4K pages, 4-way associative, 64 entries." },
