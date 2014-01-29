@@ -175,6 +175,7 @@ static struct _cache_table prefetch_table[] =
 {
 	{0xf0, 64, "64 byte prefetching."},
 	{0xf1, 64, "128 byte prefetching."},
+	{ 0, 0, NULL }
 };
 
 static unsigned char found_unknown=0;
