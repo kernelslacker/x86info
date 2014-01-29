@@ -121,3 +121,7 @@ sparse:
 
 cscope:
 	cscope -Rb
+
+mirror:
+	@git push --mirror git@github.com:kernelslacker/x86info.git
+
