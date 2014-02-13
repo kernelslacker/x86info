@@ -39,11 +39,7 @@ all: x86info test
 
 X86INFO_HEADERS = \
 	= $(patsubst %.h,%.h,$(wildcard *.h)) \
-	  $(patsubst %.h,%.h,$(wildcard include/*.h)) \
-	  $(patsubst %.h,%.h,$(wildcard AMD/*.h)) \
-	  $(patsubst %.h,%.h,$(wildcard Centaur/*.h)) \
-	  $(patsubst %.h,%.h,$(wildcard Cyrix/*.h)) \
-	  $(patsubst %.h,%.h,$(wildcard Intel/*.h))
+	  $(patsubst %.h,%.h,$(wildcard include/*.h))
 
 X86INFO_SRC = \
 	$(wildcard *.c)	\

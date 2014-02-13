@@ -12,7 +12,7 @@
 #include "x86info.h"
 #include "mptable.h"
 
-#include "Intel/Intel.h"
+#include <Intel.h>
 
 unsigned int user_is_root = 0;
 
