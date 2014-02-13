@@ -13,6 +13,7 @@
 #include "mptable.h"
 
 #include <Intel.h>
+#include <AMD.h>
 
 unsigned int user_is_root = 0;
 

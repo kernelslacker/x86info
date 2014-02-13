@@ -138,7 +138,6 @@ static const char *get_##title##_name(type id) \
         return NULL; \
 }
 
-void Identify_AMD(struct cpudata *cpu);
 void Identify_Cyrix(struct cpudata *cpu);
 void identify_centaur(struct cpudata *cpu);
 void Identify_Intel(struct cpudata *cpu);
@@ -146,7 +145,6 @@ void identify_RiSE(struct cpudata *cpu);
 void identify_natsemi(struct cpudata *cpu);
 void identify_sis(struct cpudata *cpu);
 
-void display_AMD_info(struct cpudata *cpu);
 void display_Cyrix_info(struct cpudata *cpu);
 void display_centaur_info(struct cpudata *cpu);
 void display_basic_Intel_info(struct cpudata *cpu);
@@ -191,8 +189,6 @@ void decode_serial_number(struct cpudata *cpu);
 void get_topology(struct cpudata *head);
 void display_topology(struct cpudata *head);
 void get_intel_topology(struct cpudata *cpu);
-
-void decode_AMD_cacheinfo(struct cpudata *cpu);
 
 extern unsigned int nrCPUs;
 
