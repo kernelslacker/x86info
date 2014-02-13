@@ -7,7 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "x86info.h"
+#include <x86info.h>
+#include <Intel.h>
 
 static const char * corenum(int num)
 {

@@ -176,11 +176,9 @@ int HaveCPUID(void);
 int enumerate_cpus(void);
 void get_model_name(struct cpudata *cpu);
 void decode_connector(enum connector type);
-void decode_serial_number(struct cpudata *cpu);
 
 void get_topology(struct cpudata *head);
 void display_topology(struct cpudata *head);
-void get_intel_topology(struct cpudata *cpu);
 
 extern unsigned int nrCPUs;
 

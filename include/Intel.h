@@ -20,6 +20,9 @@ void Identify_Intel(struct cpudata *cpu);
 void display_basic_Intel_info(struct cpudata *cpu);
 void display_extended_Intel_info(struct cpudata *cpu);
 
+void decode_serial_number(struct cpudata *cpu);
+void get_intel_topology(struct cpudata *cpu);
+
 #define MSR_IA32_PLATFORM_ID	0x17
 #define MSR_IA32_UCODE_REV		0x8b
 
