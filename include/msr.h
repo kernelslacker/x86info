@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * Author: Andreas Herrmann <andreas.herrmann3@amd.com>
  *
@@ -6,10 +8,6 @@
  * Licensed under the terms of the GNU GENERAL PUBLIC LICENSE version 2.
  * See file COPYING for details.
  */
-
-#ifndef _msr_h
-#define _msr_h
-
 
 #define _RANGE(name, args...) \
 unsigned char name##_range[] = { args }
@@ -130,5 +128,3 @@ static void print_reg(struct reg_spec *reg, uint64_t val, uint8_t list,
 
 	fprintf(stdout, "\n");
 }
-
-#endif /* _msr_h */

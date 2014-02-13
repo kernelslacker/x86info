@@ -1,5 +1,4 @@
-#ifndef _X86INFO_H
-#define _X86INFO_H
+#pragma once
 
 typedef unsigned char u8;
 typedef unsigned short u16;
@@ -216,5 +215,3 @@ extern unsigned int verbose;
 
 #define __stringify_1(x...)     #x
 #define __stringify(x...)       __stringify_1(x)
-
-#endif /* _X86INFO_H */

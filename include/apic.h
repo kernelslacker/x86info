@@ -1,5 +1,4 @@
-#ifndef _APIC_H
-#define _APIC_H
+#pragma once
 
 #define IA32_APIC_BASE_MSR 		0x1B
 
@@ -37,8 +36,3 @@ enum apic_register_offset
 	APIC_TCCR 	= 0x39,
 	APIC_TDCR 	= 0x3E,
 };
-
-#include <fcntl.h>
-#include <sys/mman.h>
-
-#endif /* _APIC_H */

@@ -9,7 +9,9 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include "apic.h"
+#include <apic.h>
+#include <fcntl.h>
+#include <sys/mman.h>
 #include <x86info.h>
 
 static int fd;

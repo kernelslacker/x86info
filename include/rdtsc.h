@@ -1,3 +1,5 @@
+#pragma once
+
 static inline unsigned long long int rdtsc(void)
 {
 	unsigned int low, high;

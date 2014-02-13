@@ -1,6 +1,6 @@
+#pragma once
+
 /*
- *  (C) 2001 Dave Jones.
- *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  Powernow register definitions.
@@ -92,4 +92,3 @@ union msr_pstate {
 
 extern double mobile_vid_table[32];
 extern double fid_codes[32];
-

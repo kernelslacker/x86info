@@ -1,5 +1,5 @@
-#ifndef _amd_revision_h_
-#define _amd_revision_h_
+#pragma once
+
 /*
  *  Copyright (C) 2007 Advanced Micro Devices, Inc.
  *                     Andreas Herrmann <andreas.herrmann3@amd.com>
@@ -163,4 +163,3 @@ struct id_string fam15h_revisions[] = {
 };
 get_name(fam15h_revision, int, fam15h_revisions);
 
-#endif /* _amd_revision_h_ */

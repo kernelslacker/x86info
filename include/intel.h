@@ -1,5 +1,4 @@
-#ifndef _INTEL_H
-#define _INTEL_H
+#pragma once
 
 void decode_intel_caches (struct cpudata *cpu, int output);
 void show_intel_caches(struct cpudata *cpu);
@@ -33,5 +32,3 @@ void get_intel_topology(struct cpudata *cpu);
 #define MSR_PM_THERM2_CTL		0x19d
 #define MSR_IA32_MISC_ENABLE		0x1a0
 #define MSR_IA32_ENERGY_PERF_BIAS	0x1b0
-
-#endif /* _INTEL_H */
