@@ -96,9 +96,9 @@ static void decode_mtrr_deftype(int cpu, int msr)
 	ret = mtrr_value(cpu,msr,&val);
 	if (ret) {
 		printf("0x%016llx ", val);
-		printf("(fixed-range flag: 0x%01x, ",(unsigned int) (val&IA32_MTRR_DEFTYPE_FE) >> 10);
-		printf("mtrr flag: 0x%01x, ",(unsigned int) (val&IA32_MTRR_DEFTYPE_E) >> 11);
-		printf("type field: 0x%02x (%s))\n", (unsigned int) (val&IA32_MTRR_DEFTYPE_TYPE) >> 8,
+		printf("(fixed-range flag: 0x%01x, ",(unsigned int) (val >> 10) & IA32_MTRR_DEFTYPE_FE);
+		printf("mtrr flag: 0x%01x, ",(unsigned int) (val >> 11) & IA32_MTRR_DEFTYPE_E);
+		printf("type field: 0x%02x (%s))\n", (unsigned int) (val >> 8) & IA32_MTRR_DEFTYPE_TYPE,
 				mtrr_types[((val&IA32_MTRR_DEFTYPE_TYPE) >> 8)]);
 	}
 }
