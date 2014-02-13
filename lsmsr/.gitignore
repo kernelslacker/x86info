@@ -1,10 +1,8 @@
-*.o
-*.P
-fam10h.h
-fam11h.h
-fam12h.h
-fam14h.h
-fam15h.h
-k8.h
+AMD_fam10h.h
+AMD_fam11h.h
+AMD_fam12h.h
+AMD_fam14h.h
+AMD_fam15h.h
+AMD_k8.h
 generic_msr.h
 lsmsr
