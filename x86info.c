@@ -34,7 +34,7 @@ static void separator(void)
 
 static void display_detailed_info(struct cpudata *cpu)
 {
-	bind_cpu(cpu);	/* FIXME: Eventually remove once 'gather' has all the per-cpu stuff */
+	bind_cpu(cpu->number);	/* FIXME: Eventually remove once 'gather' has all the per-cpu stuff */
 	show_info(cpu);
 
 	if (show_cpuid) {
@@ -154,7 +154,7 @@ static struct cpudata *alloc_cpu(void)
 
 static void fill_in_cpu_info(struct cpudata *cpu)
 {
-	bind_cpu(cpu);
+	bind_cpu(cpu->number);
 	estimate_MHz(cpu);
 	get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
 	get_feature_flags(cpu);

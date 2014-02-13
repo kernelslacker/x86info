@@ -156,6 +156,12 @@ void get_feature_flags(struct cpudata *cpu);
 void display_feature_flags(struct cpudata *cpu);
 void show_extra_intel_flags(struct cpudata *cpu);
 
+void bind_cpu(unsigned int cpunr);
+
+int native_cpuid(unsigned int cpunr, unsigned long long idx,
+	unsigned int *eax, unsigned int *ebx,
+	unsigned int *ecx, unsigned int *edx);
+
 void parse_command_line(int argc, char **argv);
 
 void get_cpu_info_basics(struct cpudata *cpu);
@@ -221,22 +227,6 @@ extern unsigned int verbose;
 #define X86_FEATURE_HT		(1<<28)
 #define X86_FEATURE_MTRR	(1<<12)
 #define X86_FEATURE_APIC	(1<<9)
-
-#define _GNU_SOURCE
-#define __USE_GNU
-#include <sched.h>
-#include <sys/types.h>
-#include <unistd.h>
-static inline void bind_cpu(struct cpudata *cpu)
-{
-	cpu_set_t set;
-
-	if (sched_getaffinity(getpid(), sizeof(set), &set) == 0) {
-		CPU_ZERO(&set);
-		CPU_SET(cpu->number, &set);
-		sched_setaffinity(getpid(), sizeof(set), &set);
-	}
-}
 
 #define __stringify_1(x...)     #x
 #define __stringify(x...)       __stringify_1(x)
