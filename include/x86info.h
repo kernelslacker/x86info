@@ -140,15 +140,12 @@ static const char *get_##title##_name(type id) \
 
 void Identify_Cyrix(struct cpudata *cpu);
 void identify_centaur(struct cpudata *cpu);
-void Identify_Intel(struct cpudata *cpu);
 void identify_RiSE(struct cpudata *cpu);
 void identify_natsemi(struct cpudata *cpu);
 void identify_sis(struct cpudata *cpu);
 
 void display_Cyrix_info(struct cpudata *cpu);
 void display_centaur_info(struct cpudata *cpu);
-void display_basic_Intel_info(struct cpudata *cpu);
-void display_extended_Intel_info(struct cpudata *cpu);
 
 void get_feature_flags(struct cpudata *cpu);
 void display_feature_flags(struct cpudata *cpu);

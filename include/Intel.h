@@ -1,19 +1,24 @@
 #ifndef _INTEL_H
 #define _INTEL_H
-extern void decode_Intel_caches (struct cpudata *cpu, int output);
-extern void show_Intel_caches(struct cpudata *cpu);
-extern void decode_Intel_machine_check(int cpunum, int family);
 
-extern void dump_p4_MSRs(struct cpudata *cpu);
-extern void dump_performance_MSRs(struct cpudata *cpu);
-extern void dump_thermal_MSRs(struct cpudata *cpu);
-extern void dump_IDA_MSRs(struct cpudata *cpu);
+void decode_Intel_caches (struct cpudata *cpu, int output);
+void show_Intel_caches(struct cpudata *cpu);
+void decode_Intel_machine_check(int cpunum, int family);
 
-extern void decode_microcode(struct cpudata *cpu);
+void dump_p4_MSRs(struct cpudata *cpu);
+void dump_performance_MSRs(struct cpudata *cpu);
+void dump_thermal_MSRs(struct cpudata *cpu);
+void dump_IDA_MSRs(struct cpudata *cpu);
 
-extern void Identify_Intel_family6pentium(struct cpudata *cpu);
-extern void Identify_Intel_family6core(struct cpudata *cpu);
-extern void Identify_Intel_family15(struct cpudata *cpu);
+void decode_microcode(struct cpudata *cpu);
+
+void Identify_Intel_family6pentium(struct cpudata *cpu);
+void Identify_Intel_family6core(struct cpudata *cpu);
+void Identify_Intel_family15(struct cpudata *cpu);
+
+void Identify_Intel(struct cpudata *cpu);
+void display_basic_Intel_info(struct cpudata *cpu);
+void display_extended_Intel_info(struct cpudata *cpu);
 
 #define MSR_IA32_PLATFORM_ID	0x17
 #define MSR_IA32_UCODE_REV		0x8b
