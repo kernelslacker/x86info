@@ -20,9 +20,9 @@ void display_MHz(struct cpudata *cpu)
 	if (cpu->MHz < 1000)
 		printf("%uMHz", cpu->MHz);
 	else {
-		int a = (cpu->MHz / 1000);
-		int b = ((cpu->MHz % 1000)/100);
-		int c = (a*1000)+(b*100);
+		unsigned int a = (cpu->MHz / 1000);
+		unsigned int b = ((cpu->MHz % 1000)/100);
+		unsigned int c = (a*1000)+(b*100);
 		printf("%u.%u%uGHz", a, b, (cpu->MHz - c)/10);
 	}
 }

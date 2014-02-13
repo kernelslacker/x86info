@@ -279,9 +279,10 @@ static void decode_cache(struct cpudata *cpu, const struct _cache_table *table, 
 static void clean_unknowns(const struct _cache_table *table)
 {
 	int j=0;
-	int des;
 
 	while (table[j].descriptor != 0) {
+		int des;
+
 		des = table[j++].descriptor;
 		if (unknown_array[des] == 1) {
 			unknown_array[des] = 0;
@@ -302,19 +303,20 @@ static void decode_general_cache(struct cpudata *cpu, int output)
 {
 	unsigned int i;
 	unsigned int a, b, c, d;
-	const char *type;
-	unsigned int level;
-	unsigned int associativity;
-	unsigned int partitions;
-	unsigned int line_size;
-	unsigned int sets;
-	unsigned int size;
 
 	if (cpu->cpuid_level < 4)
 		return;
 
 	i = 0;
 	for (;;) {
+		const char *type;
+		unsigned int level;
+		unsigned int associativity;
+		unsigned int partitions;
+		unsigned int line_size;
+		unsigned int sets;
+		unsigned int size;
+
 		cpuid4(cpu->number, i++, &a, &b, &c, &d);
 		if ((a & 0x1f) == 0)
 			break;
@@ -331,7 +333,7 @@ static void decode_general_cache(struct cpudata *cpu, int output)
 		size = (associativity * partitions * line_size * sets) / 1024;
 
 		if (output)
-			printf(" L%d %s: %dKB, %d-way associative, %d byte line size\n",
+			printf(" L%u %s: %uKB, %u-way associative, %u byte line size\n",
 			       level, type, size, associativity, line_size);
 	}
 }

@@ -89,7 +89,7 @@ static void decode_mcg_ctl(int cpunum)
 void decode_Intel_machine_check(int cpunum, int family)
 {
 	unsigned long long val;
-	int i, extcount = 0;
+	int i;
 
 	if (!user_is_root)
 		return;
@@ -104,6 +104,8 @@ void decode_Intel_machine_check(int cpunum, int family)
 
 	if (family == 0xf) {
 		if ((val & (1<<MCG_EXT_PBIT))) {
+			int extcount = 0;
+
 			extcount = (val >> 16) & 0xff;
 			printf("Number of extended MC registers : %d\n\n", extcount);
 		}

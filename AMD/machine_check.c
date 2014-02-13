@@ -38,7 +38,7 @@ void decode_athlon_machine_check(int cpunum)
 
 	banks = val & 0xf;
 
-	printf("Number of reporting banks : %d\n\n", banks);
+	printf("Number of reporting banks : %u\n\n", banks);
 
 	if (read_msr(cpunum, MCG_STATUS, &val) == 1) {
 		if (val != 0) {

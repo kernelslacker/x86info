@@ -23,7 +23,6 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 {
 	static int nodriver=0;
 	char cpuname[20];
-	unsigned char buffer[16];
 	int fh;
 	cpu_cpuid_args_t args;
 
@@ -35,7 +34,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 
 	args.level = idx;
 	/* Ok, use the /dev/CPU interface in preference to the _up code. */
-	(void)snprintf(cpuname,18, "/dev/cpu%d", CPU_number);
+	(void)snprintf(cpuname,18, "/dev/cpu%u", CPU_number);
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1) {
 		if (ioctl(fh, CPU_CPUID, &args) != 0) {

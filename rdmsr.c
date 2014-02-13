@@ -27,8 +27,6 @@
 int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 {
 	char cpuname[16];
-	unsigned char buffer[8];
-	unsigned long lo, hi;
 	int fh;
 	static int nodriver=0;
 	cpu_msr_args_t args;
@@ -70,7 +68,6 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 {
 	char cpuname[16];
 	unsigned char buffer[8];
-	unsigned long long lo, hi;
 	int fh;
 	static int nodriver=0;
 	unsigned int *ptr = (unsigned int *) buffer;
@@ -93,6 +90,8 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 	}
 
 	if (fh != -1) {
+		unsigned long long lo, hi;
+
 		if (read(fh, &buffer[0], 8) != 8) {
 			if (close(fh) == -1) {
 				perror("close");

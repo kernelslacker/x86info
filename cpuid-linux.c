@@ -83,7 +83,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 
 	memset(cpuname, 0, sizeof(cpuname));
 	/* Ok, use the /dev/cpu interface in preference to the _up code. */
-	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%d/cpuid", CPU_number);
+	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%u/cpuid", CPU_number);
 
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1) {

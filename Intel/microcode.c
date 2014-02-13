@@ -15,7 +15,6 @@
 void decode_microcode(struct cpudata *cpu)
 {
 	unsigned long long val = 0;
-	int ver;
 
 	if (!user_is_root)
 		return;
@@ -24,6 +23,8 @@ void decode_microcode(struct cpudata *cpu)
 		return;
 
 	if (read_msr (cpu->number, MSR_IA32_UCODE_REV, &val) == 1) {
+		int ver;
+
 		ver = val >>32;
 		if (ver>0)
 			printf("Microcode version: 0x%016llx\n", val >>32);
