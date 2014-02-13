@@ -37,7 +37,8 @@ union msr_longhaul {
 	unsigned long long val;
 };
 
-void decode_longhaul2(struct cpudata *cpu)
+/*
+static void decode_longhaul2(struct cpudata *cpu)
 {
 	union msr_longhaul longhaul;
 
@@ -82,3 +83,4 @@ void decode_longhaul2(struct cpudata *cpu)
 		binary (2, longhaul.bits.MinMHzFSB);
 	}
 }
+*/
