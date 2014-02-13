@@ -64,7 +64,7 @@ x86info: $(X86INFO_OBJS) $(HEADERS)
 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS) -lpci
 
 DEPDIR= .deps
--include $(SRCS:%.c=$(DEPDIR)/%.d)
+-include $(X86INFO_SRC:%.c=$(DEPDIR)/%.d)
 df = $(DEPDIR)/$(*D)/$(*F)
 
 %.o : %.c
@@ -107,7 +107,7 @@ mirror:
 scan:
 	@scan-build --use-analyzer=/usr/bin/clang make
 
-tags:   $(SRCS)
+tags:   $(X86INFO_SRC)
 	@ctags -R --exclude=tmp
 
 coverity:
