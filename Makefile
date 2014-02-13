@@ -82,15 +82,15 @@ df = $(DEPDIR)/$(*D)/$(*F)
 
 
 nodes:
-	scripts/makenodes
+	@scripts/makenodes
 
 test:
-	scripts/testnodes
+	@scripts/testnodes
 
 release:
-	git repack -a -d
-	git prune-packed
-	git archive --format=tar --prefix=x86info-$(VERSION)/ HEAD | gzip -9 > x86info-$(VERSION).tgz
+	@git repack -a -d
+	@git prune-packed
+	@git archive --format=tar --prefix=x86info-$(VERSION)/ HEAD | gzip -9 > x86info-$(VERSION).tgz
 
 clean:
 	@find . -name "*.o" -exec rm {} \;
@@ -99,13 +99,13 @@ clean:
 	@rm -f core.*
 
 splint:
-	splint +posixlib -badflag -fileextensions -type -nullassign -boolops -showcolumn -sysunrecog -fullinitblock -onlytrans -unrecog -usedef -statictrans -compdestroy -predboolint -predboolothers -D__`uname -m`__ $(X86INFO_SRC)
+	@splint +posixlib -badflag -fileextensions -type -nullassign -boolops -showcolumn -sysunrecog -fullinitblock -onlytrans -unrecog -usedef -statictrans -compdestroy -predboolint -predboolothers -D__`uname -m`__ $(X86INFO_SRC)
 
 sparse:
-	sparse $(X86INFO_SRC)
+	@sparse $(X86INFO_SRC)
 
 cscope:
-	cscope -Rb
+	@cscope -Rb
 
 mirror:
 	@git push --mirror git@github.com:kernelslacker/x86info.git
