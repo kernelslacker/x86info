@@ -23,7 +23,6 @@ CFLAGS += -Wwrite-strings
 
 CFLAGS += -Werror
 
-
 LDFLAGS = -Wl,-z,relro,-z,now
 
 ifeq ($(CC),"")
@@ -35,58 +34,14 @@ SHELL = /bin/sh
 all: x86info test
 
 X86INFO_SRC = \
-	AMD/identify.c \
-	AMD/machine_check.c \
-	AMD/MSR-Athlon.c \
-	AMD/MSR-K6.c \
-	AMD/powernow.c \
-	AMD/dumppsb.c \
-	AMD/bugs.c \
-\
-	Cyrix/identify.c \
-\
-	Intel/identify.c \
-	Intel/identify-family6.c \
-	Intel/identify-family6-extended.c \
-	Intel/identify-family15.c \
-	Intel/info.c \
-	Intel/machine_check.c \
-	Intel/cachesize.c \
-	Intel/MSR-P4.c \
-	Intel/MSR-P6.c \
-	Intel/MSR-performance.c \
-	Intel/MSR-thermal.c \
-	Intel/MSR-IDA.c \
-	Intel/microcode.c \
-	Intel/topology.c \
-\
-	Centaur/identify.c \
-	Centaur/MSR-C3.c \
-	Centaur/longhaul.c \
-	Centaur/powersaver.c \
-\
-	NatSemi/identify.c \
-\
-	RiSE/identify.c \
-\
-	SiS/identify.c \
-\
-	x86info.c \
-	commandline.c \
-	havecpuid.c \
-	cpuid.c \
-	features.c \
-	identify.c \
-	rdmsr.c \
-	binary.c \
-	mptable.c \
-	get_model_name.c \
-	mtrr.c  \
-	apic.c  \
-	connector.c \
-	topology.c \
-\
-	MHz.c
+	$(wildcard *.c)	\
+	$(wildcard AMD/*.c) \
+	$(wildcard Cyrix/*.c) \
+	$(wildcard Intel/*.c) \
+	$(wildcard Centaur/*.c) \
+	$(wildcard NatSemi/*.c) \
+	$(wildcard RiSE/*.c) \
+	$(wildcard SiS/*.c)
 
 X86INFO_OBJS = $(X86INFO_SRC:%.c=%.o)
 
