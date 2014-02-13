@@ -38,7 +38,7 @@ void estimate_MHz(struct cpudata *cpu)
 {
 	unsigned long long int cycles[2]; /* gotta be 64 bit */
 	unsigned int eax, ebx, ecx, edx;
-	unsigned long r;
+	unsigned long r = rand();
 
 	if (cpu->number != 0) {
 		if (all_cpus == 0) {
