@@ -55,9 +55,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1) {
-#ifndef S_SPLINT_S
 		lseek64(fh, (off64_t)idx, SEEK_CUR);
-#endif
 		if (read(fh, &buffer[0], CPUID_CHUNK_SIZE) == -1) {
 			perror(cpuname);
 			exit(EXIT_FAILURE);

@@ -95,9 +95,6 @@ clean:
 	@rm -f core.*
 	@rm -rf $(DEPDIR)/*
 
-splint:
-	@splint +posixlib -badflag -fileextensions -type -nullassign -boolops -showcolumn -sysunrecog -fullinitblock -onlytrans -unrecog -usedef -statictrans -compdestroy -predboolint -predboolothers -D__`uname -m`__ $(X86INFO_SRC)
-
 sparse:
 	@sparse $(X86INFO_SRC)
 
