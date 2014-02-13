@@ -11,7 +11,6 @@
 #include "x86info.h"
 
 unsigned int show_apic = 0;
-unsigned int show_bench = 0;
 unsigned int show_bios = 0;
 unsigned int show_machine_check = 0;
 unsigned int show_bugs = 0;
@@ -41,7 +40,6 @@ static void usage(char *programname)
       --all-cpus\n\
       --addr\n\
       --apic\n\
-      --bench\n\
       --bios\n\
       --bugs\n\
 -c,   --cache\n\
@@ -100,9 +98,6 @@ void parse_command_line(int argc, char **argv)
 			need_root = 1;
 			show_apic = 1;
 		}
-
-		if (!strcmp(arg, "--bench"))
-			show_bench = 1;
 
 		if (!strcmp(arg, "--bios")) {
 			need_root = 1;

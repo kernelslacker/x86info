@@ -99,9 +99,6 @@ static void display_detailed_info(struct cpudata *cpu)
 		display_MHz(cpu);
 		printf(" processor (estimate).\n\n");
 	}
-
-	if (show_bench)
-		show_benchmarks(cpu);
 }
 
 /*

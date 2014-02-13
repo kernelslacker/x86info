@@ -23,7 +23,6 @@ medium priority stuff
   If this has happened we die horribly. We need to store the current
   name string, perform the cpuid reset sequence, and restore the
   name string on exit.
-- Fix benchmarking
 
 
 low priority stuff

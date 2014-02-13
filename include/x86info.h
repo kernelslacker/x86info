@@ -180,7 +180,6 @@ int HaveCPUID(void);
 int enumerate_cpus(void);
 void get_model_name(struct cpudata *cpu);
 void decode_connector(enum connector type);
-void show_benchmarks(struct cpudata *cpu);
 void decode_serial_number(struct cpudata *cpu);
 
 void get_topology(struct cpudata *head);
@@ -199,7 +198,6 @@ extern unsigned int need_root;
 
 /* command line args */
 extern unsigned int show_apic;
-extern unsigned int show_bench;
 extern unsigned int show_bios;
 extern unsigned int show_machine_check;
 extern unsigned int show_bugs;

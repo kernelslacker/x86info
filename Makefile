@@ -86,8 +86,7 @@ X86INFO_SRC = \
 	connector.c \
 	topology.c \
 \
-	bench/benchmarks.c \
-	bench/MHz.c
+	MHz.c
 
 X86INFO_OBJS = $(X86INFO_SRC:%.c=%.o)
 
