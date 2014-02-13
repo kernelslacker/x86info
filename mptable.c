@@ -80,15 +80,6 @@ typedef struct TABLE_ENTRY {
 	char	name[32];
 } tableEntry;
 
-static tableEntry basetableEntryTypes[] =
-{
-	{ 0, 20, "Processor" },
-	{ 1,  8, "Bus" },
-	{ 2,  8, "I/O APIC" },
-	{ 3,  8, "I/O INT" },
-	{ 4,  8, "Local INT" }
-};
-
 /* MP Floating Pointer Structure */
 typedef struct MPFPS {
 	char	signature[4];
@@ -169,7 +160,6 @@ static int readType(void)
 static void processorEntry(void)
 {
 	ProcEntry entry;
-	int t, family, model;
 
 	/* read it into local memory */
 	if (readEntry(&entry, sizeof(entry)) < 0) {
@@ -181,6 +171,8 @@ static void processorEntry(void)
 	++ncpu;
 
 	if (!silent) {
+		int t, family, model;
+
 		printf("#\t%2d", (int) entry.apicID);
 		printf("\t 0x%2x", (unsigned int) entry.apicVersion);
 
@@ -207,7 +199,6 @@ static int MPConfigTableHeader(u32 pap)
 	vm_offset_t paddr;
 	mpcth_t cth;
 	int x;
-	int totalSize;
 	int count, c;
 
 	if (pap == 0) {
@@ -225,7 +216,6 @@ static int MPConfigTableHeader(u32 pap)
 		exit(EXIT_FAILURE);
 	}
 
-	totalSize = cth.base_table_length - sizeof(struct MPCTH);
 	count = cth.entry_count;
 
 	/* initialize tables */
@@ -243,7 +233,6 @@ static int MPConfigTableHeader(u32 pap)
 	for (c = count; c; c--) {
 		if (readType() == 0)
 			processorEntry();
-		totalSize -= basetableEntryTypes[ 0 ].length;
 	}
 	if (!silent)
 		printf("\n");
