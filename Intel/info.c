@@ -128,14 +128,6 @@ void display_extended_Intel_info(struct cpudata *cpu)
 //		dump_IDA_MSRs(cpu);
 	}
 
-	if (show_eblcr) {
-		if (cpu->family == 6 && cpu->model >= 3) {
-			unsigned long long eblcr;
-			if (read_msr(cpu->number, 0x2A, &eblcr) == 1)
-				interpret_eblcr(eblcr);
-		}
-	}
-
 	/* FIXME: Bit test for MCA here!*/
 	if (show_machine_check)
 		decode_Intel_machine_check(cpu->number, cpu->family);

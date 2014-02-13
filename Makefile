@@ -53,7 +53,6 @@ X86INFO_SRC = \
 	Intel/info.c \
 	Intel/machine_check.c \
 	Intel/cachesize.c \
-	Intel/eblcr.c \
 	Intel/MSR-P4.c \
 	Intel/MSR-P6.c \
 	Intel/MSR-performance.c \

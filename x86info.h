@@ -177,7 +177,6 @@ void display_MHz(struct cpudata *cpu);
 void estimate_MHz(struct cpudata *cpu);
 
 int HaveCPUID(void);
-void interpret_eblcr(u32 lo);
 int enumerate_cpus(void);
 void get_model_name(struct cpudata *cpu);
 void decode_connector(enum connector type);

@@ -17,7 +17,6 @@ unsigned int show_machine_check = 0;
 unsigned int show_bugs = 0;
 unsigned int show_cacheinfo = 0;
 unsigned int show_connector = 0;
-unsigned int show_eblcr = 0;
 unsigned int show_msr = 0;
 unsigned int show_microcode = 0;
 unsigned int show_mtrr = 0;
@@ -54,7 +53,6 @@ static void usage(char *programname)
       --microcode\n\
 -mp,  --mptable\n\
 -m,   --msr\n\
-      --mult\n\
       --mtrr\n\
       --pm\n\
 -r,   --registers\n\
@@ -80,7 +78,6 @@ void parse_command_line(int argc, char **argv)
 				show_mptable =1;
 				show_mtrr = 1;
 				show_machine_check = 1;
-				show_eblcr =1;
 			}
 			show_addr_sizes = 1;
 			show_bugs = 1;
@@ -148,11 +145,6 @@ void parse_command_line(int argc, char **argv)
 		if (!strcmp(arg, "--mtrr")) {
 			need_root = 1;
 			show_mtrr = 1;
-		}
-
-		if (!strcmp(arg, "--mult")) {
-			need_root = 1;
-			show_eblcr = 1;
 		}
 
 		if (!strcmp(arg, "--pm"))
