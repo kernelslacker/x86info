@@ -8,6 +8,7 @@
 #include <x86info.h>
 #include <AMD.h>
 #include <Intel.h>
+#include <centaur.h>
 
 void get_cpu_info_basics(struct cpudata *cpu)
 {
