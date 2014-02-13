@@ -12,7 +12,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
-#include "x86info.h"
+#include <x86info.h>
 
 /* returns zero on success */
 int native_cpuid(unsigned int cpunr, unsigned long long idx,

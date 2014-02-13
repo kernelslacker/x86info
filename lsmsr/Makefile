@@ -45,6 +45,9 @@ LSMSR_TMP_HEADERS=AMD_k8.h \
 LSMSR_SRC = \
 	lsmsr.c \
 	../cpuid.c \
+	../cpuid-linux.c \
+	../cpuid-freebsd.c \
+	../cpuid-solaris.c \
 	../havecpuid.c
 
 LSMSR_OBJS = $(LSMSR_SRC:%.c=%.o)
