@@ -34,7 +34,7 @@ void decode_serial_number(struct cpudata *cpu)
 	p += sprintf(p, "-%04X", edx >> 16);
 	p += sprintf(p, "-%04X", edx & 0xffff);
 	p += sprintf(p, "-%04X", ecx >> 16);
-	p += sprintf(p, "-%04X\n", ecx & 0xffff);
+	sprintf(p, "-%04X\n", ecx & 0xffff);
 
 	printf("Processor serial: %s\n", cpu->serialno);
 }
