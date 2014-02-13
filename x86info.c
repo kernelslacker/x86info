@@ -16,7 +16,7 @@
 
 unsigned int user_is_root = 0;
 
-unsigned int nrCPUs=1;
+unsigned int nrCPUs = 1;
 static unsigned int nrSMPCPUs;
 
 struct cpudata *firstcpu;
@@ -184,11 +184,9 @@ int main (int argc, char **argv)
 	}
 
 	nrCPUs = sysconf(_SC_NPROCESSORS_ONLN);
-	/*
-	 * can't have less than 1 CPU, or more than
-	 * 65535 (some arbitrary large number)
-	 */
-	if ((nrCPUs < 1) || (nrCPUs > 65535)) {
+
+	/* can't have more than 65535 CPUs (some arbitrary large number) */
+	if (nrCPUs > 65535) {
 		printf("CPU count is bogus: defaulting to 1 CPU.\n");
 		nrCPUs = 1;
 	}
