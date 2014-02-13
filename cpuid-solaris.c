@@ -54,7 +54,11 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1) {
-		lseek64(fh, (off64_t)idx, SEEK_CUR);
+		if (lseek64(fh, (off64_t)idx, SEEK_CUR) < 0) {
+			printf("cpuid seek error: %s\n", strerror(errno));
+			exit(EXIT_FAILURE);
+		}
+
 		if (read(fh, &buffer[0], CPUID_CHUNK_SIZE) == -1) {
 			perror(cpuname);
 			exit(EXIT_FAILURE);
