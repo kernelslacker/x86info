@@ -1,4 +1,6 @@
 *.o
-*.P
+.d
 x86info
 x86info-*.tgz
+cov-int
+tags
