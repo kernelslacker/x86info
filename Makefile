@@ -37,6 +37,14 @@ QUIET_CC = $(Q:@=@echo    '  CC '$@;)
 
 all: x86info test
 
+X86INFO_HEADERS = \
+	= $(patsubst %.h,%.h,$(wildcard *.h)) \
+	  $(patsubst %.h,%.h,$(wildcard include/*.h)) \
+	  $(patsubst %.h,%.h,$(wildcard AMD/*.h)) \
+	  $(patsubst %.h,%.h,$(wildcard Centaur/*.h)) \
+	  $(patsubst %.h,%.h,$(wildcard Cyrix/*.h)) \
+	  $(patsubst %.h,%.h,$(wildcard Intel/*.h))
+
 X86INFO_SRC = \
 	$(wildcard *.c)	\
 	$(wildcard AMD/*.c) \
@@ -56,10 +64,11 @@ X86INFO_OBJS = $(sort $(patsubst %.c,%.o,$(wildcard *.c))) \
 	$(sort $(patsubst %.c,%.o,$(wildcard RiSE/*.c))) \
 	$(sort $(patsubst %.c,%.o,$(wildcard SiS/*.c)))
 
-x86info: $(X86INFO_OBJS)
+x86info: $(X86INFO_OBJS) $(HEADERS)
 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS) -lpci
 
 DEPDIR= .deps
+-include $(SRCS:%.c=$(DEPDIR)/%.d)
 df = $(DEPDIR)/$(*D)/$(*F)
 
 %.o : %.c
