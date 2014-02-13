@@ -110,7 +110,7 @@ release:
 clean:
 	@find . -name "*.o" -exec rm {} \;
 	@find . -name "*~" -exec rm {} \;
-	@rm -f x86info x86info.exe
+	@rm -f x86info
 	@rm -f core.*
 
 splint:
