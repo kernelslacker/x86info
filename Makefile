@@ -31,23 +31,45 @@ endif
 
 SHELL = /bin/sh
 
+V	= @
+Q	= $(V:1=)
+QUIET_CC = $(Q:@=@echo    '  CC '$@;)
+
 all: x86info test
 
 X86INFO_SRC = \
 	$(wildcard *.c)	\
 	$(wildcard AMD/*.c) \
+	$(wildcard Centaur/*.c) \
 	$(wildcard Cyrix/*.c) \
 	$(wildcard Intel/*.c) \
-	$(wildcard Centaur/*.c) \
 	$(wildcard NatSemi/*.c) \
 	$(wildcard RiSE/*.c) \
 	$(wildcard SiS/*.c)
 
-X86INFO_OBJS = $(X86INFO_SRC:%.c=%.o)
+X86INFO_OBJS = $(sort $(patsubst %.c,%.o,$(wildcard *.c))) \
+	$(sort $(patsubst %.c,%.o,$(wildcard AMD/*.c))) \
+	$(sort $(patsubst %.c,%.o,$(wildcard Centaur/*.c))) \
+	$(sort $(patsubst %.c,%.o,$(wildcard Cyrix/*.c))) \
+	$(sort $(patsubst %.c,%.o,$(wildcard Intel/*.c))) \
+	$(sort $(patsubst %.c,%.o,$(wildcard NatSemi/*.c))) \
+	$(sort $(patsubst %.c,%.o,$(wildcard RiSE/*.c))) \
+	$(sort $(patsubst %.c,%.o,$(wildcard SiS/*.c)))
 
 x86info: $(X86INFO_OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS) -lpci
+	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS) -lpci
 
+DEPDIR= .deps
+df = $(DEPDIR)/$(*D)/$(*F)
+
+%.o : %.c
+	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ -c $<
+	@mkdir -p $(DEPDIR)/$(*D)
+	@gcc -MM $(CFLAGS) $*.c > $(df).d
+	@mv -f $(df).d $(df).d.tmp
+	@sed -e 's|.*:|$*.o:|' <$(df).d.tmp > $(df).d
+	@sed -e 's/.*://' -e 's/\\$$//' < $(df).d.tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $(df).d
+	@rm -f $(df).d.tmp
 
 
 nodes:
