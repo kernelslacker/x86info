@@ -1,6 +1,29 @@
 VERSION=1.30
 
-CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls -DVERSION="$(VERSION)"
+CFLAGS = -DVERSION="$(VERSION)"
+
+CFLAGS += -Wall -W -g -O2 -D_FORTIFY_SOURCE=2
+ifneq ($(SYSROOT),)
+CFLAGS += --sysroot=$(SYSROOT)
+endif
+CFLAGS += -Wdeclaration-after-statement
+CFLAGS += -Wformat=2
+CFLAGS += -Wimplicit
+CFLAGS += -Winit-self
+CFLAGS += -Wlogical-op
+CFLAGS += -Wmissing-declarations -Wredundant-decls
+CFLAGS += -Wnested-externs
+CFLAGS += -Wpacked
+CFLAGS += -Wshadow
+CFLAGS += -Wstrict-aliasing=3
+#CFLAGS += -Wstrict-prototypes -Wmissing-prototypes
+#CFLAGS += -Wswitch-enum
+CFLAGS += -Wundef
+#CFLAGS += -Wwrite-strings
+
+CFLAGS += -Werror
+
+
 LDFLAGS = -Wl,-z,relro,-z,now
 
 ifeq ($(CC),"")
