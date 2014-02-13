@@ -238,7 +238,7 @@ unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op)
 void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end)
 {
         unsigned int i;
-        unsigned int eax, ebx, ecx, edx;
+        unsigned int eax = 0, ebx = 0, ecx = 0, edx = 0;
 
         /* Dump all the CPUID results in raw hex */
         for (i = begin; i <= end; i++) {
