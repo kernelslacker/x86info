@@ -18,7 +18,7 @@ static char p4_errata[]="http://developer.intel.com/design/pentium4/specupdt/249
 static char *intel_nameptr;
 #define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x)
 
-void Identify_Intel_family15(struct cpudata *cpu)
+void identify_intel_family15(struct cpudata *cpu)
 {
 	intel_nameptr = cpu->name;
 

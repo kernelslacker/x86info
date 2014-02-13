@@ -18,7 +18,7 @@
 static char *intel_nameptr;
 #define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x)
 
-void Identify_Intel(struct cpudata *cpu)
+void identify_intel(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
@@ -44,7 +44,7 @@ void Identify_Intel(struct cpudata *cpu)
 			cpu->nr_cores = ((eax >> 26) + 1);
 	}
 
-	decode_Intel_caches(cpu, 0);
+	decode_intel_caches(cpu, 0);
 
 	switch (cpu->family) {
 	case 4:	add_to_cpuname("i486 ");
@@ -124,9 +124,9 @@ void Identify_Intel(struct cpudata *cpu)
 
 	case 0x6:
 		if (cpu->emodel == 0)
-			Identify_Intel_family6pentium(cpu);
+			identify_intel_family6pentium(cpu);
 		else
-			Identify_Intel_family6core(cpu);
+			identify_intel_family6core(cpu);
 
 		intel_nameptr += strlen(cpu->name);	// EWW
 		break;
@@ -136,7 +136,7 @@ void Identify_Intel(struct cpudata *cpu)
 		break;
 
 	case 0xF:
-		Identify_Intel_family15(cpu);
+		identify_intel_family15(cpu);
 		intel_nameptr += strlen(cpu->name);	// EWW
 		break;
 	}

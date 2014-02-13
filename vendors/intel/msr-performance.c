@@ -11,14 +11,14 @@
 #include <x86info.h>
 #include "intel.h"
 
-void dump_performance_MSRs(struct cpudata *cpu)
+void dump_performance_msrs(struct cpudata *cpu)
 {
 	unsigned long long val = 0;
 
 	if (!user_is_root)
 		return;
 
-	printf("Performance MSRs:\n");
+	printf("Performance msrs:\n");
 	if (read_msr(cpu->number, MSR_IA32_PERF_STATUS, &val) == 1)
 		printf("  MSR_IA32_PERF_STATUS: 0x%llx\n", val);
 

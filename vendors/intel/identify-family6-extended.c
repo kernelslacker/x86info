@@ -17,7 +17,7 @@ static char nehalem_info_url[] = "http://www.intel.com/design/corei7/documentati
 static char *intel_nameptr;
 #define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x)
 
-void Identify_Intel_family6core(struct cpudata *cpu)
+void identify_intel_family6core(struct cpudata *cpu)
 {
 	intel_nameptr = cpu->name;
 

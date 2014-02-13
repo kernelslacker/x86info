@@ -16,7 +16,7 @@ static char pm_90nm_info_url[] = "http://www.intel.com/design/intarch/pentiumm/d
 static char *intel_nameptr;
 #define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x)
 
-void Identify_Intel_family6pentium(struct cpudata *cpu)
+void identify_intel_family6pentium(struct cpudata *cpu)
 {
 	intel_nameptr = cpu->name;
 

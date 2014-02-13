@@ -195,7 +195,7 @@ static unsigned char unknown_array[256];
 
 /* Decode Intel TLB and cache info descriptors */
 //TODO : Errata workaround. http://www.sandpile.org/post/msgs/20002736.htm
-static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
+static void decode_intel_cache(int des, struct cpudata *cpu, int output,
 			const struct _cache_table *table)
 {
 	int k = 0;
@@ -271,7 +271,7 @@ static void decode_cache(struct cpudata *cpu, const struct _cache_table *table, 
 		for (j=1; j<16; j++) {
 			unsigned char val = regs[j / 4] >> (unsigned int)(8 * (j % 4));
 			if (val)
-				decode_Intel_cache(val, cpu, output, table);
+				decode_intel_cache(val, cpu, output, table);
 		}
 	}
 }
@@ -338,7 +338,7 @@ static void decode_general_cache(struct cpudata *cpu, int output)
 	}
 }
 
-void decode_Intel_caches(struct cpudata *cpu, int output)
+void decode_intel_caches(struct cpudata *cpu, int output)
 {
 	unsigned int i = 0;
 	unsigned char oldknown;

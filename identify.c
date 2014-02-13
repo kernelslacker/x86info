@@ -71,13 +71,13 @@ void identify(struct cpudata *cpu)
 {
 	switch (cpu->vendor) {
 	case VENDOR_INTEL:
-		Identify_Intel(cpu);
+		identify_intel(cpu);
 		break;
 	case VENDOR_AMD:
-		Identify_AMD(cpu);
+		identify_amd(cpu);
 		break;
 	case VENDOR_CYRIX:
-		Identify_Cyrix(cpu);
+		identify_cyrix(cpu);
 		break;
 	case VENDOR_CENTAUR:
 		identify_centaur(cpu);
@@ -86,7 +86,7 @@ void identify(struct cpudata *cpu)
 		identify_natsemi(cpu);
 		break;
 	case VENDOR_RISE:
-		identify_RiSE(cpu);
+		identify_rise(cpu);
 		break;
 	case VENDOR_SIS:
 		identify_sis(cpu);
@@ -105,7 +105,7 @@ void show_info(struct cpudata *cpu)
 	printf("Family: %u Model: %u Stepping: %u\n",
 	       cpu->family, model(cpu), cpu->stepping);
 	if (cpu->vendor == VENDOR_INTEL)
-		display_basic_Intel_info(cpu);
+		display_basic_intel_info(cpu);
 	printf("CPU Model (x86info's best guess): %s\n", cpu->name);
 	get_model_name(cpu);
 	printf("\n");
@@ -113,11 +113,11 @@ void show_info(struct cpudata *cpu)
 
 	switch (cpu->vendor) {
 	case VENDOR_AMD:
-		display_AMD_info(cpu);
+		display_amd_info(cpu);
 		break;
 
 	case VENDOR_CYRIX:
-		display_Cyrix_info(cpu);
+		display_cyrix_info(cpu);
 		break;
 
 	case VENDOR_CENTAUR:
@@ -125,7 +125,7 @@ void show_info(struct cpudata *cpu)
 		break;
 
 	case VENDOR_INTEL:
-		display_extended_Intel_info(cpu);
+		display_extended_intel_info(cpu);
 		break;
 
 	case VENDOR_NATSEMI:

@@ -50,10 +50,10 @@ static void display_detailed_info(struct cpudata *cpu)
 	if (show_cacheinfo) {
 		switch (cpu->vendor) {
 		case VENDOR_INTEL:
-			decode_Intel_caches(cpu, 1);
+			decode_intel_caches(cpu, 1);
 			break;
 		case VENDOR_AMD:
-			decode_AMD_cacheinfo(cpu);
+			decode_amd_cacheinfo(cpu);
 			break;
 
 		case VENDOR_CENTAUR:

@@ -86,7 +86,7 @@ static void decode_mcg_ctl(int cpunum)
 }
 
 
-void decode_Intel_machine_check(int cpunum, int family)
+void decode_intel_machine_check(int cpunum, int family)
 {
 	unsigned long long val;
 	int i;

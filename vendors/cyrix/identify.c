@@ -14,7 +14,7 @@ static char *cyrix_nameptr;
 #define add_to_cpuname(x)   cyrix_nameptr += snprintf(cyrix_nameptr, sizeof(x), "%s", x)
 
 /* Decode TLB and cache info descriptors */
-void decode_Cyrix_TLB (int x)
+void decode_cyrix_tlb(int x)
 {
 	switch (x & 0xff) {
 	case 0:
@@ -29,7 +29,7 @@ void decode_Cyrix_TLB (int x)
 }
 
 /* Cyrix-specific information */
-void Identify_Cyrix(struct cpudata *cpu)
+void identify_cyrix(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
@@ -73,7 +73,7 @@ void Identify_Cyrix(struct cpudata *cpu)
 	}
 }
 
-void display_Cyrix_info(struct cpudata *cpu)
+void display_cyrix_info(struct cpudata *cpu)
 {
 	unsigned int i, ntlb;
 	unsigned int eax, ebx, ecx, edx;
@@ -85,16 +85,16 @@ void display_Cyrix_info(struct cpudata *cpu)
 		for (i = 0; i < ntlb; i++) {
 			cpuid (cpu->number, 2, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
-			decode_Cyrix_TLB (eax >> 8);
-			decode_Cyrix_TLB (eax >> 16);
-			decode_Cyrix_TLB (eax >> 24);
+			decode_cyrix_tlb(eax >> 8);
+			decode_cyrix_tlb(eax >> 16);
+			decode_cyrix_tlb(eax >> 24);
 
 			/* ebx and ecx are reserved */
 			if ((edx & 0x80000000) == 0) {
-				decode_Cyrix_TLB (edx);
-				decode_Cyrix_TLB (edx >> 8);
-				decode_Cyrix_TLB (edx >> 16);
-				decode_Cyrix_TLB (edx >> 24);
+				decode_cyrix_tlb(edx);
+				decode_cyrix_tlb(edx >> 8);
+				decode_cyrix_tlb(edx >> 16);
+				decode_cyrix_tlb(edx >> 24);
 			}
 		}
 	}
@@ -106,16 +106,16 @@ void display_Cyrix_info(struct cpudata *cpu)
 		for (i = 0; i < ntlb; i++) {
 			cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
 			ntlb = eax & 0xff;
-			decode_Cyrix_TLB (ebx >> 8);
-			decode_Cyrix_TLB (ebx >> 16);
-			decode_Cyrix_TLB (ebx >> 24);
+			decode_cyrix_tlb(ebx >> 8);
+			decode_cyrix_tlb(ebx >> 16);
+			decode_cyrix_tlb(ebx >> 24);
 
 			/* eax and edx are reserved */
 			if ((ecx & 0x80000000) == 0) {
-				decode_Cyrix_TLB (ecx);
-				decode_Cyrix_TLB (ecx >> 8);
-				decode_Cyrix_TLB (ecx >> 16);
-				decode_Cyrix_TLB (ecx >> 24);
+				decode_cyrix_tlb(ecx);
+				decode_cyrix_tlb(ecx >> 8);
+				decode_cyrix_tlb(ecx >> 16);
+				decode_cyrix_tlb(ecx >> 24);
 			}
 		}
 	}

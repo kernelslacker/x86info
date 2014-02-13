@@ -11,7 +11,7 @@
 #include <x86info.h>
 #include "intel.h"
 
-void dump_thermal_MSRs(struct cpudata *cpu)
+void dump_thermal_msrs(struct cpudata *cpu)
 {
 	unsigned long long val = 0;
 
@@ -25,7 +25,7 @@ void dump_thermal_MSRs(struct cpudata *cpu)
 	if (!(val & (1<<3)))
 		return;
 
-	printf("Thermal MSRs:\n");
+	printf("Thermal msrs:\n");
 	if (read_msr(cpu->number, MSR_PM_THERM2_CTL, &val) == 1) { /* THERM2_CTL */
 		printf("  MSR_PM_THERM2_CTL: 0x%llx [Thermal monitor: %d]\n",
 			val, (val & (1<<16)) ? 2 : 1);

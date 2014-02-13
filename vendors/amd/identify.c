@@ -294,7 +294,7 @@ static void do_l2assoc(unsigned long assoc)
 		printf("%lu-way associative. ", a);
 }
 
-void decode_AMD_cacheinfo(struct cpudata *cpu)
+void decode_amd_cacheinfo(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
@@ -445,7 +445,7 @@ static void determine_xp_mp(struct cpudata *cpu)
 }
 
 
-void Identify_AMD(struct cpudata *cpu)
+void identify_amd(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
@@ -828,7 +828,7 @@ static void show_patch_level(struct cpudata *cpu)
 	}
 }
 
-void display_AMD_info(struct cpudata *cpu)
+void display_amd_info(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 

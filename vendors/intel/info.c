@@ -96,7 +96,7 @@ static void decode_brand(struct cpudata *cpu)
 	printf(")\n");
 }
 
-void display_basic_Intel_info(struct cpudata *cpu)
+void display_basic_intel_info(struct cpudata *cpu)
 {
 	if (cpu->type != 3) {
 		printf("Type: %u (", cpu->type);
@@ -115,22 +115,22 @@ void display_basic_Intel_info(struct cpudata *cpu)
 }
 
 
-void display_extended_Intel_info(struct cpudata *cpu)
+void display_extended_intel_info(struct cpudata *cpu)
 {
 	if (show_msr) {
 		if (cpu->family == 0xf)
-			dump_p4_MSRs(cpu);
+			dump_p4_msrs(cpu);
 
-		dump_performance_MSRs(cpu);
+		dump_performance_msrs(cpu);
 
-		dump_thermal_MSRs(cpu);
+		dump_thermal_msrs(cpu);
 
-//		dump_IDA_MSRs(cpu);
+//		dump_IDA_msrs(cpu);
 	}
 
 	/* FIXME: Bit test for MCA here!*/
 	if (show_machine_check)
-		decode_Intel_machine_check(cpu->number, cpu->family);
+		decode_intel_machine_check(cpu->number, cpu->family);
 
 	if (show_microcode)
 		decode_microcode(cpu);

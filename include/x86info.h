@@ -138,7 +138,7 @@ static const char *get_##title##_name(type id) \
         return NULL; \
 }
 
-void identify_RiSE(struct cpudata *cpu);
+void identify_rise(struct cpudata *cpu);
 void identify_natsemi(struct cpudata *cpu);
 void identify_sis(struct cpudata *cpu);
 

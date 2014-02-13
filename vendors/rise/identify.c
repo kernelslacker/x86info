@@ -11,7 +11,7 @@
 static char *rise_nameptr;
 #define add_to_cpuname(x)   rise_nameptr += snprintf(rise_nameptr, sizeof(x), "%s", x)
 
-void identify_RiSE(struct cpudata *cpu)
+void identify_rise(struct cpudata *cpu)
 {
 	rise_nameptr = cpu->name;
 

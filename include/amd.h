@@ -15,9 +15,9 @@ void decode_powernow (struct cpudata *cpu);
 void show_amd_bugs(struct cpudata *cpu);
 void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid);
 
-void Identify_AMD(struct cpudata *cpu);
-void display_AMD_info(struct cpudata *cpu);
-void decode_AMD_cacheinfo(struct cpudata *cpu);
+void identify_amd(struct cpudata *cpu);
+void display_amd_info(struct cpudata *cpu);
+void decode_amd_cacheinfo(struct cpudata *cpu);
 
 #define MSR_CLKCTL	0xc001001b
 
