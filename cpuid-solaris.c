@@ -1,9 +1,8 @@
 /*
- *  (C) 2000, 2001 Dave Jones.
- *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- *  Routines for retrieving cpuid registers.
+ *  Solaris routines for retrieving cpuid registers.
+ *  Originally submitted by John Levon <levon@movementarian.org>
  */
 
 #ifdef __sun__

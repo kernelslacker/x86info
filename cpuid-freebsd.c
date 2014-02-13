@@ -1,9 +1,8 @@
 /*
- * (C) 2000, 2001 Dave Jones.
- *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- *  Routines for retrieving cpuid registers.
+ *  FreeBSD Routines for retrieving cpuid registers.
+ *  Originally submitted by Stanislav Sedov <stas@FreeBSD.org>
  */
 
 #if defined(__FreeBSD__)
