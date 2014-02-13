@@ -464,7 +464,7 @@ void Identify_AMD(struct cpudata *cpu)
 	}
 
 	if (family(cpu) >= 0xf) {
-		switch family(cpu) {
+		switch (family(cpu)) {
 		case 0xf:
 			set_k8_revinfo(eax, cpu);
 			break;
