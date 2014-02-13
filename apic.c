@@ -8,6 +8,7 @@
  */
 
 #include <stdio.h>
+#include <unistd.h>
 #include "apic.h"
 #include "x86info.h"
 
