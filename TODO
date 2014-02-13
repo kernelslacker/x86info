@@ -12,17 +12,11 @@ higher priority stuff
   - number of pipelines
 - Be able to tell the user when we have failed to identify the chip, so they can send us information!
 - Add some additional tools, rename package to 'x86utils' ?
-  - Report north bridge info (requires pci lib)
 
 
 medium priority stuff
 ---------------------
-
 - introduce hexdump option (-x) to dump register values in addition to decoding.
-- Some CPUs allow the name string to be changed.
-  If this has happened we die horribly. We need to store the current
-  name string, perform the cpuid reset sequence, and restore the
-  name string on exit.
 
 
 low priority stuff
