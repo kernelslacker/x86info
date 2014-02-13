@@ -13,7 +13,7 @@
 #include <ctype.h>
 #include <sys/mman.h>
 
-#include "../x86info.h"
+#include <x86info.h>
 #include "AMD.h"
 #include "powernow.h"
 

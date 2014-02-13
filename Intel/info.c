@@ -12,7 +12,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "../x86info.h"
+#include <x86info.h>
 #include "Intel.h"
 
 /* Decode Pentium III CPU serial number */

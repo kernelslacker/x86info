@@ -1,0 +1,10 @@
+*.o
+*.P
+fam10h.h
+fam11h.h
+fam12h.h
+fam14h.h
+fam15h.h
+k8.h
+generic_msr.h
+lsmsr

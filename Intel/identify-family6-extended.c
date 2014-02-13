@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "../x86info.h"
+#include <x86info.h>
 #include "Intel.h"
 
 static char nehalem_info_url[] = "http://www.intel.com/design/corei7/documentation.htm";

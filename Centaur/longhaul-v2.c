@@ -6,7 +6,7 @@
  *  Longhaul v2 register definitions.
  */
 #include <stdio.h>
-#include "../x86info.h"
+#include <x86info.h>
 
 union msr_longhaul {
 	struct {

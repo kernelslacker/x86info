@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pci/pci.h>
-#include "../x86info.h"
+#include <x86info.h>
 #include "AMD.h"
 #include "powernow.h"
 

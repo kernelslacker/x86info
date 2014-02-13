@@ -1,12 +1,4 @@
 *.o
 *.P
 x86info
-AMD/fam10h.h
-AMD/fam11h.h
-AMD/fam12h.h
-AMD/fam14h.h
-AMD/fam15h.h
-AMD/k8.h
-generic_msr.h
-lsmsr
-x86info-1.*.tgz
+x86info-*.tgz

@@ -8,7 +8,7 @@
  *  http://www.gnu.org/licenses/gpl2.html
  */
 
-#include "../x86info.h"
+#include <x86info.h>
 
 /* name ids to concatenate cpu name */
 #define _OPTERON	0x0001

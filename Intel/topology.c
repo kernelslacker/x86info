@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
-#include "../x86info.h"
+#include <x86info.h>
 #include "Intel.h"
 
 /**

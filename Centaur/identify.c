@@ -6,7 +6,7 @@
  *  Centaur specific parts.
  */
 #include <stdio.h>
-#include "../x86info.h"
+#include <x86info.h>
 #include "centaur.h"
 
 static char *centaur_nameptr;

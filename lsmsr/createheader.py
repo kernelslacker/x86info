@@ -57,7 +57,7 @@ print(\
 print("#ifndef " + family + "_h")
 print("#define " + family + "_h\n")
 if (re.search("/", sys.argv[1])):
-    print("#include \"../msr.h\"\n")
+    print("#include \"<msr.h>\"\n")
 else:
     print("#include \"msr.h\"\n")
 struct=[]

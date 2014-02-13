@@ -6,7 +6,7 @@
  *  Rise specific parts.
  */
 #include <stdio.h>
-#include "../x86info.h"
+#include <x86info.h>
 
 static char *rise_nameptr;
 #define add_to_cpuname(x)   rise_nameptr += snprintf(rise_nameptr, sizeof(x), "%s", x)

@@ -2,7 +2,7 @@
 #include <sys/time.h>
 #include <sys/stat.h>
 #include <stdio.h>
-#include "../x86info.h"
+#include <x86info.h>
 #include "bench.h"
 
 #ifdef __linux__

@@ -6,7 +6,7 @@
  *  NatSemi specific parts.
  */
 #include <stdio.h>
-#include "../x86info.h"
+#include <x86info.h>
 
 static char *NatSemi_nameptr;
 #define add_to_cpuname(x)   NatSemi_nameptr += snprintf(NatSemi_nameptr, sizeof(x), "%s", x)

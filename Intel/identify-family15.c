@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "../x86info.h"
+#include <x86info.h>
 #include "Intel.h"
 
 static char p4_423_datasheet[]="http://developer.intel.com/design/pentium4/datashts/24919805.pdf";

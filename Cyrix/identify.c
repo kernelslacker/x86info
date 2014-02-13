@@ -7,7 +7,7 @@
  */
 
 #include <stdio.h>
-#include "../x86info.h"
+#include <x86info.h>
 #include "Cyrix.h"
 
 static char *cyrix_nameptr;

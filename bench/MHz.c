@@ -12,7 +12,7 @@
 #include <string.h>
 #include <signal.h>
 
-#include "../x86info.h"
+#include <x86info.h>
 #include "bench.h"
 
 void display_MHz(struct cpudata *cpu)

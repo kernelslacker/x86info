@@ -24,14 +24,14 @@
 #endif
 #include <getopt.h>
 
-#include "msr.h"
-#include "x86info.h"
-#include "AMD/k8.h"
-#include "AMD/fam10h.h"
-#include "AMD/fam11h.h"
-#include "AMD/fam12h.h"
-#include "AMD/fam14h.h"
-#include "AMD/fam15h.h"
+#include <msr.h>
+#include <x86info.h>
+#include "AMD_k8.h"
+#include "AMD_fam10h.h"
+#include "AMD_fam11h.h"
+#include "AMD_fam12h.h"
+#include "AMD_fam14h.h"
+#include "AMD_fam15h.h"
 #include "generic_msr.h"
 
 /* Todos:
@@ -279,22 +279,22 @@ static int set_msr_table(void)
 		supported = 1;
 		switch (g.family) {
 		case 0x0f:
-			g.msr_table = k8_spec;
+			g.msr_table = AMD_k8_spec;
 			break;
 		case 0x10:
-			g.msr_table = fam10h_spec;
+			g.msr_table = AMD_fam10h_spec;
 			break;
 		case 0x11:
-			g.msr_table = fam11h_spec;
+			g.msr_table = AMD_fam11h_spec;
 			break;
 		case 0x12:
-			g.msr_table = fam12h_spec;
+			g.msr_table = AMD_fam12h_spec;
 			break;
 		case 0x14:
-			g.msr_table = fam14h_spec;
+			g.msr_table = AMD_fam14h_spec;
 			break;
 		case 0x15:
-			g.msr_table = fam15h_spec;
+			g.msr_table = AMD_fam15h_spec;
 			break;
 		default:
 			g.msr_table = generic_msr_spec;

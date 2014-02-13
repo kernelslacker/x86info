@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include "../x86info.h"
+#include <x86info.h>
 #include "AMD.h"
 
 static void show_k7_bugs(struct cpudata *cpu)
