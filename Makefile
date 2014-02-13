@@ -131,3 +131,6 @@ mirror:
 scan:
 	@scan-build --use-analyzer=/usr/bin/clang make
 
+tags:   $(SRCS)
+	@ctags -R --exclude=tmp
+
