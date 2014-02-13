@@ -100,7 +100,7 @@ static void display_detailed_info(struct cpudata *cpu)
  * check to see if all CPUs are the same.
  * returns 1 if all cpus are the same, 0 if something is different
  */
-static int check_cpu_similarity()
+static int check_cpu_similarity(void)
 {
 	struct cpudata *cpu;
 	unsigned int i;
@@ -133,7 +133,7 @@ static int check_cpu_similarity()
 	return 1;
 }
 
-static struct cpudata *alloc_cpu()
+static struct cpudata *alloc_cpu(void)
 {
 	struct cpudata *newcpu;
 

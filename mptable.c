@@ -432,7 +432,7 @@ int enumerate_cpus(void)
 	return 1;
 }
 
-void display_mptable()
+void display_mptable(void)
 {
 	vm_offset_t paddr;
 	mpfps_t mpfps;
