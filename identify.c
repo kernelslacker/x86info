@@ -9,6 +9,7 @@
 #include <AMD.h>
 #include <Intel.h>
 #include <centaur.h>
+#include <Cyrix.h>
 
 void get_cpu_info_basics(struct cpudata *cpu)
 {

@@ -138,12 +138,9 @@ static const char *get_##title##_name(type id) \
         return NULL; \
 }
 
-void Identify_Cyrix(struct cpudata *cpu);
 void identify_RiSE(struct cpudata *cpu);
 void identify_natsemi(struct cpudata *cpu);
 void identify_sis(struct cpudata *cpu);
-
-void display_Cyrix_info(struct cpudata *cpu);
 
 void get_feature_flags(struct cpudata *cpu);
 void display_feature_flags(struct cpudata *cpu);
