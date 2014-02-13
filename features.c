@@ -445,6 +445,10 @@ static void decode_feature_flags(struct cpudata *cpu)
 			show_extra_intel_flags(cpu);
 			break;
 
+		case VENDOR_NATSEMI:
+		case VENDOR_RISE:
+		case VENDOR_SIS:
+		case VENDOR_UNKNOWN:
 		default:
 			/* Unknown CPU manufacturer or no special handling needed */
 			break;

@@ -54,6 +54,14 @@ static void display_detailed_info(struct cpudata *cpu)
 		case VENDOR_AMD:
 			decode_AMD_cacheinfo(cpu);
 			break;
+
+		case VENDOR_CENTAUR:
+		case VENDOR_CYRIX:
+		case VENDOR_NATSEMI:
+		case VENDOR_RISE:
+		case VENDOR_SIS:
+		case VENDOR_TRANSMETA:
+		case VENDOR_UNKNOWN:
 		default:
 			break;
 		}

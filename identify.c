@@ -124,6 +124,11 @@ void show_info(struct cpudata *cpu)
 		display_extended_Intel_info(cpu);
 		break;
 
+	case VENDOR_NATSEMI:
+	case VENDOR_RISE:
+	case VENDOR_SIS:
+	case VENDOR_TRANSMETA:
+	case VENDOR_UNKNOWN:
 	default:
 		break;
 	}
