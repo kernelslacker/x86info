@@ -82,7 +82,7 @@ clean:
 	@rm -f x86info
 	@rm -f core.*
 	@rm -rf $(DEPDIR)/*
-	@rm -f x86info-coverity.tgz
+	@rm -f x86info-coverity.tgz cov-int
 
 sparse:
 	@sparse $(X86INFO_SRC)
