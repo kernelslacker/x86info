@@ -18,12 +18,12 @@
 
 struct _cache_table
 {
-	unsigned char descriptor;
-	int size;
-	char *string;
+	const unsigned char descriptor;
+	const int size;
+	const char *string;
 };
 
-static struct _cache_table TRACE_cache_table[] =
+static const struct _cache_table TRACE_cache_table[] =
 {
 	{ 0x70, 12, "Instruction trace cache: 12K uOps, 8-way associative." },
 	{ 0x71, 16, "Instruction trace cache: 16K uOps, 8-way associative." },
@@ -32,7 +32,7 @@ static struct _cache_table TRACE_cache_table[] =
 	{ 0, 0, NULL }
 };
 
-static struct _cache_table L1I_cache_table[] =
+static const struct _cache_table L1I_cache_table[] =
 {
 	{ 0x6,   8, "L1 Instruction cache: 8KB, 4-way associative. 32 byte line size." },
 	{ 0x8,  16, "L1 Instruction cache: 16KB, 4-way associative. 32 byte line size." },
@@ -41,7 +41,7 @@ static struct _cache_table L1I_cache_table[] =
 	{ 0, 0, NULL }
 };
 
-static struct _cache_table L1D_cache_table[] =
+static const struct _cache_table L1D_cache_table[] =
 {
 	{ 0xa,   8, "L1 Data cache: 8KB, 2-way associative. 32 byte line size." },
 	{ 0xc,  16, "L1 Data cache: 16KB, 4-way associative. 32 byte line size." },
@@ -55,7 +55,7 @@ static struct _cache_table L1D_cache_table[] =
 	{ 0, 0, NULL }
 };
 
-static struct _cache_table L2_cache_table[] =
+static const struct _cache_table L2_cache_table[] =
 {
 	{ 0x21,  256, "L2 (MLC): 256KB, 8-way associative. 64 byte line size." },
 	{ 0x39,  128, "L2 cache: 128KB, 4-way associative. Sectored. 64 byte line size." },
@@ -89,7 +89,7 @@ static struct _cache_table L2_cache_table[] =
 	{ 0, 0, NULL }
 };
 
-static struct _cache_table L2L3_cache_table[] =
+static const struct _cache_table L2L3_cache_table[] =
 {
 	{ 0x46,  MB(4), "L2 cache: 4MB, 4-way associative. 64 byte line size." },
 	{ 0x47,  MB(8), "L2 cache: 8MB, 8-way associative. 64 byte line size." },
@@ -102,7 +102,7 @@ static struct _cache_table L2L3_cache_table[] =
 	{ 0x78,  MB(1), "L2 cache: 1MB, sectored, 8-way associative. 64 byte line size." },
 	{ 0, 0, NULL }
 };
-static struct _cache_table L3L2_cache_table[] =
+static const struct _cache_table L3L2_cache_table[] =
 {
 	{ 0x46,  MB(4), "L3 cache: 4MB, 4-way associative. 64 byte line size." },
 	{ 0x47,  MB(8), "L3 cache: 8MB, 8-way associative. 64 byte line size." },
@@ -115,7 +115,7 @@ static struct _cache_table L3L2_cache_table[] =
 	{ 0, 0, NULL }
 };
 
-static struct _cache_table L3_cache_table[] =
+static const struct _cache_table L3_cache_table[] =
 {
 	{ 0x22,  512, "L3 cache: 512KB, 4-way associative. 64 byte line size." },
 	{ 0x23, MB(1), "L3 cache: 1MB, 8-way associative. 64 byte line size." },
@@ -139,7 +139,7 @@ static struct _cache_table L3_cache_table[] =
 	{ 0, 0, NULL }
 };
 
-static struct _cache_table ITLB_cache_table[] =
+static const struct _cache_table ITLB_cache_table[] =
 {
 	{ 0x1,   32, "Instruction TLB: 4KB pages, 4-way associative, 32 entries" },
 	{ 0x2,    2, "Instruction TLB: 4MB pages, fully associative, 2 entries" },
@@ -159,7 +159,7 @@ static struct _cache_table ITLB_cache_table[] =
 	{ 0, 0, NULL }
 };
 
-static struct _cache_table DTLB_cache_table[] =
+static const struct _cache_table DTLB_cache_table[] =
 {
 	{ 0x3,   64, "Data TLB: 4KB pages, 4-way associative, 64 entries" },
 	{ 0x4,    8, "Data TLB: 4MB pages, 4-way associative, 8 entries" },
@@ -182,7 +182,7 @@ static struct _cache_table DTLB_cache_table[] =
 	{ 0, 0, NULL }
 };
 
-static struct _cache_table prefetch_table[] =
+static const struct _cache_table prefetch_table[] =
 {
 	{0xf0, 64, "64 byte prefetching."},
 	{0xf1, 64, "128 byte prefetching."},
@@ -196,7 +196,7 @@ static unsigned char unknown_array[256];
 /* Decode Intel TLB and cache info descriptors */
 //TODO : Errata workaround. http://www.sandpile.org/post/msgs/20002736.htm
 static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
-			struct _cache_table *table)
+			const struct _cache_table *table)
 {
 	int k = 0;
 	int found = 0;
@@ -248,7 +248,7 @@ static void decode_Intel_cache(int des, struct cpudata *cpu, int output,
 	}
 }
 
-static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int output)
+static void decode_cache(struct cpudata *cpu, const struct _cache_table *table, int output)
 {
 	unsigned int i, j, n;
 	unsigned int regs[4];
@@ -276,7 +276,7 @@ static void decode_cache(struct cpudata *cpu, struct _cache_table *table, int ou
 	}
 }
 
-static void clean_unknowns(struct _cache_table *table)
+static void clean_unknowns(const struct _cache_table *table)
 {
 	int j=0;
 	int des;

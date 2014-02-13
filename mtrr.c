@@ -25,7 +25,7 @@
 
 static unsigned int max_phy_addr = 0;
 
-static char * mtrr_types[MTRR_NUM_TYPES] =
+static const char * mtrr_types[MTRR_NUM_TYPES] =
 {
     "uncacheable",
     "write-combining",

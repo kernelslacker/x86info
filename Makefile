@@ -19,7 +19,7 @@ CFLAGS += -Wstrict-aliasing=3
 CFLAGS += -Wstrict-prototypes -Wmissing-prototypes
 CFLAGS += -Wswitch-enum
 CFLAGS += -Wundef
-#CFLAGS += -Wwrite-strings
+CFLAGS += -Wwrite-strings
 
 CFLAGS += -Werror
 

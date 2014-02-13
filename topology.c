@@ -9,7 +9,7 @@
 #include <string.h>
 #include "x86info.h"
 
-static char * corenum(int num)
+static const char * corenum(int num)
 {
 	switch (num) {
 	case 1:	return ("single");
@@ -101,7 +101,7 @@ void display_topology(struct cpudata *head)
 		/* Handle the single CPU case */
 		printf("processor");
 	} else {
-		char *p;
+		const char *p;
 		p = corenum(threads_per_socket);
 
 		if (strncmp("?", p, 1))
