@@ -12,8 +12,8 @@
 #include "x86info.h"
 #include "mptable.h"
 
-#include <Intel.h>
-#include <AMD.h>
+#include <intel.h>
+#include <amd.h>
 
 unsigned int user_is_root = 0;
 

@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <x86info.h>
-#include "Intel.h"
+#include "intel.h"
 
 void decode_microcode(struct cpudata *cpu)
 {

@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <x86info.h>
-#include "Intel.h"
+#include "intel.h"
 
 static char *intel_nameptr;
 #define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x)

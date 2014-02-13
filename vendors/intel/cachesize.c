@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <x86info.h>
-#include "Intel.h"
+#include "intel.h"
 
 #define MB(x)   ((x) * 1024)
 

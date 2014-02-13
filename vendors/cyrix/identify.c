@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <x86info.h>
-#include "Cyrix.h"
+#include "cyrix.h"
 
 static char *cyrix_nameptr;
 #define add_to_cpuname(x)   cyrix_nameptr += snprintf(cyrix_nameptr, sizeof(x), "%s", x)

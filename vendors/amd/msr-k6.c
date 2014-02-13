@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <x86info.h>
-#include "AMD.h"
+#include "amd.h"
 
 void dump_k6_MSR (struct cpudata *cpu)
 {

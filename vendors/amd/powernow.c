@@ -11,7 +11,7 @@
 #include <sys/types.h>
 #include <pci/pci.h>
 #include <x86info.h>
-#include "AMD.h"
+#include "amd.h"
 #include "powernow.h"
 
 double mobile_vid_table[32] = {

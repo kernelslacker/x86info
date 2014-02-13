@@ -14,7 +14,7 @@
 #include <sys/mman.h>
 
 #include <x86info.h>
-#include "AMD.h"
+#include "amd.h"
 #include "powernow.h"
 
 #define START 0x000c0000L

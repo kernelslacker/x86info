@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <x86info.h>
-#include <AMD.h>
+#include <amd.h>
 
 #define MCG_CAP 0x0179
 #define MCG_STATUS 0x17a

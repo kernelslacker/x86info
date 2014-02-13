@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <x86info.h>
-#include "Intel.h"
+#include "intel.h"
 
 static char pm_90nm_info_url[] = "http://www.intel.com/design/intarch/pentiumm/docs_pentiumm_90nm.htm";
 

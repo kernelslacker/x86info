@@ -10,7 +10,7 @@
 #include <string.h>
 #include <strings.h>
 #include <x86info.h>
-#include "Intel.h"
+#include "intel.h"
 
 /**
  * fls - find last (most-significant) bit set
@@ -42,7 +42,7 @@ static int intel_num_cpu_cores(struct cpudata *cpu)
 	if (cpu->cpuid_level < 4)
 		return 1;
 
-	/* Intel has a non-standard dependency on %ecx for this CPUID level. */
+	/* intel.has a non-standard dependency on %ecx for this CPUID level. */
 	cpuid_count(cpu->number, 4, 0, &eax, &ebx, &ecx, &edx);
 	if (eax & 0x1f)
 		return (eax >> 26) + 1;

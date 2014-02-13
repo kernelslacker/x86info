@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <x86info.h>
-#include "Intel.h"
+#include "intel.h"
 
 static char p4_423_datasheet[]="http://developer.intel.com/design/pentium4/datashts/24919805.pdf";
 static char p4_478_datasheet[]="http://developer.intel.com/design/pentium4/datashts/24988703.pdf\n\thttp://developer.intel.com/design/pentium4/datashts/29864304.pdf";

@@ -14,8 +14,8 @@
 #include <string.h>
 #include <sys/types.h>
 #include <x86info.h>
-#include <AMD.h>
-#include <AMD-revision.h>
+#include <amd.h>
+#include <amd-revision.h>
 
 static char *amd_nameptr;
 #define add_to_cpuname(x) amd_nameptr += snprintf(amd_nameptr, sizeof(x), "%s", x)

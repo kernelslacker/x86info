@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <x86info.h>
-#include "Intel.h"
+#include "intel.h"
 
 void dump_p4_MSRs (struct cpudata *cpu)
 {

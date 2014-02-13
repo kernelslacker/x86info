@@ -6,10 +6,10 @@
 
 #include <stdio.h>
 #include <x86info.h>
-#include <AMD.h>
-#include <Intel.h>
+#include <amd.h>
+#include <intel.h>
 #include <centaur.h>
-#include <Cyrix.h>
+#include <cyrix.h>
 
 void get_cpu_info_basics(struct cpudata *cpu)
 {
