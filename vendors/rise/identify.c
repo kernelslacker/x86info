@@ -1,6 +1,4 @@
 /*
- *  (C) 2001 Dave Jones.
- *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  Rise specific parts.

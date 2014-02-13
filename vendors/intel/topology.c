@@ -1,6 +1,4 @@
 /*
- *  (C) 2008 Dave Jones.
- *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  Intel multicore/multithread determination.

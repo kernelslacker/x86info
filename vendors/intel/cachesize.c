@@ -1,6 +1,4 @@
 /*
- *  (C) 2001-2011 Dave Jones.
- *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  * Intel specific parts

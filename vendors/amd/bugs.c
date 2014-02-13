@@ -1,6 +1,4 @@
 /*
- *  (C) 2002 Dave Jones.
- *
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  AMD-specific errata information
