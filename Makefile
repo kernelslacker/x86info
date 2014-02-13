@@ -134,3 +134,8 @@ scan:
 tags:   $(SRCS)
 	@ctags -R --exclude=tmp
 
+coverity:
+	@rm -rf cov-int trinity-coverity.tgz
+	@cov-build --dir cov-int make
+	@tar czvf trinity-coverity.tgz cov-int
+
