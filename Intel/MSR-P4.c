@@ -108,10 +108,6 @@ void dump_p4_MSRs (struct cpudata *cpu)
 		printf("set\n");
 
 	}
-/*
-	if (read_msr (cpu->number, 0x410, &val) == 1) {
-	}
-*/
 
 	printf("\n");
 }
