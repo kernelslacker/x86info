@@ -43,22 +43,10 @@ X86INFO_HEADERS = \
 
 X86INFO_SRC = \
 	$(wildcard *.c)	\
-	$(wildcard amd/*.c) \
-	$(wildcard centaur/*.c) \
-	$(wildcard cyrix/*.c) \
-	$(wildcard intel/*.c) \
-	$(wildcard natsemi/*.c) \
-	$(wildcard rise/*.c) \
-	$(wildcard sis/*.c)
+	$(wildcard vendors/*/*.c)
 
 X86INFO_OBJS = $(sort $(patsubst %.c,%.o,$(wildcard *.c))) \
-	$(sort $(patsubst %.c,%.o,$(wildcard amd/*.c))) \
-	$(sort $(patsubst %.c,%.o,$(wildcard centaur/*.c))) \
-	$(sort $(patsubst %.c,%.o,$(wildcard cyrix/*.c))) \
-	$(sort $(patsubst %.c,%.o,$(wildcard intel/*.c))) \
-	$(sort $(patsubst %.c,%.o,$(wildcard natsemi/*.c))) \
-	$(sort $(patsubst %.c,%.o,$(wildcard rise/*.c))) \
-	$(sort $(patsubst %.c,%.o,$(wildcard sis/*.c)))
+	$(sort $(patsubst %.c,%.o,$(wildcard vendors/*/*.c)))
 
 x86info: $(X86INFO_OBJS) $(HEADERS)
 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS) -lpci
