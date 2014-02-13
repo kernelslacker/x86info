@@ -5,7 +5,7 @@
  */
 
 #include <stdio.h>
-#include "x86info.h"
+#include <x86info.h>
 
 void dumpmsr(int cpu, unsigned int msr, int size)
 {

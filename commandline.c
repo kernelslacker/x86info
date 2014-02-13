@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "x86info.h"
+#include <x86info.h>
 
 unsigned int show_apic = 0;
 unsigned int show_bios = 0;

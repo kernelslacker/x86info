@@ -35,7 +35,7 @@
 #include <sys/types.h>
 
 #include "mptable.h"
-#include "x86info.h"
+#include <x86info.h>
 
 typedef unsigned long vm_offset_t;
 

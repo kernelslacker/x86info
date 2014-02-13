@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 #include <asm/mtrr.h>
-#include "x86info.h"
+#include <x86info.h>
 
 #define IA32_MTRRCAP_SMRR 0x800
 #define IA32_MTRRCAP_WC   0x400

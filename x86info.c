@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "x86info.h"
+#include <x86info.h>
 #include "mptable.h"
 
 #include <intel.h>
@@ -164,7 +164,7 @@ static void fill_in_cpu_info(struct cpudata *cpu)
 }
 
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
 	struct cpudata *cpu=NULL, *tmp;
 	unsigned int i;

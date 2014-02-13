@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "x86info.h"
+#include <x86info.h>
 
 void get_model_name(struct cpudata *cpu)
 {

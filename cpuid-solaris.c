@@ -18,7 +18,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
-#include "x86info.h"
+#include <x86info.h>
 
 void bind_cpu(int cpunr)
 {

@@ -13,7 +13,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "x86info.h"
+#include <x86info.h>
 
 int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 {

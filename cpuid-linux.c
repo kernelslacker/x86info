@@ -20,7 +20,7 @@
 #define __USE_GNU
 #include <sched.h>
 
-#include "x86info.h"
+#include <x86info.h>
 
 /*
  * sched_* calls weren't stable until 2.3.4

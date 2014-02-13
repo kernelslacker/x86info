@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include <setjmp.h>
-#include "x86info.h"
+#include <x86info.h>
 
 static void flag_decode(unsigned long reg, const char * reg_desc, const char *flags[], const char *flags_desc[])
 {

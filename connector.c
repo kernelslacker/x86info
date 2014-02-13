@@ -7,7 +7,7 @@
  */
 
 #include <stdio.h>
-#include "x86info.h"
+#include <x86info.h>
 
 static struct {
 	enum connector id;
