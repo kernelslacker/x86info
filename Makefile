@@ -2,7 +2,10 @@ VERSION=1.30
 
 CFLAGS = -g -O2 -Werror -Wall -Wshadow -Wextra -Wmissing-declarations -Wdeclaration-after-statement -Wredundant-decls -DVERSION="$(VERSION)"
 LDFLAGS = -Wl,-z,relro,-z,now
+
+ifeq ($(CC),"")
 CC = gcc
+endif
 
 SHELL = /bin/sh
 
@@ -124,4 +127,7 @@ cscope:
 
 mirror:
 	@git push --mirror git@github.com:kernelslacker/x86info.git
+
+scan:
+	@scan-build --use-analyzer=/usr/bin/clang make
 
