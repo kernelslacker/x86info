@@ -283,6 +283,10 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		add_to_cpuname("Core i7 (Nehalem) [Clarkdale/Arrandale]");
 		break;
 
+	case 42:
+		add_to_cpuname("Core i7 (SandyBridge)");
+		break;
+
 	case 44:
 		add_to_cpuname("Core i7 (Nehalem) [Gulftown/Westmere-EP]");
 		break;
@@ -301,7 +305,10 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 
 	case 58:
 		if (cpu->stepping == 9)
-			add_to_cpuname("Core i7 3520M");
+			add_to_cpuname("Core i7 3520M [IvyBridge]");
+		break;
+	case 62:
+		add_to_cpuname("Core i7 (IvyTown)");
 		break;
 
 	default:
