@@ -37,8 +37,6 @@
 #include "mptable.h"
 #include <x86info.h>
 
-typedef unsigned long vm_offset_t;
-
 /* EBDA is @ 40:0e in real-mode terms */
 #define EBDA_POINTER			0x040e		  /* location of EBDA pointer */
 
@@ -74,14 +72,8 @@ static int	napic;
 static int	nintr;
 static int	silent;
 
-typedef struct TABLE_ENTRY {
-	u8	type;
-	u8	length;
-	char	name[32];
-} tableEntry;
-
 /* MP Floating Pointer Structure */
-typedef struct MPFPS {
+struct mpfps {
 	char	signature[4];
 	u32	pap;
 	u8	length;
@@ -92,10 +84,10 @@ typedef struct MPFPS {
 	u8	mpfb3;
 	u8	mpfb4;
 	u8	mpfb5;
-} mpfps_t;
+};
 
 /* MP Configuration Table Header */
-typedef struct MPCTH {
+struct mpcth {
 	char	signature[4];
 	u16	base_table_length;
 	u8	spec_rev;
@@ -109,9 +101,9 @@ typedef struct MPCTH {
 	u16	extended_table_length;
 	u8	extended_table_checksum;
 	u8	reserved;
-} mpcth_t;
+};
 
-typedef struct PROCENTRY {
+struct ProcEntry {
 	u8	type;
 	u8	apicID;
 	u8	apicVersion;
@@ -120,10 +112,10 @@ typedef struct PROCENTRY {
 	u32	featureFlags;
 	u32	reserved1;
 	u32	reserved2;
-} ProcEntry;
+};
 
 
-static void seekEntry(vm_offset_t addr)
+static void seekEntry(unsigned long addr)
 {
 	if (lseek(pfd, (off_t)addr, SEEK_SET) < 0) {
 		perror("/dev/mem seek");
@@ -159,7 +151,7 @@ static int readType(void)
 
 static void processorEntry(void)
 {
-	ProcEntry entry;
+	struct ProcEntry entry;
 
 	/* read it into local memory */
 	if (readEntry(&entry, sizeof(entry)) < 0) {
@@ -196,8 +188,8 @@ static void processorEntry(void)
 
 static int MPConfigTableHeader(u32 pap)
 {
-	vm_offset_t paddr;
-	mpcth_t cth;
+	unsigned long paddr;
+	struct mpcth cth;
 	int x;
 	int count, c;
 
@@ -207,7 +199,7 @@ static int MPConfigTableHeader(u32 pap)
 	}
 
 	/* convert physical address to virtual address */
-	paddr = (vm_offset_t)pap;
+	paddr = (unsigned long) pap;
 
 	/* read in cth structure */
 	seekEntry(paddr);
@@ -246,16 +238,16 @@ static int MPConfigTableHeader(u32 pap)
  * set PHYSICAL address of MP floating pointer structure
  */
 #define NEXT(X)		((X) += 4)
-static int apic_probe(vm_offset_t* paddr)
+static int apic_probe(unsigned long* paddr)
 {
 	unsigned int x;
 	u16 segment;
-	vm_offset_t target;
+	unsigned long target;
 	unsigned int buffer[BIOS_SIZE];
 	const char MP_SIG[]="_MP_";
 
 	/* search Extended Bios Data Area, if present */
-	seekEntry((vm_offset_t)EBDA_POINTER);
+	seekEntry((unsigned long)EBDA_POINTER);
 	if (readEntry(&segment, 2)) {
 		printf("error reading EBDA pointer\n");
 		exit(EXIT_FAILURE);
@@ -264,7 +256,7 @@ static int apic_probe(vm_offset_t* paddr)
 		printf("\nEBDA points to: %x\n", segment);
 
 	if (segment) {				/* search EBDA */
-		target = (vm_offset_t)segment << 4;
+		target = (unsigned long)segment << 4;
 		seekEntry(target);
 		if (debug)
 			printf("EBDA segment ptr: %lx\n", target);
@@ -283,7 +275,7 @@ static int apic_probe(vm_offset_t* paddr)
 	}
 
 	/* read CMOS for real top of mem */
-	seekEntry((vm_offset_t)TOPOFMEM_POINTER);
+	seekEntry((unsigned long)TOPOFMEM_POINTER);
 	if (readEntry(&segment, 2)) {
 		printf("error reading CMOS for real top of mem (%p)\n", (void *) TOPOFMEM_POINTER);
 		exit(EXIT_FAILURE);
@@ -383,15 +375,15 @@ static int apic_probe(vm_offset_t* paddr)
 		}
 	}
 
-	*paddr = (vm_offset_t)0;
+	*paddr = (unsigned long)0;
 	return 0;
 }
 
 
 int enumerate_cpus(void)
 {
-	vm_offset_t paddr;
-	mpfps_t mpfps;
+	unsigned long paddr;
+	struct mpfps mpfps;
 
 	silent = 1;
 
@@ -407,7 +399,7 @@ int enumerate_cpus(void)
 
 	/* read in mpfps structure*/
 	seekEntry(paddr);
-	if (readEntry(&mpfps, sizeof(mpfps_t))) {
+	if (readEntry(&mpfps, sizeof(struct mpfps))) {
 		printf("error reading mpfpsfrom %p\n", (void *)paddr);
 		exit(EXIT_FAILURE);
 	}
@@ -423,8 +415,8 @@ int enumerate_cpus(void)
 
 void display_mptable(void)
 {
-	vm_offset_t paddr;
-	mpfps_t mpfps;
+	unsigned long paddr;
+	struct mpfps mpfps;
 
 	silent = 0;
 
@@ -440,7 +432,7 @@ void display_mptable(void)
 
 	/* read in mpfps structure*/
 	seekEntry(paddr);
-	if (readEntry(&mpfps, sizeof(mpfps_t))) {
+	if (readEntry(&mpfps, sizeof(struct mpfps))) {
 		printf("error reading mpfps from %p\n", (void *)paddr);
 		exit(EXIT_FAILURE);
 	}
