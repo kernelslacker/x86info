@@ -51,7 +51,7 @@ void get_feature_flags(struct cpudata *cpu)
 
 
 /* CPUID 0x00000006 EAX flags */
-const char *intel_cpuid_06_eax_flags[32] = {
+static const char *intel_cpuid_06_eax_flags[32] = {
 	"dts", "ida", "arat", NULL, "pln", "ecmd", "ptm",
 };
 
