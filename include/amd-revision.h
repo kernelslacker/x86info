@@ -31,7 +31,7 @@ struct id_string {
 
 /* Note: For newer K8 NPT parts naming switched from "Athlon 64"
    to "Athlon" etc., but we stick to the old naming here. */
-struct id_string k8_names[] = {
+static struct id_string k8_names[] = {
 	{_OPTERON, "Opteron"},
 	{_OPTERON_DC, "Dual-Core Opteron"},
 	{_ATHLON64, "Athlon 64"},
@@ -54,7 +54,7 @@ struct k8_rev {
 	const char* rev;
 };
 
-struct k8_rev k8_revisions[] = {
+static struct k8_rev k8_revisions[] = {
 	{0x00f00, CONN_SOCKET_754, _ATHLON64, "SH-A0"},
 	{0x00f01, CONN_SOCKET_754, _ATHLON64, "SH-A2"},
 	{0x00f10, CONN_SOCKET_940, _ATHLON64, "SH-A0"},
@@ -126,7 +126,7 @@ struct fam10h_rev {
 	const char* rev;
 };
 
-struct fam10h_rev fam10h_revisions[] = {
+static struct fam10h_rev fam10h_revisions[] = {
 	{0x0100f2a, "DR-BA"},
 	{0x0100f22, "DR-B2"},
 	{0x0100f23, "DR-B3"},
@@ -142,22 +142,22 @@ struct fam10h_rev fam10h_revisions[] = {
 	{0x0100fa0, "PH-E0"},
 };
 
-struct id_string fam11h_revisions[] = {
+static struct id_string fam11h_revisions[] = {
 	{0x0200f31, "LG-B1"},
 };
 get_name(fam11h_revision, int, fam11h_revisions);
 
-struct id_string fam12h_revisions[] = {
+static struct id_string fam12h_revisions[] = {
 	{0x0300f10, "LN1-B0"},
 };
 get_name(fam12h_revision, int, fam12h_revisions);
 
-struct id_string fam14h_revisions[] = {
+static struct id_string fam14h_revisions[] = {
 	{0x00500f10, "ON-B0"},
 };
 get_name(fam14h_revision, int, fam14h_revisions);
 
-struct id_string fam15h_revisions[] = {
+static struct id_string fam15h_revisions[] = {
 
 	{0x00600f12, "OR-B2"},
 };
