@@ -115,7 +115,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 					break;
 			}
 			break;
-		case 0xa:
+		case 10:
 			// sSpec step CoreFreq Bus cache
 			// SLB8W E0  3.00     1333 12MB (2x6) Q9650
 			// SLB8V E0  2.83     1333 12MB (2x6) Q9550
@@ -135,14 +135,14 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 			break;
 		}
 		break;
-	case 0xa:
+	case 10:
 		add_to_cpuname("Core i7 ");
 		//sSpec step CoreFreq/QuickpathGTs/DDR3	cache
 		//SLBCJ C-0	3.2/6.40/1066		8MB
 		//SLBCK C-0	2.93/4.80/1066		8MB
 		//SLBCH C-0	2.66/4.80/1066		8MB
 		break;
-	case 0xc:
+	case 12:
 		add_to_cpuname("Atom ");
 		switch (cpu->stepping) {
 		case 1:
@@ -186,7 +186,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 			break;
 		}
 		break;
-	case 0xe:
+	case 14:
 		add_to_cpuname("Core ");
 		switch (cpu->stepping) {
 		case 8:
@@ -221,7 +221,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 				break;
 			}
 			break;
-		case 0xc:
+		case 12:
 			switch (cpu->MHz) {
 			case 1200:
 				// SL99V 533FSB
@@ -239,7 +239,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
-	case 0x17:
+	case 23:
 		add_to_cpuname("Core 2 Duo ");
 		switch (cpu->stepping) {
 		case 4:	add_to_cpuname("(Penryn)");
@@ -249,7 +249,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
-	case 0x1a:
+	case 26:
 		/*
 		 * SLBCJ C-0 0x000106A4 3.20 / 6.40/ 1066 8MB
 		 * SLBCK C-0 0x000106A4 2.93 / 4.80/ 1066 8MB
@@ -267,7 +267,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
-	case 0x1c:
+	case 28:
 		add_to_cpuname("Atom");
 		switch (cpu->stepping) {
 		case 10:	add_to_cpuname(" D510");
@@ -275,31 +275,31 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
-	case 0x1e:
+	case 30:
 		add_to_cpuname("Core i7 (Nehalem) [Lynnfield/Clarksfield/Jasper Forest]");
 		break;
 
-	case 0x25:
+	case 37:
 		add_to_cpuname("Core i7 (Nehalem) [Clarkdale/Arrandale]");
 		break;
 
-	case 0x2c:
+	case 44:
 		add_to_cpuname("Core i7 (Nehalem) [Gulftown/Westmere-EP]");
 		break;
 
-	case 0x2d:
+	case 45:
 		add_to_cpuname("Core i7 (Sandybridge) [Romely-EP]");
 		break;
 
-	case 0x2e:
+	case 46:
 		add_to_cpuname("Core i7 (Nehalem) [Beckton]");
 		break;
 
-	case 0x2f:
+	case 47:
 		add_to_cpuname("Core i7 (Nehalem-EX) [Westmere] [Xeon E7]");
 		break;
 
-	case 0x3a:
+	case 58:
 		if (cpu->stepping == 9)
 			add_to_cpuname("Core i7 3520M");
 		break;
