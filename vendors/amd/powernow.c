@@ -243,7 +243,7 @@ static int get_num_boost_states(void)
 		else
 			printf("Boosting disabled\n");
 		val = (val >> 2) & 7;
-		printf("Number of boost states: %d\n", val);
+		printf("Number of boost states: %u\n", val);
 	}
 
 	pci_cleanup(pacc);
