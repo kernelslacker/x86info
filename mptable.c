@@ -56,9 +56,6 @@
 
 #define PROCENTRY_FLAG_EN	0x01
 #define PROCENTRY_FLAG_BP	0x02
-#define IOAPICENTRY_FLAG_EN	0x01
-
-#define MAXPNSTR		132
 
 /* global data */
 static int pfd;			/* physical /dev/mem fd */
