@@ -49,7 +49,7 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 	}
 
 	map = p = mmap(NULL, ROMSIZE, PROT_READ, MAP_SHARED, fd, START);
-	if (map == (void *) -1) {
+	if (map == (void *) MAP_FAILED) {
 		perror("mmap() error");
 		if (close(fd) == -1) {
 			perror("close");
