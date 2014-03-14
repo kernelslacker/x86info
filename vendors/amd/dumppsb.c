@@ -90,7 +90,7 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 				pst = (struct pst_s *) p;
 				numpstates = pst->numpstates;
 
-				if ((etuple(cpu) == pst->cpuid) && (maxfid==pst->maxfid) && (startvid==pst->startvid)) {
+				if ((etuple(cpu) == pst->cpuid) && (maxfid == pst->maxfid) && (startvid == pst->startvid)) {
 					printf(" PST:%d (@%p)\n", i, pst);
 					printf("  cpuid: 0x%x\t", pst->cpuid);
 					printf("  fsb: %d\t", (int) pst->fsbspeed);
