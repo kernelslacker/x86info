@@ -40,7 +40,7 @@ struct pst_s {
 void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 {
 	int fd, i, j;
-	char *p;
+	char *map, *p;
 	struct psb_s *psb;
 	struct pst_s *pst;
 	int numpstates;
@@ -52,8 +52,8 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 		return;
 	}
 
-	p = mmap(NULL, ROMSIZE, PROT_READ, MAP_SHARED, fd, START);
-	if (p == (void *)-1) {
+	map = p = mmap(NULL, ROMSIZE, PROT_READ, MAP_SHARED, fd, START);
+	if (map == (void *)-1) {
 		perror("mmap() error");
 		if (close(fd)==-1) {
 			perror("close");
@@ -121,7 +121,7 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 	}
 
 out:
-	if (munmap(p, ROMSIZE) == -1) {
+	if (munmap(map, ROMSIZE) == -1) {
 		perror("munmap");
 		exit(EXIT_FAILURE);
 	}
