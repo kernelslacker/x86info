@@ -42,66 +42,64 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 	int fd, i;
 	char *map, *p;
 
-	fd=open("/dev/mem", O_RDONLY);
+	fd = open("/dev/mem", O_RDONLY);
 	if (fd == -1) {
 		perror("/dev/mem");
 		return;
 	}
 
 	map = p = mmap(NULL, ROMSIZE, PROT_READ, MAP_SHARED, fd, START);
-	if (map == (void *)-1) {
+	if (map == (void *) -1) {
 		perror("mmap() error");
-		if (close(fd)==-1) {
+		if (close(fd) == -1) {
 			perror("close");
 			exit(EXIT_FAILURE);
 		}
 		return;
 	}
 
-	for (i=0; i<ROMSIZE; i++) {
+	for (i = 0; i < ROMSIZE; i++) {
 		struct psb_s *psb;
 		struct pst_s *pst;
 		int numpstates, j;
 		unsigned int fid, vid;
 
-		if (memcmp(p, "AMDK7PNOW!",  10) == 0){
+		if (memcmp(p, "AMDK7PNOW!",  10) == 0) {
 			printf("Found PSB header at %p\n", p);
 			psb = (struct psb_s *) p;
-			printf("Table version: 0x%x\n", (unsigned int)psb->tableversion);
+			printf("Table version: 0x%x\n", (unsigned int) psb->tableversion);
 			if (psb->tableversion != 0x12) {
 				printf("Sorry, only v1.2 tables supported right now\n");
 				goto out;
 			}
 
 			printf("Flags: 0x%x ", (unsigned int) psb->flags);
-			if ((psb->flags & 1)==0) {
+			if ((psb->flags & 1) == 0)
 				printf("(Mobile voltage regulator)\n");
-			} else {
+			else
 				printf("(Desktop voltage regulator)\n");
-			}
 
 			printf("Settling Time: %d microseconds.\n",
-				(int)psb->settlingtime);
+				(int) psb->settlingtime);
 			printf("Has %d PST tables. (Only dumping ones relevant to this CPU).\n",
-				(int)psb->numpst);
+				(int) psb->numpst);
 
 			p += sizeof (struct psb_s);
 
-			for (i=0 ; i<psb->numpst; i++) {
+			for (i = 0 ; i < psb->numpst; i++) {
 				pst = (struct pst_s *) p;
 				numpstates = pst->numpstates;
 
-				if ((etuple(cpu) == pst->cpuid) && (maxfid==pst->maxfid) && (startvid==pst->startvid))
-				{
+				if ((etuple(cpu) == pst->cpuid) && (maxfid==pst->maxfid) && (startvid==pst->startvid)) {
 					printf(" PST:%d (@%p)\n", i, pst);
 					printf("  cpuid: 0x%x\t", pst->cpuid);
-					printf("  fsb: %d\t", (int)pst->fsbspeed);
-					printf("  maxFID: 0x%x\t", (unsigned int)pst->maxfid);
-					printf("  startvid: 0x%x\n", (unsigned int)pst->startvid);
+					printf("  fsb: %d\t", (int) pst->fsbspeed);
+					printf("  maxFID: 0x%x\t", (unsigned int) pst->maxfid);
+					printf("  startvid: 0x%x\n", (unsigned int) pst->startvid);
 					printf("  num of p states in this table: %d\n", numpstates);
 
 					p = (char *) pst + sizeof (struct pst_s);
-					for (j=0 ; j<numpstates; j++) {
+					for (j = 0 ; j < numpstates; j++) {
 						fid = *p++;
 						printf("    FID: 0x%x (%.1fx [%.0fMHz])\t", fid,
 							fid_codes[fid], pst->fsbspeed * fid_codes[fid]);
@@ -112,8 +110,8 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 					printf("\n");
 				} else {
 					p = (char *) pst + sizeof (struct pst_s);
-					for (j=0 ; j<numpstates; j++)
-						p+=2;
+					for (j = 0 ; j < numpstates; j++)
+						p += 2;
 				}
 			}
 			goto out;
@@ -133,4 +131,3 @@ out:
 	}
 	return;
 }
-
