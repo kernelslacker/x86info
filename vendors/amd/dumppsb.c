@@ -39,12 +39,8 @@ struct pst_s {
 
 void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 {
-	int fd, i, j;
+	int fd, i;
 	char *map, *p;
-	struct psb_s *psb;
-	struct pst_s *pst;
-	int numpstates;
-	unsigned int fid, vid;
 
 	fd=open("/dev/mem", O_RDONLY);
 	if (fd == -1) {
@@ -63,6 +59,11 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 	}
 
 	for (i=0; i<ROMSIZE; i++) {
+		struct psb_s *psb;
+		struct pst_s *pst;
+		int numpstates, j;
+		unsigned int fid, vid;
+
 		if (memcmp(p, "AMDK7PNOW!",  10) == 0){
 			printf("Found PSB header at %p\n", p);
 			psb = (struct psb_s *) p;
