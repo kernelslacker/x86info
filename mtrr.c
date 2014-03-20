@@ -9,9 +9,8 @@
 #include <asm/mtrr.h>
 #include <x86info.h>
 
-#define IA32_MTRRCAP_SMRR 0x800
-#define IA32_MTRRCAP_WC   0x400
-#define IA32_MTRRCAP_FIX  0x100
+#define IA32_MTRRCAP_WC   (1 << 10)
+#define IA32_MTRRCAP_FIX  (1 << 8)
 #define IA32_MTRRCAP_VCNT 0xFF
 
 #define IA32_MTRR_DEFTYPE_E    0x800
@@ -78,13 +77,15 @@ static void decode_mtrrcap(int cpu, int msr)
 	unsigned long long val;
 	int ret;
 
-	ret = mtrr_value(cpu,msr,&val);
+	ret = mtrr_value(cpu, msr, &val);
 	if (ret) {
 		printf("0x%016llx ", val);
-		printf("(smrr flag: 0x%01x, ",(unsigned int) (val & IA32_MTRRCAP_SMRR) >> 11 );
-		printf("wc flag: 0x%01x, ",(unsigned int) (val&IA32_MTRRCAP_WC) >> 10);
-		printf("fix flag: 0x%01x, ",(unsigned int) (val&IA32_MTRRCAP_FIX) >> 8);
-		printf("vcnt field: 0x%02x (%d))\n",(unsigned int) (val&IA32_MTRRCAP_VCNT) , (int) (val&IA32_MTRRCAP_VCNT));
+		printf("wc:%d ",
+			!! ((unsigned int) val & IA32_MTRRCAP_WC));
+		printf("fix:%d ",
+			!! ((unsigned int) val & IA32_MTRRCAP_FIX));
+		printf("vcnt:%d\n",
+			(unsigned int) val & IA32_MTRRCAP_VCNT);
 	}
 }
 
