@@ -98,14 +98,14 @@ static void decode_mtrr_deftype(int cpu, int msr)
 	if (ret) {
 		printf("0x%016llx ", val);
 
-		printf("(fixed-range flag: 0x%01x, ",
-			(unsigned int) (val >> 10) & IA32_MTRR_DEFTYPE_FE);
+		printf("(fixed-range flag:%d ",
+			!! ((unsigned int) val & (1 << 10)));
 
-		printf("mtrr flag: 0x%01x, ",
-			(unsigned int) (val >> 11) & IA32_MTRR_DEFTYPE_E);
+		printf("enable flag:%d ",
+			!! ((unsigned int) val & (1 << 11)));
 
-		type = (val >> 8) & IA32_MTRR_DEFTYPE_TYPE;
-		printf("type field: 0x%02x (%s))\n", type, mtrr_types[type]);
+		type = val & IA32_MTRR_DEFTYPE_TYPE;
+		printf("default type:0x%02x (%s))\n", type, mtrr_types[type]);
 	}
 }
 
