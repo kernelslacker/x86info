@@ -10,16 +10,21 @@ CFLAGS += -Wdeclaration-after-statement
 CFLAGS += -Wformat=2
 CFLAGS += -Wimplicit
 CFLAGS += -Winit-self
-CFLAGS += -Wlogical-op
 CFLAGS += -Wmissing-declarations -Wredundant-decls
 CFLAGS += -Wnested-externs
 CFLAGS += -Wpacked
 CFLAGS += -Wshadow
-CFLAGS += -Wstrict-aliasing=3
 CFLAGS += -Wstrict-prototypes -Wmissing-prototypes
 CFLAGS += -Wswitch-enum
 CFLAGS += -Wundef
 CFLAGS += -Wwrite-strings
+
+# gcc specific
+CFLAGS += -Wstrict-aliasing=3
+CFLAGS += -Wlogical-op
+
+# clang specific
+#CFLAGS += -fsanitize=undefined
 
 # Only enabled during development, and on gcc 4.8+
 CPP_MAJOR := $(shell $(CPP) -dumpversion 2>&1 | cut -d'.' -f1)
