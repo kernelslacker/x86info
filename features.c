@@ -147,7 +147,7 @@ static const char *intel_cap_generic_ecx_flags[32] = {
 	"sse3", "pclmuldq", "dtes64", "monitor", "ds-cpl", "vmx", "smx", "est",
 	"tm2", "ssse3", "cid", NULL, "fma", "cx16", "xTPR", "pdcm",
 	NULL, "pcid", "dca", "sse4_1", "sse4_2", "x2apic", "movbe", "popcnt",
-	"tsc-deadline", "aes", "xsave", "osxsave", "avx", NULL, NULL, NULL
+	"tsc-deadline", "aes", "xsave", "osxsave", "avx", "f16c", "rdrnd", NULL
 };
 static const char *intel_cap_generic_ecx_flags_desc[32] = {
 	"Streaming SIMD Extensions 3",		    // 0
@@ -179,8 +179,9 @@ static const char *intel_cap_generic_ecx_flags_desc[32] = {
 	"XSAVE/XSTOR States",			    // 26
 	"OS-Enabled Extended State Management",	    // 27
 	"AVX instruction extensions",		    // 28
-	NULL,					    // 29
-	NULL,					    // 30
+	"F16C (half-precision) Floating Point",	    // 29
+	"RDRAND (hardware RNG)",		    // 30
+	// 31 unreliably indicates running in a hypervisor
 	NULL					    // 31
 };
 
