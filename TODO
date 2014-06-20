@@ -11,7 +11,6 @@ higher priority stuff
   - voltages (I/O, Core, Maximum)
   - number of pipelines
 - Be able to tell the user when we have failed to identify the chip, so they can send us information!
-- Add some additional tools, rename package to 'x86utils' ?
 
 
 medium priority stuff
