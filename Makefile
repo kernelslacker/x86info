@@ -100,9 +100,6 @@ sparse:
 cscope:
 	@cscope -Rb
 
-mirror:
-	@git push --mirror git@github.com:kernelslacker/x86info.git
-
 scan:
 	@scan-build --use-analyzer=/usr/bin/clang make
 
