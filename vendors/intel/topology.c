@@ -11,14 +11,14 @@
 #include "intel.h"
 
 /**
- * fls - find last (most-significant) bit set
+ * tp_fls - find last (most-significant) bit set
  * @x: the word to search
  *
  * This is defined the same way as ffs.
  * Note fls(0) = 0, fls(1) = 1, fls(0x80000000) = 32.
  */
 
-static int fls(int x)
+static int tp_fls(int x)
 {
 	return x ? sizeof(x) * 8 - __builtin_clz(x) : 0;
 }
@@ -27,7 +27,7 @@ static int get_count_order(unsigned int count)
 {
 	int order;
 
-	order = fls(count) - 1;
+	order = tp_fls(count) - 1;
 	if (count & (count - 1))
 		order++;
 	return order;
