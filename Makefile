@@ -20,8 +20,10 @@ CFLAGS += -Wundef
 CFLAGS += -Wwrite-strings
 
 # gcc specific
+ifneq ($(shell $(CC) -v 2>&1 | grep -c "clang"), 1)
 CFLAGS += -Wstrict-aliasing=3
 CFLAGS += -Wlogical-op
+endif
 
 # clang specific
 #CFLAGS += -fsanitize=undefined
