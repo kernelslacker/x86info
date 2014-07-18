@@ -36,6 +36,7 @@ void estimate_MHz(struct cpudata *cpu)
 {
 	unsigned long long int cycles[2]; /* gotta be 64 bit */
 	unsigned int eax, ebx, ecx, edx;
+	// coverity[DC.WEAK_CRYPTO]
 	unsigned long r = rand();
 
 	if (cpu->number != 0) {
@@ -62,6 +63,7 @@ void estimate_MHz(struct cpudata *cpu)
 
 	alarm(1);
 	while (!nosignal)
+		// coverity[DC.WEAK_CRYPTO]
 		r = r * rand();
 
 	nosignal = 0;
