@@ -10,9 +10,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include <cpu.h>
-#include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/cpuctl.h>
+#include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <x86info.h>
@@ -22,12 +22,12 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 	char cpuname[16];
 	int fh;
 	static int nodriver=0;
-	cpu_msr_args_t args;
+	cpuctl_msr_args_t args;
 
 	if (nodriver==1)
 		return 0;
 
-	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu%d", cpu);
+	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpuctl%d", cpu);
 
 	fh = open(cpuname, O_RDONLY);
 	if (fh==-1) {
@@ -37,7 +37,7 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 	}
 
 	args.msr = idx;
-	if (ioctl(fh, CPU_RDMSR, &args) != 0) {
+	if (ioctl(fh, CPUCTL_RDMSR, &args) != 0) {
 		if (close(fh) == -1) {
 			perror("close");
 			exit(EXIT_FAILURE);

@@ -6,7 +6,9 @@
  */
 
 #include <stdio.h>
+#ifdef __linux__
 #include <asm/mtrr.h>
+#endif
 #include <x86info.h>
 
 #define IA32_MTRRCAP_WC   (1 << 10)
@@ -21,6 +23,10 @@
 #define IA32_PHYMASK_VALID  (1 << 11)
 
 static unsigned int max_phy_addr = 0;
+
+#ifndef MTRR_NUM_TYPES
+#define MTRR_NUM_TYPES 8
+#endif
 
 static const char * mtrr_types[MTRR_NUM_TYPES] =
 {

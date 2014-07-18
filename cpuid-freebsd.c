@@ -6,13 +6,22 @@
  */
 
 #if defined(__FreeBSD__)
-# include <sys/ioctl.h>
-# include <cpu.h>
+#include <sys/types.h>
+#include <sys/fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/cpuctl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-void bind_cpu(unsigned int cpunr)
+#include <x86info.h>
+
+void bind_cpu(unsigned int cpunr __unused)
 {
 	//FIXME:
 }
+
+static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
 
 void cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax,
@@ -23,7 +32,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	static int nodriver=0;
 	char cpuname[20];
 	int fh;
-	cpu_cpuid_args_t args;
+	cpuctl_cpuid_args_t args;
 
 	if (nodriver == 1) {
 		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
@@ -33,10 +42,10 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 
 	args.level = idx;
 	/* Ok, use the /dev/CPU interface in preference to the _up code. */
-	(void)snprintf(cpuname,18, "/dev/cpu%u", CPU_number);
+	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpuctl%u", CPU_number);
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1) {
-		if (ioctl(fh, CPU_CPUID, &args) != 0) {
+		if (ioctl(fh, CPUCTL_CPUID, &args) != 0) {
 			perror(cpuname);
 			exit(EXIT_FAILURE);
 		}
