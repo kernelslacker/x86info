@@ -20,8 +20,10 @@ CFLAGS += -Wundef
 CFLAGS += -Wwrite-strings
 
 # gcc specific
+ifneq ($(shell $(CC) -v 2>&1 | grep -c "clang"), 1)
 CFLAGS += -Wstrict-aliasing=3
 CFLAGS += -Wlogical-op
+endif
 
 # clang specific
 #CFLAGS += -fsanitize=undefined
@@ -65,7 +67,7 @@ DEPDIR= .deps
 df = $(DEPDIR)/$(*D)/$(*F)
 
 %.o : %.c
-	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ -c $<
+	$(QUIET_CC)$(CC) $(CFLAGS) -o $@ -c $<
 	@mkdir -p $(DEPDIR)/$(*D)
 	@$(CC) -MM $(CFLAGS) $*.c > $(df).d
 	@mv -f $(df).d $(df).d.tmp
@@ -99,9 +101,6 @@ sparse:
 
 cscope:
 	@cscope -Rb
-
-mirror:
-	@git push --mirror git@github.com:kernelslacker/x86info.git
 
 scan:
 	@scan-build --use-analyzer=/usr/bin/clang make

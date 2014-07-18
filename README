@@ -1,5 +1,4 @@
-x86info             http://www.codemonkey.org.uk/projects/x86info
-Dave Jones <davej@redhat.com>
+x86info.
 
 Somewhere in the mists of time, there was a program by Phil Karn (KA9Q)
 called cpuid, which identified CPU. It didn't get updated very often,
@@ -9,6 +8,7 @@ simple decoding.
 x86info was written to succeed Phils work. Initially, it borrowed some bits
 from his code, but the last remnants are now long gone. Additional functionality
 has been added, such as support for SMP, and building on non-Linux platforms.
+(Solaris, and FreeBSD should work).
 
 
 
