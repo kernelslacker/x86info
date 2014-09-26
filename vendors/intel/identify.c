@@ -83,7 +83,12 @@ void identify_intel(struct cpudata *cpu)
 		}
 		break;
 
-	case 5: add_to_cpuname("Pentium ");
+	case 5:
+		if (cpu->model < 9)
+			add_to_cpuname("Pentium ");
+		else
+			add_to_cpuname("Quark ");
+
 		switch (cpu->model) {
 		case 0:
 			add_to_cpuname("A-step");
@@ -116,6 +121,9 @@ void identify_intel(struct cpudata *cpu)
 		case 8:
 			add_to_cpuname("MMX Mobile");
 			cpu->connector = CONN_SOCKET_7;
+			break;
+		case 9:
+			add_to_cpuname("X1000");
 			break;
 		}
 		break;
