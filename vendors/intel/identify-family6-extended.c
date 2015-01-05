@@ -307,6 +307,9 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		if (cpu->stepping == 9)
 			add_to_cpuname("Core i7 3520M [IvyBridge]");
 		break;
+	case 60:
+		add_to_cpuname("Core i7 (Haswell)");
+		break;
 	case 62:
 		add_to_cpuname("Core i7 (IvyTown)");
 		break;
