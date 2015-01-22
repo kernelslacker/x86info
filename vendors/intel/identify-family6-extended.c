@@ -270,9 +270,13 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 	case 28:
 		add_to_cpuname("Atom");
 		switch (cpu->stepping) {
-		case 10:	add_to_cpuname(" D510");
+		case 10:	add_to_cpuname(" D510 [Pineview]");
 				break;
 		}
+		break;
+
+	case 29:
+		add_to_cpuname("[Dunnington (MP)]");
 		break;
 
 	case 30:
@@ -281,6 +285,14 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 
 	case 37:
 		add_to_cpuname("Core i7 (Nehalem) [Clarkdale/Arrandale]");
+		break;
+
+	case 38:
+		add_to_cpuname("Atom [Lincroft]");
+		break;
+
+	case 39:
+		add_to_cpuname("Atom [Penwell]");
 		break;
 
 	case 42:
@@ -303,6 +315,18 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		add_to_cpuname("Core i7 (Nehalem-EX) [Westmere] [Xeon E7]");
 		break;
 
+	case 53:
+		add_to_cpuname("Atom [Cloverview]");
+		break;
+
+	case 54:
+		add_to_cpuname("Atom [Cedarview]");
+		break;
+
+	case 55:
+		add_to_cpuname("Atom [Silvermont]");
+		break;
+
 	case 58:
 		if (cpu->stepping == 9)
 			add_to_cpuname("Core i7 3520M [IvyBridge]");
@@ -313,6 +337,27 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 	case 62:
 		add_to_cpuname("Core i7 (IvyTown)");
 		break;
+
+	case 63:
+		add_to_cpuname("Core i7 (Haswell server)");
+		break;
+
+	case 69:
+		add_to_cpuname("Core i7 (Haswell ULT)");
+		break;
+
+	case 70:
+		add_to_cpuname("Core i7 (Haswell+GT3e)");
+		break;
+
+	case 76:
+		add_to_cpuname("Atom [Airmont]");
+		break;
+
+	case 77:
+		add_to_cpuname("Atom [Silvermont Avoton/Rangely]");
+		break;
+
 
 	default:
                 add_to_cpuname("Unknown model. ");
