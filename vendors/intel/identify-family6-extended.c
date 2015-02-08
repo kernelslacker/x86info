@@ -340,6 +340,8 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 
 	case 63:
 		add_to_cpuname("Core i7 (Haswell server)");
+		if (cpu->stepping == 2)
+			add_to_cpuname(" [i7-5820K]");
 		break;
 
 	case 69:
