@@ -71,7 +71,7 @@ static unsigned int * mapping_apic_registers(unsigned long addr)
 
 	offset = PAGE_OFFSET(addr);
 
-	mapped = mmap(NULL, (APIC_REGISTER_SPACE + offset), PROT_READ, MAP_PRIVATE, fd, (unsigned long) addr - offset);
+	mapped = mmap(NULL, (APIC_REGISTER_SPACE + offset), PROT_READ, MAP_SHARED, fd, (unsigned long) addr - offset);
 	if (mapped != MAP_FAILED)
 		return (unsigned int *) (mapped + offset);
 	else
