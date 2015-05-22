@@ -368,6 +368,10 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		add_to_cpuname("Atom [Silvermont Avoton/Rangely]");
 		break;
 
+	case 79:
+		add_to_cpuname("Core i7 [Broadwell server]");
+		break;
+
 	default:
                 add_to_cpuname("Unknown model. ");
 	}
