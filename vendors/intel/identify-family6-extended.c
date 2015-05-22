@@ -356,14 +356,17 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		add_to_cpuname("Core i7 (Haswell+GT3e)");
 		break;
 
+	case 74:
+		add_to_cpuname("Atom [Tangier]");
+		break;
+
 	case 76:
-		add_to_cpuname("Atom [Airmont]");
+		add_to_cpuname("Atom [Airmont/Braswell]");
 		break;
 
 	case 77:
 		add_to_cpuname("Atom [Silvermont Avoton/Rangely]");
 		break;
-
 
 	default:
                 add_to_cpuname("Unknown model. ");
