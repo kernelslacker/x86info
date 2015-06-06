@@ -79,10 +79,11 @@ unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op)
 void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end)
 {
         unsigned int i;
-        unsigned int eax = 0, ebx = 0, ecx = 0, edx = 0;
+        unsigned int eax, ebx, ecx, edx;
 
         /* Dump all the CPUID results in raw hex */
         for (i = begin; i <= end; i++) {
+		ecx = 0;
                 cpuid(cpunum, i, &eax, &ebx, &ecx, &edx);
                 printf("eax in: 0x%08x, eax = %08x ebx = %08x ecx = %08x edx = %08x\n", i, eax, ebx, ecx, edx);
         }
