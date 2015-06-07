@@ -7,18 +7,25 @@
 
 #if defined(__FreeBSD__)
 #include <sys/types.h>
+#include <sys/param.h>
 #include <sys/fcntl.h>
 #include <sys/ioctl.h>
 #include <sys/cpuctl.h>
+#include <sys/cpuset.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 #include <x86info.h>
 
-void bind_cpu(unsigned int cpunr __unused)
+void bind_cpu(unsigned int cpunr)
 {
-	//FIXME:
+	cpuset_t mask;
+
+	CPU_ZERO(&mask);
+	CPU_SET(cpunr, &mask);
+	(void) cpuset_setaffinity(CPU_LEVEL_WHICH, CPU_WHICH_PID, -1,
+	    sizeof(mask), &mask);
 }
 
 static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
