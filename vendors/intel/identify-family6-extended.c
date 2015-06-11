@@ -357,7 +357,11 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		break;
 
 	case 70:
-		add_to_cpuname("Core i7 (Haswell+GT3e)");
+		add_to_cpuname("Core i7 (Haswell +GT3e)");
+		break;
+
+	case 71:
+		add_to_cpuname("Core i7 (Broadwell +GT3e)");
 		break;
 
 	case 74:
