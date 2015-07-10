@@ -332,10 +332,19 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 			add_to_cpuname("Core i7 3520M [IvyBridge]");
 		break;
 	case 60:
-		if (cpu->stepping == 3)
-			// 3.5Ghz 8M cache
-			add_to_cpuname("Xeon E3-1270 (Haswell)");
-		else
+		if (cpu->stepping == 3) {
+			switch (cpu->MHz) {
+			case 3200:
+				// 3.2Ghz 8M cache
+				add_to_cpuname("Xeon E3-1225 v3 (Haswell)");
+				break;
+			case 3500:
+				// 3.5Ghz 8M cache
+				add_to_cpuname("Xeon E3-1270 (Haswell)");
+				break;
+			}
+			break;
+		} else
 			add_to_cpuname("Core i7 (Haswell)");
 		break;
 	case 61:
