@@ -384,6 +384,10 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		add_to_cpuname("[Knights Landing]");
 		break;
 
+	case 94:
+		add_to_cpuname("[Skylake]");
+		break;
+
 	default:
                 add_to_cpuname("Unknown model. ");
 	}
