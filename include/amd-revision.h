@@ -161,6 +161,7 @@ get_name(fam14h_revision, int, fam14h_revisions);
 static struct id_string fam15h_revisions[] = {
 
 	{0x00600f12, "OR-B2"},
+	{0x00600f20, "OR-C0"},
 };
 get_name(fam15h_revision, int, fam15h_revisions);
 
