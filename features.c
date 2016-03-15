@@ -65,6 +65,51 @@ static const char *intel_cpuid_06_eax_flags_desc[32] = {
 	"Package thermal management",				// 6
 };
 
+/* CPUID 0x00000007 EBX flags */
+static const char *intel_cpuid_07_ebx_flags[32] = {
+	"fsgsbase", NULL, "sgx", "bmi1", "hle", "avx2", NULL, "smep",
+	"bmi2", "erms", "invpcid", "rtm", "pqm", NULL, "mpx", "pqe",
+	"avx512f", "avx512dq", "rdseed", "adx", "smap", "avx512ifma",
+	"pcommit", "clflushopt", "clwb", NULL, "avx512pf", "avx512er",
+	"avx512cd", "sha", "avx512bw", "avx512vl"
+};
+
+static const char *intel_cpuid_07_ebx_flags_desc[32] = {
+	"Access to base of %fs and %gs",                                //0
+	NULL,                                                           //1
+	"Software Guard Extensions",                                    //2
+	"Bit Manipulation Instruction Set",                             //3
+	"Transactional Synchronization Extensions",                     //4
+	"Advanced Vector Extensions 2",                                 //5
+	NULL,                                                           //6
+	"Supervisor-Mode Execution Prevention",                         //7
+	"Bit Manipulation Instruction Set 2",                           //8
+	"Enhanced REP MOVSB/STOSB",                                     //9
+	"INVPCID instruction",                                          //10
+	"Transactional Synchronization Extensions",                     //11
+	"Platform Quality of Service Monitoring",                       //12
+	"FPU CS and FPU DS deprecated",                                 //13
+	"Intel MPX (Memory Protection Extensions)",                     //14
+	"Platform Quality of Service Enforcement",                      //15
+	"AVX-512 Foundation",                                           //16
+	"AVX-512 Doubleword and Quadword Instruct",                     //17
+	"RDSEED instruction",                                           //18
+	"Intel ADX (Multi-Precision Add-Carry Instruction Extensions)", //19
+	"Supervisor Mode Access Prevention",                            //20
+	"AVX-512 Integer Fused Multiply-Add Instructions",              //21
+	"PCOMMIT instruction",                                          //22
+	"CLFLUSHOPT instruction",                                       //23
+	"CLWB instruction",                                             //24
+	NULL,                                                           //25
+	"AVX-512 Prefetch Instructions",                                //26
+	"AVX-512 Exponential and Reciprocal Instructions",              //27
+	"AVX-512 Conflict Detection Instructions",                      //28
+	"Intel SHA extensions",                                         //29
+	"AVX-512 Byte and Word Instructions",                           //30
+	"AVX-512 Vector Length Extensions"                              //31
+
+};
+
 	/* CPUID 0x80000007 EDX flags */
 static const char *intel_cpuid_80000007_edx_flags[32] = {
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -91,6 +136,12 @@ void show_extra_intel_flags(struct cpudata *cpu)
 	if (cpu->cpuid_level >= 0x06) {
 		cpuid(cpu->number, 0x06, &eax, &ebx, &ecx, &edx);
 		flag_decode(eax, "6:eax", intel_cpuid_06_eax_flags, intel_cpuid_06_eax_flags_desc);
+	}
+	// Intel CPUID 0x07
+	if (cpu->cpuid_level >= 0x07) {
+		ecx = 0;
+		cpuid(cpu->number, 0x07, &eax, &ebx, &ecx, &edx);
+		flag_decode(ebx, "7:ebx", intel_cpuid_07_ebx_flags, intel_cpuid_07_ebx_flags_desc);
 	}
 	// Intel CPUID 0x80000007
 	if (cpu->maxei >= 0x80000007) {
