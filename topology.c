@@ -82,7 +82,8 @@ void display_topology(struct cpudata *head)
 
 	for (i = 0; i < nrCPUs; i++) {
 		if (debug == 1)
-			printf("Socket %u: %u threads\n", i, (unsigned int) sockets[i]);
+			if (sockets[i] != 0)
+				printf("Socket %u: %u threads\n", i, (unsigned int) sockets[i]);
 		if (sockets[i] != 0)	/* only count populated sockets */
 			num_sockets++;
 	}
