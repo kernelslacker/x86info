@@ -186,7 +186,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 			break;
 		}
 		break;
-	case 14:
+	case 0xe:
 		add_to_cpuname("Core ");
 		switch (cpu->stepping) {
 		case 8:
@@ -239,7 +239,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
-	case 23:
+	case 0x17:
 		add_to_cpuname("Core 2 Duo ");
 		switch (cpu->stepping) {
 		case 4:	add_to_cpuname("(Penryn)");
@@ -249,7 +249,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
-	case 26:
+	case 0x1a:
 		/*
 		 * SLBCJ C-0 0x000106A4 3.20 / 6.40/ 1066 8MB
 		 * SLBCK C-0 0x000106A4 2.93 / 4.80/ 1066 8MB
@@ -267,7 +267,7 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
-	case 28:
+	case 0x1c:
 		add_to_cpuname("Atom");
 		switch (cpu->stepping) {
 		case 10:	add_to_cpuname(" D510 [Pineview]");
@@ -275,63 +275,63 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		}
 		break;
 
-	case 29:
+	case 0x1d:
 		add_to_cpuname("[Dunnington (MP)]");
 		break;
 
-	case 30:
+	case 0x1e:
 		add_to_cpuname("Core i7 (Nehalem) [Lynnfield/Clarksfield/Jasper Forest]");
 		break;
 
-	case 37:
+	case 0x25:
 		add_to_cpuname("Core i7 (Nehalem) [Clarkdale/Arrandale]");
 		break;
 
-	case 38:
+	case 0x26:
 		add_to_cpuname("Atom [Lincroft]");
 		break;
 
-	case 39:
+	case 0x27:
 		add_to_cpuname("Atom [Penwell]");
 		break;
 
-	case 42:
+	case 0x2a:
 		add_to_cpuname("Core i7 (SandyBridge)");
 		break;
 
-	case 44:
+	case 0x2c:
 		add_to_cpuname("Core i7 (Nehalem) [Gulftown/Westmere-EP]");
 		break;
 
-	case 45:
+	case 0x2d:
 		add_to_cpuname("Core i7 (Sandybridge) [Romely-EP]");
 		break;
 
-	case 46:
+	case 0x2e:
 		add_to_cpuname("Core i7 (Nehalem) [Beckton]");
 		break;
 
-	case 47:
+	case 0x2f:
 		add_to_cpuname("Core i7 (Nehalem-EX) [Westmere] [Xeon E7]");
 		break;
 
-	case 53:
+	case 0x35:
 		add_to_cpuname("Atom [Cloverview]");
 		break;
 
-	case 54:
+	case 0x36:
 		add_to_cpuname("Atom [Cedarview]");
 		break;
 
-	case 55:
+	case 0x37:
 		add_to_cpuname("Atom [Silvermont]");
 		break;
 
-	case 58:
+	case 0x3a:
 		if (cpu->stepping == 9)
 			add_to_cpuname("Core i7 3520M [IvyBridge]");
 		break;
-	case 60:
+	case 0x3c:
 		if (cpu->stepping == 3) {
 			switch (cpu->MHz) {
 			case 3200:
@@ -347,60 +347,60 @@ SLGAS   723  m-FCBGA M-0 1.20/(n/a)/(n/a) 800 N/A  10   1    (Celeron)
 		} else
 			add_to_cpuname("Core i7 (Haswell)");
 		break;
-	case 61:
+	case 0x3d:
 		if (cpu->stepping == 4)
 			add_to_cpuname("Core i7-5600U (Broadwell)");
 		else
 			add_to_cpuname("Core i7 (Broadwell)");
 		break;
 
-	case 62:
+	case 0x3e:
 		add_to_cpuname("Core i7 (IvyTown)");
 		break;
 
-	case 63:
+	case 0x3f:
 		add_to_cpuname("Core i7 (Haswell server)");
 		if (cpu->stepping == 2)
 			add_to_cpuname(" [i7-5820K]");
 		break;
 
-	case 69:
+	case 0x45:
 		add_to_cpuname("Core i7 (Haswell ULT)");
 		break;
 
-	case 70:
+	case 0x46:
 		add_to_cpuname("Core i7 (Haswell +GT3e)");
 		break;
 
-	case 71:
+	case 0x47:
 		add_to_cpuname("Core i7 (Broadwell +GT3e)");
 		break;
 
-	case 74:
+	case 0x4a:
 		add_to_cpuname("Atom [Tangier]");
 		break;
 
-	case 76:
+	case 0x4c:
 		add_to_cpuname("Atom [Airmont/Braswell]");
 		break;
 
-	case 77:
+	case 0x4d:
 		add_to_cpuname("Atom [Silvermont Avoton/Rangely]");
 		break;
 
-	case 78:
+	case 0x4e:
 		add_to_cpuname("Core i7 [Skylake u/y]");
 		break;
 
-	case 79:
+	case 0x4f:
 		add_to_cpuname("Core i7 [Broadwell server]");
 		break;
 
-	case 87:
+	case 0x57:
 		add_to_cpuname("[Knights Landing]");
 		break;
 
-	case 94:
+	case 0x5e:
 		add_to_cpuname("[Skylake h/s]");
 		break;
 
