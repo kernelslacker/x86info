@@ -46,7 +46,7 @@ V	= @
 Q	= $(V:1=)
 QUIET_CC = $(Q:@=@echo    '  CC '$@;)
 
-all: x86info test
+all: x86info
 
 X86INFO_HEADERS = \
 	$(patsubst %.h,%.h,$(wildcard *.h)) \
@@ -74,13 +74,6 @@ df = $(DEPDIR)/$(*D)/$(*F)
 	@sed -e 's|.*:|$*.o:|' <$(df).d.tmp > $(df).d
 	@sed -e 's/.*://' -e 's/\\$$//' < $(df).d.tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $(df).d
 	@rm -f $(df).d.tmp
-
-
-nodes:
-	@scripts/makenodes
-
-test:
-	@scripts/testnodes
 
 release:
 	@git repack -a -d
