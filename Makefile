@@ -93,7 +93,7 @@ clean:
 	@rm -f x86info
 	@rm -f core.*
 	@rm -rf $(DEPDIR)/*
-	@rm -f x86info-coverity.tgz
+	@rm -f x86info-coverity.tar.xz
 	@rm -rf cov-int
 
 sparse:
@@ -109,7 +109,7 @@ tags:   $(X86INFO_SRC)
 	@ctags -R --exclude=tmp
 
 coverity:
-	@rm -rf cov-int x86info-coverity.tgz
+	@rm -rf cov-int x86info-coverity.tar.xz
 	@cov-build --dir cov-int make
-	@tar czvf x86info-coverity.tgz cov-int
+	@tar cJvf x86info-coverity.tar.xz cov-int
 
