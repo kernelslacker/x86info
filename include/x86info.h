@@ -93,9 +93,6 @@ struct cpudata {
 	unsigned int MHz;
 	unsigned int nr_cores;
 	unsigned int nr_logical;
-	char *info_url;
-	char *datasheet_url;
-	char *errata_url;
 	/* Intel specific bits */
 	unsigned int brand;
 	unsigned int apicid;
@@ -200,7 +197,6 @@ extern unsigned int show_microcode;
 extern unsigned int show_mtrr;
 extern unsigned int show_pm;
 extern unsigned int show_cpuid;
-extern unsigned int show_urls;
 extern unsigned int show_mptable;
 extern unsigned int show_feature_flags;
 extern unsigned int show_MHz;

@@ -9,10 +9,6 @@
 #include <x86info.h>
 #include "intel.h"
 
-static char p4_423_datasheet[]="http://developer.intel.com/design/pentium4/datashts/24919805.pdf";
-static char p4_478_datasheet[]="http://developer.intel.com/design/pentium4/datashts/24988703.pdf\n\thttp://developer.intel.com/design/pentium4/datashts/29864304.pdf";
-static char p4_errata[]="http://developer.intel.com/design/pentium4/specupdt/249199.htm";
-
 static char *intel_nameptr;
 #define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x)
 
@@ -23,8 +19,6 @@ void identify_intel_family15(struct cpudata *cpu)
 	switch (model(cpu)) {
 	case 0x0:	/* Family 15 */
 		cpu->connector = CONN_SOCKET_423;
-		cpu->datasheet_url = strdup(p4_423_datasheet);
-		cpu->errata_url = strdup(p4_errata);
 		add_to_cpuname("Pentium 4");
 		switch (cpu->stepping) {
 		case 7:
@@ -48,8 +42,6 @@ void identify_intel_family15(struct cpudata *cpu)
 	case 0x1:
 		cpu->connector = CONN_SOCKET_423;
 		add_to_cpuname("Pentium 4 (Willamette)");
-		cpu->datasheet_url = strdup(p4_423_datasheet);
-		cpu->errata_url = strdup(p4_errata);
 		switch (cpu->stepping) {
 		case 1:
 			//400FSB 256K L2
@@ -83,8 +75,6 @@ void identify_intel_family15(struct cpudata *cpu)
 		break;
 	case 0x2:
 		cpu->connector = CONN_SOCKET_478;
-		cpu->datasheet_url = strdup(p4_478_datasheet);
-		cpu->errata_url = strdup(p4_errata);
 		switch (cpu->brand) {
 			case 15:
 				add_to_cpuname("Celeron (P4 core)");
@@ -331,8 +321,6 @@ void identify_intel_family15(struct cpudata *cpu)
 
 	case 0x5:
 		cpu->connector = CONN_SOCKET_603;
-//		cpu->datasheet_url = strdup(p4_478_datasheet);
-//		cpu->errata_url = strdup(p4_errata);
 		add_to_cpuname("Pentium 4 Xeon (Foster)");
 		break;
 	default:

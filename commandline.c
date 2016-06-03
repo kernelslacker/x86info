@@ -19,7 +19,6 @@ unsigned int show_microcode = 0;
 unsigned int show_mtrr = 0;
 unsigned int show_pm = 0;
 unsigned int show_cpuid = 0;
-unsigned int show_urls = 0;
 unsigned int show_mptable = 0;
 unsigned int show_feature_flags = 0;
 unsigned int show_MHz = 0;
@@ -52,7 +51,6 @@ static void usage(char *programname)
       --mtrr\n\
       --pm\n\
 -r,   --registers\n\
--u,   --urls\n\
 -v,   --verbose\n\
 \n", programname);
 	exit (0);
@@ -83,7 +81,6 @@ void parse_command_line(int argc, char **argv)
 			show_MHz = 1;
 			show_pm = 1;
 			show_cpuid = 1;
-			show_urls = 1;
 		}
 
 		if (!strcmp(arg, "--all-cpus"))
@@ -150,9 +147,6 @@ void parse_command_line(int argc, char **argv)
 			need_root = 1;
 			show_machine_check = 1;
 		}
-
-		if ((!strcmp(arg, "-u") || !strcmp(arg, "--urls")))
-			show_urls = 1;
 
 		if ((!strcmp(arg, "-v") || !strcmp(arg, "--verbose")))
 			verbose = 1;

@@ -10,8 +10,6 @@
 #include <x86info.h>
 #include "intel.h"
 
-static char nehalem_info_url[] = "http://www.intel.com/design/corei7/documentation.htm";
-
 static char *intel_nameptr;
 #define add_to_cpuname(x)   intel_nameptr += snprintf(intel_nameptr, sizeof(x), "%s", x)
 
@@ -206,7 +204,6 @@ void identify_intel_family6core(struct cpudata *cpu)
 		 * SLBCH C-0 0x000106A4 2.66 / 4.80/ 1066 8MB
 		 */
 		add_to_cpuname("Core i7 (Nehalem-EP) [bloomfield/gainestown]");
-		cpu->info_url = strdup(nehalem_info_url);
 		switch (cpu->MHz) {
 		case 3200:	add_to_cpuname(" [C-0][SLBCJ]");
 				break;

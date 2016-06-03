@@ -73,15 +73,6 @@ static void display_detailed_info(struct cpudata *cpu)
 	if (show_connector)
 		decode_connector(cpu->connector);
 
-	if (show_urls) {
-		if (cpu->info_url != NULL)
-			printf("Info URL: %s\n", cpu->info_url);
-		if (cpu->datasheet_url != NULL)
-			printf("Datasheet: %s\n", cpu->datasheet_url);
-		if (cpu->errata_url != NULL)
-			printf("Errata: %s\n", cpu->errata_url);
-	}
-
 	/* Info that requires root access (eg, reading MSRs etc) */
 	if (user_is_root) {
 		if (show_mtrr)
@@ -257,12 +248,6 @@ int main(int argc, char **argv)
 	/* Tear down the linked list. */
 	cpu = firstcpu;
 	for (i = 0; i < nrCPUs; i++) {
-		if (cpu->info_url)
-			free(cpu->info_url);
-		if (cpu->datasheet_url)
-			free(cpu->datasheet_url);
-		if (cpu->errata_url)
-			free(cpu->errata_url);
 		tmp = cpu->next;
 		free(cpu);
 		cpu = tmp;
