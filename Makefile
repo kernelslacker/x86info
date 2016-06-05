@@ -40,6 +40,12 @@ ifeq ($(CC),"")
 CC = gcc
 endif
 
+ifdef STATIC_LIBPCI
+LIBPCI = -Wl,-Bstatic -lpci -Wl,-Bdynamic -lz
+else
+LIBPCI = -lpci
+endif
+
 SHELL = /bin/sh
 
 V	= @
@@ -60,7 +66,8 @@ X86INFO_OBJS = $(sort $(patsubst %.c,%.o,$(wildcard *.c))) \
 	$(sort $(patsubst %.c,%.o,$(wildcard vendors/*/*.c)))
 
 x86info: $(X86INFO_OBJS) $(X86INFO_HEADERS)
-	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS) -lpci
+	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS) \
+	    $(LIBPCI)
 
 DEPDIR= .deps
 -include $(X86INFO_SRC:%.c=$(DEPDIR)/%.d)
