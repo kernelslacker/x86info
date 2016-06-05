@@ -67,21 +67,21 @@ static const char *intel_cpuid_06_eax_flags_desc[32] = {
 
 /* CPUID 0x00000007 EBX flags */
 static const char *intel_cpuid_07_ebx_flags[32] = {
-	"fsgsbase", NULL, "sgx", "bmi1", "hle", "avx2", NULL, "smep",
-	"bmi2", "erms", "invpcid", "rtm", "pqm", NULL, "mpx", "pqe",
+	"fsgsbase", "tsc_adj", "sgx", "bmi1", "hle", "avx2", "fdp_excp", "smep",
+	"bmi2", "erms", "invpcid", "rtm", "pqm", "nofpucs", "mpx", "pqe",
 	"avx512f", "avx512dq", "rdseed", "adx", "smap", "avx512ifma",
-	"pcommit", "clflushopt", "clwb", NULL, "avx512pf", "avx512er",
+	"pcommit", "clflushopt", "clwb", "ipt", "avx512pf", "avx512er",
 	"avx512cd", "sha", "avx512bw", "avx512vl"
 };
 
 static const char *intel_cpuid_07_ebx_flags_desc[32] = {
 	"Access to base of %fs and %gs",                                //0
-	NULL,                                                           //1
+	"TSC_ADJUST MSR",                                               //1
 	"Software Guard Extensions",                                    //2
 	"Bit Manipulation Instruction Set",                             //3
 	"Transactional Synchronization Extensions",                     //4
 	"Advanced Vector Extensions 2",                                 //5
-	NULL,                                                           //6
+	"FPU Data Pointer updated only on x87 exceptions",              //6
 	"Supervisor-Mode Execution Prevention",                         //7
 	"Bit Manipulation Instruction Set 2",                           //8
 	"Enhanced REP MOVSB/STOSB",                                     //9
@@ -100,7 +100,7 @@ static const char *intel_cpuid_07_ebx_flags_desc[32] = {
 	"PCOMMIT instruction",                                          //22
 	"CLFLUSHOPT instruction",                                       //23
 	"CLWB instruction",                                             //24
-	NULL,                                                           //25
+	"Intel Processor Trace",                                        //25
 	"AVX-512 Prefetch Instructions",                                //26
 	"AVX-512 Exponential and Reciprocal Instructions",              //27
 	"AVX-512 Conflict Detection Instructions",                      //28
@@ -196,7 +196,7 @@ static const char *generic_cap_flags_desc[32] = {
 /* CPUID 0x00000001 ECX flags */
 static const char *intel_cap_generic_ecx_flags[32] = {
 	"sse3", "pclmuldq", "dtes64", "monitor", "ds-cpl", "vmx", "smx", "est",
-	"tm2", "ssse3", "cid", NULL, "fma", "cx16", "xTPR", "pdcm",
+	"tm2", "ssse3", "cid", "sdbg", "fma", "cx16", "xTPR", "pdcm",
 	NULL, "pcid", "dca", "sse4_1", "sse4_2", "x2apic", "movbe", "popcnt",
 	"tsc-deadline", "aes", "xsave", "osxsave", "avx", "f16c", "rdrnd", NULL
 };
@@ -212,7 +212,7 @@ static const char *intel_cap_generic_ecx_flags_desc[32] = {
 	"Thermal Monitor 2",			    // 8
 	"Supplemental Streaming SIMD Extensions 3", // 9
 	"L1 Context ID",			    // 10
-	NULL,					    // 11
+	"Silicon Debug",			    // 11
 	"Fused Multiply Add",			    // 12
 	"CMPXCHG16B",				    // 13
 	"xTPR Update Control",			    // 14
@@ -281,13 +281,18 @@ static const char *intel_cap_extended_edx_flags_desc[32] = {
 
 /* CPUID 0x80000001 ECX flags */
 static const char *intel_cap_extended_ecx_flags[32] = {
-	"lahf_lm", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	"lahf_lm", NULL, NULL, NULL, NULL, "lzcnt", NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 };
 static const char *intel_cap_extended_ecx_flags_desc[32] = {
 	"LAHF/SAHF available in 64-bit mode",	    // 0
+	NULL,					    // 1
+	NULL,					    // 2
+	NULL,					    // 3
+	NULL,					    // 4
+	"LZCNT instruction",			    // 5
 };
 
 static const char *amd_cap_generic_ecx_flags[32] = {
