@@ -112,6 +112,8 @@ static struct cpu_name_def intel_fam6e_names[] = {
 
 	{ .model = 0x1e, .flags = ONLYMODEL, .str = "Core i7 (Nehalem)" },
 
+	{ .model = 0x1f, .flags = ONLYMODEL, .str = "Core i7 (Nehalem)" },
+
 	{ .model = 0x25, .flags = ONLYMODEL, .str = "Core i7 (Westmere)" },
 
 	{ .model = 0x26, .flags = ONLYMODEL, .str = "Atom [Lincroft]" },
