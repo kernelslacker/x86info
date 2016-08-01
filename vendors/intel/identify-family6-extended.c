@@ -102,9 +102,14 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	// SLBCJ C-0 0x000106A4 3.20 / 6.40/ 1066 8MB
 	// SLBCK C-0 0x000106A4 2.93 / 4.80/ 1066 8MB
 	// SLBCH C-0 0x000106A4 2.66 / 4.80/ 1066 8MB
-	{ .model = 0x1a, .flags = ONLYMHZ, .mhz = 3200, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCJ]" },
-	{ .model = 0x1a, .flags = ONLYMHZ, .mhz = 2930, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCK]" },
-	{ .model = 0x1a, .flags = ONLYMHZ, .mhz = 2660, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCH]" },
+	{ .model = 0x1a, .stepping = 4, .mhz = 3200, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCJ]" },
+	{ .model = 0x1a, .stepping = 4, .mhz = 2930, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCK]" },
+	{ .model = 0x1a, .stepping = 4, .mhz = 2660, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCH]" },
+	{ .model = 0x1a, .stepping = 5, .mhz = 3330, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEQ]" },
+	{ .model = 0x1a, .stepping = 5, .mhz = 3200, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEU]" },
+	{ .model = 0x1a, .stepping = 5, .mhz = 3060, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEN]" },
+	{ .model = 0x1a, .stepping = 5, .mhz = 2660, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEJ]" },
+	{ .model = 0x1a, .stepping = 5, .mhz = 2800, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBKP]" },
 
 	{ .model = 0x1c, .stepping = 10, .str = "Atom D510 [Pineview]" },
 
