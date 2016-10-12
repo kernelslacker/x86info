@@ -185,6 +185,8 @@ static struct cpu_name_def intel_fam6e_names[] = {
 
 	{ .model = 0x5f, .flags = ONLYMODEL, .str = "Atom [Denverton]" },
 
+	{ .model = 0x85, .flags = ONLYMODEL, .str = "Xeon Phi [Knights Mill]" },
+
 	{ .model = 0x8e, .flags = ONLYMODEL, .str = "[Kabylake mobile]" },
 
 	{ .model = 0x9e, .flags = ONLYMODEL, .str = "[Kabylake desktop]" },
