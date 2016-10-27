@@ -1,0 +1,251 @@
+#!/usr/bin/env bash
+
+# 07/06/2015, 07/18/2016 
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301, USA.
+
+declare -a _bases=(
+  'archlinux'
+  'debian'
+  'gentoo'
+  'slackware'
+  'rhel'
+  'frugalware'
+  'angstrom'
+  'freebsd'
+  'openbsd'
+)
+
+_printf_err() {
+  printf '%s\n' "try again with: bash ${0} basedistro"
+  printf '%s ' "Bases: ${_bases[@]}"
+  printf '\n'
+}
+
+_gen_files() {
+  progName='pinkybar'
+  progVer='1.0.0'
+  bsdLibs=''
+  osEntered="${1,,}"
+  bsdCF='-D_DEFAULT_SOURCE -L/usr/local/lib'
+  posixCF='-D_POSIX_C_SOURCE=200112L'
+  declare -a srcToAppend configure_ac main_makefile
+  declare -a src_makefile src_libs_to_add src_files
+
+  case "${osEntered}" in
+    freebsd)
+        bsdLibs='-largp -ldevstat'
+        amCF="${bsdCF}"
+        defTits='m4_define([FREEBZD], [tits])'
+        srcToAppend=(
+          'freebsd_functions.c'
+          'include/freebzd.h'
+        )
+      ;;
+    openbsd)
+        bsdLibs='-largp -lossaudio'
+        amCF="${bsdCF}"
+        defTits='m4_define([OPENBZD], [forSure])'
+        srcToAppend=(
+          'openbsd_functions.c'
+          'include/openbzd.h'
+        )
+      ;;
+    *)
+        amCF="${posixCF}"
+        defTits='m4_define([LINUKS], [cryMeAriver])'
+        srcToAppend=(
+          'linux_functions.c'
+        )
+      ;;
+  esac
+
+
+  # to strip get_packs() at compile time,
+  # also instead using more hard-coded macros
+  # let the shell enumerate them for us
+  declare -a enumDistros=()
+  for x in {0..8}
+  do
+    enumDistros[${x}]="AC_DEFINE_UNQUOTED([${_bases[${x}]^^}],[${x}],[trololo enum generator])"
+
+    [[ "${osEntered}" == "${_bases[${x}]}" ]] && {
+      distroNum="AC_DEFINE_UNQUOTED([DISTRO],[${x}],[da monster])"
+    }
+  done
+
+  # configure.ac
+  configure_ac=("# This file is processed by autoconf to create a configure script
+  AC_INIT(["${progName}"], ["${progVer}"])
+  AC_CONFIG_AUX_DIR([temp_dir])
+  AC_CONFIG_MACRO_DIR([m4])
+  AC_CONFIG_HEADERS([src/config.h])
+  # -Werror -Wportability
+  AM_INIT_AUTOMAKE([1.13 -Wall no-define foreign subdir-objects dist-xz no-dist-gzip std-options])
+
+  AM_SILENT_RULES([yes])
+  "${defTits}"
+
+  # With the addition of more runtime compile and
+  # link tests, this option is no longer necessary.
+  # Any compiler and C library succeeding to pass the
+  # tests will be able to compile and run the
+  # program flawlessly.
+  # If you use OpenBSD uncomment the AC_PROG_CC([])
+  # line below. Make sure that you have the latest gcc/llvm
+  # AC_PROG_CC([egcc clang llvm-gcc gcc])
+
+  AC_PROG_CC_C99
+  AC_C_CONST
+  AC_HEADER_STDC
+  AM_PROG_CC_C_O
+
+  # AM_EXTRA_RECURSIVE_TARGETS([ncurses])
+
+  # The linker flags tests in m4 dir
+  TEST_SOME_FUNCS
+  TEST_NET
+  TEST_PCI
+  TEST_X11
+  TEST_ALSA
+  TEST_MPD
+  TEST_DVD
+  TEST_SENSORS
+  TEST_TYPEZ
+  TEST_WEATHER
+  TEST_PERL
+  TEST_PYTHON
+  TEST_CFLAGZ
+
+  # Definitions
+  "${distroNum}"
+  "${enumDistros[@]}"
+
+  AC_CONFIG_FILES([
+    Makefile
+    src/Makefile
+  ])
+
+  AC_OUTPUT
+
+  echo
+  echo 'Now type \"make\" and \"make install\" afterwards'
+  echo")
+
+
+  # Makefile.am
+  main_makefile=('
+    SUBDIRS = src
+
+    dist_man_MANS = doc/pinkybar.1
+
+    # To satisfy make dist
+    EXTRA_DIST =      \
+      src/ncurses.c   \
+      bootstrap       \
+      README.md       \
+      .gitignore      \
+      m4              \
+      doc             \
+      extra
+
+# uses tabs
+ncurses:
+	@cd src && $(MAKE) ncurses
+  ')
+
+
+  # src/Makefile.am
+  src_files=(
+    'main.c'
+    'cpu.c'
+    'common.c'
+    'sound.c'
+    'options.c'
+    'net.c'
+    'weather.c'
+    'smart.c'
+    'perl.c'
+    'python.c'
+
+    'prototypes/cpu.h'
+    'prototypes/common.h'
+    'prototypes/sound.h'
+    'prototypes/net.h'
+    'prototypes/functions.h'
+    'prototypes/options.h'
+    'prototypes/weather.h'
+    'prototypes/smart.h'
+    'prototypes/perl.h'
+    'prototypes/python.h'
+
+    'include/headers.h'
+    'include/options_constants.h'
+    'include/functions_constants.h'
+    'include/non_x11_colours.h'
+    'include/x11_colours.h'
+    'include/options_generator.h'
+
+    "${srcToAppend[@]}"
+  )
+
+  # The syntax is autotools specific
+  src_libs_to_add=(
+    '$(X_LIBS) $(ALSA_LIBS)'
+    '$(MPD_LIBS) $(PCI_LIBS)'
+    '$(DVD_LIBS) $(SENSORS_LIBS)'
+    '$(CURL_LIBS) $(LIBNL_LZ)'
+    '$(PERL_LZ) $(PYTHON_LZ)'
+  )
+
+  # Do not pass more definitions to AM_CFLAGS
+  # Think of the line limit
+  src_makefile=('AM_CFLAGS = '${amCF}' \
+    -I/usr/local/include $(LIBNL_CF) $(PERL_CF) $(PYTHON_CF)
+
+    bin_PROGRAMS = '${progName}'
+
+    EXTRA_PROGRAMS   = ncurses
+    ncurses_SOURCES  = ncurses.c
+    ncurses_LDADD    = -lncurses
+
+    '${progName}'_LDADD = '${src_libs_to_add[@]}' '${bsdLibs}'
+    '${progName}'_SOURCES = '${src_files[@]}'
+  ')
+
+
+  cat <<EOF > configure.ac
+${configure_ac[@]}
+EOF
+
+  cat <<EOF > Makefile.am
+${main_makefile[@]}
+EOF
+
+  cat <<EOF > src/Makefile.am
+${src_makefile[@]}
+EOF
+
+
+  # do not remove nor edit
+  autoreconf --install --force
+}
+
+
+[[ -z "${1}" ]] && _printf_err "$@" || {
+  [[ " ${_bases[@]} " =~ " ${1,,} " ]] && \
+    _gen_files "$@" || _printf_err "$@"
+}

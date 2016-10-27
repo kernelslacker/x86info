@@ -1,0 +1,1397 @@
+.\"t
+.TH "pinkybar" "1" "Oktoberfest 23, 2016" "manual" ""
+.SH NAME
+.PP
+This man page is converted from markdown, and some information might not
+look good and/or have been stripped during the automated process.
+.SH SYNOPSIS
+.PP
+pinkybar [\f[I]option\f[]]
+.SH DESCRIPTION
+.PP
+Gather some system information and show it in this statusbar program,
+not tied to any Window Manager, terminal multiplexer, etc.
+.PP
+Please note that the program won't detect fans connected via molex
+connetor(s) or external fan controller.
+Also I have not tested it with fan splitter(s) either.
+.PP
+The program is smart enough to detect whether some of your fan(s) blades
+are spinning, or the particular fan have been removed.
+Hold down some of your fan blades and you'll see that the program won't
+include this fan and it's RPM, release the blades and you'll see the fan
+and it's RPM in the statusbar.
+Try simulating real fan hardware failure by holding down all system fan
+blades and watch what the program will show you, just try not to slice
+your cheesy fingers open in the process.
+.PP
+If any of the 50+ options doesn't satisfy you, you can extend pinky\-bar
+with your own crafted perl/python script.
+.PP
+If you compile your kernel from source code make sure to include your
+cpu and motherboard sensors as \f[B]modules\f[] and not inlined.
+.PP
+\f[B]Just an example if you use BSD \- acpi/aibs, coretemp/amdtemp.\f[]
+.PP
+[IMAGE: image (img/cpu-temp.png)]
+.PP
+[IMAGE: image (img/mobo-temp.png)]
+.PP
+   *   *   *   *   *
+.SS Bandwidth measurment
+.PP
+pinky\-bar supplies bandwitdh/network throughput measurment to satisfy
+those users that pay for overpriced 3G/mobile internet, and want to
+monitor every single megabit/megabyte.
+.SS Program options
+.PP
+The order of supplied options will dictate how, where and what system
+information to be shown.
+.PP
+.TS
+tab(@);
+l l l.
+T{
+short option
+T}@T{
+long option
+T}@T{
+Descrtiption
+T}
+_
+T{
+\-M
+T}@T{
+\[en]mpd
+T}@T{
+The song filename
+T}
+T{
+\-W
+T}@T{
+\[en]mpdtrack
+T}@T{
+The song track name (not available in cmus)
+T}
+T{
+\-x
+T}@T{
+\[en]mpdartist
+T}@T{
+The song artist(s) name(s)
+T}
+T{
+\-X
+T}@T{
+\[en]mpdtitle
+T}@T{
+The song title
+T}
+T{
+\-y
+T}@T{
+\[en]mpdalbum
+T}@T{
+The song album name
+T}
+T{
+\-Y
+T}@T{
+\[en]mpddate
+T}@T{
+The song date
+T}
+T{
+\-c
+T}@T{
+\[en]cpu
+T}@T{
+The current cpu load (summed up all cores/threads)
+T}
+T{
+\-L
+T}@T{
+\[en]coresload
+T}@T{
+Show the load regarding each individual cpu core/thread
+T}
+T{
+\-T
+T}@T{
+\[en]cputemp
+T}@T{
+The current cpu temperature
+T}
+T{
+\-C
+T}@T{
+\[en]cpuspeed
+T}@T{
+Show your maximum cpu clock speed in MHz, regardless of the used
+governor.
+Uses assembly.
+T}
+T{
+\-I
+T}@T{
+\[en]cpuinfo
+T}@T{
+Detect your CPU vendor, stepping, family, clflush, l1/l2 cache and line
+size, physical cores, physical and virtual bits.
+Uses assembly.
+T}
+T{
+\-r
+T}@T{
+\[en]ramperc
+T}@T{
+The used ram in percentage
+T}
+T{
+\-J
+T}@T{
+\[en]ramtotal
+T}@T{
+The total ram
+T}
+T{
+\-K
+T}@T{
+\[en]ramfree
+T}@T{
+The free ram
+T}
+T{
+\-l
+T}@T{
+\[en]ramshared
+T}@T{
+The shared ram
+T}
+T{
+\-o
+T}@T{
+\[en]rambuffer
+T}@T{
+The buffer ram (not available in OpenBSD)
+T}
+T{
+\-s
+T}@T{
+\[en]driveperc
+T}@T{
+The used drive storage in percentage
+T}
+T{
+\-n
+T}@T{
+\[en]drivetotal
+T}@T{
+The total drive storage
+T}
+T{
+\-N
+T}@T{
+\[en]drivefree
+T}@T{
+The free drive storage
+T}
+T{
+\-O
+T}@T{
+\[en]driveavail
+T}@T{
+The available drive storage (total \- used)
+T}
+T{
+T}@T{
+\[en]drivetemp
+T}@T{
+Read the drive temperature from S.M.A.R.T
+T}
+T{
+\-g
+T}@T{
+\[en]battery
+T}@T{
+The remaining battery charge
+T}
+T{
+\-z
+T}@T{
+\[en]dvdstr
+T}@T{
+The vendor and model name of your cdrom/dvdrom
+T}
+T{
+\-S
+T}@T{
+\[en]statio
+T}@T{
+Read and written MBs to the drive so far [argument \- sda]
+T}
+T{
+\-p
+T}@T{
+\[en]packages
+T}@T{
+The number of installed packages
+T}
+T{
+\-P
+T}@T{
+\[en]kernsys
+T}@T{
+The kernel name
+T}
+T{
+T}@T{
+\[en]kernode
+T}@T{
+The network node hostname
+T}
+T{
+\-Q
+T}@T{
+\[en]kernrel
+T}@T{
+The kernel release
+T}
+T{
+\-R
+T}@T{
+\[en]kernver
+T}@T{
+The kernel version
+T}
+T{
+\-u
+T}@T{
+\[en]kernarch
+T}@T{
+The machine architecture
+T}
+T{
+\-k
+T}@T{
+\[en]kernel
+T}@T{
+Combined kernel name and version
+T}
+T{
+T}@T{
+\[en]perl
+T}@T{
+Extend pinkybar with your scripts written in perl, learn more from the
+Opt\-in section.
+T}
+T{
+T}@T{
+\[en]python
+T}@T{
+Extend pinkybar with your scripts written in python, learn more from the
+Opt\-in section.
+T}
+T{
+\-q
+T}@T{
+\[en]weather
+T}@T{
+Show the temperature outside (some details must be provided)
+T}
+T{
+\-U
+T}@T{
+\[en]uptime
+T}@T{
+The system uptime
+T}
+T{
+\-w
+T}@T{
+\[en]loadavg
+T}@T{
+The system average load for past 1, 5 and 15 minutes
+T}
+T{
+\-v
+T}@T{
+\[en]voltage
+T}@T{
+The system voltage
+T}
+T{
+\-f
+T}@T{
+\[en]fans
+T}@T{
+All system fans and their speed in RPM
+T}
+T{
+\-m
+T}@T{
+\[en]mobo
+T}@T{
+Show the motherboard name and vendor
+T}
+T{
+\-d
+T}@T{
+\[en]mobotemp
+T}@T{
+The motherboard temperature
+T}
+T{
+\-V
+T}@T{
+\[en]volume
+T}@T{
+The sound volume level
+T}
+T{
+\-t
+T}@T{
+\[en]time
+T}@T{
+The current time
+T}
+T{
+\-a
+T}@T{
+\[en]ipaddr
+T}@T{
+The local ip address [argument \- eth0]
+T}
+T{
+\-b
+T}@T{
+\[en]bandwitdh
+T}@T{
+The consumed internet bandwidth so far [argument \- eth0]
+T}
+T{
+\-i
+T}@T{
+\[en]iface
+T}@T{
+The current download and upload speed [argument \- eth0]
+T}
+T{
+\-A
+T}@T{
+\[en]ipmac
+T}@T{
+The NIC mac address [argument \- eth0]
+T}
+T{
+\-B
+T}@T{
+\[en]ipmask
+T}@T{
+The NIC subnet mask [argument \- eth0]
+T}
+T{
+\-D
+T}@T{
+\[en]ipcast
+T}@T{
+The NIC broadcast address [argument \- eth0]
+T}
+T{
+\-E
+T}@T{
+\[en]iplookup
+T}@T{
+Mini website IP lookup [website argument \- google.com]
+T}
+.TE
+.PP
+Be aware of the options that mention \f[B]Uses assembly\f[] are tested
+only on AMD and Intel CPUs (starting from pentium 4 onwards).
+.PP
+The following options are available only in Linux:
+.PP
+.TS
+tab(@);
+l l l.
+T{
+short option
+T}@T{
+long option
+T}@T{
+Descrtiption
+T}
+_
+T{
+\-F
+T}@T{
+\[en]drivemodel
+T}@T{
+The vendor name of your drive [argument \- sda]
+T}
+T{
+\-G
+T}@T{
+\[en]nicinfo
+T}@T{
+The NIC vendor and model [argument \- eth0]
+T}
+T{
+T}@T{
+\[en]nicdrv
+T}@T{
+The NIC driver [argument \- eth0]
+T}
+T{
+\-H
+T}@T{
+\[en]nicver
+T}@T{
+The NIC version [argument \- eth0]
+T}
+T{
+\-e
+T}@T{
+\[en]iplink
+T}@T{
+The NIC link speed (useful for wireless/wifi) [argument \- eth0]
+T}
+T{
+\-j
+T}@T{
+\[en]nicfw
+T}@T{
+The NIC firmware [argument \- eth0]
+T}
+T{
+\-h
+T}@T{
+\[en]wifiname
+T}@T{
+The name of currently connected wifi/wireless network [argument \-
+wlan0]
+T}
+.TE
+.PP
+The following options are available only to FreeBSD and OpenBSD:
+.PP
+.TS
+tab(@);
+l l l.
+T{
+short option
+T}@T{
+long option
+T}@T{
+Descrtiption
+T}
+_
+T{
+\-j
+T}@T{
+\[en]nicgw
+T}@T{
+The NIC gateway address [argument \- re0]
+T}
+T{
+\-Z
+T}@T{
+\[en]swapused
+T}@T{
+The used drive swap in MB
+T}
+T{
+\-F
+T}@T{
+\[en]swaperc
+T}@T{
+The used drive swap in percentage
+T}
+T{
+\-h
+T}@T{
+\[en]swaptotal
+T}@T{
+The total drive swap
+T}
+T{
+\-H
+T}@T{
+\[en]swapavail
+T}@T{
+The available drive swap (total \- used)
+T}
+.TE
+.PP
+The following options are available only in OpenBSD:
+.PP
+.TS
+tab(@);
+l l l.
+T{
+short option
+T}@T{
+long option
+T}@T{
+Descrtiption
+T}
+_
+T{
+\-l
+T}@T{
+\[en]ramused
+T}@T{
+The used ram in MB
+T}
+.TE
+.PP
+   *   *   *   *   *
+.SS GNU Build System (configure) options
+.PP
+Before the source code is passed to the compiler, you can enable/disable
+the following \f[B]configure\f[] options that will increase/reduce the
+number of dependencies required to compile the program.
+.PP
+It's up to you to decide which features suit you best.
+.PP
+.TS
+tab(@);
+l l l.
+T{
+To include
+T}@T{
+Not to include
+T}@T{
+Descrtiption
+T}
+_
+T{
+\[en]with\-x11
+T}@T{
+\[en]without\-x11
+T}@T{
+Enable it if you are using dwm.
+T}
+T{
+\[en]with\-alsa
+T}@T{
+\[en]without\-alsa
+T}@T{
+To get the sound volume level.
+T}
+T{
+\[en]with\-oss
+T}@T{
+\[en]without\-oss
+T}@T{
+To get the sound volume level in *BSD.
+T}
+T{
+\[en]with\-net
+T}@T{
+\[en]without\-net
+T}@T{
+Enable the internet related options.
+T}
+T{
+\[en]with\-libnl
+T}@T{
+\[en]without\-libnl
+T}@T{
+Enable the wifi related options regarding chipsets supporting the
+cfg80211/mac80211 modules (linux only).
+T}
+T{
+\[en]with\-pci
+T}@T{
+\[en]without\-pci
+T}@T{
+To get the NIC vendor and model in linux
+T}
+T{
+\[en]with\-dvd
+T}@T{
+\[en]without\-dvd
+T}@T{
+To get the cdrom/dvdrom vendor and model
+T}
+T{
+\[en]with\-sensors
+T}@T{
+\[en]without\-sensors
+T}@T{
+Alternative way to get the sensors values (linux only)
+T}
+T{
+\[en]with\-apm
+T}@T{
+\[en]without\-apm
+T}@T{
+APM power and resource management for laptops (FreeBSD only)
+T}
+T{
+\[en]with\-ncurses
+T}@T{
+\[en]without\-ncurses
+T}@T{
+Output the data to the terminal using the ncurses library, can be
+colorized
+T}
+T{
+\[en]with\-perl
+T}@T{
+\[en]without\-perl
+T}@T{
+Extend pinkybar with your own crafted scripts written in perl
+T}
+T{
+perl_script=/tmp/pinky.pl
+T}@T{
+T}@T{
+The location where your perl script resides, must be combined
+\f[B]\[en]with\-perl\f[]
+T}
+T{
+\[en]with\-python2
+T}@T{
+\[en]without\-python2
+T}@T{
+Extend pinkybar with your own crafted scripts written in python2
+T}
+T{
+\[en]with\-python3
+T}@T{
+\[en]without\-python3
+T}@T{
+Extend pinkybar with your own crafted scripts written in python3
+T}
+T{
+python_script=/tmp/pinky.py
+T}@T{
+T}@T{
+The location where your python script resides, must be combined either
+\f[B]\[en]with\-python2\f[] or \f[B]\[en]with\-python3\f[]
+T}
+T{
+\[en]with\-weather
+T}@T{
+\[en]without\-weather
+T}@T{
+The temperature outside (some details must be provided)
+T}
+T{
+api_town=`London,uk'
+T}@T{
+T}@T{
+Town and country code to use for temperature monitoring
+T}
+T{
+api_key=`123458976'
+T}@T{
+T}@T{
+API key obtained after registering yourself in the weather website
+T}
+T{
+\[en]with\-smartemp
+T}@T{
+\[en]without\-smartemp
+T}@T{
+Read the drive temperature from S.M.A.R.T cross\-platform available
+T}
+T{
+\[en]with\-drivetemp
+T}@T{
+\[en]without\-drivetemp
+T}@T{
+Read the drive temperature from S.M.A.R.T (linux only) uses curl
+T}
+T{
+\[en]with\-drivetemp\-light
+T}@T{
+\[en]without\-drivetemp\-light
+T}@T{
+Read the drive temperature from S.M.A.R.T (linux only) light version
+T}
+T{
+drive_port=`1234'
+T}@T{
+T}@T{
+Different TCP port to listen to for the drive temperature, default one
+is 7634, must be combined \f[B]with\-drivetemp\f[] or
+\f[B]with\-drivetemp\-light\f[]
+T}
+T{
+\[en]with\-colours
+T}@T{
+\[en]without\-colours
+T}@T{
+Colorize the output data.
+T}
+T{
+icons=/tmp
+T}@T{
+T}@T{
+xbm icons that can be used by dzen2 for example.
+Discarded when \f[B]\[en]with\-x11\f[] is used
+T}
+T{
+\[en]with\-mpd
+T}@T{
+\[en]without\-mpd
+T}@T{
+To see the currently played song name (if any).
+T}
+T{
+\[en]prefix=/tmp
+T}@T{
+T}@T{
+The directory where the program will be installed
+T}
+T{
+mobo_sensor=`dev.aibs.0'
+T}@T{
+T}@T{
+FreeBSD motherboard sensor module name to use in the sysctl calls.
+Read the FreeBSD installation below
+T}
+T{
+cpu_sensor=`dev.cpu.0.temperature'
+T}@T{
+T}@T{
+FreeBSD cpu temperature module name to use in the sysctl calls .
+Read the FreeBSD installation below
+T}
+.TE
+.PP
+By default, if \f[B]no\f[] options are passed, the program will be
+compiled with/without:
+.IP
+.nf
+\f[C]
+\-\-with\-net\ \-\-with\-pci\ \-\-without\-alsa\ \-\-without\-x11\ \-\-without\-mpd\ \-\-without\-colours\ \-\-without\-dvd\ \-\-without\-sensors\ \-\-without\-ncurses\ \-\-without\-weather\ \-\-without\-drivetemp\ \-\-without\-smartemp\ \-\-without\-perl\ \-\-without\-python2\ \-\-without\-python3
+\f[]
+.fi
+.PP
+Affects only FreeBSD users with laptops, \f[B]\[en]without\-apm\f[] will
+compile the program with acpi support to obtain the current battery
+life.
+.PP
+\f[B]\[en]without\-mpd\f[] will compile the program with cmus support,
+the options syntax stays as is.
+.PP
+The pci and sensors configure options will be discarded in *BSD.
+If you supplied \f[B]\[en]with\-alsa\f[] and \f[B]\[en]with\-oss\f[] or
+used the port package with the ncurses dialogue, alsa will have higher
+precedence over OSS.
+By default the port package will have OSS selected and alsa unselected.
+.PP
+Affects only linux, \f[B]\[en]with\-pci\f[] and or
+\f[B]\[en]with\-sensors\f[] will substitute \-O0 flag to mitigate bugs
+in GCC caused by \-O2 optimizations.
+\-O0 will optimize the compiled binary for file size, while \-O2 will
+optimize it for speed.
+So don't be shocked to find out that \f[B]\[en]without\-pci
+\[en]without\-sensors\f[] will cause the compiled binary to double it's
+size.
+If things doesn't improve with upcomining GCC releases I will temporary
+drop \-O2.
+.PP
+Affects only linux users with wifi/wireless chipsets, run
+\f[C]lsmod|grep\ 802\f[] and see whether your chipset uses
+cfg80211/mac80211.
+If that's so you can rely on libnl and enable \f[B]\[en]with\-libnl\f[]
+configure options, otherwise your chipset probably still uses we/wext,
+so type \f[B]\[en]without\-libnl\f[].
+.PP
+Affects only linux users, \f[B]\[en]with\-drivetemp\f[] pretty much
+locks you down to hddtemp.
+You can adjust the perl one liner script at the end of this README and
+compile the program \f[B]\[en]with\-smartemp\f[], so you can switch
+between hddtemp and smartmontools at any time without the need recompile
+pinkybar with different options.
+\f[B]\[en]with\-smartemp\f[] only cares for the existance of
+/tmp/pinkytemp file.
+.PP
+\f[B]\[en]with\-weather\f[] is using dis
+url (http://openweathermap.org/current), register yourself there, create
+a new API key (https://home.openweathermap.org/api_keys) and supply them
+like dis to \f[B]configure\f[].
+.PP
+Don't just rush to register yourself, read carefully what the
+\[lq]Free\[rq] account limits are and take in account how often the
+program should call their api service.
+I'm not responsible if you exceeded the limits, you've been warned.
+.IP
+.nf
+\f[C]
+#\ Make\ sure\ it\[aq]s\ working\ first
+#\ curl\ \[aq]http://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&APPID=28459ae16e4b3a7e5628ff21f4907b6f\[aq]
+
+#\ what\ to\ pass\ to\ configure
+\-\-with\-weather\ api_town=\[aq]London,uk\[aq]\ api_key=\[aq]28459ae16e4b3a7e5628ff21f4907b6f\[aq]
+\f[]
+.fi
+.PP
+   *   *   *   *   *
+.SS Installation for dwm
+.IP
+.nf
+\f[C]
+bash\ bootstrap\ distro
+\&./configure\ \-\-prefix=$HOME/.cache\ \-\-with\-x11\ \-\-with\-alsa
+make
+make\ install
+\f[]
+.fi
+.PP
+Copy the code from extra/scripts/dwm.sh or \f[C]exec\f[] it from
+\f[B]xinitrc\f[] or the script used to start dwm.
+.SS Installation for xmonad (or other WM)
+.IP
+.nf
+\f[C]
+#\ Copy\ the\ xbm\ icons
+mkdir\ \-p\ \-\-mode=700\ $HOME/.xmonad/icons
+cp\ \-r\ extra/xbm_icons/*.xbm\ $HOME/.xmonad/icons
+
+bash\ bootstrap\ distro
+
+#\ disable\ X11,\ point\ the\ location\ to\ the\ icons
+\&./configure\ \-\-prefix=$HOME/.cache\ \-\-without\-x11\ \-\-with\-alsa\ icons=$HOME/.xmonad/icons
+
+#\ compile\ \[aq]n\ install
+make
+make\ install
+\f[]
+.fi
+.PP
+Copy the code from extra/scripts/xmonad.sh or \f[C]exec\f[] it from
+\f[B]xinitrc\f[] or the script used to start xmonad.
+.SS Installation in FreeBSD
+.PP
+FreeBSD has no other way than using the module specific convention to
+query sysctl and obtain data from the sensors.
+Maintaining a list with all the possible module names and performing
+expensive sysctl calls in a loop to determine that X module is loaded
+into your system is no\-go.
+Be prepared to spend a minute or two to find out some system
+information.
+.PP
+Let's say you are using dwm:
+.PP
+Determine the motherboard sensor module name.
+.IP
+.nf
+\f[C]
+sysctl\ \-a|grep\ \[aq]aibs\[aq]
+
+dev.aibs.0.volt.0:\ 1356\ 850\ 1600
+dev.aibs.0.volt.1:\ 3344\ 2970\ 3630
+dev.aibs.0.volt.2:\ 5040\ 4500\ 5500
+dev.aibs.0.volt.3:\ 12278\ 10200\ 13800
+dev.aibs.0.temp.0:\ 39.0C\ 60.0C\ 95.0C
+dev.aibs.0.temp.1:\ 38.0C\ 45.0C\ 75.0C
+dev.aibs.0.fan.0:\ 1053\ 600\ 7200
+dev.aibs.0.fan.1:\ 1053\ 600\ 7200
+\f[]
+.fi
+.PP
+Copy only `dev.MODULE.NUMBER' (if there is any number at all) and paste
+it into the \f[B]mobo_sensor\f[] option below.
+.PP
+Do the same for your cpu temperature, copy and paste the variable as is.
+\f[B]dev.cpu.0.temperature\f[] below is provied as example.
+.IP
+.nf
+\f[C]
+bash\ bootstrap\ freebsd
+\&./configure\ \-\-prefix=$HOME/.cache\ \-\-with\-x11\ \-\-without\-alsa\ \-\-with\-oss\ mobo_sensor=\[aq]dev.aibs.0\[aq]\ cpu_sensor=\[aq]dev.cpu.0.temperature\[aq]
+make
+make\ install
+\f[]
+.fi
+.PP
+Send a request to the FreeBSD mailing list and request the OpenBSD
+sensors API to be ported.
+.SS Installation in OpenBSD
+.PP
+Before even executing the \f[B]bootstrap\f[] script, you'll have to do
+this:
+.IP
+.nf
+\f[C]
+#\ To\ detect\ the\ newer\ compiler\ that\ you\ are
+#\ about\ to\ install
+sed\ \-i\ \[aq]s/#AC_PROG_CC(/AC_PROG_CC(/g\[aq]\ bootstrap
+
+ls\ /usr/local/bin/automake\-*
+ls\ /usr/local/bin/autoconf\-*
+
+#\ Then\ replace\ the\ numbers\ below
+export\ AUTOCONF_VERSION=2.69
+export\ AUTOMAKE_VERSION=1.15
+
+#\ Your\ call,\ gcc\ or\ llvm\ ?
+pkg_add\ gcc
+\f[]
+.fi
+.SS pinky curses installation
+.IP
+.nf
+\f[C]
+bash\ bootstrap\ distro
+
+#\ disable\ X11,\ enable\ the\ colours\ and\ ncurses\ opts.
+\&./configure\ \-\-prefix=$HOME/.cache\ \-\-without\-x11\ \-\-with\-alsa\ \-\-with\-colours\ \-\-with\-ncurses
+
+#\ compile\ \[aq]n\ install
+make\ all\ ncurses
+make\ install
+\f[]
+.fi
+.PP
+Copy the code from extra/scripts/pinky\-curses.sh and
+extra/misc/.Xresources
+.PP
+Force your non xterm/urxvt terminal emulator to use the newer
+xterm/urxvt colours.
+You'll have to kill Xorg (simply logout and log back in), experienced
+people are using xrdb instead killing Xorg each time they do changes to
+such files.
+.PP
+pinky_curses is standalone program not tied to pinky\-bar.
+.IP
+.nf
+\f[C]
+#\ ^B\ \-\ Blue\ ,\ ^M\ \-\ Magenta\ ,\ ^Y\ \-\ Yellow
+while\ true;\ do\ echo\ "^BOh\ ^Mhello\ ^Ydear";sleep\ 1;done\ |\ ./pinky_curses
+\f[]
+.fi
+.SS Installation for anything else
+.PP
+pinky\-bar is no longer tied to Window Managers only.
+With the addition of \[lq]without colours\[rq], the output can be shown
+in any program, just bear in mind that the more options you've supplied
+the more system information will be shown.
+.PP
+[IMAGE: image (img/pic4.png)]
+.PP
+The installation steps:
+.IP
+.nf
+\f[C]
+bash\ bootstrap\ distro
+\&./configure\ \-\-prefix=$HOME/.cache\ \-\-without\-x11\ \-\-without\-colours
+make
+make\ install
+\f[]
+.fi
+.PP
+By choosing this 3rd installation method it is up to you where, how to
+start and use the system information that's produced by pinky\-bar.
+.PP
+   *   *   *   *   *
+.PP
+Replace \f[B]distro\f[] with archlinux, debian, gentoo, slackware, rhel,
+frugalware, angstrom.
+Here's some short distros list of some popular distros that are based on
+another one:
+.IP \[bu] 2
+[x] archlinux based distros: parabola, chakra, manjaro
+.IP \[bu] 2
+[x] debian based distros: ubuntu, linux mint, trisquel, back track, kali
+linux, peppermint linux, solusos, crunchbang, deepin, elementary os, and
+the rest *buntu based distros
+.IP \[bu] 2
+[x] gentoo based distros: funtoo, sabayon, calculate linux
+.IP \[bu] 2
+[x] slackware
+.IP \[bu] 2
+[x] rhel based distros: opensuse (uses rpm), fedora, fuduntu, mandriva,
+mandrake, viperr, mageia
+.IP \[bu] 2
+[x] frugalware
+.IP \[bu] 2
+[x] angstrom
+.PP
+Cannot list the *BSD flavours as \[lq]distros\[rq], so they deserve own
+options:
+.IP \[bu] 2
+[x] freebsd
+.IP \[bu] 2
+[x] openbsd
+.PP
+   *   *   *   *   *
+.SS Linux Mandatory requirements
+.IP \[bu] 2
+gcc/clang
+.IP \[bu] 2
+glibc
+.IP \[bu] 2
+autoconf
+.IP \[bu] 2
+automake
+.IP \[bu] 2
+m4
+.IP \[bu] 2
+gawk
+.SS *BSD Mandatory requirements
+.IP \[bu] 2
+gcc/clang
+.IP \[bu] 2
+bash
+.IP \[bu] 2
+autoconf
+.IP \[bu] 2
+automake
+.IP \[bu] 2
+autoconf\-wrapper
+.IP \[bu] 2
+automake\-wrapper
+.IP \[bu] 2
+autoconf\-archive
+.IP \[bu] 2
+argp\-standalone
+.IP \[bu] 2
+libtool
+.IP \[bu] 2
+m4
+.IP \[bu] 2
+gawk
+.PP
+Some llvm and gcc versions will not check for headers and libraries in
+/usr/local, if that's the case for you, you should export the following
+environment variables:
+.IP
+.nf
+\f[C]
+export\ LDFLAGS=\[aq]\-L/usr/local/lib\[aq]
+export\ CFLAGS=\[aq]\-I/usr/local/include\[aq]
+\f[]
+.fi
+.PP
+After editing the wrong prototype I managed to stumbled upon a bug in
+OpenBSD's own libc.
+.PP
+\f[B]Warning !!! OpenBSD users !!!\f[]
+.PP
+The majority of SCN* macros differs from their PRI* cousins.
+And I cannot guarantee the accuracy of fixed width integers when OpenBSD
+own libc managed to use different format specifiers.
+Read extra/misc/openbsd_bugs.md for more details.
+.SS Opt\-in requirements
+.PP
+Linux camp:
+.PP
+The internet related options rely on headers provided iproute2.
+By default the program will try to compile with those headers included.
+If for any reason you would like to compile the program without internet
+related options, then pass \f[B]\[en]without\-net\f[] to configure.
+.IP \[bu] 2
+iproute2
+.PP
+wifi/wireless chipsets supporting mac80211/cfg80211:
+.IP \[bu] 2
+libnl (>= 3.0)
+.IP \[bu] 2
+pkg\-config
+.PP
+In Gentoo there are two versions of pkg\-config.
+The first one is named dev\-util/pkgconfig and the second one is
+dev\-ruby/pkg\-config.
+In order to use the first one, you'll have to export the pkg\-config
+path to the following environment variable:
+.IP
+.nf
+\f[C]
+export\ PKG_CONFIG_PATH=/usr/bin/pkg\-config
+\f[]
+.fi
+.PP
+Then pass \f[B]\[en]with\-libnl\f[] to configure.
+.PP
+To get the NIC vendor and model names:
+.IP \[bu] 2
+pciutils
+.PP
+Alternative way to obtain data from the sensors:
+.IP \[bu] 2
+lm_sensors
+.PP
+To read the drive temperature from S.M.A.R.T
+\f[B]\[en]with\-drivetemp\f[]:
+.IP \[bu] 2
+hddtemp
+.IP \[bu] 2
+curl
+.PP
+To read the drive temperature from S.M.A.R.T
+\f[B]\[en]with\-drivetemp\-light\f[]:
+.IP \[bu] 2
+hddtemp
+.PP
+The \[lq]light\[rq] version does not rely on curl, and will not force
+\-O0 CFLAGS.
+.IP
+.nf
+\f[C]
+#\ \-\-with\-drivetemp\-light
+0.00s\ user\ 0.00s\ system\ 15%\ cpu\ 0.006
+
+#\ \-\-with\-drivetemp
+0.01s\ user\ 0.00s\ system\ 72%\ cpu\ 0.008
+\f[]
+.fi
+.PP
+Try running hddtemp to see if it detects your drive, depending if it has
+temperature sensor in first place:
+.IP
+.nf
+\f[C]
+sudo\ hddtemp\ /dev/sda
+
+WARNING:\ Drive\ /dev/sda\ doesn\[aq]t\ appear\ in\ the\ database\ of\ supported\ drives
+WARNING:\ But\ using\ a\ common\ value,\ it\ reports\ something.
+WARNING:\ Note\ that\ the\ temperature\ shown\ could\ be\ wrong.
+WARNING:\ See\ \-\-help,\ \-\-debug\ and\ \-\-drivebase\ options.
+WARNING:\ And\ don\[aq]t\ forget\ you\ can\ add\ your\ drive\ to\ hddtemp.db
+/dev/sda:\ Corsair\ Force\ GT:\ \ 23°C\ or\ °F
+\f[]
+.fi
+.PP
+The message is pretty clear \[lq]don't forget to add your drive to
+hddtemp.db\[rq], first run the debug command to see which field is
+responsible to report your drive temperature, it should be in the range
+of 190 \- 200:
+.IP
+.nf
+\f[C]
+#\ Copy\ the\ Model:\ line
+
+sudo\ hddtemp\ \-\-debug\ /dev/sda
+
+=================\ hddtemp\ 0.3\-beta15\ ==================
+Model:\ Corsair\ Force\ GT
+
+field(1)\ \ \ \ \ \ \ \ \ =\ 0
+field(5)\ \ \ \ \ \ \ \ \ =\ 0
+field(9)\ \ \ \ \ \ \ \ \ =\ 253
+field(12)\ \ \ \ \ \ \ \ =\ 237
+field(171)\ \ \ \ \ \ \ =\ 0
+field(172)\ \ \ \ \ \ \ =\ 0
+field(174)\ \ \ \ \ \ \ =\ 147
+field(177)\ \ \ \ \ \ \ =\ 1
+field(181)\ \ \ \ \ \ \ =\ 0
+field(182)\ \ \ \ \ \ \ =\ 0
+field(187)\ \ \ \ \ \ \ =\ 0
+field(194)\ \ \ \ \ \ \ =\ 22
+field(195)\ \ \ \ \ \ \ =\ 0
+field(196)\ \ \ \ \ \ \ =\ 0
+field(201)\ \ \ \ \ \ \ =\ 0
+field(204)\ \ \ \ \ \ \ =\ 0
+field(230)\ \ \ \ \ \ \ =\ 100
+field(231)\ \ \ \ \ \ \ =\ 0
+field(233)\ \ \ \ \ \ \ =\ 130
+field(234)\ \ \ \ \ \ \ =\ 216
+field(241)\ \ \ \ \ \ \ =\ 216
+field(242)\ \ \ \ \ \ \ =\ 151
+\f[]
+.fi
+.PP
+Open up \f[B]/usr/share/hddtemp/hddtemp.db\f[] and append the Model:
+line that you copied earlier with the correct field that reports your
+drive temperature.
+.IP
+.nf
+\f[C]
+"Corsair\ Force\ GT"\ 194\ C\ "Corsair\ Force\ GT\ 120GB\ SSD"
+\f[]
+.fi
+.PP
+Next run hddtemp in daemon mode so we can request the temperature back:
+.IP
+.nf
+\f[C]
+sudo\ hddtemp\ \-d\ /dev/sda
+\f[]
+.fi
+.PP
+Open up your browser and navigate to 127.0.0.1:7634 and you'll get
+instant temperature report back to you.
+.PP
+The \[lq]init\[rq] lock\-in for those of you that cannot choose between
+udev or eudev puts me in position not rely on libatasmart, regardless
+how neat the library is.
+There is stripped example program in extra/misc/skdump.c if you are
+curious to check and test libatasmart.
+.PP
+Linux camp end.
+.PP
+To read the drive temperature from S.M.A.R.T
+\f[B]\[en]with\-smartemp\f[]:
+.IP \[bu] 2
+smartmontools
+.PP
+smartmontools are not mandatory in OpenBSD, \f[C]atactl\f[] does the
+same job.
+.PP
+Execute the following command as root \f[C]visudo\f[] and append:
+.IP
+.nf
+\f[C]
+#\ \[aq]frost\[aq]\ is\ my\ computer\ username
+frost\ ALL=NOPASSWD:/usr/sbin/smartctl
+\f[]
+.fi
+.PP
+Copy the code from extra/scripts/drive\-temperature.sh or \f[C]exec\f[]
+it from \f[B]xinitrc\f[] or the script used to start your DE/WM.
+.PP
+To extend pinkybar with your own crafted perl or python
+script/program/chewbacca:
+.IP \[bu] 2
+perl
+.PP
+or
+.IP \[bu] 2
+python == 2.7
+.PP
+or
+.IP \[bu] 2
+python >= 3.3 (requires \[lq]hacks\[rq] which are not newbie friendly)
+.PP
+Have a look at extra/scripts/pinky{.py,.pl}, they serve as examples how
+to write the most basic scripts in order to extend pinkybar in python
+and/or perl.
+You can use both languages simultaneously.
+.PP
+python3 wants \f[C]PYTHONPATH\f[] to be exported, you should copy it to
+your shell configuration file, so it's set right after you boot your
+toaster:
+.IP
+.nf
+\f[C]
+python3\ \-c\ \[aq]import\ sys;print(":".join([x\ for\ x\ in\ sys.path]))\[aq]
+export\ PYTHONPATH=...\ :/including/the/path/to/your/script
+
+#\ On\ other\ hand\ to\ compile\ the\ program\ with\ python2,\ you\ should\ `unset`
+#\ this\ environment\ variable
+
+#~/pypi\ >\ python3\ \-c\ \[aq]import\ sys;print(":".join([x\ for\ x\ in\ sys.path]))\[aq]\ \ \ \ \ \ \ \ \ \ \ \ \ 
+#:/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat\-linux:/usr/lib64/python3.4/lib\-dynload:/usr/lib64/python3.4/site\-packages
+
+#~/pypi\ >\ export\ PYTHONPATH=/usr/lib64/python34.zip:/usr/lib64/python3.4:/usr/lib64/python3.4/plat\-linux:/usr/lib64/python3.4/lib\-dynload:/usr/lib64/python3.4/site\-packages:/home/frost/pypi
+
+#\ ./configure\ ...\ \-\-with\-python3\ python_script=\[aq]/home/frost/pypi/multi.py\[aq]
+\f[]
+.fi
+.PP
+To get the sound volume level:
+.IP \[bu] 2
+alsa\-utils
+.IP \[bu] 2
+alsa\-lib
+.PP
+Then pass \f[B]\[en]with\-alsa\f[] to configure.
+.PP
+*BSD users can use the baked OSS instead, pass \f[B]\[en]without\-alsa
+\[en]with\-oss\f[] to configure instead.
+.PP
+To output the data to the terminal using the ncurses library:
+.IP \[bu] 2
+ncurses
+.PP
+To get the vendor and model name of your cdrom/dvdrom/blu\-ray:
+.IP \[bu] 2
+libcdio
+.IP \[bu] 2
+libcddb
+.PP
+In linux \f[B]\[en]without\-dvd\f[] will still compile the program with
+dvd support.
+Except it will be limited only to dvd support, it will try to parse the
+sr0 vendor and model name detected by the kernel.
+.PP
+The weather related options, please go back and read \f[B]Don't just
+rush to register yourself\f[]:
+.IP \[bu] 2
+curl
+.IP \[bu] 2
+gzip
+.PP
+\f[B]Warning, I'm not responsible for any lawsuit towards you, neither
+encourage you to pirate content that is not licensed as free and/or for
+fair use.\f[]
+.PP
+To see the currently played song name \f[B]\[en]with\-mpd\f[]:
+.PP
+Server side:
+.IP \[bu] 2
+libmpdclient
+.IP \[bu] 2
+mpd (can be build with soundcloud support)
+.PP
+Client side:
+.IP \[bu] 2
+libmpdclient
+.IP \[bu] 2
+mpc/ncmpc/ncmpcpp, and the rest (http://mpd.wikia.com/wiki/Clients)
+.PP
+To see the currently played song name \f[B]\[en]without\-mpd\f[]:
+.IP \[bu] 2
+cmus
+.PP
+The \[lq]soundcloud\[rq] alternative that is supported in cmus and your
+mpd client will be to download \f[B]\&.m3u/.pls\f[] files according to
+the radio stream station (https://www.internet-radio.com) that you are
+interested to listen.
+.PP
+The FreeBSD users will notice that \[lq]mpd\[rq] is named
+\[lq]musicpd\[rq].
+.PP
+If you've never used mpd before copy the example configuration from
+extra/mpd according to your OS.
+.PP
+Keep an eye on the \f[B]log file size\f[] if you are using raspberry pi
+(or equivalent device) that streams the music, make sure that it's
+deleted automatically if it exceeds some pre\-defined size.
+.PP
+   *   *   *   *   *
+.SS WM specific requirements
+.PP
+If you would like the output to be shown in your Window Manager, those
+are the following requirements:
+.PP
+for non\-dwm WM:
+.IP \[bu] 2
+dzen2
+.PP
+for dwm:
+.IP \[bu] 2
+libx11
+.IP \[bu] 2
+xorg\-server
+.PP
+use \f[B]\[en]without\-colours\f[] to skip the following step:
+.IP \[bu] 2
+dwm compiled with statuscolor patch.
+The colours in use are specified in your dwm config.h
+.SS Wish list
+.PP
+As top priority:
+.PP
+It would be great if I had *BSD compatible usb wifi dongle to add wifi
+options in pinky\-bar.
+.SH REPORTING BUGS
+.PP
+Report bugs to https://gitlab.com/void0/pinky\-bar
+.SH COPYRIGHT
+.PP
+Copyright (c) 2016 Aaron Caffrey
+.PD 0
+.P
+.PD
+Free use of this software is granted under the terms of the GNU General
+Public License (GPL).
+.SH AUTHORS
+Aaron Caffrey.

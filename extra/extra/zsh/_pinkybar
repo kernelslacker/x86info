@@ -1,0 +1,89 @@
+#compdef pinkybar
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301, USA.
+
+# Cross-platform supported opts:
+
+_arguments -s -S -A '-*' : \
+'-M[song filename]' \
+'-W[song track name]' \
+'-x[song artists names]' \
+'-X[song title]' \
+'-y[song album name]' \
+'-Y[song date]' \
+'-c[summed up cores load]' \
+'-L[individual core load]' \
+'-T[cpu temp]' \
+'-C[max cpu clock speed]' \
+'-I[long and detailed cpu info]' \
+'-r[used ram]' \
+'-J[total ram]' \
+'-K[free ram]' \
+'-l[shared ram]' \
+'-o[buffered ram]' \
+'-s[used drive storage]' \
+'-n[total drive storage]' \
+'-N[free drive storage]' \
+'-O[available drive storage]' \
+'-g[remaining battery charge]' \
+'-z[dvdrom vendor and model names]' \
+'-S[disk I/O, requires argument: sda]' \
+'-p[num of installed packages]' \
+'-P[kern name]' \
+'-Q[network node hostname]' \
+'-R[kern release]' \
+'-u[kern version]' \
+'-k[machine arch.]' \
+'-q[combined kern name and version]' \
+'-U[uptime]' \
+'-w[average load]' \
+'-v[voltage]' \
+'-f[fans speed in RPM]' \
+'-m[mobo name and vendor]' \
+'-d[mobo temp.]' \
+'-V[sound volume level]' \
+'-t[current time]' \
+'-a[ip addr, requires argument eth0]' \
+'-b[consumed internet so far, requires argument eth0]' \
+'-i[current download and upload speeds, requires argument eth0]' \
+'-A[mac addr, requires argument eth0]' \
+'-B[subnet mask, requires argument eth0]' \
+'-D[broadcast addr, requires argument eth0]' \
+'-E[website ip lookup, requires argument eth0]'
+
+
+# Linux opts
+#
+# '-F[vendor and model name of ur drive, requires argument sda]' \
+# '-G[NIC vendor and model names, requires argument eth0]' \
+# '--nicinfo[NIC driver, requires argument eth0]' \
+# '-H[NIC version, requires argument eth0]' \
+# '-e[NIC links speed, requires argument eth0]' \
+# '-j[NIC firmware, requires argument eth0]' \
+# '-h[wifi essid, requires argument eth0]'
+
+
+# FreeBSD and OpenBSD opts
+#
+# '-j[NIC gateway addr, requires argument re0]' \
+# '-Z[used drive swap in MB]' \
+# '-F[used drive swap in percentage]' \
+# '-h[total drive swap]' \
+# '-H[available drive swap]'
+
+# OpenBSD opts
+#
+#'-l[used ram in MB]'
