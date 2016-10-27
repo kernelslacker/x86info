@@ -1,0 +1,113 @@
+! This program is free software; you can redistribute it and/or modify
+! it under the terms of the GNU General Public License as published by
+! the Free Software Foundation; either version 2 of the License, or
+! (at your option) any later version.
+
+! This program is distributed in the hope that it will be useful,
+! but WITHOUT ANY WARRANTY; without even the implied warranty of
+! MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+! GNU General Public License for more details.
+
+! You should have received a copy of the GNU General Public License
+! along with this program; if not, write to the Free Software
+! Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+! MA 02110-1301, USA.
+
+! Xft --------------------------------------------------------------------
+Xft.dpi:        96
+Xft.antialias:  true
+Xft.rgba:       rgb
+Xft.hinting:    true
+Xft.hintstyle:  hintslight
+Xft.autohint:   false
+Xft.lcdfilter:  lcddefault
+
+
+! urxvt conf --------------------------------------------------------------------
+URxvt.buffered                  : true
+URxvt.cursorBlink               : false
+URxvt.cursorUnderline           : false
+URxvt.pointerBlank              : false
+URxvt.geometry                  : 80x24
+URxvt.font                      : xft:DejaVu Sans Mono:bold:pixelsize=11
+URxvt.boldfont                  : xft:DejaVu Sans Mono:bold:pixelsize=11
+URxvt.letterSpace               : -1
+URxvt.termName                  : rxvt-256color
+URxvt.iso14755                  : false
+URxvt.iso14755_52               : false
+URxvt.cursorColor               : #ffffff
+URxvt.colorIT                   : #87af5f
+URxvt.colorBD                   : #d7d7d7
+URxvt.colorUL                   : #87afd7
+URxvt.urgentOnBell              : false
+URxvt.mapAlert                  : false
+URxvt.visualBell                : false
+URxvt.saveLines                 : 10000
+URxvt.scrollBar                 : false
+URxvt.scrollBar_right           : false
+URxvt.scrollBar_floating        : false
+URxvt.scrollstyle               : rxvt
+URxvt.Depth                     : 32
+URxvt.loginShell                : false
+URxvt.insecure                  : false
+URxvt.pastableTabs              : false
+URxvt.utmpInhibit               : false
+URxvt.reverseVideo              : false
+URxvt.skipBuiltinGlyphs         : true
+
+
+! urxvt colours --------------------------------------------------------------------
+*.foreground:   #c5c8c6
+*.background:   #222222
+*.cursorColor:  #ffffff
+
+! black
+*.color0:       #222222
+*.color8:       #373b41
+
+! red
+*.color1:       #ef2929
+*.color9:       #ef2929
+
+! green
+*.color2:       #8ae234
+*.color10:      #8ae234
+
+! yellow
+*.color3:       #c2a000
+*.color11:      #fce94d
+
+! blue
+*.color4:       #5f819d
+*.color12:      #81a2be
+
+! magenta
+*.color5:       #85678f
+*.color13:      #a97fa8
+
+! cyan
+*.color6:       #5e8d87
+*.color14:      #34e2e2
+
+! white
+*.color7:       #ffffff
+*.color15:      #ffffff
+
+
+! xterm conf -----------------------------------------------------------
+XTerm.vt100.geometry:   80x24
+XTerm*faceName:     DejaVu Sans Book
+XTerm*faceSize:     9
+XTerm*toolBar:      off
+
+xterm*termName: xterm-256color
+XTerm*locale: true
+xterm*cursorColor: #FFFFFF
+xterm*toolBar: false
+xterm*scrollBar: false
+xterm*rightScrollBar: false
+xterm*background: #222222
+xterm*foreground: #999999
+xterm*faceName: DejaVu Sans Book:pixelsize=12
+xterm*allowBoldFonts: false
+xterm*geometry: 80x24

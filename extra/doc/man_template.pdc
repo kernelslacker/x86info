@@ -1,0 +1,23 @@
+% pinkybar(1) manual
+% Aaron Caffrey
+% Oktoberfest 23, 2016
+
+# NAME
+This man page is converted from markdown, and some information might not look good and/or have been stripped during the automated process.
+
+# SYNOPSIS
+pinkybar [*option*]
+
+# DESCRIPTION
+
+
+
+
+
+
+# REPORTING BUGS
+Report bugs to https://gitlab.com/void0/pinky-bar
+
+# COPYRIGHT
+Copyright (c) 2016 Aaron Caffrey \
+Free use of this software is granted under the terms of the GNU General Public License (GPL).
