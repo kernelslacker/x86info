@@ -170,12 +170,16 @@ static const struct _cache_table DTLB_cache_table[] =
 	{ 0x5c, 128, "Data TLB: 4KB or 4MB pages, fully associative, 128 entries." },
 	{ 0x5d, 256, "Data TLB: 4KB or 4MB pages, fully associative, 256 entries." },
 	{ 0x63,   4, "Data TLB: 1GB pages, 4-way set associative, 4 entries" },
+	{ 0x64, 512, "Data TLB: 4KB pages, 4-way associative, 512 entries" },
+	{ 0xa0,  32, "Data TLB: 4KB pages, full associative, 32 entries" },
 	{ 0xb3, 128, "Data TLB: 4KB pages, 4-way associative, 128 entries" },
 	{ 0xb4, 256, "Data TLB1: 4KB pages, 4-way associative, 256 entries" },
 	{ 0xba,  64, "Data TLB1: 4KB pages, 4-way associative, 64 entries" },
 	{ 0xc0,   8, "Data TLB: 4KB or 4MB pages, 4-way associative, 8 entries" },
 	{ 0xc1,1024, "Shared L2 TLB: 4KB/2MB pages, 8-way associative, 1024 entries" },
 	{ 0xc2,  16, "Data TLB: 2MB/4MB pages, 4-way associative, 16 entries" },
+	{ 0xc3,1024, "Shared L2 TLB: 4KB/2MB pages, 6-way associative, 1536 entries" },
+	{ 0xc4,  32, "Data TLB: 2MB/4MB pages, 4-way associative, 32 entries" },
 	{ 0xca, 512, "Shared L2 TLB: 4KB pages, 4-way associative, 512 entries" },
 	{ 0, 0, NULL }
 };
