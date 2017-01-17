@@ -52,7 +52,9 @@ void get_feature_flags(struct cpudata *cpu)
 
 /* CPUID 0x00000006 EAX flags */
 static const char *intel_cpuid_06_eax_flags[32] = {
-	"dts", "ida", "arat", NULL, "pln", "ecmd", "ptm",
+	"dts", "ida", "arat", NULL, "pln", "ecmd", "ptm", "hwp",
+	"hwp_notify", "hwp_act_window", "hwp_epp", "hwp_lpr",
+	NULL, "hdc",
 };
 
 static const char *intel_cpuid_06_eax_flags_desc[32] = {
@@ -63,6 +65,13 @@ static const char *intel_cpuid_06_eax_flags_desc[32] = {
 	"Power limit notification controls",			// 4
 	"Clock modulation duty cycle extension",		// 5
 	"Package thermal management",				// 6
+	"HW-controlled performance states (HWP)",		// 7
+	"HWP Notification",					// 8
+	"HWP Activity Window",					// 9
+	"HWP Energy Performance Preference",			// 10
+	"HWP Package Level Request",				// 11
+	NULL,							// 12
+	"Hardware Duty Cycling",				// 13
 };
 
 /* CPUID 0x00000007 EBX flags */
@@ -282,7 +291,7 @@ static const char *intel_cap_extended_edx_flags_desc[32] = {
 /* CPUID 0x80000001 ECX flags */
 static const char *intel_cap_extended_ecx_flags[32] = {
 	"lahf_lm", NULL, NULL, NULL, NULL, "lzcnt", NULL, NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	"prefetchw", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 };
@@ -293,6 +302,9 @@ static const char *intel_cap_extended_ecx_flags_desc[32] = {
 	NULL,					    // 3
 	NULL,					    // 4
 	"LZCNT instruction",			    // 5
+	NULL,					    // 6
+	NULL,					    // 7
+	"PREFETCHW instruction",		    // 8
 };
 
 static const char *amd_cap_generic_ecx_flags[32] = {

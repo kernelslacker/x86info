@@ -179,7 +179,11 @@ static struct cpu_name_def intel_fam6e_names[] = {
 
 	{ .model = 0x57, .flags = ONLYMODEL, .str = "Xeon Phi [Knights Landing]" },
 
+	{ .model = 0x5a, .flags = ONLYMODEL, .str = "Atom E3500" },
+
 	{ .model = 0x5c, .flags = ONLYMODEL, .str = "Atom [Goldmont]" },
+
+	{ .model = 0x5d, .flags = ONLYMODEL, .str = "Atom X3-C3000 [Silvermont]" },
 
 	{ .model = 0x5e, .flags = ONLYMODEL, .str = "Core-i7 [Skylake desktop]" },
 
