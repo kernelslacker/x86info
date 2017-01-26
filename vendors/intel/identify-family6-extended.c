@@ -21,7 +21,7 @@ struct cpu_name_def {
 	const char *str;
 };
 
-static struct cpu_name_def intel_fam6e_names[] = {
+static const struct cpu_name_def intel_fam6e_names[] = {
 	// sSpec step CoreFreq Bus cache
 	// SLAN3  C0  3.00    1333  12MB (2x6) QX9650
 	// SLANY  C0  3.2     1600  12MB (2x6) QX9775
@@ -207,13 +207,13 @@ static const char * get_namestring(struct cpudata *cpu)
 		if (model(cpu) != intel_fam6e_names[i].model)
 			continue;
 
-		if (intel_fam6e_names[i].flags &= ~ONLYMODEL)
+		if (intel_fam6e_names[i].flags & ONLYMODEL)
 			return intel_fam6e_names[i].str;
 
 		if (intel_fam6e_names[i].mhz > 0) {
 			if (intel_fam6e_names[i].mhz != cpu->MHz)
 				continue;
-			if (intel_fam6e_names[i].flags &= ~ONLYMHZ)
+			if (intel_fam6e_names[i].flags & ONLYMHZ)
 				return intel_fam6e_names[i].str;
 		}
 
