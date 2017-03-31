@@ -217,9 +217,9 @@ int main(int argc, char **argv)
 		   on SMP systems that have booted UP kernels. */
 		if (user_is_root) {
 			nrSMPCPUs = enumerate_cpus();
-
-			if (nrSMPCPUs > nrCPUs)
-				printf(" (but found %u CPUs in MPTable!)", nrSMPCPUs);
+			if (nrSMPCPUs > 0)
+				if (nrSMPCPUs > nrCPUs)
+					printf(" (but found %u CPUs in MPTable!)", nrSMPCPUs);
 		}
 		if (nrCPUs >= 2)
 			printf("\n");
