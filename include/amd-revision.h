@@ -165,3 +165,8 @@ static struct id_string fam15h_revisions[] = {
 };
 get_name(fam15h_revision, int, fam15h_revisions);
 
+
+static struct id_string fam17h_revisions[] = {
+	{0x800f11, "ZP-B1"},
+};
+get_name(fam17h_revision, int, fam17h_revisions);

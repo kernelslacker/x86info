@@ -227,6 +227,19 @@ static void set_fam15h_revinfo(int id, struct cpudata *c)
 	set_connector(c);
 }
 
+static void set_fam17h_revinfo(int id, struct cpudata *c)
+{
+	const char *p;
+
+	p = get_fam17h_revision_name(id);
+	if (p)
+		snprintf(c->name, CPU_NAME_LEN,
+			 "AMD Zen Series Processor (%s)", p);
+	else
+		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU 0x%x", (unsigned)id);
+	set_connector(c);
+}
+
 
 static void do_assoc(unsigned long assoc)
 {
@@ -482,6 +495,9 @@ void identify_amd(struct cpudata *cpu)
 			break;
 		case 0x15:
 			set_fam15h_revinfo(eax, cpu);
+			break;
+		case 0x17:
+			set_fam17h_revinfo(eax, cpu);
 			break;
 		default:
 			printf("Unknown CPU family: 0x%x\n",
