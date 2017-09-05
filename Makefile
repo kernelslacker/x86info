@@ -18,6 +18,7 @@ CFLAGS += -Wstrict-prototypes -Wmissing-prototypes
 CFLAGS += -Wswitch-enum
 CFLAGS += -Wundef
 CFLAGS += -Wwrite-strings
+CFLAGS += $(shell pkg-config --cflags libpci)
 
 # gcc specific
 ifneq ($(shell $(CC) -v 2>&1 | grep -c "clang"), 1)
@@ -35,6 +36,7 @@ DEVEL   := $(shell grep VERSION Makefile | head -n1 | grep pre | wc -l)
 CFLAGS  += $(shell if [ $(CPP_MAJOR) -eq 4 -a $(CPP_MINOR) -ge 8 -a $(DEVEL) -eq 1 ] ; then echo "-Werror"; else echo ""; fi)
 
 LDFLAGS = -Wl,-z,relro,-z,now
+LDFLAGS += $(shell pkg-config --libs libpci)
 
 ifeq ($(CC),"")
 CC = gcc
