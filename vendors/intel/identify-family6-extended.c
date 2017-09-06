@@ -21,7 +21,7 @@ struct cpu_name_def {
 	const char *str;
 };
 
-static struct cpu_name_def intel_fam6e_names[] = {
+static const struct cpu_name_def intel_fam6e_names[] = {
 	// sSpec step CoreFreq Bus cache
 	// SLAN3  C0  3.00    1333  12MB (2x6) QX9650
 	// SLANY  C0  3.2     1600  12MB (2x6) QX9775
