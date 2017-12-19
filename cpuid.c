@@ -21,14 +21,7 @@ int native_cpuid(unsigned int cpunr, unsigned long long idx,
 {
 	unsigned int a = 0, b = 0, c = 0, d = 0;
 
-	if (eax != NULL)
-		a = *eax;
-	if (ebx != NULL)
-		b = *ebx;
-	if (ecx != NULL)
-		c = *ecx;
-	if (edx != NULL)
-		d = *edx;
+	c = idx >> 32;
 
 	bind_cpu(cpunr);
 
