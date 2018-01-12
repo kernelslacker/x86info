@@ -37,6 +37,8 @@ struct pst_s {
 };
 
 
+#if !defined(__sun)
+
 void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 {
 	int fd, i;
@@ -131,3 +133,5 @@ out:
 	}
 	return;
 }
+
+#endif /* !__sun */

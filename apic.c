@@ -106,6 +106,13 @@ void dump_apics(struct cpudata *cpu)
 		return;
 
 	/**
+	 * No MSR read support on Illumos.
+	 **/
+#ifdef __sun
+	return;
+#endif
+
+	/**
 	* Verify if apic is enable
 	**/
 	if (!(apic_is_enable(cpu->number, IA32_APIC_BASE_MSR)))

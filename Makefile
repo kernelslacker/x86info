@@ -1,5 +1,7 @@
 VERSION=1.31pre
 
+OS=$(shell uname)
+
 CFLAGS := -DVERSION="$(VERSION)"
 
 CFLAGS += -Wall -W -g -O2 -D_FORTIFY_SOURCE=2 -I. -Iinclude
@@ -18,7 +20,7 @@ CFLAGS += -Wstrict-prototypes -Wmissing-prototypes
 CFLAGS += -Wswitch-enum
 CFLAGS += -Wundef
 CFLAGS += -Wwrite-strings
-CFLAGS += $(shell pkg-config --cflags libpci)
+CFLAGS += $(shell pkg-config --cflags libpci 2>/dev/null)
 
 # gcc specific
 ifneq ($(shell $(CC) -v 2>&1 | grep -c "clang"), 1)
@@ -36,7 +38,7 @@ DEVEL   := $(shell grep VERSION Makefile | head -n1 | grep pre | wc -l)
 CFLAGS  += $(shell if [ $(CPP_MAJOR) -eq 4 -a $(CPP_MINOR) -ge 8 -a $(DEVEL) -eq 1 ] ; then echo "-Werror"; else echo ""; fi)
 
 LDFLAGS := -Wl,-z,relro,-z,now
-LDFLAGS += $(shell pkg-config --libs libpci)
+LDFLAGS += $(shell pkg-config --libs libpci 2>/dev/null)
 
 ifeq ($(CC),"")
 CC = gcc
@@ -66,6 +68,12 @@ X86INFO_SRC = \
 
 X86INFO_OBJS = $(sort $(patsubst %.c,%.o,$(wildcard *.c))) \
 	$(sort $(patsubst %.c,%.o,$(wildcard vendors/*/*.c)))
+
+ifeq ($(OS),SunOS)
+	X86INFO_OBJS := $(filter-out vendors/amd/powernow.o,$(X86INFO_OBJS))
+	LDFLAGS =
+	LIBPCI =
+endif
 
 x86info: $(X86INFO_OBJS) $(X86INFO_HEADERS)
 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS) \
