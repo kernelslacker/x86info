@@ -29,11 +29,11 @@ endif
 # clang specific
 #CFLAGS += -fsanitize=undefined
 
-# Only enabled during development, and on gcc 4.8+
+# Only enabled during development, and on gcc 6.3+
 CPP_MAJOR := $(shell $(CPP) -dumpversion 2>&1 | cut -d'.' -f1)
 CPP_MINOR := $(shell $(CPP) -dumpversion 2>&1 | cut -d'.' -f2)
 DEVEL   := $(shell grep VERSION Makefile | head -n1 | grep pre | wc -l)
-CFLAGS  += $(shell if [ $(CPP_MAJOR) -eq 4 -a $(CPP_MINOR) -ge 8 -a $(DEVEL) -eq 1 ] ; then echo "-Werror"; else echo ""; fi)
+CFLAGS  += $(shell if [ $(CPP_MAJOR) -eq 6 -a $(CPP_MINOR) -ge 3 -a $(DEVEL) -eq 1 ] ; then echo "-Werror"; else echo ""; fi)
 
 LDFLAGS = -Wl,-z,relro,-z,now
 LDFLAGS += $(shell pkg-config --libs libpci)
