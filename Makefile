@@ -98,6 +98,9 @@ clean:
 	@rm -f x86info-coverity.tar.xz
 	@rm -rf cov-int
 
+tag:
+	@git tag -a v$(VERSION) -m "$(VERSION) release."
+
 sparse:
 	@sparse $(X86INFO_SRC)
 
