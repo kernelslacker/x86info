@@ -84,10 +84,10 @@ df = $(DEPDIR)/$(*D)/$(*F)
 	@sed -e 's/.*://' -e 's/\\$$//' < $(df).d.tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $(df).d
 	@rm -f $(df).d.tmp
 
-release:
-	@git repack -a -d
-	@git prune-packed
-	@git archive --format=tar --prefix=x86info-$(VERSION)/ HEAD | gzip -9 > x86info-$(VERSION).tgz
+tarball:
+	@git archive --format=tar --prefix=x86info-$(VERSION)/ HEAD > x86info-$(VERSION).tar
+	@xz -9 x86info-$(VERSION).tar
+
 
 clean:
 	@find . -name "*.o" -exec rm {} \;
