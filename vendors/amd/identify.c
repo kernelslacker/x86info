@@ -10,6 +10,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
@@ -23,6 +24,7 @@ static char *amd_nameptr;
 static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 {
 	unsigned int i, id, cont;
+	int ret;
 	char s[CPU_NAME_LEN];
 
 	s[0] = 0;
@@ -42,9 +44,11 @@ static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 			strncat(s, p, CPU_NAME_LEN-1);
 		}
 	}
-	if (r)
-		snprintf(c->name, CPU_NAME_LEN, "%s (%s)", s, r->rev);
-	else
+	if (r) {
+		ret =  snprintf(c->name, CPU_NAME_LEN, "%s (%s)", s, r->rev);
+		if (ret < 0)
+			abort();
+	} else
 		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
 }
 
