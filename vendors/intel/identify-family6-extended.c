@@ -181,7 +181,7 @@ static struct cpu_name_def intel_fam6e_names[] = {
 
 	{ .model = 0x5a, .flags = ONLYMODEL, .str = "Atom E3500" },
 
-	{ .model = 0x5c, .flags = ONLYMODEL, .str = "Atom [Goldmont]" },
+	{ .model = 0x5c, .flags = ONLYMODEL, .str = "Atom [Goldmont/Apollo Lake]" },
 
 	{ .model = 0x5d, .flags = ONLYMODEL, .str = "Atom X3-C3000 [Silvermont]" },
 
@@ -189,10 +189,18 @@ static struct cpu_name_def intel_fam6e_names[] = {
 
 	{ .model = 0x5f, .flags = ONLYMODEL, .str = "Atom [Denverton]" },
 
+	{ .model = 0x66, .flags = ONLYMODEL, .str = "Atom [Cannonlake]" },
+
+	{ .model = 0x6a, .flags = ONLYMODEL, .str = "[Icelake-X]" },
+	{ .model = 0x6c, .flags = ONLYMODEL, .str = "[Icelake Xeon-D]" },
+	{ .model = 0x7a, .flags = ONLYMODEL, .str = "Atom [Gemini Lake]" },
+	{ .model = 0x7d, .flags = ONLYMODEL, .str = "[Icelake Desktop]" },
+	{ .model = 0x7e, .flags = ONLYMODEL, .str = "[Icelake Mobile]" },
+
 	{ .model = 0x85, .flags = ONLYMODEL, .str = "Xeon Phi [Knights Mill]" },
+	{ .model = 0x86, .flags = ONLYMODEL, .str = "Atom [Tremont/Jacobsville]" },
 
 	{ .model = 0x8e, .flags = ONLYMODEL, .str = "[Kabylake mobile]" },
-
 	{ .model = 0x9e, .flags = ONLYMODEL, .str = "[Kabylake desktop]" },
 };
 
