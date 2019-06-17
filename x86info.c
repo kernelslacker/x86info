@@ -165,7 +165,7 @@ int main(int argc, char **argv)
 
 	parse_command_line(argc, argv);
 
-	printf("x86info v" __stringify(VERSION) "\n");
+	printf("x86info " __stringify(VERSION) "\n");
 
 	if ((HaveCPUID()) == 0) {
 		printf("No CPUID instruction available.\n");

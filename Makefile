@@ -1,4 +1,4 @@
-VERSION=1.31pre
+VERSION=$(shell date +%Y-%m-%d)
 
 CFLAGS = -DVERSION="$(VERSION)"
 
@@ -97,9 +97,6 @@ clean:
 	@rm -rf $(DEPDIR)/*
 	@rm -f x86info-coverity.tar.xz
 	@rm -rf cov-int
-
-tag:
-	@git tag -a v$(VERSION) -m "$(VERSION) release."
 
 sparse:
 	@sparse $(X86INFO_SRC)
