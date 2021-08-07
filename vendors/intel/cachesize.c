@@ -388,7 +388,7 @@ static void decode_general_tlb(struct cpudata *cpu, int output)
 		return;
 	}
 
-	while (i < max) {
+	while (i <= max) {
 		unsigned long long idx = i;
 		unsigned int page_size, ways, type, level, entries;
 		const char *typename;
