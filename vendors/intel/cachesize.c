@@ -193,6 +193,7 @@ static const struct _cache_table prefetch_table[] =
 
 static unsigned char found_unknown=0;
 static unsigned char found_general=0;
+static unsigned char found_tlb_general=0;
 static unsigned char unknown_array[256];
 
 /* Decode Intel TLB and cache info descriptors */
@@ -210,6 +211,11 @@ static void decode_intel_cache(int des, struct cpudata *cpu, int output,
 
 	if (des == 0xff) {
 		found_general = 1;
+		return;
+	}
+
+	if (des == 0xfe) {
+		found_tlb_general = 1;
 		return;
 	}
 
@@ -340,6 +346,81 @@ static void decode_general_cache(struct cpudata *cpu, int output)
 	}
 }
 
+const char * const tlbnames[31] = {
+	NULL,
+	"Data",
+	"Instruction",
+	"Unified",
+	"Load Only",
+	"Store Only",
+};
+
+const char * const pagenames[] = {
+	"None",
+	"4KB",
+	"2MB",
+	"4KB/2MB",
+	"4MB",
+	"4MB/4KB",
+	"4MB/2MB",
+	"4MB/2MB/4KB",
+	"1GB",
+	"1GB/4KB",
+	"1GB/2MB",
+	"1GB/4KB/2MB",
+	"1GB/4MB",
+	"1GB/4MB/4KB",
+	"1GB/4MB/2MB",
+	"1GB/4MB/2MB/4KB",
+};
+
+static void decode_general_tlb(struct cpudata *cpu, int output)
+{
+	unsigned int i = 0;
+	unsigned int max = 0xffffffff;
+	unsigned int a, b, c, d;
+
+	if (!found_tlb_general)
+		return;
+	if (cpu->cpuid_level < 0x18) {
+		if (output)
+			printf("Leaf 0x18 not supported\n");
+		return;
+	}
+
+	while (i < max) {
+		unsigned long long idx = i;
+		unsigned int page_size, ways, type, level, entries;
+		const char *typename;
+		char assoc[32];
+
+		idx <<= 32;
+		idx |= 0x18;
+		cpuid(cpu->number, idx, &a, &b, &c, &d);
+
+		if (i++ == 0)
+			max = a;
+		page_size = b & 0xf;
+		ways = b >> 16;
+		type = d & 0x1f;
+		level = (d >> 5) & 7;
+		entries = c * ways;
+		if ((d >> 8) & 1)
+			strcpy(assoc, "fully");
+		else
+			sprintf(assoc, "%u-way", ways);
+		if (type == 0)
+			continue;
+		typename = tlbnames[type];
+		if (!typename)
+			typename = "Unknown";
+		if (output)
+			printf(" L%d %s TLB: %s pages, %s associative, "
+				"%u entries\n", level, typename,
+				pagenames[page_size], assoc, entries);
+	}
+}
+
 void decode_intel_caches(struct cpudata *cpu, int output)
 {
 	unsigned int i = 0;
@@ -374,11 +455,12 @@ void decode_intel_caches(struct cpudata *cpu, int output)
 		decode_general_cache (cpu, output);
 		found_general = 0;
 	};
+	decode_cache(cpu, prefetch_table, output);
 	if (output)
 		printf("TLB info\n");
+	decode_general_tlb(cpu, output);
 	decode_cache(cpu, ITLB_cache_table, output);
 	decode_cache(cpu, DTLB_cache_table, output);
-	decode_cache(cpu, prefetch_table, output);
 
 	if (found_unknown == 0)
 		return;
