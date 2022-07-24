@@ -147,6 +147,7 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	// 8M cache
 	{ .model = 0x3c, .stepping = 3, .mhz = 3200, .str = "Xeon E3-1225 v3 [Haswell]" },
 	{ .model = 0x3c, .stepping = 3, .mhz = 3500, .str = "Xeon E3-1270 [Haswell]" },
+	{ .model = 0x3c, .stepping = 3, .mhz = 4000, .str = "4790K [Haswell: Devils Canyon]" },
 	{ .model = 0x3c, .stepping = 3, .str = "Xeon E3 [Haswell]" },
 
 	{ .model = 0x3d, .stepping = 4, .str = "Core i7-5600U [Broadwell]" },
