@@ -201,8 +201,22 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	{ .model = 0x85, .flags = ONLYMODEL, .str = "Xeon Phi [Knights Mill]" },
 	{ .model = 0x86, .flags = ONLYMODEL, .str = "Atom [Tremont/Jacobsville]" },
 
+	{ .model = 0x8a, .flags = ONLYMODEL, .str = "[Lakefield]" },
+	{ .model = 0x8c, .flags = ONLYMODEL, .str = "[Tiger Lake L]" },
+	{ .model = 0x8d, .flags = ONLYMODEL, .str = "[Tiger Lake]" },
 	{ .model = 0x8e, .flags = ONLYMODEL, .str = "[Kabylake mobile]" },
+	{ .model = 0x8f, .flags = ONLYMODEL, .str = "[Sapphire Rapids]" },
+	{ .model = 0x97, .flags = ONLYMODEL, .str = "[Alder Lake]" },
+	{ .model = 0x9a, .flags = ONLYMODEL, .str = "[Alder Lake L]" },
+	{ .model = 0x9d, .flags = ONLYMODEL, .str = "[Icelake NNPI]" },
 	{ .model = 0x9e, .flags = ONLYMODEL, .str = "[Kabylake desktop]" },
+
+	{ .model = 0xa5, .flags = ONLYMODEL, .str = "[Comet Lake]" },
+	{ .model = 0xa6, .flags = ONLYMODEL, .str = "[Comet Lake]" },
+	{ .model = 0xa7, .flags = ONLYMODEL, .str = "[Rocket Lake]" },
+	{ .model = 0xb7, .flags = ONLYMODEL, .str = "[Raptor Lake]" },
+	{ .model = 0xba, .flags = ONLYMODEL, .str = "[Raptor Lake P]" },
+	{ .model = 0xbe, .flags = ONLYMODEL, .str = "[Alder Lake N]" },
 };
 
 
