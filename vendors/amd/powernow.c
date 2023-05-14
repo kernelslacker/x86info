@@ -12,13 +12,6 @@
 #include "amd.h"
 #include "powernow.h"
 
-/* Before pciutils 3.3, the pci_filter.device_class and later fields did not exist. */
-#if PCI_LIB_VERSION >= 0x030300
-#define PCI_FILTER_ANYCLASS , -1, {0,0,0}
-#else
-#define PCI_FILTER_ANYCLASS
-#endif
-
 double mobile_vid_table[32] = {
 	2.000, 1.950, 1.900, 1.850, 1.800, 1.750, 1.700, 1.650,
 	1.600, 1.550, 1.500, 1.450, 1.400, 1.350, 1.300, 0.000,
@@ -139,7 +132,7 @@ static int get_did(int family, union msr_pstate pstate)
 
 static int get_main_pll_fid(void)
 {
-	struct pci_filter filter_nb_misc = { -1, -1, -1, -1, 0x1022, 0x1703 PCI_FILTER_ANYCLASS};
+	struct pci_filter filter_nb_misc = { .domain = -1, .bus = -1, .slot = -1, .func = -1, .vendor = 0x1022, .device =0x1703, };
 	struct pci_access *pacc;
 	struct pci_dev *z = NULL;
 	u8 val;
@@ -222,7 +215,7 @@ static int get_cof(int family, union msr_pstate pstate)
 
 static int get_num_boost_states(void)
 {
-	struct pci_filter filter_nb_link = { -1, -1, -1, -1, 0x1022, 0 PCI_FILTER_ANYCLASS};
+	struct pci_filter filter_nb_link = { .domain = -1, .bus = -1, .slot = -1, .func = -1, .vendor = 0x1022, .device =0, };
 	int dev_ids[4] = {0x1204, 0x1404, 0x1604, 0x1704};
 	struct pci_access *pacc;
 	struct pci_dev *z = NULL;
