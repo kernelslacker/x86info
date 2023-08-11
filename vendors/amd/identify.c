@@ -251,7 +251,7 @@ static void set_fam19h_revinfo(int id, struct cpudata *c)
 	p = get_fam19h_revision_name(id);
 	if (p)
 		snprintf(c->name, CPU_NAME_LEN,
-			 "AMD Zen3/Zen3+/Zen4] Series Processor (%s)", p);
+			 "AMD Zen3/Zen3+/Zen4 Series Processor (%s)", p);
 	else
 		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU 0x%x", (unsigned)id);
 	set_connector(c);
