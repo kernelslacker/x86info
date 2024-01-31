@@ -28,8 +28,6 @@ void bind_cpu(unsigned int cpunr)
 	    sizeof(mask), &mask);
 }
 
-static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
-
 void cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax,
 	unsigned int *ebx,

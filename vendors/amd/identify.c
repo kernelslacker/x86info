@@ -881,8 +881,10 @@ void display_amd_info(struct cpudata *cpu)
 	if (show_microcode && family(cpu) >= 0xf)
 		show_patch_level(cpu);
 
+#if !defined(__sun)
 	if (show_pm)
 		decode_powernow(cpu);
+#endif
 
 	if (show_bugs)
 		show_amd_bugs(cpu);

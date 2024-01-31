@@ -211,3 +211,5 @@ extern unsigned int verbose;
 
 #define __stringify_1(x...)     #x
 #define __stringify(x...)       __stringify_1(x)
+
+#define NATIVE_CPUID_FAILED_MSG "WARNING: Native cpuid failed\n"
