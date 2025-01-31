@@ -310,8 +310,8 @@ static const char *intel_cap_extended_ecx_flags_desc[32] = {
 static const char *amd_cap_generic_ecx_flags[32] = {
 	"sse3", "pclmulqdq", NULL, "mwait", NULL, NULL, NULL, NULL,
 	NULL, "ssse3", NULL, NULL, "fma", "cmpxchg16b", NULL, NULL,
-	NULL, NULL, NULL, "sse4_1", "sse4_2", NULL, NULL, "popcnt",
-	NULL, "aes", "xsave", "osxsave", "avx", "f16c", NULL, NULL
+	NULL, NULL, NULL, "sse4_1", "sse4_2", "x2apic", "movbe", "popcnt",
+	NULL, "aes", "xsave", "osxsave", "avx", "f16c", "rdrand", NULL
 };
 
 static const char *amd_cap_generic_ecx_flags_desc[32] = {
@@ -336,10 +336,11 @@ static const char *amd_cap_generic_ecx_flags_desc[32] = {
 	NULL,					    // 18
 	"Streaming SIMD Extensions 4.1",	    // 19
 	NULL,					    // 20
+	NULL,					    // 21
 	NULL,					    // 22
 	"POPCNT instruction",			    // 23
 	NULL,					    // 24
-	NULL,					    // 25
+	"AES instruction support",		    // 25
 	NULL,					    // 26
 	NULL,					    // 27
 	NULL,					    // 28
@@ -362,7 +363,7 @@ static const char *amd_cap_extended_ecx_flags[32] = {
 	"skinit", "wdt", NULL, "lwp",
 	"fma4", "tce", NULL, "NodeId",
 	NULL, "tbm", "TopoExt", "PerfCtrExtCore",
-	"PerfCtrExtNB", NULL, NULL, NULL, NULL, NULL, NULL, NULL
+	"PerfCtrExtNB", NULL, "DataBPExt", NULL, "PerfCtrExtLLC", "MwaitExtended", "AdMskExtn", NULL
 };
 
 static const char *centaur_cap_extended_ecx_flags[32] = {
