@@ -50,8 +50,6 @@ void bind_cpu(unsigned int cpunr)
         return;
 }
 
-static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
-
 /* Kernel CPUID driver's minimum supported read size
  * (see linux/arch/i386/kernel/cpuid.c)
  */
