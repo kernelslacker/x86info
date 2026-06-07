@@ -176,7 +176,10 @@ void dump_mtrrs(struct cpudata *cpu)
 
 	set_max_phy_addr(cpu);
 
-	for (i = 0; i < 16; i+=2) {
+	/* vcnt is the number of variable MTRR pairs the CPU actually has. */
+	unsigned int vcnt = (unsigned int)(val & IA32_MTRRCAP_VCNT);
+
+	for (i = 0; i < vcnt * 2; i+=2) {
 		printf("MTRRphysBase%u (0x%x): ", i / 2, (unsigned int) 0x200 + i);
 		decode_mtrr_physbase(cpu->number, 0x200 + i);
 		printf("MTRRphysMask%u (0x%x): ", i/2, (unsigned int) 0x201 + i);
