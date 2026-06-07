@@ -106,10 +106,10 @@ static void decode_mtrr_deftype(int cpu, int msr)
 		printf("0x%016llx ", val);
 
 		printf("(fixed-range flag:%d ",
-			!! ((unsigned int) val & (1 << 10)));
+			!! ((unsigned int) val & IA32_MTRR_DEFTYPE_FE));
 
 		printf("enable flag:%d ",
-			!! ((unsigned int) val & (1 << 11)));
+			!! ((unsigned int) val & IA32_MTRR_DEFTYPE_E));
 
 		type = val & IA32_MTRR_DEFTYPE_TYPE;
 		printf("default type:0x%02x (%s))\n", type,
@@ -158,6 +158,7 @@ void dump_mtrrs(struct cpudata *cpu)
 {
 	unsigned long long val = 0;
 	unsigned int i;
+	unsigned int vcnt;
 
 	if (!(cpu->flags_edx & (X86_FEATURE_MTRR)))
 		return;
@@ -177,7 +178,7 @@ void dump_mtrrs(struct cpudata *cpu)
 	set_max_phy_addr(cpu);
 
 	/* vcnt is the number of variable MTRR pairs the CPU actually has. */
-	unsigned int vcnt = (unsigned int)(val & IA32_MTRRCAP_VCNT);
+	vcnt = (unsigned int)(val & IA32_MTRRCAP_VCNT);
 
 	for (i = 0; i < vcnt * 2; i+=2) {
 		printf("MTRRphysBase%u (0x%x): ", i / 2, (unsigned int) 0x200 + i);
