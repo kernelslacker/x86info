@@ -46,10 +46,10 @@ static int apic_is_enable(int cpu, int msr)
 	return ret;
 }
 
-static unsigned int apic_physical_address(int cpu, int msr)
+static unsigned long long apic_physical_address(int cpu, int msr)
 {
 	unsigned long long val;
-	unsigned int apic_phys_addr;
+	unsigned long long apic_phys_addr;
 	int ret;
 
 	apic_phys_addr = 0;
@@ -61,9 +61,9 @@ static unsigned int apic_physical_address(int cpu, int msr)
 	return apic_phys_addr;
 }
 
-static unsigned int * mapping_apic_registers(unsigned long addr)
+static unsigned int * mapping_apic_registers(unsigned long long addr)
 {
-	unsigned long offset;
+	unsigned long long offset;
 	void *mapped;
 
 	if ((fd = open("/dev/mem", O_RDONLY)) == -1)
@@ -71,7 +71,7 @@ static unsigned int * mapping_apic_registers(unsigned long addr)
 
 	offset = PAGE_OFFSET(addr);
 
-	mapped = mmap(NULL, (APIC_REGISTER_SPACE + offset), PROT_READ, MAP_SHARED, fd, (unsigned long) addr - offset);
+	mapped = mmap(NULL, (APIC_REGISTER_SPACE + offset), PROT_READ, MAP_SHARED, fd, (off_t)(addr - offset));
 	if (mapped != MAP_FAILED)
 		return (unsigned int *) (mapped + offset);
 	else
@@ -96,7 +96,7 @@ static void dump_apic(unsigned int *apic_reg_buffer, unsigned int offset)
 void dump_apics(struct cpudata *cpu)
 {
 	unsigned int *apic_reg_buffer;
-	unsigned int phys_addr;
+	unsigned long long phys_addr;
 	int i;
 
 	/**
