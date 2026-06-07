@@ -33,6 +33,7 @@ void display_topology(struct cpudata *head)
 	struct cpudata *cpu;
 	unsigned int threads_per_socket;
 	unsigned int i;
+	unsigned int max_proc_id = 0;
 	char *sockets;
 
 	int num_sockets = 0;
@@ -67,11 +68,20 @@ void display_topology(struct cpudata *head)
 		printf("\n");
 	}
 
-	sockets = malloc(nrCPUs);
+	/* Find the maximum phys_proc_id so the sockets array is large enough
+	 * for sparse or non-zero-based socket APIC ID assignments. */
+	cpu = head;
+	for (i = 0; i < nrCPUs; i++) {
+		if (cpu->phys_proc_id > max_proc_id)
+			max_proc_id = cpu->phys_proc_id;
+		cpu = cpu->next;
+	}
+
+	sockets = malloc(max_proc_id + 1);
 	if (sockets == NULL)
 		return;
 
-	for (i = 0; i < nrCPUs; i++)
+	for (i = 0; i <= max_proc_id; i++)
 		sockets[i]=0;
 
 	cpu = head;
@@ -80,7 +90,7 @@ void display_topology(struct cpudata *head)
 		cpu = cpu->next;
 	}
 
-	for (i = 0; i < nrCPUs; i++) {
+	for (i = 0; i <= max_proc_id; i++) {
 		if (debug == 1)
 			if (sockets[i] != 0)
 				printf("Socket %u: %u threads\n", i, (unsigned int) sockets[i]);
