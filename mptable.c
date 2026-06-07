@@ -220,8 +220,17 @@ static int MPConfigTableHeader(u32 pap)
 	if (!silent)
 		printf("MP Table:\n#\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
 	for (c = count; c; c--) {
-		if (readType() == 0)
+		int type = readType();
+		if (type == 0) {
 			processorEntry();
+		} else {
+			/* Non-CPU entries (bus, I/O APIC, interrupt) are 8 bytes each;
+			 * skip them so the file position advances past every entry. */
+			if (lseek(pfd, 8, SEEK_CUR) < 0) {
+				perror("entry seek");
+				exit(EXIT_FAILURE);
+			}
+		}
 	}
 	if (!silent)
 		printf("\n");
