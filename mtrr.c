@@ -112,7 +112,8 @@ static void decode_mtrr_deftype(int cpu, int msr)
 			!! ((unsigned int) val & (1 << 11)));
 
 		type = val & IA32_MTRR_DEFTYPE_TYPE;
-		printf("default type:0x%02x (%s))\n", type, mtrr_types[type]);
+		printf("default type:0x%02x (%s))\n", type,
+			type < MTRR_NUM_TYPES ? mtrr_types[type] : "?");
 	}
 }
 
@@ -130,7 +131,8 @@ static void decode_mtrr_physbase(int cpu, int msr)
 		decode_address(val);
 
 		type = (unsigned int) val & IA32_PHYBASE_TYPE;
-		printf("type: 0x%02x (%s))\n", type, mtrr_types[type]);
+		printf("type: 0x%02x (%s))\n", type,
+			type < MTRR_NUM_TYPES ? mtrr_types[type] : "?");
 	}
 }
 
