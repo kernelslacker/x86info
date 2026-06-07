@@ -35,7 +35,7 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 		return 0;
 	}
 
-	if (lseek64(fh, (off64_t) idx, SEEK_CUR) == -1) {
+	if (lseek64(fh, (off64_t) idx, SEEK_SET) == -1) {
 		perror("lseek");
 		exit(EXIT_FAILURE);
 	}
