@@ -58,6 +58,7 @@ struct {
 	const char *msr_search;
 	uint32_t reg;
 } g = {
+	.fd  = -1,
 	.reg = -1,
 };
 
