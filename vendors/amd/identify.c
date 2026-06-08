@@ -26,9 +26,12 @@ static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 	unsigned int i, id, cont;
 	int ret;
 	char s[CPU_NAME_LEN];
+	char *sp;
+	size_t left;
 
 	s[0] = 0;
 	cont = 0;
+	sp = s;
 	for (i = 0; (r != NULL) && (i < ARRAY_SIZE(k8_names)); i++) {
 		const char *p;
 
@@ -37,11 +40,15 @@ static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 		if (r->nameid & id)
 			p = get_k8_name(id);
 		if (p) {
-			if (cont)
-				strncat(s, "/", CPU_NAME_LEN-1);
-			else
+			if (cont) {
+				left = CPU_NAME_LEN - (sp - s) - 1;
+				if (left > 0)
+					sp += snprintf(sp, left, "/");
+			} else
 				cont = 1;
-			strncat(s, p, CPU_NAME_LEN-1);
+			left = CPU_NAME_LEN - (sp - s) - 1;
+			if (left > 0)
+				sp += snprintf(sp, left, "%s", p);
 		}
 	}
 	if (r) {

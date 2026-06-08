@@ -19,6 +19,7 @@ void decode_serial_number(struct cpudata *cpu)
 	char *p = cpu->serialno;
 	unsigned int eax, ebx, ecx, edx;
 	unsigned int signature;
+	int n, rem;
 
 	if (cpu->cpuid_level < 3)
 		return;
@@ -27,12 +28,19 @@ void decode_serial_number(struct cpudata *cpu)
 	signature = eax;
 
 	cpuid(cpu->number, 3, &eax, &ebx, &ecx, &edx);
-	p += sprintf(p, "%04X", signature >> 16);
-	p += sprintf(p, "-%04X", signature & 0xffff);
-	p += sprintf(p, "-%04X", edx >> 16);
-	p += sprintf(p, "-%04X", edx & 0xffff);
-	p += sprintf(p, "-%04X", ecx >> 16);
-	sprintf(p, "-%04X", ecx & 0xffff);
+	rem = sizeof(cpu->serialno);
+	p = cpu->serialno;
+	n = snprintf(p, rem, "%04X", signature >> 16);
+	p += n; rem -= n;
+	n = snprintf(p, rem, "-%04X", signature & 0xffff);
+	p += n; rem -= n;
+	n = snprintf(p, rem, "-%04X", edx >> 16);
+	p += n; rem -= n;
+	n = snprintf(p, rem, "-%04X", edx & 0xffff);
+	p += n; rem -= n;
+	n = snprintf(p, rem, "-%04X", ecx >> 16);
+	p += n; rem -= n;
+	snprintf(p, rem, "-%04X", ecx & 0xffff);
 
 	printf("Processor serial: %s\n", cpu->serialno);
 }
