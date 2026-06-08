@@ -231,6 +231,17 @@ static void set_fam15h_revinfo(int id, struct cpudata *c)
 	set_connector(c);
 }
 
+static void set_fam16h_revinfo(int id, struct cpudata *c)
+{
+	(void)id;
+	if (model(c) <= 0x0f)
+		snprintf(c->name, CPU_NAME_LEN, "AMD Jaguar APU (Kabini/Temash)");
+	else if (model(c) >= 0x30 && model(c) <= 0x3f)
+		snprintf(c->name, CPU_NAME_LEN, "AMD Puma APU (Beema/Mullins)");
+	else
+		snprintf(c->name, CPU_NAME_LEN, "AMD Family 16h Processor");
+}
+
 static void set_fam17h_revinfo(int id, struct cpudata *c)
 {
 	const char *p;
@@ -526,6 +537,9 @@ void identify_amd(struct cpudata *cpu)
 			break;
 		case 0x15:
 			set_fam15h_revinfo(eax, cpu);
+			break;
+		case 0x16:
+			set_fam16h_revinfo(eax, cpu);
 			break;
 		case 0x17:
 			set_fam17h_revinfo(eax, cpu);
