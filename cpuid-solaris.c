@@ -38,7 +38,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 
 	if (eax != NULL) {
 		*eax = (unsigned int) idx;
-		if (*eax == 4)
+		if (*eax == 4 && ecx != NULL)
 			*ecx = idx >> 32;
 	}
 
