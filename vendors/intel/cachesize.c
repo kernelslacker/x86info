@@ -417,7 +417,7 @@ static void decode_general_tlb(struct cpudata *cpu, int output)
 		if ((d >> 8) & 1)
 			strcpy(assoc, "fully");
 		else
-			sprintf(assoc, "%u-way", ways);
+			snprintf(assoc, sizeof(assoc), "%u-way", ways);
 		if (type == 0)
 			continue;
 		typename = tlbnames[type];
