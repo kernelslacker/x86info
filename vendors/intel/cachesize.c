@@ -404,8 +404,11 @@ static void decode_general_tlb(struct cpudata *cpu, int output)
 		idx |= 0x18;
 		cpuid(cpu->number, idx, &a, &b, &c, &d);
 
-		if (i++ == 0)
+		if (i++ == 0) {
 			max = a;
+			if (max > 64)
+				max = 64;
+		}
 		page_size = b & 0xf;
 		ways = b >> 16;
 		type = d & 0x1f;
