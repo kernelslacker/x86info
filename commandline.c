@@ -50,7 +50,7 @@ static void usage(char *programname)
 -m,   --msr\n\
       --mtrr\n\
       --pm\n\
--r,   --registers\n\
+-r,   --raw-cpuid\n\
 -v,   --verbose\n\
 \n", programname);
 	exit (0);
