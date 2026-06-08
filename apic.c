@@ -15,6 +15,8 @@
 #include <x86info.h>
 
 static int fd;
+static void *apic_mapped_base;
+static unsigned int apic_mapped_size;
 
 static int apic_msr_value(int cpu, int msr, unsigned long long *val)
 {
@@ -70,17 +72,19 @@ static unsigned int * mapping_apic_registers(unsigned long long addr)
 		return NULL;
 
 	offset = PAGE_OFFSET(addr);
+	apic_mapped_size = APIC_REGISTER_SPACE + (unsigned int)offset;
 
-	mapped = mmap(NULL, (APIC_REGISTER_SPACE + offset), PROT_READ, MAP_SHARED, fd, (off_t)(addr - offset));
-	if (mapped != MAP_FAILED)
-		return (unsigned int *) (mapped + offset);
-	else
+	mapped = mmap(NULL, apic_mapped_size, PROT_READ, MAP_SHARED, fd, (off_t)(addr - offset));
+	if (mapped == MAP_FAILED)
 		return NULL;
+
+	apic_mapped_base = mapped;
+	return (unsigned int *)((char *)mapped + offset);
 }
 
-static void unmapping_apic_registers(void *mapped, unsigned int size)
+static void unmapping_apic_registers(void)
 {
-	if (munmap(mapped, size) == -1)
+	if (munmap(apic_mapped_base, apic_mapped_size) == -1)
 		return;
 	if (close(fd) == -1)
 		return;
@@ -188,7 +192,7 @@ void dump_apics(struct cpudata *cpu)
 	printf("APIC Divide Configuration (for Timer)	: ");
 	dump_apic(apic_reg_buffer, APIC_TDCR);
 
-	unmapping_apic_registers(apic_reg_buffer, APIC_REGISTER_SPACE);
+	unmapping_apic_registers();
 
 	printf("\n");
 }
