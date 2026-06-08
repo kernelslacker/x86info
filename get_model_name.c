@@ -33,6 +33,7 @@ void get_model_name(struct cpudata *cpu)
 		for (i = 0; i < 4; i++)
 			*cp++ = edx >> (8 * i);
 	}
+	namestring[48] = '\0';
 	cp = namestring;
 	while(*cp == ' ')
 		cp++;
