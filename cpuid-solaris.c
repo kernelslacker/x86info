@@ -54,7 +54,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1) {
-		if (lseek64(fh, (off64_t)idx, SEEK_CUR) < 0) {
+		if (lseek64(fh, (off64_t)idx, SEEK_SET) < 0) {
 			printf("cpuid seek error: %s\n", strerror(errno));
 			exit(EXIT_FAILURE);
 		}
