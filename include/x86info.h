@@ -199,7 +199,6 @@ extern unsigned int show_machine_check;
 extern unsigned int show_bugs;
 extern unsigned int show_cacheinfo;
 extern unsigned int show_connector;
-extern unsigned int show_eblcr;
 extern unsigned int show_msr;
 extern unsigned int show_microcode;
 extern unsigned int show_mtrr;
