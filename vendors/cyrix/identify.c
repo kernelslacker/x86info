@@ -9,7 +9,13 @@
 #include "cyrix.h"
 
 static char *cyrix_nameptr;
-#define add_to_cpuname(x)   cyrix_nameptr += snprintf(cyrix_nameptr, sizeof(x), "%s", x)
+#define add_to_cpuname(x) do { \
+	int _avail = (int)(cpu->name + CPU_NAME_LEN - cyrix_nameptr); \
+	if (_avail > 1) { \
+		int _n = snprintf(cyrix_nameptr, (size_t)_avail, "%s", x); \
+		cyrix_nameptr += (_n > 0 && _n < _avail) ? _n : _avail - 1; \
+	} \
+} while (0)
 
 /* Decode TLB and cache info descriptors */
 void decode_cyrix_tlb(int x)

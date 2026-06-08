@@ -19,7 +19,13 @@
 #include <amd-revision.h>
 
 static char *amd_nameptr;
-#define add_to_cpuname(x) amd_nameptr += snprintf(amd_nameptr, sizeof(x), "%s", x)
+#define add_to_cpuname(x) do { \
+	int _avail = (int)(cpu->name + CPU_NAME_LEN - amd_nameptr); \
+	if (_avail > 1) { \
+		int _n = snprintf(amd_nameptr, (size_t)_avail, "%s", x); \
+		amd_nameptr += (_n > 0 && _n < _avail) ? _n : _avail - 1; \
+	} \
+} while (0)
 
 static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 {
