@@ -322,12 +322,12 @@ struct reg_spec unknown_msr = {0, "unknown", "(at your own risk)", NULL, NULL};
 #define OPT_MAX 32
 int main(int argc, char *argv[])
 {
-	char c;
+	int c;
 	int i, li, ret;
 	struct reg_spec *reg;
 
 	ret = 1;
-	if((g.prog = rindex(argv[0], '/')))
+	if((g.prog = strrchr(argv[0], '/')))
 		++g.prog;
 	else
 		g.prog = argv[0];
@@ -365,7 +365,7 @@ int main(int argc, char *argv[])
 			g.list = 1;
 			break;
 		case 'r':
-			if (isalpha(*optarg))
+			if (isalpha((unsigned char)*optarg))
 				g.msr_name = optarg;
 			else
 				g.reg = (unsigned int) strtol(optarg, NULL, 16);
