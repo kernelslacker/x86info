@@ -87,12 +87,14 @@ void get_intel_topology(struct cpudata *cpu)
 
 	cpu->x86_max_cores = intel_num_cpu_cores(cpu);
 	cpu->num_siblings = cpu->num_siblings / cpu->x86_max_cores;
+	if (cpu->num_siblings == 0)
+		cpu->num_siblings = 1;
 
 	index_msb = get_count_order(cpu->num_siblings);
 
 	core_bits = get_count_order(cpu->x86_max_cores);
 
-	cpu->cpu_core_id = phys_pkg_id(cpu->apicid, index_msb) &
+	cpu->cpu_core_id = phys_pkg_id(cpu->initial_apicid, index_msb) &
 		((1 << core_bits) - 1);
 
 	if (debug == 1) {
