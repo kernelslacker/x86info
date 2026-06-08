@@ -8,13 +8,7 @@
 #include "centaur.h"
 
 static char *centaur_nameptr;
-#define add_to_cpuname(x) do { \
-	int _avail = (int)(cpu->name + CPU_NAME_LEN - centaur_nameptr); \
-	if (_avail > 1) { \
-		int _n = snprintf(centaur_nameptr, (size_t)_avail, "%s", x); \
-		centaur_nameptr += (_n > 0 && _n < _avail) ? _n : _avail - 1; \
-	} \
-} while (0)
+#define add_to_cpuname(x) CPU_NAME_APPEND(centaur_nameptr, cpu, x)
 
 void identify_centaur(struct cpudata *cpu)
 {

@@ -10,13 +10,7 @@
 #include "intel.h"
 
 static char *intel_nameptr;
-#define add_to_cpuname(x) do { \
-	int _avail = (int)(cpu->name + CPU_NAME_LEN - intel_nameptr); \
-	if (_avail > 1) { \
-		int _n = snprintf(intel_nameptr, (size_t)_avail, "%s", x); \
-		intel_nameptr += (_n > 0 && _n < _avail) ? _n : _avail - 1; \
-	} \
-} while (0)
+#define add_to_cpuname(x) CPU_NAME_APPEND(intel_nameptr, cpu, x)
 
 void identify_intel_family6pentium(struct cpudata *cpu)
 {

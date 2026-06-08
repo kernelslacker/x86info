@@ -124,6 +124,14 @@ unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op);
 
 #define ARRAY_SIZE(x) ((int)(sizeof(x)/sizeof(x[0])))
 
+#define CPU_NAME_APPEND(ptr, cpu, s) do { \
+	int _avail = (int)((cpu)->name + CPU_NAME_LEN - (ptr)); \
+	if (_avail > 1) { \
+		int _n = snprintf((ptr), (size_t)_avail, "%s", (s)); \
+		(ptr) += (_n > 0 && _n < _avail) ? _n : _avail - 1; \
+	} \
+} while (0)
+
 #define get_name(title,type,table) \
 static const char *get_##title##_name(type id) \
 { \
