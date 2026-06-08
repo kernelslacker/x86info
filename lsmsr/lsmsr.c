@@ -139,7 +139,7 @@ static int get_msr_val(unsigned int msr, unsigned long long *val)
 		fprintf(stderr,
 			"could not read MSR 0x%8.8x (%s): %s\n",
 			msr, get_reg_name(msr, g.msr_table), strerror(err));
-		return 0;
+		return 1;
 	}
 
 	return 0;
