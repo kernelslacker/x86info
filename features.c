@@ -25,7 +25,7 @@ static void flag_decode(unsigned long reg, const char * reg_desc, const char *fl
 				    printf(" %-8s", flags[i]);
 			    else
 				    printf(" [%s:%u]     ", reg_desc, i);
-			    if (flags_desc)
+			    if (flags_desc && flags_desc[i])
 				    printf("\t%s\n", flags_desc[i]);
 			    else
 				    printf("\n");
