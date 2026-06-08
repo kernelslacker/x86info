@@ -120,57 +120,6 @@ This eliminates the brittle extern web and makes the data flow readable.
 
 ---
 
-## 5. Replace the linked-list CPU array with a plain array
-
-`struct cpudata` has a `next` pointer but the list is always walked
-sequentially from `firstcpu` with a fixed count in `nrCPUs`. Allocate
-`struct cpudata cpus[nrCPUs]` (or a heap array) in `main()` and pass a
-pointer + length; this removes the manual `free` loop, the `alloc_cpu`
-helper, and the `firstcpu` global.
-
-### Steps
-
-1. Read `x86info.c`. Note:
-   - `alloc_cpu()` at line 132: malloc + memset, chains via `->next`.
-   - The allocation loop at lines 190–197: `firstcpu = alloc_cpu()`, then
-     `cpu->next = alloc_cpu()` for each additional CPU.
-   - The free loop at lines 249–253: walks `->next` and frees each node.
-   - All walk loops (lines 111–125, 210, 237, 249) iterate via `cpu = cpu->next`.
-
-2. After `nrCPUs` is known (after the SMP detection block, before the
-   allocation loop), allocate a flat array:
-   ```c
-   struct cpudata *cpus = calloc(nrCPUs, sizeof(struct cpudata));
-   if (!cpus) { perror("calloc"); exit(EXIT_FAILURE); }
-   ```
-
-3. Replace the linked allocation loop with a simple index loop:
-   ```c
-   for (unsigned int i = 0; i < nrCPUs; i++) {
-       cpus[i].number = i;   /* or whatever field was set in alloc_cpu */
-       fill_in_cpu_info(&cpus[i]);
-   }
-   ```
-
-4. Replace every `cpu = cpu->next` walk with index-based iteration
-   (`for (i = 0; i < nrCPUs; i++) { … &cpus[i] … }`).
-
-5. Replace `firstcpu` references with `&cpus[0]` where they compare the
-   first CPU's fields.
-
-6. Delete `alloc_cpu()`, the `next` field from `struct cpudata`, and the
-   manual free loop (a single `free(cpus)` replaces it).
-
-7. Remove the `firstcpu` extern declaration from `x86info.h` (already gone
-   if TODO item 3 was completed).
-
-8. Run `make`. Fix any errors. Test with `./x86info --all-cpus` on an SMP
-   system if available.
-
-9. Commit: `cpudata: replace linked list with flat heap array`
-
----
-
 ## 7. Separate data gathering from display
 
 `show_info()` in `identify.c` mixes printing with control flow; the vendor
