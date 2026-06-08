@@ -468,6 +468,7 @@ void decode_intel_caches(struct cpudata *cpu, int output)
 	if (output)
 		printf("TLB info\n");
 	decode_general_tlb(cpu, output);
+	found_tlb_general = 0;
 	decode_cache(cpu, ITLB_cache_table, output);
 	decode_cache(cpu, DTLB_cache_table, output);
 
