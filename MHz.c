@@ -39,13 +39,6 @@ void estimate_MHz(struct cpudata *cpu)
 	// coverity[DC.WEAK_CRYPTO]
 	unsigned long r = rand();
 
-	if (cpu->number != 0) {
-		if (all_cpus == 0) {
-			cpu->MHz = firstcpu->MHz;
-			return;
-		}
-	}
-
 	/* Make sure we have a TSC (and hence RDTSC) */
 	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
 	if ((edx & (1<<4)) == 0) {

@@ -19,8 +19,6 @@ unsigned int user_is_root = 0;
 unsigned int nrCPUs = 1;
 static unsigned int nrSMPCPUs;
 
-struct cpudata *firstcpu;
-
 
 static void separator(void)
 {
@@ -96,9 +94,8 @@ static void display_detailed_info(struct cpudata *cpu)
  * check to see if all CPUs are the same.
  * returns 1 if all cpus are the same, 0 if something is different
  */
-static int check_cpu_similarity(void)
+static int check_cpu_similarity(struct cpudata *cpus)
 {
-	struct cpudata *cpu;
 	unsigned int i;
 
 	/* force to display all cpus if the user requested it. */
@@ -108,45 +105,30 @@ static int check_cpu_similarity(void)
 	if (nrCPUs == 1)
 		return 1;
 
-	cpu = firstcpu;
-	for (i = 0; i < nrCPUs; i++) {
-		cpu = cpu->next;
-		if (!cpu)
-			return 1;
-
-		if (cpu->efamily != firstcpu->efamily)
+	for (i = 1; i < nrCPUs; i++) {
+		if (cpus[i].efamily != cpus[0].efamily)
 			return 0;
-		if (cpu->emodel != firstcpu->emodel)
+		if (cpus[i].emodel != cpus[0].emodel)
 			return 0;
-		if (cpu->family != firstcpu->family)
+		if (cpus[i].family != cpus[0].family)
 			return 0;
-		if (model(cpu) != model(firstcpu))
+		if (((cpus[i].emodel << 4) + cpus[i].model) != ((cpus[0].emodel << 4) + cpus[0].model))
 			return 0;
-		if (cpu->stepping != firstcpu->stepping)
+		if (cpus[i].stepping != cpus[0].stepping)
 			return 0;
 	}
 
 	return 1;
 }
 
-static struct cpudata *alloc_cpu(void)
-{
-	struct cpudata *newcpu;
-
-	newcpu = malloc (sizeof (struct cpudata));
-	if (!newcpu) {
-		printf("Out of memory\n");
-		exit(EXIT_FAILURE);
-	}
-	memset(newcpu, 0, sizeof(struct cpudata));
-
-	return newcpu;
-}
-
-static void fill_in_cpu_info(struct cpudata *cpu)
+static void fill_in_cpu_info(struct cpudata *cpu, struct cpudata *cpus)
 {
 	bind_cpu(cpu->number);
-	estimate_MHz(cpu);
+	if (cpu->number == 0 || all_cpus) {
+		estimate_MHz(cpu);
+	} else {
+		cpu->MHz = cpus[0].MHz;
+	}
 	get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
 	get_feature_flags(cpu);
 	identify(cpu);
@@ -156,7 +138,7 @@ static void fill_in_cpu_info(struct cpudata *cpu)
 
 int main(int argc, char **argv)
 {
-	struct cpudata *cpu=NULL, *tmp;
+	struct cpudata *cpus;
 	unsigned int i;
 	unsigned int display_one_cpu = 1;
 
@@ -186,29 +168,24 @@ int main(int argc, char **argv)
 		nrCPUs = 1;
 	}
 
-	/* Allocate a cpu for boot cpu. */
-	cpu = firstcpu = alloc_cpu();
-	fill_in_cpu_info(cpu);
-
-	/* Allocate structs for non-boot CPUs if present */
-	if (nrCPUs > 1) {
-		for (i = 1; i < nrCPUs; i++) {
-			cpu->next = alloc_cpu();
-			cpu = cpu->next;
-			cpu->number = i;
-
-			fill_in_cpu_info(cpu);
-		}
+	/* Allocate a flat array of CPUs */
+	cpus = calloc(nrCPUs, sizeof(struct cpudata));
+	if (!cpus) {
+		perror("calloc");
+		exit(EXIT_FAILURE);
 	}
 
-	display_one_cpu = check_cpu_similarity();
+	for (i = 0; i < nrCPUs; i++) {
+		cpus[i].number = i;
+		fill_in_cpu_info(&cpus[i], cpus);
+	}
+
+	display_one_cpu = check_cpu_similarity(cpus);
 
 	if (show_mptable && user_is_root)
 		display_mptable();
 
 	/* Now we display the info we gathered */
-	cpu = firstcpu;
-
 	if (display_one_cpu) {
 		if (nrCPUs >= 2)
 			printf("Found %u identical CPUs", nrCPUs);
@@ -224,34 +201,26 @@ int main(int argc, char **argv)
 		if (nrCPUs >= 2)
 			printf("\n");
 
-		display_detailed_info(cpu);
+		display_detailed_info(&cpus[0]);
 	} else {
 		printf("Found %u CPUs.\n", nrCPUs);
 		for (i = 0; i < nrCPUs; i++) {
 			printf("CPU #%u:\n", i+1);
 
-			display_detailed_info(cpu);
+			display_detailed_info(&cpus[i]);
 
 			if (nrCPUs > 1)
 				separator();
-			cpu = cpu->next;
 		}
 	}
 
-	display_topology(firstcpu);
+	display_topology(&cpus[0]);
 
 	printf(" running at an estimated ");
-	display_MHz(firstcpu);
+	display_MHz(&cpus[0]);
 	printf("\n");
 
-
-	/* Tear down the linked list. */
-	cpu = firstcpu;
-	for (i = 0; i < nrCPUs; i++) {
-		tmp = cpu->next;
-		free(cpu);
-		cpu = tmp;
-	}
+	free(cpus);
 
 	exit(EXIT_SUCCESS);
 }

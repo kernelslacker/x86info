@@ -68,7 +68,6 @@ enum connector {
 
 #define CPU_NAME_LEN 80
 struct cpudata {
-	struct cpudata *next;
 	unsigned int number;
 	enum vendor vendor;
 	unsigned int efamily;
@@ -185,8 +184,6 @@ void get_topology(struct cpudata *head);
 void display_topology(struct cpudata *head);
 
 extern unsigned int nrCPUs;
-
-extern struct cpudata *firstcpu;
 
 extern unsigned int user_is_root;
 extern unsigned int need_root;

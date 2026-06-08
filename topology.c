@@ -28,9 +28,8 @@ void get_topology(struct cpudata *cpu)
 		get_intel_topology(cpu);
 }
 
-void display_topology(struct cpudata *head)
+void display_topology(struct cpudata *cpus)
 {
-	struct cpudata *cpu;
 	unsigned int threads_per_socket;
 	unsigned int i;
 	unsigned int max_proc_id = 0;
@@ -39,42 +38,34 @@ void display_topology(struct cpudata *head)
 	int num_sockets = 0;
 
 	/* For now, we only support topology parsing on Intel. */
-	if (head->vendor != VENDOR_INTEL)
+	if (cpus[0].vendor != VENDOR_INTEL)
 		return;
 
 	if (debug == 1) {
-		cpu = head;
 		printf("cpu->phys_proc_id: ");
 		for (i = 0; i < nrCPUs; i++) {
-			printf("%u, ", cpu->phys_proc_id);
-			cpu = cpu->next;
+			printf("%u, ", cpus[i].phys_proc_id);
 		}
 		printf("\n");
 
-		cpu = head;
 		printf("cpu->x86_max_cores: ");
 		for (i = 0; i < nrCPUs; i++) {
-			printf("%u, ", cpu->x86_max_cores);
-			cpu = cpu->next;
+			printf("%u, ", cpus[i].x86_max_cores);
 		}
 		printf("\n");
 
-		cpu = head;
 		printf("cpu->cpu_core_id: ");
 		for (i = 0; i < nrCPUs; i++) {
-			printf("%u, ", cpu->cpu_core_id);
-			cpu = cpu->next;
+			printf("%u, ", cpus[i].cpu_core_id);
 		}
 		printf("\n");
 	}
 
 	/* Find the maximum phys_proc_id so the sockets array is large enough
 	 * for sparse or non-zero-based socket APIC ID assignments. */
-	cpu = head;
 	for (i = 0; i < nrCPUs; i++) {
-		if (cpu->phys_proc_id > max_proc_id)
-			max_proc_id = cpu->phys_proc_id;
-		cpu = cpu->next;
+		if (cpus[i].phys_proc_id > max_proc_id)
+			max_proc_id = cpus[i].phys_proc_id;
 	}
 
 	sockets = malloc(max_proc_id + 1);
@@ -84,10 +75,8 @@ void display_topology(struct cpudata *head)
 	for (i = 0; i <= max_proc_id; i++)
 		sockets[i]=0;
 
-	cpu = head;
 	for (i = 0; i < nrCPUs; i++) {
-		sockets[cpu->phys_proc_id]++;
-		cpu = cpu->next;
+		sockets[cpus[i].phys_proc_id]++;
 	}
 
 	for (i = 0; i <= max_proc_id; i++) {
@@ -99,12 +88,11 @@ void display_topology(struct cpudata *head)
 	}
 
 	/* Print a topology summary */
-	cpu = head;
 	printf("Total processor threads: %d\n", sockets[0] * num_sockets);
 	printf("This system has %d ", num_sockets);
 	threads_per_socket = sockets[0];
-	if (cpu->flags_edx & X86_FEATURE_HT)
-		if (cpu->num_siblings > 1)
+	if (cpus[0].flags_edx & X86_FEATURE_HT)
+		if (cpus[0].num_siblings > 1)
 			threads_per_socket = sockets[0]/2;
 
 	if (nrCPUs == 1) {
@@ -122,8 +110,8 @@ void display_topology(struct cpudata *head)
 			printf("s");
 	}
 
-	if (cpu->flags_edx & X86_FEATURE_HT && cpu->num_siblings > 1)
-		printf(" with hyper-threading (%u threads per core)", cpu->num_siblings);
+	if (cpus[0].flags_edx & X86_FEATURE_HT && cpus[0].num_siblings > 1)
+		printf(" with hyper-threading (%u threads per core)", cpus[0].num_siblings);
 
 	free(sockets);
 }
