@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <ctype.h>
+#include <limits.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -317,6 +318,34 @@ static int set_msr_table(void)
 	return 0;
 }
 
+static int parse_int_opt(const char *name, const char *s, int base)
+{
+	char *end;
+	long val;
+
+	errno = 0;
+	val = strtol(s, &end, base);
+	if (*end != '\0' || errno == ERANGE || val < INT_MIN || val > INT_MAX) {
+		fprintf(stderr, "%s: invalid value: %s\n", name, s);
+		exit(EXIT_FAILURE);
+	}
+	return (int)val;
+}
+
+static unsigned int parse_uint_opt(const char *name, const char *s, int base)
+{
+	char *end;
+	unsigned long val;
+
+	errno = 0;
+	val = strtoul(s, &end, base);
+	if (*end != '\0' || errno == ERANGE || val > UINT_MAX) {
+		fprintf(stderr, "%s: invalid value: %s\n", name, s);
+		exit(EXIT_FAILURE);
+	}
+	return (unsigned int)val;
+}
+
 struct reg_spec unknown_msr = {0, "unknown", "(at your own risk)", NULL, NULL};
 
 #define OPT_MAX 32
@@ -350,16 +379,16 @@ int main(int argc, char *argv[])
 			version();
 			return 0;
 		case 'V':
-			g.verbosity = strtol(optarg, NULL, 10);
+			g.verbosity = parse_int_opt("-V", optarg, 10);
 			break;
 		case 'c':
-			g.cpu = strtol(optarg, NULL, 0);
+			g.cpu = parse_int_opt("-c", optarg, 0);
 			break;
 		case 'm':
-			g.model = strtol(optarg, NULL, 0);
+			g.model = parse_int_opt("-m", optarg, 0);
 			break;
 		case 'f':
-			g.family = strtol(optarg, NULL, 0);
+			g.family = parse_int_opt("-f", optarg, 0);
 			break;
 		case 'l':
 			g.list = 1;
@@ -368,7 +397,7 @@ int main(int argc, char *argv[])
 			if (isalpha((unsigned char)*optarg))
 				g.msr_name = optarg;
 			else
-				g.reg = (unsigned int) strtol(optarg, NULL, 16);
+				g.reg = parse_uint_opt("-r", optarg, 16);
 			break;
 		default:
 			usage();
