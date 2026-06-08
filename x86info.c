@@ -32,7 +32,6 @@ static void separator(void)
 
 static void display_detailed_info(struct cpudata *cpu)
 {
-	bind_cpu(cpu->number);	/* FIXME: Eventually remove once 'gather' has all the per-cpu stuff */
 	show_info(cpu);
 
 	if (show_cpuid) {

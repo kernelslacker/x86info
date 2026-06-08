@@ -558,8 +558,8 @@ void identify_amd(struct cpudata *cpu)
 			set_fam1ah_revinfo(eax, cpu);
 			break;
 		default:
-			printf("Unknown CPU family: 0x%x\n",
-			       family(cpu));
+			snprintf(cpu->name, CPU_NAME_LEN,
+				 "Unknown CPU family: 0x%x", family(cpu));
 			break;
 		}
 

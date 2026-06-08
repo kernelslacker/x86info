@@ -42,7 +42,6 @@ void decode_serial_number(struct cpudata *cpu)
 	p += n; rem -= n;
 	snprintf(p, rem, "-%04X", ecx & 0xffff);
 
-	printf("Processor serial: %s\n", cpu->serialno);
 }
 
 static void decode_brand(struct cpudata *cpu)
@@ -118,6 +117,8 @@ void display_basic_intel_info(struct cpudata *cpu)
 	}
 	if (cpu->brand > 0)
 		decode_brand(cpu);
+	if (cpu->serialno[0])
+		printf("Processor serial: %s\n", cpu->serialno);
 }
 
 

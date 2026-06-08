@@ -60,51 +60,6 @@ This eliminates the brittle extern web and makes the data flow readable.
 
 ---
 
-## 4. Separate data gathering from display
-
-`show_info()` in `identify.c` mixes printing with control flow; the vendor
-`identify_*` functions also print directly. The gather pass
-(`fill_in_cpu_info`) already exists as a concept — finish the split so that
-all vendor code only writes to `struct cpudata` and a separate display layer
-does all `printf` calls. This is a prerequisite for any future JSON/machine-
-readable output mode, and makes the `bind_cpu` FIXME in `x86info.c:37`
-easier to resolve.
-
-### Steps
-
-1. Read `identify.c` and `show_info()`. List every `printf`/`puts` call
-   inside `identify_*` functions and note what data they print (i.e. which
-   field of `struct cpudata` or which local variable holds that value).
-
-2. For each piece of data currently printed directly by vendor code, add a
-   field to `struct cpudata` in `include/x86info.h` if one does not already
-   exist (e.g. `char brand_string[48]`, `unsigned int apic_id`).
-
-3. Refactor each vendor `identify_*` function to write into the new
-   `struct cpudata` fields instead of calling `printf`. Remove the `printf`
-   calls from the identify functions.
-
-4. In `show_info()` (or a new `display_cpu_info()` function), add the
-   corresponding `printf` calls that read from `struct cpudata` and emit
-   the same output as before.
-
-5. Resolve the `bind_cpu` FIXME in `x86info.c:37`: `display_detailed_info()`
-   calls `bind_cpu(cpu->number)` before `show_info()`. Once all data is
-   gathered in the gather pass (where `bind_cpu` is called per-CPU), the
-   display pass does not need a separate `bind_cpu`; remove it.
-
-6. Run `make`. Verify output of `./x86info -a` matches the pre-refactor
-   output by diffing against a saved golden output captured beforehand:
-   ```
-   ./x86info -a > before.txt   # run before refactor
-   ./x86info -a > after.txt    # run after refactor
-   diff before.txt after.txt
-   ```
-
-7. Commit: `identify: separate data-gather from display`
-
----
-
 ## 5. Consolidate per-OS cpuid/rdmsr shims behind a clean interface
 
 `cpuid-linux.c`, `cpuid-freebsd.c`, `cpuid-netbsd.c`, `cpuid-solaris.c` and
