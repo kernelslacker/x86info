@@ -56,7 +56,7 @@ static void set_max_phy_addr(struct cpudata *cpu)
 {
 	unsigned int value;
 
-	if (!max_phy_addr) {
+	if (!max_phy_addr && cpu->maxei >= 0x80000008) {
 		cpuid(cpu->number, 0x80000008, &value, NULL, NULL, NULL);
 		max_phy_addr = value & 0xFF;
 	}
