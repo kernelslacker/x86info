@@ -100,9 +100,9 @@ void get_intel_topology(struct cpudata *cpu)
 	if (debug == 1) {
 		if ((cpu->x86_max_cores * cpu->num_siblings) > 1) {
 			printf("%s:\n", __func__);
-			printf("\tSiblings: %d\n", cpu->num_siblings);
-			printf("\tPhysical Processor ID: %d\n", cpu->phys_proc_id);
-			printf("\tProcessor Core ID: %d\n", cpu->cpu_core_id);
+			printf("\tSiblings: %u\n", cpu->num_siblings);
+			printf("\tPhysical Processor ID: %u\n", cpu->phys_proc_id);
+			printf("\tProcessor Core ID: %u\n", cpu->cpu_core_id);
 		}
 	}
 out:

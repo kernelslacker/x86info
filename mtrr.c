@@ -90,7 +90,7 @@ static void decode_mtrrcap(int cpu, int msr)
 			!! ((unsigned int) val & IA32_MTRRCAP_WC));
 		printf("fix:%d ",
 			!! ((unsigned int) val & IA32_MTRRCAP_FIX));
-		printf("vcnt:%d\n",
+		printf("vcnt:%u\n",
 			(unsigned int) val & IA32_MTRRCAP_VCNT);
 	}
 }

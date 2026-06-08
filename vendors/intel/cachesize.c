@@ -424,7 +424,7 @@ static void decode_general_tlb(struct cpudata *cpu, int output)
 		if (!typename)
 			typename = "Unknown";
 		if (output)
-			printf(" L%d %s TLB: %s pages, %s associative, "
+			printf(" L%u %s TLB: %s pages, %s associative, "
 				"%u entries\n", level, typename,
 				pagenames[page_size], assoc, entries);
 	}

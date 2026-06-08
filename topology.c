@@ -46,7 +46,7 @@ void display_topology(struct cpudata *head)
 		cpu = head;
 		printf("cpu->phys_proc_id: ");
 		for (i = 0; i < nrCPUs; i++) {
-			printf("%d, ", cpu->phys_proc_id);
+			printf("%u, ", cpu->phys_proc_id);
 			cpu = cpu->next;
 		}
 		printf("\n");
@@ -54,7 +54,7 @@ void display_topology(struct cpudata *head)
 		cpu = head;
 		printf("cpu->x86_max_cores: ");
 		for (i = 0; i < nrCPUs; i++) {
-			printf("%d, ", cpu->x86_max_cores);
+			printf("%u, ", cpu->x86_max_cores);
 			cpu = cpu->next;
 		}
 		printf("\n");
@@ -62,7 +62,7 @@ void display_topology(struct cpudata *head)
 		cpu = head;
 		printf("cpu->cpu_core_id: ");
 		for (i = 0; i < nrCPUs; i++) {
-			printf("%d, ", cpu->cpu_core_id);
+			printf("%u, ", cpu->cpu_core_id);
 			cpu = cpu->next;
 		}
 		printf("\n");
@@ -123,7 +123,7 @@ void display_topology(struct cpudata *head)
 	}
 
 	if (cpu->flags_edx & X86_FEATURE_HT && cpu->num_siblings > 1)
-		printf(" with hyper-threading (%d threads per core)", cpu->num_siblings);
+		printf(" with hyper-threading (%u threads per core)", cpu->num_siblings);
 
 	free(sockets);
 }
