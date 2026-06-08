@@ -89,6 +89,6 @@ void fix_amd_model_name(struct cpudata *cpu, char *cp, size_t len)
 		if (model_number)
 			(void)snprintf(cp, len, "%s %d", name, model_number);
 		else
-			strcpy(cp, name);
+			(void)snprintf(cp, len, "%s", name);
 	}
 }
