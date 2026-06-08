@@ -160,6 +160,8 @@ void dump_mtrrs(struct cpudata *cpu)
 	unsigned int i;
 	unsigned int vcnt;
 
+	max_phy_addr = 0;
+
 	if (!(cpu->flags_edx & (X86_FEATURE_MTRR)))
 		return;
 
