@@ -74,6 +74,88 @@ static const char *intel_cpuid_06_eax_flags_desc[32] = {
 	"Hardware Duty Cycling",				// 13
 };
 
+/* CPUID 0x00000007 ECX flags (subleaf 0) */
+static const char *intel_cpuid_07_ecx_flags[32] = {
+	"prefetchwt1", "avx512vbmi", "umip", "pku", "ospke", "waitpkg", "avx512vbmi2", "cet_ss",
+	"gfni", "vaes", "vpclmulqdq", "avx512vnni", "avx512bitalg", "tme", "avx512vpopcntdq", NULL,
+	"la57", NULL, NULL, NULL, NULL, NULL, "rdpid", "kl",
+	"bus_lock_detect", "cldemote", NULL, "movdiri", "movdir64b", "enqcmd", "sgx_lc", "pks"
+};
+
+static const char *intel_cpuid_07_ecx_flags_desc[32] = {
+	"PREFETCHWT1 instruction",			// 0
+	"AVX-512 Vector Bit Manipulation Instructions",	// 1
+	"User-Mode Instruction Prevention (UMIP)",	// 2
+	"Protection Keys for User-mode pages",		// 3
+	"OS has set CR4.PKE",				// 4
+	"TPAUSE/UMONITOR/UMWAIT instructions",		// 5
+	"AVX-512 Vector Bit Manipulation Instructions 2",// 6
+	"CET Shadow Stack",				// 7
+	"Galois Field New Instructions",		// 8
+	"Vector AES (VAES)",				// 9
+	"VPCLMULQDQ instruction",			// 10
+	"AVX-512 Vector Neural Network Instructions",	// 11
+	"AVX-512 Bit Algorithm Instructions",		// 12
+	"Total Memory Encryption",			// 13
+	"AVX-512 Vector Population Count D/Q",		// 14
+	NULL,						// 15
+	"5-level paging (57-bit VA)",			// 16
+	NULL, NULL, NULL, NULL, NULL,			// 17-21 (MAWAU field)
+	"Read Processor ID (RDPID)",			// 22
+	"Key Locker",					// 23
+	"Bus Lock Detection",				// 24
+	"Cache Line Demote (CLDEMOTE)",			// 25
+	NULL,						// 26
+	"MOVDIRI instruction",				// 27
+	"MOVDIR64B instruction",			// 28
+	"ENQCMD instruction",				// 29
+	"SGX Launch Configuration",			// 30
+	"Protection Keys for Supervisor-mode",		// 31
+};
+
+/* CPUID 0x00000007 EDX flags (subleaf 0) */
+static const char *intel_cpuid_07_edx_flags[32] = {
+	NULL, NULL, "avx512_4vnniw", "avx512_4fmaps", "fsrm", "uintr", NULL, NULL,
+	"avx512vp2intersect", "srbds_ctrl", "md_clear", "rtm_always_abort", NULL, "rtm_force_abort", "serialize", "hybrid",
+	"tsxldtrk", NULL, "pconfig", "arch_lbr", "ibt", NULL, "amx_bf16", "avx512_fp16",
+	"amx_tile", "amx_int8", "ibrs_ibpb", "stibp", "l1d_flush", "arch_capabilities", "core_capabilities", "ssbd"
+};
+
+static const char *intel_cpuid_07_edx_flags_desc[32] = {
+	NULL,							// 0
+	NULL,							// 1
+	"AVX-512 4-register Neural Network Instructions",	// 2
+	"AVX-512 4-register Multiply Accumulation Single",	// 3
+	"Fast Short REP MOVSB",					// 4
+	"User Interrupts",					// 5
+	NULL,							// 6
+	NULL,							// 7
+	"AVX-512 VP2INTERSECT Instructions",			// 8
+	"SRBDS mitigation control MSR",				// 9
+	"VERW clears CPU buffers (MD_CLEAR)",			// 10
+	"RTM always aborts",					// 11
+	NULL,							// 12
+	"RTM force abort MSR",					// 13
+	"SERIALIZE instruction",				// 14
+	"Hybrid CPU (big/little cores)",			// 15
+	"TSX Suspend Load Address Tracking",			// 16
+	NULL,							// 17
+	"Platform Configuration (PCONFIG)",			// 18
+	"Architectural Last Branch Records",			// 19
+	"Indirect Branch Tracking (CET IBT)",			// 20
+	NULL,							// 21
+	"AMX BFloat16",						// 22
+	"AVX-512 FP16",						// 23
+	"AMX Tile Architecture",				// 24
+	"AMX Int8",						// 25
+	"IBRS / IBPB indirect branch controls",			// 26
+	"Single Thread Indirect Branch Predictors (STIBP)",	// 27
+	"L1D cache flush",					// 28
+	"IA32_ARCH_CAPABILITIES MSR",				// 29
+	"IA32_CORE_CAPABILITIES MSR",				// 30
+	"Speculative Store Bypass Disable (SSBD)",		// 31
+};
+
 /* CPUID 0x00000007 EBX flags */
 static const char *intel_cpuid_07_ebx_flags[32] = {
 	"fsgsbase", "tsc_adj", "sgx", "bmi1", "hle", "avx2", "fdp_excp", "smep",
@@ -146,11 +228,13 @@ void show_extra_intel_flags(struct cpudata *cpu)
 		cpuid(cpu->number, 0x06, &eax, &ebx, &ecx, &edx);
 		flag_decode(eax, "6:eax", intel_cpuid_06_eax_flags, intel_cpuid_06_eax_flags_desc);
 	}
-	// Intel CPUID 0x07
+	// Intel CPUID 0x07 subleaf 0
 	if (cpu->cpuid_level >= 0x07) {
 		ecx = 0;
 		cpuid(cpu->number, 0x07, &eax, &ebx, &ecx, &edx);
 		flag_decode(ebx, "7:ebx", intel_cpuid_07_ebx_flags, intel_cpuid_07_ebx_flags_desc);
+		flag_decode(ecx, "7:ecx", intel_cpuid_07_ecx_flags, intel_cpuid_07_ecx_flags_desc);
+		flag_decode(edx, "7:edx", intel_cpuid_07_edx_flags, intel_cpuid_07_edx_flags_desc);
 	}
 	// Intel CPUID 0x80000007
 	if (cpu->maxei >= 0x80000007) {
