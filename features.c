@@ -156,6 +156,65 @@ static const char *intel_cpuid_07_edx_flags_desc[32] = {
 	"Speculative Store Bypass Disable (SSBD)",		// 31
 };
 
+/* CPUID 0x00000007 EAX flags (subleaf 1) */
+static const char *intel_cpuid_07_1_eax_flags[32] = {
+	NULL, NULL, NULL, NULL, "avx_vnni", "avx512_bf16", NULL, NULL,
+	NULL, NULL, "fzrm", "fsrs", "fsrc", NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, "hreset", "avx_ifma",
+	NULL, NULL, "lam", NULL, NULL, NULL, NULL, NULL
+};
+
+static const char *intel_cpuid_07_1_eax_flags_desc[32] = {
+	NULL,						// 0
+	NULL,						// 1
+	NULL,						// 2
+	NULL,						// 3
+	"AVX Vector Neural Network Instructions",	// 4
+	"AVX-512 BF16 Instructions",			// 5
+	NULL,						// 6
+	NULL,						// 7
+	NULL,						// 8
+	NULL,						// 9
+	"Fast Zero-length REP MOVSB",			// 10
+	"Fast Short REP STOSB",				// 11
+	"Fast Short REP CMPSB/SCASB",			// 12
+	NULL,						// 13
+	NULL,						// 14
+	NULL,						// 15
+	NULL,						// 16
+	NULL,						// 17
+	NULL,						// 18
+	NULL,						// 19
+	NULL,						// 20
+	NULL,						// 21
+	"HRESET instruction",				// 22
+	"AVX Integer Fused Multiply-Add",		// 23
+	NULL,						// 24
+	NULL,						// 25
+	"Linear Address Masking (LAM)",			// 26
+	NULL,						// 27
+	NULL,						// 28
+	NULL,						// 29
+	NULL,						// 30
+	NULL,						// 31
+};
+
+/* CPUID 0x00000007 EDX flags (subleaf 1) */
+static const char *intel_cpuid_07_1_edx_flags[32] = {
+	NULL, NULL, NULL, NULL, "amx_fp16", NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+};
+
+static const char *intel_cpuid_07_1_edx_flags_desc[32] = {
+	NULL,						// 0
+	NULL,						// 1
+	NULL,						// 2
+	NULL,						// 3
+	"AMX FP16 Instructions",			// 4
+};
+
 /* CPUID 0x00000007 EBX flags */
 static const char *intel_cpuid_07_ebx_flags[32] = {
 	"fsgsbase", "tsc_adj", "sgx", "bmi1", "hle", "avx2", "fdp_excp", "smep",
@@ -230,11 +289,19 @@ void show_extra_intel_flags(struct cpudata *cpu)
 	}
 	// Intel CPUID 0x07 subleaf 0
 	if (cpu->cpuid_level >= 0x07) {
+		unsigned int max_subleaf;
 		ecx = 0;
 		cpuid(cpu->number, 0x07, &eax, &ebx, &ecx, &edx);
+		max_subleaf = eax;
 		flag_decode(ebx, "7:ebx", intel_cpuid_07_ebx_flags, intel_cpuid_07_ebx_flags_desc);
 		flag_decode(ecx, "7:ecx", intel_cpuid_07_ecx_flags, intel_cpuid_07_ecx_flags_desc);
 		flag_decode(edx, "7:edx", intel_cpuid_07_edx_flags, intel_cpuid_07_edx_flags_desc);
+		// Intel CPUID 0x07 subleaf 1
+		if (max_subleaf >= 1) {
+			cpuid_count(cpu->number, 0x07, 1, &eax, &ebx, &ecx, &edx);
+			flag_decode(eax, "7.1:eax", intel_cpuid_07_1_eax_flags, intel_cpuid_07_1_eax_flags_desc);
+			flag_decode(edx, "7.1:edx", intel_cpuid_07_1_edx_flags, intel_cpuid_07_1_edx_flags_desc);
+		}
 	}
 	// Intel CPUID 0x80000007
 	if (cpu->maxei >= 0x80000007) {
