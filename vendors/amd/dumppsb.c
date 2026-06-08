@@ -100,11 +100,11 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 
 					p = (char *) pst + sizeof (struct pst_s);
 					for (j = 0 ; j < numpstates; j++) {
-						fid = *p++;
+						fid = (unsigned char)*p++ & 0x1f;
 						printf("    FID: 0x%x (%.1fx [%.0fMHz])\t", fid,
 							fid_codes[fid], pst->fsbspeed * fid_codes[fid]);
 
-						vid = *p++;
+						vid = (unsigned char)*p++ & 0x1f;
 						printf("VID: 0x%x (%0.3fV)\n", vid, mobile_vid_table[vid]);
 					}
 					printf("\n");
