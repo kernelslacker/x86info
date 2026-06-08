@@ -60,67 +60,7 @@ This eliminates the brittle extern web and makes the data flow readable.
 
 ---
 
-## 4. Replace unsafe string operations
-
-- `vendors/intel/info.c:30-35`: six chained `sprintf` calls writing into a
-  fixed char buffer with no bounds check — convert to `snprintf`.
-- `vendors/amd/identify.c:41-44`: `strncat(s, …, CPU_NAME_LEN-1)` does not
-  account for the current fill level of `s`; use `strlcat` or rewrite with an
-  offset pointer like the rest of the name-building code does.
-
-### Steps
-
-#### Part A — `vendors/intel/info.c`
-
-1. Read `vendors/intel/info.c`. Find the block starting around line 28 with
-   six `p += sprintf(p, …)` calls that write a serial number into
-   `cpu->serialno`.
-
-2. Determine the size of `cpu->serialno` (look for its declaration in
-   `include/x86info.h` inside `struct cpudata`).
-
-3. Replace each `sprintf` with `snprintf`. Track the remaining buffer space
-   using an offset variable:
-   ```c
-   int n, rem = sizeof(cpu->serialno);
-   char *p = cpu->serialno;
-   n = snprintf(p, rem, "%04X", signature >> 16);
-   p += n; rem -= n;
-   n = snprintf(p, rem, "-%04X", signature & 0xffff);
-   p += n; rem -= n;
-   /* … and so on for the remaining four fields … */
-   ```
-
-4. Verify no `sprintf` calls remain in that function with
-   `grep -n 'sprintf' vendors/intel/info.c`.
-
-#### Part B — `vendors/amd/identify.c`
-
-1. Read `vendors/amd/identify.c`. Find the `strncat(s, …, CPU_NAME_LEN-1)`
-   calls around lines 41–44.
-
-2. The bug: `strncat(dst, src, n)` appends at most `n` bytes of `src`, but
-   `n` must be the *remaining* space in `dst` minus the null terminator, not
-   the total buffer size. The current code passes `CPU_NAME_LEN-1` regardless
-   of how full `s` already is.
-
-3. Rewrite using an offset pointer (consistent with the surrounding code):
-   ```c
-   size_t used = strlen(s);
-   size_t left = CPU_NAME_LEN - used;
-   if (left > 1)
-       strncat(s + used, p, left - 1);
-   ```
-   or add `#include <string.h>` and use `strlcat(s, p, CPU_NAME_LEN)` if
-   `strlcat` is available on all target platforms (it is on Linux with glibc
-   2.38+, and BSD; add a portability note otherwise).
-
-4. Run `make` and confirm clean build. Commit:
-   `vendors: fix sprintf→snprintf in intel/info.c, fix strncat bounds in amd/identify.c`
-
----
-
-## 7. Separate data gathering from display
+## 4. Separate data gathering from display
 
 `show_info()` in `identify.c` mixes printing with control flow; the vendor
 `identify_*` functions also print directly. The gather pass
@@ -165,7 +105,7 @@ easier to resolve.
 
 ---
 
-## 10. Consolidate per-OS cpuid/rdmsr shims behind a clean interface
+## 5. Consolidate per-OS cpuid/rdmsr shims behind a clean interface
 
 `cpuid-linux.c`, `cpuid-freebsd.c`, `cpuid-netbsd.c`, `cpuid-solaris.c` and
 the corresponding `rdmsr-*` files all duplicate the same `bind_cpu` +
