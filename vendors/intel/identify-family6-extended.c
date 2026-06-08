@@ -199,6 +199,7 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	{ .model = 0xbe, .flags = ONLYMODEL, .str = "[Alder Lake N]" },
 	{ .model = 0xbf, .flags = ONLYMODEL, .str = "[Raptor Lake S]" },
 
+	{ .model = 0xc5, .flags = ONLYMODEL, .str = "[Arrow Lake]" },
 	{ .model = 0xcf, .flags = ONLYMODEL, .str = "[Emerald Rapids]" },
 };
 
