@@ -352,7 +352,7 @@ static void decode_general_cache(struct cpudata *cpu, int output)
 	}
 }
 
-const char * const tlbnames[31] = {
+const char * const tlbnames[32] = {
 	NULL,
 	"Data",
 	"Instruction",
