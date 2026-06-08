@@ -12,7 +12,7 @@ void binary(unsigned int n, unsigned long value)
 	unsigned int i;
 
 	for (i = 0; i < n; i++, value<<=1)
-		(void)putchar( (1<<(n-1) & value) ? '1' : '0' );
+		(void)putchar( (1UL<<(n-1) & value) ? '1' : '0' );
 	(void)putchar('\n');
 }
 
