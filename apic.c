@@ -63,7 +63,7 @@ static unsigned long long apic_physical_address(int cpu, int msr)
 	return apic_phys_addr;
 }
 
-static unsigned int * mapping_apic_registers(unsigned long long addr)
+static volatile unsigned int * mapping_apic_registers(unsigned long long addr)
 {
 	unsigned long long offset;
 	void *mapped;
@@ -79,7 +79,7 @@ static unsigned int * mapping_apic_registers(unsigned long long addr)
 		return NULL;
 
 	apic_mapped_base = mapped;
-	return (unsigned int *)((char *)mapped + offset);
+	return (volatile unsigned int *)((char *)mapped + offset);
 }
 
 static void unmapping_apic_registers(void)
@@ -91,7 +91,9 @@ static void unmapping_apic_registers(void)
 }
 
 
-static void dump_apic(unsigned int *apic_reg_buffer, unsigned int offset)
+/* Registers sit on 16-byte boundaries, so offset * 4 indexes the unsigned
+ * int array; the highest (APIC_TDCR) is at byte 992 of the 4096-byte page. */
+static void dump_apic(volatile unsigned int *apic_reg_buffer, unsigned int offset)
 {
 	printf("0x%08x\n", apic_reg_buffer[ (offset * APIC_REGISTER_ALIGNED_SIZE) ]);
 }
@@ -99,7 +101,7 @@ static void dump_apic(unsigned int *apic_reg_buffer, unsigned int offset)
 
 void dump_apics(struct cpudata *cpu)
 {
-	unsigned int *apic_reg_buffer;
+	volatile unsigned int *apic_reg_buffer;
 	unsigned long long phys_addr;
 	int i;
 
