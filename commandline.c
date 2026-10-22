@@ -108,6 +108,8 @@ void parse_command_line(int argc, char **argv)
 					show_mptable = 1;
 					show_mtrr = 1;
 					show_machine_check = 1;
+				} else {
+					fprintf(stderr, "Not root: skipping the APIC, BIOS, MSR, microcode, MP table, MTRR and machine check output.\n");
 				}
 				show_addr_sizes = 1;
 				show_bugs = 1;
