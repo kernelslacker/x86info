@@ -21,13 +21,26 @@
 static char *amd_nameptr;
 #define add_to_cpuname(x) CPU_NAME_APPEND(amd_nameptr, cpu, x)
 
+/* Append str to the buffer s at sp, truncating; returns the new end. */
+static char *k8_append(char *s, char *sp, const char *str)
+{
+	size_t left = CPU_NAME_LEN - (sp - s);
+	int n;
+
+	if (left <= 1)
+		return sp;
+	n = snprintf(sp, left, "%s", str);
+	if (n < 0)
+		return sp;
+	return sp + ((size_t)n < left ? (size_t)n : left - 1);
+}
+
 static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 {
 	unsigned int i, id, cont;
 	int ret;
 	char s[CPU_NAME_LEN];
 	char *sp;
-	size_t left;
 
 	s[0] = 0;
 	cont = 0;
@@ -40,15 +53,11 @@ static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 		if (r->nameid & id)
 			p = get_k8_name(id);
 		if (p) {
-			if (cont) {
-				left = CPU_NAME_LEN - (sp - s) - 1;
-				if (left > 0)
-					sp += snprintf(sp, left, "/");
-			} else
+			if (cont)
+				sp = k8_append(s, sp, "/");
+			else
 				cont = 1;
-			left = CPU_NAME_LEN - (sp - s) - 1;
-			if (left > 0)
-				sp += snprintf(sp, left, "%s", p);
+			sp = k8_append(s, sp, p);
 		}
 	}
 	if (r) {
