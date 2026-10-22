@@ -14,9 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A16. vendors/amd/msr-k6.c:36 — `0x3ff << 22` overflows int (UB). Use
-    `0x3ffULL << 22`. [haiku]
-
 A17. vendors/amd/msr-k6.c:57 — EWBE field is 3 bits but only values 0-3
     are handled; 4-7 print nothing and leave the line unterminated. Mask to
     2 bits per the K6 docs or add a default. [haiku]

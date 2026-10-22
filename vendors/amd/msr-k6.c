@@ -33,7 +33,7 @@ void dump_k6_MSR (struct cpudata *cpu)
 	/* K6-2 core (Stepping 8-F), K6-III or later. */
 	if ((cpu->model > 8) || ((cpu->model == 8) && (cpu->stepping >= 8))) {
 		if (read_msr (cpu->number, 0xC0000082, &val) == 1) {
-			if (!(val & (0x3ff << 22)))
+			if (!(val & (0x3ffULL << 22)))
 				printf("Write allocate disabled\n");
 			else {
 				printf("Write allocate enable limit: %dMbytes\n", (int) ((val >> 22) & 0x3ff) * 4);
