@@ -304,12 +304,10 @@ static void set_zen_revinfo(const char *series, const struct zen_die *dies,
 			snprintf(c->name, CPU_NAME_LEN,
 				 "AMD %s Series Processor (%s)", series,
 				 dies[i].name);
-			set_connector(c);
 			return;
 		}
 	}
 	snprintf(c->name, CPU_NAME_LEN, "Unknown CPU 0x%x", (unsigned)id);
-	set_connector(c);
 }
 
 static void set_fam17h_revinfo(int id, struct cpudata *c)
