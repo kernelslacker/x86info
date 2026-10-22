@@ -175,10 +175,6 @@ D8. mtrr.c:25 — static max_phy_addr is reset and set per call; pass it to
 
 ## 🟡 Deprecated/Obsolete API Usage
 
-E1. cpuid-linux.c:20 — `#define __USE_GNU` is a glibc-internal hack. Define
-    `_GNU_SOURCE` before the first include. Same for lsmsr/lsmsr.c:23, where
-    the define after the includes has no effect. [haiku]
-
 E2. lsmsr/lsmsr.c:130 — lseek64/off64_t/_LARGEFILE64_SOURCE (removed in
     musl, deprecated in glibc). x86 Linux off_t is 64-bit on x86_64; use
     pread() with `-D_FILE_OFFSET_BITS=64`. [haiku]

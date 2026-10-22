@@ -6,6 +6,7 @@
 
 #ifdef __linux__
 
+#define _GNU_SOURCE
 #define _FILE_OFFSET_BITS 64
 
 #include <stdio.h>
@@ -17,7 +18,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-#define __USE_GNU
 #include <sched.h>
 
 #include <x86info.h>
