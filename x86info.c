@@ -20,6 +20,77 @@ unsigned int nrCPUs = 1;
 static int nrSMPCPUs;
 
 
+/* Parse a kernel cpu list such as "0-3,8,10-11" into an array of ids. */
+static unsigned int *parse_cpu_list(const char *s, unsigned int *count)
+{
+	unsigned int *ids = NULL;
+	unsigned int n = 0;
+	char *end;
+
+	while (*s && *s != '\n') {
+		unsigned long lo = strtoul(s, &end, 10);
+		unsigned long hi = lo;
+
+		if (end == s)
+			goto bad;
+		if (*end == '-') {
+			s = end + 1;
+			hi = strtoul(s, &end, 10);
+			if (end == s || hi < lo)
+				goto bad;
+		}
+		if (hi >= 65536 || n + (hi - lo + 1) > 65536)
+			goto bad;
+		ids = realloc(ids, (n + (hi - lo + 1)) * sizeof(*ids));
+		if (!ids)
+			return NULL;
+		for (; lo <= hi; lo++)
+			ids[n++] = lo;
+		s = end;
+		if (*s == ',')
+			s++;
+		else if (*s && *s != '\n')
+			goto bad;
+	}
+	if (n == 0)
+		goto bad;
+	*count = n;
+	return ids;
+bad:
+	free(ids);
+	return NULL;
+}
+
+/* Online CPU ids, which need not be contiguous. */
+static unsigned int *get_online_cpus(unsigned int *count)
+{
+	char buf[4096];
+	unsigned int *ids = NULL;
+	FILE *f = fopen("/sys/devices/system/cpu/online", "r");
+
+	if (f) {
+		if (fgets(buf, sizeof(buf), f))
+			ids = parse_cpu_list(buf, count);
+		fclose(f);
+	}
+	if (!ids) {
+		long n = sysconf(_SC_NPROCESSORS_ONLN);
+		long i;
+
+		if (n < 1 || n > 65535) {
+			printf("CPU count is bogus: defaulting to 1 CPU.\n");
+			n = 1;
+		}
+		ids = malloc(n * sizeof(*ids));
+		if (!ids)
+			return NULL;
+		for (i = 0; i < n; i++)
+			ids[i] = i;
+		*count = n;
+	}
+	return ids;
+}
+
 static void separator(void)
 {
 	int j;
@@ -123,7 +194,7 @@ static void fill_in_cpu_info(struct cpudata *cpu, struct cpudata *cpus)
 	bind_cpu(cpu->number);
 	if (!show_MHz) {
 		cpu->MHz = 0;
-	} else if (cpu->number == 0 || all_cpus) {
+	} else if (cpu == cpus || all_cpus) {
 		estimate_MHz(cpu);
 	} else {
 		cpu->MHz = cpus[0].MHz;
@@ -138,6 +209,7 @@ static void fill_in_cpu_info(struct cpudata *cpu, struct cpudata *cpus)
 int main(int argc, char **argv)
 {
 	struct cpudata *cpus;
+	unsigned int *online;
 	unsigned int i;
 	unsigned int display_one_cpu = 1;
 
@@ -159,12 +231,10 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 
-	nrCPUs = sysconf(_SC_NPROCESSORS_ONLN);
-
-	/* can't have more than 65535 CPUs (some arbitrary large number) */
-	if (nrCPUs > 65535) {
-		printf("CPU count is bogus: defaulting to 1 CPU.\n");
-		nrCPUs = 1;
+	online = get_online_cpus(&nrCPUs);
+	if (!online) {
+		perror("malloc");
+		exit(EXIT_FAILURE);
 	}
 
 	/* Allocate a flat array of CPUs */
@@ -175,9 +245,10 @@ int main(int argc, char **argv)
 	}
 
 	for (i = 0; i < nrCPUs; i++) {
-		cpus[i].number = i;
+		cpus[i].number = online[i];
 		fill_in_cpu_info(&cpus[i], cpus);
 	}
+	free(online);
 
 	display_one_cpu = check_cpu_similarity(cpus);
 
