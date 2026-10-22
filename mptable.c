@@ -289,19 +289,21 @@ static int apic_probe(unsigned long* paddr)
 		exit(EXIT_FAILURE);
 	}
 
-	--segment;				/* less ONE_KBYTE */
-	target = segment * 1024;
-	seekEntry(target);
-	if (readEntry(buffer, ONE_KBYTE)) {
-		printf("error reading 1KB from %p\n", (void *)target);
-		exit(EXIT_FAILURE);
-	}
+	target = 0;
+	if (segment != 0) {
+		--segment;			/* less ONE_KBYTE */
+		target = segment * 1024;
+		seekEntry(target);
+		if (readEntry(buffer, ONE_KBYTE)) {
+			printf("error reading 1KB from %p\n", (void *)target);
+			exit(EXIT_FAILURE);
+		}
 
-
-	for (x = 0; x < ONE_KBYTE/4; NEXT(x)) {
-		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-			*paddr = (x*4) + target;
-			return 2;
+		for (x = 0; x < ONE_KBYTE/4; NEXT(x)) {
+			if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
+				*paddr = (x*4) + target;
+				return 2;
+			}
 		}
 	}
 
