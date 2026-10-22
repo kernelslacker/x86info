@@ -25,6 +25,21 @@ void display_MHz(struct cpudata *cpu)
 	}
 }
 
+/* With an invariant TSC the measured rate is the TSC rate, not the core clock. */
+void display_MHz_line(struct cpudata *cpu)
+{
+	unsigned int edx = 0;
+
+	if (cpu->maxei >= 0x80000007)
+		cpuid(cpu->number, 0x80000007, NULL, NULL, NULL, &edx);
+
+	display_MHz(cpu);
+	if (edx & (1 << 8))
+		printf(" TSC frequency.\n\n");
+	else
+		printf(" processor (estimate).\n\n");
+}
+
 static volatile int nosignal = 0;
 
 static void sighandler(int sig __attribute__((unused)))

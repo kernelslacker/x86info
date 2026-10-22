@@ -173,6 +173,7 @@ void dump_mtrrs(struct cpudata *cpu);
 void dump_apics(struct cpudata *cpu);
 
 void display_MHz(struct cpudata *cpu);
+void display_MHz_line(struct cpudata *cpu);
 void estimate_MHz(struct cpudata *cpu);
 
 int HaveCPUID(void);

@@ -83,10 +83,8 @@ static void display_detailed_info(struct cpudata *cpu)
 		printf("Address sizes : %u bits physical, %u bits virtual\n",
 			cpu->phyaddr_bits, cpu->viraddr_bits);
 
-	if (show_MHz) {
-		display_MHz(cpu);
-		printf(" processor (estimate).\n\n");
-	}
+	if (show_MHz)
+		display_MHz_line(cpu);
 }
 
 /*
@@ -123,7 +121,9 @@ static int check_cpu_similarity(struct cpudata *cpus)
 static void fill_in_cpu_info(struct cpudata *cpu, struct cpudata *cpus)
 {
 	bind_cpu(cpu->number);
-	if (cpu->number == 0 || all_cpus) {
+	if (!show_MHz) {
+		cpu->MHz = 0;
+	} else if (cpu->number == 0 || all_cpus) {
 		estimate_MHz(cpu);
 	} else {
 		cpu->MHz = cpus[0].MHz;
@@ -214,10 +214,6 @@ int main(int argc, char **argv)
 	}
 
 	display_topology(&cpus[0]);
-
-	printf(" running at an estimated ");
-	display_MHz(&cpus[0]);
-	printf("\n");
 
 	free(cpus);
 
