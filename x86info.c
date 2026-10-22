@@ -17,7 +17,7 @@
 unsigned int user_is_root = 0;
 
 unsigned int nrCPUs = 1;
-static unsigned int nrSMPCPUs;
+static int nrSMPCPUs;
 
 
 static void separator(void)
@@ -194,8 +194,8 @@ int main(int argc, char **argv)
 		if (user_is_root) {
 			nrSMPCPUs = enumerate_cpus();
 			if (nrSMPCPUs > 0)
-				if (nrSMPCPUs > nrCPUs)
-					printf(" (but found %u CPUs in MPTable!)", nrSMPCPUs);
+				if ((unsigned int)nrSMPCPUs > nrCPUs)
+					printf(" (but found %d CPUs in MPTable!)", nrSMPCPUs);
 		}
 		if (nrCPUs >= 2)
 			printf("\n");
