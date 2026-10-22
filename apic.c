@@ -48,6 +48,16 @@ static int apic_is_enable(int cpu, int msr)
 	return ret;
 }
 
+/* APIC_BASE bit 10: x2APIC mode, where the MMIO register page is disabled. */
+static int apic_is_x2apic(int cpu, int msr)
+{
+	unsigned long long val;
+
+	if (!apic_msr_value(cpu, msr, &val))
+		return 0;
+	return (val >> 10) & 0x1;
+}
+
 static unsigned long long apic_physical_address(int cpu, int msr)
 {
 	unsigned long long val;
@@ -118,6 +128,11 @@ void dump_apics(const struct cpudata *cpu)
 	**/
 	if (!(apic_is_enable(cpu->number, IA32_APIC_BASE_MSR)))
 		return;
+
+	if (apic_is_x2apic(cpu->number, IA32_APIC_BASE_MSR)) {
+		printf("APIC registers: x2APIC mode, MMIO dump not available\n");
+		return;
+	}
 
 	phys_addr = apic_physical_address(cpu->number, IA32_APIC_BASE_MSR);
 
