@@ -105,6 +105,11 @@ struct ProcEntry {
 	u32	reserved2;
 };
 
+/* These are read straight from /dev/mem: the layout must have no padding. */
+_Static_assert(sizeof(struct mpfps) == 16, "mpfps layout");
+_Static_assert(sizeof(struct mpcth) == 44, "mpcth layout");
+_Static_assert(sizeof(struct ProcEntry) == 20, "ProcEntry layout");
+
 
 static void seekEntry(unsigned long addr)
 {

@@ -38,6 +38,10 @@ struct pst_s {
 	u8 numpstates;
 };
 
+/* These are read straight from /dev/mem: the layout must have no padding. */
+_Static_assert(sizeof(struct psb_s) == 16, "psb_s layout");
+_Static_assert(sizeof(struct pst_s) == 8, "pst_s layout");
+
 
 void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 {
