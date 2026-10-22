@@ -35,18 +35,19 @@
 
 int bind_cpu(unsigned int cpunr)
 {
-        int ret;
-	cpu_set_t set;
-	cpu_set_t tmp_set;
+	cpu_set_t *set;
+	size_t size = CPU_ALLOC_SIZE(cpunr + 1);
+	int ret;
 
-        ret = sched_getaffinity(getpid(), sizeof(set), &set);
-        if (ret)
-                return ret;
+	set = CPU_ALLOC(cpunr + 1);
+	if (!set)
+		return -1;
 
-        memcpy(&tmp_set, &set, sizeof(cpu_set_t));
-        CPU_ZERO(&set);
-        CPU_SET(cpunr, &set);
-        return sched_setaffinity(getpid(), sizeof(set), &set);
+	CPU_ZERO_S(size, set);
+	CPU_SET_S(cpunr, size, set);
+	ret = sched_setaffinity(getpid(), size, set);
+	CPU_FREE(set);
+	return ret;
 }
 
 static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
