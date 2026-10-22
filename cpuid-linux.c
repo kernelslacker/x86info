@@ -68,12 +68,6 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned char buffer[CPUID_CHUNK_SIZE];
 	int fh;
 
-	if (eax != NULL) {
-		*eax = (unsigned int) idx;
-		if (*eax == 4 && ecx != NULL)
-			*ecx = idx >> 32;
-	}
-
 	if (nodriver == 1) {
 		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
 			printf("%s", NATIVE_CPUID_FAILED_MSG);

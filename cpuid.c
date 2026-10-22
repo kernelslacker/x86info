@@ -56,8 +56,8 @@ void cpuid_count(unsigned int CPU_number, unsigned int op, int count,
 	unsigned int *eax, unsigned int *ebx,
 	unsigned int *ecx, unsigned int *edx)
 {
-	*ecx = count;
-	cpuid(CPU_number, op, eax, ebx, ecx, edx);
+	cpuid(CPU_number, op | ((unsigned long long)(unsigned int)count << 32),
+	      eax, ebx, ecx, edx);
 }
 
 unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op)
