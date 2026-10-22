@@ -183,10 +183,6 @@ E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr
     backend, so MSR output and per-CPU cpuid don't work. Implement them
     (processor_bind(), /dev/cpu/N/msr) or drop the README claim. [sonnet]
 
-E4. flags.mk:32-35 — the "-Werror on gcc 6.3 devel builds" block is dead:
-    VERSION is a date so `grep pre` never matches, and gcc 6 is ancient.
-    Delete or replace with an explicit `WERROR=1` knob. [haiku]
-
 E5. lsmsr/createheader.py — `#!/usr/bin/python`, no `with open`, regex
     `re.search("^{")` for startswith, the `"<msr.h>"` branch emits an
     invalid include, no type hints. Bring to PYTHON.md standards (pathlib,
