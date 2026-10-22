@@ -186,6 +186,8 @@ void dump_mtrrs(struct cpudata *cpu)
 		printf("MTRRfix16K_A0000 (0x259): ");
 		dump_mtrr (cpu->number, 0x259);
 
+		printf("MTRRfix4K_C0000 (0x268): ");
+		dump_mtrr (cpu->number, 0x268);
 		printf("MTRRfix4K_C8000 (0x269): ");
 		dump_mtrr (cpu->number, 0x269);
 		printf("MTRRfix4K_D0000 0x26a: ");
