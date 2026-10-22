@@ -16,11 +16,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
 
 ## 🟡 Performance
 
-B1. cpuid-linux.c:79-99 / rdmsr-linux.c:30-50 — every cpuid()/read_msr()
-    does open+lseek+read+close; native_cpuid() also does sched_setaffinity
-    per call. Cache one fd per CPU (opened lazily, closed at exit) and use
-    pread(). [sonnet]
-
 B2. x86info.c:197 — with --all-cpus --mhz, estimate_MHz() runs a 1 s busy
     loop serially per CPU (128 s on a 128-thread box). Measure all CPUs in
     parallel (one pthread per CPU, pinned) or measure for a shorter
@@ -184,8 +179,7 @@ E1. cpuid-linux.c:20 — `#define __USE_GNU` is a glibc-internal hack. Define
     `_GNU_SOURCE` before the first include. Same for lsmsr/lsmsr.c:23, where
     the define after the includes has no effect. [haiku]
 
-E2. cpuid-linux.c:84, rdmsr-linux.c:37, lsmsr/lsmsr.c:130,
-    cpuid-solaris.c:57 — lseek64/off64_t/_LARGEFILE64_SOURCE (removed in
+E2. lsmsr/lsmsr.c:130 — lseek64/off64_t/_LARGEFILE64_SOURCE (removed in
     musl, deprecated in glibc). x86 Linux off_t is 64-bit on x86_64; use
     pread() with `-D_FILE_OFFSET_BITS=64`. [haiku]
 

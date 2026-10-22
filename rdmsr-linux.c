@@ -6,18 +6,44 @@
 
 #ifdef __linux__
 
-#define _LARGEFILE64_SOURCE
+#define _FILE_OFFSET_BITS 64
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <errno.h>
+#include <string.h>
 #include <x86info.h>
+
+#define MAX_CPUS 8192
+
+/* Per-CPU /dev/cpu/N/msr descriptors, opened lazily and stored as fd + 1. */
+static int msr_fds[MAX_CPUS];
+
+static int msr_fd(int cpu)
+{
+	char cpuname[32];
+	int fh;
+
+	if (cpu < 0 || cpu >= MAX_CPUS)
+		return -1;
+	if (msr_fds[cpu])
+		return msr_fds[cpu] - 1;
+
+	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%d/msr", cpu);
+	fh = open(cpuname, O_RDONLY);
+	if (fh == -1)
+		perror(cpuname);
+	else
+		msr_fds[cpu] = fh + 1;
+	return fh;
+}
 
 int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 {
-	char cpuname[16];
 	unsigned long long raw;
 	int fh;
 	static int nodriver=0;
@@ -25,29 +51,16 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 	if (nodriver==1)
 		return 0;
 
-	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%d/msr", cpu);
-
-	fh = open(cpuname, O_RDONLY);
+	fh = msr_fd(cpu);
 	if (fh == -1) {
-		perror(cpuname);
 		nodriver=1;
 		return 0;
 	}
 
-	if (lseek64(fh, (off64_t) idx, SEEK_SET) == -1) {
-		perror("lseek");
-		close(fh);
+	if (pread(fh, &raw, sizeof(raw), (off_t)idx) != sizeof(raw))
 		return 0;
-	}
-
-	if (read(fh, &raw, sizeof(raw)) != sizeof(raw)) {
-		close(fh);
-		return 0;
-	}
 
 	*val = raw;
-	if (close(fh) == -1)
-		perror("close");
 	return 1;
 }
 

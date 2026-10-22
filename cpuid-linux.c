@@ -6,7 +6,7 @@
 
 #ifdef __linux__
 
-#define _LARGEFILE64_SOURCE
+#define _FILE_OFFSET_BITS 64
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -57,6 +57,28 @@ static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
  */
 #define CPUID_CHUNK_SIZE (16)
 
+#define MAX_CPUS 8192
+
+/* Per-CPU /dev/cpu/N/cpuid descriptors, opened lazily and stored as fd + 1. */
+static int cpuid_fds[MAX_CPUS];
+
+static int cpuid_fd(unsigned int cpunr)
+{
+	char cpuname[32];
+	int fh;
+
+	if (cpunr >= MAX_CPUS)
+		return -1;
+	if (cpuid_fds[cpunr])
+		return cpuid_fds[cpunr] - 1;
+
+	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%u/cpuid", cpunr);
+	fh = open(cpuname, O_RDONLY);
+	if (fh != -1)
+		cpuid_fds[cpunr] = fh + 1;
+	return fh;
+}
+
 void cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax,
 	unsigned int *ebx,
@@ -64,45 +86,32 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *edx)
 {
 	static int nodriver=0;
-	char cpuname[20];
 	unsigned char buffer[CPUID_CHUNK_SIZE];
-	int fh;
+	int fh = -1;
 
-	if (nodriver == 1) {
-		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
-			printf("%s", NATIVE_CPUID_FAILED_MSG);
-		return;
-	}
+	/* Use the /dev/cpu interface in preference to the _up code. */
+	if (nodriver == 0)
+		fh = cpuid_fd(CPU_number);
 
-	memset(cpuname, 0, sizeof(cpuname));
-	/* Ok, use the /dev/cpu interface in preference to the _up code. */
-	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%u/cpuid", CPU_number);
-
-	fh = open(cpuname, O_RDONLY);
-	if (fh != -1) {
-		memset(buffer, 0, sizeof(buffer));
-		if (lseek64(fh, (off64_t)idx, SEEK_SET) < 0)
-			printf("cpuid seek error: %s\n", strerror(errno));
-		else if (read(fh, &buffer[0], CPUID_CHUNK_SIZE) != CPUID_CHUNK_SIZE)
-			perror(cpuname);
-		if (eax != NULL)
-			memcpy(eax, buffer, 4);
-		if (ebx != NULL)
-			memcpy(ebx, buffer + 4, 4);
-		if (ecx != NULL)
-			memcpy(ecx, buffer + 8, 4);
-		if (edx != NULL)
-			memcpy(edx, buffer + 12, 4);
-
-		if (close(fh) == -1)
-			perror("close");
-	} else {
-		/* Something went wrong, just do UP and hope for the best. */
+	/* Something went wrong, just do UP and hope for the best. */
+	if (fh == -1) {
 		nodriver = 1;
 		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
 			printf("%s", NATIVE_CPUID_FAILED_MSG);
 		return;
 	}
+
+	memset(buffer, 0, sizeof(buffer));
+	if (pread(fh, buffer, CPUID_CHUNK_SIZE, (off_t)idx) != CPUID_CHUNK_SIZE)
+		printf("cpuid read error: %s\n", strerror(errno));
+	if (eax != NULL)
+		memcpy(eax, buffer, 4);
+	if (ebx != NULL)
+		memcpy(ebx, buffer + 4, 4);
+	if (ecx != NULL)
+		memcpy(ecx, buffer + 8, 4);
+	if (edx != NULL)
+		memcpy(edx, buffer + 12, 4);
 }
 
 #endif	/* __linux__ */
