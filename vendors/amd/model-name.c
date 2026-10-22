@@ -25,6 +25,7 @@ void fix_amd_model_name(struct cpudata *cpu, char *cp, size_t len)
 		/* processor name string table */
 		int model_number = 0;
 		const char *name = NULL;
+		const char *sub;
 
 		switch (BrandTableIndex) {
 		case 0x00: name = "AMD Engineering Sample"; break;
@@ -86,8 +87,12 @@ void fix_amd_model_name(struct cpudata *cpu, char *cp, size_t len)
 		case 'E': model_number = 9 + NN; break;
 		}
 
-		if (model_number)
-			(void)snprintf(cp, len, "%s %d", name, model_number);
+		/* substitute the model number at the "%d" in the table entry */
+		sub = model_number ? strstr(name, "%d") : NULL;
+
+		if (sub)
+			(void)snprintf(cp, len, "%.*s%d%s",
+				       (int)(sub - name), name, model_number, sub + 2);
 		else
 			(void)snprintf(cp, len, "%s", name);
 	}
