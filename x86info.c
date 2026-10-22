@@ -176,8 +176,6 @@ static int check_cpu_similarity(struct cpudata *cpus)
 	for (i = 1; i < nrCPUs; i++) {
 		if (cpus[i].efamily != cpus[0].efamily)
 			return 0;
-		if (cpus[i].emodel != cpus[0].emodel)
-			return 0;
 		if (cpus[i].family != cpus[0].family)
 			return 0;
 		if (((cpus[i].emodel << 4) + cpus[i].model) != ((cpus[0].emodel << 4) + cpus[0].model))
