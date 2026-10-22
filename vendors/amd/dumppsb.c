@@ -17,7 +17,9 @@
 
 #define START 0x000c0000L
 #define END   0x000ffff0L
-#define ROMSIZE (END-START)+1
+#define ROMSIZE ((END-START)+1)
+
+#define PSB_SIGLEN 10
 
 struct psb_s {
 	u8 signature[10];
@@ -40,7 +42,7 @@ struct pst_s {
 void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 {
 	int fd, i;
-	char *map, *p;
+	char *map, *p, *end;
 
 	fd = open("/dev/mem", O_RDONLY);
 	if (fd == -1) {
@@ -58,14 +60,20 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 		return;
 	}
 
-	for (i = 0; i < ROMSIZE; i++) {
+	end = map + ROMSIZE;
+
+	for (i = 0; i <= ROMSIZE - PSB_SIGLEN; i++) {
 		struct psb_s *psb;
 		struct pst_s *pst;
-		int numpstates, j;
+		int numpstates, j, t;
 		unsigned int fid, vid;
 
-		if (memcmp(p, "AMDK7PNOW!",  10) == 0) {
+		if (memcmp(p, "AMDK7PNOW!", PSB_SIGLEN) == 0) {
 			printf("Found PSB header at %p\n", p);
+			if (end - p < (long) sizeof(struct psb_s)) {
+				printf("PSB header runs past the end of the ROM\n");
+				goto out;
+			}
 			psb = (struct psb_s *) p;
 			printf("Table version: 0x%x\n", (unsigned int) psb->tableversion);
 			if (psb->tableversion != 0x12) {
@@ -86,12 +94,20 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 
 			p += sizeof (struct psb_s);
 
-			for (i = 0 ; i < psb->numpst; i++) {
+			for (t = 0 ; t < psb->numpst; t++) {
+				if (end - p < (long) sizeof(struct pst_s)) {
+					printf("PST table runs past the end of the ROM\n");
+					goto out;
+				}
 				pst = (struct pst_s *) p;
 				numpstates = pst->numpstates;
+				if (end - p - (long) sizeof(struct pst_s) < 2L * numpstates) {
+					printf("PST table runs past the end of the ROM\n");
+					goto out;
+				}
 
 				if ((etuple(cpu) == pst->cpuid) && (maxfid == pst->maxfid) && (startvid == pst->startvid)) {
-					printf(" PST:%d (@%p)\n", i, pst);
+					printf(" PST:%d (@%p)\n", t, pst);
 					printf("  cpuid: 0x%x\t", pst->cpuid);
 					printf("  fsb: %d\t", (int) pst->fsbspeed);
 					printf("  maxFID: 0x%x\t", (unsigned int) pst->maxfid);
