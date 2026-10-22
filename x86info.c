@@ -23,7 +23,7 @@ static int nrSMPCPUs;
 /* Parse a kernel cpu list such as "0-3,8,10-11" into an array of ids. */
 static unsigned int *parse_cpu_list(const char *s, unsigned int *count)
 {
-	unsigned int *ids = NULL;
+	unsigned int *ids = NULL, *tmp;
 	unsigned int n = 0;
 	char *end;
 
@@ -41,9 +41,10 @@ static unsigned int *parse_cpu_list(const char *s, unsigned int *count)
 		}
 		if (hi >= 65536 || n + (hi - lo + 1) > 65536)
 			goto bad;
-		ids = realloc(ids, (n + (hi - lo + 1)) * sizeof(*ids));
-		if (!ids)
-			return NULL;
+		tmp = realloc(ids, (n + (hi - lo + 1)) * sizeof(*ids));
+		if (!tmp)
+			goto bad;
+		ids = tmp;
 		for (; lo <= hi; lo++)
 			ids[n++] = lo;
 		s = end;

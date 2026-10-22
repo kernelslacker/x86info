@@ -14,9 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A23. x86info.c:44 — `ids = realloc(ids, ...)` leaks the old block on
-    failure. Use a temporary. [haiku]
-
 A24. vendors/amd/dumppsb.c:76,114 — `%p` prints the mmap'd virtual address,
     not the physical ROM address. Print `START + (p - map)`. [haiku]
 
