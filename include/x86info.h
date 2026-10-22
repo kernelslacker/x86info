@@ -152,8 +152,8 @@ void identify_natsemi(struct cpudata *cpu);
 void identify_sis(struct cpudata *cpu);
 
 void get_feature_flags(struct cpudata *cpu);
-void display_feature_flags(struct cpudata *cpu);
-void show_extra_flags(struct cpudata *cpu);
+void display_feature_flags(const struct cpudata *cpu);
+void show_extra_flags(const struct cpudata *cpu);
 
 int bind_cpu(unsigned int cpunr);
 
@@ -176,10 +176,10 @@ void dumpmsr_bin(int cpunum, unsigned int msr, int size);
 void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end);
 
 void dump_mtrrs(struct cpudata *cpu);
-void dump_apics(struct cpudata *cpu);
+void dump_apics(const struct cpudata *cpu);
 
-void display_MHz(struct cpudata *cpu);
-void display_MHz_line(struct cpudata *cpu);
+void display_MHz(const struct cpudata *cpu);
+void display_MHz_line(const struct cpudata *cpu);
 void estimate_MHz(struct cpudata *cpu);
 
 int HaveCPUID(void);

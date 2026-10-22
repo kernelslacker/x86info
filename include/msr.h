@@ -52,7 +52,7 @@ static uint32_t get_reg_addr(const char *name, struct reg_spec *table)
 
 static const char *get_reg_name(uint32_t reg, struct reg_spec *table)
 {
-	struct reg_spec *d;
+	const struct reg_spec *d;
 	const char *s = NULL;
 
 	d = get_reg_spec(reg, table);

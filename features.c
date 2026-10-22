@@ -278,7 +278,7 @@ static const char *cpuid_80000007_edx_flags_desc[32] = {
 	"Invariant/nonstop/constant TSC",			// 8
 };
 
-void show_extra_flags(struct cpudata *cpu)
+void show_extra_flags(const struct cpudata *cpu)
 {
 	unsigned int eax = 0, ebx = 0, ecx = 0, edx = 0;
 
@@ -569,7 +569,7 @@ static const char *transmeta_cap_flags[32] = {
 };
 
 
-static void decode_feature_flags(struct cpudata *cpu)
+static void decode_feature_flags(const struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 
@@ -660,7 +660,7 @@ static void test_longnop(void)
 	printf("Long NOPs supported: %s\n", died ? "no" : "yes");
 }
 
-void display_feature_flags(struct cpudata *cpu)
+void display_feature_flags(const struct cpudata *cpu)
 {
 	decode_feature_flags(cpu);
 	bind_cpu(cpu->number);

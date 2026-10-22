@@ -13,7 +13,7 @@
 #include <x86info.h>
 #include <rdtsc.h>
 
-void display_MHz(struct cpudata *cpu)
+void display_MHz(const struct cpudata *cpu)
 {
 	if (cpu->MHz < 1000)
 		printf("%uMHz", cpu->MHz);
@@ -26,7 +26,7 @@ void display_MHz(struct cpudata *cpu)
 }
 
 /* With an invariant TSC the measured rate is the TSC rate, not the core clock. */
-void display_MHz_line(struct cpudata *cpu)
+void display_MHz_line(const struct cpudata *cpu)
 {
 	unsigned int edx = 0;
 

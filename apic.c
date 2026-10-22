@@ -95,15 +95,15 @@ static void unmapping_apic_registers(void)
 
 /* Registers sit on 16-byte boundaries, so offset * 4 indexes the unsigned
  * int array; the highest (APIC_TDCR) is at byte 992 of the 4096-byte page. */
-static void dump_apic(volatile unsigned int *apic_reg_buffer, unsigned int offset)
+static void dump_apic(const volatile unsigned int *apic_reg_buffer,unsigned int offset)
 {
 	printf("0x%08x\n", apic_reg_buffer[ (offset * APIC_REGISTER_ALIGNED_SIZE) ]);
 }
 
 
-void dump_apics(struct cpudata *cpu)
+void dump_apics(const struct cpudata *cpu)
 {
-	volatile unsigned int *apic_reg_buffer;
+	const volatile unsigned int *apic_reg_buffer;
 	unsigned long long phys_addr;
 	int i;
 
