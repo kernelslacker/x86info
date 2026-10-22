@@ -938,7 +938,7 @@ void display_amd_info(struct cpudata *cpu)
 		cpuid (cpu->number, 0x05, &eax, &ebx, &ecx, NULL);
 		printf("Monitor/Mwait: min/max line size %d/%d%s%s\n",
 		       (int) (eax & 0xffff), (int) (ebx & 0xffff),
-		       (ecx & 0x2) ? ", ecx bit 0 support" : "",
+		       (ecx & 0x2) ? ", interrupt break event" : "",
 		       (ecx & 0x1) ? ", enumeration extension" : "");
 	}
 
