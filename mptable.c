@@ -63,6 +63,8 @@ static int pfd;			/* physical /dev/mem fd */
 static int	ncpu;
 static int	silent;
 
+#define mp_error(...)	do { if (!silent) printf(__VA_ARGS__); } while (0)
+
 /* MP Floating Pointer Structure */
 struct mpfps {
 	char	signature[4];
@@ -161,7 +163,7 @@ static int processorEntry(void)
 
 	/* read it into local memory */
 	if (readEntry(&entry, sizeof(entry)) < 0) {
-		printf("Error reading processor entry\n");
+		mp_error("Error reading processor entry\n");
 		return -1;
 	}
 
@@ -200,7 +202,7 @@ static int MPConfigTableHeader(u32 pap)
 	int count, c;
 
 	if (pap == 0) {
-		printf("MP Configuration Table Header MISSING!\n");
+		mp_error("MP Configuration Table Header MISSING!\n");
 		return SMP_NO;
 	}
 
@@ -209,7 +211,7 @@ static int MPConfigTableHeader(u32 pap)
 
 	/* read in cth structure */
 	if (readAt(paddr, &cth, sizeof(cth))) {
-		printf("error reading MP Config table header structure\n");
+		mp_error("error reading MP Config table header structure\n");
 		return SMP_NO;
 	}
 
@@ -258,7 +260,7 @@ static int apic_probe(unsigned long* paddr)
 
 	/* search Extended Bios Data Area, if present */
 	if (readAt((unsigned long)EBDA_POINTER, &segment, 2)) {
-		printf("error reading EBDA pointer\n");
+		mp_error("error reading EBDA pointer\n");
 		return 0;
 	}
 
@@ -270,7 +272,7 @@ static int apic_probe(unsigned long* paddr)
 		if (debug)
 			printf("EBDA segment ptr: %lx\n", target);
 		if (readAt(target, buffer, ONE_KBYTE)) {
-			printf("error reading 1K from %p\n", (void *)target);
+			mp_error("error reading 1K from %p\n", (void *)target);
 			return 0;
 		}
 
@@ -284,7 +286,7 @@ static int apic_probe(unsigned long* paddr)
 
 	/* read CMOS for real top of mem */
 	if (readAt((unsigned long)TOPOFMEM_POINTER, &segment, 2)) {
-		printf("error reading CMOS for real top of mem (%p)\n", (void *) TOPOFMEM_POINTER);
+		mp_error("error reading CMOS for real top of mem (%p)\n", (void *) TOPOFMEM_POINTER);
 		return 0;
 	}
 
@@ -293,7 +295,7 @@ static int apic_probe(unsigned long* paddr)
 		--segment;			/* less ONE_KBYTE */
 		target = segment * 1024;
 		if (readAt(target, buffer, ONE_KBYTE)) {
-			printf("error reading 1KB from %p\n", (void *)target);
+			mp_error("error reading 1KB from %p\n", (void *)target);
 			return 0;
 		}
 
@@ -309,7 +311,7 @@ static int apic_probe(unsigned long* paddr)
 	if (target != (DEFAULT_TOPOFMEM - 1024)) {
 		target = (DEFAULT_TOPOFMEM - 1024);
 		if (readAt(target, buffer, ONE_KBYTE)) {
-			printf("error reading DEFAULT_TOPOFMEM - 1024 from %p\n", (void *) target);
+			mp_error("error reading DEFAULT_TOPOFMEM - 1024 from %p\n", (void *) target);
 			return 0;
 		}
 
@@ -323,7 +325,7 @@ static int apic_probe(unsigned long* paddr)
 
 	/* search the BIOS */
 	if (readAt(BIOS_BASE, buffer, BIOS_SIZE)) {
-		printf("error reading BIOS_BASE from %p\n", (void *)BIOS_BASE);
+		mp_error("error reading BIOS_BASE from %p\n", (void *)BIOS_BASE);
 		return 0;
 	}
 
@@ -337,7 +339,7 @@ static int apic_probe(unsigned long* paddr)
 
 	/* search the extended BIOS */
 	if (readAt(BIOS_BASE2, buffer, BIOS_SIZE)) {
-		printf("error reading BIOS_BASE2 from %p\n", (void *)BIOS_BASE2);
+		mp_error("error reading BIOS_BASE2 from %p\n", (void *)BIOS_BASE2);
 		return 0;
 	}
 
@@ -352,7 +354,7 @@ static int apic_probe(unsigned long* paddr)
 	/* search additional memory */
 	target = GROPE_AREA1;
 	if (readAt(target, buffer, GROPE_SIZE)) {
-		printf("error reading GROPE_AREA1 from %p\n", (void *)target);
+		mp_error("error reading GROPE_AREA1 from %p\n", (void *)target);
 		return 0;
 	}
 
@@ -366,7 +368,7 @@ static int apic_probe(unsigned long* paddr)
 
 	target = GROPE_AREA2;
 	if (readAt(target, buffer, GROPE_SIZE)) {
-		printf("error reading GROPE_AREA2 from %p\n", (void *)target);
+		mp_error("error reading GROPE_AREA2 from %p\n", (void *)target);
 		return 0;
 	}
 
@@ -404,7 +406,7 @@ int enumerate_cpus(void)
 
 	/* read in mpfps structure*/
 	if (readAt(paddr, &mpfps, sizeof(struct mpfps))) {
-		printf("error reading mpfpsfrom %p\n", (void *)paddr);
+		mp_error("error reading mpfpsfrom %p\n", (void *)paddr);
 		close(pfd);
 		return 1;
 	}
@@ -442,7 +444,7 @@ void display_mptable(void)
 
 	/* read in mpfps structure*/
 	if (readAt(paddr, &mpfps, sizeof(struct mpfps))) {
-		printf("error reading mpfps from %p\n", (void *)paddr);
+		mp_error("error reading mpfps from %p\n", (void *)paddr);
 		close(pfd);
 		return;
 	}

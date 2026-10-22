@@ -14,11 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A14. mptable.c MPConfigTableHeader() / enumerate_cpus() — "MP Configuration
-    Table Header MISSING!" and read errors print even in silent mode,
-    which runs on every root invocation (x86info.c:265). Gate on !silent.
-    [haiku]
-
 A15. cpuid.c:79 — `for (i = begin; i <= end; i++)` never terminates if a
     bogus maxei/maxei2 is 0xffffffff. Sanity-check maxei/maxei2 in
     get_cpu_info_basics() (upper 16 bits must equal the range base, cap the
