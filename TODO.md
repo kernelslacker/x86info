@@ -175,9 +175,9 @@ D8. mtrr.c:25 — static max_phy_addr is reset and set per call; pass it to
 
 ## 🟡 Deprecated/Obsolete API Usage
 
-E2. lsmsr/lsmsr.c:130 — lseek64/off64_t/_LARGEFILE64_SOURCE (removed in
-    musl, deprecated in glibc). x86 Linux off_t is 64-bit on x86_64; use
-    pread() with `-D_FILE_OFFSET_BITS=64`. [haiku]
+E2. cpuid-solaris.c:57 — lseek64/off64_t/_LARGEFILE64_SOURCE (removed in
+    musl, deprecated in glibc). Use pread() with `-D_FILE_OFFSET_BITS=64`.
+    [haiku]
 
 E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr
     backend, so MSR output and per-CPU cpuid don't work. Implement them

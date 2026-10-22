@@ -8,7 +8,7 @@
  */
 
 #define _GNU_SOURCE
-#define _LARGEFILE64_SOURCE
+#define _FILE_OFFSET_BITS 64
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -121,19 +121,13 @@ static void version(void)
 
 static int get_msr_val(unsigned int msr, unsigned long long *val)
 {
-	off64_t off;
+	ssize_t ret;
 	int err;
 
 	*val = 0;
-	off = lseek64(g.fd, (off64_t) msr, SEEK_SET);
-	if (off == (off_t) -1) {
-		perror("invalid MSR");
-		return 1;
-	}
-
-	off = read(g.fd, val, 8);
+	ret = pread(g.fd, val, 8, (off_t) msr);
 	err = errno;
-	if (off != 8) {
+	if (ret != 8) {
 		fflush(stdout);
 		fprintf(stderr,
 			"could not read MSR 0x%8.8x (%s): %s\n",
