@@ -31,16 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C3. Per-vendor name appenders duplicated 6 ways: static `*_nameptr` +
-    `add_to_cpuname` macro in amd/identify.c:21, centaur/identify.c:10,
-    cyrix/identify.c:11, natsemi, rise, sis, plus the strlen-based one in
-    intel.h:6 and k8_append() in amd/identify.c:25. [sonnet]
-    1. Replace CPU_NAME_APPEND with a function
-       `void cpu_name_append(struct cpudata *, const char *)` in a .c file,
-       appending at strlen(cpu->name).
-    2. Delete every `*_nameptr` and per-file macro, and k8_append() (build
-       the k8 name with cpu_name_append directly).
-
 C4. lsmsr/lsmsr.c:220-252 duplicates the vendor-signature switch from
     identify.c:21-60 (and misses Hygon/Transmeta). Extract
     `enum vendor vendor_from_cpuid(unsigned int ebx, unsigned int edx)`

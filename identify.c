@@ -3,6 +3,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <x86info.h>
 #include <amd.h>
 #include <intel.h>
@@ -82,6 +83,14 @@ void get_cpu_info_basics(struct cpudata *cpu)
 		cpu->phyaddr_bits = address_bits & 0xFF;
 		cpu->viraddr_bits = (address_bits >> 8) & 0xFF;
 	}
+}
+
+void cpu_name_append(struct cpudata *cpu, const char *str)
+{
+	size_t len = strlen(cpu->name);
+
+	if (len < CPU_NAME_LEN - 1)
+		snprintf(cpu->name + len, CPU_NAME_LEN - len, "%s", str);
 }
 
 void identify(struct cpudata *cpu)

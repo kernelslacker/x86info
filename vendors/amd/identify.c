@@ -18,34 +18,18 @@
 #include <amd.h>
 #include <amd-revision.h>
 
-static char *amd_nameptr;
-#define add_to_cpuname(x) CPU_NAME_APPEND(amd_nameptr, cpu, x)
-
-/* Append str to the buffer s at sp, truncating; returns the new end. */
-static char *k8_append(char *s, char *sp, const char *str)
-{
-	size_t left = CPU_NAME_LEN - (sp - s);
-	int n;
-
-	if (left <= 1)
-		return sp;
-	n = snprintf(sp, left, "%s", str);
-	if (n < 0)
-		return sp;
-	return sp + ((size_t)n < left ? (size_t)n : left - 1);
-}
-
 static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 {
 	unsigned int i, id, cont;
-	int ret;
-	char s[CPU_NAME_LEN];
-	char *sp;
 
-	s[0] = 0;
+	c->name[0] = 0;
+	if (!r) {
+		cpu_name_append(c, "Unknown CPU");
+		return;
+	}
+
 	cont = 0;
-	sp = s;
-	for (i = 0; (r != NULL) && (i < ARRAY_SIZE(k8_names)); i++) {
+	for (i = 0; i < ARRAY_SIZE(k8_names); i++) {
 		const char *p;
 
 		p = NULL;
@@ -54,18 +38,15 @@ static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 			p = get_k8_name(id);
 		if (p) {
 			if (cont)
-				sp = k8_append(s, sp, "/");
+				cpu_name_append(c, "/");
 			else
 				cont = 1;
-			sp = k8_append(s, sp, p);
+			cpu_name_append(c, p);
 		}
 	}
-	if (r) {
-		ret =  snprintf(c->name, CPU_NAME_LEN, "%s (%s)", s, r->rev);
-		if (ret < 0)
-			abort();
-	} else
-		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
+	cpu_name_append(c, " (");
+	cpu_name_append(c, r->rev);
+	cpu_name_append(c, ")");
 }
 
 static void set_k8_revinfo(int id, struct cpudata *c)
@@ -574,8 +555,6 @@ static void determine_xp_mp(struct cpudata *cpu)
 void identify_amd(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
-
-	amd_nameptr = cpu->name;
 
 	if (cpu->cpuid_level < 1)
 		return;

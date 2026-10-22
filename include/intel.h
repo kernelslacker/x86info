@@ -2,12 +2,6 @@
 
 #include <string.h>
 
-/* Append to cpu->name, at the end of whatever is already there. */
-#define add_to_cpuname(x) do { \
-	char *_name_end = (cpu)->name + strlen((cpu)->name); \
-	CPU_NAME_APPEND(_name_end, cpu, x); \
-} while (0)
-
 void decode_intel_caches (struct cpudata *cpu, int output);
 void decode_intel_machine_check(int cpunum, int family);
 

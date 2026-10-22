@@ -122,13 +122,9 @@ unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op);
 
 #define ARRAY_SIZE(x) ((int)(sizeof(x)/sizeof(x[0])))
 
-#define CPU_NAME_APPEND(ptr, cpu, s) do { \
-	int _avail = (int)((cpu)->name + CPU_NAME_LEN - (ptr)); \
-	if (_avail > 1) { \
-		int _n = snprintf((ptr), (size_t)_avail, "%s", (s)); \
-		(ptr) += (_n > 0 && _n < _avail) ? _n : _avail - 1; \
-	} \
-} while (0)
+/* Append to cpu->name, at the end of whatever is already there. */
+void cpu_name_append(struct cpudata *cpu, const char *str);
+#define add_to_cpuname(x) cpu_name_append(cpu, x)
 
 #define get_name(title,type,table) \
 static const char *get_##title##_name(type id) \

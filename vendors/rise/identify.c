@@ -6,13 +6,8 @@
 #include <stdio.h>
 #include <x86info.h>
 
-static char *rise_nameptr;
-#define add_to_cpuname(x) CPU_NAME_APPEND(rise_nameptr, cpu, x)
-
 void identify_rise(struct cpudata *cpu)
 {
-	rise_nameptr = cpu->name;
-
 	switch (tuple(cpu) & 0xff0) {
 	case 0x500:	add_to_cpuname("iDragon (0.25um)");
 			break;

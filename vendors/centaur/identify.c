@@ -7,13 +7,8 @@
 #include <x86info.h>
 #include "centaur.h"
 
-static char *centaur_nameptr;
-#define add_to_cpuname(x) CPU_NAME_APPEND(centaur_nameptr, cpu, x)
-
 void identify_centaur(struct cpudata *cpu)
 {
-	centaur_nameptr = cpu->name;
-
 	switch (tuple(cpu) & 0xff0) {
 		case 0x540:
 			add_to_cpuname("Winchip C6");

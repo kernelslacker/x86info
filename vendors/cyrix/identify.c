@@ -8,9 +8,6 @@
 #include <x86info.h>
 #include "cyrix.h"
 
-static char *cyrix_nameptr;
-#define add_to_cpuname(x) CPU_NAME_APPEND(cyrix_nameptr, cpu, x)
-
 /* Decode TLB and cache info descriptors */
 void decode_cyrix_tlb(int x)
 {
@@ -31,8 +28,6 @@ void identify_cyrix(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 	int known = 1;
-
-	cyrix_nameptr = cpu->name;
 
 	switch (tuple(cpu) & 0xff0) {
 		case 0x450:	add_to_cpuname("MediaGX");

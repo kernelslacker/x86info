@@ -6,13 +6,8 @@
 #include <stdio.h>
 #include <x86info.h>
 
-static char *NatSemi_nameptr;
-#define add_to_cpuname(x) CPU_NAME_APPEND(NatSemi_nameptr, cpu, x)
-
 void identify_natsemi(struct cpudata *cpu)
 {
-	NatSemi_nameptr = cpu->name;
-
 	switch (tuple(cpu) & 0xff0) {
 		case 0x540:	add_to_cpuname("Geode GX1");
 					break;
