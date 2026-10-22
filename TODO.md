@@ -31,10 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C1. include/x86info.h:109-113,121, include/intel.h:12,18 — cpuid_UP(),
-    show_intel_caches(), dump_ida_msrs() are declared but never defined.
-    Remove. [haiku]
-
 C2. include/x86info.h:101-106,85 — struct fields written but never read:
     apicid, nr_logical, x2apic_id, cachesize_trace, initial_apicid (only
     used as a local in intel/topology.c). Remove. [haiku]

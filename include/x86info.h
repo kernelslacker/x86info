@@ -110,8 +110,6 @@ struct cpudata {
 	unsigned int num_siblings;
 };
 
-void cpuid_UP(unsigned int idx,
-	unsigned long *eax, unsigned long *ebx, unsigned long *ecx, unsigned long *edx);
 void cpuid(unsigned int cpu, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
 void cpuid4(unsigned int CPU_number, unsigned long long idx,
