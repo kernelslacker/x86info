@@ -440,6 +440,12 @@ void decode_intel_caches(struct cpudata *cpu, int output)
 
 	memset(&unknown_array, 0, sizeof(unknown_array));
 
+	cpu->cachesize_trace = 0;
+	cpu->cachesize_L1_I = 0;
+	cpu->cachesize_L1_D = 0;
+	cpu->cachesize_L2 = 0;
+	cpu->cachesize_L3 = 0;
+
 	if (output)
 		printf("Cache info\n");
 
