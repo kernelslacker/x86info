@@ -73,7 +73,7 @@ static void set_k8_revinfo(int id, struct cpudata *c)
 	int i;
 	struct k8_rev *r;
 
-	c->connector = 0;
+	c->connector = CONN_UNKNOWN;
 	r = NULL;
 	for (i = 0; i < ARRAY_SIZE(k8_revisions); i++) {
 		if (k8_revisions[i].eax == id) {
@@ -83,7 +83,7 @@ static void set_k8_revinfo(int id, struct cpudata *c)
 	}
 
 	set_k8_name(r, c);
-	c->connector = r ? r->socketid : 0;
+	c->connector = r ? r->socketid : CONN_UNKNOWN;
 }
 
 
