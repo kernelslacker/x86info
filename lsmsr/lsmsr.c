@@ -78,7 +78,7 @@ static struct option lopts[] = {
 	{0, 0, 0, 0}
 };
 
-#define OPTSTRING "ac:C:f:hlm:r:vV:"
+#define OPTSTRING "ac:f:hlm:r:vV:"
 
 #define _USAGE "[OPTION] <MSR>\n"
 
@@ -265,7 +265,8 @@ static void set_family_model(void)
 	if (!g.model) {
 		cpuid(g.cpu, 1, &a, NULL, NULL, NULL);
 		g.model = (a >> 4) & 0xf;
-		if (g.model == 0xf)
+		/* ExtModel applies when the base family is 6 or 0xf */
+		if (((a >> 8) & 0xf) == 0xf || ((a >> 8) & 0xf) == 6)
 			g.model |= (a >> 12) & 0xf0;
 	}
 }
