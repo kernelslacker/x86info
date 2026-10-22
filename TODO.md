@@ -2,17 +2,9 @@
 
 ## 🔴 Correctness
 
-A1. MHz.c:141 — TSC rate is rounded to 50 MHz with a ">15 rounds up" rule,
-    so 2933 becomes 2950 and 2666 becomes 2700. Every SKU table entry that
-    isn't a multiple of 50 can never match (identify-family6.c:444-446
-    QX6800/QX6700, identify-family6-extended.c 2830/2330/2930/2660/3330/
-    3060/2150/1330/1860...). [sonnet]
-    - Round to the nearest 1 MHz (or nearest 10), not 50.
-    - Match SKU tables with a tolerance (e.g. +/-1%) instead of `==`.
-
 A2. vendors/intel/identify-family6.c:422,424 — `cpu->MHz/100 == 1860` is
-    ~18 == 1860, never true; E6300/E6400 are never named. Compare against
-    the MHz value with the same tolerance helper as A1. [haiku]
+    ~18 == 1860, never true; E6300/E6400 are never named. Compare with
+    MHz_matches() (MHz.c). [haiku]
 
 A3. vendors/intel/identify-family6-extended.c:225 — SKU entries with `.mhz`
     only match when `--mhz` was given, because `cpu->MHz` is 0 at identify

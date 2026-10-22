@@ -440,14 +440,12 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 			/* The SKU is only distinguishable by frequency */
 			if (cpu->MHz == 0)
 				estimate_MHz(cpu);
-			switch (cpu->MHz) {
-			case 2930:	add_to_cpuname("[SL9UK/SLACP] [B3/G0] QX6800");
-					break;
-			case 2660:	add_to_cpuname("[SL9UL] [B3] QX6700");
-					break;
-			case 2400:	add_to_cpuname("[SL9UM] [B3] QX6600");
-					break;
-			}
+			if (MHz_matches(cpu->MHz, 2930))
+				add_to_cpuname("[SL9UK/SLACP] [B3/G0] QX6800");
+			else if (MHz_matches(cpu->MHz, 2660))
+				add_to_cpuname("[SL9UL] [B3] QX6700");
+			else if (MHz_matches(cpu->MHz, 2400))
+				add_to_cpuname("[SL9UM] [B3] QX6600");
 			break;
 
 		case 0xa:

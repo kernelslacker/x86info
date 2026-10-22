@@ -181,6 +181,7 @@ void dump_apics(const struct cpudata *cpu);
 void display_MHz(const struct cpudata *cpu);
 void display_MHz_line(const struct cpudata *cpu);
 void estimate_MHz(struct cpudata *cpu);
+int MHz_matches(unsigned int measured, unsigned int nominal);
 
 int HaveCPUID(void);
 int enumerate_cpus(void);

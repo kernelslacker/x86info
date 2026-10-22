@@ -137,9 +137,13 @@ void estimate_MHz(struct cpudata *cpu)
 		cpu->MHz = ((-1ULL - cycles[0]) + cycles[1]) / 1000000;
 	else
 		cpu->MHz = (cycles[1] - cycles[0]) / 1000000;
+}
 
-	if ((cpu->MHz % 50) > 15)
-		cpu->MHz = ((cpu->MHz / 50) * 50) + 50;
-	else
-		cpu->MHz = ((cpu->MHz / 50) * 50);
+/* True if a measured MHz is within 1% of a nominal SKU frequency. */
+int MHz_matches(unsigned int measured, unsigned int nominal)
+{
+	unsigned int diff = measured > nominal ? measured - nominal :
+						 nominal - measured;
+
+	return nominal != 0 && diff * 100 <= nominal;
 }
