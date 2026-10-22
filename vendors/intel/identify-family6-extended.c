@@ -223,6 +223,7 @@ static const char * get_namestring(struct cpudata *cpu)
 			return intel_fam6e_names[i].str;
 
 		if (intel_fam6e_names[i].mhz > 0) {
+			ensure_MHz(cpu);
 			if (!MHz_matches(cpu->MHz, intel_fam6e_names[i].mhz))
 				continue;
 			if (intel_fam6e_names[i].flags & ONLYMHZ)

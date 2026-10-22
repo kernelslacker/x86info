@@ -139,6 +139,22 @@ void estimate_MHz(struct cpudata *cpu)
 		cpu->MHz = (cycles[1] - cycles[0]) / 1000000;
 }
 
+/* Fill cpu->MHz, measuring the TSC rate only once per run. */
+void ensure_MHz(struct cpudata *cpu)
+{
+	static int measured;
+	static unsigned int tsc_MHz;
+
+	if (cpu->MHz)
+		return;
+	if (!measured) {
+		estimate_MHz(cpu);
+		tsc_MHz = cpu->MHz;
+		measured = 1;
+	}
+	cpu->MHz = tsc_MHz;
+}
+
 /* True if a measured MHz is within 1% of a nominal SKU frequency. */
 int MHz_matches(unsigned int measured, unsigned int nominal)
 {

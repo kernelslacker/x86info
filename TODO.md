@@ -2,18 +2,6 @@
 
 ## 🔴 Correctness
 
-A3. vendors/intel/identify-family6-extended.c:225 — SKU entries with `.mhz`
-    only match when `--mhz` was given, because `cpu->MHz` is 0 at identify
-    time otherwise (x86info.c:194-195). Names change depending on flags.
-    Decide on one rule: either always estimate when a table needs it
-    (as identify-family6.c:441 now does), or drop MHz-keyed entries and
-    fall back to the BIOS brand string. [sonnet]
-
-A4. vendors/intel/identify-family6.c:441 — estimate_MHz() is called from
-    identify, i.e. once per CPU in the fill loop: a 1 s busy loop per
-    Kentsfield core even when MHz wasn't requested. Estimate once on
-    cpus[0] and reuse. [sonnet]
-
 A5. vendors/intel/cachesize.c:274 — the "bit 31 means invalid register"
     check covers eax/ebx/ecx only (`j<3`); edx is never cleared, so garbage
     descriptors can be decoded. Use `j<4`. [haiku]

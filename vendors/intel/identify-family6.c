@@ -419,6 +419,7 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 			switch (cpu->cachesize_L2) {
 			case 2048:
 				add_to_cpuname("[B2]");
+				ensure_MHz(cpu);
 				if (MHz_matches(cpu->MHz, 1860))
 					add_to_cpuname("[SL9SA] E6300");
 				if (MHz_matches(cpu->MHz, 2130))
@@ -438,8 +439,7 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 			 */
 			add_to_cpuname("Quad (Kentsfield) ");
 			/* The SKU is only distinguishable by frequency */
-			if (cpu->MHz == 0)
-				estimate_MHz(cpu);
+			ensure_MHz(cpu);
 			if (MHz_matches(cpu->MHz, 2930))
 				add_to_cpuname("[SL9UK/SLACP] [B3/G0] QX6800");
 			else if (MHz_matches(cpu->MHz, 2660))
