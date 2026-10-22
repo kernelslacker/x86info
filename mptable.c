@@ -229,13 +229,13 @@ static int MPConfigTableHeader(u32 pap)
 /*
  * set PHYSICAL address of MP floating pointer structure
  */
-#define NEXT(X)		((X) += 4)
+#define MP_ALIGN	16	/* the floating pointer is 16-byte aligned */
 static int apic_probe(unsigned long* paddr)
 {
 	unsigned int x;
 	u16 segment;
 	unsigned long target;
-	unsigned int buffer[BIOS_SIZE];
+	unsigned char buffer[BIOS_SIZE];
 	const char MP_SIG[]="_MP_";
 
 	/* search Extended Bios Data Area, if present */
@@ -261,9 +261,9 @@ static int apic_probe(unsigned long* paddr)
 	}
 
 
-	for (x = 0; x < ONE_KBYTE / 4; NEXT(x)) {
+	for (x = 0; x < ONE_KBYTE; x += MP_ALIGN) {
 		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-			*paddr = (x*4) + target;
+			*paddr = x +target;
 			return 1;
 		}
 	}
@@ -285,9 +285,9 @@ static int apic_probe(unsigned long* paddr)
 			exit(EXIT_FAILURE);
 		}
 
-		for (x = 0; x < ONE_KBYTE/4; NEXT(x)) {
+		for (x = 0; x < ONE_KBYTE; x += MP_ALIGN) {
 			if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-				*paddr = (x*4) + target;
+				*paddr = x +target;
 				return 2;
 			}
 		}
@@ -302,9 +302,9 @@ static int apic_probe(unsigned long* paddr)
 			exit(EXIT_FAILURE);
 		}
 
-		for (x = 0; x < ONE_KBYTE/4; NEXT(x)) {
+		for (x = 0; x < ONE_KBYTE; x += MP_ALIGN) {
 			if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-				*paddr = (x*4) + target;
+				*paddr = x +target;
 				return 3;
 			}
 		}
@@ -318,9 +318,9 @@ static int apic_probe(unsigned long* paddr)
 	}
 
 
-	for (x = 0; x < BIOS_SIZE/4; NEXT(x)) {
+	for (x = 0; x < BIOS_SIZE; x += MP_ALIGN) {
 		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-			*paddr = (x*4) + BIOS_BASE;
+			*paddr = x +BIOS_BASE;
 			return 4;
 		}
 	}
@@ -333,9 +333,9 @@ static int apic_probe(unsigned long* paddr)
 	}
 
 
-	for (x = 0; x < BIOS_SIZE/4; NEXT(x)) {
+	for (x = 0; x < BIOS_SIZE; x += MP_ALIGN) {
 		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-			*paddr = (x*4) + BIOS_BASE2;
+			*paddr = x +BIOS_BASE2;
 			return 4;
 		}
 	}
@@ -349,9 +349,9 @@ static int apic_probe(unsigned long* paddr)
 	}
 
 
-	for (x = 0; x < GROPE_SIZE/4; NEXT(x)) {
+	for (x = 0; x < GROPE_SIZE; x += MP_ALIGN) {
 		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-			*paddr = (x*4) + GROPE_AREA1;
+			*paddr = x +GROPE_AREA1;
 			return 5;
 		}
 	}
@@ -364,9 +364,9 @@ static int apic_probe(unsigned long* paddr)
 	}
 
 
-	for (x = 0; x < GROPE_SIZE/4; NEXT(x)) {
+	for (x = 0; x < GROPE_SIZE; x += MP_ALIGN) {
 		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-			*paddr = (x*4) + GROPE_AREA2;
+			*paddr = x +GROPE_AREA2;
 			return 6;
 		}
 	}
