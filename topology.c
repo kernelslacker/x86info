@@ -51,7 +51,6 @@ static int get_x2apic_topology(struct cpudata *cpu)
 	if (!levels || !smt_count)
 		return 0;
 
-	cpu->x2apic_id = id;
 	cpu->num_siblings = smt_count;
 	cpu->x86_max_cores = logical / smt_count;
 	cpu->phys_proc_id = pkg_shift >= 32 ? 0 : id >> pkg_shift;

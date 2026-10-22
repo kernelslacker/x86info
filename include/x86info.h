@@ -82,7 +82,6 @@ struct cpudata {
 	unsigned int cachesize_L1_I, cachesize_L1_D;
 	unsigned int cachesize_L2;
 	unsigned int cachesize_L3;
-	unsigned int cachesize_trace;
 	unsigned int phyaddr_bits;
 	unsigned int viraddr_bits;
 	unsigned int cpuid_level, maxei, maxei2;
@@ -95,15 +94,11 @@ struct cpudata {
 	unsigned int MHz;		/* TSC rate */
 	unsigned int core_MHz;		/* from APERF/MPERF, 0 if unknown */
 	unsigned int nr_cores;
-	unsigned int nr_logical;
 	/* Intel specific bits */
 	unsigned int brand;
-	unsigned int apicid;
 	char serialno[30];
 
 	unsigned int phys_proc_id;
-	unsigned int initial_apicid;
-	unsigned int x2apic_id;
 	unsigned int topology;		/* TOPOLOGY_* */
 	unsigned int x86_max_cores;
 	unsigned int cpu_core_id;

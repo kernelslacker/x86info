@@ -224,9 +224,6 @@ static void decode_intel_cache(int des, struct cpudata *cpu, int output,
 	while ((table[k].descriptor != 0) && (found == 0)) {
 		if (table[k].descriptor == des) {
 
-			if (table == TRACE_cache_table)
-				cpu->cachesize_trace += table[k].size;
-
 			if (table == L1I_cache_table)
 				cpu->cachesize_L1_I += table[k].size;
 
@@ -440,7 +437,6 @@ void decode_intel_caches(struct cpudata *cpu, int output)
 
 	memset(&unknown_array, 0, sizeof(unknown_array));
 
-	cpu->cachesize_trace = 0;
 	cpu->cachesize_L1_I = 0;
 	cpu->cachesize_L1_D = 0;
 	cpu->cachesize_L2 = 0;

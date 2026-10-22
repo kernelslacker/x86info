@@ -31,10 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C2. include/x86info.h:101-106,85 — struct fields written but never read:
-    apicid, nr_logical, x2apic_id, cachesize_trace, initial_apicid (only
-    used as a local in intel/topology.c). Remove. [haiku]
-
 C3. Per-vendor name appenders duplicated 6 ways: static `*_nameptr` +
     `add_to_cpuname` macro in amd/identify.c:21, centaur/identify.c:10,
     cyrix/identify.c:11, natsemi, rise, sis, plus the strlen-based one in

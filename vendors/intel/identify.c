@@ -23,8 +23,6 @@ void identify_intel(struct cpudata *cpu)
 	cpu->type = (eax >> 12) & 0x3;
 
 	cpu->brand = ebx & 0xf;
-	cpu->apicid = ebx >> 24;
-	cpu->nr_logical = (ebx >> 16) & 0xff;
 
 	cpu->flags_ecx = ecx; // Used for identification of Core 2
 	cpu->flags_edx = edx;
