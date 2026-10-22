@@ -14,10 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A7. vendors/intel/cachesize.c:343-347 — sizes >= 1 MB are truncated to
-    whole MB (2.5 MB L3 prints "2MB", 37.5 MB prints "37MB"). Print KB
-    unless evenly divisible, or print one decimal. [haiku]
-
 A8. vendors/cyrix/identify.c:42 — `case 0x524` under `switch (tuple & 0xff0)`
     is unreachable; GXm is never identified. Match on stepping separately.
     [haiku]

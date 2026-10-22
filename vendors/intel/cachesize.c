@@ -341,8 +341,8 @@ static void decode_general_cache(struct cpudata *cpu, int output)
 
 		unit = "KB";
 		size = (associativity * partitions * line_size * sets) / 1024;
-		if (size >= 1024) {
-			size = (associativity * partitions * line_size * sets) / 1024 / 1024;
+		if (size >= 1024 && size % 1024 == 0) {
+			size /= 1024;
 			unit = "MB";
 		}
 
