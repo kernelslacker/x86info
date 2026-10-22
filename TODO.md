@@ -14,11 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A12. apic.c:114 / x86info.c:192 — local APIC MMIO reads whichever CPU the
-    process is running on, which after the fill loop is the *last* CPU, not
-    the one being displayed. Call bind_cpu(cpu->number) at the top of
-    dump_apics(), as display_feature_flags() does. [haiku]
-
 A13. mptable.c:265 — `if (segment == 0) return 0;` aborts the whole MP
     table search when there's no EBDA, skipping the base-memory and BIOS
     ROM scans. Only skip the EBDA scan. [haiku]

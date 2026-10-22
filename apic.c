@@ -123,6 +123,8 @@ void dump_apics(const struct cpudata *cpu)
 	if (!(cpu->flags_edx & (X86_FEATURE_APIC)))
 		return;
 
+	bind_cpu(cpu->number);
+
 	/**
 	* Verify if apic is enable
 	**/
