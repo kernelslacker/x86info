@@ -21,46 +21,14 @@ void get_cpu_info_basics(struct cpudata *cpu)
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
 	cpu->cpuid_level = maxi;
 
-	switch (vendor) {
-	case 0x756e6547:
-		/* "GenuineTMx86" shares "Genu" with "GenuineIntel"; EDX is "ineT" */
-		if (vendor_edx == 0x54656e69)
-			cpu->vendor = VENDOR_TRANSMETA;
-		else
-			cpu->vendor = VENDOR_INTEL;
-		break;
-	case 0x6f677948:	/* "HygonGenuine" */
-		cpu->vendor = VENDOR_AMD;
-		break;
-	case 0x68747541:
-		cpu->vendor = VENDOR_AMD;
-		break;
-	case 0x69727943:
-		cpu->vendor = VENDOR_CYRIX;
-		break;
-	case 0x746e6543:
-		cpu->vendor = VENDOR_CENTAUR;
-		break;
-	case 0x646f6547:
-		cpu->vendor = VENDOR_NATSEMI;
-		break;
-	case 0x52697365:
-	case 0x65736952:
-		cpu->vendor = VENDOR_RISE;
-		break;
-	case 0x20536953:
-		cpu->vendor = VENDOR_SIS;
-		break;
-	default:
-		if (!unknown_vendor_reported) {
-			unsigned int ebx, ecx, edx;
+	cpu->vendor = vendor_from_cpuid(vendor, vendor_edx);
+	if (cpu->vendor == VENDOR_UNKNOWN && !unknown_vendor_reported) {
+		unsigned int ebx, ecx, edx;
 
-			cpuid(cpu->number, 0, NULL, &ebx, &ecx, &edx);
-			printf("Unknown vendor (%.4s%.4s%.4s)\n",
-			       (char *)&ebx, (char *)&edx, (char *)&ecx);
-			unknown_vendor_reported = 1;
-		}
-		break;
+		cpuid(cpu->number, 0, NULL, &ebx, &ecx, &edx);
+		printf("Unknown vendor (%.4s%.4s%.4s)\n",
+		       (char *)&ebx, (char *)&edx, (char *)&ecx);
+		unknown_vendor_reported = 1;
 	}
 
 	if (maxi < 1)

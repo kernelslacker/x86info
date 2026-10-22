@@ -70,6 +70,34 @@ unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op)
 }
 
 
+/* Map the CPUID leaf 0 vendor string registers to a vendor. */
+enum vendor vendor_from_cpuid(unsigned int ebx, unsigned int edx)
+{
+	switch (ebx) {
+	case 0x756e6547:
+		/* "GenuineTMx86" shares "Genu" with "GenuineIntel"; EDX is "ineT" */
+		if (edx == 0x54656e69)
+			return VENDOR_TRANSMETA;
+		return VENDOR_INTEL;
+	case 0x6f677948:	/* "HygonGenuine" */
+	case 0x68747541:
+		return VENDOR_AMD;
+	case 0x69727943:
+		return VENDOR_CYRIX;
+	case 0x746e6543:
+		return VENDOR_CENTAUR;
+	case 0x646f6547:
+		return VENDOR_NATSEMI;
+	case 0x52697365:
+	case 0x65736952:
+		return VENDOR_RISE;
+	case 0x20536953:
+		return VENDOR_SIS;
+	default:
+		return VENDOR_UNKNOWN;
+	}
+}
+
 /* Largest plausible leaf in the range starting at base, or 0 if bogus. */
 unsigned int sane_max_leaf(unsigned int max, unsigned int base)
 {

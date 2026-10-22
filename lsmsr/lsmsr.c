@@ -211,36 +211,10 @@ get_name(vendor, enum vendor, vendor_names);
 
 static void set_vendor(void)
 {
-	unsigned int b;
-	cpuid(g.cpu, 0, NULL, &b, NULL, NULL);
+	unsigned int b, d;
+	cpuid(g.cpu, 0, NULL, &b, NULL, &d);
 
-	switch (b) {
-	case 0x68747541:
-		g.vendor = VENDOR_AMD;
-		break;
-	case 0x756e6547:
-		g.vendor = VENDOR_INTEL;
-		break;
-	case 0x69727943:
-		g.vendor = VENDOR_CYRIX;
-		break;
-	case 0x746e6543:
-		g.vendor = VENDOR_CENTAUR;
-		break;
-	case 0x646f6547:
-		g.vendor = VENDOR_NATSEMI;
-		break;
-	case 0x52697365:
-	case 0x65736952:
-		g.vendor = VENDOR_RISE;
-		break;
-	case 0x20536953:
-		g.vendor = VENDOR_SIS;
-		break;
-	default:
-		g.vendor = VENDOR_UNKNOWN;
-		break;
-	}
+	g.vendor = vendor_from_cpuid(b, d);
 }
 
 static void set_family_model(void)

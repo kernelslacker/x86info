@@ -31,11 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C4. lsmsr/lsmsr.c:220-252 duplicates the vendor-signature switch from
-    identify.c:21-60 (and misses Hygon/Transmeta). Extract
-    `enum vendor vendor_from_cpuid(unsigned int ebx, unsigned int edx)`
-    into cpuid.c (already linked by lsmsr) and use it in both. [sonnet]
-
 C5. features.c — amd_cap_generic_ecx_flags duplicates the Intel leaf-1 ECX
     table (same architectural bits, fewer entries); likewise for 80000001
     EDX/ECX. Use one table per CPUID register; keep vendor tables only
