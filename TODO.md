@@ -2,10 +2,6 @@
 
 ## 🔴 Correctness
 
-A2. vendors/intel/identify-family6.c:422,424 — `cpu->MHz/100 == 1860` is
-    ~18 == 1860, never true; E6300/E6400 are never named. Compare with
-    MHz_matches() (MHz.c). [haiku]
-
 A3. vendors/intel/identify-family6-extended.c:225 — SKU entries with `.mhz`
     only match when `--mhz` was given, because `cpu->MHz` is 0 at identify
     time otherwise (x86info.c:194-195). Names change depending on flags.

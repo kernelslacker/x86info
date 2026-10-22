@@ -419,9 +419,9 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 			switch (cpu->cachesize_L2) {
 			case 2048:
 				add_to_cpuname("[B2]");
-				if (cpu->MHz/100 == 1860)
+				if (MHz_matches(cpu->MHz, 1860))
 					add_to_cpuname("[SL9SA] E6300");
-				if (cpu->MHz/100 == 2130)
+				if (MHz_matches(cpu->MHz, 2130))
 					add_to_cpuname("[SL9S9] E6400");
 				break;
 			case 4096:
