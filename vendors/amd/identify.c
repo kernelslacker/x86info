@@ -258,44 +258,73 @@ static void set_fam16h_revinfo(int id, struct cpudata *c)
 		snprintf(c->name, CPU_NAME_LEN, "AMD Family 16h Processor");
 }
 
+/* Zen die names, keyed on the full model (stepping ignored). */
+struct zen_die {
+	unsigned int lo, hi;
+	const char *name;
+};
+
+static const struct zen_die fam17h_dies[] = {
+	{0x00, 0x0f, "Zeppelin"},
+	{0x10, 0x1f, "Raven Ridge"},
+	{0x20, 0x2f, "Dali"},
+	{0x30, 0x3f, "Rome"},
+	{0x60, 0x6f, "Renoir"},
+	{0x70, 0x7f, "Matisse"},
+	{0x90, 0x9f, "Van Gogh"},
+	{0xa0, 0xaf, "Mendocino"},
+};
+
+static const struct zen_die fam19h_dies[] = {
+	{0x00, 0x0f, "Milan"},
+	{0x10, 0x1f, "Genoa"},
+	{0x20, 0x2f, "Vermeer"},
+	{0x40, 0x4f, "Rembrandt"},
+	{0x50, 0x5f, "Cezanne"},
+	{0x60, 0x6f, "Raphael"},
+	{0x70, 0x7f, "Phoenix"},
+	{0xa0, 0xaf, "Bergamo/Siena"},
+};
+
+static const struct zen_die fam1ah_dies[] = {
+	{0x00, 0x1f, "Turin"},
+	{0x20, 0x2f, "Strix Point/Gorgon Point"},
+	{0x40, 0x4f, "Granite Ridge"},
+	{0x60, 0x6f, "Krackan Point"},
+	{0x70, 0x7f, "Strix Halo"},
+};
+
+static void set_zen_revinfo(const char *series, const struct zen_die *dies,
+			    unsigned int ndies, int id, struct cpudata *c)
+{
+	unsigned int i;
+
+	for (i = 0; i < ndies; i++) {
+		if (model(c) >= dies[i].lo && model(c) <= dies[i].hi) {
+			snprintf(c->name, CPU_NAME_LEN,
+				 "AMD %s Series Processor (%s)", series,
+				 dies[i].name);
+			set_connector(c);
+			return;
+		}
+	}
+	snprintf(c->name, CPU_NAME_LEN, "Unknown CPU 0x%x", (unsigned)id);
+	set_connector(c);
+}
+
 static void set_fam17h_revinfo(int id, struct cpudata *c)
 {
-	const char *p;
-
-	p = get_fam17h_revision_name(id);
-	if (p)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "AMD Zen/Zen+/Zen2 Series Processor (%s)", p);
-	else
-		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU 0x%x", (unsigned)id);
-	set_connector(c);
+	set_zen_revinfo("Zen/Zen+/Zen2", fam17h_dies, ARRAY_SIZE(fam17h_dies), id, c);
 }
 
 static void set_fam19h_revinfo(int id, struct cpudata *c)
 {
-	const char *p;
-
-	p = get_fam19h_revision_name(id);
-	if (p)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "AMD Zen3/Zen3+/Zen4 Series Processor (%s)", p);
-	else
-		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU 0x%x", (unsigned)id);
-	set_connector(c);
+	set_zen_revinfo("Zen3/Zen3+/Zen4", fam19h_dies, ARRAY_SIZE(fam19h_dies), id, c);
 }
 
 static void set_fam1ah_revinfo(int id, struct cpudata *c)
 {
-	const char *p;
-
-	p = get_fam1ah_revision_name(id);
-	if (p)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "AMD Zen5 Series Processor (%s)", p);
-	else
-		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU 0x%x", (unsigned)id);
-
-	set_connector(c);
+	set_zen_revinfo("Zen5", fam1ah_dies, ARRAY_SIZE(fam1ah_dies), id, c);
 }
 
 

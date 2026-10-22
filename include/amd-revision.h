@@ -164,19 +164,3 @@ static struct id_string fam15h_revisions[] = {
 	{0x00600f20, "OR-C0"},
 };
 get_name(fam15h_revision, int, fam15h_revisions);
-
-
-static struct id_string fam17h_revisions[] = {
-	{0x800f11, "ZP-B1"},
-};
-get_name(fam17h_revision, int, fam17h_revisions);
-
-static struct id_string fam19h_revisions[] = {
-	{0xa40f41, "Ryzen 7 7735HS"},
-};
-get_name(fam19h_revision, int, fam19h_revisions);
-
-static struct id_string fam1ah_revisions[] = {
-	{0xb40f40, "Ryzen 9 9950X"},
-};
-get_name(fam1ah_revision, int, fam1ah_revisions);
