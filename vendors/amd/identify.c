@@ -113,7 +113,7 @@ static void set_connector(struct cpudata *c)
 	pkg_id = (ebx >> 28) & 0xf;
 
 
-	if ((family(c) == 0x10) || (family(c) == 0x11) ||
+	if ((family(c) == 0x10) ||
 	    ((family(c) == 0x15) && (model(c) <= 0xf))) {
 		switch (pkg_id) {
 		case 0:
