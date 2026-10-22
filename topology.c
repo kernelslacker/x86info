@@ -33,7 +33,9 @@ void display_topology(struct cpudata *cpus)
 	unsigned int threads_per_socket;
 	unsigned int i;
 	unsigned int max_proc_id = 0;
-	char *sockets;
+	unsigned int *sockets;
+	unsigned int total_threads = 0;
+	unsigned int first_threads = 0;
 
 	int num_sockets = 0;
 
@@ -68,32 +70,32 @@ void display_topology(struct cpudata *cpus)
 			max_proc_id = cpus[i].phys_proc_id;
 	}
 
-	sockets = malloc(max_proc_id + 1);
+	sockets = calloc(max_proc_id + 1, sizeof(*sockets));
 	if (sockets == NULL)
 		return;
-
-	for (i = 0; i <= max_proc_id; i++)
-		sockets[i]=0;
 
 	for (i = 0; i < nrCPUs; i++) {
 		sockets[cpus[i].phys_proc_id]++;
 	}
 
 	for (i = 0; i <= max_proc_id; i++) {
+		if (sockets[i] == 0)	/* only count populated sockets */
+			continue;
 		if (debug == 1)
-			if (sockets[i] != 0)
-				printf("Socket %u: %u threads\n", i, (unsigned int) sockets[i]);
-		if (sockets[i] != 0)	/* only count populated sockets */
-			num_sockets++;
+			printf("Socket %u: %u threads\n", i, sockets[i]);
+		if (num_sockets == 0)
+			first_threads = sockets[i];
+		total_threads += sockets[i];
+		num_sockets++;
 	}
 
 	/* Print a topology summary */
-	printf("Total processor threads: %d\n", sockets[0] * num_sockets);
+	printf("Total processor threads: %u\n", total_threads);
 	printf("This system has %d ", num_sockets);
-	threads_per_socket = sockets[0];
+	threads_per_socket = first_threads;
 	if (cpus[0].flags_edx & X86_FEATURE_HT)
 		if (cpus[0].num_siblings > 1)
-			threads_per_socket = sockets[0]/2;
+			threads_per_socket = first_threads/2;
 
 	if (nrCPUs == 1) {
 		/* Handle the single CPU case */
