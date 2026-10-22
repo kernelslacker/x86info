@@ -60,13 +60,7 @@
 /* global data */
 static int pfd;			/* physical /dev/mem fd */
 
-static int	busses[16];
-static int	apics[16];
-
 static int	ncpu;
-static int	nbus;
-static int	napic;
-static int	nintr;
 static int	silent;
 
 /* MP Floating Pointer Structure */
@@ -187,7 +181,6 @@ static int MPConfigTableHeader(u32 pap)
 {
 	unsigned long paddr;
 	struct mpcth cth;
-	int x;
 	int count, c;
 
 	if (pap == 0) {
@@ -207,14 +200,7 @@ static int MPConfigTableHeader(u32 pap)
 
 	count = cth.entry_count;
 
-	/* initialize tables */
-	for (x = 0; x < 16; ++x)
-		busses[ x ] = apics[ x ] = 0xff;
-
 	ncpu = 0;
-	nbus = 0;
-	napic = 0;
-	nintr = 0;
 
 	/* process all the CPUs */
 	if (!silent)
