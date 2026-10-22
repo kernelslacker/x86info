@@ -72,10 +72,10 @@ void get_cpu_info_basics(struct cpudata *cpu)
 	cpu->family = (eax >> 8) & 0xf;
 
 	cpuid(cpu->number, 0x80000000, &maxei, NULL, NULL, NULL);
-	cpu->maxei = maxei;
+	cpu->maxei = sane_max_leaf(maxei, 0x80000000);
 
 	cpuid(cpu->number, 0xC0000000, &maxei, NULL, NULL, NULL);
-	cpu->maxei2 = maxei;
+	cpu->maxei2 = sane_max_leaf(maxei, 0xC0000000);
 
 	if (cpu->maxei >= 0x80000008) {
 		cpuid(cpu->number, 0x80000008, &address_bits, NULL, NULL, NULL);

@@ -70,16 +70,31 @@ unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op)
 }
 
 
+/* Largest plausible leaf in the range starting at base, or 0 if bogus. */
+unsigned int sane_max_leaf(unsigned int max, unsigned int base)
+{
+	if ((max & 0xffff0000) != base)
+		return 0;
+	if (max - base > 0xff)
+		return base + 0xff;
+	return max;
+}
+
 void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end)
 {
 	unsigned int i;
 	unsigned int eax, ebx, ecx, edx;
 
 	/* Dump all the CPUID results in raw hex */
-	for (i = begin; i <= end; i++) {
+	if (end < begin)
+		return;
+
+	for (i = begin; ; i++) {
 		ecx = 0;
 		cpuid(cpunum, i, &eax, &ebx, &ecx, &edx);
 		printf("eax in: 0x%08x, eax = %08x ebx = %08x ecx = %08x edx = %08x\n", i, eax, ebx, ecx, edx);
+		if (i == end)
+			break;
 	}
 	printf("\n");
 }

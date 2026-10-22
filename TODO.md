@@ -14,11 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A15. cpuid.c:79 — `for (i = begin; i <= end; i++)` never terminates if a
-    bogus maxei/maxei2 is 0xffffffff. Sanity-check maxei/maxei2 in
-    get_cpu_info_basics() (upper 16 bits must equal the range base, cap the
-    count) and use `i - begin <= end - begin` style bounds. [sonnet]
-
 A16. vendors/amd/msr-k6.c:36 — `0x3ff << 22` overflows int (UB). Use
     `0x3ffULL << 22`. [haiku]
 

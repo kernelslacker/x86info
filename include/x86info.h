@@ -173,6 +173,7 @@ void binary32(unsigned long value);
 void binary64(unsigned long long value);
 void dumpmsr(int cpunum, unsigned int msr, int size);
 void dumpmsr_bin(int cpunum, unsigned int msr, int size);
+unsigned int sane_max_leaf(unsigned int max, unsigned int base);
 void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end);
 
 void dump_mtrrs(struct cpudata *cpu);
