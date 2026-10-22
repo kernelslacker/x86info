@@ -56,11 +56,7 @@ void identify_cyrix(struct cpudata *cpu)
 
 	if (cpu->maxei >= 0x80000001) {
 		cpuid (cpu->number, 0x80000001, &eax, &ebx, &ecx, &edx);
-		cpu->stepping = eax & 0xf;
-		cpu->model = (eax >> 4) & 0xf;
-		cpu->family = (eax >> 8) & 0xf;
-
-		switch (cpu->family) {
+		switch ((eax >> 8) & 0xf) {
 			case 4:	add_to_cpuname("MediaGX");
 					break;
 			case 5:	add_to_cpuname("6x86/GXm");
@@ -76,8 +72,8 @@ void display_cyrix_info(struct cpudata *cpu)
 	unsigned int i, ntlb;
 	unsigned int eax, ebx, ecx, edx;
 
-	printf("TLB & L1 Cache info\n");
 	if (cpu->cpuid_level >= 2 && show_cacheinfo) {
+		printf("TLB & L1 Cache info\n");
 		/* TLB and L1 Cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {
@@ -97,8 +93,8 @@ void display_cyrix_info(struct cpudata *cpu)
 		}
 	}
 
-	printf("TLB & L1 Cache info from extended info\n");
 	if (cpu->maxei >= 0x80000005 && show_cacheinfo) {
+		printf("TLB & L1 Cache info from extended info\n");
 		/* TLB and L1 Cache info */
 		ntlb = 255;
 		for (i = 0; i < ntlb; i++) {
