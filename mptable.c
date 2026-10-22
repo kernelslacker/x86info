@@ -111,12 +111,13 @@ _Static_assert(sizeof(struct mpcth) == 44, "mpcth layout");
 _Static_assert(sizeof(struct ProcEntry) == 20, "ProcEntry layout");
 
 
-static void seekEntry(unsigned long addr)
+static int seekEntry(unsigned long addr)
 {
 	if (lseek(pfd, (off_t)addr, SEEK_SET) < 0) {
 		perror("/dev/mem seek");
-		exit(EXIT_FAILURE);
+		return -1;
 	}
+	return 0;
 }
 
 static int readEntry(void* entry, int size)
@@ -128,31 +129,40 @@ static int readEntry(void* entry, int size)
 	return 0;
 }
 
+/* Seek to a physical address and read size bytes; 0 on success. */
+static int readAt(unsigned long addr, void *buf, int size)
+{
+	if (seekEntry(addr))
+		return -1;
+	return readEntry(buf, size);
+}
+
+/* Returns the type of the next entry without consuming it, or -1. */
 static int readType(void)
 {
 	unsigned char type;
 
 	if (read(pfd, &type, sizeof(unsigned char)) != sizeof(unsigned char)) {
 		perror("type read");
-		exit(EXIT_FAILURE);
+		return -1;
 	}
 
 	if (lseek(pfd, -1, SEEK_CUR) < 0) {
 		perror("type seek");
-		exit(EXIT_FAILURE);
+		return -1;
 	}
 
 	return (int)type;
 }
 
-static void processorEntry(void)
+static int processorEntry(void)
 {
 	struct ProcEntry entry;
 
 	/* read it into local memory */
 	if (readEntry(&entry, sizeof(entry)) < 0) {
 		printf("Error reading processor entry\n");
-		exit(EXIT_FAILURE);
+		return -1;
 	}
 
 	/* count it */
@@ -179,6 +189,7 @@ static void processorEntry(void)
 		printf("\t %d\t %d\t %d", family, model, t & 0xf);
 		printf("\t 0x%04x\n", entry.featureFlags);
 	}
+	return 0;
 }
 
 
@@ -197,10 +208,9 @@ static int MPConfigTableHeader(u32 pap)
 	paddr = (unsigned long) pap;
 
 	/* read in cth structure */
-	seekEntry(paddr);
-	if(readEntry(&cth, sizeof(cth))) {
+	if (readAt(paddr, &cth, sizeof(cth))) {
 		printf("error reading MP Config table header structure\n");
-		exit(EXIT_FAILURE);
+		return SMP_NO;
 	}
 
 	count = cth.entry_count;
@@ -212,14 +222,17 @@ static int MPConfigTableHeader(u32 pap)
 		printf("MP Table:\n#\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
 	for (c = count; c; c--) {
 		int type = readType();
+		if (type < 0)
+			return SMP_NO;
 		if (type == 0) {
-			processorEntry();
+			if (processorEntry())
+				return SMP_NO;
 		} else {
 			/* Non-CPU entries (bus, I/O APIC, interrupt) are 8 bytes each;
 			 * skip them so the file position advances past every entry. */
 			if (lseek(pfd, 8, SEEK_CUR) < 0) {
 				perror("entry seek");
-				exit(EXIT_FAILURE);
+				return SMP_NO;
 			}
 		}
 	}
@@ -244,10 +257,9 @@ static int apic_probe(unsigned long* paddr)
 	const char MP_SIG[]="_MP_";
 
 	/* search Extended Bios Data Area, if present */
-	seekEntry((unsigned long)EBDA_POINTER);
-	if (readEntry(&segment, 2)) {
+	if (readAt((unsigned long)EBDA_POINTER, &segment, 2)) {
 		printf("error reading EBDA pointer\n");
-		exit(EXIT_FAILURE);
+		return 0;
 	}
 
 	if (segment == 0)
@@ -257,12 +269,11 @@ static int apic_probe(unsigned long* paddr)
 		printf("\nEBDA points to: %x\n", segment);
 
 	target = (unsigned long)segment << 4;
-	seekEntry(target);
 	if (debug)
 		printf("EBDA segment ptr: %lx\n", target);
-	if (readEntry(buffer, ONE_KBYTE)) {
+	if (readAt(target, buffer, ONE_KBYTE)) {
 		printf("error reading 1K from %p\n", (void *)target);
-		exit(EXIT_FAILURE);
+		return 0;
 	}
 
 
@@ -274,20 +285,18 @@ static int apic_probe(unsigned long* paddr)
 	}
 
 	/* read CMOS for real top of mem */
-	seekEntry((unsigned long)TOPOFMEM_POINTER);
-	if (readEntry(&segment, 2)) {
+	if (readAt((unsigned long)TOPOFMEM_POINTER, &segment, 2)) {
 		printf("error reading CMOS for real top of mem (%p)\n", (void *) TOPOFMEM_POINTER);
-		exit(EXIT_FAILURE);
+		return 0;
 	}
 
 	target = 0;
 	if (segment != 0) {
 		--segment;			/* less ONE_KBYTE */
 		target = segment * 1024;
-		seekEntry(target);
-		if (readEntry(buffer, ONE_KBYTE)) {
+		if (readAt(target, buffer, ONE_KBYTE)) {
 			printf("error reading 1KB from %p\n", (void *)target);
-			exit(EXIT_FAILURE);
+			return 0;
 		}
 
 		for (x = 0; x < ONE_KBYTE; x += MP_ALIGN) {
@@ -301,10 +310,9 @@ static int apic_probe(unsigned long* paddr)
 	/* we don't necessarily believe CMOS, check base of the last 1K of 640K */
 	if (target != (DEFAULT_TOPOFMEM - 1024)) {
 		target = (DEFAULT_TOPOFMEM - 1024);
-		seekEntry(target);
-		if (readEntry(buffer, ONE_KBYTE)) {
+		if (readAt(target, buffer, ONE_KBYTE)) {
 			printf("error reading DEFAULT_TOPOFMEM - 1024 from %p\n", (void *) target);
-			exit(EXIT_FAILURE);
+			return 0;
 		}
 
 		for (x = 0; x < ONE_KBYTE; x += MP_ALIGN) {
@@ -316,10 +324,9 @@ static int apic_probe(unsigned long* paddr)
 	}
 
 	/* search the BIOS */
-	seekEntry(BIOS_BASE);
-	if (readEntry(buffer, BIOS_SIZE)) {
+	if (readAt(BIOS_BASE, buffer, BIOS_SIZE)) {
 		printf("error reading BIOS_BASE from %p\n", (void *)BIOS_BASE);
-		exit(EXIT_FAILURE);
+		return 0;
 	}
 
 
@@ -331,10 +338,9 @@ static int apic_probe(unsigned long* paddr)
 	}
 
 	/* search the extended BIOS */
-	seekEntry(BIOS_BASE2);
-	if (readEntry(buffer, BIOS_SIZE)) {
+	if (readAt(BIOS_BASE2, buffer, BIOS_SIZE)) {
 		printf("error reading BIOS_BASE2 from %p\n", (void *)BIOS_BASE2);
-		exit(EXIT_FAILURE);
+		return 0;
 	}
 
 
@@ -347,10 +353,9 @@ static int apic_probe(unsigned long* paddr)
 
 	/* search additional memory */
 	target = GROPE_AREA1;
-	seekEntry(target);
-	if (readEntry(buffer, GROPE_SIZE)) {
+	if (readAt(target, buffer, GROPE_SIZE)) {
 		printf("error reading GROPE_AREA1 from %p\n", (void *)target);
-		exit(EXIT_FAILURE);
+		return 0;
 	}
 
 
@@ -362,10 +367,9 @@ static int apic_probe(unsigned long* paddr)
 	}
 
 	target = GROPE_AREA2;
-	seekEntry(target);
-	if (readEntry(buffer, GROPE_SIZE)) {
+	if (readAt(target, buffer, GROPE_SIZE)) {
 		printf("error reading GROPE_AREA2 from %p\n", (void *)target);
-		exit(EXIT_FAILURE);
+		return 0;
 	}
 
 
@@ -401,10 +405,10 @@ int enumerate_cpus(void)
 	}
 
 	/* read in mpfps structure*/
-	seekEntry(paddr);
-	if (readEntry(&mpfps, sizeof(struct mpfps))) {
+	if (readAt(paddr, &mpfps, sizeof(struct mpfps))) {
 		printf("error reading mpfpsfrom %p\n", (void *)paddr);
-		exit(EXIT_FAILURE);
+		close(pfd);
+		return 1;
 	}
 
 
@@ -439,10 +443,10 @@ void display_mptable(void)
 	}
 
 	/* read in mpfps structure*/
-	seekEntry(paddr);
-	if (readEntry(&mpfps, sizeof(struct mpfps))) {
+	if (readAt(paddr, &mpfps, sizeof(struct mpfps))) {
 		printf("error reading mpfps from %p\n", (void *)paddr);
-		exit(EXIT_FAILURE);
+		close(pfd);
+		return;
 	}
 
 
