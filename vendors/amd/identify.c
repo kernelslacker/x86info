@@ -925,7 +925,7 @@ void display_amd_info(struct cpudata *cpu)
 	if (show_bugs)
 		show_amd_bugs(cpu);
 
-	if (cpu->cpuid_level >= 0x05) {
+	if (show_feature_flags && cpu->cpuid_level >= 0x05) {
 		cpuid (cpu->number, 0x05, &eax, &ebx, &ecx, NULL);
 		printf("Monitor/Mwait: min/max line size %d/%d%s%s\n",
 		       (int) (eax & 0xffff), (int) (ebx & 0xffff),
@@ -933,7 +933,7 @@ void display_amd_info(struct cpudata *cpu)
 		       (ecx & 0x1) ? ", enumeration extension" : "");
 	}
 
-	if (cpu->maxei >= 0x8000000a) {
+	if (show_feature_flags && cpu->maxei >= 0x8000000a) {
 		cpuid (cpu->number, 0x8000000a, &eax, &ebx, NULL, &edx);
 		printf("SVM: revision %d, %d ASIDs",
 		       (int) (eax & 0xff), (int) ebx);
