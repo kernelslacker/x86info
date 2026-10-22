@@ -14,9 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A20. vendors/centaur/identify.c:163 — VIA cache info is printed even
-    without --cache. Gate on show_cacheinfo like the other vendors. [haiku]
-
 A21. cpuid-solaris.c:36,47 — uses CPUID_CHUNK_SIZE and
     NATIVE_CPUID_FAILED_MSG, which are file-local to cpuid-linux.c; this
     file cannot compile. Either fix it or delete Solaris support (see E3).
