@@ -67,6 +67,10 @@ enum connector {
 };
 
 #define CPU_NAME_LEN 80
+#define TOPOLOGY_NONE	0
+#define TOPOLOGY_LEGACY	1	/* CPUID 1 / 4 derived */
+#define TOPOLOGY_X2APIC	2	/* CPUID 0x1F / 0xB */
+
 struct cpudata {
 	unsigned int number;
 	enum vendor vendor;
@@ -99,6 +103,8 @@ struct cpudata {
 
 	unsigned int phys_proc_id;
 	unsigned int initial_apicid;
+	unsigned int x2apic_id;
+	unsigned int topology;		/* TOPOLOGY_* */
 	unsigned int x86_max_cores;
 	unsigned int cpu_core_id;
 	unsigned int num_siblings;

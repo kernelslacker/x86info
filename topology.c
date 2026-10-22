@@ -8,39 +8,111 @@
 #include <x86info.h>
 #include <intel.h>
 
-static const char * corenum(int num)
+#define LEVEL_TYPE_SMT	1
+
+/* Mask of the low 'bits' bits, safe for bits >= 32. */
+static unsigned int low_mask(unsigned int bits)
 {
-	switch (num) {
-	case 1:	return ("single");
-	case 2:	return ("dual");
-	case 3:	return ("tri");
-	case 4:	return ("quad");
-	case 6:	return ("six");
-	case 8:	return ("eight");
-	default:
-		return ("?");
+	return bits >= 32 ? ~0u : (1u << bits) - 1;
+}
+
+/*
+ * Decode the extended topology leaf (0x1F, else 0xB). Each subleaf gives
+ * the shift to the next level of the 32-bit x2APIC ID and how many logical
+ * processors sit at or below that level.
+ */
+static int get_x2apic_topology(struct cpudata *cpu)
+{
+	unsigned int eax, ebx, ecx, edx, sub, type;
+	unsigned int leaf, smt_shift = 0, pkg_shift = 0;
+	unsigned int smt_count = 1, logical = 0, id = 0, levels = 0;
+
+	if (cpu->cpuid_level >= 0x1f)
+		leaf = 0x1f;
+	else if (cpu->cpuid_level >= 0xb)
+		leaf = 0xb;
+	else
+		return 0;
+
+	for (sub = 0; sub < 8; sub++) {
+		cpuid_count(cpu->number, leaf, sub, &eax, &ebx, &ecx, &edx);
+		type = (ecx >> 8) & 0xff;
+		if (type == 0)
+			break;
+		if (type == LEVEL_TYPE_SMT) {
+			smt_shift = eax & 0x1f;
+			smt_count = ebx & 0xffff;
+		}
+		pkg_shift = eax & 0x1f;
+		logical = ebx & 0xffff;
+		id = edx;
+		levels++;
 	}
+	if (!levels || !smt_count)
+		return 0;
+
+	cpu->x2apic_id = id;
+	cpu->num_siblings = smt_count;
+	cpu->x86_max_cores = logical / smt_count;
+	cpu->phys_proc_id = pkg_shift >= 32 ? 0 : id >> pkg_shift;
+	cpu->cpu_core_id = (id >> smt_shift) & low_mask(pkg_shift - smt_shift);
+	cpu->topology = TOPOLOGY_X2APIC;
+	return 1;
 }
 
 void get_topology(struct cpudata *cpu)
 {
-	if (cpu->vendor == VENDOR_INTEL)
+	if (get_x2apic_topology(cpu))
+		return;
+
+	if (cpu->vendor == VENDOR_INTEL) {
 		get_intel_topology(cpu);
+		cpu->topology = TOPOLOGY_LEGACY;
+	}
+}
+
+static int cmp_u64(const void *a, const void *b)
+{
+	unsigned long long x = *(const unsigned long long *)a;
+	unsigned long long y = *(const unsigned long long *)b;
+
+	return (x > y) - (x < y);
+}
+
+/* Number of distinct (package, core) pairs among the CPUs. */
+static unsigned int count_cores(struct cpudata *cpus)
+{
+	unsigned long long *keys;
+	unsigned int i, cores = 0;
+
+	keys = malloc(nrCPUs * sizeof(*keys));
+	if (keys == NULL)
+		return 0;
+
+	for (i = 0; i < nrCPUs; i++)
+		keys[i] = ((unsigned long long)cpus[i].phys_proc_id << 32) |
+			  cpus[i].cpu_core_id;
+	qsort(keys, nrCPUs, sizeof(*keys), cmp_u64);
+
+	for (i = 0; i < nrCPUs; i++)
+		if (i == 0 || keys[i] != keys[i - 1])
+			cores++;
+
+	free(keys);
+	return cores;
 }
 
 void display_topology(struct cpudata *cpus)
 {
-	unsigned int threads_per_socket;
 	unsigned int i;
 	unsigned int max_proc_id = 0;
 	unsigned int *sockets;
+	unsigned int num_sockets = 0;
 	unsigned int total_threads = 0;
-	unsigned int first_threads = 0;
+	unsigned int cores;
+	unsigned int min_siblings = ~0u, max_siblings = 0;
 
-	int num_sockets = 0;
-
-	/* For now, we only support topology parsing on Intel. */
-	if (cpus[0].vendor != VENDOR_INTEL)
+	if (cpus[0].topology == TOPOLOGY_NONE)
 		return;
 
 	if (debug == 1) {
@@ -76,6 +148,10 @@ void display_topology(struct cpudata *cpus)
 
 	for (i = 0; i < nrCPUs; i++) {
 		sockets[cpus[i].phys_proc_id]++;
+		if (cpus[i].num_siblings < min_siblings)
+			min_siblings = cpus[i].num_siblings;
+		if (cpus[i].num_siblings > max_siblings)
+			max_siblings = cpus[i].num_siblings;
 	}
 
 	for (i = 0; i <= max_proc_id; i++) {
@@ -83,37 +159,31 @@ void display_topology(struct cpudata *cpus)
 			continue;
 		if (debug == 1)
 			printf("Socket %u: %u threads\n", i, sockets[i]);
-		if (num_sockets == 0)
-			first_threads = sockets[i];
 		total_threads += sockets[i];
 		num_sockets++;
+	}
+	free(sockets);
+
+	if (cpus[0].topology == TOPOLOGY_X2APIC) {
+		cores = count_cores(cpus);
+	} else {
+		/* No per-core ID: assume every core has the same thread count. */
+		cores = max_siblings > 1 ? total_threads / max_siblings : total_threads;
 	}
 
 	/* Print a topology summary */
 	printf("Total processor threads: %u\n", total_threads);
-	printf("This system has %d ", num_sockets);
-	threads_per_socket = first_threads;
-	if (cpus[0].flags_edx & X86_FEATURE_HT)
-		if (cpus[0].num_siblings > 1)
-			threads_per_socket = first_threads/2;
+	printf("This system has %u socket%s, %u core%s, %u thread%s",
+	       num_sockets, num_sockets == 1 ? "" : "s",
+	       cores, cores == 1 ? "" : "s",
+	       total_threads, total_threads == 1 ? "" : "s");
 
-	if (nrCPUs == 1) {
-		/* Handle the single CPU case */
-		printf("processor");
-	} else {
-		const char *p;
-		p = corenum(threads_per_socket);
-
-		if (strncmp("?", p, 1))
-			printf("%s-core processor", corenum(threads_per_socket));
+	if (max_siblings > 1) {
+		if (min_siblings == max_siblings)
+			printf(" (%u threads per core)", max_siblings);
 		else
-			printf("%u-core processor", threads_per_socket);
-		if (num_sockets > 1)
-			printf("s");
+			printf(" (hybrid: %u-%u threads per core)",
+			       min_siblings, max_siblings);
 	}
-
-	if (cpus[0].flags_edx & X86_FEATURE_HT && cpus[0].num_siblings > 1)
-		printf(" with hyper-threading (%u threads per core)", cpus[0].num_siblings);
-
-	free(sockets);
+	printf("\n");
 }
