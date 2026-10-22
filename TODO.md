@@ -14,11 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A9. vendors/cyrix/identify.c:57-67 — the name is appended twice (e.g.
-    "6x86/MX6x86/MX"): once from the tuple switch, again from 0x80000001.
-    Use the extended family only when the first switch hit `default`.
-    [haiku]
-
 A10. vendors/cyrix/identify.c:99-114 — leaf 0x80000005 EAX is not an
     iteration count, yet the loop runs `eax & 0xff` times (up to 255
     repeated prints). Query it once. [haiku]

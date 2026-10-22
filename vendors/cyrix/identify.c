@@ -30,6 +30,7 @@ void decode_cyrix_tlb(int x)
 void identify_cyrix(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
+	int known = 1;
 
 	cyrix_nameptr = cpu->name;
 
@@ -48,11 +49,12 @@ void identify_cyrix(struct cpudata *cpu)
 		case 0x620:	add_to_cpuname("MII");
 				break;
 		default:	add_to_cpuname("Unknown CPU");
+				known = 0;
 				break;
 	}
 
-	/* Check for presence of extended info */
-	if (cpu->maxei < 0x80000000)
+	/* The extended family only refines an unrecognised tuple */
+	if (known || cpu->maxei < 0x80000000)
 		return;
 
 	if (cpu->maxei >= 0x80000001) {
