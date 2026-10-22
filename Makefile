@@ -8,10 +8,6 @@ CFLAGS += $(shell pkg-config --cflags libpci)
 LDFLAGS = -Wl,-z,relro,-z,now
 LDFLAGS += $(shell pkg-config --libs libpci)
 
-ifeq ($(CC),"")
-CC = gcc
-endif
-
 ifdef STATIC_LIBPCI
 LIBPCI = -Wl,-Bstatic -lpci -Wl,-Bdynamic -lz
 else
