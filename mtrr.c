@@ -25,7 +25,7 @@
 static unsigned int max_phy_addr = 0;
 
 #ifndef MTRR_NUM_TYPES
-#define MTRR_NUM_TYPES 8
+#define MTRR_NUM_TYPES 7
 #endif
 
 static const char * mtrr_types[MTRR_NUM_TYPES] =
