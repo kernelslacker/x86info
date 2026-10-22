@@ -30,8 +30,13 @@ void dump_thermal_msrs(struct cpudata *cpu)
 	if (read_msr(cpu->number, MSR_IA32_THERM_CONTROL, &val) == 1) {
 		printf("  MSR_IA32_THERM_CONTROL: 0x%llx ", val);
 		if (val & (1<<4)) {
-			printf("[Software-controlled clock: %f%% duty cycle]\n",
-			       ((val >> 1) & 7) / 8.);
+			unsigned int duty = (val >> 1) & 7;
+
+			if (duty == 0)
+				printf("[Software-controlled clock: reserved duty cycle]\n");
+			else
+				printf("[Software-controlled clock: %.1f%% duty cycle]\n",
+				       duty * 100. / 8.);
 		} else
 			printf("[Software-controlled clock disabled (full speed)]\n");
 	}
