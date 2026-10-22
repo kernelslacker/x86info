@@ -99,22 +99,17 @@ void display_cyrix_info(struct cpudata *cpu)
 	if (cpu->maxei >= 0x80000005 && show_cacheinfo) {
 		printf("TLB & L1 Cache info from extended info\n");
 		/* TLB and L1 Cache info */
-		ntlb = 255;
-		for (i = 0; i < ntlb; i++) {
-			cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
-			ntlb = eax & 0xff;
-			decode_cyrix_tlb(ebx >> 8);
-			decode_cyrix_tlb(ebx >> 16);
-			decode_cyrix_tlb(ebx >> 24);
+		cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
+		decode_cyrix_tlb(ebx >> 8);
+		decode_cyrix_tlb(ebx >> 16);
+		decode_cyrix_tlb(ebx >> 24);
 
-			/* eax and edx are reserved */
-			if ((ecx & 0x80000000) == 0) {
-				decode_cyrix_tlb(ecx);
-				decode_cyrix_tlb(ecx >> 8);
-				decode_cyrix_tlb(ecx >> 16);
-				decode_cyrix_tlb(ecx >> 24);
-			}
+		/* eax and edx are reserved */
+		if ((ecx & 0x80000000) == 0) {
+			decode_cyrix_tlb(ecx);
+			decode_cyrix_tlb(ecx >> 8);
+			decode_cyrix_tlb(ecx >> 16);
+			decode_cyrix_tlb(ecx >> 24);
 		}
 	}
 }
-

@@ -14,10 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A10. vendors/cyrix/identify.c:99-114 — leaf 0x80000005 EAX is not an
-    iteration count, yet the loop runs `eax & 0xff` times (up to 255
-    repeated prints). Query it once. [haiku]
-
 A11. vendors/intel/info.c:55 — decode_brand() starts its line with ")",
     leaving a stray paren after the "Type:" line. Drop the leading ")".
     [haiku]
