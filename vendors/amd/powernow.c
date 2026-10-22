@@ -215,6 +215,21 @@ static int get_cof(int family, union msr_pstate pstate)
 	return ((100 * (fid + t)) >> did);
  }
 
+/* Zen P-state MSR: CpuFid and CpuDfsId, widened to 12 bits of Fid from Zen 5. */
+static int get_zen_cof(struct cpudata *cpu, unsigned long long val)
+{
+	unsigned int fid, did;
+
+	if (family(cpu) >= 0x1a || (family(cpu) == 0x19 && model(cpu) >= 0xa0))
+		return (val & 0xfff) * 5;
+
+	fid = val & 0xff;
+	did = (val >> 8) & 0x3f;
+	if (did == 0)
+		return 0;
+	return 200 * fid / did;
+}
+
 static int get_num_boost_states(void)
 {
 	struct pci_filter filter_nb_link = { .domain = -1, .bus = -1, .slot = -1, .func = -1, .vendor = 0x1022, .device =0, };
@@ -263,7 +278,8 @@ static void decode_pstates(struct cpudata *cpu, int has_cpb)
 	if (fam < 0x10)
 		return;
 
-	if (has_cpb)
+	/* The NB PCI IDs for the boost state count only exist up to family 15h */
+	if (has_cpb && fam <= 0x15)
 		boost_states = get_num_boost_states();
 
 	if (read_msr(cpu->number, MSR_PSTATE_LIMIT, &val) != 1) {
@@ -280,19 +296,30 @@ static void decode_pstates(struct cpudata *cpu, int has_cpb)
 
 	pscur += boost_states;
 	psmax += boost_states;
+	/* There are eight P-state MSRs */
+	if (psmax > 7)
+		psmax = 7;
 	for (i=0; i<=psmax; i++) {
+		int cof, enabled;
+
 		if (read_msr(cpu->number, MSR_PSTATE + i, &pstate.val) != 1) {
 			printf("Something went wrong reading MSR_PSTATE_%d\n",
 				i);
 			return;
 		}
+		if (fam >= 0x17) {
+			cof = get_zen_cof(cpu, pstate.val);
+			enabled = pstate.val >> 63;
+		} else {
+			cof = get_cof(fam, pstate);
+			enabled = pstate.bits.en;
+		}
 		if (i < boost_states) {
-			printf("Pstate-Pb%d: %dMHz (boost state)\n",
-			       i, get_cof(fam, pstate));
-		} else if (pstate.bits.en) {
+			printf("Pstate-Pb%d: %dMHz (boost state)\n", i, cof);
+		} else if (enabled) {
 			/* show information only if pstate is enabled */
 			printf("Pstate-P%d:  %dMHz%s\n",
-			       i - boost_states, get_cof(fam, pstate),
+			       i - boost_states, cof,
 			       (i == pscur) ? " (current)"  : "");
 		}
 	}
