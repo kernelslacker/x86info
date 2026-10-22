@@ -342,7 +342,15 @@ void decode_powernow(struct cpudata *cpu)
 	}
 	if (edx & (1<<10))
 		printf("\n\tread-only Effective Frequency Interface");
-	if (!(edx & 0x1ff))
+	if (edx & (1<<11))
+		printf("\n\tProcessor Feedback Interface");
+	if (edx & (1<<12))
+		printf("\n\tProcessor Power Reporting");
+	if (edx & (1<<13))
+		printf("\n\tConnected Standby");
+	if (edx & (1<<14))
+		printf("\n\tRAPL");
+	if (!(edx & 0x7fff))
 		printf(" None");
 
 	cpuid(cpu->number, 6, &eax, &ebx, &ecx, &edx);
