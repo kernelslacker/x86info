@@ -1,7 +1,3 @@
-ifeq ($(CC),"")
-CC = gcc
-endif
-
 SHELL = /bin/sh
 
 include ../flags.mk
