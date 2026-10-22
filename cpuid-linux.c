@@ -80,14 +80,11 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1) {
-		if (lseek64(fh, (off64_t)idx, SEEK_SET) < 0) {
+		memset(buffer, 0, sizeof(buffer));
+		if (lseek64(fh, (off64_t)idx, SEEK_SET) < 0)
 			printf("cpuid seek error: %s\n", strerror(errno));
-			exit(EXIT_FAILURE);
-		}
-		if (read(fh, &buffer[0], CPUID_CHUNK_SIZE) != CPUID_CHUNK_SIZE) {
+		else if (read(fh, &buffer[0], CPUID_CHUNK_SIZE) != CPUID_CHUNK_SIZE)
 			perror(cpuname);
-			exit(EXIT_FAILURE);
-		}
 		if (eax != NULL)
 			memcpy(eax, buffer, 4);
 		if (ebx != NULL)
@@ -97,10 +94,8 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 		if (edx != NULL)
 			memcpy(edx, buffer + 12, 4);
 
-		if (close(fh) == -1) {
+		if (close(fh) == -1)
 			perror("close");
-			exit(EXIT_FAILURE);
-		}
 	} else {
 		/* Something went wrong, just do UP and hope for the best. */
 		nodriver = 1;

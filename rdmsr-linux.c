@@ -36,22 +36,18 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 
 	if (lseek64(fh, (off64_t) idx, SEEK_SET) == -1) {
 		perror("lseek");
-		exit(EXIT_FAILURE);
+		close(fh);
+		return 0;
 	}
 
 	if (read(fh, &raw, sizeof(raw)) != sizeof(raw)) {
-		if (close(fh) == -1) {
-			perror("close");
-			exit(EXIT_FAILURE);
-		}
+		close(fh);
 		return 0;
 	}
 
 	*val = raw;
-	if (close(fh) == -1) {
+	if (close(fh) == -1)
 		perror("close");
-		exit(EXIT_FAILURE);
-	}
 	return 1;
 }
 
