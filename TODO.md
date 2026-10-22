@@ -14,11 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A18. vendors/intel/machine_check.c:26-84 — decode_mcg_ctl() is a copy of
-    the AMD K7 MC bank decoder ("L2 ECC K7 deallocate", etc). Intel MCi_CTL
-    bits are model specific, so this prints wrong labels. Remove it from
-    the Intel path. [haiku]
-
 A19. vendors/intel/topology.c:75-82 — with HT set but one sibling,
     phys_proc_id is never set, so multi-socket legacy systems report one
     socket. Always compute phys_proc_id from the initial APIC ID. Also
