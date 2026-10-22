@@ -84,7 +84,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 			printf("cpuid seek error: %s\n", strerror(errno));
 			exit(EXIT_FAILURE);
 		}
-		if (read(fh, &buffer[0], CPUID_CHUNK_SIZE) == -1) {
+		if (read(fh, &buffer[0], CPUID_CHUNK_SIZE) != CPUID_CHUNK_SIZE) {
 			perror(cpuname);
 			exit(EXIT_FAILURE);
 		}
