@@ -21,8 +21,6 @@ void get_model_name(struct cpudata *cpu)
 	cp = namestring;
 	for (j = 0x80000002; j <= 0x80000004; j++) {
 		cpuid(cpu->number, j, &eax, &ebx, &ecx, &edx);
-		if (eax == 0)
-			return;
 
 		for (i = 0; i < 4; i++)
 			*cp++ = eax >> (8 * i);
