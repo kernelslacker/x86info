@@ -24,8 +24,12 @@ void decode_serial_number(struct cpudata *cpu)
 	if (cpu->cpuid_level < 3)
 		return;
 
-	cpuid(cpu->number, 1, &eax, NULL, NULL, NULL);
+	cpuid(cpu->number, 1, &eax, NULL, NULL, &edx);
 	signature = eax;
+
+	/* PSN feature bit; clear when the BIOS disables the serial number */
+	if (!(edx & (1 << 18)))
+		return;
 
 	cpuid(cpu->number, 3, &eax, &ebx, &ecx, &edx);
 	/* Six 4-digit groups and five dashes: 29 characters plus the NUL
