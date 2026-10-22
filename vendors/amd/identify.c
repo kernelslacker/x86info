@@ -357,6 +357,9 @@ static void do_l2assoc(unsigned long assoc)
 	case 0xe:
 		a = 128;
 		break;
+	case 0x9:
+		printf("See CPUID 0x8000001D. ");
+		break;
 	default:
 		break;
 	}
@@ -450,7 +453,7 @@ void decode_amd_cacheinfo(struct cpudata *cpu)
 		printf("\n\t");
 		printf("lines per tag=%u\t", (ecx >> 8) & 0x0f);
 		printf("line size=%u bytes.\n", ecx & 0xff);
-		if ((family(cpu) == 0x10) || (family(cpu) == 0x15)) {
+		if (family(cpu) >= 0x10) {
 			printf("L3 (shared) cache:\n\t");
 			if (!(edx >> 18))
 				printf("none/disabled\n");
@@ -911,15 +914,29 @@ static void show_patch_level(struct cpudata *cpu)
 	}
 }
 
+/* CPUID 0x8000000A EDX */
+static const char *svm_features[32] = {
+	"np", "lbrVirt", "SVMLock", "NRIPSave",
+	"TscRateMsr", "VmcbClean", "FlushByAsid", "DecodeAssists",
+	NULL, NULL, "PauseFilter", NULL,
+	"PauseFilterThreshold", "AVIC", NULL, "V_VMSAVE_VMLOAD",
+	"vGIF", "GMET", "x2AVIC", NULL,
+	"SpecCtrl", NULL, NULL, NULL,
+	NULL, "VNMI", NULL, NULL,
+	"SvmeAddrChk", NULL, NULL, NULL,
+};
+
 void display_amd_info(struct cpudata *cpu)
 {
-	unsigned int eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx, i;
 
 	if (show_msr) {
 		if (cpu->family == 5)
 			dump_k6_MSR(cpu);
 		if (cpu->family == 6)
 			dump_athlon_MSR(cpu);
+		if (cpu->family >= 0xf)
+			printf("MSR dump not supported for this family.\n");
 	}
 
 	if (show_machine_check)
@@ -946,26 +963,9 @@ void display_amd_info(struct cpudata *cpu)
 		cpuid (cpu->number, 0x8000000a, &eax, &ebx, NULL, &edx);
 		printf("SVM: revision %d, %d ASIDs",
 		       (int) (eax & 0xff), (int) ebx);
-		if (edx & 1)
-			printf(", np");
-		if (edx & 2)
-			printf(", lbrVirt");
-		if (edx & 4)
-			printf(", SVMLock");
-		if (edx & 8)
-			printf(", NRIPSave");
-		if (edx & 0x10)
-			printf(", TscRateMsr");
-		if (edx & 0x20)
-			printf(", VmcbClean");
-		if (edx & 0x40)
-			printf(", FlushByAsid");
-		if (edx & 0x80)
-			printf(", DecodeAssists");
-		if (edx & 0x400)
-			printf(", PauseFilter");
-		if (edx & 0x1000)
-			printf(", PauseFilterThreshold");
+		for (i = 0; i < 32; i++)
+			if ((edx & (1u << i)) && svm_features[i])
+				printf(", %s", svm_features[i]);
 		printf("\n");
 	}
 
@@ -983,9 +983,22 @@ void display_amd_info(struct cpudata *cpu)
 		else
 			p = n;
 
-		if (p > 1)
+		/* NC counts logical processors from Zen onwards */
+		if (p > 1 && family(cpu) >= 0x17) {
+			printf("The physical package has %d of %d "
+			       "possible threads implemented", n, p);
+			if (cpu->maxei >= 0x8000001e) {
+				unsigned int tpc;
+
+				cpuid(cpu->number, 0x8000001e, NULL, &ebx, NULL, NULL);
+				tpc = ((ebx >> 8) & 0xff) + 1;
+				printf(" (%d cores)", n / tpc);
+			}
+			printf(".\n");
+		} else if (p > 1) {
 			printf("The physical package has %d of %d "
 			       "possible cores implemented.\n", n, p);
+		}
 	}
 }
 
