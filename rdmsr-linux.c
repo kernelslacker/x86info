@@ -18,10 +18,9 @@
 int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 {
 	char cpuname[16];
-	unsigned char buffer[8];
+	unsigned long long raw;
 	int fh;
 	static int nodriver=0;
-	unsigned int *ptr = (unsigned int *) buffer;
 
 	if (nodriver==1)
 		return 0;
@@ -40,21 +39,15 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 		exit(EXIT_FAILURE);
 	}
 
-	if (fh != -1) {
-		unsigned long long lo, hi;
-
-		if (read(fh, &buffer[0], 8) != 8) {
-			if (close(fh) == -1) {
-				perror("close");
-				exit(EXIT_FAILURE);
-			}
-			return 0;
+	if (read(fh, &raw, sizeof(raw)) != sizeof(raw)) {
+		if (close(fh) == -1) {
+			perror("close");
+			exit(EXIT_FAILURE);
 		}
-
-		lo = *ptr;
-		hi = *(++ptr);
-		*val = (hi << 32) | lo;
+		return 0;
 	}
+
+	*val = raw;
 	if (close(fh) == -1) {
 		perror("close");
 		exit(EXIT_FAILURE);
