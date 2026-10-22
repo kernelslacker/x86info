@@ -40,7 +40,7 @@ void display_MHz_line(struct cpudata *cpu)
 		printf(" processor (estimate).\n\n");
 }
 
-static volatile int nosignal = 0;
+static volatile sig_atomic_t nosignal = 0;
 
 static void sighandler(int sig __attribute__((unused)))
 {
@@ -51,6 +51,7 @@ void estimate_MHz(struct cpudata *cpu)
 {
 	unsigned long long int cycles[2]; /* gotta be 64 bit */
 	unsigned int eax, ebx, ecx, edx;
+	void (*old)(int);
 	// coverity[DC.WEAK_CRYPTO]
 	unsigned long r = rand();
 
@@ -62,7 +63,8 @@ void estimate_MHz(struct cpudata *cpu)
 		return;
 	}
 
-	if (signal(SIGALRM, sighandler) == SIG_ERR) {
+	old = signal(SIGALRM, sighandler);
+	if (old == SIG_ERR) {
 		printf("Some kind of signal failure.\n");
 		return;
 	}
@@ -75,6 +77,7 @@ void estimate_MHz(struct cpudata *cpu)
 		r = r * rand();
 
 	nosignal = 0;
+	signal(SIGALRM, old);
 
 	cycles[1] = rdtsc();
 
