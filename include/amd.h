@@ -11,7 +11,7 @@
 #endif
 #include <x86info.h>
 
-void decode_athlon_machine_check(int cpunum);
+void decode_athlon_machine_check(int cpunum, unsigned int family);
 void dump_athlon_MSR(struct cpudata *cpu);
 void dump_k6_MSR (struct cpudata *cpu);
 void decode_powernow (struct cpudata *cpu);

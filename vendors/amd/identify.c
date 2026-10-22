@@ -923,7 +923,7 @@ void display_amd_info(struct cpudata *cpu)
 	}
 
 	if (show_machine_check)
-		decode_athlon_machine_check(cpu->number);
+		decode_athlon_machine_check(cpu->number, family(cpu));
 
 	if (show_microcode && family(cpu) >= 0xf)
 		show_patch_level(cpu);

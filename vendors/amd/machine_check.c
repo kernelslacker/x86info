@@ -19,7 +19,7 @@
 #define MC_ADDR 0x402
 #define MC_MISC 0x403
 
-void decode_athlon_machine_check(int cpunum)
+void decode_athlon_machine_check(int cpunum, unsigned int family)
 {
 	unsigned long long val, val2;
 	unsigned int banks, i, ctlp = 0;
@@ -34,19 +34,21 @@ void decode_athlon_machine_check(int cpunum)
 	if (ctlp == 0)
 		printf("Erk, MCG_CTL not present! :%016llx:\n", val);
 
-	banks = val & 0xf;
+	banks = val & 0xff;
 
 	printf("Number of reporting banks : %u\n\n", banks);
 
 	if (read_msr(cpunum, MCG_STATUS, &val) == 1) {
 		if (val != 0) {
-			printf("            31       23       15       7 \n");
 			printf("MCG_STATUS: ");
-			dumpmsr_bin (cpunum, MCG_STATUS, 32);
+			dumpmsr_bin (cpunum, MCG_STATUS, 64);
 		}
 	}
 
-	if ( ctlp && read_msr(cpunum, MCG_CTL, &val) == 1) {
+	/* The per-unit MCG_CTL bits below are the K7/K8 layout. */
+	if (ctlp && family >= 0x10 && read_msr(cpunum, MCG_CTL, &val) == 1) {
+		printf("MCG_CTL: 0x%016llx\n", val);
+	} else if (ctlp && read_msr(cpunum, MCG_CTL, &val) == 1) {
 		printf("MCG_CTL:\n");
 
 		printf(" Data cache check %sabled\n", val & (1<<0) ? "en" : "dis");
@@ -102,17 +104,16 @@ void decode_athlon_machine_check(int cpunum)
 	printf("\n");
 
 
-	printf("           31       23       15       7 \n");
 	for (i=0; i<banks; i++) {
 		printf("Bank: %u (0x%x)\n", i, (unsigned int)MC_CTL+i*4);
 		printf("MC%uCTL:    ", i);
-		dumpmsr_bin (cpunum, MC_CTL+i*4, 32);
+		dumpmsr_bin (cpunum, MC_CTL+i*4, 64);
 		printf("MC%uSTATUS: ", i);
-		dumpmsr_bin (cpunum, MC_STATUS+i*4, 32);
+		dumpmsr_bin (cpunum, MC_STATUS+i*4, 64);
 		printf("MC%uADDR:   ", i);
-		dumpmsr_bin (cpunum, MC_ADDR+i*4, 32);
+		dumpmsr_bin (cpunum, MC_ADDR+i*4, 64);
 		printf("MC%uMISC:   ", i);
-		dumpmsr_bin (cpunum, MC_MISC+i*4, 32);
+		dumpmsr_bin (cpunum, MC_MISC+i*4, 64);
 		printf("\n");
 	}
 }
