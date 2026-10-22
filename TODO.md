@@ -14,9 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A24. vendors/amd/dumppsb.c:76,114 — `%p` prints the mmap'd virtual address,
-    not the physical ROM address. Print `START + (p - map)`. [haiku]
-
 ## 🟡 Performance
 
 B1. cpuid-linux.c:79-99 / rdmsr-linux.c:30-50 — every cpuid()/read_msr()

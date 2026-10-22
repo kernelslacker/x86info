@@ -73,7 +73,7 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 		unsigned int fid, vid;
 
 		if (memcmp(p, "AMDK7PNOW!", PSB_SIGLEN) == 0) {
-			printf("Found PSB header at %p\n", p);
+			printf("Found PSB header at 0x%lx\n", START + (long)(p - map));
 			if (end - p < (long) sizeof(struct psb_s)) {
 				printf("PSB header runs past the end of the ROM\n");
 				goto out;
@@ -111,7 +111,7 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 				}
 
 				if ((etuple(cpu) == pst->cpuid) && (maxfid == pst->maxfid) && (startvid == pst->startvid)) {
-					printf(" PST:%d (@%p)\n", t, pst);
+					printf(" PST:%d (@0x%lx)\n", t, START + (long)((char *)pst - map));
 					printf("  cpuid: 0x%x\t", pst->cpuid);
 					printf("  fsb: %d\t", (int) pst->fsbspeed);
 					printf("  maxFID: 0x%x\t", (unsigned int) pst->maxfid);
