@@ -1,39 +1,9 @@
 VERSION=$(shell date +%Y-%m-%d)
 
-CFLAGS = -DVERSION="$(VERSION)"
+include flags.mk
 
-CFLAGS += -Wall -W -g -O2 -D_FORTIFY_SOURCE=2 -I. -Iinclude
-ifneq ($(SYSROOT),)
-CFLAGS += --sysroot=$(SYSROOT)
-endif
-CFLAGS += -Wdeclaration-after-statement
-CFLAGS += -Wformat=2
-CFLAGS += -Wimplicit
-CFLAGS += -Winit-self
-CFLAGS += -Wmissing-declarations -Wredundant-decls
-CFLAGS += -Wnested-externs
-CFLAGS += -Wpacked
-CFLAGS += -Wshadow
-CFLAGS += -Wstrict-prototypes -Wmissing-prototypes
-CFLAGS += -Wswitch-enum
-CFLAGS += -Wundef
-CFLAGS += -Wwrite-strings
+CFLAGS = -DVERSION="$(VERSION)" -I. -Iinclude $(COMMON_CFLAGS)
 CFLAGS += $(shell pkg-config --cflags libpci)
-
-# gcc specific
-ifneq ($(shell $(CC) -v 2>&1 | grep -c "clang"), 1)
-CFLAGS += -Wstrict-aliasing=3
-CFLAGS += -Wlogical-op
-endif
-
-# clang specific
-#CFLAGS += -fsanitize=undefined
-
-# Only enabled during development, and on gcc 6.3+
-CPP_MAJOR := $(shell $(CPP) -dumpversion 2>&1 | cut -d'.' -f1)
-CPP_MINOR := $(shell $(CPP) -dumpversion 2>&1 | cut -d'.' -f2)
-DEVEL   := $(shell grep VERSION Makefile | head -n1 | grep pre | wc -l)
-CFLAGS  += $(shell if [ $(CPP_MAJOR) -eq 6 -a $(CPP_MINOR) -ge 3 -a $(DEVEL) -eq 1 ] ; then echo "-Werror"; else echo ""; fi)
 
 LDFLAGS = -Wl,-z,relro,-z,now
 LDFLAGS += $(shell pkg-config --libs libpci)
@@ -54,7 +24,9 @@ V	= @
 Q	= $(V:1=)
 QUIET_CC = $(Q:@=@echo    '  CC '$@;)
 
-all: x86info
+all: x86info lsmsr
+
+.PHONY: lsmsr
 
 X86INFO_HEADERS = \
 	$(patsubst %.h,%.h,$(wildcard *.h)) \
@@ -62,7 +34,8 @@ X86INFO_HEADERS = \
 
 X86INFO_SRC = \
 	$(wildcard *.c)	\
-	$(wildcard vendors/*/*.c)
+	$(wildcard vendors/*/*.c) \
+	$(wildcard lsmsr/*.c)
 
 X86INFO_OBJS = $(sort $(patsubst %.c,%.o,$(wildcard *.c))) \
 	$(sort $(patsubst %.c,%.o,$(wildcard vendors/*/*.c)))
@@ -70,6 +43,9 @@ X86INFO_OBJS = $(sort $(patsubst %.c,%.o,$(wildcard *.c))) \
 x86info: $(X86INFO_OBJS) $(X86INFO_HEADERS)
 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS) \
 	    $(LIBPCI)
+
+lsmsr: x86info
+	$(Q)$(MAKE) --no-print-directory -C lsmsr VERSION=$(VERSION)
 
 DEPDIR= .deps
 -include $(X86INFO_SRC:%.c=$(DEPDIR)/%.d)
@@ -93,6 +69,7 @@ clean:
 	@find . -name "*.o" -exec rm {} \;
 	@find . -name "*~" -exec rm {} \;
 	@rm -f x86info
+	@$(MAKE) --no-print-directory -C lsmsr clean
 	@rm -f core.*
 	@rm -rf $(DEPDIR)/*
 	@rm -f x86info-coverity.tar.xz

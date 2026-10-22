@@ -4,28 +4,11 @@ endif
 
 SHELL = /bin/sh
 
-CFLAGS = -DVERSION="$(VERSION)"
+include ../flags.mk
 
-CFLAGS += -Wall -W -g -O2 -D_FORTIFY_SOURCE=2 -I. -I../include
-ifneq ($(SYSROOT),)
-CFLAGS += --sysroot=$(SYSROOT)
-endif
-CFLAGS += -Wdeclaration-after-statement
-CFLAGS += -Wformat=2
-CFLAGS += -Wimplicit
-CFLAGS += -Winit-self
-CFLAGS += -Wlogical-op
-CFLAGS += -Wmissing-declarations -Wredundant-decls
-CFLAGS += -Wnested-externs
-CFLAGS += -Wpacked
-CFLAGS += -Wshadow
-CFLAGS += -Wstrict-aliasing=3
-CFLAGS += -Wstrict-prototypes -Wmissing-prototypes
-CFLAGS += -Wswitch-enum
-CFLAGS += -Wundef
-CFLAGS += -Wwrite-strings
+VERSION ?= $(shell date +%Y-%m-%d)
 
-CFLAGS += -Werror
+CFLAGS = -DVERSION="$(VERSION)" -I. -I../include $(COMMON_CFLAGS)
 
 LDFLAGS = -Wl,-z,relro,-z,now
 
