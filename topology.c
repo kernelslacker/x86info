@@ -115,7 +115,7 @@ void display_topology(struct cpudata *cpus)
 	if (cpus[0].topology == TOPOLOGY_NONE)
 		return;
 
-	if (debug == 1) {
+	if (debug) {
 		printf("cpu->phys_proc_id: ");
 		for (i = 0; i < nrCPUs; i++) {
 			printf("%u, ", cpus[i].phys_proc_id);
@@ -157,7 +157,7 @@ void display_topology(struct cpudata *cpus)
 	for (i = 0; i <= max_proc_id; i++) {
 		if (sockets[i] == 0)	/* only count populated sockets */
 			continue;
-		if (debug == 1)
+		if (debug)
 			printf("Socket %u: %u threads\n", i, sockets[i]);
 		total_threads += sockets[i];
 		num_sockets++;

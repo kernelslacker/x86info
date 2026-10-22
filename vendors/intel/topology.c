@@ -97,7 +97,7 @@ void get_intel_topology(struct cpudata *cpu)
 	cpu->cpu_core_id = phys_pkg_id(cpu->initial_apicid, index_msb) &
 		((1 << core_bits) - 1);
 
-	if (debug == 1) {
+	if (debug) {
 		if ((cpu->x86_max_cores * cpu->num_siblings) > 1) {
 			printf("%s:\n", __func__);
 			printf("\tSiblings: %u\n", cpu->num_siblings);
