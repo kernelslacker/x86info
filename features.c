@@ -379,13 +379,13 @@ static const char *generic_cap_flags_desc[32] = {
 };
 
 /* CPUID 0x00000001 ECX flags */
-static const char *intel_cap_generic_ecx_flags[32] = {
-	"sse3", "pclmuldq", "dtes64", "monitor", "ds-cpl", "vmx", "smx", "est",
+static const char *cap_generic_ecx_flags[32] = {
+	"sse3", "pclmulqdq", "dtes64", "monitor", "ds-cpl", "vmx", "smx", "est",
 	"tm2", "ssse3", "cid", "sdbg", "fma", "cx16", "xTPR", "pdcm",
 	NULL, "pcid", "dca", "sse4_1", "sse4_2", "x2apic", "movbe", "popcnt",
 	"tsc-deadline", "aes", "xsave", "osxsave", "avx", "f16c", "rdrnd", NULL
 };
-static const char *intel_cap_generic_ecx_flags_desc[32] = {
+static const char *cap_generic_ecx_flags_desc[32] = {
 	"Streaming SIMD Extensions 3",		    // 0
 	"PCLMULDQ Instruction",			    // 1
 	"64-Bit Debug Store",			    // 2
@@ -422,124 +422,37 @@ static const char *intel_cap_generic_ecx_flags_desc[32] = {
 };
 
 /* CPUID 0x80000001 EDX flags */
-static const char *intel_cap_extended_edx_flags[32] = {
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, "SYSCALL", NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL, "xd", NULL, NULL, NULL,
-	NULL, NULL, "pdpe1gb", "rdtscp", NULL, "em64t", NULL, NULL,
-};
-
-static const char *intel_cap_extended_edx_flags_desc[32] = {
-	NULL,					    // 0
-	NULL,					    // 1
-	NULL,					    // 2
-	NULL,					    // 3
-	NULL,					    // 4
-	NULL,					    // 5
-	NULL,					    // 6
-	NULL,					    // 7
-	NULL,					    // 8
-	NULL,					    // 9
-	NULL,					    // 10
-	"SYSCALL/SYSRET instructions",		    // 11
-	NULL,					    // 12
-	NULL,					    // 13
-	NULL,					    // 14
-	NULL,					    // 15
-	NULL,					    // 16
-	NULL,					    // 17
-	NULL,					    // 18
-	NULL,					    // 19
-	"Execution Disable Bit",		    // 20
-	NULL,					    // 21
-	NULL,					    // 22
-	NULL,					    // 23
-	NULL,					    // 24
-	NULL,					    // 25
-	"1-GByte pages",			    // 26
-	"RDTSCP and IA32_TSC_AUX",		    // 27
-	NULL,					    // 28
-	"Intel 64 Instruction Set Architecture",    // 29
-	NULL,					    // 30
-	NULL					    // 31
-};
-
-/* CPUID 0x80000001 ECX flags */
-static const char *intel_cap_extended_ecx_flags[32] = {
-	"lahf_lm", NULL, NULL, NULL, NULL, "lzcnt", NULL, NULL,
-	"prefetchw", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-};
-static const char *intel_cap_extended_ecx_flags_desc[32] = {
-	"LAHF/SAHF available in 64-bit mode",	    // 0
-	NULL,					    // 1
-	NULL,					    // 2
-	NULL,					    // 3
-	NULL,					    // 4
-	"LZCNT instruction",			    // 5
-	NULL,					    // 6
-	NULL,					    // 7
-	"PREFETCHW instruction",		    // 8
-};
-
-static const char *amd_cap_generic_ecx_flags[32] = {
-	"sse3", "pclmulqdq", NULL, "mwait", NULL, NULL, NULL, NULL,
-	NULL, "ssse3", NULL, NULL, "fma", "cmpxchg16b", NULL, NULL,
-	NULL, NULL, NULL, "sse4_1", "sse4_2", "x2apic", "movbe", "popcnt",
-	NULL, "aes", "xsave", "osxsave", "avx", "f16c", "rdrand", NULL
-};
-
-static const char *amd_cap_generic_ecx_flags_desc[32] = {
-	"Streaming SIMD Extensions 3",		    // 0
-	NULL,					    // 1
-	NULL,					    // 2
-	"MONITOR/MWAIT instructions",		    // 3
-	NULL,					    // 4
-	NULL,					    // 5
-	NULL,					    // 6
-	NULL,					    // 7
-	NULL,					    // 8
-	"Supplemental Streaming SIMD Extensions 3", // 9
-	NULL,					    // 10
-	NULL,					    // 11
-	NULL,					    // 12
-	"CMPXCHG16B instruction",		    // 13
-	NULL,					    // 14
-	NULL,					    // 15
-	NULL,					    // 16
-	NULL,					    // 17
-	NULL,					    // 18
-	"Streaming SIMD Extensions 4.1",	    // 19
-	NULL,					    // 20
-	NULL,					    // 21
-	NULL,					    // 22
-	"POPCNT instruction",			    // 23
-	NULL,					    // 24
-	"AES instruction support",		    // 25
-	NULL,					    // 26
-	NULL,					    // 27
-	NULL,					    // 28
-	NULL,					    // 29
-	NULL,					    // 30
-	NULL					    // 31
-};
-static const char *amd_cap_extended_edx_flags[32] = {
+static const char *cap_extended_edx_flags[32] = {
 	"fpu", "vme", "de", "pse", "tsc", "msr", "pae", "mce",
-	"cx8", "apic", NULL, "sep", "mtrr", "pge", "mca", "cmov",
+	"cx8", "apic", NULL, "syscall", "mtrr", "pge", "mca", "cmov",
 	"pat", "pse36", NULL, "mp", "nx", NULL, "mmxext", "mmx",
 	"fxsr", "ffxsr", "page1gb", "rdtscp",
 	NULL, "lm", "3dnowext",	"3dnow"
 }; /* "mp" defined for CPUs prior to AMD family 0xf */
 
-static const char *amd_cap_extended_ecx_flags[32] = {
-	"lahf/sahf", "CmpLegacy", "svm", "ExtApicSpace",
+static const char *cap_extended_edx_flags_desc[32] = {
+	[11] = "SYSCALL/SYSRET instructions",
+	[20] = "Execution Disable Bit",
+	[26] = "1-GByte pages",
+	[27] = "RDTSCP and IA32_TSC_AUX",
+	[29] = "64-bit Long Mode",
+};
+
+/* CPUID 0x80000001 ECX flags */
+static const char *cap_extended_ecx_flags[32] = {
+	"lahf_lm", "CmpLegacy", "svm", "ExtApicSpace",
 	"LockMovCr0", "abm", "sse4a", "misalignsse",
-	"3dnowPref", "osvw", "ibs", "xop",
+	"3dnowprefetch", "osvw", "ibs", "xop",
 	"skinit", "wdt", NULL, "lwp",
 	"fma4", "tce", NULL, "NodeId",
 	NULL, "tbm", "TopoExt", "PerfCtrExtCore",
 	"PerfCtrExtNB", NULL, "DataBPExt", NULL, "PerfCtrExtLLC", "MwaitExtended", "AdMskExtn", NULL
+};
+
+static const char *cap_extended_ecx_flags_desc[32] = {
+	[0] = "LAHF/SAHF available in 64-bit mode",
+	[5] = "LZCNT/ABM instructions",
+	[8] = "PREFETCHW instruction",
 };
 
 static const char *centaur_cap_ecx_flags[32] = {
@@ -579,13 +492,13 @@ static void decode_feature_flags(const struct cpudata *cpu)
 	/* Vendor specific extensions. */
 	switch (cpu->vendor) {
 		case VENDOR_AMD:
-			flag_decode(cpu->flags_ecx, "1:ecx", amd_cap_generic_ecx_flags, amd_cap_generic_ecx_flags_desc);
+			flag_decode(cpu->flags_ecx, "1:ecx", cap_generic_ecx_flags, cap_generic_ecx_flags_desc);
 			printf("\n");
 			if (cpu->maxei < 0x80000001)
 				break;
 			printf("Extended feature flags:\n");
-			flag_decode(cpu->eflags_edx, "80000001:edx", amd_cap_extended_edx_flags, NULL);
-			flag_decode(cpu->eflags_ecx, "80000001:ecx", amd_cap_extended_ecx_flags, NULL);
+			flag_decode(cpu->eflags_edx, "80000001:edx", cap_extended_edx_flags, cap_extended_edx_flags_desc);
+			flag_decode(cpu->eflags_ecx, "80000001:ecx", cap_extended_ecx_flags, cap_extended_ecx_flags_desc);
 			printf("\n");
 			break;
 
@@ -617,13 +530,13 @@ static void decode_feature_flags(const struct cpudata *cpu)
 			break;
 
 		case VENDOR_INTEL:
-			flag_decode(cpu->flags_ecx, "1:ecx", intel_cap_generic_ecx_flags, intel_cap_generic_ecx_flags_desc);
+			flag_decode(cpu->flags_ecx, "1:ecx", cap_generic_ecx_flags, cap_generic_ecx_flags_desc);
 			printf("\n");
 			if (cpu->maxei < 0x80000001)
 				break;
 			printf("Extended feature flags:\n");
-			flag_decode(cpu->eflags_edx, "80000001:edx", intel_cap_extended_edx_flags, intel_cap_extended_edx_flags_desc);
-			flag_decode(cpu->eflags_ecx, "80000001:ecx", intel_cap_extended_ecx_flags, intel_cap_extended_ecx_flags_desc);
+			flag_decode(cpu->eflags_edx, "80000001:edx", cap_extended_edx_flags, cap_extended_edx_flags_desc);
+			flag_decode(cpu->eflags_ecx, "80000001:ecx", cap_extended_ecx_flags, cap_extended_ecx_flags_desc);
 			break;
 
 		case VENDOR_NATSEMI:

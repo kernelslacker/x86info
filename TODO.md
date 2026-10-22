@@ -31,11 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C5. features.c — amd_cap_generic_ecx_flags duplicates the Intel leaf-1 ECX
-    table (same architectural bits, fewer entries); likewise for 80000001
-    EDX/ECX. Use one table per CPUID register; keep vendor tables only
-    where the bits genuinely differ. [sonnet]
-
 C6. vendors/amd/powernow.c:338-381 — decode_powernow() hand-decodes
     80000007 EDX, which features.c already has as
     cpuid_80000007_edx_flags/_desc. Reuse that table (via flag_decode with
