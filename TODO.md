@@ -14,11 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A21. cpuid-solaris.c:36,47 — uses CPUID_CHUNK_SIZE and
-    NATIVE_CPUID_FAILED_MSG, which are file-local to cpuid-linux.c; this
-    file cannot compile. Either fix it or delete Solaris support (see E3).
-    [haiku]
-
 A22. Makefile:9,41 — LDFLAGS already gets `pkg-config --libs libpci`, so
     STATIC_LIBPCI still links libpci dynamically. Use one source of truth:
     `LIBPCI ?= $(shell pkg-config --libs libpci)` and drop it from LDFLAGS.
@@ -205,8 +200,9 @@ E2. cpuid-linux.c:84, rdmsr-linux.c:37, lsmsr/lsmsr.c:130,
     musl, deprecated in glibc). x86 Linux off_t is 64-bit on x86_64; use
     pread() with `-D_FILE_OFFSET_BITS=64`. [haiku]
 
-E3. cpuid-solaris.c — doesn't compile (A21), bind_cpu is a FIXME stub, no
-    rdmsr backend. Delete Solaris support and the README claim. [haiku]
+E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr
+    backend, so MSR output and per-CPU cpuid don't work. Implement them
+    (processor_bind(), /dev/cpu/N/msr) or drop the README claim. [sonnet]
 
 E4. flags.mk:32-35 — the "-Werror on gcc 6.3 devel builds" block is dead:
     VERSION is a date so `grep pre` never matches, and gcc 6 is ancient.

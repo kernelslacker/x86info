@@ -19,8 +19,14 @@
 #include <errno.h>
 #include <x86info.h>
 
+static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
+
+/* Kernel CPUID driver's minimum supported read size */
+#define CPUID_CHUNK_SIZE (16)
+
 int bind_cpu(unsigned int cpunr)
 {
+	(void)cpunr;
 	//FIXME
 	return 0;
 }
