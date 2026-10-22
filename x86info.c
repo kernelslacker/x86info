@@ -190,14 +190,15 @@ static int check_cpu_similarity(struct cpudata *cpus)
 static void fill_in_cpu_info(struct cpudata *cpu, struct cpudata *cpus)
 {
 	bind_cpu(cpu->number);
+	get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
 	if (!show_MHz) {
 		cpu->MHz = 0;
 	} else if (cpu == cpus || all_cpus) {
 		estimate_MHz(cpu);
 	} else {
 		cpu->MHz = cpus[0].MHz;
+		cpu->core_MHz = cpus[0].core_MHz;
 	}
-	get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
 	get_feature_flags(cpu);
 	identify(cpu);
 	get_topology(cpu);

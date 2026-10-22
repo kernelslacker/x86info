@@ -13,19 +13,30 @@
 #include <x86info.h>
 #include <rdtsc.h>
 
-void display_MHz(const struct cpudata *cpu)
+#define MSR_MPERF	0xe7
+#define MSR_APERF	0xe8
+
+static void print_MHz(unsigned int mhz)
 {
-	if (cpu->MHz < 1000)
-		printf("%uMHz", cpu->MHz);
+	if (mhz < 1000)
+		printf("%uMHz", mhz);
 	else {
-		unsigned int a = (cpu->MHz / 1000);
-		unsigned int b = ((cpu->MHz % 1000)/100);
+		unsigned int a = (mhz / 1000);
+		unsigned int b = ((mhz % 1000)/100);
 		unsigned int c = (a*1000)+(b*100);
-		printf("%u.%u%uGHz", a, b, (cpu->MHz - c)/10);
+		printf("%u.%u%uGHz", a, b, (mhz - c)/10);
 	}
 }
 
-/* With an invariant TSC the measured rate is the TSC rate, not the core clock. */
+void display_MHz(const struct cpudata *cpu)
+{
+	print_MHz(cpu->MHz);
+}
+
+/*
+ * With an invariant TSC the measured rate is the TSC rate, not the core
+ * clock; APERF/MPERF, when readable, give the core clock over the run.
+ */
 void display_MHz_line(const struct cpudata *cpu)
 {
 	unsigned int edx = 0;
@@ -33,11 +44,35 @@ void display_MHz_line(const struct cpudata *cpu)
 	if (cpu->maxei >= 0x80000007)
 		cpuid(cpu->number, 0x80000007, NULL, NULL, NULL, &edx);
 
+	if (cpu->core_MHz) {
+		print_MHz(cpu->core_MHz);
+		printf(" processor (measured), TSC ");
+		print_MHz(cpu->MHz);
+		printf(".\n\n");
+		return;
+	}
+
 	display_MHz(cpu);
 	if (edx & (1 << 8))
 		printf(" TSC frequency.\n\n");
 	else
 		printf(" processor (estimate).\n\n");
+}
+
+/* Read the APERF/MPERF counters if the CPU has them and the MSRs are readable. */
+static int read_perf_counters(const struct cpudata *cpu,
+			      unsigned long long *aperf, unsigned long long *mperf)
+{
+	unsigned int ecx = 0;
+	unsigned int base = cpu->vendor == VENDOR_AMD ? 0xc0000000 : 0;
+
+	if (cpu->cpuid_level < 6)
+		return 0;
+	cpuid(cpu->number, 6, NULL, NULL, &ecx, NULL);
+	if (!(ecx & 1))
+		return 0;
+	return read_msr(cpu->number, base + MSR_APERF, aperf) == 1 &&
+	       read_msr(cpu->number, base + MSR_MPERF, mperf) == 1;
 }
 
 static volatile sig_atomic_t nosignal = 0;
@@ -50,6 +85,8 @@ static void sighandler(int sig __attribute__((unused)))
 void estimate_MHz(struct cpudata *cpu)
 {
 	unsigned long long int cycles[2]; /* gotta be 64 bit */
+	unsigned long long aperf[2], mperf[2];
+	int have_perf;
 	unsigned int eax, ebx, ecx, edx;
 	void (*old)(int);
 	// coverity[DC.WEAK_CRYPTO]
@@ -70,6 +107,8 @@ void estimate_MHz(struct cpudata *cpu)
 		return;
 	}
 
+	have_perf = user_is_root && read_perf_counters(cpu, &aperf[0], &mperf[0]);
+
 	cycles[0] = rdtsc();
 
 	alarm(1);
@@ -81,6 +120,16 @@ void estimate_MHz(struct cpudata *cpu)
 	signal(SIGALRM, old);
 
 	cycles[1] = rdtsc();
+
+	cpu->core_MHz = 0;
+	if (have_perf && read_perf_counters(cpu, &aperf[1], &mperf[1]) &&
+	    mperf[1] > mperf[0] && aperf[1] > aperf[0]) {
+		double tsc_mhz = (double)(cycles[1] - cycles[0]) / 1e6;
+
+		cpu->core_MHz = (unsigned int)(tsc_mhz *
+			(double)(aperf[1] - aperf[0]) /
+			(double)(mperf[1] - mperf[0]) + 0.5);
+	}
 
 	/* Check to see if rdtsc wrapped */
 	if (cycles[1] < cycles[0])

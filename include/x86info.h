@@ -92,7 +92,8 @@ struct cpudata {
 	unsigned int flags_edx;
 	unsigned int eflags_ecx;
 	unsigned int eflags_edx;
-	unsigned int MHz;
+	unsigned int MHz;		/* TSC rate */
+	unsigned int core_MHz;		/* from APERF/MPERF, 0 if unknown */
 	unsigned int nr_cores;
 	unsigned int nr_logical;
 	/* Intel specific bits */
