@@ -605,7 +605,11 @@ static void decode_feature_flags(const struct cpudata *cpu)
 		case VENDOR_TRANSMETA:
 			printf("\n");
 			printf("Extended feature flags:\n");
-			flag_decode(cpu->flags_ecx, "1:ecx", transmeta_cap_flags, NULL);
+			cpuid(cpu->number, 0x80860000, &eax, &ebx, &ecx, &edx);
+			if (eax >= 0x80860001) {
+				cpuid(cpu->number, 0x80860001, &eax, &ebx, &ecx, &edx);
+				flag_decode(edx, "80860001:edx", transmeta_cap_flags, NULL);
+			}
 			break;
 
 		case VENDOR_CYRIX:
