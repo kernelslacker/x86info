@@ -162,6 +162,6 @@ void display_centaur_info(struct cpudata *cpu)
 
 	decode_centaur_cacheinfo(cpu);
 
-	if (cpu->family == 6 && show_cpuid)
+	if (cpu->family == 6 && show_msr)
 		dump_C3_MSR(cpu);
 }
