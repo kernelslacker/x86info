@@ -9,6 +9,9 @@
  * See file COPYING for details.
  */
 
+/* Defines static functions and initialised tables: include from one
+ * translation unit only (lsmsr.c). */
+
 #define _RANGE(name, args...) \
 unsigned char name##_range[] = { args }
 
