@@ -76,7 +76,7 @@ void decode_longhaul(struct cpudata *cpu)
 		printf("\tMinMHzBR: ");
 		binary (4, longhaul.bits.MinMHzBR);
 		printf("\tMinimumVID: ");
-		binary (4, longhaul.bits.MinimumVID);
+		binary (5, longhaul.bits.MinimumVID);
 		printf("\tMinMHzFSB: ");
 		binary (2, longhaul.bits.MinMHzFSB);
 	}

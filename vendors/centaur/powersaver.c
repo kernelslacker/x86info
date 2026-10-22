@@ -59,7 +59,7 @@ void decode_powersaver(struct cpudata *cpu)
 			printf("\tVRM Rev=%s\n",
 				ps.bits.VRMRev ? "Mobile VRM" : "VRM 8.5");
 			printf("\tMinimumVID: ");
-			binary (4, ps.bits.MinimumVID);
+			binary (5, ps.bits.MinimumVID);
 			printf("\tMaximumVID: ");
 			binary (5, ps.bits.MaximumVID);
 		}
