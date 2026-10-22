@@ -11,32 +11,14 @@
 
 void get_cpu_info_basics(struct cpudata *cpu)
 {
+	static int unknown_vendor_reported;
+
 	unsigned int maxi, maxei, vendor, address_bits;
 	unsigned int eax;
 
 	cpuid(cpu->number, 0, &maxi, &vendor, NULL, NULL);
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
 	cpu->cpuid_level = maxi;
-	if (maxi < 1)
-		return;
-
-	/* Everything that supports cpuid supports these. */
-	cpuid(cpu->number, 1, &eax, NULL, NULL, NULL);
-	cpu->stepping = eax & 0xf;
-	cpu->model = (eax >> 4) & 0xf;
-	cpu->family = (eax >> 8) & 0xf;
-
-	cpuid(cpu->number, 0x80000000, &maxei, NULL, NULL, NULL);
-	cpu->maxei = maxei;
-
-	cpuid(cpu->number, 0xC0000000, &maxei, NULL, NULL, NULL);
-	cpu->maxei2 = maxei;
-
-	if (cpu->maxei >= 0x80000008) {
-		cpuid(cpu->number, 0x80000008, &address_bits, NULL, NULL, NULL);
-		cpu->phyaddr_bits = address_bits & 0xFF;
-		cpu->viraddr_bits = (address_bits >> 8) & 0xFF;
-	}
 
 	switch (vendor) {
 	case 0x756e6547:
@@ -62,8 +44,36 @@ void get_cpu_info_basics(struct cpudata *cpu)
 		cpu->vendor = VENDOR_SIS;
 		break;
 	default:
-		printf("Unknown vendor (%x)\n", vendor);
+		if (!unknown_vendor_reported) {
+			unsigned int ebx, ecx, edx;
+
+			cpuid(cpu->number, 0, NULL, &ebx, &ecx, &edx);
+			printf("Unknown vendor (%.4s%.4s%.4s)\n",
+			       (char *)&ebx, (char *)&edx, (char *)&ecx);
+			unknown_vendor_reported = 1;
+		}
+		break;
+	}
+
+	if (maxi < 1)
 		return;
+
+	/* Everything that supports cpuid supports these. */
+	cpuid(cpu->number, 1, &eax, NULL, NULL, NULL);
+	cpu->stepping = eax & 0xf;
+	cpu->model = (eax >> 4) & 0xf;
+	cpu->family = (eax >> 8) & 0xf;
+
+	cpuid(cpu->number, 0x80000000, &maxei, NULL, NULL, NULL);
+	cpu->maxei = maxei;
+
+	cpuid(cpu->number, 0xC0000000, &maxei, NULL, NULL, NULL);
+	cpu->maxei2 = maxei;
+
+	if (cpu->maxei >= 0x80000008) {
+		cpuid(cpu->number, 0x80000008, &address_bits, NULL, NULL, NULL);
+		cpu->phyaddr_bits = address_bits & 0xFF;
+		cpu->viraddr_bits = (address_bits >> 8) & 0xFF;
 	}
 }
 
