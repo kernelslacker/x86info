@@ -437,6 +437,9 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 			 * SLACP G0 8MB QX6800 2.93GHz/1066MHz
 			 */
 			add_to_cpuname("Quad (Kentsfield) ");
+			/* The SKU is only distinguishable by frequency */
+			if (cpu->MHz == 0)
+				estimate_MHz(cpu);
 			switch (cpu->MHz) {
 			case 2930:	add_to_cpuname("[SL9UK/SLACP] [B3/G0] QX6800");
 					break;
