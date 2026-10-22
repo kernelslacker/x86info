@@ -6,12 +6,11 @@ CFLAGS = -DVERSION="$(VERSION)" -I. -Iinclude $(COMMON_CFLAGS)
 CFLAGS += $(shell pkg-config --cflags libpci)
 
 LDFLAGS = -Wl,-z,relro,-z,now
-LDFLAGS += $(shell pkg-config --libs libpci)
 
 ifdef STATIC_LIBPCI
 LIBPCI = -Wl,-Bstatic -lpci -Wl,-Bdynamic -lz
 else
-LIBPCI = -lpci
+LIBPCI ?= $(shell pkg-config --libs libpci)
 endif
 
 SHELL = /bin/sh

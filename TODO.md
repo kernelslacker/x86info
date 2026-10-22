@@ -14,11 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A22. Makefile:9,41 — LDFLAGS already gets `pkg-config --libs libpci`, so
-    STATIC_LIBPCI still links libpci dynamically. Use one source of truth:
-    `LIBPCI ?= $(shell pkg-config --libs libpci)` and drop it from LDFLAGS.
-    [haiku]
-
 A23. x86info.c:44 — `ids = realloc(ids, ...)` leaks the old block on
     failure. Use a temporary. [haiku]
 
