@@ -14,10 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A8. vendors/cyrix/identify.c:42 — `case 0x524` under `switch (tuple & 0xff0)`
-    is unreachable; GXm is never identified. Match on stepping separately.
-    [haiku]
-
 A9. vendors/cyrix/identify.c:57-67 — the name is appended twice (e.g.
     "6x86/MX6x86/MX"): once from the tuple switch, again from 0x80000001.
     Use the extended family only when the first switch hit `default`.

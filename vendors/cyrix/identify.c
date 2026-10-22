@@ -37,9 +37,10 @@ void identify_cyrix(struct cpudata *cpu)
 		case 0x450:	add_to_cpuname("MediaGX");
 				break;
 
-		case 0x520:	add_to_cpuname("6x86");
-				break;
-		case 0x524:	add_to_cpuname("GXm");
+		case 0x520:	if (cpu->stepping == 4)
+					add_to_cpuname("GXm");
+				else
+					add_to_cpuname("6x86");
 				break;
 
 		case 0x600:	add_to_cpuname("6x86/MX");
