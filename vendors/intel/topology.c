@@ -56,39 +56,28 @@ static int phys_pkg_id(int cpuid_apic, int index_msb)
 void get_intel_topology(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
-	unsigned int index_msb, core_bits;
-
-	if (!(cpu->flags_edx & X86_FEATURE_HT))
-		return;
-/*
-	if (cpu_has(cpu, X86_FEATURE_CMP_LEGACY))
-		goto out;
-
-	if (cpu_has(cpu, X86_FEATURE_XTOPOLOGY))
-		return;
-*/
-
+	unsigned int logical, index_msb, core_bits;
 
 	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
-	cpu->num_siblings = (ebx & 0xff0000) >> 16;
+	cpu->initial_apicid = (ebx >> 24) & 0xFF;
 
-	if (cpu->num_siblings == 1) {
-		if (debug)
-			printf("Hyper-Threading is disabled\n");
-		goto out;
-	}
-
-	if (cpu->num_siblings <= 1)
-		goto out;
-
-	index_msb = get_count_order(cpu->num_siblings);
-	cpu->initial_apicid = (cpuid_ebx(cpu->number, 1) >> 24) & 0xFF;
-	cpu->phys_proc_id = phys_pkg_id(cpu->initial_apicid, index_msb);
+	logical = 1;
+	if (cpu->flags_edx & X86_FEATURE_HT)
+		logical = (ebx & 0xff0000) >> 16;
 
 	cpu->x86_max_cores = intel_num_cpu_cores(cpu);
-	cpu->num_siblings = cpu->num_siblings / cpu->x86_max_cores;
+	if (logical < cpu->x86_max_cores)
+		logical = cpu->x86_max_cores;
+
+	index_msb = get_count_order(logical);
+	cpu->phys_proc_id = phys_pkg_id(cpu->initial_apicid, index_msb);
+
+	cpu->num_siblings = logical / cpu->x86_max_cores;
 	if (cpu->num_siblings == 0)
 		cpu->num_siblings = 1;
+
+	if (debug && cpu->num_siblings == 1)
+		printf("Hyper-Threading is disabled\n");
 
 	index_msb = get_count_order(cpu->num_siblings);
 
@@ -105,6 +94,4 @@ void get_intel_topology(struct cpudata *cpu)
 			printf("\tProcessor Core ID: %u\n", cpu->cpu_core_id);
 		}
 	}
-out:
-	return;
 }

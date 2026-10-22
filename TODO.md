@@ -14,11 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A19. vendors/intel/topology.c:75-82 — with HT set but one sibling,
-    phys_proc_id is never set, so multi-socket legacy systems report one
-    socket. Always compute phys_proc_id from the initial APIC ID. Also
-    num_siblings stays 0 when HT is clear (line 61). [sonnet]
-
 A20. vendors/centaur/identify.c:163 — VIA cache info is printed even
     without --cache. Gate on show_cacheinfo like the other vendors. [haiku]
 
