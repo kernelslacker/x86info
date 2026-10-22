@@ -542,9 +542,15 @@ static const char *amd_cap_extended_ecx_flags[32] = {
 	"PerfCtrExtNB", NULL, "DataBPExt", NULL, "PerfCtrExtLLC", "MwaitExtended", "AdMskExtn", NULL
 };
 
-static const char *centaur_cap_extended_ecx_flags[32] = {
+static const char *centaur_cap_ecx_flags[32] = {
 	"sse3", NULL, NULL, NULL, NULL, NULL, NULL, "EPS",
 	"tm2", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+};
+static const char *centaur_cap_80000001_edx_flags[32] = {
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, "mmxext", NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, "3dnowext", "3dnow"
 };
@@ -586,12 +592,13 @@ static void decode_feature_flags(struct cpudata *cpu)
 		case VENDOR_CENTAUR:
 			printf("\n");
 			printf("Extended feature flags:\n");
-			flag_decode(cpu->flags_ecx, "1:ecx", centaur_cap_extended_ecx_flags, NULL);
+			flag_decode(cpu->flags_ecx, "1:ecx", centaur_cap_ecx_flags, NULL);
+			if (cpu->maxei >= 0x80000001)
+				flag_decode(cpu->eflags_edx, "80000001:edx", centaur_cap_80000001_edx_flags, NULL);
 			cpuid(cpu->number, 0xc0000000, &eax, &ebx, &ecx, &edx);
 			if (eax >=0xc0000001) {
 				cpuid(cpu->number, 0xc0000001, &eax, &ebx, &ecx, &edx);
-				cpu->flags_edx = edx;
-				flag_decode(cpu->flags_edx, "1:edx", centaur_cap_extended_edx_flags, NULL);
+				flag_decode(edx, "c0000001:edx", centaur_cap_extended_edx_flags, NULL);
 			}
 			break;
 
