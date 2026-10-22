@@ -147,7 +147,7 @@ void identify_sis(struct cpudata *cpu);
 
 void get_feature_flags(struct cpudata *cpu);
 void display_feature_flags(struct cpudata *cpu);
-void show_extra_intel_flags(struct cpudata *cpu);
+void show_extra_flags(struct cpudata *cpu);
 
 void bind_cpu(unsigned int cpunr);
 

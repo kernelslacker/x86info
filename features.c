@@ -51,13 +51,13 @@ void get_feature_flags(struct cpudata *cpu)
 
 
 /* CPUID 0x00000006 EAX flags */
-static const char *intel_cpuid_06_eax_flags[32] = {
+static const char *cpuid_06_eax_flags[32] = {
 	"dts", "ida", "arat", NULL, "pln", "ecmd", "ptm", "hwp",
 	"hwp_notify", "hwp_act_window", "hwp_epp", "hwp_lpr",
 	NULL, "hdc",
 };
 
-static const char *intel_cpuid_06_eax_flags_desc[32] = {
+static const char *cpuid_06_eax_flags_desc[32] = {
 	"Digital temperature sensor supported",			// 0
 	"Intel Dynamic Acceleration Technology (Turbo Boost)",	// 1
 	"Always Running APIC Timer",				// 2
@@ -75,14 +75,14 @@ static const char *intel_cpuid_06_eax_flags_desc[32] = {
 };
 
 /* CPUID 0x00000007 ECX flags (subleaf 0) */
-static const char *intel_cpuid_07_ecx_flags[32] = {
+static const char *cpuid_07_ecx_flags[32] = {
 	"prefetchwt1", "avx512vbmi", "umip", "pku", "ospke", "waitpkg", "avx512vbmi2", "cet_ss",
 	"gfni", "vaes", "vpclmulqdq", "avx512vnni", "avx512bitalg", "tme", "avx512vpopcntdq", NULL,
 	"la57", NULL, NULL, NULL, NULL, NULL, "rdpid", "kl",
 	"bus_lock_detect", "cldemote", NULL, "movdiri", "movdir64b", "enqcmd", "sgx_lc", "pks"
 };
 
-static const char *intel_cpuid_07_ecx_flags_desc[32] = {
+static const char *cpuid_07_ecx_flags_desc[32] = {
 	"PREFETCHWT1 instruction",			// 0
 	"AVX-512 Vector Bit Manipulation Instructions",	// 1
 	"User-Mode Instruction Prevention (UMIP)",	// 2
@@ -114,14 +114,14 @@ static const char *intel_cpuid_07_ecx_flags_desc[32] = {
 };
 
 /* CPUID 0x00000007 EDX flags (subleaf 0) */
-static const char *intel_cpuid_07_edx_flags[32] = {
+static const char *cpuid_07_edx_flags[32] = {
 	NULL, NULL, "avx512_4vnniw", "avx512_4fmaps", "fsrm", "uintr", NULL, NULL,
 	"avx512vp2intersect", "srbds_ctrl", "md_clear", "rtm_always_abort", NULL, "rtm_force_abort", "serialize", "hybrid",
 	"tsxldtrk", NULL, "pconfig", "arch_lbr", "ibt", NULL, "amx_bf16", "avx512_fp16",
 	"amx_tile", "amx_int8", "ibrs_ibpb", "stibp", "l1d_flush", "arch_capabilities", "core_capabilities", "ssbd"
 };
 
-static const char *intel_cpuid_07_edx_flags_desc[32] = {
+static const char *cpuid_07_edx_flags_desc[32] = {
 	NULL,							// 0
 	NULL,							// 1
 	"AVX-512 4-register Neural Network Instructions",	// 2
@@ -157,14 +157,14 @@ static const char *intel_cpuid_07_edx_flags_desc[32] = {
 };
 
 /* CPUID 0x00000007 EAX flags (subleaf 1) */
-static const char *intel_cpuid_07_1_eax_flags[32] = {
+static const char *cpuid_07_1_eax_flags[32] = {
 	NULL, NULL, NULL, NULL, "avx_vnni", "avx512_bf16", NULL, NULL,
 	NULL, NULL, "fzrm", "fsrs", "fsrc", NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, "hreset", "avx_ifma",
 	NULL, NULL, "lam", NULL, NULL, NULL, NULL, NULL
 };
 
-static const char *intel_cpuid_07_1_eax_flags_desc[32] = {
+static const char *cpuid_07_1_eax_flags_desc[32] = {
 	NULL,						// 0
 	NULL,						// 1
 	NULL,						// 2
@@ -200,14 +200,14 @@ static const char *intel_cpuid_07_1_eax_flags_desc[32] = {
 };
 
 /* CPUID 0x00000007 EDX flags (subleaf 1) */
-static const char *intel_cpuid_07_1_edx_flags[32] = {
+static const char *cpuid_07_1_edx_flags[32] = {
 	NULL, NULL, NULL, NULL, "amx_fp16", NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
 
-static const char *intel_cpuid_07_1_edx_flags_desc[32] = {
+static const char *cpuid_07_1_edx_flags_desc[32] = {
 	NULL,						// 0
 	NULL,						// 1
 	NULL,						// 2
@@ -216,7 +216,7 @@ static const char *intel_cpuid_07_1_edx_flags_desc[32] = {
 };
 
 /* CPUID 0x00000007 EBX flags */
-static const char *intel_cpuid_07_ebx_flags[32] = {
+static const char *cpuid_07_ebx_flags[32] = {
 	"fsgsbase", "tsc_adj", "sgx", "bmi1", "hle", "avx2", "fdp_excp", "smep",
 	"bmi2", "erms", "invpcid", "rtm", "pqm", "nofpucs", "mpx", "pqe",
 	"avx512f", "avx512dq", "rdseed", "adx", "smap", "avx512ifma",
@@ -224,7 +224,7 @@ static const char *intel_cpuid_07_ebx_flags[32] = {
 	"avx512cd", "sha", "avx512bw", "avx512vl"
 };
 
-static const char *intel_cpuid_07_ebx_flags_desc[32] = {
+static const char *cpuid_07_ebx_flags_desc[32] = {
 	"Access to base of %fs and %gs",                                //0
 	"TSC_ADJUST MSR",                                               //1
 	"Software Guard Extensions",                                    //2
@@ -261,12 +261,12 @@ static const char *intel_cpuid_07_ebx_flags_desc[32] = {
 };
 
 	/* CPUID 0x80000007 EDX flags */
-static const char *intel_cpuid_80000007_edx_flags[32] = {
+static const char *cpuid_80000007_edx_flags[32] = {
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	"nonstop_tsc",
 };
 
-static const char *intel_cpuid_80000007_edx_flags_desc[32] = {
+static const char *cpuid_80000007_edx_flags_desc[32] = {
 	NULL,							// 0
 	NULL,							// 1
 	NULL,							// 2
@@ -278,14 +278,14 @@ static const char *intel_cpuid_80000007_edx_flags_desc[32] = {
 	"Invariant/nonstop/constant TSC",			// 8
 };
 
-void show_extra_intel_flags(struct cpudata *cpu)
+void show_extra_flags(struct cpudata *cpu)
 {
 	unsigned int eax = 0, ebx = 0, ecx = 0, edx = 0;
 
 	// Intel CPUID 0x06
 	if (cpu->cpuid_level >= 0x06) {
 		cpuid(cpu->number, 0x06, &eax, &ebx, &ecx, &edx);
-		flag_decode(eax, "6:eax", intel_cpuid_06_eax_flags, intel_cpuid_06_eax_flags_desc);
+		flag_decode(eax, "6:eax", cpuid_06_eax_flags, cpuid_06_eax_flags_desc);
 	}
 	// Intel CPUID 0x07 subleaf 0
 	if (cpu->cpuid_level >= 0x07) {
@@ -293,20 +293,20 @@ void show_extra_intel_flags(struct cpudata *cpu)
 		ecx = 0;
 		cpuid(cpu->number, 0x07, &eax, &ebx, &ecx, &edx);
 		max_subleaf = eax;
-		flag_decode(ebx, "7:ebx", intel_cpuid_07_ebx_flags, intel_cpuid_07_ebx_flags_desc);
-		flag_decode(ecx, "7:ecx", intel_cpuid_07_ecx_flags, intel_cpuid_07_ecx_flags_desc);
-		flag_decode(edx, "7:edx", intel_cpuid_07_edx_flags, intel_cpuid_07_edx_flags_desc);
+		flag_decode(ebx, "7:ebx", cpuid_07_ebx_flags, cpuid_07_ebx_flags_desc);
+		flag_decode(ecx, "7:ecx", cpuid_07_ecx_flags, cpuid_07_ecx_flags_desc);
+		flag_decode(edx, "7:edx", cpuid_07_edx_flags, cpuid_07_edx_flags_desc);
 		// Intel CPUID 0x07 subleaf 1
 		if (max_subleaf >= 1) {
 			cpuid_count(cpu->number, 0x07, 1, &eax, &ebx, &ecx, &edx);
-			flag_decode(eax, "7.1:eax", intel_cpuid_07_1_eax_flags, intel_cpuid_07_1_eax_flags_desc);
-			flag_decode(edx, "7.1:edx", intel_cpuid_07_1_edx_flags, intel_cpuid_07_1_edx_flags_desc);
+			flag_decode(eax, "7.1:eax", cpuid_07_1_eax_flags, cpuid_07_1_eax_flags_desc);
+			flag_decode(edx, "7.1:edx", cpuid_07_1_edx_flags, cpuid_07_1_edx_flags_desc);
 		}
 	}
 	// Intel CPUID 0x80000007
 	if (cpu->maxei >= 0x80000007) {
 		cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
-		flag_decode(edx, "80000007:edx", intel_cpuid_80000007_edx_flags, intel_cpuid_80000007_edx_flags_desc);
+		flag_decode(edx, "80000007:edx", cpuid_80000007_edx_flags, cpuid_80000007_edx_flags_desc);
 	}
 	// Intel CPUID 0x1F: V2 extended topology
 	if (cpu->cpuid_level >= 0x1f) {
@@ -613,7 +613,6 @@ static void decode_feature_flags(struct cpudata *cpu)
 			printf("Extended feature flags:\n");
 			flag_decode(cpu->eflags_edx, "80000001:edx", intel_cap_extended_edx_flags, intel_cap_extended_edx_flags_desc);
 			flag_decode(cpu->eflags_ecx, "80000001:ecx", intel_cap_extended_ecx_flags, intel_cap_extended_ecx_flags_desc);
-			show_extra_intel_flags(cpu);
 			break;
 
 		case VENDOR_NATSEMI:
@@ -624,6 +623,8 @@ static void decode_feature_flags(struct cpudata *cpu)
 			/* Unknown CPU manufacturer or no special handling needed */
 			break;
 	}
+
+	show_extra_flags(cpu);
 
 	printf("\n");
 }
