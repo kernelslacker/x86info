@@ -2,10 +2,6 @@
 
 ## 🔴 Correctness
 
-A5. vendors/intel/cachesize.c:274 — the "bit 31 means invalid register"
-    check covers eax/ebx/ecx only (`j<3`); edx is never cleared, so garbage
-    descriptors can be decoded. Use `j<4`. [haiku]
-
 A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     broken: the TRACE pass already marks every non-trace descriptor as
     unknown, so `oldknown == found_unknown` is always true, L3L2_cache_table
@@ -303,7 +299,7 @@ G1. vendors/intel/cachesize.c — restructure decoding: [opus]
     3. A descriptor not found in the table is unknown; drop
        unknown_array/found_unknown/clean_unknowns and the static
        found_general/found_tlb_general state.
-    Supersedes A5, A6, B3.
+    Supersedes A6, B3.
 
 G2. vendors/amd/identify.c (1056 lines) — move decode_amd_cacheinfo(),
     do_assoc(), do_l2assoc() and the 0x8000001D decoder to

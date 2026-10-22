@@ -271,7 +271,7 @@ static void decode_cache(struct cpudata *cpu, const struct _cache_table *table, 
 		cpuid(cpu->number, 2, &regs[0], &regs[1], &regs[2], &regs[3]);
 
 		/* If bit 31 is set, this is an unknown format */
-		for (j=0; j<3; j++)
+		for (j=0; j<4; j++)
 			if (regs[j] & 0x80000000)
 				regs[j] = 0;
 
