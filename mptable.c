@@ -402,8 +402,10 @@ int enumerate_cpus(void)
 	}
 
 	/* probe for MP structures */
-	if (apic_probe(&paddr) <= 0)
+	if (apic_probe(&paddr) <= 0) {
+		close(pfd);
 		return 1;
+	}
 
 	/* read in mpfps structure*/
 	seekEntry(paddr);
@@ -415,9 +417,12 @@ int enumerate_cpus(void)
 
 	/* check whether an MP config table exists */
 	if (!mpfps.mpfb1)
-		if (MPConfigTableHeader(mpfps.pap) == SMP_YES)
+		if (MPConfigTableHeader(mpfps.pap) == SMP_YES) {
+			close(pfd);
 			return ncpu;
+		}
 
+	close(pfd);
 	return 1;
 }
 
@@ -435,8 +440,10 @@ void display_mptable(void)
 	}
 
 	/* probe for MP structures */
-	if (apic_probe(&paddr) <= 0)
+	if (apic_probe(&paddr) <= 0) {
+		close(pfd);
 		return;
+	}
 
 	/* read in mpfps structure*/
 	seekEntry(paddr);
@@ -449,4 +456,6 @@ void display_mptable(void)
 	/* parse an MP config table if it exists */
 	if (!mpfps.mpfb1)
 		(void) MPConfigTableHeader(mpfps.pap);
+
+	close(pfd);
 }

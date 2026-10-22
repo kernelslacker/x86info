@@ -75,8 +75,10 @@ static volatile unsigned int * mapping_apic_registers(unsigned long long addr)
 	apic_mapped_size = APIC_REGISTER_SPACE + (unsigned int)offset;
 
 	mapped = mmap(NULL, apic_mapped_size, PROT_READ, MAP_SHARED, fd, (off_t)(addr - offset));
-	if (mapped == MAP_FAILED)
+	if (mapped == MAP_FAILED) {
+		close(fd);
 		return NULL;
+	}
 
 	apic_mapped_base = mapped;
 	return (volatile unsigned int *)((char *)mapped + offset);
