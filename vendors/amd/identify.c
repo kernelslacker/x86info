@@ -496,6 +496,31 @@ void decode_amd_cacheinfo(struct cpudata *cpu)
 		}
 	}
 
+	if (family(cpu) >= 0x17 && cpu->maxei >= 0x8000001d) {
+		static const char * const ctype[] = {
+			"", "data", "instruction", "unified"
+		};
+		unsigned int sub;
+
+		printf("Caches (CPUID 0x8000001D):\n");
+		for (sub = 0; sub < 8; sub++) {
+			unsigned int type, ways, parts, line, sets;
+
+			cpuid_count(cpu->number, 0x8000001d, sub, &eax, &ebx, &ecx, &edx);
+			type = eax & 0x1f;
+			if (type == 0 || type >= ARRAY_SIZE(ctype))
+				break;
+			ways = (ebx >> 22) + 1;
+			parts = ((ebx >> 12) & 0x3ff) + 1;
+			line = (ebx & 0xfff) + 1;
+			sets = ecx + 1;
+			printf("\tL%u %s: %uKb, %u-way, line size=%u bytes, shared by %u threads\n",
+			       (eax >> 5) & 7, ctype[type],
+			       ways * parts * line * sets / 1024, ways, line,
+			       ((eax >> 14) & 0xfff) + 1);
+		}
+	}
+
 	printf("\n");
 }
 
