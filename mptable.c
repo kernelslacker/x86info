@@ -262,25 +262,23 @@ static int apic_probe(unsigned long* paddr)
 		return 0;
 	}
 
-	if (segment == 0)
-		return 0;
+	if (segment != 0) {
+		if (debug)
+			printf("\nEBDA points to: %x\n", segment);
 
-	if (debug)
-		printf("\nEBDA points to: %x\n", segment);
+		target = (unsigned long)segment << 4;
+		if (debug)
+			printf("EBDA segment ptr: %lx\n", target);
+		if (readAt(target, buffer, ONE_KBYTE)) {
+			printf("error reading 1K from %p\n", (void *)target);
+			return 0;
+		}
 
-	target = (unsigned long)segment << 4;
-	if (debug)
-		printf("EBDA segment ptr: %lx\n", target);
-	if (readAt(target, buffer, ONE_KBYTE)) {
-		printf("error reading 1K from %p\n", (void *)target);
-		return 0;
-	}
-
-
-	for (x = 0; x < ONE_KBYTE; x += MP_ALIGN) {
-		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-			*paddr = x +target;
-			return 1;
+		for (x = 0; x < ONE_KBYTE; x += MP_ALIGN) {
+			if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
+				*paddr = x +target;
+				return 1;
+			}
 		}
 	}
 

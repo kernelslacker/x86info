@@ -14,10 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A13. mptable.c:265 — `if (segment == 0) return 0;` aborts the whole MP
-    table search when there's no EBDA, skipping the base-memory and BIOS
-    ROM scans. Only skip the EBDA scan. [haiku]
-
 A14. mptable.c MPConfigTableHeader() / enumerate_cpus() — "MP Configuration
     Table Header MISSING!" and read errors print even in silent mode,
     which runs on every root invocation (x86info.c:265). Gate on !silent.
