@@ -13,16 +13,23 @@ void get_cpu_info_basics(struct cpudata *cpu)
 {
 	static int unknown_vendor_reported;
 
-	unsigned int maxi, maxei, vendor, address_bits;
+	unsigned int maxi, maxei, vendor, vendor_edx, address_bits;
 	unsigned int eax;
 
-	cpuid(cpu->number, 0, &maxi, &vendor, NULL, NULL);
+	cpuid(cpu->number, 0, &maxi, &vendor, NULL, &vendor_edx);
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
 	cpu->cpuid_level = maxi;
 
 	switch (vendor) {
 	case 0x756e6547:
-		cpu->vendor = VENDOR_INTEL;
+		/* "GenuineTMx86" shares "Genu" with "GenuineIntel"; EDX is "ineT" */
+		if (vendor_edx == 0x54656e69)
+			cpu->vendor = VENDOR_TRANSMETA;
+		else
+			cpu->vendor = VENDOR_INTEL;
+		break;
+	case 0x6f677948:	/* "HygonGenuine" */
+		cpu->vendor = VENDOR_AMD;
 		break;
 	case 0x68747541:
 		cpu->vendor = VENDOR_AMD;
