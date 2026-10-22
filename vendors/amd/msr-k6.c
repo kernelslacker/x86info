@@ -54,7 +54,7 @@ void dump_k6_MSR (struct cpudata *cpu)
 			else
 				printf("Data prefetch disabled.\n");
 			printf("EWBE mode: ");
-			switch ((val & (1<<2|1<<3|1<<4))>>2) {
+			switch ((val & (1<<2|1<<3))>>2) {
 				case 0:	printf("strong ordering (slowest performance)\n");
 					break;
 				case 1:	printf("speculative disable (close to best performance)\n");
