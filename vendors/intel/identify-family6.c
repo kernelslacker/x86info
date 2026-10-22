@@ -27,64 +27,18 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 		switch (cpu->stepping) {
 		case 1:
 			add_to_cpuname(" [B0]");
-			switch (cpu->MHz) {
-				case 133:
-					//sSpec# Q0812, Q0815
-					break;
-				case 150:
-					//sSpec# Q0813, Q0816, SY002, SY011, SY014
-					break;
-			}
 			break;
 		case 2:
 			add_to_cpuname(" [C0]");
-			//sSpec# Q0822, Q0825, Q0826, SY010
 			break;
 		case 6:
 			add_to_cpuname(" [sA0]");
-			switch (cpu->MHz) {
-				case 166:
-					//sSpec# Q0864
-					break;
-				case 180:
-					//sSpec# SY012, Q0858, Q0860, Q0873, Q0910
-					break;
-				case 200:
-					//cache = 256 sSpec# SY013, Q0859, Q0874
-					//cache = 512 sSpec# Q0865
-					break;
-			}
 			break;
 		case 7:
 			add_to_cpuname(" [sA1]");
-			switch (cpu->MHz) {
-				case 166:
-					//sSpec# SY034, SY047, Q0918, Q0929, Q935
-					break;
-				case 180:
-					//sSpec# SY031, SY039, SU103, Q0871, Q0907
-					break;
-				case 200:
-					//cache = 256 sSpec# SY032, SY040, SL245, SL247, SU104, Q076, Q0872, Q0908, Q0909
-					//cache = 512 sSpec# SY048, Q0920, Q0924, Q932 , Q936
-					break;
-			}
 			break;
 		case 9:
 			add_to_cpuname(" [sB1]");
-			switch (cpu->MHz) {
-				case 166:
-					//sSpec# Q008, Q009, SL2FJ, SL22X
-					break;
-				case 180:
-					//sSpec# SL22S, SL22U, SL23L, Q033, Q035
-					break;
-				case 200:
-					//cache = 256 sSpec# L22T, SL22V, SL23M,SL254,SL255,Q034,Q036 ,Q083 ,Q084
-					//cache = 512 sSpec# Q010, Q011, SL22Z
-					//cache = 1MB sSpec# SL259, SL25A
-					break;
-			}
 			break;
 		}
 		break;
@@ -97,31 +51,9 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 			break;
 		case 3:
 			add_to_cpuname("(Klamath) [C0]");
-			switch (cpu->MHz) {
-				case 233:
-					//sSpec# SL264, SL268, SL28K
-					break;
-				case 266:
-					//sSpec# SL265, SL269, SL28L
-					break;
-				case 300:
-					//sSpec# SL28R, SL2MZ
-					break;
-			}
 			break;
 		case 4:
 			add_to_cpuname("(Klamath) [C1]");
-			switch (cpu->MHz) {
-				case 233:
-					//sSpec# SL2HD, SL2HF, SL2QA
-					break;
-				case 266:
-					//sSpec# SL2HC, SL2HE, SL2QB
-					break;
-				case 300:
-					//sSpec# SL2HA, SL2QC
-					break;
-			}
 			break;
 		}
 		break;
@@ -145,65 +77,15 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 				switch (cpu->stepping) {
 				case 0:
 					add_to_cpuname("Pentium II [dA0]");
-					switch (cpu->MHz) {
-						case 266:
-							//sSpec# SL2K9
-							break;
-						case 333:
-							//sSpec# SL2KA, SL2QF
-							break;
-					}
 					break;
 				case 1:
 					add_to_cpuname("Pentium II (Deschutes) [dA1]");
-					switch (cpu->MHz) {
-						case 300:
-							//66 bus sSpec# SL35V, SL2VY
-							break;
-						case 333:
-							//66 bus sSpec# SL2QH, SL2S5, SL2ZP
-							break;
-						case 350:
-							//100Bus - sSpec# SL2ZQ, SL2S6, SL2SF
-							break;
-						case 400:
-							//100Bus - sSpec# Sl2S7, SL2SH
-							break;
-					}
 					break;
 				case 2:
 					add_to_cpuname("Pentium II (Deschutes) [dB0]");
-					switch (cpu->MHz) {
-						case 266:
-							//66Bus sSpec# SL33D, SL2W7
-							break;
-						case 300:
-							//66Bus - SL2YK, SL2W8
-							break;
-						case 333:
-							//66Bus - SL2KE, SL2TV
-							break;
-						case 350:
-							//100Bus - SL2WZ, SL2U3, SL2U4, SL356, SL37F, SL3FN
-							break;
-						case 400:
-							//100Bus - SL2YM, SL37G, SL2U5, SL2U6, SL357, SL3EE, SL3F9
-							break;
-						case 450:
-							//100Bus - SL2WB, SL37H, SL2U7, SL358
-							break;
-					}
 					break;
 				case 3:
 					add_to_cpuname("Pentium II (Deschutes) [dB1]");
-					switch (cpu->MHz) {
-						case 350:
-							//100Bus - SL38M, SL36U, SL3J2
-							break;
-						case 400:
-							//100Bus - SL38N, SL38Z, SL3D5
-							break;
-					}
 					break;
 				default:
 					add_to_cpuname("Pentium II");
