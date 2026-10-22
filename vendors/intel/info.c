@@ -52,7 +52,7 @@ void decode_serial_number(struct cpudata *cpu)
 
 static void decode_brand(struct cpudata *cpu)
 {
-	printf(")\tBrand: %u (", cpu->brand);
+	printf("\tBrand: %u (", cpu->brand);
 	switch (cpu->brand) {
 	case 1:
 	case 0xA:

@@ -14,10 +14,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
     3. Delete L2L3/L3L2 tables and the oldknown logic.
     (Fold into G1 if doing the restructure.)
 
-A11. vendors/intel/info.c:55 — decode_brand() starts its line with ")",
-    leaving a stray paren after the "Type:" line. Drop the leading ")".
-    [haiku]
-
 A12. apic.c:114 / x86info.c:192 — local APIC MMIO reads whichever CPU the
     process is running on, which after the fill loop is the *last* CPU, not
     the one being displayed. Call bind_cpu(cpu->number) at the top of
