@@ -18,6 +18,7 @@ struct cpu_name_def {
 	unsigned int stepping;
 	unsigned int mhz;
 	unsigned int flags;
+	unsigned int cores;	/* 0 matches any core count */
 	const char *str;
 };
 
@@ -25,8 +26,8 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	// sSpec step CoreFreq Bus cache
 	// SLAN3  C0  3.00    1333  12MB (2x6) QX9650
 	// SLANY  C0  3.2     1600  12MB (2x6) QX9775
-	{ .model = 7, .stepping = 6, .mhz = 3000, .str = "Core 2 quad (QX9650) [C0]" },
-	{ .model = 7, .stepping = 6, .mhz = 3200, .str = "Core 2 extreme quad (QX9775) [C0]" },
+	{ .model = 0x17, .cores = 4,.stepping = 6, .mhz = 3000, .str = "Core 2 quad (QX9650) [C0]" },
+	{ .model = 0x17, .cores = 4,.stepping = 6, .mhz = 3200, .str = "Core 2 extreme quad (QX9775) [C0]" },
 
 	// sSpec step CoreFreq Bus cache
 	// SLAWM C1   3.2    1600  12MB (2x6)	QX9770
@@ -34,33 +35,31 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	// SLAWR C1   2.66   1333  12MB (2x6)	Q9450
 	// SLAWE M1   2.50   1333  6MB (2x3)	Q9300
 	// SLB5M M1   2.33   1333  4MB (2x2)    Q8200
-	{ .model = 7, .stepping = 7, .mhz = 3200, .str = "Core 2 quad (QX9770) [C1]" },
-	{ .model = 7, .stepping = 7, .mhz = 2830, .str = "Core 2 quad (Q9550) [C1]" },
-	{ .model = 7, .stepping = 7, .mhz = 2660, .str = "Core 2 quad (Q9450) [C1]" },
-	{ .model = 7, .stepping = 7, .mhz = 2500, .str = "Core 2 quad (Q9300) [M1]" },
-	{ .model = 7, .stepping = 7, .mhz = 2330, .str = "Core 2 quad (Q8200) [M1]" },
+	{ .model = 0x17, .cores = 4,.stepping = 7, .mhz = 3200, .str = "Core 2 quad (QX9770) [C1]" },
+	{ .model = 0x17, .cores = 4,.stepping = 7, .mhz = 2830, .str = "Core 2 quad (Q9550) [C1]" },
+	{ .model = 0x17, .cores = 4,.stepping = 7, .mhz = 2660, .str = "Core 2 quad (Q9450) [C1]" },
+	{ .model = 0x17, .cores = 4,.stepping = 7, .mhz = 2500, .str = "Core 2 quad (Q9300) [M1]" },
+	{ .model = 0x17, .cores = 4,.stepping = 7, .mhz = 2330, .str = "Core 2 quad (Q8200) [M1]" },
 
 	// sSpec step CoreFreq Bus cache
 	// SLB8W E0  3.00     1333 12MB (2x6) Q9650
 	// SLB8V E0  2.83     1333 12MB (2x6) Q9550
 	// SLB6B R0  2.66     1333 6MB  (2x3) Q9400
 	// SLB5W R0  2.5      1333 4MB  (2x2) Q8300
-	{ .model = 7, .stepping = 10, .mhz = 3000, .str = "Core 2 quad (Q9650) [E0]" },
-	{ .model = 7, .stepping = 10, .mhz = 2830, .str = "Core 2 quad (Q9550) [E0]" },
-	{ .model = 7, .stepping = 10, .mhz = 2660, .str = "Core 2 quad (Q9400) [R0]" },
-	{ .model = 7, .stepping = 10, .mhz = 2500, .str = "Core 2 quad (Q8300) [R0]" },
+	{ .model = 0x17, .cores = 4,.stepping = 10, .mhz = 3000, .str = "Core 2 quad (Q9650) [E0]" },
+	{ .model = 0x17, .cores = 4,.stepping = 10, .mhz = 2830, .str = "Core 2 quad (Q9550) [E0]" },
+	{ .model = 0x17, .cores = 4,.stepping = 10, .mhz = 2660, .str = "Core 2 quad (Q9400) [R0]" },
+	{ .model = 0x17, .cores = 4,.stepping = 10, .mhz = 2500, .str = "Core 2 quad (Q8300) [R0]" },
 
 	//sSpec step CoreFreq/QuickpathGTs/DDR3	cache
 	//SLBCJ C-0	3.2/6.40/1066		8MB
 	//SLBCK C-0	2.93/4.80/1066		8MB
 	//SLBCH C-0	2.66/4.80/1066		8MB
-	{ .model = 0xa, .flags = ONLYMODEL, .str = "Core i7", },
-
 	// sSpec step TDP Name FSB EFMS  HFM    LFM    Package  MCU
 	// QDTD  B0   2.5   x  533 106C1 1.6GHz 800MHz FCBGA8 M01106C1109
 	// QDTB  B0   2.5   x  533 106C1 1.6GHz 800MHz FCBGA8 M01106C1109
 	// QGFD1 B0     X   X  533 106C1 1.33GHz ----  FCBGA437 M01106C1109
-	{ .model = 0xc, .stepping = 1, .str = "Atom" },
+	{ .model = 0x1c,.stepping = 1, .str = "Atom" },
 
 	// sSpec step TDP Name FSB EFMS  HFM     LFM    Package
 	// SLB6Q C0 0.65W Z500 400 106C2 800GHz  600MHz FCBGA8
@@ -73,12 +72,12 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	// QGZR2 C0    4W  230 533 106C2 1.60GHz -----  FCBGA437
 	// SLB2M C0  2.4W Z540 533 106C2 1.86GHz 800MHz FCBGA8
 	// SLGPT C0  2.4W Z550 533 106C2 2.0GHz  800MHz FCBGA8
-	{ .model = 0xc, .stepping = 2, .mhz = 800, .str = "Atom Z500/Z515 [C0]" },
-	{ .model = 0xc, .stepping = 2, .mhz = 1100, .str = "Atom Z510 [C0]" },
-	{ .model = 0xc, .stepping = 2, .mhz = 1330, .str = "Atom Z520 [C0]" },
-	{ .model = 0xc, .stepping = 2, .mhz = 1600, .str = "Atom Z530/N270/QKGY1/QGZR2" },
-	{ .model = 0xc, .stepping = 2, .mhz = 1860, .str = "Atom Z540 [C0]" },
-	{ .model = 0xc, .stepping = 2, .mhz = 2000, .str = "Atom Z550 [C0]" },
+	{ .model = 0x1c,.stepping = 2, .mhz = 800, .str = "Atom Z500/Z515 [C0]" },
+	{ .model = 0x1c,.stepping = 2, .mhz = 1100, .str = "Atom Z510 [C0]" },
+	{ .model = 0x1c,.stepping = 2, .mhz = 1330, .str = "Atom Z520 [C0]" },
+	{ .model = 0x1c,.stepping = 2, .mhz = 1600, .str = "Atom Z530/N270/QKGY1/QGZR2" },
+	{ .model = 0x1c,.stepping = 2, .mhz = 1860, .str = "Atom Z540 [C0]" },
+	{ .model = 0x1c,.stepping = 2, .mhz = 2000, .str = "Atom Z550 [C0]" },
 
 	{ .model = 0xe, .stepping = 8, .mhz = 1000, .str = "Core Duo U2400/Solo U1300 [Yonah] [C-0]" },
 	{ .model = 0xe, .stepping = 8, .mhz = 1200, .str = "Core Solo U1400 [Yonah] [C-0]" },
@@ -92,12 +91,12 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	{ .model = 0xe, .stepping = 12, .mhz = 1800, .str = "Core Duo L2500 [Yonah] [D-0]" },
 	{ .model = 0xe, .stepping = 12, .mhz = 2300, .str = "Core Duo T2700 [Yonah] [D-0]" },
 
-	{ .model = 0xf, .flags = ONLYMODEL, .str = "Core 2 [Merom]" },
+	{ .model = 0xe, .flags = ONLYMODEL, .str = "Core Duo/Solo [Yonah]" },
 
 	{ .model = 0x16, .flags = ONLYMODEL, .str = "Core 2 [Merom-L]" },
 
 	{ .model = 0x17, .stepping = 4, .str = "Core 2 Duo [Penryn]" },
-	{ .model = 0x17, .stepping = 6, .str = "Core 2 Duo P8600 [Penryn]" },
+	{ .model = 0x17, .stepping = 6, .cores = 2, .str = "Core 2 Duo P8600 [Penryn]" },
 
 	// SLBCJ C-0 0x000106A4 3.20 / 6.40/ 1066 8MB
 	// SLBCK C-0 0x000106A4 2.93 / 4.80/ 1066 8MB
@@ -110,6 +109,8 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	{ .model = 0x1a, .stepping = 5, .mhz = 3060, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEN]" },
 	{ .model = 0x1a, .stepping = 5, .mhz = 2660, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEJ]" },
 	{ .model = 0x1a, .stepping = 5, .mhz = 2800, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBKP]" },
+
+	{ .model = 0x1a, .flags = ONLYMODEL, .str = "Core i7 (Nehalem)" },
 
 	{ .model = 0x1c, .stepping = 10, .str = "Atom D510 [Pineview]" },
 	{ .model = 0x1d, .flags = ONLYMODEL, .str = "Core i7 [Dunnington (MP)]" },
@@ -212,6 +213,10 @@ static const char * get_namestring(struct cpudata *cpu)
 
 	for (i = 0; i < ARRAY_SIZE(intel_fam6e_names); i++) {
 		if (model(cpu) != intel_fam6e_names[i].model)
+			continue;
+
+		if (intel_fam6e_names[i].cores &&
+		    intel_fam6e_names[i].cores != cpu->nr_cores)
 			continue;
 
 		if (intel_fam6e_names[i].flags & ONLYMODEL)

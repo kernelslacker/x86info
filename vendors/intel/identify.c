@@ -124,7 +124,8 @@ void identify_intel(struct cpudata *cpu)
 		break;
 
 	case 0x6:
-		if (cpu->emodel == 0)
+		/* Yonah (model 0xe, emodel 0) is only in the extended table */
+		if (cpu->emodel == 0 && cpu->model != 0xe)
 			identify_intel_family6pentium(cpu);
 		else
 			identify_intel_family6core(cpu);
