@@ -19,9 +19,10 @@
 #include <errno.h>
 #include <x86info.h>
 
-void bind_cpu(int cpunr)
+int bind_cpu(unsigned int cpunr)
 {
 	//FIXME
+	return 0;
 }
 
 void cpuid(unsigned int CPU_number, unsigned long long idx,

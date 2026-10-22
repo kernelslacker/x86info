@@ -149,7 +149,7 @@ void get_feature_flags(struct cpudata *cpu);
 void display_feature_flags(struct cpudata *cpu);
 void show_extra_flags(struct cpudata *cpu);
 
-void bind_cpu(unsigned int cpunr);
+int bind_cpu(unsigned int cpunr);
 
 int native_cpuid(unsigned int cpunr, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx,

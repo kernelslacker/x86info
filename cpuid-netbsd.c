@@ -16,17 +16,19 @@
 
 #include <x86info.h>
 
-void bind_cpu(unsigned int cpunr)
+int bind_cpu(unsigned int cpunr)
 {
 	cpuset_t *cpuset;
+	int ret;
 
 	cpuset = cpuset_create();
 	if (cpuset == NULL)
-		return;
+		return -1;
 	cpuset_zero(cpuset);
 	cpuset_set(cpunr, cpuset);
-	_sched_setaffinity(0, 0, cpuset_size(cpuset), cpuset);
+	ret = _sched_setaffinity(0, 0, cpuset_size(cpuset), cpuset);
 	cpuset_destroy(cpuset);
+	return ret;
 }
 
 static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";

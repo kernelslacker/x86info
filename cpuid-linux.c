@@ -33,7 +33,7 @@
 #endif
 #endif
 
-void bind_cpu(unsigned int cpunr)
+int bind_cpu(unsigned int cpunr)
 {
         int ret;
 	cpu_set_t set;
@@ -41,13 +41,12 @@ void bind_cpu(unsigned int cpunr)
 
         ret = sched_getaffinity(getpid(), sizeof(set), &set);
         if (ret)
-                return;
+                return ret;
 
         memcpy(&tmp_set, &set, sizeof(cpu_set_t));
         CPU_ZERO(&set);
         CPU_SET(cpunr, &set);
-        sched_setaffinity(getpid(), sizeof(set), &set);
-        return;
+        return sched_setaffinity(getpid(), sizeof(set), &set);
 }
 
 static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";

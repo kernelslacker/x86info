@@ -18,13 +18,13 @@
 
 #include <x86info.h>
 
-void bind_cpu(unsigned int cpunr)
+int bind_cpu(unsigned int cpunr)
 {
 	cpuset_t mask;
 
 	CPU_ZERO(&mask);
 	CPU_SET(cpunr, &mask);
-	(void) cpuset_setaffinity(CPU_LEVEL_WHICH, CPU_WHICH_PID, -1,
+	return cpuset_setaffinity(CPU_LEVEL_WHICH, CPU_WHICH_PID, -1,
 	    sizeof(mask), &mask);
 }
 

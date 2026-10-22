@@ -23,7 +23,8 @@ int native_cpuid(unsigned int cpunr, unsigned long long idx,
 
 	c = idx >> 32;
 
-	bind_cpu(cpunr);
+	if (bind_cpu(cpunr))
+		return -1;
 
 	asm("cpuid"
 		: "=a" (a),
