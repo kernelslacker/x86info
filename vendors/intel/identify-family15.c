@@ -9,13 +9,8 @@
 #include <x86info.h>
 #include "intel.h"
 
-static char *intel_nameptr;
-#define add_to_cpuname(x) CPU_NAME_APPEND(intel_nameptr, cpu, x)
-
 void identify_intel_family15(struct cpudata *cpu)
 {
-	intel_nameptr = cpu->name;
-
 	switch (model(cpu)) {
 	case 0x0:	/* Family 15 */
 		cpu->connector = CONN_SOCKET_423;

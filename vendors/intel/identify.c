@@ -13,14 +13,9 @@
 #include <x86info.h>
 #include "intel.h"
 
-static char *intel_nameptr;
-#define add_to_cpuname(x) CPU_NAME_APPEND(intel_nameptr, cpu, x)
-
 void identify_intel(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
-
-	intel_nameptr = cpu->name;
 
 	cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
 	cpu->emodel = (eax >> 16) & 0xf;
@@ -133,8 +128,6 @@ void identify_intel(struct cpudata *cpu)
 			identify_intel_family6pentium(cpu);
 		else
 			identify_intel_family6core(cpu);
-
-		intel_nameptr += strlen(cpu->name);	// EWW
 		break;
 
 	case 0x7:
@@ -143,7 +136,6 @@ void identify_intel(struct cpudata *cpu)
 
 	case 0xF:
 		identify_intel_family15(cpu);
-		intel_nameptr += strlen(cpu->name);	// EWW
 		break;
 	}
 }
