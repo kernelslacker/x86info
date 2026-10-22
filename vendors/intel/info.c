@@ -28,6 +28,8 @@ void decode_serial_number(struct cpudata *cpu)
 	signature = eax;
 
 	cpuid(cpu->number, 3, &eax, &ebx, &ecx, &edx);
+	/* Six 4-digit groups and five dashes: 29 characters plus the NUL
+	 * exactly fill serialno, so rem never goes negative. */
 	rem = sizeof(cpu->serialno);
 	p = cpu->serialno;
 	n = snprintf(p, rem, "%04X", signature >> 16);
