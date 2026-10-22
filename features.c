@@ -645,14 +645,17 @@ static void sigill(__attribute__((__unused__))int sig)
 
 static void test_longnop(void)
 {
-	int died;
+	volatile int died;
+	void (*old)(int);
 
-	signal(SIGILL, sigill);
+	old = signal(SIGILL, sigill);
 
 	died = sigsetjmp(out, 1);
 
 	if (!died)
 		asm volatile(".byte 0x0f,0x1f,0x00 /* nopl 0(%eax) */");
+
+	signal(SIGILL, old);
 
 	printf("Long NOPs supported: %s\n", died ? "no" : "yes");
 }
@@ -660,6 +663,7 @@ static void test_longnop(void)
 void display_feature_flags(struct cpudata *cpu)
 {
 	decode_feature_flags(cpu);
+	bind_cpu(cpu->number);
 	test_longnop();
 	printf("\n");
 }
