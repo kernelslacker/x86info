@@ -117,10 +117,31 @@ void identify_intel(struct cpudata *cpu)
 		break;
 
 	case 0xF:
-		if (cpu->efamily == 0)
+		switch (cpu->efamily) {
+		case 0:
 			identify_intel_family15(cpu);
-		else
+			break;
+		case 3:		/* Family 0x12 */
+			switch (model(cpu)) {
+			case 0x1:
+				add_to_cpuname("[Nova Lake]");
+				break;
+			case 0x3:
+				add_to_cpuname("[Nova Lake L]");
+				break;
+			default:
+				add_to_cpuname("Unknown model.");
+			}
+			break;
+		case 4:		/* Family 0x13 */
+			if (model(cpu) == 0x1)
+				add_to_cpuname("[Diamond Rapids]");
+			else
+				add_to_cpuname("Unknown model.");
+			break;
+		default:
 			add_to_cpuname("Unknown model.");
+		}
 		break;
 	}
 }
