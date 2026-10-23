@@ -14,9 +14,6 @@ E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr
     backend, so MSR output and per-CPU cpuid don't work. Implement them
     (processor_bind(), /dev/cpu/N/msr) or drop the README claim. [sonnet]
 
-E7. cpuid-linux.c:25-34 — the glibc < 2.4 #error guards a 2006 release that
-    nothing can still build against. Remove it. [haiku]
-
 ## 🟡 Better API Alternatives
 
 ## 🟡 Architectural improvements

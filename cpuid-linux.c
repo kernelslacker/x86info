@@ -22,17 +22,6 @@
 
 #include <x86info.h>
 
-/*
- * sched_* calls weren't stable until 2.3.4
- * AFAIK, there's no macro to check for the .4, so we just
- * check for the next minor version up. (2.4)
- */
-#ifdef __GLIBC__
-#if __GLIBC__ < 2 || __GLIBC__ == 2 && __GLIBC_MINOR__ < 4
-#error Need at least glibc 2.4
-#endif
-#endif
-
 /* The CPU this thread is bound to, or -1 if bind_cpu() hasn't succeeded. */
 static __thread int bound_cpu = -1;
 
