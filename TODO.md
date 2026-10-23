@@ -2,11 +2,6 @@
 
 ## 🔴 Correctness
 
-A28. x86info.c:507-514 — with one online CPU and an MP table listing more,
-    " (but found %d CPUs in MPTable!)" is printed with no "Found ..." prefix
-    and no newline, so it runs into the model header. Print the MP table
-    count on its own line whatever nrCPUs is. [haiku]
-
 A29. mptable.c:116-158 — seekEntry(), readEntry() and readType() call
     perror() unconditionally, so the silent enumerate_cpus() pass (every root
     run with one kind of CPU) still prints e.g. "readEntry: Operation not

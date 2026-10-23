@@ -270,18 +270,15 @@ int main(int argc, char **argv)
 	/* Now we display the info we gathered */
 	if (display_one_cpu) {
 		if (nrCPUs >= 2)
-			printf("Found %u identical CPUs", nrCPUs);
+			printf("Found %u identical CPUs\n", nrCPUs);
 
 		/* Check mptable if present. This way we get number of CPUs
 		   on SMP systems that have booted UP kernels. */
 		if (user_is_root) {
 			nrSMPCPUs = enumerate_cpus();
-			if (nrSMPCPUs > 0)
-				if ((unsigned int)nrSMPCPUs > nrCPUs)
-					printf(" (but found %d CPUs in MPTable!)", nrSMPCPUs);
+			if (nrSMPCPUs > 0 && (unsigned int)nrSMPCPUs > nrCPUs)
+				printf("Found %d CPUs in MPTable!\n", nrSMPCPUs);
 		}
-		if (nrCPUs >= 2)
-			printf("\n");
 
 		display_detailed_info(&cpus[0], 1);
 	} else if (!opts.all_cpus) {
