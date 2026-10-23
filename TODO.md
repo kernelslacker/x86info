@@ -31,11 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C14. vendors/amd/identify.c:402-497 — 1G TLB leaf 0x80000019 is queried
-    twice; the TLB line and cache block prints are repeated 8x/3x. Add
-    `print_tlb(label, assoc_fn, assoc, entries)` and
-    `print_cache(label, size, assoc, lpt, line)` helpers. [sonnet]
-
 C15. vendors/amd/model-name.c:22-75 — 55-line switch of brand strings plus
     a second switch on model letter. Make it a
     `{index, letter, fmt}` table. [sonnet]

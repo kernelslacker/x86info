@@ -284,104 +284,88 @@ static void do_l2assoc(unsigned long assoc)
 		printf("%u-way associative. ", l2assoc_ways[assoc]);
 }
 
+static void print_tlb(const char *label, void (*assoc_fn)(unsigned long),
+		      unsigned long assoc, unsigned int entries)
+{
+	printf("%-28s", label);
+	assoc_fn(assoc);
+	printf("%u entries.\n", entries);
+}
+
+static void print_cache(const char *label, unsigned int size_kb,
+			void (*assoc_fn)(unsigned long), unsigned long assoc,
+			unsigned int lines_per_tag, unsigned int line_size)
+{
+	printf("%s:\n\tSize: %uKb\t", label, size_kb);
+	assoc_fn(assoc);
+	printf("\n\tlines per tag=%u\tline size=%u bytes.\n",
+	       lines_per_tag, line_size);
+}
+
 void decode_amd_cacheinfo(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
+	unsigned int tlb1g_eax = 0, tlb1g_ebx = 0;
+	int have_1g = 0;
 
 	if ((cpu->eflags_edx & 1<<26) && cpu->maxei >= 0x80000019) {
-		/* 1GB page TLB info */
-		cpuid(cpu->number, 0x80000019, &eax, &ebx, &ecx, &edx);
+		cpuid(cpu->number, 0x80000019, &tlb1g_eax, &tlb1g_ebx, &ecx, &edx);
+		have_1g = 1;
 
-		printf("L1 Data TLB (1G):           ");
-		do_l2assoc(eax >> 28);
-		printf("%u entries.\n", (eax >> 16) & 0xfff);
-		printf("L1 Instruction TLB (1G):    ");
-		do_l2assoc((eax >> 12) & 0xf);
-		printf("%u entries.\n", eax & 0xfff);
+		print_tlb("L1 Data TLB (1G):", do_l2assoc, tlb1g_eax >> 28,
+			  (tlb1g_eax >> 16) & 0xfff);
+		print_tlb("L1 Instruction TLB (1G):", do_l2assoc,
+			  (tlb1g_eax >> 12) & 0xf, tlb1g_eax & 0xfff);
 	}
 
 	if (cpu->maxei >= 0x80000005) {
 		/* TLB and cache info */
 		cpuid(cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);
 
-		printf("L1 Data TLB (2M/4M):        ");
-		do_assoc(eax >> 24);
-		printf("%u entries.\n", (eax >> 16) & 0xff);
-		printf("L1 Instruction TLB (2M/4M): ");
-		do_assoc((eax >> 8) & 0xff);
-		printf("%u entries.\n", eax & 0xff);
+		print_tlb("L1 Data TLB (2M/4M):", do_assoc, eax >> 24,
+			  (eax >> 16) & 0xff);
+		print_tlb("L1 Instruction TLB (2M/4M):", do_assoc,
+			  (eax >> 8) & 0xff, eax & 0xff);
+		print_tlb("L1 Data TLB (4K):", do_assoc, ebx >> 24,
+			  (ebx >> 16) & 0xff);
+		print_tlb("L1 Instruction TLB (4K):", do_assoc,
+			  (ebx >> 8) & 0xff, ebx & 0xff);
 
-		printf("L1 Data TLB (4K):           ");
-		do_assoc(ebx >> 24);
-		printf("%u entries.\n", (ebx >> 16) & 0xff);
-		printf("L1 Instruction TLB (4K):    ");
-		do_assoc((ebx >> 8) & 0xff);
-		printf("%u entries.\n", ebx & 0xff);
-
-		printf("L1 Data cache:\n\t");
-		printf("Size: %uKb\t", ecx >> 24);
-		do_assoc((ecx >> 16) & 0xff);
-		printf("\n\t");
-		printf("lines per tag=%u\t", (ecx >> 8) & 0xff);
-		printf("line size=%u bytes.\n", ecx & 0xff);
-
-		printf("L1 Instruction cache:\n\t");
-		printf("Size: %uKb\t", edx >> 24);
-		do_assoc((edx >> 16) & 0xff);
-		printf("\n\t");
-		printf("lines per tag=%u\t", (edx >> 8) & 0xff);
-		printf("line size=%u bytes.\n", edx & 0xff);
+		print_cache("L1 Data cache", ecx >> 24, do_assoc,
+			    (ecx >> 16) & 0xff, (ecx >> 8) & 0xff, ecx & 0xff);
+		print_cache("L1 Instruction cache", edx >> 24, do_assoc,
+			    (edx >> 16) & 0xff, (edx >> 8) & 0xff, edx & 0xff);
 	}
 
-	if ((cpu->eflags_edx & 1<<26) && cpu->maxei >= 0x80000019) {
-		/* 1GB page TLB info */
-		cpuid(cpu->number, 0x80000019, &eax, &ebx, &ecx, &edx);
-
-		printf("L2 Data TLB (1G):           ");
-		do_l2assoc(ebx >> 28);
-		printf("%u entries.\n", (ebx >> 16) & 0xfff);
-		printf("L2 Instruction TLB (1G):    ");
-		do_l2assoc((ebx >> 12) & 0xf);
-		printf("%u entries.\n", ebx & 0xfff);
+	if (have_1g) {
+		print_tlb("L2 Data TLB (1G):", do_l2assoc, tlb1g_ebx >> 28,
+			  (tlb1g_ebx >> 16) & 0xfff);
+		print_tlb("L2 Instruction TLB (1G):", do_l2assoc,
+			  (tlb1g_ebx >> 12) & 0xf, tlb1g_ebx & 0xfff);
 	}
 
 	if (cpu->maxei >= 0x80000006) {
 		/* K6-III (and later) on-chip L2 cache size */
 		cpuid(cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
 
-		printf("L2 Data TLB (2M/4M):        ");
-		do_l2assoc(eax >> 28);
-		printf("%u entries.\n", (eax >> 16) & 0xfff);
-		printf("L2 Instruction TLB (2M/4M): ");
-		do_l2assoc((eax >> 12) & 0xf);
-		printf("%u entries.\n", eax & 0xfff);
+		print_tlb("L2 Data TLB (2M/4M):", do_l2assoc, eax >> 28,
+			  (eax >> 16) & 0xfff);
+		print_tlb("L2 Instruction TLB (2M/4M):", do_l2assoc,
+			  (eax >> 12) & 0xf, eax & 0xfff);
+		print_tlb("L2 Data TLB (4K):", do_l2assoc, ebx >> 28,
+			  (ebx >> 16) & 0xfff);
+		print_tlb("L2 Instruction TLB (4K):", do_l2assoc,
+			  (ebx >> 12) & 0xf, ebx & 0xfff);
 
-		printf("L2 Data TLB (4K):           ");
-		do_l2assoc(ebx >> 28);
-		printf("%u entries.\n", (ebx >> 16) & 0xfff);
-		printf("L2 Instruction TLB (4K):    ");
-		do_l2assoc((ebx >> 12) & 0xf);
-		printf("%u entries.\n", ebx & 0xfff);
-
-		printf("L2 cache:\n\t");
-		printf("Size: %uKb\t", ecx >> 16);
-		do_l2assoc((ecx >> 12) & 0x0f);
-		printf("\n\t");
-		printf("lines per tag=%u\t", (ecx >> 8) & 0x0f);
-		printf("line size=%u bytes.\n", ecx & 0xff);
+		print_cache("L2 cache", ecx >> 16, do_l2assoc,
+			    (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);
 		if (family(cpu) >= 0x10) {
-			printf("L3 (shared) cache:\n\t");
 			if (!(edx >> 18))
-				printf("none/disabled\n");
-			else {
-				/* shared L3  cache */
-				printf("Size: %uKb\t",
-				       (edx >> 18) * 512);
-				do_l2assoc((edx >> 12) & 0x0f);
-				printf("\n\t");
-				printf("lines per tag=%u\t", (edx >> 8) & 0x0f);
-				printf("line size=%u bytes.\n", edx & 0xff);
-			}
+				printf("L3 (shared) cache:\n\tnone/disabled\n");
+			else
+				print_cache("L3 (shared) cache", (edx >> 18) * 512,
+					    do_l2assoc, (edx >> 12) & 0x0f,
+					    (edx >> 8) & 0x0f, edx & 0xff);
 		}
 	}
 
