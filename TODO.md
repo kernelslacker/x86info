@@ -1,25 +1,5 @@
 # x86info TODO
 
-## 🔴 Correctness
-
-A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
-    broken: the TRACE pass already marks every non-trace descriptor as
-    unknown, so `oldknown == found_unknown` is always true, L3L2_cache_table
-    is dead, and descriptors 0x46/0x47/0x4a-0x4d (L3 per the SDM) are always
-    reported and summed as L2. 0x48 is also in both L2_cache_table and
-    L2L3_cache_table, so it is printed and counted twice. cachesize_L2
-    feeds the naming switches in identify-family6.c. [opus]
-    1. Move 0x46/0x47/0x4a-0x4d into L3_cache_table, 0x78 into L2.
-    2. Special-case 0x49: L3 on family 0xf model 6, L2 otherwise.
-    3. Delete L2L3/L3L2 tables and the oldknown logic.
-    (Fold into G1 if doing the restructure.)
-
-## 🟡 Performance
-
-B3. vendors/intel/cachesize.c:259-285 — decode_cache() re-runs CPUID 2 for
-    each of ~11 tables, twice (once during identify, once for --cache).
-    Read the descriptor bytes once into a 16*n array (see G1). [sonnet]
-
 ## 🟡 Deprecated/Obsolete API Usage
 
 E2. cpuid-solaris.c:57 — lseek64/off64_t/_LARGEFILE64_SOURCE (removed in
@@ -31,16 +11,6 @@ E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr
     (processor_bind(), /dev/cpu/N/msr) or drop the README claim. [sonnet]
 
 ## 🟡 Architectural improvements
-
-G1. vendors/intel/cachesize.c — restructure decoding: [opus]
-    1. Read all CPUID 2 descriptor bytes once.
-    2. One combined descriptor table carrying a level/kind field (trace,
-       L1I, L1D, L2, L3, ITLB, DTLB, prefetch) instead of table-pointer
-       identity checks (lines 227-244) to pick the size field.
-    3. A descriptor not found in the table is unknown; drop
-       unknown_array/found_unknown/clean_unknowns and the static
-       found_general/found_tlb_general state.
-    Supersedes A6, B3.
 
 G5. 18 `show_*` globals in commandline.c / x86info.h. Group into a
     `struct options` (one extern) to make the option set discoverable and
