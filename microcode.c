@@ -30,11 +30,10 @@ void decode_microcode(struct cpudata *cpu)
 	unsigned long long ver = 0;
 
 	if (!sysfs_microcode_version(cpu, &ver)) {
-		if (!user_is_root || read_msr(cpu->number, MSR_UCODE_REV, &ver) != 1)
+		/* The MSR fallback is AMD only */
+		if (cpu->vendor == VENDOR_INTEL || !user_is_root ||
+		    read_msr(cpu->number, MSR_UCODE_REV, &ver) != 1)
 			return;
-		/* Intel reports the revision in the upper half of the MSR */
-		if (cpu->vendor == VENDOR_INTEL)
-			ver >>= 32;
 	}
 
 	if (ver > 0)

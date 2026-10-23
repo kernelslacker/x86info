@@ -2,12 +2,6 @@
 
 ## 🔴 Correctness
 
-A38. microcode.c:407-411 — the Intel fallback reads MSR 0x8b directly, but
-    the SDM requires writing 0 to it and executing CPUID 1 first, which a
-    read-only /dev/cpu/N/msr can't do, so the value may be 0 or stale. Only
-    reached without sysfs (FreeBSD, old kernels). Drop the MSR fallback for
-    Intel. [haiku]
-
 A39. rdmsr-linux.c:502-537, cpuid-linux.c:63,91 — the `nodriver` latches and
     lazily filled fd arrays are written from the --mhz worker threads
     (read_perf_counters -> read_msr). A data race; and as root without the
