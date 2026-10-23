@@ -156,11 +156,16 @@ static int cmp_u64(const void *a, const void *b)
 	return (x > y) - (x < y);
 }
 
-/* Number of distinct (package, core) pairs among the CPUs. */
-static unsigned int count_cores(struct cpudata *cpus)
+/* Number of distinct (package, core) pairs among the CPUs, and the
+ * smallest and largest number of CPUs sharing one. */
+static unsigned int count_cores(struct cpudata *cpus, unsigned int *min_threads,
+				unsigned int *max_threads)
 {
 	unsigned long long *keys;
-	unsigned int i, cores = 0;
+	unsigned int i, run = 0, cores = 0;
+
+	*min_threads = ~0u;
+	*max_threads = 0;
 
 	keys = malloc(nrCPUs * sizeof(*keys));
 	if (keys == NULL)
@@ -171,9 +176,19 @@ static unsigned int count_cores(struct cpudata *cpus)
 			  cpus[i].cpu_core_id;
 	qsort(keys, nrCPUs, sizeof(*keys), cmp_u64);
 
-	for (i = 0; i < nrCPUs; i++)
-		if (i == 0 || keys[i] != keys[i - 1])
+	for (i = 0; i < nrCPUs; i++) {
+		if (i == 0 || keys[i] != keys[i - 1]) {
 			cores++;
+			run = 0;
+		}
+		run++;
+		if (i + 1 == nrCPUs || keys[i + 1] != keys[i]) {
+			if (run < *min_threads)
+				*min_threads = run;
+			if (run > *max_threads)
+				*max_threads = run;
+		}
+	}
 
 	free(keys);
 	return cores;
@@ -243,7 +258,7 @@ void display_topology(struct cpudata *cpus)
 	free(sockets);
 
 	if (cpus[0].topology == TOPOLOGY_X2APIC) {
-		cores = count_cores(cpus);
+		cores = count_cores(cpus, &min_siblings, &max_siblings);
 	} else {
 		/* No per-core ID: assume every core has the same thread count. */
 		cores = max_siblings > 1 ? total_threads / max_siblings : total_threads;

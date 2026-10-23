@@ -2,14 +2,6 @@
 
 ## 🔴 Correctness
 
-A27. topology.c:634-645 — "threads per core" is num_siblings, the CPUID SMT
-    level count, which says what a core can run, not what is online. With
-    nosmt or offlined siblings the summary reads "8 cores, 8 threads (2
-    threads per core)"; the Zen 5 golden already shows "1 core, 1 thread (2
-    threads per core)". On the x2APIC path derive threads per core (and the
-    hybrid min/max) from the online CPUs per (package, core) key that
-    count_cores() already builds, then update the golden. [sonnet]
-
 A28. x86info.c:507-514 — with one online CPU and an MP table listing more,
     " (but found %d CPUs in MPTable!)" is printed with no "Found ..." prefix
     and no newline, so it runs into the model header. Print the MP table

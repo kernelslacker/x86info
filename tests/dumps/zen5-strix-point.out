@@ -43,4 +43,4 @@ Extended feature flags:
 Long NOPs supported: yes
 
 Address sizes : 48 bits physical, 48 bits virtual
-This system has 1 socket, 1 core, 1 thread (2 threads per core)
+This system has 1 socket, 1 core, 1 thread
