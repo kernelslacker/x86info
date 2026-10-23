@@ -52,9 +52,12 @@ static int decode_x2apic_leaf(struct cpudata *cpu, unsigned int leaf)
 	return 1;
 }
 
-/* Decode the extended topology leaf, trying 0x1F before 0xB. */
+/* Decode the extended topology leaf: AMD's 0x80000026, else 0x1F, else 0xB. */
 static int get_x2apic_topology(struct cpudata *cpu)
 {
+	if (cpu->vendor == VENDOR_AMD && cpu->maxei >= 0x80000026 &&
+	    decode_x2apic_leaf(cpu, 0x80000026))
+		return 1;
 	if (cpu->cpuid_level >= 0x1f && decode_x2apic_leaf(cpu, 0x1f))
 		return 1;
 	if (cpu->cpuid_level >= 0xb && decode_x2apic_leaf(cpu, 0xb))
@@ -140,10 +143,56 @@ void clear_uniform_core_types(struct cpudata *cpus, unsigned int n)
 		cpus[i].core_type = 0;
 }
 
+/*
+ * AMD without an extended topology leaf: 0x80000008 gives the thread count
+ * and APIC ID width, and with TOPOEXT 0x8000001E the core ID and the
+ * threads per core.
+ */
+static int get_amd_topology(struct cpudata *cpu)
+{
+	unsigned int eax, ebx, ecx, nthreads, bits, apicid, threads = 1;
+
+	if (cpu->maxei < 0x80000008)
+		return 0;
+
+	cpuid(cpu->number, 0x80000008, NULL, NULL, &ecx, NULL);
+	nthreads = (ecx & 0xff) + 1;
+	bits = (ecx >> 12) & 0xf;
+	if (!bits)
+		bits = get_count_order(nthreads);
+
+	cpuid(cpu->number, 1, NULL, &ebx, NULL, NULL);
+	apicid = ebx >> 24;
+	cpu->cpu_core_id = apicid & low_mask(bits);
+
+	if (cpu->maxei >= 0x8000001e) {
+		cpuid(cpu->number, 0x80000001, NULL, NULL, &ecx, NULL);
+		if (ecx & (1u << 22)) {
+			cpuid(cpu->number, 0x8000001e, &eax, &ebx, NULL, NULL);
+			apicid = eax;
+			threads = ((ebx >> 8) & 0xff) + 1;
+			cpu->cpu_core_id = ebx & 0xff;
+		}
+	}
+	if (threads > nthreads)
+		threads = nthreads;
+
+	cpu->num_siblings = threads;
+	cpu->x86_max_cores = nthreads / threads;
+	cpu->phys_proc_id = apicid >> bits;
+	cpu->topology = TOPOLOGY_LEGACY;
+	return 1;
+}
+
 void get_topology(struct cpudata *cpu)
 {
 	if (get_x2apic_topology(cpu))
 		return;
+
+	if (cpu->vendor == VENDOR_AMD) {
+		get_amd_topology(cpu);
+		return;
+	}
 
 	if (cpu->vendor == VENDOR_INTEL) {
 		get_intel_topology(cpu);

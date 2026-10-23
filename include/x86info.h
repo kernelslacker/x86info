@@ -192,6 +192,7 @@ void decode_microcode(struct cpudata *cpu);
 void display_model_name(struct cpudata *cpu);
 void decode_connector(enum connector type);
 
+unsigned int get_count_order(unsigned int count);
 void get_topology(struct cpudata *head);
 void get_core_type(struct cpudata *cpu);
 const char *core_type_name(const struct cpudata *cpu);

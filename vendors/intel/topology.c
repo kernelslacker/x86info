@@ -23,7 +23,7 @@ static int tp_fls(int x)
 	return x ? sizeof(x) * 8 - __builtin_clz(x) : 0;
 }
 
-static unsigned int get_count_order(unsigned int count)
+unsigned int get_count_order(unsigned int count)
 {
 	unsigned int order;
 
