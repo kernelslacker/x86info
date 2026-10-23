@@ -117,7 +117,10 @@ void identify_intel(struct cpudata *cpu)
 		break;
 
 	case 0xF:
-		identify_intel_family15(cpu);
+		if (cpu->efamily == 0)
+			identify_intel_family15(cpu);
+		else
+			add_to_cpuname("Unknown model.");
 		break;
 	}
 }

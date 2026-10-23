@@ -2,13 +2,6 @@
 
 ## 🔴 Correctness
 
-A25. vendors/intel/identify.c:156 — Intel families 0x12/0x13 (Nova Lake,
-    Diamond Rapids: base family 0xf, efamily 3/4) go to
-    identify_intel_family15(), which switches on model(cpu) alone, so model 1
-    is named "Pentium 4 (Willamette)" on Socket 423. Only call it when
-    efamily == 0; otherwise name the CPU "Unknown model." (or add a table for
-    the new families). [haiku]
-
 A26. vendors/intel/identify.c:62 — cpu->brand = ebx & 0xf, but the brand
     index is EBX[7:0]. Cases 0x11-0x17 in decode_brand() (info.c:44-71) are
     unreachable and a Pentium M (0x16) prints as "Mobile Pentium III" (6).
