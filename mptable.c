@@ -387,9 +387,13 @@ static int read_mptable(int quiet)
 	return ret;
 }
 
+/* Result of the scan done by display_mptable(), if any. */
+static int displayed;
+static int display_ret;
+
 int enumerate_cpus(void)
 {
-	int ret = read_mptable(1);
+	int ret = displayed ? display_ret : read_mptable(1);
 
 	if (ret < 0)
 		return -1;
@@ -398,5 +402,6 @@ int enumerate_cpus(void)
 
 void display_mptable(void)
 {
-	read_mptable(0);
+	display_ret = read_mptable(0);
+	displayed = 1;
 }

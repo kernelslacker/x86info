@@ -4,10 +4,6 @@
 
 ## 🟡 Performance
 
-B8. x86info.c:497-511 — with --mptable, root runs open and scan /dev/mem
-    twice (display_mptable() then enumerate_cpus()). Have read_mptable()
-    record that it ran and let enumerate_cpus() reuse ncpu. [haiku]
-
 ## 🟡 Maintainability
 
 C26. features.c:500-547 — the AMD and Intel cases are identical except that
