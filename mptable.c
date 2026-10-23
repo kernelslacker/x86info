@@ -141,33 +141,11 @@ static int readAt(struct mp_scan *mp, unsigned long addr, void *buf, int size)
 	return readEntry(mp, buf, size);
 }
 
-/* Returns the type of the next entry without consuming it, or -1. */
-static int readType(struct mp_scan *mp)
-{
-	unsigned char type;
-
-	if (read(mp->fd, &type, sizeof(unsigned char)) != sizeof(unsigned char)) {
-		mp_perror(mp, "type read");
-		return -1;
-	}
-
-	if (lseek(mp->fd, -1, SEEK_CUR) < 0) {
-		mp_perror(mp, "type seek");
-		return -1;
-	}
-
-	return (int)type;
-}
-
-static int processorEntry(struct mp_scan *mp)
+static void processorEntry(struct mp_scan *mp, const unsigned char *raw)
 {
 	struct ProcEntry entry;
 
-	/* read it into local memory */
-	if (readEntry(mp, &entry, sizeof(entry)) < 0) {
-		mp_error(mp, "Error reading processor entry\n");
-		return -1;
-	}
+	memcpy(&entry, raw, sizeof(entry));
 
 	/* count it */
 	++mp->ncpu;
@@ -193,15 +171,40 @@ static int processorEntry(struct mp_scan *mp)
 		printf("\t %d\t %d\t %d", family, model, t & 0xf);
 		printf("\t 0x%04x\n", entry.featureFlags);
 	}
-	return 0;
 }
 
+/* Size of each MP configuration table entry type, or 0 if unknown. */
+static unsigned int entry_size(unsigned int type)
+{
+	switch (type) {
+	case 0:			/* processor */
+		return sizeof(struct ProcEntry);
+	case 1:			/* bus */
+	case 2:			/* I/O APIC */
+	case 3:			/* I/O interrupt assignment */
+	case 4:			/* local interrupt assignment */
+		return 8;
+	default:
+		return 0;
+	}
+}
+
+static unsigned int checksum(const unsigned char *p, size_t len)
+{
+	unsigned int sum = 0;
+
+	while (len--)
+		sum += *p++;
+	return sum & 0xff;
+}
 
 static int MPConfigTableHeader(struct mp_scan *mp, u32 pap)
 {
 	unsigned long paddr;
+	unsigned char *table;
 	struct mpcth cth;
-	int count, c;
+	unsigned int off, size;
+	int c;
 
 	if (pap == 0) {
 		mp_error(mp, "MP Configuration Table Header MISSING!\n");
@@ -216,29 +219,46 @@ static int MPConfigTableHeader(struct mp_scan *mp, u32 pap)
 		return SMP_NO;
 	}
 
-	count = cth.entry_count;
+	if (memcmp(cth.signature, "PCMP", 4) ||
+	    cth.base_table_length < sizeof(cth)) {
+		mp_error(mp, "invalid MP Configuration Table Header\n");
+		return SMP_NO;
+	}
+
+	size = cth.base_table_length;
+	table = malloc(size);
+	if (!table)
+		return SMP_NO;
+	if (readAt(mp, paddr, table, size)) {
+		mp_error(mp, "error reading MP Config table\n");
+		free(table);
+		return SMP_NO;
+	}
+	if (checksum(table, size)) {
+		mp_error(mp, "MP Configuration Table checksum is bad\n");
+		free(table);
+		return SMP_NO;
+	}
 
 	mp->ncpu = 0;
 
 	/* process all the CPUs */
 	if (!mp->silent)
 		printf("MP Table:\n#\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
-	for (c = count; c; c--) {
-		int type = readType(mp);
-		if (type < 0)
+	off = sizeof(cth);
+	for (c = cth.entry_count; c; c--) {
+		unsigned int len = off < size ? entry_size(table[off]) : 0;
+
+		if (!len || size - off < len) {
+			mp_error(mp, "MP Configuration Table entry is invalid\n");
+			free(table);
 			return SMP_NO;
-		if (type == 0) {
-			if (processorEntry(mp))
-				return SMP_NO;
-		} else {
-			/* Non-CPU entries (bus, I/O APIC, interrupt) are 8 bytes each;
-			 * skip them so the file position advances past every entry. */
-			if (lseek(mp->fd, 8, SEEK_CUR) < 0) {
-				mp_perror(mp, "entry seek");
-				return SMP_NO;
-			}
 		}
+		if (table[off] == 0)
+			processorEntry(mp, table + off);
+		off += len;
 	}
+	free(table);
 	if (!mp->silent)
 		printf("\n");
 
@@ -256,7 +276,7 @@ static int scan_for_mp(struct mp_scan *mp, const char *what,
 		       unsigned long addr, int size, unsigned long *paddr)
 {
 	const char MP_SIG[] = "_MP_";
-	unsigned char buffer[BIOS_SIZE];
+	static unsigned char buffer[BIOS_SIZE];
 	int x;
 
 	if (readAt(mp, addr, buffer, size)) {
@@ -264,8 +284,11 @@ static int scan_for_mp(struct mp_scan *mp, const char *what,
 		return -1;
 	}
 
-	for (x = 0; x < size; x += MP_ALIGN) {
-		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
+	for (x = 0; x + (int)sizeof(struct mpfps) <= size; x += MP_ALIGN) {
+		/* length is in 16-byte units and must be 1 */
+		if (!strncmp((char *)&buffer[x], MP_SIG, 4) &&
+		    buffer[x + 8] == 1 &&
+		    !checksum(&buffer[x], sizeof(struct mpfps))) {
 			*paddr = x + addr;
 			return 1;
 		}
@@ -347,34 +370,26 @@ static int apic_probe(struct mp_scan *mp, unsigned long* paddr)
 }
 
 /*
- * Find and parse the MP table.
- * Returns -1 if /dev/mem can't be opened, 1 if an MP configuration table
- * was parsed, 0 otherwise. *ncpu is the number of processor entries found.
+ * Find and parse the MP table in the physical memory image open on fd.
+ * Returns 1 if an MP configuration table was parsed, 0 otherwise.
+ * *ncpu is the number of processor entries found.
  */
-static int read_mptable(int quiet, int *ncpu)
+int mptable_scan_fd(int fd, int quiet, int *ncpu)
 {
-	struct mp_scan mp = { .silent = quiet };
+	struct mp_scan mp = { .fd = fd, .silent = quiet };
 	unsigned long paddr;
 	struct mpfps mpfps;
 	int ret = 0;
 
-	/* open physical memory for access to MP structures */
-	if ((mp.fd = open("/dev/mem", O_RDONLY)) < 0) {
-		if (!quiet)
-			fprintf(stderr, "mptable: /dev/mem: %s\n", strerror(errno));
-		return -1;
-	}
+	*ncpu = 0;
 
 	/* probe for MP structures */
-	if (apic_probe(&mp, &paddr) <= 0) {
-		close(mp.fd);
+	if (apic_probe(&mp, &paddr) <= 0)
 		return 0;
-	}
 
 	/* read in mpfps structure*/
 	if (readAt(&mp, paddr, &mpfps, sizeof(struct mpfps))) {
 		mp_error(&mp, "error reading mpfps from %p\n", (void *)paddr);
-		close(mp.fd);
 		return 0;
 	}
 
@@ -382,8 +397,26 @@ static int read_mptable(int quiet, int *ncpu)
 	if (!mpfps.mpfb1)
 		ret = MPConfigTableHeader(&mp, mpfps.pap) == SMP_YES;
 
-	close(mp.fd);
-	*ncpu = mp.ncpu;
+	*ncpu = ret ? mp.ncpu : 0;
+	return ret;
+}
+
+/*
+ * Returns -1 if /dev/mem can't be opened, else as mptable_scan_fd().
+ */
+static int read_mptable(int quiet, int *ncpu)
+{
+	int fd, ret;
+
+	/* open physical memory for access to MP structures */
+	if ((fd = open("/dev/mem", O_RDONLY)) < 0) {
+		if (!quiet)
+			fprintf(stderr, "mptable: /dev/mem: %s\n", strerror(errno));
+		return -1;
+	}
+
+	ret = mptable_scan_fd(fd, quiet, ncpu);
+	close(fd);
 	return ret;
 }
 

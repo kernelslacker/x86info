@@ -42,12 +42,14 @@ x86info: $(X86INFO_OBJS) $(X86INFO_HEADERS)
 CHECK_BIN = tests/build/x86info
 PSB_TEST = tests/build/test-psb
 OPTS_TEST = tests/build/test-opts
+MPTABLE_TEST = tests/build/test-mptable
 
 # Build x86info against the CPUID replay backend and diff its output with
 # the goldens in tests/dumps.
-check: $(CHECK_BIN) $(PSB_TEST) $(OPTS_TEST)
+check: $(CHECK_BIN) $(PSB_TEST) $(OPTS_TEST) $(MPTABLE_TEST)
 	@$(PSB_TEST) > /dev/null
 	@$(OPTS_TEST)
+	@$(MPTABLE_TEST)
 	@tests/run-tests.sh $(CHECK_BIN)
 
 $(PSB_TEST): tests/test-psb.c vendors/amd/dumppsb.c $(X86INFO_HEADERS)
@@ -57,6 +59,10 @@ $(PSB_TEST): tests/test-psb.c vendors/amd/dumppsb.c $(X86INFO_HEADERS)
 $(OPTS_TEST): tests/test-opts.c commandline.c $(X86INFO_HEADERS)
 	@mkdir -p tests/build
 	$(QUIET_CC)$(CC) $(CFLAGS) -o $@ tests/test-opts.c commandline.c
+
+$(MPTABLE_TEST): tests/test-mptable.c mptable.c $(X86INFO_HEADERS)
+	@mkdir -p tests/build
+	$(QUIET_CC)$(CC) $(CFLAGS) -o $@ tests/test-mptable.c mptable.c
 
 # Record this machine's CPUID leaves, one section per CPU, as
 # tests/dumps/$(NAME).dump. Check the output of the replay build, then
