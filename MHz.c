@@ -21,7 +21,16 @@
 #define MSR_MPERF	0xe7
 #define MSR_APERF	0xe8
 
-static int has_perf_counters(const struct cpudata *cpu);
+/* CPUID 6 ECX[0]: the CPU has the APERF/MPERF counters. */
+static int has_perf_counters(const struct cpudata *cpu)
+{
+	unsigned int ecx = 0;
+
+	if (cpu->cpuid_level < 6)
+		return 0;
+	cpuid(cpu->number, 6, NULL, NULL, &ecx, NULL);
+	return ecx & 1;
+}
 
 static void print_MHz(unsigned int mhz)
 {
@@ -139,17 +148,6 @@ static int read_perf_msr_pmu(unsigned long long *aperf, unsigned long long *mper
 }
 #endif
 
-/* CPUID 6 ECX[0]: the CPU has the APERF/MPERF counters. */
-static int has_perf_counters(const struct cpudata *cpu)
-{
-	unsigned int ecx = 0;
-
-	if (cpu->cpuid_level < 6)
-		return 0;
-	cpuid(cpu->number, 6, NULL, NULL, &ecx, NULL);
-	return ecx & 1;
-}
-
 static unsigned int perf_msr_base(const struct cpudata *cpu)
 {
 	return cpu->vendor == VENDOR_AMD ? 0xc0000000 : 0;
@@ -191,18 +189,20 @@ static void probe_msr_access(const struct cpudata *cpu)
 #define MEASURE_US	100000.0
 #endif
 
-static double elapsed_us(const struct timespec *t0, const struct timespec *t1);
+static double elapsed_us(const struct timespec *t0, const struct timespec *t1)
+{
+	return (double)(t1->tv_sec - t0->tv_sec) * 1e6 +
+	       (double)(t1->tv_nsec - t0->tv_nsec) / 1e3;
+}
 
-static unsigned long spin(unsigned long r, double us)
+static void spin(double us)
 {
 	struct timespec t0, t1;
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &t0);
 	do {
-		r = r * 6364136223846793005UL + 1442695040888963407UL;
 		clock_gettime(CLOCK_MONOTONIC_RAW, &t1);
 	} while (elapsed_us(&t0, &t1) < us);
-	return r;
 }
 
 /*
@@ -229,12 +229,6 @@ static unsigned int cpuid_tsc_MHz(const struct cpudata *cpu)
 	return eax & 0xffff;
 }
 
-static double elapsed_us(const struct timespec *t0, const struct timespec *t1)
-{
-	return (double)(t1->tv_sec - t0->tv_sec) * 1e6 +
-	       (double)(t1->tv_nsec - t0->tv_nsec) / 1e3;
-}
-
 /* Measure the TSC rate and, if want_core, the core clock as well. */
 static void measure_MHz(struct cpudata *cpu, int want_core)
 {
@@ -244,7 +238,6 @@ static void measure_MHz(struct cpudata *cpu, int want_core)
 	int have_perf;
 	unsigned int eax, ebx, ecx, edx, known_MHz;
 	double tsc_mhz;
-	unsigned long r = cpu->number + 1;
 
 	/* Make sure we have a TSC (and hence RDTSC) */
 	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
@@ -265,14 +258,14 @@ static void measure_MHz(struct cpudata *cpu, int want_core)
 	}
 
 	if (have_perf) {
-		r = spin(r, WARMUP_US);
+		spin(WARMUP_US);
 		read_perf_counters(cpu, &aperf[0], &mperf[0]);
 	}
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &ts[0]);
 	cycles[0] = rdtsc();
 
-	r = spin(r, MEASURE_US);
+	spin(MEASURE_US);
 
 	cycles[1] = rdtsc();
 	clock_gettime(CLOCK_MONOTONIC_RAW, &ts[1]);

@@ -6,11 +6,6 @@
 
 ## 🟡 Maintainability
 
-C32. MHz.c:24,185 — the forward declarations of has_perf_counters() and
-    elapsed_us() only exist because of definition order; reorder the
-    functions. spin()'s LCG can go too: the clock_gettime() call in the loop
-    already stops it from being optimised away. [haiku]
-
 C33. cpudata nr_cores (vendors/intel/identify.c:64) and x86_max_cores
     (vendors/intel/topology.c:63) both hold intel_num_cpu_cores(), so leaf 4
     is decoded twice into two fields. Fill x86_max_cores once in
