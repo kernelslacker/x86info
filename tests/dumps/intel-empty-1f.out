@@ -1,0 +1,18 @@
+Found 2 identical CPUs
+Extended Family: 0 Extended Model: 9 Family: 6 Model: 158 Stepping: 10
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): [Kabylake desktop]
+Processor name string (BIOS programmed): 
+
+Cache info
+TLB info
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh ds acpi mmx fxsr sse sse2 ss ht tm pbe sse3 pclmulqdq dtes64 monitor ds-cpl vmx smx est tm2 ssse3 sdbg fma cx16 xTPR pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc-deadline aes xsave osxsave avx f16c rdrnd
+Extended feature flags:
+
+Additional feature flags:
+
+Long NOPs supported: yes
+
+Address sizes : 0 bits physical, 0 bits virtual
+This system has 1 socket, 1 core, 2 threads (2 threads per core)

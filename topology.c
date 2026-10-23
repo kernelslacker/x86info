@@ -17,22 +17,15 @@ static unsigned int low_mask(unsigned int bits)
 }
 
 /*
- * Decode the extended topology leaf (0x1F, else 0xB). Each subleaf gives
- * the shift to the next level of the 32-bit x2APIC ID and how many logical
- * processors sit at or below that level.
+ * Decode an extended topology leaf. Each subleaf gives the shift to the
+ * next level of the 32-bit x2APIC ID and how many logical processors sit
+ * at or below that level. Returns 0 if the leaf holds no usable levels.
  */
-static int get_x2apic_topology(struct cpudata *cpu)
+static int decode_x2apic_leaf(struct cpudata *cpu, unsigned int leaf)
 {
 	unsigned int eax, ebx, ecx, edx, sub, type;
-	unsigned int leaf, smt_shift = 0, pkg_shift = 0;
+	unsigned int smt_shift = 0, pkg_shift = 0;
 	unsigned int smt_count = 1, logical = 0, id = 0, levels = 0;
-
-	if (cpu->cpuid_level >= 0x1f)
-		leaf = 0x1f;
-	else if (cpu->cpuid_level >= 0xb)
-		leaf = 0xb;
-	else
-		return 0;
 
 	for (sub = 0; sub < 8; sub++) {
 		cpuid_count(cpu->number, leaf, sub, &eax, &ebx, &ecx, &edx);
@@ -48,7 +41,7 @@ static int get_x2apic_topology(struct cpudata *cpu)
 		id = edx;
 		levels++;
 	}
-	if (!levels || !smt_count)
+	if (!levels || !smt_count || !logical)
 		return 0;
 
 	cpu->num_siblings = smt_count;
@@ -57,6 +50,16 @@ static int get_x2apic_topology(struct cpudata *cpu)
 	cpu->cpu_core_id = (id >> smt_shift) & low_mask(pkg_shift - smt_shift);
 	cpu->topology = TOPOLOGY_X2APIC;
 	return 1;
+}
+
+/* Decode the extended topology leaf, trying 0x1F before 0xB. */
+static int get_x2apic_topology(struct cpudata *cpu)
+{
+	if (cpu->cpuid_level >= 0x1f && decode_x2apic_leaf(cpu, 0x1f))
+		return 1;
+	if (cpu->cpuid_level >= 0xb && decode_x2apic_leaf(cpu, 0xb))
+		return 1;
+	return 0;
 }
 
 /* Raw core type encodings: AMD 0x80000026 EBX[31:28], Intel 0x1A EAX[31:24]. */
