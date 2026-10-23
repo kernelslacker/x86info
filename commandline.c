@@ -93,16 +93,16 @@ void parse_command_line(int argc, char **argv)
 					show_apic = 1;
 					show_bios = 1;
 					show_msr = 1;
-					show_microcode = 1;
 					need_root = 1;
 					show_mptable = 1;
 					show_mtrr = 1;
 					show_machine_check = 1;
 				} else {
-					fprintf(stderr, "Not root: skipping the APIC, BIOS, MSR, microcode, MP table, MTRR and machine check output.\n");
+					fprintf(stderr, "Not root: skipping the APIC, BIOS, MSR, MP table, MTRR and machine check output.\n");
 				}
 				show_addr_sizes = 1;
 				show_bugs = 1;
+				show_microcode = 1;
 				show_cacheinfo = 1;
 				show_connector = 1;
 				show_feature_flags = 1;
@@ -160,7 +160,6 @@ void parse_command_line(int argc, char **argv)
 				show_MHz = 1;
 				break;
 			case OPT_MICROCODE:  // --microcode
-				need_root = 1;
 				show_microcode = 1;
 				break;
 			case OPT_MPTABLE:  // --mptable

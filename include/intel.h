@@ -9,7 +9,6 @@ void dump_p4_msrs(struct cpudata *cpu);
 void dump_performance_msrs(struct cpudata *cpu);
 void dump_thermal_msrs(struct cpudata *cpu);
 
-void decode_microcode(struct cpudata *cpu);
 
 void identify_intel_family6pentium(struct cpudata *cpu);
 void identify_intel_family6core(struct cpudata *cpu);

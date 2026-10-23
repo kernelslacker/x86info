@@ -128,6 +128,6 @@ void display_extended_intel_info(struct cpudata *cpu)
 	if (show_machine_check)
 		decode_intel_machine_check(cpu->number, cpu->family);
 
-	if (show_microcode)
+	if (show_microcode && cpu->family >= 6)
 		decode_microcode(cpu);
 }

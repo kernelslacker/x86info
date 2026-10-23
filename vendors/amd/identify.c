@@ -562,16 +562,6 @@ out_660:
 	}
 }
 
-static void show_patch_level(struct cpudata *cpu)
-{
-	unsigned long long val = 0;
-	if (read_msr(cpu->number, 0x8b, &val) == 1) {
-		if (val>0)
-			printf("Microcode patch level: 0x%llx\n", val);
-		printf("\n");
-	}
-}
-
 /* CPUID 0x8000000A EDX */
 static const char *svm_features[32] = {
 	"np", "lbrVirt", "SVMLock", "NRIPSave",
@@ -601,7 +591,7 @@ void display_amd_info(struct cpudata *cpu)
 		decode_athlon_machine_check(cpu->number, family(cpu));
 
 	if (show_microcode && family(cpu) >= 0xf)
-		show_patch_level(cpu);
+		decode_microcode(cpu);
 
 	if (show_pm)
 		decode_powernow(cpu);
