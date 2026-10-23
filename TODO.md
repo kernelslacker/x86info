@@ -10,10 +10,6 @@
 
 ## 🟡 Deprecated/Obsolete API Usage
 
-E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr
-    backend, so MSR output and per-CPU cpuid don't work. Implement them
-    (processor_bind(), /dev/cpu/N/msr) or drop the README claim. [sonnet]
-
 ## 🟡 Better API Alternatives
 
 ## 🟡 Architectural improvements
