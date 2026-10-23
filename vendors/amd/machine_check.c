@@ -19,6 +19,75 @@
 #define MC_ADDR 0x402
 #define MC_MISC 0x403
 
+struct mc_bit {
+	unsigned int bit;
+	const char *label;
+};
+
+struct k7_unit {
+	const char *name;
+	const struct mc_bit *bits;
+	unsigned int nr_bits;
+};
+
+static const struct mc_bit k7_dc_bits[] = {
+	{ 0, "ECC 1 bit error reporting" },
+	{ 1, "ECC multi bit error reporting" },
+	{ 2, "Data cache data parity" },
+	{ 3, "Data cache main tag parity" },
+	{ 4, "Data cache snoop tag parity" },
+	{ 5, "L1 TLB parity" },
+	{ 6, "L2 TLB parity" },
+};
+
+static const struct mc_bit k7_ic_bits[] = {
+	{ 0, "ECC 1 bit error reporting" },
+	{ 1, "ECC multi bit error reporting" },
+	{ 2, "Instruction cache data parity" },
+	{ 3, "IC main tag parity" },
+	{ 4, "IC snoop tag parity" },
+	{ 5, "L1 TLB parity" },
+	{ 6, "L2 TLB parity" },
+	{ 7, "Predecode array parity" },
+	{ 8, "Target selector parity" },
+	{ 9, "Read data error" },
+};
+
+static const struct mc_bit k7_bu_bits[] = {
+	{ 0, "External L2 tag parity error" },
+	{ 1, "L2 partial tag parity error" },
+	{ 2, "System ECC TLB reload error" },
+	{ 3, "L2 ECC TLB reload error" },
+	{ 4, "L2 ECC K7 deallocate" },
+	{ 5, "L2 ECC probe deallocate" },
+	{ 6, "System datareaderror reporting" },
+};
+
+static const struct mc_bit k7_ls_bits[] = {
+	{ 0, "Read data error enable (loads)" },
+	{ 1, "Read data error enable (stores)" },
+};
+
+#define K7_UNIT(n, b) { n, b, ARRAY_SIZE(b) }
+
+/* Indexed by MCG_CTL bit, which is also the MC bank number. */
+static const struct k7_unit k7_units[] = {
+	K7_UNIT("Data cache", k7_dc_bits),
+	K7_UNIT("Instruction cache", k7_ic_bits),
+	K7_UNIT("Bus unit", k7_bu_bits),
+	K7_UNIT("Load/Store unit", k7_ls_bits),
+};
+
+static void print_ctl_bits(const struct mc_bit *bits, unsigned int nr,
+			   unsigned long long ctl)
+{
+	unsigned int i;
+
+	for (i = 0; i < nr; i++)
+		printf("  %s %sabled\n", bits[i].label,
+		       ctl & (1ULL << bits[i].bit) ? "en" : "dis");
+}
+
 void decode_athlon_machine_check(int cpunum, unsigned int family)
 {
 	unsigned long long val, val2;
@@ -51,54 +120,14 @@ void decode_athlon_machine_check(int cpunum, unsigned int family)
 	} else if (ctlp && read_msr(cpunum, MCG_CTL, &val) == 1) {
 		printf("MCG_CTL:\n");
 
-		printf(" Data cache check %sabled\n", val & (1<<0) ? "en" : "dis");
-		if ((val & (1<<0)) == 1) {
-			if (read_msr(cpunum, MC_CTL, &val2) == 1) {
-				printf("  ECC 1 bit error reporting %sabled\n", val2 & (1<<0) ? "en" : "dis");
-				printf("  ECC multi bit error reporting %sabled\n", val2 & (1<<1) ? "en" : "dis");
-				printf("  Data cache data parity %sabled\n", val2 & (1<<2) ? "en" : "dis");
-				printf("  Data cache main tag parity %sabled\n", val2 & (1<<3) ? "en" : "dis");
-				printf("  Data cache snoop tag parity %sabled\n", val2 & (1<<4) ? "en" : "dis");
-				printf("  L1 TLB parity %sabled\n", val2 & (1<<5) ? "en" : "dis");
-				printf("  L2 TLB parity %sabled\n", val2 & (1<<6) ? "en" : "dis");
-			}
-		}
+		for (i = 0; i < ARRAY_SIZE(k7_units); i++) {
+			const struct k7_unit *u = &k7_units[i];
 
-		printf(" Instruction cache check %sabled\n", val & (1<<1) ? "en" : "dis");
-		if (((val & (1<<1)) == 2) && (banks>1)) {
-			if (read_msr(cpunum, MC_CTL+4, &val2) == 1) {
-				printf("  ECC 1 bit error reporting %sabled\n", val2 & (1<<0) ? "en" : "dis");
-				printf("  ECC multi bit error reporting %sabled\n", val2 & (1<<1) ? "en" : "dis");
-				printf("  Instruction cache data parity %sabled\n", val2 & (1<<2) ? "en" : "dis");
-				printf("  IC main tag parity %sabled\n", val2 & (1<<3) ? "en" : "dis");
-				printf("  IC snoop tag parity %sabled\n", val2 & (1<<4) ? "en" : "dis");
-				printf("  L1 TLB parity %sabled\n", val2 & (1<<5) ? "en" : "dis");
-				printf("  L2 TLB parity %sabled\n", val2 & (1<<6) ? "en" : "dis");
-				printf("  Predecode array parity %sabled\n", val2 & (1<<7) ? "en" : "dis");
-				printf("  Target selector parity %sabled\n", val2 & (1<<8) ? "en" : "dis");
-				printf("  Read data error %sabled\n", val2 & (1<<9) ? "en" : "dis");
-			}
-		}
-
-		printf(" Bus unit check %sabled\n", val & (1<<2) ? "en" : "dis");
-		if ((val & (1<<2)) == 4 && (banks>2)) {
-			if (read_msr(cpunum, MC_CTL+8, &val2) == 1) {
-				printf("  External L2 tag parity error %sabled\n", val2 & (1<<0) ? "en" : "dis");
-				printf("  L2 partial tag parity error %sabled\n", val2 & (1<<1) ? "en" : "dis");
-				printf("  System ECC TLB reload error %sabled\n", val2 & (1<<2) ? "en" : "dis");
-				printf("  L2 ECC TLB reload error %sabled\n", val2 & (1<<3) ? "en" : "dis");
-				printf("  L2 ECC K7 deallocate %sabled\n", val2 & (1<<4) ? "en" : "dis");
-				printf("  L2 ECC probe deallocate %sabled\n", val2 & (1<<5) ? "en" : "dis");
-				printf("  System datareaderror reporting %sabled\n", val2 & (1<<6) ? "en" : "dis");
-			}
-		}
-
-		printf(" Load/Store unit check %sabled\n", val & (1<<3) ? "en" : "dis");
-		if ((val & (1<<3)) == 8 && (banks>3)) {
-			if (read_msr(cpunum, MC_CTL+12, &val2) == 1) {
-				printf("  Read data error enable (loads) %sabled\n", val2 & (1<<0) ? "en" : "dis");
-				printf("  Read data error enable (stores) %sabled\n", val2 & (1<<1) ? "en" : "dis");
-			}
+			printf(" %s check %sabled\n", u->name, val & (1<<i) ? "en" : "dis");
+			if (!(val & (1<<i)) || banks <= i)
+				continue;
+			if (read_msr(cpunum, MC_CTL + 4 * i, &val2) == 1)
+				print_ctl_bits(u->bits, u->nr_bits, val2);
 		}
 	}
 	printf("\n");

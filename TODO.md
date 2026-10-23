@@ -35,10 +35,6 @@ C7. Machine-check bank dump loop duplicated in amd/machine_check.c:107-118
     and intel/machine_check.c:117-125 (Intel omits MISC). Move to one
     `dump_mc_banks(int cpu, unsigned banks)` in a shared file. [sonnet]
 
-C8. vendors/amd/machine_check.c:54-102 — 30 near-identical
-    `printf("... %sabled", val & (1<<n) ...)` lines. Turn each bank's bits
-    into a `{bit, label}` table and print with one loop. [sonnet]
-
 C9. vendors/intel/msr-p4.c:52-107 / msr-performance.c:22-39 — both
     decode IA32_MISC_ENABLE bit by bit with different subsets. One bit
     table, one decoder, call from both. [sonnet]
