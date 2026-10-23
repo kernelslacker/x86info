@@ -68,11 +68,6 @@ G1. vendors/intel/cachesize.c — restructure decoding: [opus]
        found_general/found_tlb_general state.
     Supersedes A6, B3.
 
-G4. include/msr.h, include/amd-revision.h — headers defining static
-    functions/tables, each included by exactly one .c. Move msr.h into
-    lsmsr/ (it isn't used by x86info) and amd-revision.h next to
-    vendors/amd/identify.c. [haiku]
-
 G5. 18 `show_*` globals in commandline.c / x86info.h. Group into a
     `struct options` (one extern) to make the option set discoverable and
     testable. Low priority. [sonnet]

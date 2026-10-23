@@ -23,7 +23,7 @@
 
 #include <getopt.h>
 
-#include <msr.h>
+#include "msr.h"
 #include <x86info.h>
 #include "AMD_k8.h"
 #include "AMD_fam10h.h"

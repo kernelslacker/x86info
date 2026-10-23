@@ -16,7 +16,7 @@
 #include <sys/types.h>
 #include <x86info.h>
 #include <amd.h>
-#include <amd-revision.h>
+#include "amd-revision.h"
 
 static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 {
