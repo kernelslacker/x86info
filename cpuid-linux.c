@@ -45,7 +45,7 @@ int bind_cpu(unsigned int cpunr)
 
 	CPU_ZERO_S(size, set);
 	CPU_SET_S(cpunr, size, set);
-	ret = sched_setaffinity(getpid(), size, set);
+	ret = sched_setaffinity(0, size, set);
 	CPU_FREE(set);
 	return ret;
 }
