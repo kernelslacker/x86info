@@ -9,6 +9,10 @@
 #include <time.h>
 
 #include <string.h>
+#ifdef __linux__
+#include <sys/syscall.h>
+#include <linux/perf_event.h>
+#endif
 
 #include <x86info.h>
 #include <rdtsc.h>
@@ -58,7 +62,69 @@ void display_MHz_line(const struct cpudata *cpu)
 		printf(" processor (estimate).\n\n");
 }
 
-/* Read the APERF/MPERF counters if the CPU has them and the MSRs are readable. */
+#ifdef __linux__
+#define MSR_PMU_TYPE	"/sys/bus/event_source/devices/msr/type"
+#define PERF_MSR_APERF	1
+#define PERF_MSR_MPERF	2
+
+/* Per-thread APERF/MPERF counters from the kernel's msr PMU; no root needed. */
+static int perf_msr_open(unsigned int config)
+{
+	struct perf_event_attr attr;
+	unsigned int type;
+	FILE *f;
+	int ok;
+
+	f = fopen(MSR_PMU_TYPE, "r");
+	if (!f)
+		return -1;
+	ok = fscanf(f, "%u", &type) == 1;
+	fclose(f);
+	if (!ok)
+		return -1;
+
+	memset(&attr, 0, sizeof(attr));
+	attr.type = type;
+	attr.size = sizeof(attr);
+	attr.config = config;
+	return (int)syscall(SYS_perf_event_open, &attr, 0, -1, -1, 0);
+}
+
+static int read_perf_msr_pmu(unsigned long long *aperf, unsigned long long *mperf)
+{
+	static int fds[2] = { -1, -1 };
+	static int tried;
+
+	if (!tried) {
+		tried = 1;
+		fds[0] = perf_msr_open(PERF_MSR_APERF);
+		fds[1] = perf_msr_open(PERF_MSR_MPERF);
+		if (fds[0] < 0 || fds[1] < 0) {
+			if (fds[0] >= 0)
+				close(fds[0]);
+			if (fds[1] >= 0)
+				close(fds[1]);
+			fds[0] = fds[1] = -1;
+		}
+	}
+	if (fds[0] < 0)
+		return 0;
+	return read(fds[0], aperf, sizeof(*aperf)) == sizeof(*aperf) &&
+	       read(fds[1], mperf, sizeof(*mperf)) == sizeof(*mperf);
+}
+#else
+static int read_perf_msr_pmu(unsigned long long *aperf, unsigned long long *mperf)
+{
+	(void)aperf;
+	(void)mperf;
+	return 0;
+}
+#endif
+
+/*
+ * Read the APERF/MPERF counters if the CPU has them: from the MSRs as
+ * root, otherwise from the kernel's msr PMU.
+ */
 static int read_perf_counters(const struct cpudata *cpu,
 			      unsigned long long *aperf, unsigned long long *mperf)
 {
@@ -70,8 +136,11 @@ static int read_perf_counters(const struct cpudata *cpu,
 	cpuid(cpu->number, 6, NULL, NULL, &ecx, NULL);
 	if (!(ecx & 1))
 		return 0;
-	return read_msr(cpu->number, base + MSR_APERF, aperf) == 1 &&
-	       read_msr(cpu->number, base + MSR_MPERF, mperf) == 1;
+	if (user_is_root &&
+	    read_msr(cpu->number, base + MSR_APERF, aperf) == 1 &&
+	    read_msr(cpu->number, base + MSR_MPERF, mperf) == 1)
+		return 1;
+	return read_perf_msr_pmu(aperf, mperf);
 }
 
 /* Long enough for a sub-0.1% reading, short enough for --all-cpus. */
@@ -128,7 +197,7 @@ void estimate_MHz(struct cpudata *cpu)
 		return;
 	}
 
-	have_perf = user_is_root && read_perf_counters(cpu, &aperf[0], &mperf[0]);
+	have_perf = read_perf_counters(cpu, &aperf[0], &mperf[0]);
 
 	/* Nothing left to measure if CPUID gives the TSC rate */
 	known_MHz = cpuid_tsc_MHz(cpu);
