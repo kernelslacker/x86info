@@ -1,0 +1,661 @@
+# S-spec and release history
+
+Notes carried over from comments in the CPU identification code. They record
+which S-spec / stepping / frequency belongs to which part and are not
+authoritative.
+
+## vendors/amd/identify.c
+
+```
+/* Palomino
+ * 0.18u L2=256KB
+ * 266MHz FSB
+ * 12%-20% faster than Athlon Thunderbird at same GHz
+ * Power requirement reduced by 20%
+ * Athlon XP 1500+ (Oct 2001)
+ * Athlon XP 1600+ (Oct 2001)
+ * Athlon XP 1700+ (Oct 2001)
+ * Athlon XP 1800+ (Oct 2001)
+ * Athlon XP 1900+ (Nov 2001)
+ * Athlon XP 2000+ (Jan 2002)
+ * Athlon XP 2100+ (Mar 2002)
+ */
+```
+
+```
+/*
+ * Thoroughbred
+ * 0.13u L2=256KB
+ * Thoroughbred 'A' = 266FSB
+ * Thoroughbred 'B' = 266FSB
+ * Thoroughbred 'B' = 333FSB
+ * Throughbred B has an extra layer of copper interconnects
+ * to reduce interference.
+ * Athlon XP1600+ (A:June 2002 B:Mar 2003)
+ * Athlon XP1700+ (A:June 2002 B:Dec 2002)
+ * Athlon XP1800+ (A:June 2002 B:Dec 2002)
+ * Athlon XP1900+ (A:June 2002 B:Dec 2002)
+ * Athlon XP2000+ (A:June 2002 B:Aug 2002)
+ * Athlon XP2100+ (A:June 2002 B:Dec 2002)
+ * Athlon XP2200+ (A:June 2002 B:Aug 2002)
+ * Athlon XP2400+ (            B:Aug 2002)
+ * Athlon XP2600+ (            B:Aug 2002 B2: Nov 2002)
+ * Athlon XP2700+ (                       B2: Oct 2002)
+ * Athlon XP2800+ (                       B2: Oct 2002)
+ */
+```
+
+```
+/* Barton
+ * L2=512
+ * 333 FSB & 400 FSB
+ * 10%-15% faster than Athlon XP (old) with same GHz
+ * CPU core size 20% bigger than T-bred.
+ * 333 FSB:
+ * Athlon XP 2500+ (Feb 2003)
+ * Athlon XP 2600+ (June 2003)
+ * Athlon XP 2800+ (Feb 2003)
+ * Athlon XP 3000+ (Feb 2003)
+ * 400 FSB:
+ * Athlon XP 3000+ (Apr 2003)
+ * Athlon XP 3200+ (May 2003)
+ * Athlon XP 3400+ (Q4 2003)
+ * Athlon XP 3600+ (Q1 2004)
+ * Athlon XP 3800+ (Q2 2004)
+ */
+```
+
+```
+/*
+ * Applebred
+ * 0.13u L2=64KB
+ * 266FSB
+ * Barton grade processor modules with 64KB cache
+ *
+ * Duron 1.4 (Aug 2003)
+ * Duron 1.6 (Aug 2003)
+ * Duron 1.8 (Q4 2003)
+ */
+```
+
+```
+/*
+ * Socket 940
+ * Sledgehammer
+ * 0.13u
+ * L2=1mb
+ * 400FSB
+ * SOI (silicon on insulator)
+ * Registered DIMM required
+ * 25% faster than Athlon XP with same GHz
+ * Athlon 64 FX51 (Sep 2003)
+ * Athlon 64 FX53 (Nov 2003)
+ * Athlon 64 FX55 (Q4 2003)
+ */
+```
+
+```
+/*
+ * Socket 754
+ * Clawhammer
+ * 0.13
+ * L2=1mb
+ * 400FSB
+ * No dual channel memory access
+ * Registered DIMM not required
+ * Athlon 64 3000+ (Oct 2003)
+ * Athlon 64 3200+ (Sep 2003)
+ * Athlon 64 3400+ (Oct 2003)
+ * Athlon 64 3700+ (Q4 2003)
+ */
+```
+
+```
+/*
+ * Socket 939
+ * San Diego
+ * 90nm l2=1mb
+ * 400FSB
+ * Dual channel memory access
+ * Registered DIMM not required
+ * Athlon64 FX-57 (Q1 2004)
+ */
+```
+
+```
+/*
+ * Socket 754
+ * Victoria
+ * 90nm L2=1MB
+ * 400FSB
+ * No dual channel memory access
+ * Registered DIMM not required
+ * Athlon64 3x00+ (Q3 2004)
+ */
+```
+
+## vendors/intel/identify-family6.c
+
+```
+// Core=500 FSB=100
+// SL2XU SL3C9 (l2=512)
+// SL2XV SL3CA (l2=1MB)
+// SL2XW SL3CB (l2=2MB)
+```
+
+```
+// Core=550 FSB=100
+// SL3FK SL3D9 SL3AJ SL3Y4 SL3FR SL3LM (l2=512)
+// SL3DA SL3CE SL3TW SL3LN (l2=1mb)
+// SL3DB SL3CF SL3LP (l2=2mb)
+//
+// Core 500 FSB=100
+// SL385 (l2=512)
+// SL386 (l2=1MB)
+// SL387 (l2=2MB)
+```
+
+```
+// l2=256KB FSB=133
+// Core=600		SL3BJ SL3BK SL3SS
+// Core=667		SL3BL SL3DC SL3ST
+// Core=733		SL3SF SL3SG SL3SU
+// Core=800		SL3V2 SL3V3 SL3VU
+```
+
+```
+// l2=256 FSB=133
+// Core=600		SL3WM SL3WN
+// Core=667		SL3WP SL3WQ
+// Core=733		SL3WR SL3WS
+// Core=800		SL3WT SL3WU
+// Core=866		SL3WV SL3WW SL4PZ
+// Core=933		SL3WX SL3WY
+```
+
+```
+// l2=256 FSB=133
+// Core=733		SL4H6 SL4H7
+// Core=800		SL4H8 SL4H9
+// Core=866		SL4HA SL4HB SL4U2
+// Core=933		SL4HC SL4HD SL4R9
+// Core=1000	SL4HE SL4HF
+```
+
+```
+// Core=700
+//    L2=1MB		SL3U4 SL3U5 SL4GD SL4GE
+//    L2=2MB		SL3WZ SL3X2 SL4GF SL4GG
+```
+
+```
+// Core=700
+//    L2=1MB		SL49P SL49Q SL4RZ
+//    L2=2MB		SL49R SL49S SL4R3
+```
+
+```
+// Core=700
+//    L2=1MB		SL4XU SL5D4 SL4XV
+//    L2=2MB		SL4XW SL5D5 SL4XX
+// Core=900
+//    L2=2MB		SL4XY SL4XZ SL5D3
+```
+
+```
+/*
+	S-spec	Processor	Hi-Freq	Low-Freq
+			Number
+	SL7EM	755			2.0GHz	600MHz
+	SL7EL	755			2.0GHz	600MHz
+	SL7EN	745			1.8GHz	600MHz
+	SL7EQ	745			1.8GHz	600MHz
+	SL7EP	735			1.7GHz	600MHz
+	SL7ER	735			1.7GHz	600MHz
+	SL7EG	725			1.6GHz	600MHz
+	SL7F2	725			1.6GHz	600MHz
+	SL7GL	715			1.5GHz	600MHz
+	SL7GK	715			1.5GHz	600MHz
+	SL7VC	738			1.4GHz	600MHz
+	SL7F4	733			1.1GHz	600MHz
+	SL7VD	733			1.1GHz	600MHz
+	SL7V2	723			1.0GHz	600MHz
+ */
+```
+
+```
+	/*
+	   FSB=533 2MB L2 90nm
+		SL86G	730			1.6GHz	800MHz
+		SL7SA	740			1.73GHz	800MHz
+		SL7S9	750			1.86GHz	800MHz
+		SL7SM	760			2.0GHz	800MHz
+		SL7SL	770			2.13GHz	800MHz
+		SL7VB	780			2.26GHz	800MHz
+		SL86M	730			1.6GHz	800MHz
+		SL7S8	740			1.73GHz	800MHz
+		SL7SR	750			1.86GHz	800MHz
+		Sl7SQ	760			2.0GHz	800MHz
+		SL7SP	770			2.13GHz	800MHz
+		SL7SN	780			2.26GHz	800MHz
+		SL86B	740			1.73GHz	800MHz
+		SL86A	750			1.86GHz	800MHz
+		SL869	760			2.0GHz	800MHz
+		SL868	770			2.13GHz	800MHz
+		SL8QK	780			2.26GHz	800MHz
+	   FSB=400
+		SL8QF	778			1.6GHz	600MHz
+		SL89X	758			1.5GHz	600MHz
+		SL8A3	723			1.0GHz	600MHz
+		SL8LM	733J		1.1GHz	600MHz
+		SL8A2	733J		1.1GHz	600MHz
+		SL89Z	753			1.2GHz	600MHz
+		SL8LL	753			1.2GHz	600MHz
+		SL8QG	778			1.6GHz	600MHz
+		SL89M	758			1.5GHz	600MHz
+		SL89R	723			1.0GHz	600MHz
+		SL8LT	733J		1.1GHz	600MHz
+		SL89Q	733J		1.1GHz	600MHz
+		SL89P	753			1.2GHz	600MHz
+		SL8LS	753			1.2GHz	600MHz
+		SL89N	738			1.4GHz	600MHz
+		SL89Y	738			1.4GHz	600MHz
+     */
+```
+
+```
+/*
+ * 2M Level2 cache
+ * SL9TB L2 E4300 1.8GHz/800Mhz
+ * SLA3F L2 E4400 2GHz/800MHz
+ * SL9TA L2 E6300 1.86GHz/1066MHz
+ * SL9T9 L2 E6400 2.13GHz/1066MHz
+ */
+```
+
+```
+/*
+ * 2MB L2 cache
+ * - SL9SA B2 E6300 1.86GHz/1066MHz
+ * - SL9S9 B2 E6400 2.13GHz/1066MHz
+ * 4MB L2 cache
+ * - SLA4U B2 E6320 1.86GHz/1066MHz
+ * - SLA4T B2 E6420 2.13GHz/1066MHz
+ * - SL9S8 B2 E6600 2.4GHz/1066MHz
+ * - SL9ZL B2 E6600 2.4GHz/1066MHz
+ * - SL9S7 B2 E6700 2.66GHz/1066MHz
+ * - SL9ZF B2 E6700 2.66GHz/1066MHz
+ * - SLAA5 G0 E6540 2.33GHz/1.333MHz
+ * - SLA9X G0 E6550 2.33GHz/1.333MHz
+ * - SLA9V G0 E6750 2.66GHz/1.333MHz
+ * - SLA9U G0 E6850 3GHz/1.333MHz
+ * - SL9S5 B2 X6800 2.93GHz/1066MHz
+ */
+```
+
+```
+/*
+ * All quad-core.
+ * SL9UK B3 8MB QX6800 2.93GHz/1066MHz
+ * SL9UL B3 8MB QX6700 2.66GHz/1066MHz
+ * SL9UM B3 8MB QX6600 2.4GHz/1066MHz
+ * SLACP G0 8MB QX6800 2.93GHz/1066MHz
+ */
+```
+
+```
+/* sCode Procname (IDA/HFM)
+ * SLA43 T7700 (2.6GHz/2.4GHz)
+ * SLA3M T7700 (2.6GHz/2.4GHz)
+ * SLA44 T7500 (2.4GHz/2.2GHz)
+ * SLA3N T7500 (2.4GHz/2.2GHz)
+ * SLA45 T7300 (2.4GHz/2.0GHz)
+ * SLA3P T7300 (2.2GHz/2.0GHz)
+ * SLA3R L7500 (1.8GHz/1.6GHz)
+ * SLA3S L7300 (1.6GHz/1.4GHz)
+ * SLA33 X7900 (2.8GHz)
+ * SLA6Z X7800 (2.6GHz)
+ */
+```
+
+```
+/*
+ * SLALT G0 2M E4700 2.6GHz/800MHz
+ *
+ * SLAFN G0 8M QX6850 3GHz/1333MHz
+ * SLACQ G0 8M Q6700 2.66GHz/1066MHz
+ * SLACR G0 8M Q6600 2.4GHz/1066MHz
+ */
+```
+
+```
+/*
+ * SLA98 M0 2M E4400 2GHz/800MHz
+ * SLA95 M0 2M E4500 2.2GHz/800MHz
+ * SLA94 M0 2M E4600 2.4GHz/800MHz
+ */
+```
+
+## vendors/intel/identify-family6-extended.c
+
+```
+// sSpec step CoreFreq Bus cache
+// SLAN3  C0  3.00    1333  12MB (2x6) QX9650
+// SLANY  C0  3.2     1600  12MB (2x6) QX9775
+```
+
+```
+// sSpec step CoreFreq Bus cache
+// SLAWM C1   3.2    1600  12MB (2x6)	QX9770
+// SLAWQ C1   2.83   1600  12MB (2x6)	Q9550
+// SLAWR C1   2.66   1333  12MB (2x6)	Q9450
+// SLAWE M1   2.50   1333  6MB (2x3)	Q9300
+// SLB5M M1   2.33   1333  4MB (2x2)    Q8200
+```
+
+```
+// sSpec step CoreFreq Bus cache
+// SLB8W E0  3.00     1333 12MB (2x6) Q9650
+// SLB8V E0  2.83     1333 12MB (2x6) Q9550
+// SLB6B R0  2.66     1333 6MB  (2x3) Q9400
+// SLB5W R0  2.5      1333 4MB  (2x2) Q8300
+```
+
+```
+//sSpec step CoreFreq/QuickpathGTs/DDR3	cache
+//SLBCJ C-0	3.2/6.40/1066		8MB
+//SLBCK C-0	2.93/4.80/1066		8MB
+//SLBCH C-0	2.66/4.80/1066		8MB
+// sSpec step TDP Name FSB EFMS  HFM    LFM    Package  MCU
+// QDTD  B0   2.5   x  533 106C1 1.6GHz 800MHz FCBGA8 M01106C1109
+// QDTB  B0   2.5   x  533 106C1 1.6GHz 800MHz FCBGA8 M01106C1109
+// QGFD1 B0     X   X  533 106C1 1.33GHz ----  FCBGA437 M01106C1109
+```
+
+```
+// sSpec step TDP Name FSB EFMS  HFM     LFM    Package
+// SLB6Q C0 0.65W Z500 400 106C2 800GHz  600MHz FCBGA8
+// SLB2C C0    2W Z510 400 106C2 1.1GHz  600MHz FCBGA8
+// SLGMG C0 0.65W Z515 400 106C2 800MHz  600MHz FCBGA8
+// SLB2H C0    2W Z520 533 106C2 1.33GHz 800MHz FCBGA8
+// SLB6P C0    2W Z530 533 106C2 1.60GHz 800MHz FCBGA8
+// QGZT  C0  2.5W N270 533 106C2 1.60GHz 800MHz FCBGA8
+// QKGY1 C0    8W  300 533 106C2 1.60GHz ------ FCBGA437
+// QGZR2 C0    4W  230 533 106C2 1.60GHz -----  FCBGA437
+// SLB2M C0  2.4W Z540 533 106C2 1.86GHz 800MHz FCBGA8
+// SLGPT C0  2.4W Z550 533 106C2 2.0GHz  800MHz FCBGA8
+```
+
+```
+// SLBCJ C-0 0x000106A4 3.20 / 6.40/ 1066 8MB
+// SLBCK C-0 0x000106A4 2.93 / 4.80/ 1066 8MB
+// SLBCH C-0 0x000106A4 2.66 / 4.80/ 1066 8MB
+```
+
+## vendors/intel/identify-family15.c
+
+```
+//SL4QD SL4SF = 1.3GHz
+//SL4SG SL4SC = 1.4GHz
+//SL4SH SL4TY = 1.5GHz
+```
+
+```
+//SL5FW SL5GC 1.3GHz
+//SL4WS SL4X2 SL59U SL5N7 1.4GHz
+//SL4WT SL4X3 SL59V SL5NB 1.5GHz
+//SL4WU SL4X4 SL5US SL5UW 1.6GHz
+//SL57W SL57V SL59X SL5N9 1.7GHz
+//SL4WV SL4X5 SL5UT SL5UV 1.8GHz
+```
+
+```
+//400FSB 256K L2
+//SSpec MHz L3
+//SL5G8 1.6 1M
+//SL5S4 1.6 1M
+//SL5FZ 1.4 512K
+//SL5RZ 1.4 512K
+//SL5G2 1.5 512K
+//SL5RW 1.5 512K
+```
+
+```
+//SL5TG SL5UE 1.4GHz
+//SL5SX SL5TJ SL5UF SL62Y SL5TN 1.5GHz
+//SL5VL SL5UL SL5VH SL5UJ 1.6GHz
+//SL5SY SL5TK SL5UG SL62Z 1.7GHz
+//SL5VM SL5VM SL5VJ SL5UK 1.8GHz
+//SL5VN SL5WH SL5VK SL5WG 1.9GHz
+//SL5SZ SL5TQ SL5TL 2GHz
+```
+
+```
+//SL6BC SL679 1.6GHz
+//SL6BD SL67A 1.7GHz
+//SL6BE SL78B 1.8GHz
+//SL6BF SL67C 1.9GHz
+```
+
+```
+//512K L2
+//          L3
+//SL6GZ 1.5 1M
+//SL6KB 1.5 1M
+//SL6H2 1.9 2M
+//SL6KC 1.9 2M
+//SL66Z 2.0 1M
+//SL6KD 2.0 1M
+```
+
+```
+//SL66B 1.6GHz
+//SL63X SL62P SL6BQ 1.8GHz
+//SL6BR SL5YR 2GHz
+//SL5YS SL6BS SL5ZU 2.2GHz
+//SL6B3 SL67Y 2.26GHz (533MHz FSB)
+//SL6BT SL65R SL67R 2.4GHz (400MHz FSB)
+//SL6B4 SL67Z 2.4GHz (533MHz FSB)
+//SL6B5 SL6B2 2.53GHz (533MHz FSB)
+```
+
+```
+//SL6Z3 2.4GHz (800FSB)
+//SL6Z5 2.8GHz (800FSB)
+```
+
+```
+//SL7AA 3.2GHz (800FSB) 2MB L3 cache
+//SL7CH 3.4GHz (800FSB) 2MB L3 cache
+```
+
+```
+//SL6YJ 2.0 1M L3
+//SL6Z6 2.0 1M L3
+//SL6Z2 2.5 1M L3
+//SL6Z7 2.5 1M L3
+//SL6YL 2.8 2M L3
+//SL6Z8 2.8 2M L3
+```
+
+```
+//400FSB 512K L2
+//SL79V 3.0 4M L3
+//SL79Z 2.7 2M L3
+//SL7A5 2.2 2M L3
+```
+
+```
+//SL6HL SL6K6 2.8GHz (533MHz FSB)
+//SL6LA SL6S6 1.8GHz
+//SL6GQ SL6S7 SL6E7 2GHz
+//SL6GR SL6SB SL6EB 2.2GHz
+//SL6DU SL6RY SL6EE 2.26GHz (533FSB)
+//SL6EF SL6DV SL6S9 SL6RZ SL6E9 2.4GHz (533FSB)
+//SL6SA 2.5GHz (400FSB)
+//SL6EG SL6S2 SL6DW 2.53GHz (533FSB)
+//SL6SB 2.6GHz (400FSB)
+//SL6S3 SL6SK 2.66GHz (533FSB)
+//SL6S4 SL6SL 2.8GHz (533FSB)
+//SL6S5 SL6K7 SL6SM SL6JJ 3.06GHz (533FSB)
+```
+
+```
+//SL6QL 1.8GHz
+//SL6QM SL6PK 2.0GHz
+//SL6QN SL6PL 2.2GHz
+//SL6QR SL6PB 2.26GHz (533FSB)
+//SL6QP SL6PM 2.4GHz
+//SL6QB SL6PC 2.4GHz (533FSB)
+//SL6WF SL6WR 2.4GHz (800FSB)
+//SL6QQ 2.5GHz
+//SL6Q9 SL6PD 2.53GHz (533FSB)
+//SL6QR 2.6GHz
+//SL6WH SL6WS 2.6GHz (800FSB)
+//SL6QA SL6PE 2.66GHz (533FSB)
+//SL6QB SL6PF 2.8GHz (533FSB)
+//SL6WJ SL6WT 2.8GHz (800FSB)
+//SL6WU SL6WK 3GHz (800FSB)
+//SL6QC SL6PG 3.06GHz (533FSB)
+//SL6WG SL6WE 3.2GHz (800FSB)
+//SL793 3.4GHz (800FSB)
+```
+
+```
+/*
+sspec speed   fsb l2 90nm
+SL7D7 2.26GHz 533 512K
+SL7FY 2.4GHz  800 1M
+SL7E8 2.4GHz  533 1M
+SL7E9 2.66GHz 533 1M
+SL7D8 2.8GHz  533 1M
+SL79K 2.8GHz  800 1M
+SL79L 3.0GHz  800 1M
+SL79M 3.2GHz  800 1M
+SL7B8 3.2GHz  800 1M
+SL7B9 3.4GHz  800 1M
+SL7AJ 3.4GHz  800 1M
+
+process = "0.09u";
+125 million transistors
+112mm2 die size
+pipeline_stages=31
+*/
+```
+
+```
+/*
+1M L2 90nm
+sspec speed   fsb
+SL7E2 2.8GHz  533
+SL7E3 2.8GHz  800
+SL7KA 2.8GHz  800
+SL7K9 2.8GHz  533
+SL7E4 3.0GHz  800
+SL7KB 3.0GHz  800
+SL7L4 3.0GHz  800
+SL7L5 3.2GHz  800
+SL7E5 3.2GHz  800
+SL7KC 3.2GHz  800
+SL7E6 3.4GHz  800
+SL7KD 3.4GHz  800
+SL7YP 2.4GHz  533
+SL7YU 2.66GHz 533
+SL7J4 2.8GHz  533
+SL7J5 2.8GHz  800
+SL7KH 2.8GHz  533
+SL7KJ 2.8GHz  800
+SL7YV 2.93GHz 533
+SL7J6 3.0GHz  800
+SL7KK 3.0GHz  800
+SL7J7 3.2GHz  800
+SL7KL 3.2GHz  800
+SL7LA 3.2GHz  800
+SL7J8 3.4GHz  800
+SL7KM 3.4GHz  800
+SL7L8 3.4GHz  800
+SL7J9 3.6GHz  800
+SL7KN 3.6GHz  800
+SL7L9 3.6GHz  800
+ */
+```
+
+```
+/*
+ 1M L2 90nm
+SL88F 2.4GHz  533
+SL8B3 2.66GHz 533
+SL88G 2.8GHz  533
+SL88H 2.8GHz  800
+SL7PL 2.8GHz  800
+SL7PK 2.8GHz  533
+SL7PM 3GHz    800
+SL88J 3GHz    800
+SL7PN 3.2GHz  800
+SL88K 3.2GHz  800
+SL88L 3.4GHz  800
+SL7PP 3.4GHz  800
+SL7PT 2.66GHz 533
+SL82P 2.8GHz  800
+SL7PR 2.8GHz  800
+SL8HX 2.8GHz  800
+SL85U 2.66GHz 533
+SL8J8 2.66GHz 533
+SL85V 2.93GHz 533
+SL8J9 2.93GHz 533
+SL87L 3.06GHz 533
+SL8JA 3.06GHz 533
+SL82X 3.0GHz  800
+SL7PU 3.0GHz  800
+SL8HZ 3.0GHz  800
+SL7PW 3.2GHz  800
+SL7PX 3.2GHz  800
+SL82Z 3.2GHz  800
+SL8J2 3.2GHz  800
+SL7PY 3.4GHz  800
+SL7PZ 3.4GHz  800
+SL833 3.4GHz  800
+SL7ZW 3.4GHz  800
+SL8J5 3.4GHz  800
+SL84X 3.6GHz  800
+SL7Q2 3.6GHz  800
+SL7NZ 3.6GHz  800
+SL8J6 3.6GHz  800
+SL82U 3.8GHz  800
+SL84Y 3.8GHz  800
+SL7P2 3.8GHz  800
+SL8J7 3.8GHz  800
+ */
+```
+
+```
+/*
+ 8MB L3 [C-0]
+ SL8EY 3.3GHz 667
+ SL8EW 3GHz   667
+ 4MB L3
+ SL8ED 2.8GHz 667
+ */
+```
+
+```
+/*
+ 2M L2 90nm
+ SL7Z9 3.0GHz  800
+ SL7Z8 3.2GHz  800
+ SL8Z7 3.4GHz  800
+ SL7Z5 3.6GHz  800
+ SL7Z4 3.73GHz 800
+ SL7Z3 3.8GHz  800
+ */
+```
+
+```
+/*
+   1Mx2 L2	800MHz FSB
+   SL88T	2.8GHz
+   SL88S	3GHz
+   SL88R	3.2GHz
+   SL8FK	3.2GHz
+ */
+```

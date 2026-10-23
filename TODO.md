@@ -85,13 +85,6 @@ G5. 18 `show_*` globals in commandline.c / x86info.h. Group into a
     `struct options` (one extern) to make the option set discoverable and
     testable. Low priority. [sonnet]
 
-## 🟡 Comments
-
-H1. Remove the S-spec / release-date history blocks: amd/identify.c:782-794,
-    833-852,874-949, identify-family6.c:116-131,163-186,248-264,319-389,
-    408-476, identify-family6-extended.c:26-74, identify-family15.c
-    throughout. If worth keeping, move to docs/sspecs.md. [haiku]
-
 ## 🟡 Tests & docs
 
 I1. No tests. Identification is a pure function of CPUID values. [opus]
