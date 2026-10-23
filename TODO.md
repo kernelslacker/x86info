@@ -2,12 +2,6 @@
 
 ## 🔴 Correctness
 
-A32. MHz.c:304-353 — without --all-cpus the clocks are measured on the first
-    CPU of each core type, but x86info.c groups by family, model, stepping
-    and core type. On a mixed-stepping multi-socket box the second group
-    shows the first group's MHz. Use the group leaders from B5 instead of
-    first_of_type(). [sonnet]
-
 A33. topology.c:597-609 — sockets[] is sized max phys_proc_id + 1, and
     phys_proc_id (id >> pkg_shift) can be near UINT_MAX with bogus CPUID from
     a hypervisor: calloc() fails and the topology line silently disappears,
@@ -56,12 +50,6 @@ A39. rdmsr-linux.c:502-537, cpuid-linux.c:63,91 — the `nodriver` latches and
     [sonnet]
 
 ## 🟡 Performance
-
-B5. x86info.c:404-413,492-494,525-533 — group_leader() is O(i) and called
-    in O(n) loops; the per-group count loop is O(groups * n^2), and MHz.c's
-    first_of_type() repeats the pattern. Compute a leader[] array and
-    per-group counts once in main() and pass the leaders to
-    estimate_MHz_cpus() (which also fixes A32). [sonnet]
 
 B6. vendors/intel/identify-family6-extended.c:530-537 — get_namestring()
     checks MHz before stepping, so any CPU whose model has MHz-keyed entries

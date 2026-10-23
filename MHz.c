@@ -300,30 +300,20 @@ static void *measure_thread(void *arg)
 	return NULL;
 }
 
-/* Index of the first CPU with the same core type as cpus[i]. */
-static unsigned int first_of_type(const struct cpudata *cpus, unsigned int i)
-{
-	unsigned int j;
-
-	for (j = 0; j < i; j++)
-		if (cpus[j].core_type == cpus[i].core_type)
-			break;
-	return j;
-}
-
 /*
  * Measure the clocks of every CPU with --all-cpus, otherwise of the first
- * CPU of each core type, all at once. The rest take their core type's
- * figures.
+ * CPU of each group, all at once. The rest take their group leader's
+ * figures. leader[i] is the index of the first CPU like cpus[i].
  */
-void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n)
+void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n,
+		       const unsigned int *leader)
 {
 	pthread_t *threads = calloc(n, sizeof(*threads));
 	unsigned char *started = calloc(n, sizeof(*started));
 	unsigned int i;
 
 	for (i = 0; i < n; i++) {
-		if (!opts.all_cpus && first_of_type(cpus, i) != i)
+		if (!opts.all_cpus && leader[i] != i)
 			continue;
 		if (threads && started &&
 		    pthread_create(&threads[i], NULL, measure_thread, &cpus[i]) == 0)
@@ -339,7 +329,7 @@ void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n)
 
 	if (!opts.all_cpus) {
 		for (i = 0; i < n; i++) {
-			unsigned int lead = first_of_type(cpus, i);
+			unsigned int lead = leader[i];
 
 			if (lead == i)
 				continue;

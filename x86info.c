@@ -171,15 +171,26 @@ static int same_cpu(const struct cpudata *a, const struct cpudata *b)
 	       a->core_type == b->core_type;
 }
 
-/* Index of the first CPU that is the same as cpus[i]. */
-static unsigned int group_leader(const struct cpudata *cpus, unsigned int i)
+/*
+ * Set leader[i] to the index of the first CPU that is the same as cpus[i],
+ * count[] to the size of each group, and return the number of groups.
+ */
+static unsigned int find_groups(const struct cpudata *cpus, unsigned int n,
+				unsigned int *leader, unsigned int *count)
 {
-	unsigned int j;
+	unsigned int i, j, groups = 0;
 
-	for (j = 0; j < i; j++)
-		if (same_cpu(&cpus[j], &cpus[i]))
-			break;
-	return j;
+	for (i = 0; i < n; i++) {
+		for (j = 0; j < i; j++)
+			if (leader[j] == j && same_cpu(&cpus[j], &cpus[i]))
+				break;
+		leader[i] = j;
+		count[i] = 0;
+		count[j]++;
+		if (j == i)
+			groups++;
+	}
+	return groups;
 }
 
 /* True if the groups differ only in core type, so one header serves all. */
@@ -214,6 +225,7 @@ int main(int argc, char **argv)
 {
 	struct cpudata *cpus;
 	unsigned int *online;
+	unsigned int *leader, *group_size;
 	unsigned int i;
 	unsigned int display_one_cpu = 1;
 	unsigned int nr_groups = 0;
@@ -257,11 +269,15 @@ int main(int argc, char **argv)
 	free(online);
 
 	clear_uniform_core_types(cpus, nrCPUs);
+	leader = malloc(nrCPUs * sizeof(*leader));
+	group_size = malloc(nrCPUs * sizeof(*group_size));
+	if (!leader || !group_size) {
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	nr_groups = find_groups(cpus, nrCPUs, leader, group_size);
 	if (opts.show_MHz)
-		estimate_MHz_cpus(cpus, nrCPUs);
-	for (i = 0; i < nrCPUs; i++)
-		if (group_leader(cpus, i) == i)
-			nr_groups++;
+		estimate_MHz_cpus(cpus, nrCPUs, leader);
 	display_one_cpu = nr_groups == 1 && !opts.all_cpus;
 
 	if (opts.show_mptable && user_is_root)
@@ -290,14 +306,10 @@ int main(int argc, char **argv)
 			show_header(&cpus[0]);
 		}
 		for (i = 0; i < nrCPUs; i++) {
-			unsigned int j, count = 0;
-
-			if (group_leader(cpus, i) != i)
+			if (leader[i] != i)
 				continue;
-			for (j = i; j < nrCPUs; j++)
-				if (group_leader(cpus, j) == i)
-					count++;
-			printf("CPU #%u (%u in this group):\n", i + 1, count);
+			printf("CPU #%u (%u in this group):\n", i + 1,
+			       group_size[i]);
 
 			display_detailed_info(&cpus[i], !common);
 		}
@@ -315,6 +327,8 @@ int main(int argc, char **argv)
 
 	display_topology(&cpus[0]);
 
+	free(leader);
+	free(group_size);
 	free(cpus);
 
 	exit(EXIT_SUCCESS);
