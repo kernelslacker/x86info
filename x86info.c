@@ -106,9 +106,9 @@ static void separator(void)
 }
 
 
-static void display_detailed_info(struct cpudata *cpu)
+static void display_detailed_info(struct cpudata *cpu, int header)
 {
-	show_info(cpu);
+	show_info(cpu, header);
 
 	if (opts.show_cpuid) {
 		dump_raw_cpuid(cpu->number, 0, cpu->cpuid_level);
@@ -180,6 +180,22 @@ static unsigned int group_leader(const struct cpudata *cpus, unsigned int i)
 		if (same_cpu(&cpus[j], &cpus[i]))
 			break;
 	return j;
+}
+
+/* True if the groups differ only in core type, so one header serves all. */
+static int groups_share_header(const struct cpudata *cpus)
+{
+	unsigned int i;
+
+	for (i = 1; i < nrCPUs; i++) {
+		const struct cpudata *a = &cpus[0], *b = &cpus[i];
+
+		if (a->vendor != b->vendor || a->efamily != b->efamily ||
+		    a->emodel != b->emodel || a->family != b->family ||
+		    a->stepping != b->stepping || strcmp(a->name, b->name))
+			return 0;
+	}
+	return 1;
 }
 
 static void fill_in_cpu_info(struct cpudata *cpu)
@@ -267,9 +283,15 @@ int main(int argc, char **argv)
 		if (nrCPUs >= 2)
 			printf("\n");
 
-		display_detailed_info(&cpus[0]);
+		display_detailed_info(&cpus[0], 1);
 	} else if (!opts.all_cpus) {
+		int common = groups_share_header(cpus);
+
 		printf("Found %u CPUs of %u kinds.\n", nrCPUs, nr_groups);
+		if (common) {
+			printf("\n");
+			show_header(&cpus[0]);
+		}
 		for (i = 0; i < nrCPUs; i++) {
 			unsigned int j, count = 0;
 
@@ -280,7 +302,7 @@ int main(int argc, char **argv)
 					count++;
 			printf("CPU #%u (%u in this group):\n", i + 1, count);
 
-			display_detailed_info(&cpus[i]);
+			display_detailed_info(&cpus[i], !common);
 			separator();
 		}
 	} else {
@@ -288,7 +310,7 @@ int main(int argc, char **argv)
 		for (i = 0; i < nrCPUs; i++) {
 			printf("CPU #%u:\n", i+1);
 
-			display_detailed_info(&cpus[i]);
+			display_detailed_info(&cpus[i], 1);
 
 			if (nrCPUs > 1)
 				separator();

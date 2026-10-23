@@ -152,7 +152,8 @@ void parse_command_line(int argc, char **argv);
 
 void get_cpu_info_basics(struct cpudata *cpu);
 void identify(struct cpudata *cpu);
-void show_info(struct cpudata *cpu);
+void show_header(struct cpudata *cpu);
+void show_info(struct cpudata *cpu, int header);
 
 int read_msr(int cpu, unsigned int idx, unsigned long long *val);
 void binary(unsigned int n, unsigned long value);
