@@ -1366,7 +1366,7 @@
     DIS_SPEC_TLB_RLD:1
     :4
     DIS_IND:1
-    :39
+    :49
 }
 
 {DC_CFG=0xc0011022;data cache configuration

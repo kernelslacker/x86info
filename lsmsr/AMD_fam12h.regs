@@ -1570,7 +1570,7 @@
 {DE_CFG=0xc0011029;decode configuration
     :23
     ClflushSerialize:1
-    :13
+    :40
 }
 
 {BU_CFG2=0xc001102A;bus unit configuration 2

@@ -32,6 +32,8 @@ Todos/Nice-to-have:
 import sys
 from pathlib import Path
 
+REGISTER_BITS: int = 64
+
 HEADER: str = """/*
  * Licensed under the terms of the GNU GENERAL PUBLIC LICENSE version 2.
  * See file COPYING for details.
@@ -66,6 +68,10 @@ class Register:
 
     def macros(self, family: str) -> tuple[str, str, str]:
         """Return the _RANGE, _NAMES and _SPEC macro invocations."""
+        width = sum(int(fwidth) for _, fwidth in self.fields)
+        if width != REGISTER_BITS:
+            msg = f"{self.name}: fields add up to {width} bits"
+            raise ValueError(f"{msg}, not {REGISTER_BITS}")
         ranges = "_RANGE(" + family + "_" + self.name
         names = "_NAMES(" + family + "_" + self.name
         for fname, fwidth in self.fields:
@@ -103,16 +109,23 @@ def main(argv: list[str]) -> int:
 
     family: str = argv[2]
     specs: list[str] = []
+    lines: list[str] = []
+
+    try:
+        for reg in parse_registers(Path(argv[1])):
+            ranges, names, spec = reg.macros(family)
+            lines += [ranges, names]
+            specs.append(spec)
+    except ValueError as err:
+        print(f"{progname}: {argv[1]}: {err}", file=sys.stderr)
+        return 1
 
     print(HEADER)
     print("#ifndef " + family + "_h")
     print("#define " + family + "_h\n")
     print('#include "msr.h"\n')
-    for reg in parse_registers(Path(argv[1])):
-        ranges, names, spec = reg.macros(family)
-        print(ranges)
-        print(names)
-        specs.append(spec)
+    for line in lines:
+        print(line)
     print("\nstruct reg_spec " + family + "_spec [] = {")
     for spec in specs:
         print("\t" + spec + ",")

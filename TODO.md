@@ -78,10 +78,6 @@ I1. No tests. Identification is a pure function of CPUID values. [opus]
     3. `make check` diffs output against goldens.
     This would have caught A1, A2, A6, A8, A9.
 
-I3. lsmsr/createheader.py — validate that each register's field widths sum
-    to 64; msr.h print_reg_bits() shifts by the running offset and is UB
-    past 64. [haiku]
-
 ## 🟢 Enhancements
 
 J2. Intel hybrid parts: report per-CPU core type (CPUID 0x1A EAX[31:24],
