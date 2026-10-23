@@ -14,20 +14,17 @@ void get_cpu_info_basics(struct cpudata *cpu)
 {
 	static int unknown_vendor_reported;
 
-	unsigned int maxi, maxei, vendor, vendor_edx, address_bits;
+	unsigned int maxi, maxei, vendor, vendor_ecx, vendor_edx, address_bits;
 	unsigned int eax;
 
-	cpuid(cpu->number, 0, &maxi, &vendor, NULL, &vendor_edx);
+	cpuid(cpu->number, 0, &maxi, &vendor, &vendor_ecx, &vendor_edx);
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
 	cpu->cpuid_level = maxi;
 
 	cpu->vendor = vendor_from_cpuid(vendor, vendor_edx);
 	if (cpu->vendor == VENDOR_UNKNOWN && !unknown_vendor_reported) {
-		unsigned int ebx, ecx, edx;
-
-		cpuid(cpu->number, 0, NULL, &ebx, &ecx, &edx);
 		printf("Unknown vendor (%.4s%.4s%.4s)\n",
-		       (char *)&ebx, (char *)&edx, (char *)&ecx);
+		       (char *)&vendor, (char *)&vendor_edx, (char *)&vendor_ecx);
 		unknown_vendor_reported = 1;
 	}
 

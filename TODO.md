@@ -8,9 +8,6 @@
 
 ## 🟡 Clean-ups/Refactoring/Style
 
-D10. identify.c:25-31 — the unknown-vendor message issues CPUID 0 a second
-    time; fetch ECX in the first call. [haiku]
-
 D11. vendors/amd/identify.c:313-324 — four identical case arms for families
     0x11, 0x12, 0x14 and 0x15; stack the labels. [haiku]
 
