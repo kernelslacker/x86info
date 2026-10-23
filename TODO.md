@@ -16,11 +16,6 @@ A6. vendors/intel/cachesize.c:452-462 — the L2L3 vs L3L2 heuristic is
 
 ## 🟡 Performance
 
-B2. x86info.c:197 — with --all-cpus --mhz, estimate_MHz() runs a 1 s busy
-    loop serially per CPU (128 s on a 128-thread box). Measure all CPUs in
-    parallel (one pthread per CPU, pinned) or measure for a shorter
-    window. [opus]
-
 B3. vendors/intel/cachesize.c:259-285 — decode_cache() re-runs CPUID 2 for
     each of ~11 tables, twice (once during identify, once for --cache).
     Read the descriptor bytes once into a 16*n array (see G1). [sonnet]

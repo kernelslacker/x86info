@@ -9,7 +9,6 @@
 #include <time.h>
 
 #include <string.h>
-#include <signal.h>
 
 #include <x86info.h>
 #include <rdtsc.h>
@@ -76,12 +75,8 @@ static int read_perf_counters(const struct cpudata *cpu,
 	       read_msr(cpu->number, base + MSR_MPERF, mperf) == 1;
 }
 
-static volatile sig_atomic_t nosignal = 0;
-
-static void sighandler(int sig __attribute__((unused)))
-{
-	nosignal = 1;
-}
+/* Long enough for a sub-0.1% reading, short enough for --all-cpus. */
+#define MEASURE_US	100000.0
 
 /*
  * TSC rate in MHz from CPUID 0x15 (crystal clock ratio), or failing that
@@ -123,7 +118,6 @@ void estimate_MHz(struct cpudata *cpu)
 	int have_perf;
 	unsigned int eax, ebx, ecx, edx, known_MHz;
 	double tsc_mhz;
-	void (*old)(int);
 	// coverity[DC.WEAK_CRYPTO]
 	unsigned long r = rand();
 
@@ -145,23 +139,14 @@ void estimate_MHz(struct cpudata *cpu)
 		return;
 	}
 
-	old = signal(SIGALRM, sighandler);
-	if (old == SIG_ERR) {
-		printf("Some kind of signal failure.\n");
-		cpu->MHz = 0;
-		return;
-	}
-
 	clock_gettime(CLOCK_MONOTONIC_RAW, &ts[0]);
 	cycles[0] = rdtsc();
 
-	alarm(1);
-	while (!nosignal)
+	do {
 		// coverity[DC.WEAK_CRYPTO]
 		r = r * rand();
-
-	nosignal = 0;
-	signal(SIGALRM, old);
+		clock_gettime(CLOCK_MONOTONIC_RAW, &ts[1]);
+	} while (elapsed_us(&ts[0], &ts[1]) < MEASURE_US);
 
 	cycles[1] = rdtsc();
 	clock_gettime(CLOCK_MONOTONIC_RAW, &ts[1]);
