@@ -6,10 +6,6 @@
 
 ## 🟡 Maintainability
 
-C30. MHz.c:50,217-220, vendors/amd/identify.c:258 — CPUID 0x80000007 EDX is
-    fetched in three places for the invariant TSC and mobile bits. Store it
-    in cpudata from get_feature_flags() and test the bits there. [haiku]
-
 C31. mtrr.c:446-454 — get_max_phy_addr() repeats the CPUID 0x80000008
     lookup that get_cpu_info_basics() already stores in cpu->phyaddr_bits.
     Use the field. [haiku]

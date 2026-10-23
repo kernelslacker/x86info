@@ -316,7 +316,8 @@ static void decode_pstates(struct cpudata *cpu, int has_cpb)
 
 void decode_powernow(struct cpudata *cpu)
 {
-	unsigned int eax, ebx, ecx, edx;
+	unsigned int edx = cpu->apm_edx;
+	unsigned int eax, ebx, ecx;
 	int can_scale_vid, can_scale_fid;
 	int has_cpb;
 	unsigned int i;
@@ -324,7 +325,6 @@ void decode_powernow(struct cpudata *cpu)
 	if (cpu->maxei < 0x80000007)
 		return;
 
-	cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
 	printf("PowerNOW! Technology information\n");
 	printf("Available features:");
 

@@ -91,6 +91,7 @@ struct cpudata {
 	unsigned int flags_edx;
 	unsigned int eflags_ecx;
 	unsigned int eflags_edx;
+	unsigned int apm_edx;		/* CPUID 0x80000007 EDX */
 	unsigned int MHz;		/* TSC rate */
 	unsigned int core_MHz;		/* from APERF/MPERF, 0 if unknown */
 	unsigned int nr_cores;

@@ -45,11 +45,6 @@ static void display_MHz(const struct cpudata *cpu)
  */
 void display_MHz_line(const struct cpudata *cpu)
 {
-	unsigned int edx = 0;
-
-	if (cpu->maxei >= 0x80000007)
-		cpuid(cpu->number, 0x80000007, NULL, NULL, NULL, &edx);
-
 	if (cpu->core_MHz) {
 		print_MHz(cpu->core_MHz);
 		printf(" processor (measured), TSC ");
@@ -59,7 +54,7 @@ void display_MHz_line(const struct cpudata *cpu)
 	}
 
 	display_MHz(cpu);
-	if (edx & (1 << 8))
+	if (cpu->apm_edx & (1 << 8))
 		printf(" TSC frequency.");
 	else
 		printf(" processor (estimate).");
@@ -217,7 +212,7 @@ static unsigned long spin(unsigned long r, double us)
  */
 static unsigned int cpuid_tsc_MHz(const struct cpudata *cpu)
 {
-	unsigned int eax, ebx, ecx, edx = 0;
+	unsigned int eax, ebx, ecx;
 
 	if (cpu->cpuid_level >= 0x15) {
 		cpuid(cpu->number, 0x15, &eax, &ebx, &ecx, NULL);
@@ -228,9 +223,7 @@ static unsigned int cpuid_tsc_MHz(const struct cpudata *cpu)
 
 	if (cpu->vendor != VENDOR_INTEL || cpu->cpuid_level < 0x16)
 		return 0;
-	if (cpu->maxei >= 0x80000007)
-		cpuid(cpu->number, 0x80000007, NULL, NULL, NULL, &edx);
-	if (!(edx & (1 << 8)))
+	if (!(cpu->apm_edx & (1 << 8)))
 		return 0;
 	cpuid(cpu->number, 0x16, &eax, NULL, NULL, NULL);
 	return eax & 0xffff;

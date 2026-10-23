@@ -47,6 +47,10 @@ void get_feature_flags(struct cpudata *cpu)
 		cpu->eflags_ecx = ecx;
 		cpu->eflags_edx = edx;
 	}
+	if (cpu->maxei >= 0x80000007) {
+		cpuid(cpu->number, 0x80000007, NULL, NULL, NULL, &edx);
+		cpu->apm_edx = edx;
+	}
 }
 
 
@@ -315,10 +319,8 @@ static void show_extra_flags(const struct cpudata *cpu)
 		}
 	}
 	// CPUID 0x80000007
-	if (cpu->maxei >= 0x80000007) {
-		cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
-		flag_decode(edx, "80000007:edx", cpuid_80000007_edx_flags, cpuid_80000007_edx_flags_desc);
-	}
+	if (cpu->maxei >= 0x80000007)
+		flag_decode(cpu->apm_edx, "80000007:edx", cpuid_80000007_edx_flags, cpuid_80000007_edx_flags_desc);
 }
 
 /* CPUID 0x00000001 EDX flags */

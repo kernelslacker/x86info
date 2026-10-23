@@ -254,16 +254,7 @@ static int getL2size(int cpunum)
 
 static int is_mobile(struct cpudata *cpu)
 {
-	unsigned int eax, ebx, ecx, edx;
-	if (cpu->maxei >= 0x80000007) {
-		cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
-		if ((edx & (1<<1|1<<2)) == 0)
-			return 0;
-		else
-			return 1;
-	} else {
-		return 0;
-	}
+	return (cpu->apm_edx & (1 << 1 | 1 << 2)) != 0;
 }
 
 
