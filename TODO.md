@@ -2,12 +2,6 @@
 
 ## 🔴 Correctness
 
-A26. vendors/intel/identify.c:62 — cpu->brand = ebx & 0xf, but the brand
-    index is EBX[7:0]. Cases 0x11-0x17 in decode_brand() (info.c:44-71) are
-    unreachable and a Pentium M (0x16) prints as "Mobile Pentium III" (6).
-    Mask with 0xff; the family 6/15 brand switches only test values < 0x10 so
-    they are unaffected. [haiku]
-
 A27. topology.c:634-645 — "threads per core" is num_siblings, the CPUID SMT
     level count, which says what a core can run, not what is online. With
     nosmt or offlined siblings the summary reads "8 cores, 8 threads (2

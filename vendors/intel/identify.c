@@ -22,7 +22,7 @@ void identify_intel(struct cpudata *cpu)
 	cpu->efamily= (eax >> 20) & 0xff;
 	cpu->type = (eax >> 12) & 0x3;
 
-	cpu->brand = ebx & 0xf;
+	cpu->brand = ebx & 0xff;
 
 	cpu->nr_cores = intel_num_cpu_cores(cpu);
 
