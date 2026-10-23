@@ -185,6 +185,8 @@ static int check_cpu_similarity(struct cpudata *cpus)
 			return 0;
 		if (c->stepping != first->stepping)
 			return 0;
+		if (c->core_type != first->core_type)
+			return 0;
 	}
 
 	return 1;

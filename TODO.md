@@ -16,8 +16,3 @@ I1. No tests. Identification is a pure function of CPUID values. [opus]
        output.
     3. `make check` diffs output against goldens.
     This would have caught A1, A2, A6, A8, A9.
-
-## 🟢 Enhancements
-
-J2. Intel hybrid parts: report per-CPU core type (CPUID 0x1A EAX[31:24],
-    P-core/E-core) in the per-CPU and topology output. [sonnet]

@@ -100,6 +100,7 @@ struct cpudata {
 
 	unsigned int phys_proc_id;
 	unsigned int topology;		/* TOPOLOGY_* */
+	unsigned int core_type;		/* CPUID 0x1A EAX[31:24], 0 if not hybrid */
 	unsigned int x86_max_cores;
 	unsigned int cpu_core_id;
 	unsigned int num_siblings;
@@ -211,6 +212,9 @@ struct options {
 };
 
 extern struct options opts;
+
+#define CORE_TYPE_ATOM		0x20
+#define CORE_TYPE_CORE		0x40
 
 #define X86_FEATURE_HT		(1<<28)
 #define X86_FEATURE_MTRR	(1<<12)

@@ -59,8 +59,27 @@ static int get_x2apic_topology(struct cpudata *cpu)
 	return 1;
 }
 
+/* CPUID.7.EDX[15] flags a hybrid part; leaf 0x1A then names this CPU's core. */
+static void get_core_type(struct cpudata *cpu)
+{
+	unsigned int eax, edx;
+
+	cpu->core_type = 0;
+	if (cpu->vendor != VENDOR_INTEL || cpu->cpuid_level < 0x1a)
+		return;
+
+	cpuid_count(cpu->number, 7, 0, NULL, NULL, NULL, &edx);
+	if (!(edx & (1 << 15)))
+		return;
+
+	cpuid(cpu->number, 0x1a, &eax, NULL, NULL, NULL);
+	cpu->core_type = eax >> 24;
+}
+
 void get_topology(struct cpudata *cpu)
 {
+	get_core_type(cpu);
+
 	if (get_x2apic_topology(cpu))
 		return;
 
@@ -110,6 +129,7 @@ void display_topology(struct cpudata *cpus)
 	unsigned int total_threads = 0;
 	unsigned int cores;
 	unsigned int min_siblings = ~0u, max_siblings = 0;
+	unsigned int p_threads = 0, e_threads = 0;
 
 	if (cpus[0].topology == TOPOLOGY_NONE)
 		return;
@@ -185,4 +205,14 @@ void display_topology(struct cpudata *cpus)
 			       min_siblings, max_siblings);
 	}
 	printf("\n");
+
+	for (i = 0; i < nrCPUs; i++) {
+		if (cpus[i].core_type == CORE_TYPE_CORE)
+			p_threads++;
+		else if (cpus[i].core_type == CORE_TYPE_ATOM)
+			e_threads++;
+	}
+	if (p_threads || e_threads)
+		printf("Hybrid: %u Performance (Core) threads, %u Efficiency (Atom) threads\n",
+		       p_threads, e_threads);
 }
