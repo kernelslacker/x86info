@@ -2,12 +2,6 @@
 
 ## 🔴 Correctness
 
-A36. lsmsr/createheader.py:91-99 — parse_registers() uses independent ifs and
-    never resets reg after "}", so a "{name=addr;desc}" line whose
-    description contains ':' also goes to add_field() (IndexError), and any
-    ':' line after a "}" is added to the previous register. Use match on the
-    line prefix and set reg = None after appending. [haiku]
-
 A37. vendors/amd/bugs.c:185 — --bugs (also set by -a for non-root users)
     reads MSR_CLKCTL without checking user_is_root, so a non-root run on a K7
     prints "/dev/cpu/0/msr: Permission denied" and latches nodriver. Gate it

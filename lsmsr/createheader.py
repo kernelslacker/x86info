@@ -89,14 +89,16 @@ def parse_registers(path: Path) -> list[Register]:
 
     with path.open() as f:
         for line in f:
-            if line.startswith("#"):
-                continue
-            if line.startswith("{"):
-                reg = Register(line)
-            if line.startswith("}") and reg:
-                regs.append(reg)
-            if ":" in line and reg:
-                reg.add_field(line)
+            match line[:1]:
+                case "{":
+                    reg = Register(line)
+                case "}" if reg:
+                    regs.append(reg)
+                    reg = None
+                case "#":
+                    pass
+                case _ if reg and ":" in line:
+                    reg.add_field(line)
     return regs
 
 
