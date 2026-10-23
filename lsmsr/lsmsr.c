@@ -42,7 +42,7 @@
 
 #define LSMSR_VERSION "0.816"
 
-struct {
+static struct {
 	int fd;
 	int show_all;
 	int list;
@@ -193,7 +193,7 @@ static int show_matching(const char *name)
 	return ret;
 }
 
-struct vendor_string {
+static const struct vendor_string {
 	enum vendor id;
 	const char *name;
 } vendor_names[] = {
@@ -313,7 +313,7 @@ static unsigned int parse_uint_opt(const char *name, const char *s, int base)
 	return (unsigned int)val;
 }
 
-struct reg_spec unknown_msr = {0, "unknown", "(at your own risk)", NULL, NULL};
+static struct reg_spec unknown_msr = {0, "unknown", "(at your own risk)", NULL, NULL};
 
 #define OPT_MAX 32
 int main(int argc, char *argv[])

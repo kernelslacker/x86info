@@ -105,9 +105,3 @@ J3. rdmsr-linux.c:28 — on ENOENT for /dev/cpu/N/msr, hint
 J4. cpuid.c:76 — dump_raw_cpuid() only dumps subleaf 0. Also walk
     subleaves for 4, 7, 0xB, 0xD, 0x12, 0x14, 0x18, 0x1F, 0x8000001D,
     0x80000020. [sonnet]
-
-## 🟢 Minor nits / one-liners
-
-K5. lsmsr/lsmsr.c:47,207,350 — `g`, `vendor_names`, `unknown_msr`,
-    `lopts` should be static. Same for cachesize.c:355,364
-    tlbnames/pagenames. [haiku]

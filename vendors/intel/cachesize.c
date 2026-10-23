@@ -339,7 +339,7 @@ static void decode_general_cache(struct cpudata *cpu, int output)
 	}
 }
 
-const char * const tlbnames[32] = {
+static const char * const tlbnames[32] = {
 	NULL,
 	"Data",
 	"Instruction",
@@ -348,7 +348,7 @@ const char * const tlbnames[32] = {
 	"Store Only",
 };
 
-const char * const pagenames[] = {
+static const char * const pagenames[] = {
 	"None",
 	"4KB",
 	"2MB",
