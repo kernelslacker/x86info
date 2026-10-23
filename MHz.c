@@ -303,8 +303,10 @@ static void *measure_thread(void *arg)
 void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n,
 		       const unsigned int *leader)
 {
-	pthread_t *threads = calloc(n, sizeof(*threads));
-	unsigned char *started = calloc(n, sizeof(*started));
+	struct worker {
+		pthread_t tid;
+		unsigned char started;
+	} *workers = calloc(n, sizeof(*workers));
 	unsigned int i;
 
 	for (i = 0; i < n; i++)
@@ -314,16 +316,16 @@ void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n,
 	for (i = 0; i < n; i++) {
 		if (!opts.all_cpus && leader[i] != i)
 			continue;
-		if (threads && started &&
-		    pthread_create(&threads[i], NULL, measure_thread, &cpus[i]) == 0)
-			started[i] = 1;
+		if (workers &&
+		    pthread_create(&workers[i].tid, NULL, measure_thread, &cpus[i]) == 0)
+			workers[i].started = 1;
 		else
 			measure_thread(&cpus[i]);
 	}
 
 	for (i = 0; i < n; i++) {
-		if (started && started[i])
-			pthread_join(threads[i], NULL);
+		if (workers && workers[i].started)
+			pthread_join(workers[i].tid, NULL);
 	}
 
 	if (!opts.all_cpus) {
@@ -337,8 +339,7 @@ void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n,
 		}
 	}
 
-	free(threads);
-	free(started);
+	free(workers);
 }
 
 /* Fill cpu->MHz, measuring the TSC rate only once per run. */
