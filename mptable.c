@@ -64,6 +64,7 @@ static int	ncpu;
 static int	silent;
 
 #define mp_error(...)	do { if (!silent) printf(__VA_ARGS__); } while (0)
+#define mp_perror(s)	do { if (!silent) perror(s); } while (0)
 
 /* MP Floating Pointer Structure */
 struct mpfps {
@@ -116,7 +117,7 @@ _Static_assert(sizeof(struct ProcEntry) == 20, "ProcEntry layout");
 static int seekEntry(unsigned long addr)
 {
 	if (lseek(pfd, (off_t)addr, SEEK_SET) < 0) {
-		perror("/dev/mem seek");
+		mp_perror("/dev/mem seek");
 		return -1;
 	}
 	return 0;
@@ -125,7 +126,7 @@ static int seekEntry(unsigned long addr)
 static int readEntry(void* entry, int size)
 {
 	if (read(pfd, entry, size) != size) {
-		perror("readEntry");
+		mp_perror("readEntry");
 		return -1;
 	}
 	return 0;
@@ -145,12 +146,12 @@ static int readType(void)
 	unsigned char type;
 
 	if (read(pfd, &type, sizeof(unsigned char)) != sizeof(unsigned char)) {
-		perror("type read");
+		mp_perror("type read");
 		return -1;
 	}
 
 	if (lseek(pfd, -1, SEEK_CUR) < 0) {
-		perror("type seek");
+		mp_perror("type seek");
 		return -1;
 	}
 
@@ -233,7 +234,7 @@ static int MPConfigTableHeader(u32 pap)
 			/* Non-CPU entries (bus, I/O APIC, interrupt) are 8 bytes each;
 			 * skip them so the file position advances past every entry. */
 			if (lseek(pfd, 8, SEEK_CUR) < 0) {
-				perror("entry seek");
+				mp_perror("entry seek");
 				return SMP_NO;
 			}
 		}

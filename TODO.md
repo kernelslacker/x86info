@@ -2,12 +2,6 @@
 
 ## 🔴 Correctness
 
-A29. mptable.c:116-158 — seekEntry(), readEntry() and readType() call
-    perror() unconditionally, so the silent enumerate_cpus() pass (every root
-    run with one kind of CPU) still prints e.g. "readEntry: Operation not
-    permitted" when STRICT_DEVMEM blocks the config table read above 1MB.
-    Gate them on !silent like mp_error(). [haiku]
-
 A30. vendors/amd/powernow.c:341 — decode_powernow() reads CPUID 6 without
     checking cpu->cpuid_level >= 6; K7/K8 report level 1, so the
     "Effective Frequency Interface" line comes from an out-of-range leaf.
