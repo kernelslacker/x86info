@@ -2,11 +2,6 @@
 
 ## 🔴 Correctness
 
-A30. vendors/amd/powernow.c:341 — decode_powernow() reads CPUID 6 without
-    checking cpu->cpuid_level >= 6; K7/K8 report level 1, so the
-    "Effective Frequency Interface" line comes from an out-of-range leaf.
-    Guard it. [haiku]
-
 A31. x86info.c:416-429 — groups_share_header() compares emodel but not the
     low model nibble, so kinds that differ only in model share cpus[0]'s
     header. Compare model(a) != model(b). [haiku]

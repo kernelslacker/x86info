@@ -338,9 +338,11 @@ void decode_powernow(struct cpudata *cpu)
 	if (!(edx & 0x7fff))
 		printf(" None");
 
-	cpuid(cpu->number, 6, &eax, &ebx, &ecx, &edx);
-	if (ecx & 1)
-		printf("\n\tEffective Frequency Interface");
+	if (cpu->cpuid_level >= 6) {
+		cpuid(cpu->number, 6, &eax, &ebx, &ecx, &edx);
+		if (ecx & 1)
+			printf("\n\tEffective Frequency Interface");
+	}
 
 	printf("\n\n");
 
