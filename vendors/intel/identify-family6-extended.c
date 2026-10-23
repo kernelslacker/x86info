@@ -11,7 +11,6 @@
 #include "intel.h"
 
 #define ONLYMODEL 1
-#define ONLYMHZ 2
 
 struct cpu_name_def {
 	unsigned int model;
@@ -226,8 +225,6 @@ static const char * get_namestring(struct cpudata *cpu)
 			ensure_MHz(cpu);
 			if (!MHz_matches(cpu->MHz, intel_fam6e_names[i].mhz))
 				continue;
-			if (intel_fam6e_names[i].flags & ONLYMHZ)
-				return intel_fam6e_names[i].str;
 		}
 
 		if (intel_fam6e_names[i].stepping != cpu->stepping)
@@ -242,5 +239,5 @@ static const char * get_namestring(struct cpudata *cpu)
 void identify_intel_family6core(struct cpudata *cpu)
 {
 	//TODO: make cpu->name a ptr.
-	strncpy(cpu->name, get_namestring(cpu), CPU_NAME_LEN);
+	snprintf(cpu->name, CPU_NAME_LEN, "%s", get_namestring(cpu));
 }

@@ -31,10 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C23. vendors/intel/identify-family6-extended.c:14,228 — ONLYMHZ is never
-    set in the table; remove the flag and its branch. strncpy at line 244
-    should be snprintf. [haiku]
-
 C24. get_model_name.c:12 — named get_ but prints; re-queries the vendor via
     CPUID instead of using cpu->vendor. Rename to display_model_name() and
     use cpu->vendor. [haiku]
