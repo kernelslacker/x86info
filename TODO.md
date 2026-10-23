@@ -6,11 +6,6 @@
 
 ## 🟡 Maintainability
 
-C34. vendors/centaur/longhaul.c, vendors/centaur/powersaver.c — both decode
-    MSR 0x110a with near-identical printf()/binary() blocks over the same
-    union. Fold them into one decoder that takes the CPU generation.
-    [sonnet]
-
 C35. vendors/amd/machine_check.c:431-445 — when the family >= 0x10 read of
     MCG_CTL fails, the else-if reads it again and decodes it with the K7
     layout. Read MCG_CTL once, then branch on family. [haiku]

@@ -15,11 +15,11 @@ void dump_C3_MSR (struct cpudata *cpu)
 	printf("Power management: ");
 	if (cpu->model==6 || cpu->model==7) {
 		printf("Longhaul\n");
-		decode_longhaul(cpu);
+		decode_c3_power(cpu, C3_LONGHAUL);
 	}
 
 	if (cpu->model==8 || cpu->model==9) {
 		printf("Powersaver\n");
-		decode_powersaver(cpu);
+		decode_c3_power(cpu, C3_POWERSAVER);
 	}
 }
