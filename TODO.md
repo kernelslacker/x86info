@@ -2,11 +2,6 @@
 
 ## 🔴 Correctness
 
-A35. lsmsr/Makefile:20 — `python3 createheader.py ... >$@` leaves an empty or
-    partial header behind when the script fails (it exits 1 on a bad .regs)
-    and the next make treats it as up to date. Add `.DELETE_ON_ERROR:`.
-    [haiku]
-
 A36. lsmsr/createheader.py:91-99 — parse_registers() uses independent ifs and
     never resets reg after "}", so a "{name=addr;desc}" line whose
     description contains ':' also goes to add_field() (IndexError), and any

@@ -8,6 +8,8 @@ CFLAGS = -DVERSION="$(VERSION)" -I. -I../include $(COMMON_CFLAGS)
 
 LDFLAGS = -Wl,-z,relro,-z,now
 
+.DELETE_ON_ERROR:
+
 all: lsmsr
 
 LSMSR_TMP_HEADERS=AMD_k8.h \
