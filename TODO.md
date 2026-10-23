@@ -98,9 +98,6 @@ H2. Stale/wrong comments: sis/identify.c:4 says "Rise specific parts";
     and identify-family6-extended.c:243 TODOs; mtrr.c:5
     "TODO: decode the registers too" (mtrr already decodes). [haiku]
 
-H3. features.c:285,291,307,312 — "// Intel CPUID 0x06" etc on leaves used
-    for all vendors. Drop "Intel". [haiku]
-
 ## 🟡 Tests & docs
 
 I1. No tests. Identification is a pure function of CPUID values. [opus]

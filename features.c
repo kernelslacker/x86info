@@ -289,12 +289,12 @@ void show_extra_flags(const struct cpudata *cpu)
 {
 	unsigned int eax = 0, ebx = 0, ecx = 0, edx = 0;
 
-	// Intel CPUID 0x06
+	// CPUID 0x06
 	if (cpu->cpuid_level >= 0x06) {
 		cpuid(cpu->number, 0x06, &eax, &ebx, &ecx, &edx);
 		flag_decode(eax, "6:eax", cpuid_06_eax_flags, cpuid_06_eax_flags_desc);
 	}
-	// Intel CPUID 0x07 subleaf 0
+	// CPUID 0x07 subleaf 0
 	if (cpu->cpuid_level >= 0x07) {
 		unsigned int max_subleaf;
 		ecx = 0;
@@ -303,19 +303,19 @@ void show_extra_flags(const struct cpudata *cpu)
 		flag_decode(ebx, "7:ebx", cpuid_07_ebx_flags, cpuid_07_ebx_flags_desc);
 		flag_decode(ecx, "7:ecx", cpuid_07_ecx_flags, cpuid_07_ecx_flags_desc);
 		flag_decode(edx, "7:edx", cpuid_07_edx_flags, cpuid_07_edx_flags_desc);
-		// Intel CPUID 0x07 subleaf 1
+		// CPUID 0x07 subleaf 1
 		if (max_subleaf >= 1) {
 			cpuid_count(cpu->number, 0x07, 1, &eax, &ebx, &ecx, &edx);
 			flag_decode(eax, "7.1:eax", cpuid_07_1_eax_flags, cpuid_07_1_eax_flags_desc);
 			flag_decode(edx, "7.1:edx", cpuid_07_1_edx_flags, cpuid_07_1_edx_flags_desc);
 		}
 	}
-	// Intel CPUID 0x80000007
+	// CPUID 0x80000007
 	if (cpu->maxei >= 0x80000007) {
 		cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
 		flag_decode(edx, "80000007:edx", cpuid_80000007_edx_flags, cpuid_80000007_edx_flags_desc);
 	}
-	// Intel CPUID 0x1F: V2 extended topology
+	// CPUID 0x1F: V2 extended topology
 	if (cpu->cpuid_level >= 0x1f) {
 		static const char * const level_names[] = {
 			"Invalid", "SMT", "Core", "Module", "Tile", "Die"
