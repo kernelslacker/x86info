@@ -8,10 +8,6 @@
 
 ## 🟡 Clean-ups/Refactoring/Style
 
-D13. x86info.c:379-386 — the `if (user_is_root)` around the MTRR/APIC dumps
-    never fails: show_mtrr and show_apic set need_root, which main() already
-    enforces. Drop it. [haiku]
-
 ## 🟡 Deprecated/Obsolete API Usage
 
 E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr

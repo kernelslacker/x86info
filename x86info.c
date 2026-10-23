@@ -146,14 +146,12 @@ static void display_detailed_info(struct cpudata *cpu, int header)
 	if (opts.show_connector)
 		decode_connector(cpu->connector);
 
-	/* Info that requires root access (eg, reading MSRs etc) */
-	if (user_is_root) {
-		if (opts.show_mtrr)
-			dump_mtrrs(cpu);
+	/* MTRR and APIC dumps */
+	if (opts.show_mtrr)
+		dump_mtrrs(cpu);
 
-		if (opts.show_apic)
-			dump_apics(cpu);
-	}
+	if (opts.show_apic)
+		dump_apics(cpu);
 
 	if (opts.show_addr_sizes)
 		printf("Address sizes : %u bits physical, %u bits virtual\n",
