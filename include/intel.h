@@ -29,9 +29,7 @@ int intel_num_cpu_cores(struct cpudata *cpu);
 #define MSR_IA32_UCODE_REV		0x8b
 
 #define MSR_IA32_PERF_STATUS		0x198
-#define MSR_IA32_PERF_CTL		0x199
 #define MSR_IA32_THERM_CONTROL		0x19a
 #define MSR_IA32_THERM_STATUS		0x19c
 #define MSR_PM_THERM2_CTL		0x19d
 #define MSR_IA32_MISC_ENABLE		0x1a0
-#define MSR_IA32_ENERGY_PERF_BIAS	0x1b0

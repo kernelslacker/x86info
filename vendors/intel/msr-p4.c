@@ -17,7 +17,7 @@ void dump_p4_msrs (struct cpudata *cpu)
 
 	printf("Pentium 4 specific msrs:\n");
 
-	if (read_msr (cpu->number, 0x17, &val) == 1)
+	if (read_msr (cpu->number, MSR_IA32_PLATFORM_ID, &val) == 1)
 		printf("IA32_PLATFORM_ID=%016llx\n", val);
 
 	if (read_msr (cpu->number, 0x2a, &val) == 1) {
@@ -33,7 +33,7 @@ void dump_p4_msrs (struct cpudata *cpu)
 		printf("MSR_EBC_FREQUENCY_ID=%016llx\n", val);
 	}
 
-	if (read_msr (cpu->number, 0x8b, &val) == 1) {
+	if (read_msr (cpu->number, MSR_IA32_UCODE_REV, &val) == 1) {
 		printf("IA32_BIOS_SIGN_ID=%016llx\n", val);
 	}
 
@@ -46,7 +46,7 @@ void dump_p4_msrs (struct cpudata *cpu)
 		printf("abled\n");
 	}
 
-	if (read_msr (cpu->number, 0x1a0, &val) == 1) {
+	if (read_msr (cpu->number, MSR_IA32_MISC_ENABLE, &val) == 1) {
 		decode_misc_enable(val);
 	}
 

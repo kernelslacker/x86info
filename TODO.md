@@ -6,13 +6,6 @@
 
 ## 🟡 Maintainability
 
-C37. vendors/intel/msr-p4.c:20,36,49 use raw 0x17, 0x8b and 0x1a0 although
-    include/intel.h:28-36 defines MSR_IA32_PLATFORM_ID, MSR_IA32_UCODE_REV
-    and MSR_IA32_MISC_ENABLE; microcode.c:384 defines its own
-    MSR_UCODE_REV; MSR_IA32_PERF_CTL and MSR_IA32_ENERGY_PERF_BIAS are
-    unused. Use the constants and drop the duplicates and unused ones.
-    [haiku]
-
 ## 🟡 Clean-ups/Refactoring/Style
 
 D9. features.c:299-301 — `ecx = 0;` before cpuid(..., 0x07, ...) does
