@@ -6,10 +6,6 @@
 
 ## 🟡 Maintainability
 
-C36. connector.c:275-283 hand-rolls the lookup that the get_name() macro
-    (include/x86info.h:128) generates for amd-revision.h and lsmsr. Use the
-    macro. [haiku]
-
 C37. vendors/intel/msr-p4.c:20,36,49 use raw 0x17, 0x8b and 0x1a0 although
     include/intel.h:28-36 defines MSR_IA32_PLATFORM_ID, MSR_IA32_UCODE_REV
     and MSR_IA32_MISC_ENABLE; microcode.c:384 defines its own

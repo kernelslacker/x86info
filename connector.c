@@ -63,15 +63,7 @@ static struct {
 	{CONN_BGA, "BGA"},	/*  */
 };
 
-static const char * get_connector_name(enum connector id)
-{
-	int i;
-
-	for (i = 0; i < ARRAY_SIZE(connector_strings); i++)
-		if (id == connector_strings[i].id)
-			return connector_strings[i].name;
-	return NULL;
-}
+get_name(connector, enum connector, connector_strings);
 
 void decode_connector(enum connector type)
 {
