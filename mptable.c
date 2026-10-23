@@ -247,16 +247,39 @@ static int MPConfigTableHeader(u32 pap)
 
 
 /*
- * set PHYSICAL address of MP floating pointer structure
+ * Scan a region for the MP floating pointer signature.
+ * Returns 1 and sets *paddr if found, 0 if not, -1 if it can't be read.
  */
 #define MP_ALIGN	16	/* the floating pointer is 16-byte aligned */
+static int scan_for_mp(const char *what, unsigned long addr, int size,
+		       unsigned long *paddr)
+{
+	const char MP_SIG[] = "_MP_";
+	unsigned char buffer[BIOS_SIZE];
+	int x;
+
+	if (readAt(addr, buffer, size)) {
+		mp_error("error reading %s from %p\n", what, (void *)addr);
+		return -1;
+	}
+
+	for (x = 0; x < size; x += MP_ALIGN) {
+		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
+			*paddr = x + addr;
+			return 1;
+		}
+	}
+	return 0;
+}
+
+/*
+ * set PHYSICAL address of MP floating pointer structure
+ */
 static int apic_probe(unsigned long* paddr)
 {
-	unsigned int x;
 	u16 segment;
 	unsigned long target;
-	unsigned char buffer[BIOS_SIZE];
-	const char MP_SIG[]="_MP_";
+	int ret;
 
 	/* search Extended Bios Data Area, if present */
 	if (readAt((unsigned long)EBDA_POINTER, &segment, 2)) {
@@ -271,17 +294,9 @@ static int apic_probe(unsigned long* paddr)
 		target = (unsigned long)segment << 4;
 		if (debug)
 			printf("EBDA segment ptr: %lx\n", target);
-		if (readAt(target, buffer, ONE_KBYTE)) {
-			mp_error("error reading 1K from %p\n", (void *)target);
-			return 0;
-		}
-
-		for (x = 0; x < ONE_KBYTE; x += MP_ALIGN) {
-			if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-				*paddr = x +target;
-				return 1;
-			}
-		}
+		ret = scan_for_mp("1K at the EBDA", target, ONE_KBYTE, paddr);
+		if (ret)
+			return ret < 0 ? 0 : 1;
 	}
 
 	/* read CMOS for real top of mem */
@@ -294,165 +309,92 @@ static int apic_probe(unsigned long* paddr)
 	if (segment != 0) {
 		--segment;			/* less ONE_KBYTE */
 		target = segment * 1024;
-		if (readAt(target, buffer, ONE_KBYTE)) {
-			mp_error("error reading 1KB from %p\n", (void *)target);
-			return 0;
-		}
-
-		for (x = 0; x < ONE_KBYTE; x += MP_ALIGN) {
-			if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-				*paddr = x +target;
-				return 2;
-			}
-		}
+		ret = scan_for_mp("1KB at the top of base memory", target, ONE_KBYTE, paddr);
+		if (ret)
+			return ret < 0 ? 0 : 2;
 	}
 
 	/* we don't necessarily believe CMOS, check base of the last 1K of 640K */
 	if (target != (DEFAULT_TOPOFMEM - 1024)) {
-		target = (DEFAULT_TOPOFMEM - 1024);
-		if (readAt(target, buffer, ONE_KBYTE)) {
-			mp_error("error reading DEFAULT_TOPOFMEM - 1024 from %p\n", (void *) target);
-			return 0;
-		}
-
-		for (x = 0; x < ONE_KBYTE; x += MP_ALIGN) {
-			if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-				*paddr = x +target;
-				return 3;
-			}
-		}
+		ret = scan_for_mp("DEFAULT_TOPOFMEM - 1024", DEFAULT_TOPOFMEM - 1024,
+				  ONE_KBYTE, paddr);
+		if (ret)
+			return ret < 0 ? 0 : 3;
 	}
 
 	/* search the BIOS */
-	if (readAt(BIOS_BASE, buffer, BIOS_SIZE)) {
-		mp_error("error reading BIOS_BASE from %p\n", (void *)BIOS_BASE);
-		return 0;
-	}
-
-
-	for (x = 0; x < BIOS_SIZE; x += MP_ALIGN) {
-		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-			*paddr = x +BIOS_BASE;
-			return 4;
-		}
-	}
+	ret = scan_for_mp("BIOS_BASE", BIOS_BASE, BIOS_SIZE, paddr);
+	if (ret)
+		return ret < 0 ? 0 : 4;
 
 	/* search the extended BIOS */
-	if (readAt(BIOS_BASE2, buffer, BIOS_SIZE)) {
-		mp_error("error reading BIOS_BASE2 from %p\n", (void *)BIOS_BASE2);
-		return 0;
-	}
-
-
-	for (x = 0; x < BIOS_SIZE; x += MP_ALIGN) {
-		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-			*paddr = x +BIOS_BASE2;
-			return 4;
-		}
-	}
+	ret = scan_for_mp("BIOS_BASE2", BIOS_BASE2, BIOS_SIZE, paddr);
+	if (ret)
+		return ret < 0 ? 0 : 4;
 
 	/* search additional memory */
-	target = GROPE_AREA1;
-	if (readAt(target, buffer, GROPE_SIZE)) {
-		mp_error("error reading GROPE_AREA1 from %p\n", (void *)target);
-		return 0;
-	}
+	ret = scan_for_mp("GROPE_AREA1", GROPE_AREA1, GROPE_SIZE, paddr);
+	if (ret)
+		return ret < 0 ? 0 : 5;
 
-
-	for (x = 0; x < GROPE_SIZE; x += MP_ALIGN) {
-		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-			*paddr = x +GROPE_AREA1;
-			return 5;
-		}
-	}
-
-	target = GROPE_AREA2;
-	if (readAt(target, buffer, GROPE_SIZE)) {
-		mp_error("error reading GROPE_AREA2 from %p\n", (void *)target);
-		return 0;
-	}
-
-
-	for (x = 0; x < GROPE_SIZE; x += MP_ALIGN) {
-		if (!strncmp((char *)&buffer[x], MP_SIG, 4)) {
-			*paddr = x +GROPE_AREA2;
-			return 6;
-		}
-	}
+	ret = scan_for_mp("GROPE_AREA2", GROPE_AREA2, GROPE_SIZE, paddr);
+	if (ret)
+		return ret < 0 ? 0 : 6;
 
 	*paddr = (unsigned long)0;
 	return 0;
 }
 
-
-int enumerate_cpus(void)
+/*
+ * Find and parse the MP table.
+ * Returns -1 if /dev/mem can't be opened, 1 if an MP configuration table
+ * was parsed, 0 otherwise.
+ */
+static int read_mptable(int quiet)
 {
 	unsigned long paddr;
 	struct mpfps mpfps;
+	int ret = 0;
 
-	silent = 1;
+	silent = quiet;
 
 	/* open physical memory for access to MP structures */
 	if ((pfd = open("/dev/mem", O_RDONLY)) < 0) {
-		fprintf(stderr, "enumerate_cpus(): /dev/mem: %s\n", strerror(errno));
+		fprintf(stderr, "mptable: /dev/mem: %s\n", strerror(errno));
 		return -1;
 	}
 
 	/* probe for MP structures */
 	if (apic_probe(&paddr) <= 0) {
 		close(pfd);
-		return 1;
-	}
-
-	/* read in mpfps structure*/
-	if (readAt(paddr, &mpfps, sizeof(struct mpfps))) {
-		mp_error("error reading mpfpsfrom %p\n", (void *)paddr);
-		close(pfd);
-		return 1;
-	}
-
-
-	/* check whether an MP config table exists */
-	if (!mpfps.mpfb1)
-		if (MPConfigTableHeader(mpfps.pap) == SMP_YES) {
-			close(pfd);
-			return ncpu;
-		}
-
-	close(pfd);
-	return 1;
-}
-
-void display_mptable(void)
-{
-	unsigned long paddr;
-	struct mpfps mpfps;
-
-	silent = 0;
-
-	/* open physical memory for access to MP structures */
-	if ((pfd = open("/dev/mem", O_RDONLY)) < 0) {
-		fprintf(stderr, "%s(): /dev/mem: %s\n", __func__, strerror(errno));
-		return;
-	}
-
-	/* probe for MP structures */
-	if (apic_probe(&paddr) <= 0) {
-		close(pfd);
-		return;
+		return 0;
 	}
 
 	/* read in mpfps structure*/
 	if (readAt(paddr, &mpfps, sizeof(struct mpfps))) {
 		mp_error("error reading mpfps from %p\n", (void *)paddr);
 		close(pfd);
-		return;
+		return 0;
 	}
 
-
-	/* parse an MP config table if it exists */
+	/* check whether an MP config table exists */
 	if (!mpfps.mpfb1)
-		(void) MPConfigTableHeader(mpfps.pap);
+		ret = MPConfigTableHeader(mpfps.pap) == SMP_YES;
 
 	close(pfd);
+	return ret;
+}
+
+int enumerate_cpus(void)
+{
+	int ret = read_mptable(1);
+
+	if (ret < 0)
+		return -1;
+	return ret ? ncpu : 1;
+}
+
+void display_mptable(void)
+{
+	read_mptable(0);
 }

@@ -31,11 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C16. mptable.c:251-385 — seven copies of "read region, scan 16-byte aligned
-    for _MP_". Extract `scan_for_mp(addr, size, &paddr)`. enumerate_cpus()
-    and display_mptable() (lines 388-458) are also duplicates differing only
-    in `silent`; merge into one function taking `silent`. [sonnet]
-
 C17. vendors/intel/identify.c:33-38 duplicates intel_num_cpu_cores() in
     vendors/intel/topology.c:36; identify.c:29-30 re-stores flags_ecx/edx
     already set by get_feature_flags(). Keep one. [haiku]
