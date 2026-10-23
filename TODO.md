@@ -6,10 +6,6 @@
 
 ## 🟡 Maintainability
 
-C35. vendors/amd/machine_check.c:431-445 — when the family >= 0x10 read of
-    MCG_CTL fails, the else-if reads it again and decodes it with the K7
-    layout. Read MCG_CTL once, then branch on family. [haiku]
-
 C36. connector.c:275-283 hand-rolls the lookup that the get_name() macro
     (include/x86info.h:128) generates for amd-revision.h and lsmsr. Use the
     macro. [haiku]

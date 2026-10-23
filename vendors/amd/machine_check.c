@@ -85,10 +85,29 @@ static void print_ctl_bits(const struct mc_bit *bits, unsigned int nr,
 		       ctl & (1ULL << bits[i].bit) ? "en" : "dis");
 }
 
+static void print_k7_mcg_ctl(int cpunum, unsigned long long ctl,
+			     unsigned int banks)
+{
+	unsigned long long val;
+	unsigned int i;
+
+	printf("MCG_CTL:\n");
+
+	for (i = 0; i < ARRAY_SIZE(k7_units); i++) {
+		const struct k7_unit *u = &k7_units[i];
+
+		printf(" %s check %sabled\n", u->name, ctl & (1<<i) ? "en" : "dis");
+		if (!(ctl & (1<<i)) || banks <= i)
+			continue;
+		if (read_msr(cpunum, MC_CTL + 4 * i, &val) == 1)
+			print_ctl_bits(u->bits, u->nr_bits, val);
+	}
+}
+
 void decode_athlon_machine_check(int cpunum, unsigned int family)
 {
-	unsigned long long val, val2;
-	unsigned int banks, i, ctlp = 0;
+	unsigned long long val;
+	unsigned int banks, ctlp = 0;
 
 	if (read_msr(cpunum, MCG_CAP, &val) != 1)
 		return;
@@ -109,20 +128,11 @@ void decode_athlon_machine_check(int cpunum, unsigned int family)
 	}
 
 	/* The per-unit MCG_CTL bits below are the K7/K8 layout. */
-	if (ctlp && family >= 0x10 && read_msr(cpunum, MCG_CTL, &val) == 1) {
-		printf("MCG_CTL: 0x%016llx\n", val);
-	} else if (ctlp && read_msr(cpunum, MCG_CTL, &val) == 1) {
-		printf("MCG_CTL:\n");
-
-		for (i = 0; i < ARRAY_SIZE(k7_units); i++) {
-			const struct k7_unit *u = &k7_units[i];
-
-			printf(" %s check %sabled\n", u->name, val & (1<<i) ? "en" : "dis");
-			if (!(val & (1<<i)) || banks <= i)
-				continue;
-			if (read_msr(cpunum, MC_CTL + 4 * i, &val2) == 1)
-				print_ctl_bits(u->bits, u->nr_bits, val2);
-		}
+	if (ctlp && read_msr(cpunum, MCG_CTL, &val) == 1) {
+		if (family >= 0x10)
+			printf("MCG_CTL: 0x%016llx\n", val);
+		else
+			print_k7_mcg_ctl(cpunum, val, banks);
 	}
 	printf("\n");
 
