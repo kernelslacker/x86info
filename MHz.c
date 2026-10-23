@@ -18,13 +18,12 @@
 
 static void print_MHz(unsigned int mhz)
 {
-	if (mhz < 1000)
+	if (mhz < 1000) {
 		printf("%uMHz", mhz);
-	else {
-		unsigned int a = (mhz / 1000);
-		unsigned int b = ((mhz % 1000)/100);
-		unsigned int c = (a*1000)+(b*100);
-		printf("%u.%u%uGHz", a, b, (mhz - c)/10);
+	} else {
+		unsigned int centi = (mhz + 5) / 10;
+
+		printf("%u.%02uGHz", centi / 100, centi % 100);
 	}
 }
 
