@@ -174,6 +174,9 @@ void ensure_MHz(struct cpudata *cpu);
 int MHz_matches(unsigned int measured, unsigned int nominal);
 
 int HaveCPUID(void);
+#ifdef CPUID_REPLAY
+unsigned int *replay_cpu_ids(unsigned int *count);
+#endif
 int enumerate_cpus(void);
 void decode_microcode(struct cpudata *cpu);
 void display_model_name(struct cpudata *cpu);

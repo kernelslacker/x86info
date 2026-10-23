@@ -3,6 +3,9 @@
  *
  *  CPUID replay backend for tests: answers cpuid() from a dump in the
  *  format printed by 'x86info -r', named by $X86INFO_CPUID_DUMP.
+ *
+ *  A dump from 'x86info -r --all-cpus' has a "CPU #N:" line before each
+ *  CPU's leaves. Leaves before the first such line apply to every CPU.
  */
 
 #ifdef CPUID_REPLAY
@@ -12,7 +15,10 @@
 #include <string.h>
 #include <x86info.h>
 
+#define ALL_CPUS	(-1)
+
 struct replay_entry {
+	int cpu;
 	unsigned int leaf, sub;
 	unsigned int regs[4];
 };
@@ -20,10 +26,32 @@ struct replay_entry {
 static struct replay_entry *entries;
 static unsigned int nr_entries;
 
+static unsigned int *cpu_ids;
+static unsigned int nr_cpu_ids;
+
+static void replay_add_cpu(unsigned int cpu)
+{
+	unsigned int *tmp;
+	unsigned int i;
+
+	for (i = 0; i < nr_cpu_ids; i++)
+		if (cpu_ids[i] == cpu)
+			return;
+
+	tmp = realloc(cpu_ids, (nr_cpu_ids + 1) * sizeof(*cpu_ids));
+	if (!tmp) {
+		perror("realloc");
+		exit(EXIT_FAILURE);
+	}
+	cpu_ids = tmp;
+	cpu_ids[nr_cpu_ids++] = cpu;
+}
+
 static void replay_load(void)
 {
 	const char *path = getenv("X86INFO_CPUID_DUMP");
 	char line[256];
+	int current = ALL_CPUS;
 	FILE *f;
 
 	if (!path) {
@@ -37,8 +65,16 @@ static void replay_load(void)
 	}
 
 	while (fgets(line, sizeof(line), f)) {
-		struct replay_entry e = { 0 };
+		struct replay_entry e = { .cpu = current };
 		struct replay_entry *tmp;
+		unsigned int cpu;
+		int len = 0;
+
+		if (sscanf(line, "CPU #%u:%n", &cpu, &len) >= 1 && len) {
+			current = cpu;
+			replay_add_cpu(cpu);
+			continue;
+		}
 
 		if (sscanf(line, "eax in: 0x%x, ecx in: 0x%x, eax = %x ebx = %x ecx = %x edx = %x",
 			   &e.leaf, &e.sub, &e.regs[0], &e.regs[1], &e.regs[2], &e.regs[3]) != 6 &&
@@ -71,6 +107,25 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 	return 0;
 }
 
+/* The CPUs the dump describes: those it has sections for, else CPU 0. */
+unsigned int *replay_cpu_ids(unsigned int *count)
+{
+	unsigned int n;
+	unsigned int *ids;
+
+	if (!entries)
+		replay_load();
+
+	n = nr_cpu_ids ? nr_cpu_ids : 1;
+	ids = calloc(n, sizeof(*ids));
+	if (!ids)
+		return NULL;
+	if (nr_cpu_ids)
+		memcpy(ids, cpu_ids, n * sizeof(*ids));
+	*count = n;
+	return ids;
+}
+
 void cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx,
 	unsigned int *ecx, unsigned int *edx)
@@ -80,15 +135,19 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int regs[4] = { 0, 0, 0, 0 };
 	unsigned int i;
 
-	(void)CPU_number;
 	if (!entries)
 		replay_load();
 
+	/* A leaf in the CPU's own section wins over a shared one. */
 	for (i = 0; i < nr_entries; i++) {
-		if (entries[i].leaf == leaf && entries[i].sub == sub) {
+		if (entries[i].leaf != leaf || entries[i].sub != sub)
+			continue;
+		if (entries[i].cpu == (int)CPU_number) {
 			memcpy(regs, entries[i].regs, sizeof(regs));
 			break;
 		}
+		if (entries[i].cpu == ALL_CPUS)
+			memcpy(regs, entries[i].regs, sizeof(regs));
 	}
 
 	if (eax)

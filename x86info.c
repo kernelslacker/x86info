@@ -19,6 +19,7 @@ unsigned int user_is_root = 0;
 unsigned int nrCPUs = 1;
 
 
+#ifndef CPUID_REPLAY
 /* Parse a kernel cpu list such as "0-3,8,10-11" into an array of ids. */
 static unsigned int *parse_cpu_list(const char *s, unsigned int *count)
 {
@@ -60,13 +61,13 @@ bad:
 	free(ids);
 	return NULL;
 }
+#endif
 
 /* Online CPU ids, which need not be contiguous. */
 static unsigned int *get_online_cpus(unsigned int *count)
 {
 #ifdef CPUID_REPLAY
-	/* A replayed dump describes exactly one CPU */
-	return parse_cpu_list("0", count);
+	return replay_cpu_ids(count);
 #else
 	char buf[4096];
 	unsigned int *ids = NULL;
