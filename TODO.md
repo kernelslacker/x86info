@@ -108,9 +108,6 @@ J4. cpuid.c:76 — dump_raw_cpuid() only dumps subleaf 0. Also walk
 
 ## 🟢 Minor nits / one-liners
 
-K2. vendors/amd/identify.c:1008-1052 — `%d` with `(int)` casts on unsigned
-    CPUID fields; use `%u`. [haiku]
-
 K3. vendors/amd/identify.c:62-68 — abort() on snprintf < 0 is overkill.
     set_k8_revinfo() sets connector twice (lines 76, 86). [haiku]
 

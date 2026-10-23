@@ -609,16 +609,15 @@ void display_amd_info(struct cpudata *cpu)
 
 	if (show_feature_flags && cpu->cpuid_level >= 0x05) {
 		cpuid (cpu->number, 0x05, &eax, &ebx, &ecx, NULL);
-		printf("Monitor/Mwait: min/max line size %d/%d%s%s\n",
-		       (int) (eax & 0xffff), (int) (ebx & 0xffff),
+		printf("Monitor/Mwait: min/max line size %u/%u%s%s\n",
+		       eax & 0xffff, ebx & 0xffff,
 		       (ecx & 0x2) ? ", interrupt break event" : "",
 		       (ecx & 0x1) ? ", enumeration extension" : "");
 	}
 
 	if (show_feature_flags && cpu->maxei >= 0x8000000a) {
 		cpuid (cpu->number, 0x8000000a, &eax, &ebx, NULL, &edx);
-		printf("SVM: revision %d, %d ASIDs",
-		       (int) (eax & 0xff), (int) ebx);
+		printf("SVM: revision %u, %u ASIDs", eax & 0xff, ebx);
 		for (i = 0; i < 32; i++)
 			if ((edx & (1u << i)) && svm_features[i])
 				printf(", %s", svm_features[i]);
@@ -627,29 +626,29 @@ void display_amd_info(struct cpudata *cpu)
 
 	/* AMD Multicore characterisation */
 	if (cpu->maxei >= 0x80000008) {
-		int n, p;
+		unsigned int n, p;
 		cpuid (cpu->number, 0x80000008, NULL, NULL, &ecx, NULL);
 		p = (ecx >> 12) & 0xf;
 		n = (ecx & 0xff) + 1;
 		if (p)
-			p = 1 << p;
+			p = 1u << p;
 		else
 			p = n;
 
 		/* NC counts logical processors from Zen onwards */
 		if (p > 1 && family(cpu) >= 0x17) {
-			printf("The physical package has %d of %d "
+			printf("The physical package has %u of %u "
 			       "possible threads implemented", n, p);
 			if (cpu->maxei >= 0x8000001e) {
 				unsigned int tpc;
 
 				cpuid(cpu->number, 0x8000001e, NULL, &ebx, NULL, NULL);
 				tpc = ((ebx >> 8) & 0xff) + 1;
-				printf(" (%d cores)", n / tpc);
+				printf(" (%u cores)", n / tpc);
 			}
 			printf(".\n");
 		} else if (p > 1) {
-			printf("The physical package has %d of %d "
+			printf("The physical package has %u of %u "
 			       "possible cores implemented.\n", n, p);
 		}
 	}
