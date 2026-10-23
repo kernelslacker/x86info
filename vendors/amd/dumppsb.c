@@ -57,10 +57,8 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 	map = p = mmap(NULL, ROMSIZE, PROT_READ, MAP_SHARED, fd, START);
 	if (map == (void *) MAP_FAILED) {
 		perror("mmap() error");
-		if (close(fd) == -1) {
+		if (close(fd) == -1)
 			perror("close");
-			exit(EXIT_FAILURE);
-		}
 		return;
 	}
 
@@ -129,9 +127,7 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 					}
 					printf("\n");
 				} else {
-					p = (char *) pst + sizeof (struct pst_s);
-					for (j = 0 ; j < numpstates; j++)
-						p += 2;
+					p = (char *) pst + sizeof (struct pst_s) + 2 * numpstates;
 				}
 			}
 			goto out;
@@ -140,14 +136,9 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid)
 	}
 
 out:
-	if (munmap(map, ROMSIZE) == -1) {
+	if (munmap(map, ROMSIZE) == -1)
 		perror("munmap");
-		exit(EXIT_FAILURE);
-	}
 
-	if (close(fd) == -1) {
+	if (close(fd) == -1)
 		perror("close");
-		exit(EXIT_FAILURE);
-	}
-	return;
 }
