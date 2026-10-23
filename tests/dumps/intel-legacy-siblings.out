@@ -1,0 +1,18 @@
+Found 3 identical CPUs
+Family: 15 Model: 4 Stepping: 3
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Pentium 4 (Prescott) [N0]
+Processor name string (BIOS programmed): 
+
+Cache info
+TLB info
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh ds acpi mmx fxsr sse sse2 ss ht
+Extended feature flags:
+
+Additional feature flags:
+
+Long NOPs supported: yes
+
+Address sizes : 0 bits physical, 0 bits virtual
+This system has 2 sockets, 2 cores, 3 threads (hybrid: 1-2 threads per core)

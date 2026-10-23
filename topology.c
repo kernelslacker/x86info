@@ -318,7 +318,7 @@ void display_topology(struct cpudata *cpus, unsigned int n)
 	unsigned int num_sockets;
 	unsigned int total_threads = n;
 	unsigned int cores;
-	unsigned int min_siblings = ~0u, max_siblings = 0;
+	unsigned int min_siblings, max_siblings;
 	unsigned int p_threads = 0, e_threads = 0;
 
 	if (cpus[0].topology == TOPOLOGY_NONE)
@@ -344,21 +344,9 @@ void display_topology(struct cpudata *cpus, unsigned int n)
 		printf("\n");
 	}
 
-	for (i = 0; i < n; i++) {
-		if (cpus[i].num_siblings < min_siblings)
-			min_siblings = cpus[i].num_siblings;
-		if (cpus[i].num_siblings > max_siblings)
-			max_siblings = cpus[i].num_siblings;
-	}
-
 	num_sockets = count_sockets(cpus, n);
 
-	if (cpus[0].topology == TOPOLOGY_X2APIC) {
-		cores = count_cores(cpus, n, &min_siblings, &max_siblings);
-	} else {
-		/* No per-core ID: assume every core has the same thread count. */
-		cores = max_siblings > 1 ? total_threads / max_siblings : total_threads;
-	}
+	cores = count_cores(cpus, n, &min_siblings, &max_siblings);
 
 	/* Print a topology summary */
 	printf("This system has %u socket%s, %u core%s, %u thread%s",
