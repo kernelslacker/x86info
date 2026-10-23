@@ -1,6 +1,6 @@
 # Compiler flags shared by x86info and lsmsr.
 
-COMMON_CFLAGS = -Wall -W -g -O2 -D_FORTIFY_SOURCE=2
+COMMON_CFLAGS = -Wall -W -g -O2 -D_FORTIFY_SOURCE=2 -pthread
 ifneq ($(SYSROOT),)
 COMMON_CFLAGS += --sysroot=$(SYSROOT)
 endif

@@ -197,19 +197,12 @@ static int check_cpu_similarity(struct cpudata *cpus)
 	return 1;
 }
 
-static void fill_in_cpu_info(struct cpudata *cpu, struct cpudata *cpus)
+static void fill_in_cpu_info(struct cpudata *cpu)
 {
 	bind_cpu(cpu->number);
 	get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
 	get_core_type(cpu);
-	if (!opts.show_MHz) {
-		cpu->MHz = 0;
-	} else if (cpu == cpus || opts.all_cpus) {
-		estimate_MHz(cpu);
-	} else {
-		cpu->MHz = cpus[0].MHz;
-		cpu->core_MHz = cpus[0].core_MHz;
-	}
+	cpu->MHz = 0;
 	get_feature_flags(cpu);
 	identify(cpu);
 	get_topology(cpu);
@@ -257,11 +250,13 @@ int main(int argc, char **argv)
 
 	for (i = 0; i < nrCPUs; i++) {
 		cpus[i].number = online[i];
-		fill_in_cpu_info(&cpus[i], cpus);
+		fill_in_cpu_info(&cpus[i]);
 	}
 	free(online);
 
 	clear_uniform_core_types(cpus, nrCPUs);
+	if (opts.show_MHz)
+		estimate_MHz_cpus(cpus, nrCPUs);
 	display_one_cpu = check_cpu_similarity(cpus);
 
 	if (opts.show_mptable && user_is_root)

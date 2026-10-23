@@ -9,6 +9,7 @@
 #include <time.h>
 
 #include <string.h>
+#include <pthread.h>
 #ifdef __linux__
 #include <sys/syscall.h>
 #include <linux/perf_event.h>
@@ -90,13 +91,26 @@ static int perf_msr_open(unsigned int config)
 	return (int)syscall(SYS_perf_event_open, &attr, 0, -1, -1, 0);
 }
 
+static __thread int perf_fds[2] = { -1, -1 };
+static __thread int perf_tried;
+
+static void perf_msr_close(void)
+{
+	if (perf_fds[0] >= 0)
+		close(perf_fds[0]);
+	if (perf_fds[1] >= 0)
+		close(perf_fds[1]);
+	perf_fds[0] = perf_fds[1] = -1;
+	perf_tried = 0;
+}
+
 static int read_perf_msr_pmu(unsigned long long *aperf, unsigned long long *mperf)
 {
-	static int fds[2] = { -1, -1 };
-	static int tried;
+	int *fds = perf_fds;
+	int tried = perf_tried;
 
 	if (!tried) {
-		tried = 1;
+		perf_tried = 1;
 		fds[0] = perf_msr_open(PERF_MSR_APERF);
 		fds[1] = perf_msr_open(PERF_MSR_MPERF);
 		if (fds[0] < 0 || fds[1] < 0) {
@@ -113,6 +127,10 @@ static int read_perf_msr_pmu(unsigned long long *aperf, unsigned long long *mper
 	       read(fds[1], mperf, sizeof(*mperf)) == sizeof(*mperf);
 }
 #else
+static void perf_msr_close(void)
+{
+}
+
 static int read_perf_msr_pmu(unsigned long long *aperf, unsigned long long *mperf)
 {
 	(void)aperf;
@@ -146,7 +164,7 @@ static int read_perf_counters(const struct cpudata *cpu,
 /* Cores take most of a second to ramp up to boost clocks, so spin for a
  * while before measuring the core clock. The TSC rate needs no warm-up. */
 #ifndef WARMUP_US
-#define WARMUP_US	1000000.0
+#define WARMUP_US	4000000.0
 #endif
 #ifndef MEASURE_US
 #define MEASURE_US	100000.0
@@ -160,8 +178,7 @@ static unsigned long spin(unsigned long r, double us)
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &t0);
 	do {
-		// coverity[DC.WEAK_CRYPTO]
-		r = r * rand();
+		r = r * 6364136223846793005UL + 1442695040888963407UL;
 		clock_gettime(CLOCK_MONOTONIC_RAW, &t1);
 	} while (elapsed_us(&t0, &t1) < us);
 	return r;
@@ -199,7 +216,8 @@ static double elapsed_us(const struct timespec *t0, const struct timespec *t1)
 	       (double)(t1->tv_nsec - t0->tv_nsec) / 1e3;
 }
 
-void estimate_MHz(struct cpudata *cpu)
+/* Measure the TSC rate and, if want_core, the core clock as well. */
+static void measure_MHz(struct cpudata *cpu, int want_core)
 {
 	unsigned long long int cycles[2]; /* gotta be 64 bit */
 	unsigned long long aperf[2], mperf[2];
@@ -207,8 +225,7 @@ void estimate_MHz(struct cpudata *cpu)
 	int have_perf;
 	unsigned int eax, ebx, ecx, edx, known_MHz;
 	double tsc_mhz;
-	// coverity[DC.WEAK_CRYPTO]
-	unsigned long r = rand();
+	unsigned long r = cpu->number + 1;
 
 	/* Make sure we have a TSC (and hence RDTSC) */
 	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
@@ -218,7 +235,7 @@ void estimate_MHz(struct cpudata *cpu)
 		return;
 	}
 
-	have_perf = read_perf_counters(cpu, &aperf[0], &mperf[0]);
+	have_perf = want_core && read_perf_counters(cpu, &aperf[0], &mperf[0]);
 
 	/* Nothing left to measure if CPUID gives the TSC rate */
 	known_MHz = cpuid_tsc_MHz(cpu);
@@ -256,6 +273,73 @@ void estimate_MHz(struct cpudata *cpu)
 	cpu->MHz = (unsigned int)(tsc_mhz + 0.5);
 }
 
+void estimate_MHz(struct cpudata *cpu)
+{
+	measure_MHz(cpu, 1);
+}
+
+static void *measure_thread(void *arg)
+{
+	struct cpudata *cpu = arg;
+
+	bind_cpu(cpu->number);
+	estimate_MHz(cpu);
+	perf_msr_close();
+	return NULL;
+}
+
+/* Index of the first CPU with the same core type as cpus[i]. */
+static unsigned int first_of_type(const struct cpudata *cpus, unsigned int i)
+{
+	unsigned int j;
+
+	for (j = 0; j < i; j++)
+		if (cpus[j].core_type == cpus[i].core_type)
+			break;
+	return j;
+}
+
+/*
+ * Measure the clocks of every CPU with --all-cpus, otherwise of the first
+ * CPU of each core type, all at once. The rest take their core type's
+ * figures.
+ */
+void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n)
+{
+	pthread_t *threads = calloc(n, sizeof(*threads));
+	unsigned char *started = calloc(n, sizeof(*started));
+	unsigned int i;
+
+	for (i = 0; i < n; i++) {
+		if (!opts.all_cpus && first_of_type(cpus, i) != i)
+			continue;
+		if (threads && started &&
+		    pthread_create(&threads[i], NULL, measure_thread, &cpus[i]) == 0)
+			started[i] = 1;
+		else
+			measure_thread(&cpus[i]);
+	}
+
+	for (i = 0; i < n; i++) {
+		if (started && started[i])
+			pthread_join(threads[i], NULL);
+	}
+
+	if (!opts.all_cpus) {
+		for (i = 0; i < n; i++) {
+			unsigned int lead = first_of_type(cpus, i);
+
+			if (lead == i)
+				continue;
+			cpus[i].MHz = cpus[lead].MHz;
+			cpus[i].core_MHz = cpus[lead].core_MHz;
+		}
+	}
+
+	free(threads);
+	free(started);
+}
+
 /* Fill cpu->MHz, measuring the TSC rate only once per run. */
 void ensure_MHz(struct cpudata *cpu)
 {
@@ -267,7 +351,7 @@ void ensure_MHz(struct cpudata *cpu)
 	if (!measured) {
 		tsc_MHz = cpuid_tsc_MHz(cpu);
 		if (!tsc_MHz) {
-			estimate_MHz(cpu);
+			measure_MHz(cpu, 0);
 			tsc_MHz = cpu->MHz;
 		}
 		measured = 1;
