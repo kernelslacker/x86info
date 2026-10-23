@@ -220,7 +220,7 @@ static void set_vendor(void)
 static void set_family_model(void)
 {
 	unsigned int a;
-	cpuid(g.cpu, 0, &a, NULL, NULL, NULL);
+
 	if (!g.family) {
 		cpuid(g.cpu, 1, &a, NULL, NULL, NULL);
 		g.family = (a >> 8) & 0xf;
@@ -371,12 +371,10 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (argc < 2) {
+	if (argc < 2)
 		usage();
-		goto out;
-	}
 
-	if ((optind > -1) && argv[optind]) {
+	if (argv[optind]) {
 		if ((argc - optind) != 1)
 			usage();
 		if (strlen(argv[optind]) >= OPT_MAX) {

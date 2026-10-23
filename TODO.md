@@ -31,10 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Clean-ups/Refactoring/Style
 
-D6. lsmsr/lsmsr.c:408-411 — usage() exits, so `goto out` is dead;
-    `optind > -1` (line 413) is always true; first cpuid(…, 0) in
-    set_family_model() (line 257) is unused. [haiku]
-
 D7. vendors/amd/dumppsb.c:132-134 — `for (j…) p += 2;` is
     `p += 2 * numpstates`. exit() on munmap/close failure is overkill. [haiku]
 
