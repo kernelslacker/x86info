@@ -580,7 +580,7 @@ void display_amd_info(struct cpudata *cpu)
 	if (opts.show_microcode && family(cpu) >= 0xf)
 		decode_microcode(cpu);
 
-	if (opts.show_pm)
+	if (want_powernow())
 		decode_powernow(cpu);
 
 	if (opts.show_bugs)

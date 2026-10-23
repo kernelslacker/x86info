@@ -231,6 +231,12 @@ struct options {
 
 extern struct options opts;
 
+/* The BIOS PST tables are decoded by the PowerNow path. */
+static inline int want_powernow(void)
+{
+	return opts.show_pm || opts.show_bios;
+}
+
 #define CORE_TYPE_PERFORMANCE	1
 #define CORE_TYPE_EFFICIENCY	2
 #define CORE_TYPE_UNKNOWN	3
