@@ -52,9 +52,6 @@ J6. cpuid.c:413-444 — dump_subleaves() skips other leaves that have
 
 ## 🟢 Minor nits / one-liners
 
-K6. vendors/intel/identify-family6-extended.c:445 — stray ")" in
-    "Core i7 [Broadwell])". [haiku]
-
 K7. vendors/intel/misc-enable.c:181 — "compatability". [haiku]
 
 K8. vendors/intel/machine_check.c:136 — file-scope nr_msr_banks is only used

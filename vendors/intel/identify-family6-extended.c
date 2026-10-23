@@ -100,7 +100,7 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	{ .model = 0x3c, .stepping = 3, .mhz = 4000, .str = "4790K [Haswell: Devils Canyon]" },
 	{ .model = 0x3c, .stepping = 3, .str = "Xeon E3 [Haswell]" },
 	{ .model = 0x3d, .stepping = 4, .str = "Core i7-5600U [Broadwell]" },
-	{ .model = 0x3d, .flags = ONLYMODEL, .str = "Core i7 [Broadwell])" },
+	{ .model = 0x3d, .flags = ONLYMODEL, .str = "Core i7 [Broadwell]" },
 	{ .model = 0x3e, .flags = ONLYMODEL, .str = "Core i7 [IvyBridge-X]" },
 	{ .model = 0x3f, .stepping = 2, .str = "Core i7-5820K [Haswell-X]" },
 	{ .model = 0x3f, .flags = ONLYMODEL, .str = "Core i7 [Haswell-X]" },
