@@ -2,13 +2,6 @@
 
 ## 🔴 Correctness
 
-A33. topology.c:597-609 — sockets[] is sized max phys_proc_id + 1, and
-    phys_proc_id (id >> pkg_shift) can be near UINT_MAX with bogus CPUID from
-    a hypervisor: calloc() fails and the topology line silently disappears,
-    or max_proc_id + 1 wraps to 0 and sockets[] is written out of bounds.
-    Count distinct packages by sorting, as count_cores() does; total_threads
-    is just nrCPUs. [sonnet]
-
 A34. identify.c:38-41 — extended family/model are only decoded in
     identify_intel() and identify_amd(). Centaur (VIA Nano is family 6 model
     0xf with emodel set) and the other vendors keep emodel 0, so model(cpu),

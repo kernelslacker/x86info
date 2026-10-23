@@ -156,6 +156,42 @@ static int cmp_u64(const void *a, const void *b)
 	return (x > y) - (x < y);
 }
 
+static int cmp_uint(const void *a, const void *b)
+{
+	unsigned int x = *(const unsigned int *)a;
+	unsigned int y = *(const unsigned int *)b;
+
+	return (x > y) - (x < y);
+}
+
+/* Number of distinct packages among the CPUs. */
+static unsigned int count_sockets(struct cpudata *cpus)
+{
+	unsigned int *ids;
+	unsigned int i, run = 0, sockets = 0;
+
+	ids = malloc(nrCPUs * sizeof(*ids));
+	if (ids == NULL)
+		return 0;
+
+	for (i = 0; i < nrCPUs; i++)
+		ids[i] = cpus[i].phys_proc_id;
+	qsort(ids, nrCPUs, sizeof(*ids), cmp_uint);
+
+	for (i = 0; i < nrCPUs; i++) {
+		if (i == 0 || ids[i] != ids[i - 1]) {
+			sockets++;
+			run = 0;
+		}
+		run++;
+		if (opts.debug && (i + 1 == nrCPUs || ids[i + 1] != ids[i]))
+			printf("Socket %u: %u threads\n", ids[i], run);
+	}
+
+	free(ids);
+	return sockets;
+}
+
 /* Number of distinct (package, core) pairs among the CPUs, and the
  * smallest and largest number of CPUs sharing one. */
 static unsigned int count_cores(struct cpudata *cpus, unsigned int *min_threads,
@@ -197,10 +233,8 @@ static unsigned int count_cores(struct cpudata *cpus, unsigned int *min_threads,
 void display_topology(struct cpudata *cpus)
 {
 	unsigned int i;
-	unsigned int max_proc_id = 0;
-	unsigned int *sockets;
-	unsigned int num_sockets = 0;
-	unsigned int total_threads = 0;
+	unsigned int num_sockets;
+	unsigned int total_threads = nrCPUs;
 	unsigned int cores;
 	unsigned int min_siblings = ~0u, max_siblings = 0;
 	unsigned int p_threads = 0, e_threads = 0;
@@ -228,34 +262,14 @@ void display_topology(struct cpudata *cpus)
 		printf("\n");
 	}
 
-	/* Find the maximum phys_proc_id so the sockets array is large enough
-	 * for sparse or non-zero-based socket APIC ID assignments. */
 	for (i = 0; i < nrCPUs; i++) {
-		if (cpus[i].phys_proc_id > max_proc_id)
-			max_proc_id = cpus[i].phys_proc_id;
-	}
-
-	sockets = calloc(max_proc_id + 1, sizeof(*sockets));
-	if (sockets == NULL)
-		return;
-
-	for (i = 0; i < nrCPUs; i++) {
-		sockets[cpus[i].phys_proc_id]++;
 		if (cpus[i].num_siblings < min_siblings)
 			min_siblings = cpus[i].num_siblings;
 		if (cpus[i].num_siblings > max_siblings)
 			max_siblings = cpus[i].num_siblings;
 	}
 
-	for (i = 0; i <= max_proc_id; i++) {
-		if (sockets[i] == 0)	/* only count populated sockets */
-			continue;
-		if (opts.debug)
-			printf("Socket %u: %u threads\n", i, sockets[i]);
-		total_threads += sockets[i];
-		num_sockets++;
-	}
-	free(sockets);
+	num_sockets = count_sockets(cpus);
 
 	if (cpus[0].topology == TOPOLOGY_X2APIC) {
 		cores = count_cores(cpus, &min_siblings, &max_siblings);
