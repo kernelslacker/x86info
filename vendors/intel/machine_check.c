@@ -17,17 +17,11 @@
 #define MCG_CTL 0x17b
 #define MCG_EXT 0x180
 
-#define MC_CTL 0x0400
-#define MC_STATUS 0x0401
-#define MC_ADDR 0x402
-
 static int nr_msr_banks;
 
 void decode_intel_machine_check(int cpunum, int family)
 {
 	unsigned long long val;
-	int i;
-
 	if (!user_is_root)
 		return;
 
@@ -50,14 +44,5 @@ void decode_intel_machine_check(int cpunum, int family)
 			printf("Erk, MCG_EXT not present! :%016llx:\n", val);
 	}
 
-	for (i=0; i < nr_msr_banks; i++) {
-		printf("Bank: %d (0x%x)\n", i, (unsigned int)MC_CTL+i*4);
-		printf("MC%dCTL:    ", i);
-		dumpmsr_bin (cpunum, MC_CTL+i*4, 64);
-		printf("MC%dSTATUS: ", i);
-		dumpmsr_bin (cpunum, MC_STATUS+i*4, 64);
-		printf("MC%dADDR:   ", i);
-		dumpmsr_bin (cpunum, MC_ADDR+i*4, 64);
-	}
-	printf("\n");
+	dump_mc_banks(cpunum, nr_msr_banks);
 }

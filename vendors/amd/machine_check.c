@@ -15,9 +15,6 @@
 #define MCG_CTL 0x17b
 
 #define MC_CTL 0x0400
-#define MC_STATUS 0x0401
-#define MC_ADDR 0x402
-#define MC_MISC 0x403
 
 struct mc_bit {
 	unsigned int bit;
@@ -132,17 +129,5 @@ void decode_athlon_machine_check(int cpunum, unsigned int family)
 	}
 	printf("\n");
 
-
-	for (i=0; i<banks; i++) {
-		printf("Bank: %u (0x%x)\n", i, (unsigned int)MC_CTL+i*4);
-		printf("MC%uCTL:    ", i);
-		dumpmsr_bin (cpunum, MC_CTL+i*4, 64);
-		printf("MC%uSTATUS: ", i);
-		dumpmsr_bin (cpunum, MC_STATUS+i*4, 64);
-		printf("MC%uADDR:   ", i);
-		dumpmsr_bin (cpunum, MC_ADDR+i*4, 64);
-		printf("MC%uMISC:   ", i);
-		dumpmsr_bin (cpunum, MC_MISC+i*4, 64);
-		printf("\n");
-	}
+	dump_mc_banks(cpunum, banks);
 }
