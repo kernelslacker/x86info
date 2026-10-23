@@ -294,14 +294,6 @@ void identify_amd(struct cpudata *cpu)
 		return;
 
 	cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
-	if (cpu->family == 0xf) {
-		cpu->emodel = (eax >> 16) & 0xf;
-		cpu->efamily= (eax >> 20) & 0xff;
-	} else {
-		cpu->emodel = 0;
-		cpu->efamily = 0;
-	}
-
 	if (family(cpu) >= 0xf) {
 		switch (family(cpu)) {
 		case 0xf:

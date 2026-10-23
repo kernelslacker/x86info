@@ -18,8 +18,6 @@ void identify_intel(struct cpudata *cpu)
 	unsigned int eax, ebx;
 
 	cpuid(cpu->number, 0x00000001, &eax, &ebx, NULL, NULL);
-	cpu->emodel = (eax >> 16) & 0xf;
-	cpu->efamily= (eax >> 20) & 0xff;
 	cpu->type = (eax >> 12) & 0x3;
 
 	cpu->brand = ebx & 0xff;

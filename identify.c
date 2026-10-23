@@ -39,6 +39,12 @@ void get_cpu_info_basics(struct cpudata *cpu)
 	cpu->stepping = eax & 0xf;
 	cpu->model = (eax >> 4) & 0xf;
 	cpu->family = (eax >> 8) & 0xf;
+	if (cpu->family == 0xf)
+		cpu->efamily = (eax >> 20) & 0xff;
+	/* AMD only has an extended model at family 0xf */
+	if (cpu->family == 0xf ||
+	    (cpu->family == 6 && cpu->vendor != VENDOR_AMD))
+		cpu->emodel = (eax >> 16) & 0xf;
 
 	cpuid(cpu->number, 0x80000000, &maxei, NULL, NULL, NULL);
 	cpu->maxei = sane_max_leaf(maxei, 0x80000000);

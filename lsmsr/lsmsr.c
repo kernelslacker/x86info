@@ -231,8 +231,9 @@ static void set_family_model(void)
 	if (!g.model) {
 		cpuid(g.cpu, 1, &a, NULL, NULL, NULL);
 		g.model = (a >> 4) & 0xf;
-		/* ExtModel applies when the base family is 6 or 0xf */
-		if (((a >> 8) & 0xf) == 0xf || ((a >> 8) & 0xf) == 6)
+		/* ExtModel applies at base family 0xf, and 6 except on AMD */
+		if (((a >> 8) & 0xf) == 0xf ||
+		    (((a >> 8) & 0xf) == 6 && g.vendor != VENDOR_AMD))
 			g.model |= (a >> 12) & 0xf0;
 	}
 }

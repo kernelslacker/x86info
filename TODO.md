@@ -2,16 +2,6 @@
 
 ## 🔴 Correctness
 
-A34. identify.c:38-41 — extended family/model are only decoded in
-    identify_intel() and identify_amd(). Centaur (VIA Nano is family 6 model
-    0xf with emodel set) and the other vendors keep emodel 0, so model(cpu),
-    the header and the grouping are wrong for them.
-    1. Decode efamily (base family 0xf) and emodel (base family 6 or 0xf; AMD
-       only 0xf) once in get_cpu_info_basics().
-    2. Drop the vendor copies.
-    3. Have lsmsr's set_family_model() (lsmsr.c:220) use the same rule.
-    [sonnet]
-
 A35. lsmsr/Makefile:20 — `python3 createheader.py ... >$@` leaves an empty or
     partial header behind when the script fails (it exits 1 on a bad .regs)
     and the next make treats it as up to date. Add `.DELETE_ON_ERROR:`.
