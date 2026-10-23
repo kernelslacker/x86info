@@ -2,11 +2,6 @@
 
 ## 🔴 Correctness
 
-A37. vendors/amd/bugs.c:185 — --bugs (also set by -a for non-root users)
-    reads MSR_CLKCTL without checking user_is_root, so a non-root run on a K7
-    prints "/dev/cpu/0/msr: Permission denied" and latches nodriver. Gate it
-    like decode_microcode() does. [haiku]
-
 A38. microcode.c:407-411 — the Intel fallback reads MSR 0x8b directly, but
     the SDM requires writing 0 to it and executing CPUID 1 first, which a
     read-only /dev/cpu/N/msr can't do, so the value may be 0 or stale. Only
