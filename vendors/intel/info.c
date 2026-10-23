@@ -93,18 +93,6 @@ static void decode_brand(struct cpudata *cpu)
 	printf(")\n");
 }
 
-static const char *core_type_name(unsigned int core_type)
-{
-	switch (core_type) {
-	case CORE_TYPE_ATOM:
-		return "Efficiency (Atom)";
-	case CORE_TYPE_CORE:
-		return "Performance (Core)";
-	default:
-		return "unknown";
-	}
-}
-
 void display_basic_intel_info(struct cpudata *cpu)
 {
 	if (cpu->type != 3) {
@@ -119,8 +107,6 @@ void display_basic_intel_info(struct cpudata *cpu)
 		}
 		printf(")\n");
 	}
-	if (cpu->core_type)
-		printf("Core type: %s\n", core_type_name(cpu->core_type));
 	if (cpu->brand > 0)
 		decode_brand(cpu);
 	if (cpu->serialno[0])

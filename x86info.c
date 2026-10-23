@@ -201,6 +201,7 @@ static void fill_in_cpu_info(struct cpudata *cpu, struct cpudata *cpus)
 {
 	bind_cpu(cpu->number);
 	get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
+	get_core_type(cpu);
 	if (!opts.show_MHz) {
 		cpu->MHz = 0;
 	} else if (cpu == cpus || opts.all_cpus) {
@@ -260,6 +261,7 @@ int main(int argc, char **argv)
 	}
 	free(online);
 
+	clear_uniform_core_types(cpus, nrCPUs);
 	display_one_cpu = check_cpu_similarity(cpus);
 
 	if (opts.show_mptable && user_is_root)

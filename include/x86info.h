@@ -100,7 +100,7 @@ struct cpudata {
 
 	unsigned int phys_proc_id;
 	unsigned int topology;		/* TOPOLOGY_* */
-	unsigned int core_type;		/* CPUID 0x1A EAX[31:24], 0 if not hybrid */
+	unsigned int core_type;		/* CORE_TYPE_*, 0 if not hybrid */
 	unsigned int x86_max_cores;
 	unsigned int cpu_core_id;
 	unsigned int num_siblings;
@@ -181,6 +181,9 @@ void display_model_name(struct cpudata *cpu);
 void decode_connector(enum connector type);
 
 void get_topology(struct cpudata *head);
+void get_core_type(struct cpudata *cpu);
+const char *core_type_name(const struct cpudata *cpu);
+void clear_uniform_core_types(struct cpudata *cpus, unsigned int n);
 void display_topology(struct cpudata *head);
 
 extern unsigned int nrCPUs;
@@ -213,7 +216,7 @@ struct options {
 
 extern struct options opts;
 
-#define CORE_TYPE_ATOM		0x20
+#define CORE_TYPE_ATOM		0x20	/* Intel Atom, AMD compact */
 #define CORE_TYPE_CORE		0x40
 
 #define X86_FEATURE_HT		(1<<28)

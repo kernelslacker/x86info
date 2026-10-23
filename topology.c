@@ -59,12 +59,33 @@ static int get_x2apic_topology(struct cpudata *cpu)
 	return 1;
 }
 
-/* CPUID.7.EDX[15] flags a hybrid part; leaf 0x1A then names this CPU's core. */
-static void get_core_type(struct cpudata *cpu)
+#define AMD_CORE_PERFORMANCE	0
+#define AMD_CORE_EFFICIENCY	1
+
+/*
+ * Intel: CPUID.7.EDX[15] flags a hybrid part; leaf 0x1A then names this
+ * CPU's core. AMD: CPUID 0x80000026 EBX[31:28] of the core level.
+ */
+void get_core_type(struct cpudata *cpu)
 {
-	unsigned int eax, edx;
+	unsigned int eax, ebx, edx;
 
 	cpu->core_type = 0;
+	if (cpu->vendor == VENDOR_AMD) {
+		if (cpu->maxei < 0x80000026)
+			return;
+		cpuid_count(cpu->number, 0x80000026, 0, NULL, &ebx, NULL, NULL);
+		switch (ebx >> 28) {
+		case AMD_CORE_PERFORMANCE:
+			cpu->core_type = CORE_TYPE_CORE;
+			break;
+		case AMD_CORE_EFFICIENCY:
+			cpu->core_type = CORE_TYPE_ATOM;
+			break;
+		}
+		return;
+	}
+
 	if (cpu->vendor != VENDOR_INTEL || cpu->cpuid_level < 0x1a)
 		return;
 
@@ -76,10 +97,34 @@ static void get_core_type(struct cpudata *cpu)
 	cpu->core_type = eax >> 24;
 }
 
+const char *core_type_name(const struct cpudata *cpu)
+{
+	int amd = cpu->vendor == VENDOR_AMD;
+
+	switch (cpu->core_type) {
+	case CORE_TYPE_ATOM:
+		return amd ? "Efficiency (compact)" : "Efficiency (Atom)";
+	case CORE_TYPE_CORE:
+		return amd ? "Performance" : "Performance (Core)";
+	default:
+		return "unknown";
+	}
+}
+
+/* A core type is only worth reporting when the CPUs differ. */
+void clear_uniform_core_types(struct cpudata *cpus, unsigned int n)
+{
+	unsigned int i;
+
+	for (i = 1; i < n; i++)
+		if (cpus[i].core_type != cpus[0].core_type)
+			return;
+	for (i = 0; i < n; i++)
+		cpus[i].core_type = 0;
+}
+
 void get_topology(struct cpudata *cpu)
 {
-	get_core_type(cpu);
-
 	if (get_x2apic_topology(cpu))
 		return;
 
@@ -213,6 +258,6 @@ void display_topology(struct cpudata *cpus)
 			e_threads++;
 	}
 	if (p_threads || e_threads)
-		printf("Hybrid: %u Performance (Core) threads, %u Efficiency (Atom) threads\n",
+		printf("Hybrid: %u Performance threads, %u Efficiency threads\n",
 		       p_threads, e_threads);
 }

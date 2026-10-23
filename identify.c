@@ -94,6 +94,8 @@ void show_info(struct cpudata *cpu)
 			cpu->efamily, cpu->emodel);
 	printf("Family: %u Model: %u Stepping: %u\n",
 	       cpu->family, model(cpu), cpu->stepping);
+	if (cpu->core_type)
+		printf("Core type: %s\n", core_type_name(cpu));
 	if (cpu->vendor == VENDOR_INTEL)
 		display_basic_intel_info(cpu);
 	printf("CPU Model (x86info's best guess): %s\n", cpu->name);
