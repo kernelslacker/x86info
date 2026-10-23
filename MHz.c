@@ -21,6 +21,8 @@
 #define MSR_MPERF	0xe7
 #define MSR_APERF	0xe8
 
+static int has_perf_counters(const struct cpudata *cpu);
+
 static void print_MHz(unsigned int mhz)
 {
 	if (mhz < 1000) {
@@ -58,9 +60,12 @@ void display_MHz_line(const struct cpudata *cpu)
 
 	display_MHz(cpu);
 	if (edx & (1 << 8))
-		printf(" TSC frequency.\n\n");
+		printf(" TSC frequency.");
 	else
-		printf(" processor (estimate).\n\n");
+		printf(" processor (estimate).");
+	if (!user_is_root && has_perf_counters(cpu))
+		printf(" Run as root for the core clock.");
+	printf("\n\n");
 }
 
 #ifdef __linux__
@@ -139,6 +144,17 @@ static int read_perf_msr_pmu(unsigned long long *aperf, unsigned long long *mper
 }
 #endif
 
+/* CPUID 6 ECX[0]: the CPU has the APERF/MPERF counters. */
+static int has_perf_counters(const struct cpudata *cpu)
+{
+	unsigned int ecx = 0;
+
+	if (cpu->cpuid_level < 6)
+		return 0;
+	cpuid(cpu->number, 6, NULL, NULL, &ecx, NULL);
+	return ecx & 1;
+}
+
 /*
  * Read the APERF/MPERF counters if the CPU has them: from the MSRs as
  * root, otherwise from the kernel's msr PMU.
@@ -146,13 +162,9 @@ static int read_perf_msr_pmu(unsigned long long *aperf, unsigned long long *mper
 static int read_perf_counters(const struct cpudata *cpu,
 			      unsigned long long *aperf, unsigned long long *mperf)
 {
-	unsigned int ecx = 0;
 	unsigned int base = cpu->vendor == VENDOR_AMD ? 0xc0000000 : 0;
 
-	if (cpu->cpuid_level < 6)
-		return 0;
-	cpuid(cpu->number, 6, NULL, NULL, &ecx, NULL);
-	if (!(ecx & 1))
+	if (!has_perf_counters(cpu))
 		return 0;
 	if (user_is_root &&
 	    read_msr(cpu->number, base + MSR_APERF, aperf) == 1 &&
