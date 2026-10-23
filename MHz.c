@@ -143,8 +143,29 @@ static int read_perf_counters(const struct cpudata *cpu,
 	return read_perf_msr_pmu(aperf, mperf);
 }
 
-/* Cores take most of a second to ramp up to boost clocks. */
-#define MEASURE_US	1000000.0
+/* Cores take most of a second to ramp up to boost clocks, so spin for a
+ * while before measuring the core clock. The TSC rate needs no warm-up. */
+#ifndef WARMUP_US
+#define WARMUP_US	1000000.0
+#endif
+#ifndef MEASURE_US
+#define MEASURE_US	100000.0
+#endif
+
+static double elapsed_us(const struct timespec *t0, const struct timespec *t1);
+
+static unsigned long spin(unsigned long r, double us)
+{
+	struct timespec t0, t1;
+
+	clock_gettime(CLOCK_MONOTONIC_RAW, &t0);
+	do {
+		// coverity[DC.WEAK_CRYPTO]
+		r = r * rand();
+		clock_gettime(CLOCK_MONOTONIC_RAW, &t1);
+	} while (elapsed_us(&t0, &t1) < us);
+	return r;
+}
 
 /*
  * TSC rate in MHz from CPUID 0x15 (crystal clock ratio), or failing that
@@ -207,14 +228,15 @@ void estimate_MHz(struct cpudata *cpu)
 		return;
 	}
 
+	if (have_perf) {
+		r = spin(r, WARMUP_US);
+		read_perf_counters(cpu, &aperf[0], &mperf[0]);
+	}
+
 	clock_gettime(CLOCK_MONOTONIC_RAW, &ts[0]);
 	cycles[0] = rdtsc();
 
-	do {
-		// coverity[DC.WEAK_CRYPTO]
-		r = r * rand();
-		clock_gettime(CLOCK_MONOTONIC_RAW, &ts[1]);
-	} while (elapsed_us(&ts[0], &ts[1]) < MEASURE_US);
+	r = spin(r, MEASURE_US);
 
 	cycles[1] = rdtsc();
 	clock_gettime(CLOCK_MONOTONIC_RAW, &ts[1]);
