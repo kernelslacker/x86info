@@ -35,9 +35,11 @@ static int msr_fd(int cpu)
 
 	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%d/msr", cpu);
 	fh = open(cpuname, O_RDONLY);
-	if (fh == -1)
+	if (fh == -1) {
 		perror(cpuname);
-	else
+		if (errno == ENOENT)
+			fprintf(stderr, "Is the msr module loaded? Try 'modprobe msr'.\n");
+	} else
 		msr_fds[cpu] = fh + 1;
 	return fh;
 }

@@ -76,6 +76,9 @@ static int cpuid_fd(unsigned int cpunr)
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1)
 		cpuid_fds[cpunr] = fh + 1;
+	else if (errno == ENOENT)
+		fprintf(stderr, "%s: %s. Try 'modprobe cpuid'; using native cpuid.\n",
+			cpuname, strerror(errno));
 	return fh;
 }
 

@@ -96,9 +96,6 @@ I3. lsmsr/createheader.py — validate that each register's field widths sum
 J2. Intel hybrid parts: report per-CPU core type (CPUID 0x1A EAX[31:24],
     P-core/E-core) in the per-CPU and topology output. [sonnet]
 
-J3. rdmsr-linux.c:28 — on ENOENT for /dev/cpu/N/msr, hint
-    "modprobe msr" once instead of a bare perror. Same for cpuid. [haiku]
-
 J4. cpuid.c:76 — dump_raw_cpuid() only dumps subleaf 0. Also walk
     subleaves for 4, 7, 0xB, 0xD, 0x12, 0x14, 0x18, 0x1F, 0x8000001D,
     0x80000020. [sonnet]
