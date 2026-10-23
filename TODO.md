@@ -45,10 +45,5 @@ J5. cpuid.c:369-394 — Zhaoxin ("  Shanghai  ", EBX 0x68532020) is
     leaves) and add the family 7 names to identify_centaur(). Depends on
     A34. [sonnet]
 
-J6. cpuid.c:413-444 — dump_subleaves() skips other leaves that have
-    subleaves (0xf, 0x10, 0x17, 0x1d, 0x20, 0x23, 0x24, 0x80000026), so -r
-    output, and the dumps made from it for tests, are missing them.
-    [haiku]
-
 ## 🟢 Minor nits / one-liners
 

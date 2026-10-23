@@ -99,10 +99,11 @@ enum subleaf_state {
 	SUBLEAF_SKIP,
 };
 
-/* Whether a subleaf of leaf holds data, given subleaf 0's EAX and EBX. */
+/* Whether a subleaf of leaf holds data, given subleaf 0's EAX, EBX and EDX. */
 static enum subleaf_state subleaf_state(unsigned int leaf, unsigned int sub,
 		unsigned int eax, unsigned int ebx, unsigned int ecx,
-		unsigned int edx, unsigned int eax0, unsigned int ebx0)
+		unsigned int edx, unsigned int eax0, unsigned int ebx0,
+		unsigned int edx0)
 {
 	switch (leaf) {
 	case 4:
@@ -110,11 +111,16 @@ static enum subleaf_state subleaf_state(unsigned int leaf, unsigned int sub,
 		return (eax & 0x1f) ? SUBLEAF_SHOW : SUBLEAF_END;
 	case 7:
 	case 0x14:
+	case 0x17:
+	case 0x1d:
+	case 0x20:
+	case 0x24:
 		return sub <= eax0 ? SUBLEAF_SHOW : SUBLEAF_END;
 	case 0x18:
 		return sub <= eax0 && sub < 64 ? SUBLEAF_SHOW : SUBLEAF_END;
 	case 0xb:
 	case 0x1f:
+	case 0x80000026:
 		return (ecx >> 8) & 0xff ? SUBLEAF_SHOW : SUBLEAF_END;
 	case 0xd:
 		if (sub >= 32)
@@ -124,25 +130,35 @@ static enum subleaf_state subleaf_state(unsigned int leaf, unsigned int sub,
 		if (sub >= 32)
 			return SUBLEAF_END;
 		return sub < 2 || (eax & 0xf) ? SUBLEAF_SHOW : SUBLEAF_END;
+	case 0xf:
+		if (sub >= 32)
+			return SUBLEAF_END;
+		return (edx0 >> sub) & 1 ? SUBLEAF_SHOW : SUBLEAF_SKIP;
+	case 0x10:
 	case 0x80000020:
 		if (sub >= 32)
 			return SUBLEAF_END;
 		return (ebx0 >> sub) & 1 ? SUBLEAF_SHOW : SUBLEAF_SKIP;
+	case 0x23:
+		if (sub >= 32)
+			return SUBLEAF_END;
+		return (eax0 >> sub) & 1 ? SUBLEAF_SHOW : SUBLEAF_SKIP;
 	default:
 		return SUBLEAF_END;
 	}
 }
 
 /* Dump subleaves 1 and up of the leaves that have them. */
-static void dump_subleaves(int cpunum, unsigned int leaf,
-			   unsigned int eax0, unsigned int ebx0)
+static void dump_subleaves(int cpunum, unsigned int leaf, unsigned int eax0,
+			   unsigned int ebx0, unsigned int edx0)
 {
 	unsigned int sub;
 	unsigned int eax, ebx, ecx, edx;
 
 	for (sub = 1; sub < 64; sub++) {
 		cpuid_count(cpunum, leaf, sub, &eax, &ebx, &ecx, &edx);
-		switch (subleaf_state(leaf, sub, eax, ebx, ecx, edx, eax0, ebx0)) {
+		switch (subleaf_state(leaf, sub, eax, ebx, ecx, edx, eax0, ebx0,
+				  edx0)) {
 		case SUBLEAF_END:
 			return;
 		case SUBLEAF_SKIP:
@@ -167,7 +183,7 @@ void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end)
 	for (i = begin; ; i++) {
 		cpuid(cpunum, i, &eax, &ebx, &ecx, &edx);
 		printf("eax in: 0x%08x, eax = %08x ebx = %08x ecx = %08x edx = %08x\n", i, eax, ebx, ecx, edx);
-		dump_subleaves(cpunum, i, eax, ebx);
+		dump_subleaves(cpunum, i, eax, ebx, edx);
 		if (i == end)
 			break;
 	}
