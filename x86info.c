@@ -303,7 +303,6 @@ int main(int argc, char **argv)
 			printf("CPU #%u (%u in this group):\n", i + 1, count);
 
 			display_detailed_info(&cpus[i], !common);
-			separator();
 		}
 	} else {
 		printf("Found %u CPUs.\n", nrCPUs);
