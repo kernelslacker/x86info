@@ -54,8 +54,6 @@ static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
  */
 #define CPUID_CHUNK_SIZE (16)
 
-#define MAX_CPUS 8192
-
 /* Per-CPU /dev/cpu/N/cpuid descriptors, opened lazily and stored as fd + 1. */
 static int cpuid_fds[MAX_CPUS];
 

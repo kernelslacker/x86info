@@ -18,8 +18,6 @@
 #include <string.h>
 #include <x86info.h>
 
-#define MAX_CPUS 8192
-
 /* Per-CPU /dev/cpu/N/msr descriptors, opened lazily and stored as fd + 1. */
 static int msr_fds[MAX_CPUS];
 

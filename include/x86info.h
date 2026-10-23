@@ -188,6 +188,9 @@ const char *core_type_name(const struct cpudata *cpu);
 void clear_uniform_core_types(struct cpudata *cpus, unsigned int n);
 void display_topology(struct cpudata *head);
 
+/* Upper bound for per-CPU descriptor tables. */
+#define MAX_CPUS 8192
+
 extern unsigned int nrCPUs;
 
 extern unsigned int user_is_root;
