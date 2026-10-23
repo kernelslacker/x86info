@@ -1,0 +1,97 @@
+Found 2 CPUs of 2 kinds.
+
+Extended Family: 11 Extended Model: 2 Family: 15 Model: 36 Stepping: 0
+CPU Model (x86info's best guess): AMD Zen5 Series Processor (Strix Point/Gorgon Point)
+Processor name string (BIOS programmed): AMD Ryzen AI 9 HX 470 w/ Radeon 890M           
+The physical package has 24 of 32 possible threads implemented (12 cores).
+
+CPU #0 (1 in this group):
+Core type: Performance
+
+Monitor/Mwait: min/max line size 64/64, interrupt break event, enumeration extension
+SVM: revision 1, 32768 ASIDs, np, lbrVirt, SVMLock, NRIPSave, TscRateMsr, VmcbClean, FlushByAsid, DecodeAssists, PauseFilter, PauseFilterThreshold, AVIC, V_VMSAVE_VMLOAD, vGIF, GMET, x2AVIC, SpecCtrl, VNMI, SvmeAddrChk
+L1 Data TLB (1G):           Fully associative. 96 entries.
+L1 Instruction TLB (1G):    Fully associative. 64 entries.
+L1 Data TLB (2M/4M):        Fully associative. 96 entries.
+L1 Instruction TLB (2M/4M): Fully associative. 64 entries.
+L1 Data TLB (4K):           Fully associative. 96 entries.
+L1 Instruction TLB (4K):    Fully associative. 64 entries.
+L1 Data cache:
+	Size: 48Kb	12-way associative. 
+	lines per tag=1	line size=64 bytes.
+L1 Instruction cache:
+	Size: 32Kb	8-way associative. 
+	lines per tag=1	line size=64 bytes.
+L2 Data TLB (1G):           4-way associative. 32 entries.
+L2 Instruction TLB (1G):    Disabled. 0 entries.
+L2 Data TLB (2M/4M):        4-way associative. 128 entries.
+L2 Instruction TLB (2M/4M): 2-way associative. 64 entries.
+L2 Data TLB (4K):           8-way associative. 128 entries.
+L2 Instruction TLB (4K):    4-way associative. 64 entries.
+L2 cache:
+	Size: 1024Kb	16-way associative. 
+	lines per tag=1	line size=64 bytes.
+L3 (shared) cache:
+	Size: 16384Kb	See CPUID 0x8000001D. 
+	lines per tag=1	line size=64 bytes.
+Caches (CPUID 0x8000001D):
+	L1 data: 48Kb, 12-way, line size=64 bytes, shared by 2 threads
+	L1 instruction: 32Kb, 8-way, line size=64 bytes, shared by 2 threads
+	L2 unified: 1024Kb, 16-way, line size=64 bytes, shared by 2 threads
+	L3 unified: 16384Kb, 16-way, line size=64 bytes, shared by 8 threads
+
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh mmx fxsr sse sse2 ht sse3 pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrnd
+Extended feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic syscall mtrr pge mca cmov pat pse36 nx mmxext mmx fxsr ffxsr page1gb rdtscp lm lahf_lm CmpLegacy svm ExtApicSpace LockMovCr0 abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce TopoExt PerfCtrExtCore PerfCtrExtNB DataBPExt PerfCtrExtLLC MwaitExtended AdMskExtn
+Additional feature flags:
+ arat fsgsbase tsc_adj bmi1 avx2 smep bmi2 erms invpcid pqm pqe avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha avx512bw avx512vl avx512vbmi umip pku ospke avx512vbmi2 cet_ss gfni vaes vpclmulqdq avx512vnni avx512bitalg avx512vpopcntdq rdpid bus_lock_detect movdiri movdir64b fsrm avx512vp2intersect l1d_flush avx_vnni avx512_bf16 ts ttp tm hwpstate nonstop_tsc cpb eff_freq_ro connected_standby rapl
+Long NOPs supported: yes
+
+Address sizes : 48 bits physical, 48 bits virtual
+CPU #4 (1 in this group):
+Core type: Efficiency (compact)
+
+Monitor/Mwait: min/max line size 64/64, interrupt break event, enumeration extension
+SVM: revision 1, 32768 ASIDs, np, lbrVirt, SVMLock, NRIPSave, TscRateMsr, VmcbClean, FlushByAsid, DecodeAssists, PauseFilter, PauseFilterThreshold, AVIC, V_VMSAVE_VMLOAD, vGIF, GMET, x2AVIC, SpecCtrl, VNMI, SvmeAddrChk
+L1 Data TLB (1G):           Fully associative. 96 entries.
+L1 Instruction TLB (1G):    Fully associative. 64 entries.
+L1 Data TLB (2M/4M):        Fully associative. 96 entries.
+L1 Instruction TLB (2M/4M): Fully associative. 64 entries.
+L1 Data TLB (4K):           Fully associative. 96 entries.
+L1 Instruction TLB (4K):    Fully associative. 64 entries.
+L1 Data cache:
+	Size: 48Kb	12-way associative. 
+	lines per tag=1	line size=64 bytes.
+L1 Instruction cache:
+	Size: 32Kb	8-way associative. 
+	lines per tag=1	line size=64 bytes.
+L2 Data TLB (1G):           4-way associative. 32 entries.
+L2 Instruction TLB (1G):    Disabled. 0 entries.
+L2 Data TLB (2M/4M):        4-way associative. 128 entries.
+L2 Instruction TLB (2M/4M): 2-way associative. 64 entries.
+L2 Data TLB (4K):           8-way associative. 128 entries.
+L2 Instruction TLB (4K):    4-way associative. 64 entries.
+L2 cache:
+	Size: 1024Kb	16-way associative. 
+	lines per tag=1	line size=64 bytes.
+L3 (shared) cache:
+	Size: 8192Kb	See CPUID 0x8000001D. 
+	lines per tag=1	line size=64 bytes.
+Caches (CPUID 0x8000001D):
+	L1 data: 48Kb, 12-way, line size=64 bytes, shared by 2 threads
+	L1 instruction: 32Kb, 8-way, line size=64 bytes, shared by 2 threads
+	L2 unified: 1024Kb, 16-way, line size=64 bytes, shared by 2 threads
+	L3 unified: 8192Kb, 16-way, line size=64 bytes, shared by 16 threads
+
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh mmx fxsr sse sse2 ht sse3 pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrnd
+Extended feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic syscall mtrr pge mca cmov pat pse36 nx mmxext mmx fxsr ffxsr page1gb rdtscp lm lahf_lm CmpLegacy svm ExtApicSpace LockMovCr0 abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce TopoExt PerfCtrExtCore PerfCtrExtNB DataBPExt PerfCtrExtLLC MwaitExtended AdMskExtn
+Additional feature flags:
+ arat fsgsbase tsc_adj bmi1 avx2 smep bmi2 erms invpcid pqm pqe avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha avx512bw avx512vl avx512vbmi umip pku ospke avx512vbmi2 cet_ss gfni vaes vpclmulqdq avx512vnni avx512bitalg avx512vpopcntdq rdpid bus_lock_detect movdiri movdir64b fsrm avx512vp2intersect l1d_flush avx_vnni avx512_bf16 ts ttp tm hwpstate nonstop_tsc cpb eff_freq_ro connected_standby rapl
+Long NOPs supported: yes
+
+Address sizes : 48 bits physical, 48 bits virtual
+This system has 1 socket, 2 cores, 2 threads
+Hybrid: 1 Performance threads, 1 Efficiency threads

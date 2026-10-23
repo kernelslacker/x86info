@@ -25,19 +25,6 @@ I1. `make check` replays CPUID dumps from tests/dumps and diffs the output
     tests/run-tests.sh tests/build/x86info` after checking the output by
     hand. [needs hardware]
 
-I4. The replay backend describes exactly one CPU (x86info.c:297-299,
-    cpuid-replay.c), so CPU grouping, the shared header, hybrid core types,
-    the MHz leader copy and the topology summary are untested, although
-    most recent commits changed them.
-    1. Let a dump hold several "CPU N:" sections (`x86info -r --all-cpus`
-       already prints one block per CPU) and key replay entries by CPU.
-    2. Have get_online_cpus() return the replayed CPU ids under
-       CPUID_REPLAY.
-    3. Add a two-CPU P+E hybrid dump and a two-identical-CPU dump with
-       goldens, and cover A27 with an SMT dump that lists one thread per
-       core.
-    [sonnet]
-
 ## 🟢 Enhancements
 
 ## 🟢 Minor nits / one-liners
