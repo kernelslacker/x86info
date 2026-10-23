@@ -164,7 +164,7 @@ static int read_perf_counters(const struct cpudata *cpu,
 /* Cores take most of a second to ramp up to boost clocks, so spin for a
  * while before measuring the core clock. The TSC rate needs no warm-up. */
 #ifndef WARMUP_US
-#define WARMUP_US	4000000.0
+#define WARMUP_US	6000000.0
 #endif
 #ifndef MEASURE_US
 #define MEASURE_US	100000.0
