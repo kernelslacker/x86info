@@ -80,10 +80,29 @@ static void set_fam10h_name(struct fam10h_rev *r, struct cpudata *c)
 		 r->rev);
 }
 
+/* Socket by package ID (CPUID 0x80000001 EBX[31:28]). */
+static const enum connector fam10h_connectors[] = {
+	CONN_SOCKET_F_R2, CONN_SOCKET_AM3, CONN_SOCKET_S1G3,
+	CONN_SOCKET_G34, CONN_SOCKET_ASB2, CONN_SOCKET_C32,
+};
+
+static const enum connector fam15h_early_connectors[] = {
+	CONN_SOCKET_FP2, CONN_SOCKET_FS1r2, CONN_SOCKET_FM2,
+};
+
+static const enum connector fam12h_connectors[] = {
+	CONN_SOCKET_FP1, CONN_SOCKET_FS1, CONN_SOCKET_FM1,
+};
+
+static const enum connector fam14h_connectors[] = {
+	CONN_SOCKET_FT1,
+};
+
 static void set_connector(struct cpudata *c)
 {
+	const enum connector *table = NULL;
 	unsigned int eax, ebx, ecx, edx;
-	int pkg_id;
+	unsigned int pkg_id, n = 0;
 
 	if (family(c) == 0x11) {
 		c->connector = CONN_SOCKET_S1G2;
@@ -93,68 +112,23 @@ static void set_connector(struct cpudata *c)
 	cpuid(c->number, 0x80000001, &eax, &ebx, &ecx, &edx);
 	pkg_id = (ebx >> 28) & 0xf;
 
-
 	if ((family(c) == 0x10) ||
 	    ((family(c) == 0x15) && (model(c) <= 0xf))) {
-		switch (pkg_id) {
-		case 0:
-			c->connector = CONN_SOCKET_F_R2;
-			break;
-		case 1:
-			c->connector = CONN_SOCKET_AM3;
-			break;
-		case 2:
-			c->connector = CONN_SOCKET_S1G3;
-			break;
-		case 3:
-			c->connector = CONN_SOCKET_G34;
-			break;
-		case 4:
-			c->connector = CONN_SOCKET_ASB2;
-			break;
-		case 5:
-			c->connector = CONN_SOCKET_C32;
-			break;
-		default:
-			c->connector = 0;
-		}
+		table = fam10h_connectors;
+		n = ARRAY_SIZE(fam10h_connectors);
 	} else if ((family(c) == 0x15) && (model(c) <= 0x1f)) {
-		switch (pkg_id) {
-		case 0:
-			c->connector = CONN_SOCKET_FP2;
-			break;
-		case 1:
-			c->connector = CONN_SOCKET_FS1r2;
-			break;
-		case 2:
-			c->connector = CONN_SOCKET_FM2;
-			break;
-		default:
-			c->connector = 0;
-		}
-	} else if(family(c) == 0x12) {
-		switch (pkg_id) {
-		case 0:
-			c->connector = CONN_SOCKET_FP1;
-			break;
-		case 1:
-			c->connector = CONN_SOCKET_FS1;
-			break;
-		case 2:
-			c->connector = CONN_SOCKET_FM1;
-			break;
-		default:
-			c->connector = 0;
-		}
+		table = fam15h_early_connectors;
+		n = ARRAY_SIZE(fam15h_early_connectors);
+	} else if (family(c) == 0x12) {
+		table = fam12h_connectors;
+		n = ARRAY_SIZE(fam12h_connectors);
 	} else if (family(c) == 0x14) {
-		switch (pkg_id) {
-		case 0:
-			c->connector = CONN_SOCKET_FT1;
-			break;
-		default:
-			c->connector = 0;
-		}
+		table = fam14h_connectors;
+		n = ARRAY_SIZE(fam14h_connectors);
 	}
+
+	if (table)
+		c->connector = pkg_id < n ? table[pkg_id] : CONN_UNKNOWN;
 }
 
 static void set_fam10h_revinfo(int id, struct cpudata *c)

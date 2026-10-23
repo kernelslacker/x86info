@@ -31,10 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C12. vendors/amd/identify.c:102-177 — set_connector() is four switches
-    mapping pkg_id to a constant. Use per-family arrays indexed by pkg_id;
-    `c->connector = 0` should be CONN_UNKNOWN. [haiku]
-
 C13. vendors/amd/identify.c:345-396 — do_l2assoc() switch is a 16-entry
     lookup table. [haiku]
 
