@@ -207,7 +207,6 @@ static int MPConfigTableHeader(u32 pap)
 		return SMP_NO;
 	}
 
-	/* convert physical address to virtual address */
 	paddr = (unsigned long) pap;
 
 	/* read in cth structure */

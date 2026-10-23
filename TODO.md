@@ -16,9 +16,6 @@
 
 ## 🟡 Comments
 
-H4. mptable.c:209 — "convert physical address to virtual address" above a
-    plain cast; nothing is converted. Remove it. [haiku]
-
 H5. apic.c:119-142 — the `/** ... **/` blocks ("Verify if apic feature is
     supported", "Mapping the apic registers") restate the next line. Remove
     them. [haiku]
