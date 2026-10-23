@@ -31,9 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C21. vendors/amd/powernow.c:89-95 — k8_fid_codes[64] is
-    `fid & 1 || fid > 42 ? -1 : 4 + fid / 2`. Compute it. [haiku]
-
 C22. Redundant `if (!user_is_root) return;` in dump_* / decode_* MSR
     functions (msr-athlon, msr-k6, msr-p4, msr-performance, msr-thermal,
     microcode, machine_check x2, powersaver, msr-c3, show_patch_level): all

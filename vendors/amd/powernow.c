@@ -86,13 +86,11 @@ static double k8_vid_table[32] = {
 	0.950, 0.925, 0.900, 0.875, 0.850, 0.825, 0.800, 0.000,
 };
 
-static int k8_fid_codes[64] = {
-	4, -1, 5, -1, 6, -1, 7, -1, 8, -1, 9, -1, 10, -1, 11, -1,
-	12, -1, 13, -1, 14, -1, 15, -1, 16, -1, 17, -1, 18, -1, 19, -1,
-	20, -1, 21, -1, 22, -1, 23, -1, 24, -1, 25,
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	-1, -1, -1, -1, -1
-};
+/* FID code to multiplier; -1 for reserved codes. */
+static int k8_fid_code(unsigned int fid)
+{
+	return (fid & 1 || fid > 42) ? -1 : 4 + (int)(fid / 2);
+}
 
 static void k8_decode_fidvid(struct cpudata *cpu)
 {
@@ -113,9 +111,9 @@ static void k8_decode_fidvid(struct cpudata *cpu)
 		k8_vid_table[fidvidstatus.bits.cvid]);
 
 	printf("Frequency ID codes: Maximum=%dx Startup=%dx Currently=%dx\n",
-		k8_fid_codes[fidvidstatus.bits.mfid],
-		k8_fid_codes[fidvidstatus.bits.sfid],
-		k8_fid_codes[fidvidstatus.bits.cfid]);
+		k8_fid_code(fidvidstatus.bits.mfid),
+		k8_fid_code(fidvidstatus.bits.sfid),
+		k8_fid_code(fidvidstatus.bits.cfid));
 }
 
 static int get_did(int family, union msr_pstate pstate)
