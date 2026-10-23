@@ -17,7 +17,7 @@ struct misc_enable_bit {
 
 static const struct misc_enable_bit misc_enable_bits[] = {
 	{ 0,  "Fast string enable", "set", NULL },
-	{ 2,  "x87 FPU Fopcode compatability mode", "set", NULL },
+	{ 2,  "x87 FPU Fopcode compatibility mode", "set", NULL },
 	{ 3,  "Thermal monitor enable", "set", "TCC" },
 	{ 4,  "Split lock disable", "set", NULL },
 	{ 6,  "L3 cache disable", "set", NULL },

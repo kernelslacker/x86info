@@ -52,8 +52,6 @@ J6. cpuid.c:413-444 — dump_subleaves() skips other leaves that have
 
 ## 🟢 Minor nits / one-liners
 
-K7. vendors/intel/misc-enable.c:181 — "compatability". [haiku]
-
 K8. vendors/intel/machine_check.c:136 — file-scope nr_msr_banks is only used
     inside decode_intel_machine_check(); make it a local. [haiku]
 
