@@ -31,11 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C6. vendors/amd/powernow.c:338-381 — decode_powernow() hand-decodes
-    80000007 EDX, which features.c already has as
-    cpuid_80000007_edx_flags/_desc. Reuse that table (via flag_decode with
-    descriptions) and keep only the can_scale_*/has_cpb derivation. [sonnet]
-
 C7. Machine-check bank dump loop duplicated in amd/machine_check.c:107-118
     and intel/machine_check.c:117-125 (Intel omits MISC). Move to one
     `dump_mc_banks(int cpu, unsigned banks)` in a shared file. [sonnet]

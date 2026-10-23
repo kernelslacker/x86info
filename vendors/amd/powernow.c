@@ -329,8 +329,9 @@ static void decode_pstates(struct cpudata *cpu, int has_cpb)
 void decode_powernow(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
-	int can_scale_vid=0, can_scale_fid=0;
-	int has_cpb = 0;
+	int can_scale_vid, can_scale_fid;
+	int has_cpb;
+	unsigned int i;
 
 	if (cpu->maxei < 0x80000007)
 		return;
@@ -339,44 +340,13 @@ void decode_powernow(struct cpudata *cpu)
 	printf("PowerNOW! Technology information\n");
 	printf("Available features:");
 
-	if (edx & (1<<0))
-		printf("\n\tTemperature sensing diode present.");
-	if (edx & (1<<1)) {
-		printf("\n\tFrequency ID control");
-		can_scale_fid=1;
-	}
-	if (edx & (1<<2)) {
-		printf("\n\tVoltage ID control");
-		can_scale_vid=1;
-	}
-	if (edx & (1<<3))
-		printf("\n\tThermal Trip");
-	if (edx & (1<<4))
-		printf("\n\tThermal Monitoring");
-	if (edx & (1<<5))
-		printf("\n\tSoftware Thermal Control");
-	if (edx & (1<<6))
-		printf("\n\t100MHz multiplier control");
-	if (edx & (1<<7)) {
-		printf("\n\tHardware P-state control");
-		can_scale_fid = can_scale_vid = 1;
-	}
-	if (edx & (1<<8))
-		printf("\n\tinvariant TSC");
-	if (edx & (1<<9)) {
-		printf("\n\tCore Performance Boost");
-		has_cpb = 1;
-	}
-	if (edx & (1<<10))
-		printf("\n\tread-only Effective Frequency Interface");
-	if (edx & (1<<11))
-		printf("\n\tProcessor Feedback Interface");
-	if (edx & (1<<12))
-		printf("\n\tProcessor Power Reporting");
-	if (edx & (1<<13))
-		printf("\n\tConnected Standby");
-	if (edx & (1<<14))
-		printf("\n\tRAPL");
+	for (i = 0; i < 15; i++)
+		if (edx & (1U << i))
+			printf("\n\t%s", cpuid_80000007_edx_flags_desc[i]);
+
+	can_scale_fid = !!(edx & ((1 << 1) | (1 << 7)));
+	can_scale_vid = !!(edx & ((1 << 2) | (1 << 7)));
+	has_cpb = !!(edx & (1 << 9));
 	if (!(edx & 0x7fff))
 		printf(" None");
 

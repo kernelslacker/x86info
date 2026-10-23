@@ -262,20 +262,27 @@ static const char *cpuid_07_ebx_flags_desc[32] = {
 
 	/* CPUID 0x80000007 EDX flags */
 static const char *cpuid_80000007_edx_flags[32] = {
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-	"nonstop_tsc",
+	"ts", "fid", "vid", "ttp", "tm", "stc", "100mhzsteps", "hwpstate",
+	"nonstop_tsc", "cpb", "eff_freq_ro", "proc_feedback",
+	"acc_power", "connected_standby", "rapl",
 };
 
-static const char *cpuid_80000007_edx_flags_desc[32] = {
-	NULL,							// 0
-	NULL,							// 1
-	NULL,							// 2
-	NULL,							// 3
-	NULL,							// 4
-	NULL,							// 5
-	NULL,							// 6
-	NULL,							// 7
+const char *cpuid_80000007_edx_flags_desc[32] = {
+	"Temperature sensing diode present",			// 0
+	"Frequency ID control",					// 1
+	"Voltage ID control",					// 2
+	"Thermal Trip",						// 3
+	"Thermal Monitoring",					// 4
+	"Software Thermal Control",				// 5
+	"100MHz multiplier control",				// 6
+	"Hardware P-state control",				// 7
 	"Invariant/nonstop/constant TSC",			// 8
+	"Core Performance Boost",				// 9
+	"read-only Effective Frequency Interface",		// 10
+	"Processor Feedback Interface",				// 11
+	"Processor Power Reporting",				// 12
+	"Connected Standby",					// 13
+	"RAPL",							// 14
 };
 
 void show_extra_flags(const struct cpudata *cpu)
