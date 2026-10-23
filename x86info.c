@@ -163,38 +163,23 @@ static void display_detailed_info(struct cpudata *cpu)
 		display_MHz_line(cpu);
 }
 
-/*
- * check to see if all CPUs are the same.
- * returns 1 if all cpus are the same, 0 if something is different
- */
-static int check_cpu_similarity(struct cpudata *cpus)
+/* True if two CPUs are the same model, stepping and core type. */
+static int same_cpu(const struct cpudata *a, const struct cpudata *b)
 {
-	struct cpudata *first = &cpus[0];
-	unsigned int i;
+	return a->efamily == b->efamily && a->family == b->family &&
+	       model(a) == model(b) && a->stepping == b->stepping &&
+	       a->core_type == b->core_type;
+}
 
-	/* force to display all cpus if the user requested it. */
-	if (opts.all_cpus)
-		return 0;
+/* Index of the first CPU that is the same as cpus[i]. */
+static unsigned int group_leader(const struct cpudata *cpus, unsigned int i)
+{
+	unsigned int j;
 
-	if (nrCPUs == 1)
-		return 1;
-
-	for (i = 1; i < nrCPUs; i++) {
-		struct cpudata *c = &cpus[i];
-
-		if (c->efamily != first->efamily)
-			return 0;
-		if (c->family != first->family)
-			return 0;
-		if (model(c) != model(first))
-			return 0;
-		if (c->stepping != first->stepping)
-			return 0;
-		if (c->core_type != first->core_type)
-			return 0;
-	}
-
-	return 1;
+	for (j = 0; j < i; j++)
+		if (same_cpu(&cpus[j], &cpus[i]))
+			break;
+	return j;
 }
 
 static void fill_in_cpu_info(struct cpudata *cpu)
@@ -215,6 +200,7 @@ int main(int argc, char **argv)
 	unsigned int *online;
 	unsigned int i;
 	unsigned int display_one_cpu = 1;
+	unsigned int nr_groups = 0;
 	int nrSMPCPUs;
 
 	if (getuid() == 0)
@@ -257,7 +243,10 @@ int main(int argc, char **argv)
 	clear_uniform_core_types(cpus, nrCPUs);
 	if (opts.show_MHz)
 		estimate_MHz_cpus(cpus, nrCPUs);
-	display_one_cpu = check_cpu_similarity(cpus);
+	for (i = 0; i < nrCPUs; i++)
+		if (group_leader(cpus, i) == i)
+			nr_groups++;
+	display_one_cpu = nr_groups == 1 && !opts.all_cpus;
 
 	if (opts.show_mptable && user_is_root)
 		display_mptable();
@@ -279,6 +268,21 @@ int main(int argc, char **argv)
 			printf("\n");
 
 		display_detailed_info(&cpus[0]);
+	} else if (!opts.all_cpus) {
+		printf("Found %u CPUs of %u kinds.\n", nrCPUs, nr_groups);
+		for (i = 0; i < nrCPUs; i++) {
+			unsigned int j, count = 0;
+
+			if (group_leader(cpus, i) != i)
+				continue;
+			for (j = i; j < nrCPUs; j++)
+				if (group_leader(cpus, j) == i)
+					count++;
+			printf("CPU #%u (%u in this group):\n", i + 1, count);
+
+			display_detailed_info(&cpus[i]);
+			separator();
+		}
 	} else {
 		printf("Found %u CPUs.\n", nrCPUs);
 		for (i = 0; i < nrCPUs; i++) {
