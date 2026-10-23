@@ -53,7 +53,7 @@ static int get_x2apic_topology(struct cpudata *cpu)
 
 	cpu->num_siblings = smt_count;
 	cpu->x86_max_cores = logical / smt_count;
-	cpu->phys_proc_id = pkg_shift >= 32 ? 0 : id >> pkg_shift;
+	cpu->phys_proc_id = id >> pkg_shift;
 	cpu->cpu_core_id = (id >> smt_shift) & low_mask(pkg_shift - smt_shift);
 	cpu->topology = TOPOLOGY_X2APIC;
 	return 1;
