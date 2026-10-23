@@ -14,6 +14,8 @@ void dump_k6_MSR (struct cpudata *cpu);
 void decode_powernow (struct cpudata *cpu);
 void show_amd_bugs(struct cpudata *cpu);
 void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid);
+int decode_psb(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid,
+	       const char *rom, size_t len, unsigned long base);
 
 void identify_amd(struct cpudata *cpu);
 void display_amd_info(struct cpudata *cpu);

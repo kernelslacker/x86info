@@ -119,7 +119,6 @@ int cpuid_count(unsigned int CPU_number, unsigned int op, int count,
 #define model(c) ((c->emodel << 4) + c->model)
 
 #define tuple(c) ((c->family<<8)|(c->model<<4)|(c->stepping))
-#define etuple(c) ((c->efamily<<8)|(c->model<<4)|(c->stepping))
 
 #define ARRAY_SIZE(x) ((int)(sizeof(x)/sizeof(x[0])))
 
