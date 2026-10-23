@@ -141,9 +141,9 @@ void display_centaur_info(struct cpudata *cpu)
 	if (cpu->maxei == 0)
 		return;
 
-	if (show_cacheinfo)
+	if (opts.show_cacheinfo)
 		decode_centaur_cacheinfo(cpu);
 
-	if (cpu->family == 6 && show_msr)
+	if (cpu->family == 6 && opts.show_msr)
 		dump_C3_MSR(cpu);
 }

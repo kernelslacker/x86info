@@ -116,7 +116,7 @@ void display_basic_intel_info(struct cpudata *cpu)
 
 void display_extended_intel_info(struct cpudata *cpu)
 {
-	if (show_msr) {
+	if (opts.show_msr) {
 		if (cpu->family == 0xf)
 			dump_p4_msrs(cpu);
 
@@ -125,9 +125,9 @@ void display_extended_intel_info(struct cpudata *cpu)
 		dump_thermal_msrs(cpu);
 	}
 
-	if (show_machine_check)
+	if (opts.show_machine_check)
 		decode_intel_machine_check(cpu->number, cpu->family);
 
-	if (show_microcode && cpu->family >= 6)
+	if (opts.show_microcode && cpu->family >= 6)
 		decode_microcode(cpu);
 }

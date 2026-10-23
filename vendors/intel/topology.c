@@ -71,7 +71,7 @@ void get_intel_topology(struct cpudata *cpu)
 	if (cpu->num_siblings == 0)
 		cpu->num_siblings = 1;
 
-	if (debug && cpu->num_siblings == 1)
+	if (opts.debug && cpu->num_siblings == 1)
 		printf("Hyper-Threading is disabled\n");
 
 	index_msb = get_count_order(cpu->num_siblings);
@@ -81,7 +81,7 @@ void get_intel_topology(struct cpudata *cpu)
 	cpu->cpu_core_id = (initial_apicid >> index_msb) &
 		((1 << core_bits) - 1);
 
-	if (debug) {
+	if (opts.debug) {
 		if ((cpu->x86_max_cores * cpu->num_siblings) > 1) {
 			printf("%s:\n", __func__);
 			printf("\tSiblings: %u\n", cpu->num_siblings);

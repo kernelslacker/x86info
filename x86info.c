@@ -105,7 +105,7 @@ static void display_detailed_info(struct cpudata *cpu)
 {
 	show_info(cpu);
 
-	if (show_cpuid) {
+	if (opts.show_cpuid) {
 		dump_raw_cpuid(cpu->number, 0, cpu->cpuid_level);
 		if (cpu->maxei >=0x80000000)
 			dump_raw_cpuid(cpu->number, 0x80000000, cpu->maxei);
@@ -114,7 +114,7 @@ static void display_detailed_info(struct cpudata *cpu)
 			dump_raw_cpuid(cpu->number, 0xC0000000, cpu->maxei2);
 	}
 
-	if (show_cacheinfo) {
+	if (opts.show_cacheinfo) {
 		switch (cpu->vendor) {
 		case VENDOR_INTEL:
 			decode_intel_caches(cpu, 1);
@@ -135,26 +135,26 @@ static void display_detailed_info(struct cpudata *cpu)
 		}
 	}
 
-	if (show_feature_flags)
+	if (opts.show_feature_flags)
 		display_feature_flags(cpu);
 
-	if (show_connector)
+	if (opts.show_connector)
 		decode_connector(cpu->connector);
 
 	/* Info that requires root access (eg, reading MSRs etc) */
 	if (user_is_root) {
-		if (show_mtrr)
+		if (opts.show_mtrr)
 			dump_mtrrs(cpu);
 
-		if (show_apic)
+		if (opts.show_apic)
 			dump_apics(cpu);
 	}
 
-	if (show_addr_sizes)
+	if (opts.show_addr_sizes)
 		printf("Address sizes : %u bits physical, %u bits virtual\n",
 			cpu->phyaddr_bits, cpu->viraddr_bits);
 
-	if (show_MHz)
+	if (opts.show_MHz)
 		display_MHz_line(cpu);
 }
 
@@ -168,7 +168,7 @@ static int check_cpu_similarity(struct cpudata *cpus)
 	unsigned int i;
 
 	/* force to display all cpus if the user requested it. */
-	if (all_cpus)
+	if (opts.all_cpus)
 		return 0;
 
 	if (nrCPUs == 1)
@@ -194,9 +194,9 @@ static void fill_in_cpu_info(struct cpudata *cpu, struct cpudata *cpus)
 {
 	bind_cpu(cpu->number);
 	get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
-	if (!show_MHz) {
+	if (!opts.show_MHz) {
 		cpu->MHz = 0;
-	} else if (cpu == cpus || all_cpus) {
+	} else if (cpu == cpus || opts.all_cpus) {
 		estimate_MHz(cpu);
 	} else {
 		cpu->MHz = cpus[0].MHz;
@@ -229,7 +229,7 @@ int main(int argc, char **argv)
 		exit(EXIT_SUCCESS);
 	}
 
-	if (need_root && !user_is_root) {
+	if (opts.need_root && !user_is_root) {
 		printf("Need to be root to use specified options.\n");
 		exit(EXIT_FAILURE);
 	}
@@ -255,7 +255,7 @@ int main(int argc, char **argv)
 
 	display_one_cpu = check_cpu_similarity(cpus);
 
-	if (show_mptable && user_is_root)
+	if (opts.show_mptable && user_is_root)
 		display_mptable();
 
 	/* Now we display the info we gathered */

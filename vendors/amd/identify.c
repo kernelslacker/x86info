@@ -578,7 +578,7 @@ void display_amd_info(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx, i;
 
-	if (show_msr) {
+	if (opts.show_msr) {
 		if (cpu->family == 5)
 			dump_k6_MSR(cpu);
 		if (cpu->family == 6)
@@ -587,19 +587,19 @@ void display_amd_info(struct cpudata *cpu)
 			printf("MSR dump not supported for this family.\n");
 	}
 
-	if (show_machine_check)
+	if (opts.show_machine_check)
 		decode_athlon_machine_check(cpu->number, family(cpu));
 
-	if (show_microcode && family(cpu) >= 0xf)
+	if (opts.show_microcode && family(cpu) >= 0xf)
 		decode_microcode(cpu);
 
-	if (show_pm)
+	if (opts.show_pm)
 		decode_powernow(cpu);
 
-	if (show_bugs)
+	if (opts.show_bugs)
 		show_amd_bugs(cpu);
 
-	if (show_feature_flags && cpu->cpuid_level >= 0x05) {
+	if (opts.show_feature_flags && cpu->cpuid_level >= 0x05) {
 		cpuid (cpu->number, 0x05, &eax, &ebx, &ecx, NULL);
 		printf("Monitor/Mwait: min/max line size %u/%u%s%s\n",
 		       eax & 0xffff, ebx & 0xffff,
@@ -607,7 +607,7 @@ void display_amd_info(struct cpudata *cpu)
 		       (ecx & 0x1) ? ", enumeration extension" : "");
 	}
 
-	if (show_feature_flags && cpu->maxei >= 0x8000000a) {
+	if (opts.show_feature_flags && cpu->maxei >= 0x8000000a) {
 		cpuid (cpu->number, 0x8000000a, &eax, &ebx, NULL, &edx);
 		printf("SVM: revision %u, %u ASIDs", eax & 0xff, ebx);
 		for (i = 0; i < 32; i++)

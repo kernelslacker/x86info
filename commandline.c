@@ -9,26 +9,7 @@
 #include <getopt.h>
 #include <x86info.h>
 
-unsigned int show_apic = 0;
-unsigned int show_bios = 0;
-unsigned int show_machine_check = 0;
-unsigned int show_bugs = 0;
-unsigned int show_cacheinfo = 0;
-unsigned int show_connector = 0;
-unsigned int show_msr = 0;
-unsigned int show_microcode = 0;
-unsigned int show_mtrr = 0;
-unsigned int show_pm = 0;
-unsigned int show_cpuid = 0;
-unsigned int show_mptable = 0;
-unsigned int show_feature_flags = 0;
-unsigned int show_MHz = 0;
-unsigned int show_addr_sizes = 0;
-unsigned int all_cpus = 0;
-
-unsigned int debug = 0;
-unsigned int verbose = 0;
-unsigned int need_root = 0;
+struct options opts;
 
 enum {
 	OPT_ALL_CPUS = 128,
@@ -90,88 +71,88 @@ void parse_command_line(int argc, char **argv)
 		switch (opt) {
 			case 'a':  // --all
 				if (user_is_root) {
-					show_apic = 1;
-					show_bios = 1;
-					show_msr = 1;
-					need_root = 1;
-					show_mptable = 1;
-					show_mtrr = 1;
-					show_machine_check = 1;
+					opts.show_apic = 1;
+					opts.show_bios = 1;
+					opts.show_msr = 1;
+					opts.need_root = 1;
+					opts.show_mptable = 1;
+					opts.show_mtrr = 1;
+					opts.show_machine_check = 1;
 				} else {
 					fprintf(stderr, "Not root: skipping the APIC, BIOS, MSR, MP table, MTRR and machine check output.\n");
 				}
-				show_addr_sizes = 1;
-				show_bugs = 1;
-				show_microcode = 1;
-				show_cacheinfo = 1;
-				show_connector = 1;
-				show_feature_flags = 1;
-				show_MHz = 1;
-				show_pm = 1;
-				show_cpuid = 1;
+				opts.show_addr_sizes = 1;
+				opts.show_bugs = 1;
+				opts.show_microcode = 1;
+				opts.show_cacheinfo = 1;
+				opts.show_connector = 1;
+				opts.show_feature_flags = 1;
+				opts.show_MHz = 1;
+				opts.show_pm = 1;
+				opts.show_cpuid = 1;
 				break;
 			case 'c':  // --cache
-				show_cacheinfo = 1;
+				opts.show_cacheinfo = 1;
 				break;
 			case 'f':  // --flags
-				show_feature_flags = 1;
+				opts.show_feature_flags = 1;
 				break;
 			case 'h':  // --help
 				usage(argv[0], EXIT_SUCCESS);
 				break;
 			case 'm':  // --msr
-				need_root = 1;
-				show_msr = 1;
+				opts.need_root = 1;
+				opts.show_msr = 1;
 				break;
 			case 'r':  // --raw-cpuid
-				show_cpuid = 1;
+				opts.show_cpuid = 1;
 				break;
 			case 'v':  // --verbose
-				verbose = 1;
+				opts.verbose = 1;
 				break;
 			case OPT_ALL_CPUS:  // --all-cpus
-				all_cpus = 1;
+				opts.all_cpus = 1;
 				break;
 			case OPT_ADDR:  // --addr
-				show_addr_sizes = 1;
+				opts.show_addr_sizes = 1;
 				break;
 			case OPT_APIC:  // --apic
-				need_root = 1;
-				show_apic = 1;
+				opts.need_root = 1;
+				opts.show_apic = 1;
 				break;
 			case OPT_BIOS:  // --bios
-				need_root = 1;
-				show_bios = 1;
+				opts.need_root = 1;
+				opts.show_bios = 1;
 				break;
 			case OPT_BUGS:  // --bugs
-				show_bugs = 1;
+				opts.show_bugs = 1;
 				break;
 			case OPT_CONNECTOR:  // --connector
-				show_connector = 1;
+				opts.show_connector = 1;
 				break;
 			case OPT_DEBUG:  // --debug
-				debug = 1;
+				opts.debug = 1;
 				break;
 			case OPT_SHOW_MACHINE_CHECK:  // --show-machine-check
-				need_root = 1;
-				show_machine_check = 1;
+				opts.need_root = 1;
+				opts.show_machine_check = 1;
 				break;
 			case OPT_MHZ:  // --mhz
-				show_MHz = 1;
+				opts.show_MHz = 1;
 				break;
 			case OPT_MICROCODE:  // --microcode
-				show_microcode = 1;
+				opts.show_microcode = 1;
 				break;
 			case OPT_MPTABLE:  // --mptable
-				need_root = 1;
-				show_mptable = 1;
+				opts.need_root = 1;
+				opts.show_mptable = 1;
 				break;
 			case OPT_MTRR:  // --mtrr
-				need_root = 1;
-				show_mtrr = 1;
+				opts.need_root = 1;
+				opts.show_mtrr = 1;
 				break;
 			case OPT_PM:  // --pm
-				show_pm = 1;
+				opts.show_pm = 1;
 				break;
 			default:
 				usage(argv[0], EXIT_FAILURE);

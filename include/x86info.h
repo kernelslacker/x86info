@@ -185,28 +185,32 @@ void display_topology(struct cpudata *head);
 extern unsigned int nrCPUs;
 
 extern unsigned int user_is_root;
-extern unsigned int need_root;
 
 
 /* command line args */
-extern unsigned int show_apic;
-extern unsigned int show_bios;
-extern unsigned int show_machine_check;
-extern unsigned int show_bugs;
-extern unsigned int show_cacheinfo;
-extern unsigned int show_connector;
-extern unsigned int show_msr;
-extern unsigned int show_microcode;
-extern unsigned int show_mtrr;
-extern unsigned int show_pm;
-extern unsigned int show_cpuid;
-extern unsigned int show_mptable;
-extern unsigned int show_feature_flags;
-extern unsigned int show_MHz;
-extern unsigned int show_addr_sizes;
-extern unsigned int all_cpus;
-extern unsigned int debug;
-extern unsigned int verbose;
+struct options {
+	unsigned int show_apic;
+	unsigned int show_bios;
+	unsigned int show_machine_check;
+	unsigned int show_bugs;
+	unsigned int show_cacheinfo;
+	unsigned int show_connector;
+	unsigned int show_msr;
+	unsigned int show_microcode;
+	unsigned int show_mtrr;
+	unsigned int show_pm;
+	unsigned int show_cpuid;
+	unsigned int show_mptable;
+	unsigned int show_feature_flags;
+	unsigned int show_MHz;
+	unsigned int show_addr_sizes;
+	unsigned int all_cpus;
+	unsigned int debug;
+	unsigned int verbose;
+	unsigned int need_root;
+};
+
+extern struct options opts;
 
 #define X86_FEATURE_HT		(1<<28)
 #define X86_FEATURE_MTRR	(1<<12)

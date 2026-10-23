@@ -67,7 +67,7 @@ static void decode_fidvid(struct cpudata *cpu)
 		fid_codes[fidvidstatus.bits.SFID],
 		fid_codes[fidvidstatus.bits.CFID]);
 
-	if (show_bios) {
+	if (opts.show_bios) {
 		printf("Decoding BIOS PST tables (maxfid=%x, startvid=%x)\n",
 			fidvidstatus.bits.MFID, fidvidstatus.bits.SVID);
 		dump_PSB(cpu, fidvidstatus.bits.MFID, fidvidstatus.bits.SVID);

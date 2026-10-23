@@ -6,12 +6,6 @@ E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr
     backend, so MSR output and per-CPU cpuid don't work. Implement them
     (processor_bind(), /dev/cpu/N/msr) or drop the README claim. [sonnet]
 
-## 🟡 Architectural improvements
-
-G5. 18 `show_*` globals in commandline.c / x86info.h. Group into a
-    `struct options` (one extern) to make the option set discoverable and
-    testable. Low priority. [sonnet]
-
 ## 🟡 Tests & docs
 
 I1. No tests. Identification is a pure function of CPUID values. [opus]

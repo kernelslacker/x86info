@@ -70,7 +70,7 @@ void display_cyrix_info(struct cpudata *cpu)
 	unsigned int i, ntlb;
 	unsigned int eax, ebx, ecx, edx;
 
-	if (cpu->cpuid_level >= 2 && show_cacheinfo) {
+	if (cpu->cpuid_level >= 2 && opts.show_cacheinfo) {
 		printf("TLB & L1 Cache info\n");
 		/* TLB and L1 Cache info */
 		ntlb = 255;
@@ -91,7 +91,7 @@ void display_cyrix_info(struct cpudata *cpu)
 		}
 	}
 
-	if (cpu->maxei >= 0x80000005 && show_cacheinfo) {
+	if (cpu->maxei >= 0x80000005 && opts.show_cacheinfo) {
 		printf("TLB & L1 Cache info from extended info\n");
 		/* TLB and L1 Cache info */
 		cpuid (cpu->number, 0x80000005, &eax, &ebx, &ecx, &edx);

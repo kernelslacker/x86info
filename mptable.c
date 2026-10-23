@@ -288,11 +288,11 @@ static int apic_probe(unsigned long* paddr)
 	}
 
 	if (segment != 0) {
-		if (debug)
+		if (opts.debug)
 			printf("\nEBDA points to: %x\n", segment);
 
 		target = (unsigned long)segment << 4;
-		if (debug)
+		if (opts.debug)
 			printf("EBDA segment ptr: %lx\n", target);
 		ret = scan_for_mp("1K at the EBDA", target, ONE_KBYTE, paddr);
 		if (ret)
