@@ -8,10 +8,6 @@
 
 ## 🟡 Clean-ups/Refactoring/Style
 
-D12. vendors/centaur/identify.c:115,132 query CPUID 0x80000005 twice, and
-    features.c:518 re-queries 0xc0000000 although cpu->maxei2 holds it.
-    [haiku]
-
 D13. x86info.c:379-386 — the `if (user_is_root)` around the MTRR/APIC dumps
     never fails: show_mtrr and show_apic set need_root, which main() already
     enforces. Drop it. [haiku]
