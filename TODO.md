@@ -52,9 +52,6 @@ J6. cpuid.c:413-444 — dump_subleaves() skips other leaves that have
 
 ## 🟢 Minor nits / one-liners
 
-K8. vendors/intel/machine_check.c:136 — file-scope nr_msr_banks is only used
-    inside decode_intel_machine_check(); make it a local. [haiku]
-
 K9. vendors/amd/identify.c:534-544 — "Duron " + " (Thoroughbred)" gives a
     double space, and "[A0]"/"[B0]" are appended with no leading space.
     [haiku]

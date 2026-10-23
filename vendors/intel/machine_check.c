@@ -17,11 +17,11 @@
 #define MCG_CTL 0x17b
 #define MCG_EXT 0x180
 
-static int nr_msr_banks;
-
 void decode_intel_machine_check(int cpunum, int family)
 {
 	unsigned long long val;
+	int nr_msr_banks;
+
 	if (read_msr(cpunum, MCG_CAP, &val) != 1)
 		return;
 
