@@ -21,7 +21,7 @@ QUIET_CC = $(Q:@=@echo    '  CC '$@;)
 
 all: x86info lsmsr
 
-.PHONY: lsmsr check clean tarball sparse cscope scan tags coverity
+.PHONY: lsmsr check record clean tarball sparse cscope scan tags coverity
 
 X86INFO_HEADERS = \
 	$(wildcard *.h) \
@@ -45,6 +45,17 @@ CHECK_BIN = tests/build/x86info
 # the goldens in tests/dumps.
 check: $(CHECK_BIN)
 	@tests/run-tests.sh $(CHECK_BIN)
+
+# Record this machine's CPUID leaves, one section per CPU, as
+# tests/dumps/$(NAME).dump. Check the output of the replay build, then
+# create the golden with UPDATE=1 tests/run-tests.sh $(CHECK_BIN).
+record: x86info
+	@test -n "$(NAME)" || { echo "usage: make record NAME=<dump name>"; exit 1; }
+	@test ! -e tests/dumps/$(NAME).dump || { echo "tests/dumps/$(NAME).dump exists"; exit 1; }
+	@./x86info -r --all-cpus > tests/dumps/$(NAME).raw || { rm -f tests/dumps/$(NAME).raw; exit 1; }
+	@grep -E '^(CPU #[0-9]+:|eax in:)' tests/dumps/$(NAME).raw > tests/dumps/$(NAME).dump; \
+	 rm -f tests/dumps/$(NAME).raw; \
+	 echo "recorded tests/dumps/$(NAME).dump: $$(grep -c '^CPU #' tests/dumps/$(NAME).dump) CPUs"
 
 $(CHECK_BIN): $(X86INFO_HEADERS) $(wildcard *.c) $(wildcard vendors/*/*.c)
 	@mkdir -p tests/build
