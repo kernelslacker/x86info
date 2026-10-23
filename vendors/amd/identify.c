@@ -257,57 +257,31 @@ static void do_assoc(unsigned long assoc)
 	}
 }
 
+/* L2/L3 associativity field to number of ways; 0 for the special values. */
+static const unsigned char l2assoc_ways[16] = {
+	[0x2] = 2, [0x4] = 4, [0x6] = 8, [0x8] = 16, [0xa] = 32,
+	[0xb] = 48, [0xc] = 64, [0xd] = 96, [0xe] = 128,
+};
+
 static void do_l2assoc(unsigned long assoc)
 {
-	unsigned long a;
-
-	a = 0;
 	switch (assoc) {
 	case 0x0:
 		printf("Disabled. ");
-		break;
+		return;
 	case 0x1:
 		printf("Direct mapped. ");
-		break;
+		return;
 	case 0xf:
 		printf("Fully associative. ");
-		break;
-	case 0x2:
-		a = 2;
-		break;
-	case 0x4:
-		a = 4;
-		break;
-	case 0x6:
-		a = 8;
-		break;
-	case 0x8:
-		a = 16;
-		break;
-	case 0xa:
-		a = 32;
-		break;
-	case 0xb:
-		a = 48;
-		break;
-	case 0xc:
-		a = 64;
-		break;
-	case 0xd:
-		a = 96;
-		break;
-	case 0xe:
-		a = 128;
-		break;
+		return;
 	case 0x9:
 		printf("See CPUID 0x8000001D. ");
-		break;
-	default:
-		break;
+		return;
 	}
 
-	if (a)
-		printf("%lu-way associative. ", a);
+	if (assoc < ARRAY_SIZE(l2assoc_ways) && l2assoc_ways[assoc])
+		printf("%u-way associative. ", l2assoc_ways[assoc]);
 }
 
 void decode_amd_cacheinfo(struct cpudata *cpu)

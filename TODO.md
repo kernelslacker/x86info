@@ -31,9 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C13. vendors/amd/identify.c:345-396 — do_l2assoc() switch is a 16-entry
-    lookup table. [haiku]
-
 C14. vendors/amd/identify.c:402-497 — 1G TLB leaf 0x80000019 is queried
     twice; the TLB line and cache block prints are repeated 8x/3x. Add
     `print_tlb(label, assoc_fn, assoc, entries)` and
