@@ -199,6 +199,8 @@ static const struct zen_die fam17h_dies[] = {
 	{0x10, 0x1f, "Raven Ridge"},
 	{0x20, 0x2f, "Dali"},
 	{0x30, 0x3f, "Rome"},
+	{0x40, 0x4f, "Zen2"},
+	{0x50, 0x5f, "Zen1"},
 	{0x60, 0x6f, "Renoir"},
 	{0x70, 0x7f, "Matisse"},
 	{0x90, 0x9f, "Van Gogh"},
@@ -209,10 +211,13 @@ static const struct zen_die fam19h_dies[] = {
 	{0x00, 0x0f, "Milan"},
 	{0x10, 0x1f, "Genoa"},
 	{0x20, 0x2f, "Vermeer"},
+	{0x30, 0x3f, "Zen3"},
 	{0x40, 0x4f, "Rembrandt"},
 	{0x50, 0x5f, "Cezanne"},
 	{0x60, 0x6f, "Raphael"},
 	{0x70, 0x7f, "Phoenix"},
+	{0x80, 0x8f, "Zen4"},
+	{0x90, 0x9f, "Zen4 HBM3 APU"},
 	{0xa0, 0xaf, "Bergamo/Siena"},
 };
 
@@ -222,6 +227,11 @@ static const struct zen_die fam1ah_dies[] = {
 	{0x40, 0x4f, "Granite Ridge"},
 	{0x60, 0x6f, "Krackan Point"},
 	{0x70, 0x7f, "Strix Halo"},
+	{0x50, 0x5f, "Zen6"},
+	{0x80, 0xaf, "Zen6"},
+	{0xc0, 0xcf, "Zen6"},
+	{0xd0, 0xd7, "Zen5"},
+	{0xd8, 0xef, "Zen6"},
 };
 
 static void set_zen_revinfo(const char *series, const struct zen_die *dies,
@@ -314,7 +324,7 @@ void identify_amd(struct cpudata *cpu)
 					ARRAY_SIZE(fam19h_dies), eax, cpu);
 			break;
 		case 0x1a:
-			set_zen_revinfo("Zen5", fam1ah_dies,
+			set_zen_revinfo("Zen5/Zen6", fam1ah_dies,
 					ARRAY_SIZE(fam1ah_dies), eax, cpu);
 			break;
 		default:
