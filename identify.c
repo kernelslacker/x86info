@@ -99,6 +99,8 @@ void show_header(struct cpudata *cpu)
 		display_basic_intel_info(cpu);
 	printf("CPU Model (x86info's best guess): %s\n", cpu->name);
 	display_model_name(cpu);
+	if (cpu->vendor == VENDOR_AMD)
+		display_amd_package(cpu);
 	printf("\n");
 }
 

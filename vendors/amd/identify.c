@@ -615,8 +615,13 @@ void display_amd_info(struct cpudata *cpu)
 				printf(", %s", svm_features[i]);
 		printf("\n");
 	}
+}
 
-	/* AMD Multicore characterisation */
+/* How much of the package is implemented; the same for every core type. */
+void display_amd_package(struct cpudata *cpu)
+{
+	unsigned int ebx, ecx;
+
 	if (cpu->maxei >= 0x80000008) {
 		unsigned int n, p;
 		cpuid (cpu->number, 0x80000008, NULL, NULL, &ecx, NULL);
@@ -645,4 +650,3 @@ void display_amd_info(struct cpudata *cpu)
 		}
 	}
 }
-

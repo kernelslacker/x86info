@@ -20,6 +20,7 @@ void dump_PSB(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid);
 
 void identify_amd(struct cpudata *cpu);
 void display_amd_info(struct cpudata *cpu);
+void display_amd_package(struct cpudata *cpu);
 void decode_amd_cacheinfo(struct cpudata *cpu);
 
 void fix_amd_model_name(struct cpudata *cpu, char *cp, size_t len);
