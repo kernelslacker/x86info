@@ -8,7 +8,7 @@ simple decoding.
 x86info was written to succeed Phils work. Initially, it borrowed some bits
 from his code, but the last remnants are now long gone. Additional functionality
 has been added, such as support for SMP, and building on non-Linux platforms.
-(Solaris, and FreeBSD should work).
+The FreeBSD, NetBSD and Solaris backends are lightly tested and incomplete.
 
 
 
@@ -19,27 +19,20 @@ Features:
  - Approximation of current CPU MHz.
 
 Requirements:
-* On Linux, at least version 2.4 of glibc is required.
+*  A C compiler and make.
 
-*  For usage of the MSR / SMP functions, x86info needs the
-   x86 cpuid driver provided with the Linux kernel since 2.2.18 / 2.4.0,
-   and the appropriate nodes in /dev
+*  libpci (pciutils development files), found with pkg-config. It is used
+   for the AMD --pm output.
 
-   To set up these devices, do the following..
+*  For the MSR / per-CPU CPUID functions, x86info needs the cpuid and msr
+   drivers from the Linux kernel (CONFIG_X86_CPUID, CONFIG_X86_MSR). If they
+   are built as modules, load them first:
 
-	mkdir /dev/cpu
-	for i in 0 1 2 3 4 5 6 7
-	do
-		mkdir /dev/cpu/$i ; cd /dev/cpu/$i
-		mknod cpuid c 203 $i
-		mknod msr c 202 $i
-	done
+	modprobe cpuid
+	modprobe msr
 
-*  If you are using the cpuid / msr drivers built as modules
-   as opposed to built into the kernel, then you should ensure
-   the following is in your /etc/modprobe.conf:
-
-	alias char-major-202 msr
-	alias char-major-203 cpuid
+   The /dev/cpu/N/cpuid and /dev/cpu/N/msr nodes are created by devtmpfs
+   and are only accessible to root. Without them x86info falls back to
+   executing CPUID directly on the CPU it is running on.
 
 Info on the command line switches can be found in the man page.

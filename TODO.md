@@ -83,10 +83,6 @@ I1. No tests. Identification is a pure function of CPUID values. [opus]
     3. `make check` diffs output against goldens.
     This would have caught A1, A2, A6, A8, A9.
 
-I2. README — mknod/modprobe.conf instructions, "glibc 2.4", "Solaris should
-    work" are all obsolete. Rewrite: needs the cpuid/msr modules,
-    /dev/cpu/* from devtmpfs, libpci for --pm on AMD. [haiku]
-
 I3. lsmsr/createheader.py — validate that each register's field widths sum
     to 64; msr.h print_reg_bits() shifts by the running offset and is UB
     past 64. [haiku]
