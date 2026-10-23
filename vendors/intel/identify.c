@@ -15,25 +15,16 @@
 
 void identify_intel(struct cpudata *cpu)
 {
-	unsigned int eax, ebx, ecx, edx;
+	unsigned int eax, ebx;
 
-	cpuid(cpu->number, 0x00000001, &eax, &ebx, &ecx, &edx);
+	cpuid(cpu->number, 0x00000001, &eax, &ebx, NULL, NULL);
 	cpu->emodel = (eax >> 16) & 0xf;
 	cpu->efamily= (eax >> 20) & 0xff;
 	cpu->type = (eax >> 12) & 0x3;
 
 	cpu->brand = ebx & 0xf;
 
-	cpu->flags_ecx = ecx; // Used for identification of Core 2
-	cpu->flags_edx = edx;
-
-	/* Figure out number of cores on this package. */
-	cpu->nr_cores = 1;
-	if (cpu->cpuid_level >= 4) {
-		cpuid4(cpu->number, 0, &eax, &ebx, &ecx, &edx);
-		if (eax & 0x1f)
-			cpu->nr_cores = ((eax >> 26) + 1);
-	}
+	cpu->nr_cores = intel_num_cpu_cores(cpu);
 
 	decode_intel_caches(cpu, 0);
 

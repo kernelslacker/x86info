@@ -33,7 +33,7 @@ static int get_count_order(unsigned int count)
 	return order;
 }
 
-static int intel_num_cpu_cores(struct cpudata *cpu)
+int intel_num_cpu_cores(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 

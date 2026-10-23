@@ -31,10 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C17. vendors/intel/identify.c:33-38 duplicates intel_num_cpu_cores() in
-    vendors/intel/topology.c:36; identify.c:29-30 re-stores flags_ecx/edx
-    already set by get_feature_flags(). Keep one. [haiku]
-
 C18. vendors/intel/topology.c — phys_pkg_id() is a one-line wrapper; the
     `goto out; out: return;` is noise; `num_siblings == 1` and `<= 1` checks
     are redundant; cpuid_ebx(cpu, 1) re-issues a leaf already read. [haiku]
