@@ -31,10 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C9. vendors/intel/msr-p4.c:52-107 / msr-performance.c:22-39 — both
-    decode IA32_MISC_ENABLE bit by bit with different subsets. One bit
-    table, one decoder, call from both. [sonnet]
-
 C10. apic.c:21,151-212 / mtrr.c:63,182-204 — apic_msr_value() and
     mtrr_value() are pointless wrappers around `read_msr()==1`; the APIC
     register dump and fixed-range MTRR dump are long printf/dump pairs that

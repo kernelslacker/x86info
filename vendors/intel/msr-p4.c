@@ -50,61 +50,7 @@ void dump_p4_msrs (struct cpudata *cpu)
 	}
 
 	if (read_msr (cpu->number, 0x1a0, &val) == 1) {
-		printf("Fast string enable is ");
-		if (!(val & (1<<0)))
-			printf("un");
-		printf("set\n");
-
-		printf("x87 FPU Fopcode compatability mode is ");
-		if (!(val & (1<<2)))
-			printf("un");
-		printf("set\n");
-
-		printf("Thermal monitor enable is ");
-		if (!(val & (1<<3)))
-			printf("un");
-		printf("set\n");
-
-		printf("Split lock disable is ");
-		if (!(val & (1<<4)))
-			printf("un");
-		printf("set\n");
-
-		printf("L3 cache disable is ");
-		if (!(val & (1<<6)))
-			printf("un");
-		printf("set\n");
-
-		printf("Performance monitoring is ");
-		if (!(val & (1<<7)))
-			printf("un");
-		printf("available\n");
-
-		printf("Suppress lock enable is ");
-		if (!(val & (1<<8)))
-			printf("un");
-		printf("set\n");
-
-		printf("Prefetch queue disable is ");
-		if (!(val & (1<<9)))
-			printf("un");
-		printf("set\n");
-
-		printf("FERR# Interrupt reporting enable is ");
-		if (!(val & (1<<10)))
-			printf("un");
-		printf("set\n");
-
-		printf("Branch trace storage unavailable is ");
-		if (!(val & (1<<11)))
-			printf("un");
-		printf("set\n");
-
-		printf("Precise Event Based Sampling Unavailable is ");
-		if (!(val & (1<<12)))
-			printf("un");
-		printf("set\n");
-
+		decode_misc_enable(val);
 	}
 
 	printf("\n");

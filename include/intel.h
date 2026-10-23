@@ -19,6 +19,9 @@ void identify_intel(struct cpudata *cpu);
 void display_basic_intel_info(struct cpudata *cpu);
 void display_extended_intel_info(struct cpudata *cpu);
 
+void decode_misc_enable(unsigned long long val);
+void decode_misc_enable_brief(unsigned long long val);
+
 void decode_serial_number(struct cpudata *cpu);
 void get_intel_topology(struct cpudata *cpu);
 
