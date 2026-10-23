@@ -68,10 +68,6 @@ G1. vendors/intel/cachesize.c — restructure decoding: [opus]
        found_general/found_tlb_general state.
     Supersedes A6, B3.
 
-G2. vendors/amd/identify.c (1056 lines) — move decode_amd_cacheinfo(),
-    do_assoc(), do_l2assoc() and the 0x8000001D decoder to
-    vendors/amd/cacheinfo.c, mirroring intel/cachesize.c. [haiku]
-
 G3. vendors/natsemi, rise, sis — three ~20-line files, each a one-case
     switch. Merge into one vendors/misc/identify.c with a
     `{vendor, tuple, mask, name}` table. [haiku]
