@@ -316,7 +316,7 @@ static void decode_general_cache(struct cpudata *cpu, int output)
 		unsigned int sets;
 		unsigned int size;
 
-		cpuid4(cpu->number, i++, &a, &b, &c, &d);
+		cpuid_count(cpu->number, 4, i++, &a, &b, &c, &d);
 		if ((a & 0x1f) == 0)
 			break;
 

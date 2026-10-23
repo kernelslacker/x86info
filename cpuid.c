@@ -45,12 +45,6 @@ int native_cpuid(unsigned int cpunr, unsigned long long idx,
 	return 0;
 }
 
-void cpuid4(unsigned int CPU_number, unsigned long long idx,
-	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx)
-{
-	cpuid(CPU_number, 4 | (idx << 32), eax, ebx, ecx, edx);
-}
-
 /* Some CPUID calls want 'count' to be placed in ecx */
 void cpuid_count(unsigned int CPU_number, unsigned int op, int count,
 	unsigned int *eax, unsigned int *ebx,
@@ -118,7 +112,6 @@ void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end)
 		return;
 
 	for (i = begin; ; i++) {
-		ecx = 0;
 		cpuid(cpunum, i, &eax, &ebx, &ecx, &edx);
 		printf("eax in: 0x%08x, eax = %08x ebx = %08x ecx = %08x edx = %08x\n", i, eax, ebx, ecx, edx);
 		if (i == end)

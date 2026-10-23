@@ -31,9 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Clean-ups/Refactoring/Style
 
-D2. cpuid.c:48-52 — cpuid4() is cpuid_count(cpu, 4, n, ...). Delete it and
-    use cpuid_count. dump_raw_cpuid's `ecx = 0;` (line 80) is dead. [haiku]
-
 D3. x86info.c:181 — check_cpu_similarity() open-codes the model() macro.
     x86info.c:20 nrSMPCPUs is a file global only used in main. [haiku]
 

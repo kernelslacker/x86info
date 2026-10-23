@@ -107,8 +107,6 @@ struct cpudata {
 
 void cpuid(unsigned int cpu, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
-void cpuid4(unsigned int CPU_number, unsigned long long idx,
-	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
 void cpuid_count(unsigned int CPU_number, unsigned int op, int count,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
 unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op);
