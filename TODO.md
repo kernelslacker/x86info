@@ -29,12 +29,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
     pci_alloc/init/scan_bus/cleanup. Share one helper that scans once and
     finds a device by vendor + list of device IDs. [sonnet]
 
-## 🟡 Clean-ups/Refactoring/Style
-
-D8. mtrr.c:25 — static max_phy_addr is reset and set per call; pass it to
-    decode_address(). <asm/mtrr.h> is included only for MTRR_NUM_TYPES;
-    define it locally. [haiku]
-
 ## 🟡 Deprecated/Obsolete API Usage
 
 E2. cpuid-solaris.c:57 — lseek64/off64_t/_LARGEFILE64_SOURCE (removed in

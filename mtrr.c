@@ -6,9 +6,6 @@
  */
 
 #include <stdio.h>
-#ifdef __linux__
-#include <asm/mtrr.h>
-#endif
 #include <x86info.h>
 
 #define IA32_MTRRCAP_WC   (1 << 10)
@@ -22,11 +19,7 @@
 #define IA32_PHYBASE_TYPE   0XFF
 #define IA32_PHYMASK_VALID  (1 << 11)
 
-static unsigned int max_phy_addr = 0;
-
-#ifndef MTRR_NUM_TYPES
 #define MTRR_NUM_TYPES 7
-#endif
 
 static const char * mtrr_types[MTRR_NUM_TYPES] =
 {
@@ -39,7 +32,7 @@ static const char * mtrr_types[MTRR_NUM_TYPES] =
 	"write-back",
 };
 
-static void decode_address(unsigned long long val)
+static void decode_address(unsigned long long val, unsigned int max_phy_addr)
 {
 	unsigned int bits = max_phy_addr ? max_phy_addr : 36;
 
@@ -50,14 +43,14 @@ static void decode_address(unsigned long long val)
 	       (val >> 12) & ((1ULL << bits) - 1));
 }
 
-static void set_max_phy_addr(struct cpudata *cpu)
+static unsigned int get_max_phy_addr(struct cpudata *cpu)
 {
 	unsigned int value;
 
-	if (!max_phy_addr && cpu->maxei >= 0x80000008) {
-		cpuid(cpu->number, 0x80000008, &value, NULL, NULL, NULL);
-		max_phy_addr = value & 0xFF;
-	}
+	if (cpu->maxei < 0x80000008)
+		return 0;
+	cpuid(cpu->number, 0x80000008, &value, NULL, NULL, NULL);
+	return value & 0xFF;
 }
 
 static void dump_mtrr(int cpu, int msr)
@@ -96,7 +89,7 @@ static void decode_mtrr_deftype(int cpu, int msr)
 	}
 }
 
-static void decode_mtrr_physbase(int cpu, int msr)
+static void decode_mtrr_physbase(int cpu, int msr, unsigned int max_phy_addr)
 {
 	unsigned long long val;
 	u8 type;
@@ -105,7 +98,7 @@ static void decode_mtrr_physbase(int cpu, int msr)
 		printf("0x%016llx ", val);
 
 		printf("(physbase:");
-		decode_address(val);
+		decode_address(val, max_phy_addr);
 
 		type = (unsigned int) val & IA32_PHYBASE_TYPE;
 		printf("type: 0x%02x (%s))\n", type,
@@ -113,7 +106,7 @@ static void decode_mtrr_physbase(int cpu, int msr)
 	}
 }
 
-static void decode_mtrr_physmask(int cpu, int msr)
+static void decode_mtrr_physmask(int cpu, int msr, unsigned int max_phy_addr)
 {
 	unsigned long long val;
 
@@ -121,7 +114,7 @@ static void decode_mtrr_physmask(int cpu, int msr)
 		printf("0x%016llx ", val);
 
 		printf("(physmask:");
-		decode_address(val);
+		decode_address(val, max_phy_addr);
 
 		printf("valid:%d)\n",
 			!! ((int) val & IA32_PHYMASK_VALID));
@@ -151,8 +144,7 @@ void dump_mtrrs(struct cpudata *cpu)
 	unsigned long long val = 0;
 	unsigned int i;
 	unsigned int vcnt;
-
-	max_phy_addr = 0;
+	unsigned int max_phy_addr;
 
 	if (!(cpu->flags_edx & (X86_FEATURE_MTRR)))
 		return;
@@ -169,16 +161,16 @@ void dump_mtrrs(struct cpudata *cpu)
 	printf("MTRRcap (0xfe): ");
 	decode_mtrrcap(val);
 
-	set_max_phy_addr(cpu);
+	max_phy_addr = get_max_phy_addr(cpu);
 
 	/* vcnt is the number of variable MTRR pairs the CPU actually has. */
 	vcnt = (unsigned int)(val & IA32_MTRRCAP_VCNT);
 
 	for (i = 0; i < vcnt * 2; i+=2) {
 		printf("MTRRphysBase%u (0x%x): ", i / 2, (unsigned int) 0x200 + i);
-		decode_mtrr_physbase(cpu->number, 0x200 + i);
+		decode_mtrr_physbase(cpu->number, 0x200 + i, max_phy_addr);
 		printf("MTRRphysMask%u (0x%x): ", i/2, (unsigned int) 0x201 + i);
-		decode_mtrr_physmask(cpu->number, 0x201 + i);
+		decode_mtrr_physmask(cpu->number, 0x201 + i, max_phy_addr);
 	}
 
 	if (val & IA32_MTRRCAP_FIX) {
