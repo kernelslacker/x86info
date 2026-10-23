@@ -133,8 +133,6 @@ static void decode_centaur_cacheinfo(struct cpudata *cpu)
 		printf(" Instruction TLB: %u-way associative. %u entries.\n", (ebx >> 8) & 0xff, ebx & 0xff);
 		printf(" Data TLB: %u-way associative. %u entries.\n", ebx >> 24, (ebx >> 16) & 0xff);
 	}
-
-	/* check on-chip L2 cache size */
 }
 
 

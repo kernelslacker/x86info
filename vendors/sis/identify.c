@@ -1,7 +1,7 @@
 /*
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- *  Rise specific parts.
+ *  SiS specific parts.
  */
 #include <stdio.h>
 #include <x86info.h>

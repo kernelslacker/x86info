@@ -238,6 +238,5 @@ static const char * get_namestring(struct cpudata *cpu)
 
 void identify_intel_family6core(struct cpudata *cpu)
 {
-	//TODO: make cpu->name a ptr.
 	snprintf(cpu->name, CPU_NAME_LEN, "%s", get_namestring(cpu));
 }

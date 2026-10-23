@@ -2,7 +2,6 @@
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  MTRR register dumping.
- *  TODO : decode the registers too.
  */
 
 #include <stdio.h>

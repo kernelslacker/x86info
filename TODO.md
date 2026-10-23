@@ -92,12 +92,6 @@ H1. Remove the S-spec / release-date history blocks: amd/identify.c:782-794,
     408-476, identify-family6-extended.c:26-74, identify-family15.c
     throughout. If worth keeping, move to docs/sspecs.md. [haiku]
 
-H2. Stale/wrong comments: sis/identify.c:4 says "Rise specific parts";
-    centaur/identify.c:154 "check on-chip L2 cache size" (nothing follows);
-    intel/info.c:144 "FIXME: Bit test for MCA here!"; cachesize.c:200,222
-    and identify-family6-extended.c:243 TODOs; mtrr.c:5
-    "TODO: decode the registers too" (mtrr already decodes). [haiku]
-
 ## 🟡 Tests & docs
 
 I1. No tests. Identification is a pure function of CPUID values. [opus]

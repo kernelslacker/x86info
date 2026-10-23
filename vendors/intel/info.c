@@ -125,7 +125,6 @@ void display_extended_intel_info(struct cpudata *cpu)
 		dump_thermal_msrs(cpu);
 	}
 
-	/* FIXME: Bit test for MCA here!*/
 	if (show_machine_check)
 		decode_intel_machine_check(cpu->number, cpu->family);
 

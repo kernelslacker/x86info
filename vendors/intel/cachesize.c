@@ -190,7 +190,6 @@ static unsigned char found_tlb_general=0;
 static unsigned char unknown_array[256];
 
 /* Decode Intel TLB and cache info descriptors */
-//TODO : Errata workaround. http://www.sandpile.org/post/msgs/20002736.htm
 static void decode_intel_cache(int des, struct cpudata *cpu, int output,
 			const struct _cache_table *table)
 {
@@ -211,8 +210,6 @@ static void decode_intel_cache(int des, struct cpudata *cpu, int output,
 		found_tlb_general = 1;
 		return;
 	}
-
-	//TODO: Add description to link-list in cpu->
 
 	while ((table[k].descriptor != 0) && (found == 0)) {
 		if (table[k].descriptor == des) {
