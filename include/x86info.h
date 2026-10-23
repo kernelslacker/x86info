@@ -134,9 +134,7 @@ static const char *get_##title##_name(type id) \
         return NULL; \
 }
 
-void identify_rise(struct cpudata *cpu);
-void identify_natsemi(struct cpudata *cpu);
-void identify_sis(struct cpudata *cpu);
+void identify_misc(struct cpudata *cpu);
 
 extern const char *cpuid_80000007_edx_flags_desc[32];
 void get_feature_flags(struct cpudata *cpu);

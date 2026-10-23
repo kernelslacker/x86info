@@ -77,13 +77,9 @@ void identify(struct cpudata *cpu)
 		identify_centaur(cpu);
 		break;
 	case VENDOR_NATSEMI:
-		identify_natsemi(cpu);
-		break;
 	case VENDOR_RISE:
-		identify_rise(cpu);
-		break;
 	case VENDOR_SIS:
-		identify_sis(cpu);
+		identify_misc(cpu);
 		break;
 	case VENDOR_TRANSMETA:
 	case VENDOR_UNKNOWN:

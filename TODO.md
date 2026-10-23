@@ -68,10 +68,6 @@ G1. vendors/intel/cachesize.c — restructure decoding: [opus]
        found_general/found_tlb_general state.
     Supersedes A6, B3.
 
-G3. vendors/natsemi, rise, sis — three ~20-line files, each a one-case
-    switch. Merge into one vendors/misc/identify.c with a
-    `{vendor, tuple, mask, name}` table. [haiku]
-
 G4. include/msr.h, include/amd-revision.h — headers defining static
     functions/tables, each included by exactly one .c. Move msr.h into
     lsmsr/ (it isn't used by x86info) and amd-revision.h next to
