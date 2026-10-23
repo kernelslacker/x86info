@@ -6,10 +6,6 @@
 
 ## 🟡 Maintainability
 
-C31. mtrr.c:446-454 — get_max_phy_addr() repeats the CPUID 0x80000008
-    lookup that get_cpu_info_basics() already stores in cpu->phyaddr_bits.
-    Use the field. [haiku]
-
 C32. MHz.c:24,185 — the forward declarations of has_perf_counters() and
     elapsed_us() only exist because of definition order; reorder the
     functions. spin()'s LCG can go too: the clock_gettime() call in the loop

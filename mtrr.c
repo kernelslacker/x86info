@@ -42,16 +42,6 @@ static void decode_address(unsigned long long val, unsigned int max_phy_addr)
 	       (val >> 12) & ((1ULL << bits) - 1));
 }
 
-static unsigned int get_max_phy_addr(struct cpudata *cpu)
-{
-	unsigned int value;
-
-	if (cpu->maxei < 0x80000008)
-		return 0;
-	cpuid(cpu->number, 0x80000008, &value, NULL, NULL, NULL);
-	return value & 0xFF;
-}
-
 static void dump_mtrr(int cpu, int msr)
 {
 	unsigned long long val = 0;
@@ -160,7 +150,7 @@ void dump_mtrrs(struct cpudata *cpu)
 	printf("MTRRcap (0xfe): ");
 	decode_mtrrcap(val);
 
-	max_phy_addr = get_max_phy_addr(cpu);
+	max_phy_addr = cpu->phyaddr_bits;
 
 	/* vcnt is the number of variable MTRR pairs the CPU actually has. */
 	vcnt = (unsigned int)(val & IA32_MTRRCAP_VCNT);
