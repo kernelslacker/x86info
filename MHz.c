@@ -364,11 +364,8 @@ void ensure_MHz(struct cpudata *cpu)
 	if (cpu->MHz)
 		return;
 	if (!measured) {
-		tsc_MHz = cpuid_tsc_MHz(cpu);
-		if (!tsc_MHz) {
-			measure_MHz(cpu, 0);
-			tsc_MHz = cpu->MHz;
-		}
+		measure_MHz(cpu, 0);
+		tsc_MHz = cpu->MHz;
 		measured = 1;
 	}
 	cpu->MHz = tsc_MHz;

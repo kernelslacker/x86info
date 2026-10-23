@@ -6,10 +6,6 @@
 
 ## 🟡 Maintainability
 
-C29. MHz.c:356-372 — ensure_MHz() calls cpuid_tsc_MHz() and then
-    measure_MHz(cpu, 0), which calls cpuid_tsc_MHz() again and returns early
-    with it. Just call measure_MHz(cpu, 0). [haiku]
-
 C30. MHz.c:50,217-220, vendors/amd/identify.c:258 — CPUID 0x80000007 EDX is
     fetched in three places for the invariant TSC and mobile bits. Store it
     in cpudata from get_feature_flags() and test the bits there. [haiku]
