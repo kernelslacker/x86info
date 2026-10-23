@@ -143,8 +143,8 @@ static int read_perf_counters(const struct cpudata *cpu,
 	return read_perf_msr_pmu(aperf, mperf);
 }
 
-/* Long enough for a sub-0.1% reading, short enough for --all-cpus. */
-#define MEASURE_US	100000.0
+/* Cores take most of a second to ramp up to boost clocks. */
+#define MEASURE_US	1000000.0
 
 /*
  * TSC rate in MHz from CPUID 0x15 (crystal clock ratio), or failing that
