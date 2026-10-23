@@ -1,7 +1,6 @@
 *.o
-.d
 x86info
-x86info-*.tgz
+x86info-*.tar.xz
 cov-int
 tags
 tests/build
