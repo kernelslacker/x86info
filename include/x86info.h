@@ -145,6 +145,13 @@ void display_feature_flags(const struct cpudata *cpu);
 
 int bind_cpu(unsigned int cpunr);
 
+/* Per-CPU descriptor cache slots: >= 0 is open. */
+#define CPUDEV_CLOSED	-1
+#define CPUDEV_FAILED	-2
+
+/* Open or fetch /dev/cpu/<cpu>/<node> through the cache fds[MAX_CPUS]. */
+int cpudev_fd(int *fds, unsigned int cpu, const char *node);
+
 int native_cpuid(unsigned int cpunr, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx,
 	unsigned int *ecx, unsigned int *edx);

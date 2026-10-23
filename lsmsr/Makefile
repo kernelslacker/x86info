@@ -27,6 +27,7 @@ LSMSR_SRC = \
 	lsmsr.c \
 	../cpuid.c \
 	../cpuid-linux.c \
+	../cpudev-linux.c \
 	../cpuid-freebsd.c \
 	../cpuid-solaris.c \
 	../havecpuid.c

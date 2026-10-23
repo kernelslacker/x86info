@@ -52,28 +52,8 @@ int bind_cpu(unsigned int cpunr)
  */
 #define CPUID_CHUNK_SIZE (16)
 
-/* Per-CPU /dev/cpu/N/cpuid descriptors, opened lazily; -1 if not open. */
-static int cpuid_fds[MAX_CPUS] = { [0 ... MAX_CPUS - 1] = -1 };
-
-static int cpuid_fd(unsigned int cpunr)
-{
-	char cpuname[32];
-	int fh;
-
-	if (cpunr >= MAX_CPUS)
-		return -1;
-	if (cpuid_fds[cpunr] != -1)
-		return cpuid_fds[cpunr];
-
-	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%u/cpuid", cpunr);
-	fh = open(cpuname, O_RDONLY);
-	if (fh != -1)
-		cpuid_fds[cpunr] = fh;
-	else if (errno == ENOENT)
-		fprintf(stderr, "%s: %s. Try 'modprobe cpuid'; using native cpuid.\n",
-			cpuname, strerror(errno));
-	return fh;
-}
+/* Per-CPU /dev/cpu/N/cpuid descriptors, opened lazily. */
+static int cpuid_fds[MAX_CPUS] = { [0 ... MAX_CPUS - 1] = CPUDEV_CLOSED };
 
 int cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax,
@@ -81,19 +61,15 @@ int cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *ecx,
 	unsigned int *edx)
 {
-	static int nodriver=0;
 	unsigned char buffer[CPUID_CHUNK_SIZE];
-	int fh = -1;
+	int fh;
 
 	/* Use the /dev/cpu interface in preference to the _up code. */
-	if (nodriver == 0)
-		fh = cpuid_fd(CPU_number);
+	fh = cpudev_fd(cpuid_fds, CPU_number, "cpuid");
 
-	/* Something went wrong, just do UP and hope for the best. */
-	if (fh == -1) {
-		nodriver = 1;
+	/* No device for this CPU, execute CPUID on it directly. */
+	if (fh == -1)
 		return native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
-	}
 
 	memset(buffer, 0, sizeof(buffer));
 	if (pread(fh, buffer, CPUID_CHUNK_SIZE, (off_t)idx) != CPUID_CHUNK_SIZE) {
