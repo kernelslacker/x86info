@@ -4,7 +4,6 @@
  *  Licensed under the terms of the GNU GPL License version 2.
  *
  *  APIC register dumping.
- *  TODO : decode the registers too.
  */
 
 #include <stdio.h>
@@ -17,61 +16,6 @@
 static int fd;
 static void *apic_mapped_base;
 static unsigned int apic_mapped_size;
-
-static int apic_msr_value(int cpu, int msr, unsigned long long *val)
-{
-	if (read_msr(cpu, msr, val) == 1)
-		return 1;
-	else
-		return 0;
-}
-
-static void dump_apic_base_msr(int cpu, int msr)
-{
-	unsigned long long val;
-	int ret;
-
-	ret = apic_msr_value(cpu, msr, &val);
-	if (ret)
-		printf("0x%016llx\n", val);
-}
-
-static int apic_is_enable(int cpu, int msr)
-{
-	unsigned long long val;
-	int ret;
-
-	ret = apic_msr_value(cpu, msr, &val);
-	if (ret)
-		ret = ((int)(val >> 11) & 0x1);
-
-	return ret;
-}
-
-/* APIC_BASE bit 10: x2APIC mode, where the MMIO register page is disabled. */
-static int apic_is_x2apic(int cpu, int msr)
-{
-	unsigned long long val;
-
-	if (!apic_msr_value(cpu, msr, &val))
-		return 0;
-	return (val >> 10) & 0x1;
-}
-
-static unsigned long long apic_physical_address(int cpu, int msr)
-{
-	unsigned long long val;
-	unsigned long long apic_phys_addr;
-	int ret;
-
-	apic_phys_addr = 0;
-
-	ret = apic_msr_value(cpu, msr, &val);
-	if (ret)
-		apic_phys_addr = ((val >> 12) << 12);
-
-	return apic_phys_addr;
-}
 
 static volatile unsigned int * mapping_apic_registers(unsigned long long addr)
 {
@@ -111,11 +55,66 @@ static void dump_apic(const volatile unsigned int *apic_reg_buffer,unsigned int 
 }
 
 
+struct apic_reg {
+	const char *label;
+	unsigned int offset;
+};
+
+static const struct apic_reg apic_regs_head[] = {
+	{ "APIC Local ID", APIC_ID },
+	{ "APIC Local Version", APIC_VER },
+	{ "APIC Task Priority", APIC_TPR },
+	{ "APIC Arbitration Priority", APIC_APR },
+	{ "APIC Processor Priority", APIC_PPR },
+	{ "APIC EOI", APIC_EOI },
+	{ "APIC Remote Read", APIC_RRD },
+	{ "APIC Logical Destination", APIC_LDR },
+	{ "APIC Destination Format", APIC_DFR },
+	{ "APIC Spurious Interrupt Vector", APIC_SIVR },
+};
+
+/* Eight consecutive 32-bit registers each; the label is a prefix. */
+static const struct apic_reg apic_regs_bitmaps[] = {
+	{ "APIC In-Service (ISR", APIC_ISR },
+	{ "APIC Trigger Mode (TMR", APIC_TMR },
+	{ "APIC Interrupt Request (IRR", APIC_IRR },
+};
+
+static const struct apic_reg apic_regs_tail[] = {
+	{ "APIC Error Status", APIC_ESR },
+	{ "APIC LVT CMCI", APIC_LVT },
+	{ "APIC Interrupt Command (ICR0)", APIC_ICR0 },
+	{ "APIC Interrupt Command (ICR1)", APIC_ICR1 },
+	{ "APIC LVT Timer", APIC_LVTT },
+	{ "APIC Thermal Sensor", APIC_LVTTS },
+	{ "APIC LVT Performance Monitoring Counters", APIC_LVTPC },
+	{ "APIC LVT LINT0", APIC_LVT0 },
+	{ "APIC LVT LINT1", APIC_LVT1 },
+	{ "APIC LVT Error", APIC_LVTER },
+	{ "APIC Initial Count (for Timer)", APIC_TICR },
+	{ "APIC Current Count (for Timer)", APIC_TCCR },
+	{ "APIC Divide Configuration (for Timer)", APIC_TDCR },
+};
+
+#define APIC_LABEL_WIDTH 42
+
+static void dump_apic_regs(const volatile unsigned int *apic_reg_buffer,
+			   const struct apic_reg *regs, unsigned int nr)
+{
+	unsigned int i;
+
+	for (i = 0; i < nr; i++) {
+		printf("%-*s: ", APIC_LABEL_WIDTH, regs[i].label);
+		dump_apic(apic_reg_buffer, regs[i].offset);
+	}
+}
+
 void dump_apics(const struct cpudata *cpu)
 {
 	const volatile unsigned int *apic_reg_buffer;
-	unsigned long long phys_addr;
-	int i;
+	unsigned long long base;
+	unsigned int i, j;
+	char label[64];
 
 	/**
 	 * Verify if apic feature is supported
@@ -125,93 +124,42 @@ void dump_apics(const struct cpudata *cpu)
 
 	bind_cpu(cpu->number);
 
-	/**
-	* Verify if apic is enable
-	**/
-	if (!(apic_is_enable(cpu->number, IA32_APIC_BASE_MSR)))
+	if (read_msr(cpu->number, IA32_APIC_BASE_MSR, &base) != 1)
 		return;
 
-	if (apic_is_x2apic(cpu->number, IA32_APIC_BASE_MSR)) {
+	/* APIC_BASE bit 11: enabled */
+	if (!(base & (1ULL << 11)))
+		return;
+
+	/* APIC_BASE bit 10: x2APIC mode, where the MMIO register page is disabled. */
+	if (base & (1ULL << 10)) {
 		printf("APIC registers: x2APIC mode, MMIO dump not available\n");
 		return;
 	}
 
-	phys_addr = apic_physical_address(cpu->number, IA32_APIC_BASE_MSR);
-
 	/**
 	 * Mapping the apic registers
 	 **/
-	apic_reg_buffer = mapping_apic_registers(phys_addr);
+	apic_reg_buffer = mapping_apic_registers((base >> 12) << 12);
 	if (apic_reg_buffer == NULL)
 		return;
 
 	printf("APIC registers:\n");
 
-	printf("APIC MSR Base(0x%02x): 			: ", IA32_APIC_BASE_MSR);
-	dump_apic_base_msr(cpu->number, IA32_APIC_BASE_MSR);
+	snprintf(label, sizeof(label), "APIC MSR Base(0x%02x)", IA32_APIC_BASE_MSR);
+	printf("%-*s: 0x%016llx\n", APIC_LABEL_WIDTH, label, base);
 
-	printf("APIC Local ID				: ");
-	dump_apic(apic_reg_buffer, APIC_ID);
-	printf("APIC Local Version			: ");
-	dump_apic(apic_reg_buffer, APIC_VER);
-	printf("APIC Task Priority			: ");
-	dump_apic(apic_reg_buffer, APIC_TPR);
-	printf("APIC Arbitration Priority		: ");
-	dump_apic(apic_reg_buffer, APIC_APR);
-	printf("APIC Processor Priority 		: ");
-	dump_apic(apic_reg_buffer, APIC_PPR);
-	printf("APIC EOI 				: ");
-	dump_apic(apic_reg_buffer, APIC_EOI);
-	printf("APIC Remote Read 			: ");
-	dump_apic(apic_reg_buffer, APIC_RRD);
-	printf("APIC Logical Destination 		: ");
-	dump_apic(apic_reg_buffer, APIC_LDR);
-	printf("APIC Destination Format 		: ");
-	dump_apic(apic_reg_buffer, APIC_DFR);
-	printf("APIC Spurious Interrupt Vector 		: ");
-	dump_apic(apic_reg_buffer, APIC_SIVR);
+	dump_apic_regs(apic_reg_buffer, apic_regs_head, ARRAY_SIZE(apic_regs_head));
 
-	for (i = 0 ; i < 8 ; i++) {
-		printf("APIC In-Service (ISR%d)	 		: ", i);
-		dump_apic(apic_reg_buffer, APIC_ISR+i);
+	for (j = 0; j < ARRAY_SIZE(apic_regs_bitmaps); j++) {
+		for (i = 0; i < 8; i++) {
+			snprintf(label, sizeof(label), "%s%u)", apic_regs_bitmaps[j].label, i);
+			printf("%-*s: ", APIC_LABEL_WIDTH, label);
+			dump_apic(apic_reg_buffer, apic_regs_bitmaps[j].offset + i);
+		}
 	}
 
-	for (i = 0 ; i < 8 ; i++) {
-		printf("APIC Trigger Mode (TMR%d)	 	: ", i);
-		dump_apic(apic_reg_buffer, APIC_TMR+i);
-	}
-
-	for (i = 0 ; i < 8 ; i++) {
-		printf("APIC Interrupt Request (IRR0%d)	 	: ", i);
-		dump_apic(apic_reg_buffer, APIC_IRR+i);
-	}
-
-	printf("APIC Error Status 			: ");
-	dump_apic(apic_reg_buffer, APIC_ESR);
-	printf("APIC LVT CMCI 				: ");
-	dump_apic(apic_reg_buffer, APIC_LVT);
-	printf("APIC Interrupt Command (ICR0)		: ");
-	dump_apic(apic_reg_buffer, APIC_ICR0);
-	printf("APIC Interrupt Command (ICR1) 		: ");
-	dump_apic(apic_reg_buffer, APIC_ICR1);
-	printf("APIC LVT Timer 				: ");
-	dump_apic(apic_reg_buffer, APIC_LVTT);
-	printf("APIC Thermal Sensor 			: ");
-	dump_apic(apic_reg_buffer, APIC_LVTTS);
-	printf("APIC LVT Performance Monitoring Counters: ");
-	dump_apic(apic_reg_buffer, APIC_LVTPC);
-	printf("APIC LVT LINT0 				: ");
-	dump_apic(apic_reg_buffer, APIC_LVT0);
-	printf("APIC LVT LINT1 				: ");
-	dump_apic(apic_reg_buffer, APIC_LVT1);
-	printf("APIC LVT Error 				: ");
-	dump_apic(apic_reg_buffer, APIC_LVTER);
-	printf("APIC Initial Count (for Timer)		: ");
-	dump_apic(apic_reg_buffer, APIC_TICR);
-	printf("APIC Current Count (for Timer)		: ");
-	dump_apic(apic_reg_buffer, APIC_TCCR);
-	printf("APIC Divide Configuration (for Timer)	: ");
-	dump_apic(apic_reg_buffer, APIC_TDCR);
+	dump_apic_regs(apic_reg_buffer, apic_regs_tail, ARRAY_SIZE(apic_regs_tail));
 
 	unmapping_apic_registers();
 

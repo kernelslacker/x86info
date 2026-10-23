@@ -31,11 +31,9 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C10. apic.c:21,151-212 / mtrr.c:63,182-204 — apic_msr_value() and
-    mtrr_value() are pointless wrappers around `read_msr()==1`; the APIC
-    register dump and fixed-range MTRR dump are long printf/dump pairs that
-    want `{label, offset}` tables. APIC_BASE is also read 4 times; read it
-    once. [sonnet]
+C10. apic.c:21 / mtrr.c:63,182-204 — mtrr_value() is a pointless wrapper
+    around `read_msr()==1`; the fixed-range MTRR dump is a long printf/dump
+    pair that wants a `{label, offset}` table. [sonnet]
 
 C11. vendors/amd/identify.c:194-248 — set_fam11h/12h/14h/15h_revinfo are
     the same function with a different lookup and prefix; set_fam17h/19h/
@@ -194,7 +192,7 @@ H1. Remove the S-spec / release-date history blocks: amd/identify.c:782-794,
 H2. Stale/wrong comments: sis/identify.c:4 says "Rise specific parts";
     centaur/identify.c:154 "check on-chip L2 cache size" (nothing follows);
     intel/info.c:144 "FIXME: Bit test for MCA here!"; cachesize.c:200,222
-    and identify-family6-extended.c:243 TODOs; apic.c:7 / mtrr.c:5
+    and identify-family6-extended.c:243 TODOs; mtrr.c:5
     "TODO: decode the registers too" (mtrr already decodes). [haiku]
 
 H3. features.c:285,291,307,312 — "// Intel CPUID 0x06" etc on leaves used
@@ -246,8 +244,6 @@ K2. vendors/amd/identify.c:1008-1052 — `%d` with `(int)` casts on unsigned
 
 K3. vendors/amd/identify.c:62-68 — abort() on snprintf < 0 is overkill.
     set_k8_revinfo() sets connector twice (lines 76, 86). [haiku]
-
-K4. apic.c:183 — "IRR0%d" label typo (prints IRR00..IRR07). [haiku]
 
 K5. lsmsr/lsmsr.c:47,207,350 — `g`, `vendor_names`, `unknown_msr`,
     `lopts` should be static. Same for cachesize.c:355,364
