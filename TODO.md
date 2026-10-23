@@ -4,11 +4,6 @@
 
 ## 🟡 Performance
 
-B6. vendors/intel/identify-family6-extended.c:530-537 — get_namestring()
-    checks MHz before stepping, so any CPU whose model has MHz-keyed entries
-    (0xe, 0x17, 0x1a, 0x1c, 0x3c) spends ensure_MHz()'s 100ms spin even when
-    no stepping matches. Test stepping and cores first. [haiku]
-
 B7. cpuid.c:327, cpuid-linux.c:36-51 — without the cpuid driver (every
     non-root run) native_cpuid() calls bind_cpu() on each CPUID:
     CPU_ALLOC(), sched_setaffinity(), CPU_FREE(), hundreds of times per CPU.
