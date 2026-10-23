@@ -306,7 +306,7 @@ int main(int argc, char **argv)
 		for (i = 0; i < nrCPUs; i++) {
 			if (leader[i] != i)
 				continue;
-			printf("CPU #%u (%u in this group):\n", i + 1,
+			printf("CPU #%u (%u in this group):\n", cpus[i].number,
 			       group_size[i]);
 
 			display_detailed_info(&cpus[i], !common);
@@ -314,7 +314,7 @@ int main(int argc, char **argv)
 	} else {
 		printf("Found %u CPUs.\n", nrCPUs);
 		for (i = 0; i < nrCPUs; i++) {
-			printf("CPU #%u:\n", i+1);
+			printf("CPU #%u:\n", cpus[i].number);
 
 			display_detailed_info(&cpus[i], 1);
 
