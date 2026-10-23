@@ -7,8 +7,32 @@
 #include <x86info.h>
 #include "centaur.h"
 
+/* Zhaoxin parts have an extended model, or are family 7. */
+static void identify_zhaoxin(struct cpudata *cpu)
+{
+	switch ((family(cpu) << 8) | model(cpu)) {
+	case 0x619:
+		add_to_cpuname("Zhaoxin ZXC");
+		break;
+	case 0x71b:
+		add_to_cpuname("Zhaoxin ZXD");
+		break;
+	case 0x73b:
+		add_to_cpuname("Zhaoxin ZXE");
+		break;
+	default:
+		add_to_cpuname("Unknown Zhaoxin CPU");
+		break;
+	}
+}
+
 void identify_centaur(struct cpudata *cpu)
 {
+	if (cpu->family == 7 || cpu->emodel) {
+		identify_zhaoxin(cpu);
+		return;
+	}
+
 	switch (tuple(cpu) & 0xff0) {
 		case 0x540:
 			add_to_cpuname("Winchip C6");

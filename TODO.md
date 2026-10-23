@@ -40,10 +40,5 @@ I4. The replay backend describes exactly one CPU (x86info.c:297-299,
 
 ## 🟢 Enhancements
 
-J5. cpuid.c:369-394 — Zhaoxin ("  Shanghai  ", EBX 0x68532020) is
-    VENDOR_UNKNOWN. Map it to VENDOR_CENTAUR (same lineage, same 0xC000000x
-    leaves) and add the family 7 names to identify_centaur(). Depends on
-    A34. [sonnet]
-
 ## 🟢 Minor nits / one-liners
 

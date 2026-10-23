@@ -70,6 +70,7 @@ enum vendor vendor_from_cpuid(unsigned int ebx, unsigned int edx)
 	case 0x69727943:
 		return VENDOR_CYRIX;
 	case 0x746e6543:
+	case 0x68532020:	/* "  Shanghai  " (Zhaoxin) */
 		return VENDOR_CENTAUR;
 	case 0x646f6547:
 		return VENDOR_NATSEMI;
