@@ -28,9 +28,7 @@ int bind_cpu(unsigned int cpunr)
 	    sizeof(mask), &mask);
 }
 
-static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
-
-void cpuid(unsigned int CPU_number, unsigned long long idx,
+int cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax,
 	unsigned int *ebx,
 	unsigned int *ecx,
@@ -41,11 +39,8 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	int fh;
 	cpuctl_cpuid_count_args_t args;
 
-	if (nodriver == 1) {
-		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
-			printf("%s", NATIVE_CPUID_FAILED_MSG);
-		return;
-	}
+	if (nodriver == 1)
+		return native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 
 	args.level = idx;
 	args.level_type = idx >> 32;
@@ -65,16 +60,14 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 			perror("close");
 			exit(EXIT_FAILURE);
 		}
-	} else {
-		/* Something went wrong, just do UP and hope for the best. */
-		nodriver = 1;
-		if (nrCPUs != 1)
-			perror(cpuname);
-		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
-			printf("%s", NATIVE_CPUID_FAILED_MSG);
-
-		return;
+		return 0;
 	}
+
+	/* Something went wrong, just do UP and hope for the best. */
+	nodriver = 1;
+	if (nrCPUs != 1)
+		perror(cpuname);
+	return native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 }
 
 #endif /* __FreeBSD__ */

@@ -10,14 +10,15 @@
 #include <centaur.h>
 #include <cyrix.h>
 
-void get_cpu_info_basics(struct cpudata *cpu)
+int get_cpu_info_basics(struct cpudata *cpu)
 {
 	static int unknown_vendor_reported;
 
 	unsigned int maxi, maxei, vendor, vendor_ecx, vendor_edx, address_bits;
 	unsigned int eax;
 
-	cpuid(cpu->number, 0, &maxi, &vendor, &vendor_ecx, &vendor_edx);
+	if (cpuid(cpu->number, 0, &maxi, &vendor, &vendor_ecx, &vendor_edx))
+		return -1;
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
 	cpu->cpuid_level = maxi;
 
@@ -29,10 +30,11 @@ void get_cpu_info_basics(struct cpudata *cpu)
 	}
 
 	if (maxi < 1)
-		return;
+		return 0;
 
 	/* Everything that supports cpuid supports these. */
-	cpuid(cpu->number, 1, &eax, NULL, NULL, NULL);
+	if (cpuid(cpu->number, 1, &eax, NULL, NULL, NULL))
+		return -1;
 	cpu->stepping = eax & 0xf;
 	cpu->model = (eax >> 4) & 0xf;
 	cpu->family = (eax >> 8) & 0xf;
@@ -54,6 +56,7 @@ void get_cpu_info_basics(struct cpudata *cpu)
 		cpu->phyaddr_bits = address_bits & 0xFF;
 		cpu->viraddr_bits = (address_bits >> 8) & 0xFF;
 	}
+	return 0;
 }
 
 void cpu_name_append(struct cpudata *cpu, const char *str)

@@ -126,7 +126,7 @@ unsigned int *replay_cpu_ids(unsigned int *count)
 	return ids;
 }
 
-void cpuid(unsigned int CPU_number, unsigned long long idx,
+int cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx,
 	unsigned int *ecx, unsigned int *edx)
 {
@@ -158,6 +158,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 		*ecx = regs[2];
 	if (edx)
 		*edx = regs[3];
+	return 0;
 }
 
 #endif	/* CPUID_REPLAY */

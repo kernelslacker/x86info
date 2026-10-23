@@ -21,6 +21,15 @@ int native_cpuid(unsigned int cpunr, unsigned long long idx,
 {
 	unsigned int a = 0, b = 0, c = 0, d = 0;
 
+	if (eax != NULL)
+		*eax = 0;
+	if (ebx != NULL)
+		*ebx = 0;
+	if (ecx != NULL)
+		*ecx = 0;
+	if (edx != NULL)
+		*edx = 0;
+
 	c = idx >> 32;
 
 	if (bind_cpu(cpunr))
@@ -46,11 +55,11 @@ int native_cpuid(unsigned int cpunr, unsigned long long idx,
 }
 
 /* Some CPUID calls want 'count' to be placed in ecx */
-void cpuid_count(unsigned int CPU_number, unsigned int op, int count,
+int cpuid_count(unsigned int CPU_number, unsigned int op, int count,
 	unsigned int *eax, unsigned int *ebx,
 	unsigned int *ecx, unsigned int *edx)
 {
-	cpuid(CPU_number, op | ((unsigned long long)(unsigned int)count << 32),
+	return cpuid(CPU_number, op | ((unsigned long long)(unsigned int)count << 32),
 	      eax, ebx, ecx, edx);
 }
 

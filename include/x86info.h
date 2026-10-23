@@ -108,9 +108,10 @@ struct cpudata {
 	unsigned int num_siblings;
 };
 
-void cpuid(unsigned int cpu, unsigned long long idx,
+/* Both return zero on success; on failure the outputs are zeroed. */
+int cpuid(unsigned int cpu, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
-void cpuid_count(unsigned int CPU_number, unsigned int op, int count,
+int cpuid_count(unsigned int CPU_number, unsigned int op, int count,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
 
 
@@ -150,7 +151,7 @@ int native_cpuid(unsigned int cpunr, unsigned long long idx,
 
 void parse_command_line(int argc, char **argv);
 
-void get_cpu_info_basics(struct cpudata *cpu);
+int get_cpu_info_basics(struct cpudata *cpu);
 void identify(struct cpudata *cpu);
 void show_header(struct cpudata *cpu);
 void show_info(struct cpudata *cpu, int header);

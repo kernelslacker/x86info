@@ -289,7 +289,8 @@ static void *measure_thread(void *arg)
 {
 	struct cpudata *cpu = arg;
 
-	bind_cpu(cpu->number);
+	if (bind_cpu(cpu->number))
+		return NULL;
 	measure_MHz(cpu, 1);
 	perf_msr_close();
 	return NULL;

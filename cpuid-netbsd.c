@@ -31,17 +31,13 @@ int bind_cpu(unsigned int cpunr)
 	return ret;
 }
 
-static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
-
-void cpuid(unsigned int CPU_number, unsigned long long idx,
+int cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax,
 	unsigned int *ebx,
 	unsigned int *ecx,
 	unsigned int *edx)
 {
-
-	if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
-		printf("%s", NATIVE_CPUID_FAILED_MSG);
+	return native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 }
 
 #endif /* __NetBSD__ */

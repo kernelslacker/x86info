@@ -47,8 +47,6 @@ int bind_cpu(unsigned int cpunr)
 	return ret;
 }
 
-static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
-
 /* Kernel CPUID driver's minimum supported read size
  * (see linux/arch/i386/kernel/cpuid.c)
  */
@@ -77,7 +75,7 @@ static int cpuid_fd(unsigned int cpunr)
 	return fh;
 }
 
-void cpuid(unsigned int CPU_number, unsigned long long idx,
+int cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax,
 	unsigned int *ebx,
 	unsigned int *ecx,
@@ -94,14 +92,21 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 	/* Something went wrong, just do UP and hope for the best. */
 	if (fh == -1) {
 		nodriver = 1;
-		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
-			printf("%s", NATIVE_CPUID_FAILED_MSG);
-		return;
+		return native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 	}
 
 	memset(buffer, 0, sizeof(buffer));
-	if (pread(fh, buffer, CPUID_CHUNK_SIZE, (off_t)idx) != CPUID_CHUNK_SIZE)
-		printf("cpuid read error: %s\n", strerror(errno));
+	if (pread(fh, buffer, CPUID_CHUNK_SIZE, (off_t)idx) != CPUID_CHUNK_SIZE) {
+		if (eax != NULL)
+			*eax = 0;
+		if (ebx != NULL)
+			*ebx = 0;
+		if (ecx != NULL)
+			*ecx = 0;
+		if (edx != NULL)
+			*edx = 0;
+		return -1;
+	}
 	if (eax != NULL)
 		memcpy(eax, buffer, 4);
 	if (ebx != NULL)
@@ -110,6 +115,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 		memcpy(ecx, buffer + 8, 4);
 	if (edx != NULL)
 		memcpy(edx, buffer + 12, 4);
+	return 0;
 }
 
 #endif	/* __linux__ */

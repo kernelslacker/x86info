@@ -556,7 +556,7 @@ static void test_longnop(void)
 void display_feature_flags(const struct cpudata *cpu)
 {
 	decode_feature_flags(cpu);
-	bind_cpu(cpu->number);
-	test_longnop();
+	if (!bind_cpu(cpu->number))
+		test_longnop();
 	printf("\n");
 }

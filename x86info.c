@@ -211,15 +211,19 @@ static int groups_share_header(const struct cpudata *cpus)
 	return 1;
 }
 
-static void fill_in_cpu_info(struct cpudata *cpu)
+/* Returns zero on success, -1 if the CPU can't be queried. */
+static int fill_in_cpu_info(struct cpudata *cpu)
 {
-	bind_cpu(cpu->number);
-	get_cpu_info_basics(cpu);	/* get vendor,family,model,stepping */
+	if (bind_cpu(cpu->number))
+		return -1;
+	if (get_cpu_info_basics(cpu))	/* get vendor,family,model,stepping */
+		return -1;
 	get_core_type(cpu);
 	cpu->MHz = 0;
 	get_feature_flags(cpu);
 	identify(cpu);
 	get_topology(cpu);
+	return 0;
 }
 
 
@@ -228,7 +232,7 @@ int main(int argc, char **argv)
 	struct cpudata *cpus;
 	unsigned int *online;
 	unsigned int *leader, *group_size;
-	unsigned int i;
+	unsigned int i, n;
 	unsigned int display_one_cpu = 1;
 	unsigned int nr_groups = 0;
 	int nrSMPCPUs;
@@ -261,11 +265,22 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 
-	for (i = 0; i < nrCPUs; i++) {
-		cpus[i].number = online[i];
-		fill_in_cpu_info(&cpus[i]);
+	for (i = 0, n = 0; i < nrCPUs; i++) {
+		cpus[n].number = online[i];
+		if (fill_in_cpu_info(&cpus[n])) {
+			fprintf(stderr, "CPU #%u: unable to read CPUID, skipping.\n",
+				online[i]);
+			memset(&cpus[n], 0, sizeof(cpus[n]));
+			continue;
+		}
+		n++;
 	}
 	free(online);
+	if (n == 0) {
+		fprintf(stderr, "No usable CPUs found.\n");
+		exit(EXIT_FAILURE);
+	}
+	nrCPUs = n;
 
 	clear_uniform_core_types(cpus, nrCPUs);
 	leader = malloc(nrCPUs * sizeof(*leader));

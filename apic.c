@@ -119,7 +119,8 @@ void dump_apics(const struct cpudata *cpu)
 	if (!(cpu->flags_edx & (X86_FEATURE_APIC)))
 		return;
 
-	bind_cpu(cpu->number);
+	if (bind_cpu(cpu->number))
+		return;
 
 	if (read_msr(cpu->number, IA32_APIC_BASE_MSR, &base) != 1)
 		return;

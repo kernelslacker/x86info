@@ -19,8 +19,6 @@
 #include <errno.h>
 #include <x86info.h>
 
-static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
-
 /* Kernel CPUID driver's minimum supported read size */
 #define CPUID_CHUNK_SIZE (16)
 
@@ -31,7 +29,7 @@ int bind_cpu(unsigned int cpunr)
 	return 0;
 }
 
-void cpuid(unsigned int CPU_number, unsigned long long idx,
+int cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax,
 	unsigned int *ebx,
 	unsigned int *ecx,
@@ -48,11 +46,8 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 			*ecx = idx >> 32;
 	}
 
-	if (nodriver == 1) {
-		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
-			printf("%s", NATIVE_CPUID_FAILED_MSG);
-		return;
-	}
+	if (nodriver == 1)
+		return native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 
 	memset(cpuname, 0, sizeof(cpuname));
 	/* Solaris doesn't (yet) have per-CPU interface */
@@ -76,12 +71,11 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 			perror("close");
 			exit(EXIT_FAILURE);
 		}
-	} else {
-		/* Something went wrong, just do UP and hope for the best. */
-		nodriver = 1;
-		if (native_cpuid(CPU_number, idx, eax,ebx,ecx,edx))
-			printf("%s", NATIVE_CPUID_FAILED_MSG);
-		return;
+		return 0;
 	}
+
+	/* Something went wrong, just do UP and hope for the best. */
+	nodriver = 1;
+	return native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 }
 #endif	/* __sun__ */
