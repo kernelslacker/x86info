@@ -8,9 +8,6 @@
 
 ## 🟡 Clean-ups/Refactoring/Style
 
-D11. vendors/amd/identify.c:313-324 — four identical case arms for families
-    0x11, 0x12, 0x14 and 0x15; stack the labels. [haiku]
-
 D12. vendors/centaur/identify.c:115,132 query CPUID 0x80000005 twice, and
     features.c:518 re-queries 0xc0000000 although cpu->maxei2 holds it.
     [haiku]

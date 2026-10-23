@@ -294,14 +294,8 @@ void identify_amd(struct cpudata *cpu)
 			set_fam10h_revinfo(eax, cpu);
 			break;
 		case 0x11:
-			set_listed_revinfo(eax, cpu);
-			break;
 		case 0x12:
-			set_listed_revinfo(eax, cpu);
-			break;
 		case 0x14:
-			set_listed_revinfo(eax, cpu);
-			break;
 		case 0x15:
 			set_listed_revinfo(eax, cpu);
 			break;
