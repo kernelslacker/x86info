@@ -21,7 +21,7 @@ QUIET_CC = $(Q:@=@echo    '  CC '$@;)
 
 all: x86info lsmsr
 
-.PHONY: lsmsr clean tarball sparse cscope scan tags coverity
+.PHONY: lsmsr check clean tarball sparse cscope scan tags coverity
 
 X86INFO_HEADERS = \
 	$(wildcard *.h) \
@@ -38,6 +38,18 @@ X86INFO_OBJS = $(sort $(patsubst %.c,%.o,$(wildcard *.c))) \
 x86info: $(X86INFO_OBJS) $(X86INFO_HEADERS)
 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o x86info $(X86INFO_OBJS) \
 	    $(LIBPCI)
+
+CHECK_BIN = tests/build/x86info
+
+# Build x86info against the CPUID replay backend and diff its output with
+# the goldens in tests/dumps.
+check: $(CHECK_BIN)
+	@tests/run-tests.sh $(CHECK_BIN)
+
+$(CHECK_BIN): $(X86INFO_HEADERS) $(wildcard *.c) $(wildcard vendors/*/*.c)
+	@mkdir -p tests/build
+	$(QUIET_CC)$(CC) $(CFLAGS) -DCPUID_REPLAY $(LDFLAGS) -o $@ \
+	    $(wildcard *.c) $(wildcard vendors/*/*.c) $(LIBPCI)
 
 lsmsr: x86info
 	$(Q)$(MAKE) --no-print-directory -C lsmsr VERSION=$(VERSION)
@@ -69,6 +81,7 @@ clean:
 	@rm -rf $(DEPDIR)/*
 	@rm -f x86info-coverity.tar.xz
 	@rm -rf cov-int
+	@rm -rf tests/build
 
 sparse:
 	@sparse $(X86INFO_SRC)

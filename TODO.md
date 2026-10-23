@@ -8,11 +8,9 @@ E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr
 
 ## 🟡 Tests & docs
 
-I1. No tests. Identification is a pure function of CPUID values. [opus]
-    1. Add a compile-time-selectable cpuid backend that replays a recorded
-       dump (the `x86info -r` format, or kernel /dev/cpu dumps).
-    2. Check in dumps for a handful of CPUs (K7, K8, Zen 2/3/4/5, Core 2,
-       Nehalem, Alder Lake hybrid, VIA) with expected name/cache/topology
-       output.
-    3. `make check` diffs output against goldens.
-    This would have caught A1, A2, A6, A8, A9.
+I1. `make check` replays CPUID dumps from tests/dumps and diffs the output
+    with the .out goldens, but only a Zen 5 dump is checked in. Add dumps
+    (`x86info -r | grep '^eax in'`) from a K7, K8, Zen 2/3/4, Core 2,
+    Nehalem, Alder Lake hybrid and VIA CPU, then `UPDATE=1
+    tests/run-tests.sh tests/build/x86info` after checking the output by
+    hand. [needs hardware]

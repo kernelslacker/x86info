@@ -4,7 +4,7 @@
  *  Linux specific routines for retrieving cpuid registers.
  */
 
-#ifdef __linux__
+#if defined(__linux__) && !defined(CPUID_REPLAY)
 
 #define _GNU_SOURCE
 #define _FILE_OFFSET_BITS 64

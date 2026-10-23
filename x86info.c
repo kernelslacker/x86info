@@ -64,6 +64,10 @@ bad:
 /* Online CPU ids, which need not be contiguous. */
 static unsigned int *get_online_cpus(unsigned int *count)
 {
+#ifdef CPUID_REPLAY
+	/* A replayed dump describes exactly one CPU */
+	return parse_cpu_list("0", count);
+#else
 	char buf[4096];
 	unsigned int *ids = NULL;
 	FILE *f = fopen("/sys/devices/system/cpu/online", "r");
@@ -89,6 +93,7 @@ static unsigned int *get_online_cpus(unsigned int *count)
 		*count = n;
 	}
 	return ids;
+#endif
 }
 
 static void separator(void)

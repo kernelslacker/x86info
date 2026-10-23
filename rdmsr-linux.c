@@ -4,7 +4,7 @@
  *  Linux specific routines for reading MSRs.
  */
 
-#ifdef __linux__
+#if defined(__linux__) && !defined(CPUID_REPLAY)
 
 #define _FILE_OFFSET_BITS 64
 
