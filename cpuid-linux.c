@@ -33,11 +33,17 @@
 #endif
 #endif
 
+/* The CPU this thread is bound to, or -1 if bind_cpu() hasn't succeeded. */
+static __thread int bound_cpu = -1;
+
 int bind_cpu(unsigned int cpunr)
 {
 	cpu_set_t *set;
 	size_t size = CPU_ALLOC_SIZE(cpunr + 1);
 	int ret;
+
+	if (bound_cpu == (int)cpunr)
+		return 0;
 
 	set = CPU_ALLOC(cpunr + 1);
 	if (!set)
@@ -47,6 +53,8 @@ int bind_cpu(unsigned int cpunr)
 	CPU_SET_S(cpunr, size, set);
 	ret = sched_setaffinity(0, size, set);
 	CPU_FREE(set);
+	if (ret == 0)
+		bound_cpu = cpunr;
 	return ret;
 }
 

@@ -4,12 +4,6 @@
 
 ## 🟡 Performance
 
-B7. cpuid.c:327, cpuid-linux.c:36-51 — without the cpuid driver (every
-    non-root run) native_cpuid() calls bind_cpu() on each CPUID:
-    CPU_ALLOC(), sched_setaffinity(), CPU_FREE(), hundreds of times per CPU.
-    Remember the last CPU bound in a __thread variable in bind_cpu() and skip
-    the syscall when it is unchanged. [haiku]
-
 B8. x86info.c:497-511 — with --mptable, root runs open and scan /dev/mem
     twice (display_mptable() then enumerate_cpus()). Have read_mptable()
     record that it ran and let enumerate_cpus() reuse ncpu. [haiku]
