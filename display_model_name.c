@@ -9,7 +9,7 @@
 #include <x86info.h>
 #include <amd.h>
 
-void get_model_name(struct cpudata *cpu)
+void display_model_name(struct cpudata *cpu)
 {
 	unsigned int i, j;
 	unsigned int eax, ebx, ecx, edx;
@@ -38,10 +38,7 @@ void get_model_name(struct cpudata *cpu)
 
 	/* Broken BIOS? Try to determine the model name ourselves.  */
 	if (strstr(cp, "unknown") != NULL) {
-		unsigned int vendor;
-
-		cpuid(cpu->number, 0, NULL, &vendor, NULL, NULL);
-		if (vendor == 0x68747541 && cpu->cpuid_level >= 1 && cpu->maxei >= 0x80000001) {	/* AMD defined flags */
+		if (cpu->vendor == VENDOR_AMD && cpu->cpuid_level >= 1 && cpu->maxei >= 0x80000001) {
 			cp = namestring;
 			fix_amd_model_name(cpu, cp, sizeof(namestring));
 		}

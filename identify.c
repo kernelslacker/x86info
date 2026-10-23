@@ -101,7 +101,7 @@ void show_info(struct cpudata *cpu)
 	if (cpu->vendor == VENDOR_INTEL)
 		display_basic_intel_info(cpu);
 	printf("CPU Model (x86info's best guess): %s\n", cpu->name);
-	get_model_name(cpu);
+	display_model_name(cpu);
 	printf("\n");
 
 

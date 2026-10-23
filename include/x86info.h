@@ -179,7 +179,7 @@ int MHz_matches(unsigned int measured, unsigned int nominal);
 
 int HaveCPUID(void);
 int enumerate_cpus(void);
-void get_model_name(struct cpudata *cpu);
+void display_model_name(struct cpudata *cpu);
 void decode_connector(enum connector type);
 
 void get_topology(struct cpudata *head);
