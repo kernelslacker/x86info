@@ -52,10 +52,6 @@ J6. cpuid.c:413-444 — dump_subleaves() skips other leaves that have
 
 ## 🟢 Minor nits / one-liners
 
-K13. lsmsr/lsmsr.c:169-194 — show_matching()'s length juggling is
-    strncmp(table name, name, strlen(name)) == 0; and -c accepts negative
-    CPU numbers. [haiku]
-
 K14. x86info.c:533,540 — "CPU #%u" prints the array index + 1, not the CPU
     number, so the labels are wrong once some CPUs are offline. Print
     cpus[i].number. [haiku]

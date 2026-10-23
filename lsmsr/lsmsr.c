@@ -342,6 +342,10 @@ int main(int argc, char *argv[])
 			break;
 		case 'c':
 			g.cpu = parse_int_opt("-c", optarg, 0);
+			if (g.cpu < 0) {
+				fprintf(stderr, "-c: invalid value: %s\n", optarg);
+				exit(EXIT_FAILURE);
+			}
 			break;
 		case 'm':
 			g.model = parse_int_opt("-m", optarg, 0);
