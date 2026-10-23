@@ -360,7 +360,8 @@ static int read_mptable(int quiet)
 
 	/* open physical memory for access to MP structures */
 	if ((pfd = open("/dev/mem", O_RDONLY)) < 0) {
-		fprintf(stderr, "mptable: /dev/mem: %s\n", strerror(errno));
+		if (!quiet)
+			fprintf(stderr, "mptable: /dev/mem: %s\n", strerror(errno));
 		return -1;
 	}
 
