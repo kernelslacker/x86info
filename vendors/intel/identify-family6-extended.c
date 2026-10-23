@@ -156,6 +156,7 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	{ .model = 0xae, .flags = ONLYMODEL, .str = "[Granite Rapids D]" },
 	{ .model = 0xaf, .flags = ONLYMODEL, .str = "[Sierra Forest]" },
 
+	{ .model = 0xb5, .flags = ONLYMODEL, .str = "[Arrow Lake U]" },
 	{ .model = 0xb6, .flags = ONLYMODEL, .str = "[Grand Ridge]" },
 	{ .model = 0xb7, .flags = ONLYMODEL, .str = "[Raptor Lake]" },
 	{ .model = 0xba, .flags = ONLYMODEL, .str = "[Raptor Lake P]" },
@@ -164,7 +165,15 @@ static struct cpu_name_def intel_fam6e_names[] = {
 	{ .model = 0xbf, .flags = ONLYMODEL, .str = "[Raptor Lake S]" },
 
 	{ .model = 0xc5, .flags = ONLYMODEL, .str = "[Arrow Lake]" },
+	{ .model = 0xc6, .flags = ONLYMODEL, .str = "[Arrow Lake]" },
+	{ .model = 0xcc, .flags = ONLYMODEL, .str = "[Panther Lake L]" },
 	{ .model = 0xcf, .flags = ONLYMODEL, .str = "[Emerald Rapids]" },
+
+	{ .model = 0xd5, .flags = ONLYMODEL, .str = "[Wildcat Lake L]" },
+	{ .model = 0xd7, .flags = ONLYMODEL, .str = "[Bartlett Lake]" },
+	{ .model = 0xdd, .flags = ONLYMODEL, .str = "[Clearwater Forest]" },
+
+	{ .model = 0xe5, .flags = ONLYMODEL, .str = "[Panther Lake R]" },
 };
 
 
