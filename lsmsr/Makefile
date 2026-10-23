@@ -4,7 +4,7 @@ include ../flags.mk
 
 VERSION ?= $(shell date +%Y-%m-%d)
 
-CFLAGS = -DVERSION="$(VERSION)" -I. -I../include $(COMMON_CFLAGS)
+CFLAGS = -DVERSION="$(VERSION)" -I. -I../include $(COMMON_CFLAGS) -MMD -MP
 
 LDFLAGS = -Wl,-z,relro,-z,now
 
@@ -34,6 +34,8 @@ LSMSR_SRC = \
 
 LSMSR_OBJS = $(LSMSR_SRC:%.c=%.o)
 
+-include $(LSMSR_OBJS:%.o=%.d)
+
 lsmsr.c: $(LSMSR_TMP_HEADERS)
 
 lsmsr.o: $(LSMSR_TMP_HEADERS)
@@ -43,7 +45,7 @@ lsmsr: $(LSMSR_TMP_HEADERS) $(LSMSR_OBJS)
 
 
 clean:
-	@find . -name "*.o" -exec rm {} \;
+	@find . -name "*.o" -o -name "*.d" | xargs rm -f
 	@find . -name "*~" -exec rm {} \;
 	@rm -f lsmsr $(LSMSR_TMP_HEADERS)
 	@rm -f core.*

@@ -25,7 +25,8 @@ all: x86info lsmsr
 
 X86INFO_HEADERS = \
 	$(wildcard *.h) \
-	$(wildcard include/*.h)
+	$(wildcard include/*.h) \
+	$(wildcard vendors/*/*.h)
 
 X86INFO_SRC = \
 	$(wildcard *.c)	\
