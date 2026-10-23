@@ -39,11 +39,6 @@ E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr
     backend, so MSR output and per-CPU cpuid don't work. Implement them
     (processor_bind(), /dev/cpu/N/msr) or drop the README claim. [sonnet]
 
-E5. lsmsr/createheader.py — `#!/usr/bin/python`, no `with open`, regex
-    `re.search("^{")` for startswith, the `"<msr.h>"` branch emits an
-    invalid include, no type hints. Bring to PYTHON.md standards (pathlib,
-    startswith, type hints, black, pyrefly strict). [sonnet]
-
 ## 🟡 Better API Alternatives
 
 F1. vendors/intel/microcode.c / amd/identify.c:956 — reading MSR 0x8b needs
