@@ -247,11 +247,12 @@ static void measure_MHz(struct cpudata *cpu, int want_core)
 		return;
 	}
 
-	have_perf = want_core && read_perf_counters(cpu, &aperf[0], &mperf[0]);
+	have_perf = want_core && host_can_measure() &&
+		    read_perf_counters(cpu, &aperf[0], &mperf[0]);
 
 	/* Nothing left to measure if CPUID gives the TSC rate */
 	known_MHz = cpuid_tsc_MHz(cpu);
-	if (known_MHz && !have_perf) {
+	if ((known_MHz && !have_perf) || !host_can_measure()) {
 		cpu->MHz = known_MHz;
 		cpu->core_MHz = 0;
 		return;

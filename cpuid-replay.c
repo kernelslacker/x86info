@@ -161,4 +161,30 @@ int cpuid(unsigned int CPU_number, unsigned long long idx,
 	return 0;
 }
 
+/*
+ * Nothing about the machine running the replay may reach the output: it
+ * is never root, and what a dump doesn't record is reported as unavailable.
+ */
+bool is_root(void)
+{
+	return false;
+}
+
+int host_longnop(void)
+{
+	return -1;
+}
+
+int host_microcode_version(unsigned int cpu, unsigned long long *ver)
+{
+	(void)cpu;
+	(void)ver;
+	return 0;
+}
+
+int host_can_measure(void)
+{
+	return 0;
+}
+
 #endif	/* CPUID_REPLAY */

@@ -16,12 +16,6 @@
 
 unsigned int nrCPUs = 1;
 
-bool is_root(void)
-{
-	return getuid() == 0;
-}
-
-
 #ifndef CPUID_REPLAY
 /* Parse a kernel cpu list such as "0-3,8,10-11" into an array of ids. */
 static unsigned int *parse_cpu_list(const char *s, unsigned int *count)

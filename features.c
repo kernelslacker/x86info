@@ -5,8 +5,6 @@
  */
 
 #include <stdio.h>
-#include <signal.h>
-#include <setjmp.h>
 #include <x86info.h>
 
 static void flag_decode(unsigned long reg, const char * reg_desc, const char *flags[], const char *flags_desc[])
@@ -529,28 +527,12 @@ static void decode_feature_flags(const struct cpudata *cpu)
 	printf("\n");
 }
 
-static sigjmp_buf out;
-
-static void sigill(__attribute__((__unused__))int sig)
-{
-	siglongjmp(out, 1);
-}
-
 static void test_longnop(void)
 {
-	volatile int died;
-	void (*old)(int);
+	int ret = host_longnop();
 
-	old = signal(SIGILL, sigill);
-
-	died = sigsetjmp(out, 1);
-
-	if (!died)
-		asm volatile(".byte 0x0f,0x1f,0x00 /* nopl 0(%eax) */");
-
-	signal(SIGILL, old);
-
-	printf("Long NOPs supported: %s\n", died ? "no" : "yes");
+	printf("Long NOPs supported: %s\n",
+	       ret < 0 ? "not recorded" : ret ? "yes" : "no");
 }
 
 void display_feature_flags(const struct cpudata *cpu)

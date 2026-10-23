@@ -12,7 +12,7 @@ Extended feature flags:
 
 Additional feature flags:
 
-Long NOPs supported: yes
+Long NOPs supported: not recorded
 
 Address sizes : 0 bits physical, 0 bits virtual
 This system has 1 socket, 1 core, 2 threads (2 threads per core)

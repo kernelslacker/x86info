@@ -8,27 +8,11 @@
 #include <x86info.h>
 #include <intel.h>
 
-static int sysfs_microcode_version(struct cpudata *cpu, unsigned long long *ver)
-{
-	char path[80];
-	FILE *f;
-	int ret;
-
-	snprintf(path, sizeof(path),
-		 "/sys/devices/system/cpu/cpu%u/microcode/version", cpu->number);
-	f = fopen(path, "r");
-	if (!f)
-		return 0;
-	ret = fscanf(f, "%llx", ver) == 1;
-	fclose(f);
-	return ret;
-}
-
 void decode_microcode(struct cpudata *cpu)
 {
 	unsigned long long ver = 0;
 
-	if (!sysfs_microcode_version(cpu, &ver)) {
+	if (!host_microcode_version(cpu->number, &ver)) {
 		/* The MSR fallback is AMD only */
 		if (cpu->vendor == VENDOR_INTEL || !is_root() ||
 		    read_msr(cpu->number, MSR_IA32_UCODE_REV, &ver) != 1)

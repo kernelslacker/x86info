@@ -205,6 +205,11 @@ extern unsigned int nrCPUs;
 
 bool is_root(void);
 
+/* Probes of the running machine; a replay build answers without them. */
+int host_longnop(void);			/* 1 yes, 0 no, -1 unknown */
+int host_microcode_version(unsigned int cpu, unsigned long long *ver);
+int host_can_measure(void);		/* may time or read counters */
+
 
 /* command line args */
 struct options {
