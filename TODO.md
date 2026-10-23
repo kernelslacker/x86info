@@ -2,10 +2,6 @@
 
 ## 🔴 Correctness
 
-A31. x86info.c:416-429 — groups_share_header() compares emodel but not the
-    low model nibble, so kinds that differ only in model share cpus[0]'s
-    header. Compare model(a) != model(b). [haiku]
-
 A32. MHz.c:304-353 — without --all-cpus the clocks are measured on the first
     CPU of each core type, but x86info.c groups by family, model, stepping
     and core type. On a mixed-stepping multi-socket box the second group

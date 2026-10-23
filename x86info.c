@@ -191,7 +191,7 @@ static int groups_share_header(const struct cpudata *cpus)
 		const struct cpudata *a = &cpus[0], *b = &cpus[i];
 
 		if (a->vendor != b->vendor || a->efamily != b->efamily ||
-		    a->emodel != b->emodel || a->family != b->family ||
+		    model(a) != model(b) || a->family != b->family ||
 		    a->stepping != b->stepping || strcmp(a->name, b->name))
 			return 0;
 	}
