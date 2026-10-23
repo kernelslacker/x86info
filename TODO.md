@@ -16,10 +16,6 @@
 
 ## 🟡 Comments
 
-H5. apic.c:119-142 — the `/** ... **/` blocks ("Verify if apic feature is
-    supported", "Mapping the apic registers") restate the next line. Remove
-    them. [haiku]
-
 ## 🟡 Tests & docs
 
 I1. `make check` replays CPUID dumps from tests/dumps and diffs the output

@@ -116,9 +116,6 @@ void dump_apics(const struct cpudata *cpu)
 	unsigned int i, j;
 	char label[64];
 
-	/**
-	 * Verify if apic feature is supported
-	 **/
 	if (!(cpu->flags_edx & (X86_FEATURE_APIC)))
 		return;
 
@@ -137,9 +134,6 @@ void dump_apics(const struct cpudata *cpu)
 		return;
 	}
 
-	/**
-	 * Mapping the apic registers
-	 **/
 	apic_reg_buffer = mapping_apic_registers((base >> 12) << 12);
 	if (apic_reg_buffer == NULL)
 		return;
