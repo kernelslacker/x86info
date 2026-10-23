@@ -188,7 +188,7 @@ static const char * get_namestring(struct cpudata *cpu)
 			continue;
 
 		if (intel_fam6e_names[i].cores &&
-		    intel_fam6e_names[i].cores != cpu->nr_cores)
+		    intel_fam6e_names[i].cores != cpu->x86_max_cores)
 			continue;
 
 		if (intel_fam6e_names[i].flags & ONLYMODEL)

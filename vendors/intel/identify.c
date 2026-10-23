@@ -22,7 +22,7 @@ void identify_intel(struct cpudata *cpu)
 
 	cpu->brand = ebx & 0xff;
 
-	cpu->nr_cores = intel_num_cpu_cores(cpu);
+	cpu->x86_max_cores = intel_num_cpu_cores(cpu);
 
 	decode_intel_caches(cpu, 0);
 

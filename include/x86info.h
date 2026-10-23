@@ -94,7 +94,6 @@ struct cpudata {
 	unsigned int apm_edx;		/* CPUID 0x80000007 EDX */
 	unsigned int MHz;		/* TSC rate */
 	unsigned int core_MHz;		/* from APERF/MPERF, 0 if unknown */
-	unsigned int nr_cores;
 	/* Intel specific bits */
 	unsigned int brand;
 	char serialno[30];

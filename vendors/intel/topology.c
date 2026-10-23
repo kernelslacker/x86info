@@ -60,7 +60,6 @@ void get_intel_topology(struct cpudata *cpu)
 	if (cpu->flags_edx & X86_FEATURE_HT)
 		logical = (ebx & 0xff0000) >> 16;
 
-	cpu->x86_max_cores = intel_num_cpu_cores(cpu);
 	if (logical < cpu->x86_max_cores)
 		logical = cpu->x86_max_cores;
 

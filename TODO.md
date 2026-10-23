@@ -6,12 +6,6 @@
 
 ## 🟡 Maintainability
 
-C33. cpudata nr_cores (vendors/intel/identify.c:64) and x86_max_cores
-    (vendors/intel/topology.c:63) both hold intel_num_cpu_cores(), so leaf 4
-    is decoded twice into two fields. Fill x86_max_cores once in
-    identify_intel(), use it for the fam6e .cores match, and drop nr_cores.
-    [sonnet]
-
 C34. vendors/centaur/longhaul.c, vendors/centaur/powersaver.c — both decode
     MSR 0x110a with near-identical printf()/binary() blocks over the same
     union. Fold them into one decoder that takes the CPU generation.
