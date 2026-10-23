@@ -17,7 +17,6 @@
 unsigned int user_is_root = 0;
 
 unsigned int nrCPUs = 1;
-static int nrSMPCPUs;
 
 
 /* Parse a kernel cpu list such as "0-3,8,10-11" into an array of ids. */
@@ -165,6 +164,7 @@ static void display_detailed_info(struct cpudata *cpu)
  */
 static int check_cpu_similarity(struct cpudata *cpus)
 {
+	struct cpudata *first = &cpus[0];
 	unsigned int i;
 
 	/* force to display all cpus if the user requested it. */
@@ -175,13 +175,15 @@ static int check_cpu_similarity(struct cpudata *cpus)
 		return 1;
 
 	for (i = 1; i < nrCPUs; i++) {
-		if (cpus[i].efamily != cpus[0].efamily)
+		struct cpudata *c = &cpus[i];
+
+		if (c->efamily != first->efamily)
 			return 0;
-		if (cpus[i].family != cpus[0].family)
+		if (c->family != first->family)
 			return 0;
-		if (((cpus[i].emodel << 4) + cpus[i].model) != ((cpus[0].emodel << 4) + cpus[0].model))
+		if (model(c) != model(first))
 			return 0;
-		if (cpus[i].stepping != cpus[0].stepping)
+		if (c->stepping != first->stepping)
 			return 0;
 	}
 
@@ -212,6 +214,7 @@ int main(int argc, char **argv)
 	unsigned int *online;
 	unsigned int i;
 	unsigned int display_one_cpu = 1;
+	int nrSMPCPUs;
 
 	if (getuid() == 0)
 		user_is_root = 1;
