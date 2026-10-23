@@ -6,12 +6,6 @@
 
 ## 🟡 Maintainability
 
-C26. features.c:500-547 — the AMD and Intel cases are identical except that
-    Intel omits the "\n" after the extended flags, so on Intel the CPUID
-    6/7/0x80000007 flags run on at the end of the "Extended feature flags:"
-    line. Merge the two cases and print show_extra_flags() output under its
-    own heading; update the golden. [haiku]
-
 C27. features.c:318-342 — show_extra_flags() also prints the CPUID 0x1F
     topology levels, which are topology, not flags. Move that block into
     topology.c (behind --debug or --verbose), and make show_extra_flags()

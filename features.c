@@ -289,6 +289,10 @@ void show_extra_flags(const struct cpudata *cpu)
 {
 	unsigned int eax = 0, ebx = 0, ecx = 0, edx = 0;
 
+	if (cpu->cpuid_level < 0x06 && cpu->maxei < 0x80000007)
+		return;
+	printf("\nAdditional feature flags:\n");
+
 	// CPUID 0x06
 	if (cpu->cpuid_level >= 0x06) {
 		cpuid(cpu->number, 0x06, &eax, &ebx, &ecx, &edx);
@@ -499,6 +503,7 @@ static void decode_feature_flags(const struct cpudata *cpu)
 	/* Vendor specific extensions. */
 	switch (cpu->vendor) {
 		case VENDOR_AMD:
+		case VENDOR_INTEL:
 			flag_decode(cpu->flags_ecx, "1:ecx", cap_generic_ecx_flags, cap_generic_ecx_flags_desc);
 			printf("\n");
 			if (cpu->maxei < 0x80000001)
@@ -506,7 +511,6 @@ static void decode_feature_flags(const struct cpudata *cpu)
 			printf("Extended feature flags:\n");
 			flag_decode(cpu->eflags_edx, "80000001:edx", cap_extended_edx_flags, cap_extended_edx_flags_desc);
 			flag_decode(cpu->eflags_ecx, "80000001:ecx", cap_extended_ecx_flags, cap_extended_ecx_flags_desc);
-			printf("\n");
 			break;
 
 		case VENDOR_CENTAUR:
@@ -534,16 +538,6 @@ static void decode_feature_flags(const struct cpudata *cpu)
 
 		case VENDOR_CYRIX:
 			printf("\n");
-			break;
-
-		case VENDOR_INTEL:
-			flag_decode(cpu->flags_ecx, "1:ecx", cap_generic_ecx_flags, cap_generic_ecx_flags_desc);
-			printf("\n");
-			if (cpu->maxei < 0x80000001)
-				break;
-			printf("Extended feature flags:\n");
-			flag_decode(cpu->eflags_edx, "80000001:edx", cap_extended_edx_flags, cap_extended_edx_flags_desc);
-			flag_decode(cpu->eflags_ecx, "80000001:ecx", cap_extended_ecx_flags, cap_extended_ecx_flags_desc);
 			break;
 
 		case VENDOR_NATSEMI:
