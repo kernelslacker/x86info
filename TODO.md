@@ -2,14 +2,6 @@
 
 ## 🔴 Correctness
 
-A39. rdmsr-linux.c:502-537, cpuid-linux.c:63,91 — the `nodriver` latches and
-    lazily filled fd arrays are written from the --mhz worker threads
-    (read_perf_counters -> read_msr). A data race; and as root without the
-    msr module, several threads print the "modprobe msr" hint before one
-    sets nodriver. Probe MSR access once in the main thread before
-    estimate_MHz_cpus() starts threads (e.g. open the group leaders' fds).
-    [sonnet]
-
 ## 🟡 Performance
 
 B6. vendors/intel/identify-family6-extended.c:530-537 — get_namestring()

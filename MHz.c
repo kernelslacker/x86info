@@ -155,6 +155,11 @@ static int has_perf_counters(const struct cpudata *cpu)
 	return ecx & 1;
 }
 
+static unsigned int perf_msr_base(const struct cpudata *cpu)
+{
+	return cpu->vendor == VENDOR_AMD ? 0xc0000000 : 0;
+}
+
 /*
  * Read the APERF/MPERF counters if the CPU has them: from the MSRs as
  * root, otherwise from the kernel's msr PMU.
@@ -162,7 +167,7 @@ static int has_perf_counters(const struct cpudata *cpu)
 static int read_perf_counters(const struct cpudata *cpu,
 			      unsigned long long *aperf, unsigned long long *mperf)
 {
-	unsigned int base = cpu->vendor == VENDOR_AMD ? 0xc0000000 : 0;
+	unsigned int base = perf_msr_base(cpu);
 
 	if (!has_perf_counters(cpu))
 		return 0;
@@ -171,6 +176,15 @@ static int read_perf_counters(const struct cpudata *cpu,
 	    read_msr(cpu->number, base + MSR_MPERF, mperf) == 1)
 		return 1;
 	return read_perf_msr_pmu(aperf, mperf);
+}
+
+/* Open the MSR driver for this CPU, so the measuring threads find it ready. */
+static void probe_msr_access(const struct cpudata *cpu)
+{
+	unsigned long long val;
+
+	if (user_is_root && has_perf_counters(cpu))
+		read_msr(cpu->number, perf_msr_base(cpu) + MSR_APERF, &val);
 }
 
 /* Cores take most of a second to ramp up to boost clocks, so spin for a
@@ -311,6 +325,10 @@ void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n,
 	pthread_t *threads = calloc(n, sizeof(*threads));
 	unsigned char *started = calloc(n, sizeof(*started));
 	unsigned int i;
+
+	for (i = 0; i < n; i++)
+		if (opts.all_cpus || leader[i] == i)
+			probe_msr_access(&cpus[i]);
 
 	for (i = 0; i < n; i++) {
 		if (!opts.all_cpus && leader[i] != i)
