@@ -324,7 +324,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	display_topology(&cpus[0]);
+	display_topology(&cpus[0], nrCPUs);
 
 	free(leader);
 	free(group_size);

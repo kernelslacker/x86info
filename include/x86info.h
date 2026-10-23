@@ -188,7 +188,7 @@ void get_topology(struct cpudata *head);
 void get_core_type(struct cpudata *cpu);
 const char *core_type_name(const struct cpudata *cpu);
 void clear_uniform_core_types(struct cpudata *cpus, unsigned int n);
-void display_topology(struct cpudata *head);
+void display_topology(struct cpudata *cpus, unsigned int n);
 
 /* Upper bound for per-CPU descriptor tables. */
 #define MAX_CPUS 8192

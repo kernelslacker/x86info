@@ -165,26 +165,26 @@ static int cmp_uint(const void *a, const void *b)
 }
 
 /* Number of distinct packages among the CPUs. */
-static unsigned int count_sockets(struct cpudata *cpus)
+static unsigned int count_sockets(struct cpudata *cpus, unsigned int n)
 {
 	unsigned int *ids;
 	unsigned int i, run = 0, sockets = 0;
 
-	ids = malloc(nrCPUs * sizeof(*ids));
+	ids = malloc(n * sizeof(*ids));
 	if (ids == NULL)
 		return 0;
 
-	for (i = 0; i < nrCPUs; i++)
+	for (i = 0; i < n; i++)
 		ids[i] = cpus[i].phys_proc_id;
-	qsort(ids, nrCPUs, sizeof(*ids), cmp_uint);
+	qsort(ids, n, sizeof(*ids), cmp_uint);
 
-	for (i = 0; i < nrCPUs; i++) {
+	for (i = 0; i < n; i++) {
 		if (i == 0 || ids[i] != ids[i - 1]) {
 			sockets++;
 			run = 0;
 		}
 		run++;
-		if (opts.debug && (i + 1 == nrCPUs || ids[i + 1] != ids[i]))
+		if (opts.debug && (i + 1 == n || ids[i + 1] != ids[i]))
 			printf("Socket %u: %u threads\n", ids[i], run);
 	}
 
@@ -194,7 +194,8 @@ static unsigned int count_sockets(struct cpudata *cpus)
 
 /* Number of distinct (package, core) pairs among the CPUs, and the
  * smallest and largest number of CPUs sharing one. */
-static unsigned int count_cores(struct cpudata *cpus, unsigned int *min_threads,
+static unsigned int count_cores(struct cpudata *cpus, unsigned int n,
+				unsigned int *min_threads,
 				unsigned int *max_threads)
 {
 	unsigned long long *keys;
@@ -203,22 +204,22 @@ static unsigned int count_cores(struct cpudata *cpus, unsigned int *min_threads,
 	*min_threads = ~0u;
 	*max_threads = 0;
 
-	keys = malloc(nrCPUs * sizeof(*keys));
+	keys = malloc(n * sizeof(*keys));
 	if (keys == NULL)
 		return 0;
 
-	for (i = 0; i < nrCPUs; i++)
+	for (i = 0; i < n; i++)
 		keys[i] = ((unsigned long long)cpus[i].phys_proc_id << 32) |
 			  cpus[i].cpu_core_id;
-	qsort(keys, nrCPUs, sizeof(*keys), cmp_u64);
+	qsort(keys, n, sizeof(*keys), cmp_u64);
 
-	for (i = 0; i < nrCPUs; i++) {
+	for (i = 0; i < n; i++) {
 		if (i == 0 || keys[i] != keys[i - 1]) {
 			cores++;
 			run = 0;
 		}
 		run++;
-		if (i + 1 == nrCPUs || keys[i + 1] != keys[i]) {
+		if (i + 1 == n || keys[i + 1] != keys[i]) {
 			if (run < *min_threads)
 				*min_threads = run;
 			if (run > *max_threads)
@@ -259,11 +260,11 @@ static void show_topology_levels(const struct cpudata *cpu)
 	}
 }
 
-void display_topology(struct cpudata *cpus)
+void display_topology(struct cpudata *cpus, unsigned int n)
 {
 	unsigned int i;
 	unsigned int num_sockets;
-	unsigned int total_threads = nrCPUs;
+	unsigned int total_threads = n;
 	unsigned int cores;
 	unsigned int min_siblings = ~0u, max_siblings = 0;
 	unsigned int p_threads = 0, e_threads = 0;
@@ -273,35 +274,35 @@ void display_topology(struct cpudata *cpus)
 
 	if (opts.debug) {
 		printf("cpu->phys_proc_id: ");
-		for (i = 0; i < nrCPUs; i++) {
+		for (i = 0; i < n; i++) {
 			printf("%u, ", cpus[i].phys_proc_id);
 		}
 		printf("\n");
 
 		printf("cpu->x86_max_cores: ");
-		for (i = 0; i < nrCPUs; i++) {
+		for (i = 0; i < n; i++) {
 			printf("%u, ", cpus[i].x86_max_cores);
 		}
 		printf("\n");
 
 		printf("cpu->cpu_core_id: ");
-		for (i = 0; i < nrCPUs; i++) {
+		for (i = 0; i < n; i++) {
 			printf("%u, ", cpus[i].cpu_core_id);
 		}
 		printf("\n");
 	}
 
-	for (i = 0; i < nrCPUs; i++) {
+	for (i = 0; i < n; i++) {
 		if (cpus[i].num_siblings < min_siblings)
 			min_siblings = cpus[i].num_siblings;
 		if (cpus[i].num_siblings > max_siblings)
 			max_siblings = cpus[i].num_siblings;
 	}
 
-	num_sockets = count_sockets(cpus);
+	num_sockets = count_sockets(cpus, n);
 
 	if (cpus[0].topology == TOPOLOGY_X2APIC) {
-		cores = count_cores(cpus, &min_siblings, &max_siblings);
+		cores = count_cores(cpus, n, &min_siblings, &max_siblings);
 	} else {
 		/* No per-core ID: assume every core has the same thread count. */
 		cores = max_siblings > 1 ? total_threads / max_siblings : total_threads;
@@ -322,7 +323,7 @@ void display_topology(struct cpudata *cpus)
 	}
 	printf("\n");
 
-	for (i = 0; i < nrCPUs; i++) {
+	for (i = 0; i < n; i++) {
 		if (cpus[i].core_type == CORE_TYPE_PERFORMANCE)
 			p_threads++;
 		else if (cpus[i].core_type == CORE_TYPE_EFFICIENCY)
