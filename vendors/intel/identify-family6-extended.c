@@ -21,7 +21,7 @@ struct cpu_name_def {
 	const char *str;
 };
 
-static struct cpu_name_def intel_fam6e_names[] = {
+static const struct cpu_name_def intel_fam6e_names[] = {
 	{ .model = 0x17, .cores = 4,.stepping = 6, .mhz = 3000, .str = "Core 2 quad (QX9650) [C0]" },
 	{ .model = 0x17, .cores = 4,.stepping = 6, .mhz = 3200, .str = "Core 2 extreme quad (QX9775) [C0]" },
 

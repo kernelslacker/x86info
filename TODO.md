@@ -52,10 +52,6 @@ J6. cpuid.c:413-444 — dump_subleaves() skips other leaves that have
 
 ## 🟢 Minor nits / one-liners
 
-K12. vendors/amd/powernow.c:15,22 (mobile_vid_table, fid_codes),
-    vendors/amd/amd-revision.h and vendors/intel/identify-family6-extended.c
-    (intel_fam6e_names) — read-only tables that aren't const. [haiku]
-
 K13. lsmsr/lsmsr.c:169-194 — show_matching()'s length juggling is
     strncmp(table name, name, strlen(name)) == 0; and -c accepts negative
     CPU numbers. [haiku]

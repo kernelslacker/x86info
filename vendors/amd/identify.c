@@ -18,7 +18,7 @@
 #include <amd.h>
 #include "amd-revision.h"
 
-static void set_k8_name(struct k8_rev *r, struct cpudata *c)
+static void set_k8_name(const struct k8_rev *r, struct cpudata *c)
 {
 	unsigned int i, id, cont;
 
@@ -52,7 +52,7 @@ static void set_k8_name(struct k8_rev *r, struct cpudata *c)
 static void set_k8_revinfo(int id, struct cpudata *c)
 {
 	int i;
-	struct k8_rev *r;
+	const struct k8_rev *r;
 
 	r = NULL;
 	for (i = 0; i < ARRAY_SIZE(k8_revisions); i++) {
@@ -67,7 +67,7 @@ static void set_k8_revinfo(int id, struct cpudata *c)
 }
 
 
-static void set_fam10h_name(struct fam10h_rev *r, struct cpudata *c)
+static void set_fam10h_name(const struct fam10h_rev *r, struct cpudata *c)
 {
 	if (!r) {
 		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
@@ -133,7 +133,7 @@ static void set_connector(struct cpudata *c)
 static void set_fam10h_revinfo(int id, struct cpudata *c)
 {
 	int i;
-	struct fam10h_rev *r = NULL;
+	const struct fam10h_rev *r = NULL;
 
 	for (i = 0; i < ARRAY_SIZE(fam10h_revisions); i++) {
 		if (fam10h_revisions[i].eax == id) {

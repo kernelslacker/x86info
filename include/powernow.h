@@ -88,5 +88,5 @@ union msr_pstate {
 	unsigned long long val;
 };
 
-extern double mobile_vid_table[32];
-extern double fid_codes[32];
+extern const double mobile_vid_table[32];
+extern const double fid_codes[32];
