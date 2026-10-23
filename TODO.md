@@ -20,10 +20,6 @@ B3. vendors/intel/cachesize.c:259-285 — decode_cache() re-runs CPUID 2 for
     each of ~11 tables, twice (once during identify, once for --cache).
     Read the descriptor bytes once into a 16*n array (see G1). [sonnet]
 
-B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
-    pci_alloc/init/scan_bus/cleanup. Share one helper that scans once and
-    finds a device by vendor + list of device IDs. [sonnet]
-
 ## 🟡 Deprecated/Obsolete API Usage
 
 E2. cpuid-solaris.c:57 — lseek64/off64_t/_LARGEFILE64_SOURCE (removed in

@@ -125,31 +125,46 @@ static int get_did(int family, union msr_pstate pstate)
 	return t;
 }
 
-static int get_main_pll_fid(void)
+/*
+ * Read a config space byte from the first AMD device whose ID is in ids.
+ * Returns 1 and sets *val if found.
+ */
+static int read_amd_pci_byte(const int *ids, unsigned int nr_ids,
+			     unsigned int reg, u8 *val)
 {
-	struct pci_filter filter_nb_misc = { .domain = -1, .bus = -1, .slot = -1, .func = -1, .vendor = 0x1022, .device =0x1703, };
 	struct pci_access *pacc;
-	struct pci_dev *z = NULL;
-	u8 val;
+	struct pci_dev *z;
+	unsigned int i;
+	int found = 0;
 
 	pacc = pci_alloc();
 	pci_init(pacc);
 	pci_scan_bus(pacc);
 
-	for (z=pacc->devices; z; z=z->next) {
-		if (pci_filter_match(&filter_nb_misc, z))
-			break;
-	}
+	for (i = 0; i < nr_ids && !found; i++) {
+		struct pci_filter filter = { .domain = -1, .bus = -1, .slot = -1, .func = -1, .vendor = 0x1022, .device = ids[i], };
 
-	val = 0;
-	if (z) {
-		val = pci_read_byte(z, 0xd4);
-		val &= 0x3f;
+		for (z = pacc->devices; z; z = z->next) {
+			if (pci_filter_match(&filter, z)) {
+				*val = pci_read_byte(z, reg);
+				found = 1;
+				break;
+			}
+		}
 	}
 
 	pci_cleanup(pacc);
+	return found;
+}
 
-	return val;
+static int get_main_pll_fid(void)
+{
+	static const int dev_ids[] = {0x1703};
+	u8 val = 0;
+
+	if (!read_amd_pci_byte(dev_ids, ARRAY_SIZE(dev_ids), 0xd4, &val))
+		return 0;
+	return val & 0x3f;
 }
 
 static int get_cof(int family, union msr_pstate pstate)
@@ -225,38 +240,18 @@ static int get_zen_cof(struct cpudata *cpu, unsigned long long val)
 
 static int get_num_boost_states(void)
 {
-	struct pci_filter filter_nb_link = { .domain = -1, .bus = -1, .slot = -1, .func = -1, .vendor = 0x1022, .device =0, };
-	int dev_ids[4] = {0x1204, 0x1404, 0x1604, 0x1704};
-	struct pci_access *pacc;
-	struct pci_dev *z = NULL;
+	static const int dev_ids[] = {0x1204, 0x1404, 0x1604, 0x1704};
 	u8 val;
-	int i;
 
-	pacc = pci_alloc();
-	pci_init(pacc);
-	pci_scan_bus(pacc);
+	if (!read_amd_pci_byte(dev_ids, ARRAY_SIZE(dev_ids), 0x15c, &val))
+		return 0;
 
-	for (i=0; i<ARRAY_SIZE(dev_ids); i++) {
-		filter_nb_link.device = dev_ids[i];
-		for (z=pacc->devices; z; z=z->next) {
-			if (pci_filter_match(&filter_nb_link, z))
-				goto match;
-		}
-	}
-
- match:
-	val = 0;
-	if (z) {
-		val = pci_read_byte(z, 0x15c);
-		if (val & 3)
-			printf("Boosting enabled\n");
-		else
-			printf("Boosting disabled\n");
-		val = (val >> 2) & 7;
-		printf("Number of boost states: %u\n", val);
-	}
-
-	pci_cleanup(pacc);
+	if (val & 3)
+		printf("Boosting enabled\n");
+	else
+		printf("Boosting disabled\n");
+	val = (val >> 2) & 7;
+	printf("Number of boost states: %u\n", val);
 	return val;
 }
 
