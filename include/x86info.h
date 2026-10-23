@@ -140,7 +140,6 @@ void identify_misc(struct cpudata *cpu);
 extern const char *cpuid_80000007_edx_flags_desc[32];
 void get_feature_flags(struct cpudata *cpu);
 void display_feature_flags(const struct cpudata *cpu);
-void show_extra_flags(const struct cpudata *cpu);
 
 int bind_cpu(unsigned int cpunr);
 

@@ -6,11 +6,6 @@
 
 ## 🟡 Maintainability
 
-C27. features.c:318-342 — show_extra_flags() also prints the CPUID 0x1F
-    topology levels, which are topology, not flags. Move that block into
-    topology.c (behind --debug or --verbose), and make show_extra_flags()
-    static since only features.c calls it. [sonnet]
-
 C28. Dead or needlessly exported functions: cpuid_ebx() (cpuid.c:358) has no
     callers; estimate_MHz() (MHz.c:288) is a one-line wrapper used only by
     measure_thread(); display_MHz() (MHz.c:37) is only used in MHz.c. Delete

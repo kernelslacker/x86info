@@ -285,7 +285,7 @@ const char *cpuid_80000007_edx_flags_desc[32] = {
 	"RAPL",							// 14
 };
 
-void show_extra_flags(const struct cpudata *cpu)
+static void show_extra_flags(const struct cpudata *cpu)
 {
 	unsigned int eax = 0, ebx = 0, ecx = 0, edx = 0;
 
@@ -318,31 +318,6 @@ void show_extra_flags(const struct cpudata *cpu)
 	if (cpu->maxei >= 0x80000007) {
 		cpuid(cpu->number, 0x80000007, &eax, &ebx, &ecx, &edx);
 		flag_decode(edx, "80000007:edx", cpuid_80000007_edx_flags, cpuid_80000007_edx_flags_desc);
-	}
-	// CPUID 0x1F: V2 extended topology
-	if (cpu->cpuid_level >= 0x1f) {
-		static const char * const level_names[] = {
-			"Invalid", "SMT", "Core", "Module", "Tile", "Die"
-		};
-		unsigned int subleaf, level_type;
-
-		cpuid_count(cpu->number, 0x1f, 0, &eax, &ebx, &ecx, &edx);
-		if (ebx) {
-			printf("\nV2 extended topology (leaf 0x1F):\n");
-			for (subleaf = 0; subleaf < 8; subleaf++) {
-				cpuid_count(cpu->number, 0x1f, subleaf,
-					    &eax, &ebx, &ecx, &edx);
-				level_type = (ecx >> 8) & 0xff;
-				if (level_type == 0)
-					break;
-				printf("  Level %u (%s): %u logical CPUs"
-				       ", x2APIC shift=%u, x2APIC ID=%u\n",
-				       ecx & 0xff,
-				       level_type < ARRAY_SIZE(level_names)
-					? level_names[level_type] : "Unknown",
-				       ebx & 0xffff, eax & 0x1f, edx);
-			}
-		}
 	}
 }
 

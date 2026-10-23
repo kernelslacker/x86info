@@ -230,6 +230,35 @@ static unsigned int count_cores(struct cpudata *cpus, unsigned int *min_threads,
 	return cores;
 }
 
+/* Print the levels of the extended topology leaf 0x1F. */
+static void show_topology_levels(const struct cpudata *cpu)
+{
+	static const char * const level_names[] = {
+		"Invalid", "SMT", "Core", "Module", "Tile", "Die"
+	};
+	unsigned int eax, ebx, ecx, edx, subleaf, level_type;
+
+	if (cpu->cpuid_level < 0x1f)
+		return;
+	cpuid_count(cpu->number, 0x1f, 0, &eax, &ebx, &ecx, &edx);
+	if (!ebx)
+		return;
+
+	printf("V2 extended topology (leaf 0x1F):\n");
+	for (subleaf = 0; subleaf < 8; subleaf++) {
+		cpuid_count(cpu->number, 0x1f, subleaf, &eax, &ebx, &ecx, &edx);
+		level_type = (ecx >> 8) & 0xff;
+		if (level_type == 0)
+			break;
+		printf("  Level %u (%s): %u logical CPUs"
+		       ", x2APIC shift=%u, x2APIC ID=%u\n",
+		       ecx & 0xff,
+		       level_type < ARRAY_SIZE(level_names)
+			? level_names[level_type] : "Unknown",
+		       ebx & 0xffff, eax & 0x1f, edx);
+	}
+}
+
 void display_topology(struct cpudata *cpus)
 {
 	unsigned int i;
@@ -302,4 +331,7 @@ void display_topology(struct cpudata *cpus)
 	if (p_threads || e_threads)
 		printf("Hybrid: %u Performance threads, %u Efficiency threads\n",
 		       p_threads, e_threads);
+
+	if (opts.debug || opts.verbose)
+		show_topology_levels(&cpus[0]);
 }
