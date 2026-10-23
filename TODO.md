@@ -31,10 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C18. vendors/intel/topology.c — phys_pkg_id() is a one-line wrapper; the
-    `goto out; out: return;` is noise; `num_siblings == 1` and `<= 1` checks
-    are redundant; cpuid_ebx(cpu, 1) re-issues a leaf already read. [haiku]
-
 C19. vendors/intel/info.c:37-49 — six snprintf calls with manual offset
     arithmetic build the serial; one
     `snprintf(..., "%04X-%04X-%04X-%04X-%04X-%04X", ...)` does it. [haiku]

@@ -48,11 +48,6 @@ int intel_num_cpu_cores(struct cpudata *cpu)
 		return 1;
 }
 
-static int phys_pkg_id(int cpuid_apic, int index_msb)
-{
-	return cpuid_apic >> index_msb;
-}
-
 void get_intel_topology(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
@@ -70,7 +65,7 @@ void get_intel_topology(struct cpudata *cpu)
 		logical = cpu->x86_max_cores;
 
 	index_msb = get_count_order(logical);
-	cpu->phys_proc_id = phys_pkg_id(initial_apicid, index_msb);
+	cpu->phys_proc_id = initial_apicid >> index_msb;
 
 	cpu->num_siblings = logical / cpu->x86_max_cores;
 	if (cpu->num_siblings == 0)
@@ -83,7 +78,7 @@ void get_intel_topology(struct cpudata *cpu)
 
 	core_bits = get_count_order(cpu->x86_max_cores);
 
-	cpu->cpu_core_id = phys_pkg_id(initial_apicid, index_msb) &
+	cpu->cpu_core_id = initial_apicid >> index_msb &
 		((1 << core_bits) - 1);
 
 	if (debug) {
