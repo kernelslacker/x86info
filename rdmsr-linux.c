@@ -18,8 +18,8 @@
 #include <string.h>
 #include <x86info.h>
 
-/* Per-CPU /dev/cpu/N/msr descriptors, opened lazily and stored as fd + 1. */
-static int msr_fds[MAX_CPUS];
+/* Per-CPU /dev/cpu/N/msr descriptors, opened lazily; -1 if not open. */
+static int msr_fds[MAX_CPUS] = { [0 ... MAX_CPUS - 1] = -1 };
 
 static int msr_fd(int cpu)
 {
@@ -28,8 +28,8 @@ static int msr_fd(int cpu)
 
 	if (cpu < 0 || cpu >= MAX_CPUS)
 		return -1;
-	if (msr_fds[cpu])
-		return msr_fds[cpu] - 1;
+	if (msr_fds[cpu] != -1)
+		return msr_fds[cpu];
 
 	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%d/msr", cpu);
 	fh = open(cpuname, O_RDONLY);
@@ -38,7 +38,7 @@ static int msr_fd(int cpu)
 		if (errno == ENOENT)
 			fprintf(stderr, "Is the msr module loaded? Try 'modprobe msr'.\n");
 	} else
-		msr_fds[cpu] = fh + 1;
+		msr_fds[cpu] = fh;
 	return fh;
 }
 

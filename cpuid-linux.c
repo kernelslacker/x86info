@@ -54,8 +54,8 @@ static const char *NATIVE_CPUID_FAILED_MSG = "WARNING: Native cpuid failed\n";
  */
 #define CPUID_CHUNK_SIZE (16)
 
-/* Per-CPU /dev/cpu/N/cpuid descriptors, opened lazily and stored as fd + 1. */
-static int cpuid_fds[MAX_CPUS];
+/* Per-CPU /dev/cpu/N/cpuid descriptors, opened lazily; -1 if not open. */
+static int cpuid_fds[MAX_CPUS] = { [0 ... MAX_CPUS - 1] = -1 };
 
 static int cpuid_fd(unsigned int cpunr)
 {
@@ -64,13 +64,13 @@ static int cpuid_fd(unsigned int cpunr)
 
 	if (cpunr >= MAX_CPUS)
 		return -1;
-	if (cpuid_fds[cpunr])
-		return cpuid_fds[cpunr] - 1;
+	if (cpuid_fds[cpunr] != -1)
+		return cpuid_fds[cpunr];
 
 	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpu/%u/cpuid", cpunr);
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1)
-		cpuid_fds[cpunr] = fh + 1;
+		cpuid_fds[cpunr] = fh;
 	else if (errno == ENOENT)
 		fprintf(stderr, "%s: %s. Try 'modprobe cpuid'; using native cpuid.\n",
 			cpuname, strerror(errno));
