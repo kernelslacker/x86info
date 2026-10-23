@@ -9,7 +9,7 @@
 #include "cyrix.h"
 
 /* Decode TLB and cache info descriptors */
-void decode_cyrix_tlb(int x)
+static void decode_cyrix_tlb(int x)
 {
 	switch (x & 0xff) {
 	case 0:

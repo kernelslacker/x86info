@@ -31,9 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Clean-ups/Refactoring/Style
 
-D5. vendors/cyrix/identify.c:15 / include/cyrix.h — decode_cyrix_tlb() is
-    only used locally; make it static. [haiku]
-
 D6. lsmsr/lsmsr.c:408-411 — usage() exits, so `goto out` is dead;
     `optind > -1` (line 413) is always true; first cpuid(…, 0) in
     set_family_model() (line 257) is unused. [haiku]
