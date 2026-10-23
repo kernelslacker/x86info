@@ -203,7 +203,8 @@ static int MPConfigTableHeader(struct mp_scan *mp, u32 pap)
 	unsigned long paddr;
 	unsigned char *table;
 	struct mpcth cth;
-	unsigned int off, size;
+	unsigned int off;
+	u16 size;
 	int c;
 
 	if (pap == 0) {
