@@ -31,10 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C15. vendors/amd/model-name.c:22-75 — 55-line switch of brand strings plus
-    a second switch on model letter. Make it a
-    `{index, letter, fmt}` table. [sonnet]
-
 C16. mptable.c:251-385 — seven copies of "read region, scan 16-byte aligned
     for _MP_". Extract `scan_for_mp(addr, size, &paddr)`. enumerate_cpus()
     and display_mptable() (lines 388-458) are also duplicates differing only
