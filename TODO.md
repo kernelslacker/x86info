@@ -108,11 +108,6 @@ J4. cpuid.c:76 — dump_raw_cpuid() only dumps subleaf 0. Also walk
 
 ## 🟢 Minor nits / one-liners
 
-K1. Makefile — VERSION from `date` makes builds irreproducible; use
-    `git describe --always --dirty` with date fallback. Add .PHONY for
-    clean/tarball/sparse/cscope/scan/tags/coverity. `$(patsubst %.h,%.h,…)`
-    is a no-op. [haiku]
-
 K2. vendors/amd/identify.c:1008-1052 — `%d` with `(int)` casts on unsigned
     CPUID fields; use `%u`. [haiku]
 

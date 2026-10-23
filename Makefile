@@ -1,4 +1,4 @@
-VERSION=$(shell date +%Y-%m-%d)
+VERSION=$(shell git describe --tags --always --dirty 2>/dev/null || date +%Y-%m-%d)
 
 include flags.mk
 
@@ -21,11 +21,11 @@ QUIET_CC = $(Q:@=@echo    '  CC '$@;)
 
 all: x86info lsmsr
 
-.PHONY: lsmsr
+.PHONY: lsmsr clean tarball sparse cscope scan tags coverity
 
 X86INFO_HEADERS = \
-	$(patsubst %.h,%.h,$(wildcard *.h)) \
-	$(patsubst %.h,%.h,$(wildcard include/*.h))
+	$(wildcard *.h) \
+	$(wildcard include/*.h)
 
 X86INFO_SRC = \
 	$(wildcard *.c)	\
