@@ -6,42 +6,14 @@
 #include <stdio.h>
 #include <x86info.h>
 #include "centaur.h"
-
-union msr_longhaul {
-	struct {
-		unsigned RevisionID:4,	// 3:0
-		RevisionKey:4,		// 7:4
-		EnableSoftBusRatio:1,	// 8
-		EnableSoftVID:1,	// 9
-		EnableSoftBSEL:1,	// 10
-		Reserved:3,		// 11:13
-		SoftBusRatio4:1,	// 14
-		VRMRev:1,		// 15
-		SoftBusRatio:4,		// 19:16
-		SoftVID:5,		// 24:20
-		Reserved2:3,		// 27:25
-		SoftBSEL:2,		// 29:28
-		Reserved3:2,		// 31:30
-		MaxMHzBR:4,		// 35:32
-		MaximumVID:5,		// 40:36
-		MaxMHzFSB:2,		// 42:41
-		MaxMHzBR4:1,		// 43
-		Reserved4:4,		// 47:44
-		MinMHzBR:4,		// 51:48
-		MinimumVID:5,		// 56:52
-		MinMHzFSB:2,		// 58:57
-		MinMHzBR4:1,		// 59
-		Reserved5:4;		// 63:60
-	} bits;
-	unsigned long long val;
-};
+#include "powersaver.h"
 
 void decode_longhaul(struct cpudata *cpu)
 {
-	union msr_longhaul longhaul;
+	union msr_powersaver longhaul;
 
-	if (read_msr(cpu->number, 0x110A, &longhaul.val) == 1) {
-		dumpmsr (cpu->number, 0x110A, 64);
+	if (read_msr(cpu->number, MSR_POWERSAVER, &longhaul.val) == 1) {
+		dumpmsr (cpu->number, MSR_POWERSAVER, 64);
 
 		if (longhaul.bits.RevisionID & 1)
 			printf("\tSoftVID support\n");

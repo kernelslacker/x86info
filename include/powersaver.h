@@ -10,28 +10,32 @@
 
 #define MSR_POWERSAVER	0x110a
 
+/* Shared by the Longhaul (Samuel/Ezra/Nehemiah) and Powersaver (C7) CPUs. */
 union msr_powersaver {
 	struct {
 		unsigned RevisionID:4,	// 3:0
-		RevisionKey:4,			// 7:4
+		RevisionKey:4,		// 7:4
 		EnableSoftBusRatio:1,	// 8
-		EnableSoftVID:1,		// 9
-		Reserved:4,				// 10:13
-		SoftBusRatio4:1,		// 14
-		VRMRev:1,				// 15
-		SoftBusRatio:4,			// 16:19
-		SoftVID:5,				// 20:24
-		Reserved2:7,			// 25:31
-		MaxMHzBR:4,				// 32:35
-		MaximumVID:5,			// 36:40
-		MaxMHzFSB:2,			// 41:42
-		MaxMHzBR4:1,			// 43
-		Reserved3:4,			// 44:47
-		MinMHzBR:4,				// 48:51
-		MinimumVID:5,			// 52:56
-		MinMHzFSB:2,			// 57:58
-		MinMHzBR4:1,			// 59
-		Reserved4:4;			// 60:63
+		EnableSoftVID:1,	// 9
+		EnableSoftBSEL:1,	// 10
+		Reserved:3,		// 11:13
+		SoftBusRatio4:1,	// 14
+		VRMRev:1,		// 15
+		SoftBusRatio:4,		// 19:16
+		SoftVID:5,		// 24:20
+		Reserved2:3,		// 27:25
+		SoftBSEL:2,		// 29:28
+		Reserved3:2,		// 31:30
+		MaxMHzBR:4,		// 35:32
+		MaximumVID:5,		// 40:36
+		MaxMHzFSB:2,		// 42:41
+		MaxMHzBR4:1,		// 43
+		Reserved4:4,		// 47:44
+		MinMHzBR:4,		// 51:48
+		MinimumVID:5,		// 56:52
+		MinMHzFSB:2,		// 58:57
+		MinMHzBR4:1,		// 59
+		Reserved5:4;		// 63:60
 	} bits;
 	unsigned long long val;
 };

@@ -31,9 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C20. vendors/centaur/longhaul.c:10-37 / include/powersaver.h — same MSR
-    (0x110a), near-identical bitfield unions. Share one union. [haiku]
-
 C21. vendors/amd/powernow.c:89-95 — k8_fid_codes[64] is
     `fid & 1 || fid > 42 ? -1 : 4 + fid / 2`. Compute it. [haiku]
 
