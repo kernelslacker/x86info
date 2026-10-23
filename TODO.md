@@ -2,10 +2,6 @@
 
 ## 🟡 Deprecated/Obsolete API Usage
 
-E2. cpuid-solaris.c:57 — lseek64/off64_t/_LARGEFILE64_SOURCE (removed in
-    musl, deprecated in glibc). Use pread() with `-D_FILE_OFFSET_BITS=64`.
-    [haiku]
-
 E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr
     backend, so MSR output and per-CPU cpuid don't work. Implement them
     (processor_bind(), /dev/cpu/N/msr) or drop the README claim. [sonnet]

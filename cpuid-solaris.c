@@ -7,7 +7,7 @@
 
 #ifdef __sun__
 
-#define _LARGEFILE64_SOURCE
+#define _FILE_OFFSET_BITS 64
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -60,12 +60,7 @@ void cpuid(unsigned int CPU_number, unsigned long long idx,
 
 	fh = open(cpuname, O_RDONLY);
 	if (fh != -1) {
-		if (lseek64(fh, (off64_t)idx, SEEK_SET) < 0) {
-			printf("cpuid seek error: %s\n", strerror(errno));
-			exit(EXIT_FAILURE);
-		}
-
-		if (read(fh, &buffer[0], CPUID_CHUNK_SIZE) == -1) {
+		if (pread(fh, &buffer[0], CPUID_CHUNK_SIZE, (off_t)idx) == -1) {
 			perror(cpuname);
 			exit(EXIT_FAILURE);
 		}
