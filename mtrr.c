@@ -60,14 +60,6 @@ static void set_max_phy_addr(struct cpudata *cpu)
 	}
 }
 
-static int mtrr_value(int cpu, int msr, unsigned long long *val)
-{
-	if (read_msr(cpu, msr, val) == 1)
-		return 1;
-	else
-		return 0;
-}
-
 static void dump_mtrr(int cpu, int msr)
 {
 	unsigned long long val = 0;
@@ -87,11 +79,9 @@ static void decode_mtrrcap(unsigned long long val)
 static void decode_mtrr_deftype(int cpu, int msr)
 {
 	unsigned long long val;
-	int ret;
 	u8 type;
 
-	ret = mtrr_value(cpu,msr,&val);
-	if (ret) {
+	if (read_msr(cpu, msr, &val) == 1) {
 		printf("0x%016llx ", val);
 
 		printf("(fixed-range flag:%d ",
@@ -109,11 +99,9 @@ static void decode_mtrr_deftype(int cpu, int msr)
 static void decode_mtrr_physbase(int cpu, int msr)
 {
 	unsigned long long val;
-	int ret;
 	u8 type;
 
-	ret = mtrr_value(cpu, msr, &val);
-	if (ret) {
+	if (read_msr(cpu, msr, &val) == 1) {
 		printf("0x%016llx ", val);
 
 		printf("(physbase:");
@@ -128,10 +116,8 @@ static void decode_mtrr_physbase(int cpu, int msr)
 static void decode_mtrr_physmask(int cpu, int msr)
 {
 	unsigned long long val;
-	int ret;
 
-	ret = mtrr_value(cpu,msr,&val);
-	if (ret) {
+	if (read_msr(cpu, msr, &val) == 1) {
 		printf("0x%016llx ", val);
 
 		printf("(physmask:");
@@ -142,6 +128,23 @@ static void decode_mtrr_physmask(int cpu, int msr)
 	}
 }
 
+
+static const struct {
+	const char *label;
+	unsigned int msr;
+} mtrr_fixed[] = {
+	{ "MTRRfix64K_00000", 0x250 },
+	{ "MTRRfix16K_80000", 0x258 },
+	{ "MTRRfix16K_A0000", 0x259 },
+	{ "MTRRfix4K_C0000", 0x268 },
+	{ "MTRRfix4K_C8000", 0x269 },
+	{ "MTRRfix4K_D0000", 0x26a },
+	{ "MTRRfix4K_D8000", 0x26b },
+	{ "MTRRfix4K_E0000", 0x26c },
+	{ "MTRRfix4K_E8000", 0x26d },
+	{ "MTRRfix4K_F0000", 0x26e },
+	{ "MTRRfix4K_F8000", 0x26f },
+};
 
 void dump_mtrrs(struct cpudata *cpu)
 {
@@ -179,29 +182,10 @@ void dump_mtrrs(struct cpudata *cpu)
 	}
 
 	if (val & IA32_MTRRCAP_FIX) {
-		printf("MTRRfix64K_00000 (0x250): ");
-		dump_mtrr (cpu->number, 0x250);
-		printf("MTRRfix16K_80000 (0x258): ");
-		dump_mtrr (cpu->number, 0x258);
-		printf("MTRRfix16K_A0000 (0x259): ");
-		dump_mtrr (cpu->number, 0x259);
-
-		printf("MTRRfix4K_C0000 (0x268): ");
-		dump_mtrr (cpu->number, 0x268);
-		printf("MTRRfix4K_C8000 (0x269): ");
-		dump_mtrr (cpu->number, 0x269);
-		printf("MTRRfix4K_D0000 0x26a: ");
-		dump_mtrr (cpu->number, 0x26a);
-		printf("MTRRfix4K_D8000 0x26b: ");
-		dump_mtrr (cpu->number, 0x26b);
-		printf("MTRRfix4K_E0000 0x26c: ");
-		dump_mtrr (cpu->number, 0x26c);
-		printf("MTRRfix4K_E8000 0x26d: ");
-		dump_mtrr (cpu->number, 0x26d);
-		printf("MTRRfix4K_F0000 0x26e: ");
-		dump_mtrr (cpu->number, 0x26e);
-		printf("MTRRfix4K_F8000 0x26f: ");
-		dump_mtrr (cpu->number, 0x26f);
+		for (i = 0; i < ARRAY_SIZE(mtrr_fixed); i++) {
+			printf("%s (0x%x): ", mtrr_fixed[i].label, mtrr_fixed[i].msr);
+			dump_mtrr(cpu->number, mtrr_fixed[i].msr);
+		}
 	}
 
 	printf("MTRRdefType (0x2ff): ");

@@ -31,10 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C10. apic.c:21 / mtrr.c:63,182-204 — mtrr_value() is a pointless wrapper
-    around `read_msr()==1`; the fixed-range MTRR dump is a long printf/dump
-    pair that wants a `{label, offset}` table. [sonnet]
-
 C11. vendors/amd/identify.c:194-248 — set_fam11h/12h/14h/15h_revinfo are
     the same function with a different lookup and prefix; set_fam17h/19h/
     1ah_revinfo are one-line wrappers. Use a `{family, prefix, lookup}`
