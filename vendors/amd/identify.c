@@ -329,6 +329,9 @@ void identify_amd(struct cpudata *cpu)
 			set_zen_revinfo("Zen/Zen+/Zen2", fam17h_dies,
 					ARRAY_SIZE(fam17h_dies), eax, cpu);
 			break;
+		case 0x18:
+			snprintf(cpu->name, CPU_NAME_LEN, "Hygon Dhyana");
+			break;
 		case 0x19:
 			set_zen_revinfo("Zen3/Zen3+/Zen4", fam19h_dies,
 					ARRAY_SIZE(fam19h_dies), eax, cpu);

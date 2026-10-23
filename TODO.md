@@ -93,9 +93,6 @@ I3. lsmsr/createheader.py — validate that each register's field widths sum
 
 ## 🟢 Enhancements
 
-J1. vendors/amd/identify.c:624 — Hygon (family 0x18) maps to VENDOR_AMD
-    but prints "Unknown CPU family: 0x18". Add a Dhyana entry. [haiku]
-
 J2. Intel hybrid parts: report per-CPU core type (CPUID 0x1A EAX[31:24],
     P-core/E-core) in the per-CPU and topology output. [sonnet]
 
