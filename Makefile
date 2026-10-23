@@ -50,6 +50,7 @@ check: $(CHECK_BIN) $(PSB_TEST) $(OPTS_TEST) $(MPTABLE_TEST)
 	@$(PSB_TEST) > /dev/null
 	@$(OPTS_TEST)
 	@$(MPTABLE_TEST)
+	@tests/test-runner.sh
 	@tests/run-tests.sh $(CHECK_BIN)
 
 $(PSB_TEST): tests/test-psb.c vendors/amd/dumppsb.c $(X86INFO_HEADERS)

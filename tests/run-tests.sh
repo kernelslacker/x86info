@@ -10,7 +10,12 @@ fail=0
 
 for dump in "$dir"/*.dump; do
 	golden=${dump%.dump}.out
-	actual=$(X86INFO_CPUID_DUMP=$dump "$bin" -c -f --addr --bugs --connector | tail -n +2)
+	if ! raw=$(X86INFO_CPUID_DUMP=$dump "$bin" -c -f --addr --bugs --connector); then
+		echo "FAIL $(basename "$dump"): $bin exited unsuccessfully"
+		fail=1
+		continue
+	fi
+	actual=$(printf '%s\n' "$raw" | tail -n +2)
 	if [ -n "$UPDATE" ]; then
 		printf '%s\n' "$actual" > "$golden"
 	elif printf '%s\n' "$actual" | diff -u "$golden" - > /dev/null; then
