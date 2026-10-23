@@ -40,7 +40,7 @@ void get_cpu_info_basics(struct cpudata *cpu)
 		cpu->efamily = (eax >> 20) & 0xff;
 	/* AMD only has an extended model at family 0xf */
 	if (cpu->family == 0xf ||
-	    (cpu->family == 6 && cpu->vendor != VENDOR_AMD))
+	    (cpu->family >= 6 && cpu->vendor != VENDOR_AMD))
 		cpu->emodel = (eax >> 16) & 0xf;
 
 	cpuid(cpu->number, 0x80000000, &maxei, NULL, NULL, NULL);
