@@ -102,6 +102,68 @@ unsigned int sane_max_leaf(unsigned int max, unsigned int base)
 	return max;
 }
 
+enum subleaf_state {
+	SUBLEAF_END,
+	SUBLEAF_SHOW,
+	SUBLEAF_SKIP,
+};
+
+/* Whether a subleaf of leaf holds data, given subleaf 0's EAX and EBX. */
+static enum subleaf_state subleaf_state(unsigned int leaf, unsigned int sub,
+		unsigned int eax, unsigned int ebx, unsigned int ecx,
+		unsigned int edx, unsigned int eax0, unsigned int ebx0)
+{
+	switch (leaf) {
+	case 4:
+	case 0x8000001d:
+		return (eax & 0x1f) ? SUBLEAF_SHOW : SUBLEAF_END;
+	case 7:
+	case 0x14:
+		return sub <= eax0 ? SUBLEAF_SHOW : SUBLEAF_END;
+	case 0x18:
+		return sub <= eax0 && sub < 64 ? SUBLEAF_SHOW : SUBLEAF_END;
+	case 0xb:
+	case 0x1f:
+		return (ecx >> 8) & 0xff ? SUBLEAF_SHOW : SUBLEAF_END;
+	case 0xd:
+		if (sub >= 32)
+			return SUBLEAF_END;
+		return sub < 2 || eax || ebx || ecx || edx ? SUBLEAF_SHOW : SUBLEAF_SKIP;
+	case 0x12:
+		if (sub >= 32)
+			return SUBLEAF_END;
+		return sub < 2 || (eax & 0xf) ? SUBLEAF_SHOW : SUBLEAF_END;
+	case 0x80000020:
+		if (sub >= 32)
+			return SUBLEAF_END;
+		return (ebx0 >> sub) & 1 ? SUBLEAF_SHOW : SUBLEAF_SKIP;
+	default:
+		return SUBLEAF_END;
+	}
+}
+
+/* Dump subleaves 1 and up of the leaves that have them. */
+static void dump_subleaves(int cpunum, unsigned int leaf,
+			   unsigned int eax0, unsigned int ebx0)
+{
+	unsigned int sub;
+	unsigned int eax, ebx, ecx, edx;
+
+	for (sub = 1; sub < 64; sub++) {
+		cpuid_count(cpunum, leaf, sub, &eax, &ebx, &ecx, &edx);
+		switch (subleaf_state(leaf, sub, eax, ebx, ecx, edx, eax0, ebx0)) {
+		case SUBLEAF_END:
+			return;
+		case SUBLEAF_SKIP:
+			continue;
+		case SUBLEAF_SHOW:
+			break;
+		}
+		printf("eax in: 0x%08x, ecx in: 0x%x, eax = %08x ebx = %08x ecx = %08x edx = %08x\n",
+		       leaf, sub, eax, ebx, ecx, edx);
+	}
+}
+
 void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end)
 {
 	unsigned int i;
@@ -114,6 +176,7 @@ void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end)
 	for (i = begin; ; i++) {
 		cpuid(cpunum, i, &eax, &ebx, &ecx, &edx);
 		printf("eax in: 0x%08x, eax = %08x ebx = %08x ecx = %08x edx = %08x\n", i, eax, ebx, ecx, edx);
+		dump_subleaves(cpunum, i, eax, ebx);
 		if (i == end)
 			break;
 	}

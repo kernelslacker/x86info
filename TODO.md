@@ -27,7 +27,3 @@ I1. No tests. Identification is a pure function of CPUID values. [opus]
 
 J2. Intel hybrid parts: report per-CPU core type (CPUID 0x1A EAX[31:24],
     P-core/E-core) in the per-CPU and topology output. [sonnet]
-
-J4. cpuid.c:76 — dump_raw_cpuid() only dumps subleaf 0. Also walk
-    subleaves for 4, 7, 0xB, 0xD, 0x12, 0x14, 0x18, 0x1F, 0x8000001D,
-    0x80000020. [sonnet]
