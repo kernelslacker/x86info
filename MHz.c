@@ -67,7 +67,7 @@ void display_MHz_line(const struct cpudata *cpu)
 		printf(" TSC frequency.");
 	else
 		printf(" processor (estimate).");
-	if (!user_is_root && has_perf_counters(cpu))
+	if (!is_root() && has_perf_counters(cpu))
 		printf(" Run as root for the core clock.");
 	printf("\n\n");
 }
@@ -164,7 +164,7 @@ static int read_perf_counters(const struct cpudata *cpu,
 
 	if (!has_perf_counters(cpu))
 		return 0;
-	if (user_is_root &&
+	if (is_root() &&
 	    read_msr(cpu->number, base + MSR_APERF, aperf) == 1 &&
 	    read_msr(cpu->number, base + MSR_MPERF, mperf) == 1)
 		return 1;
@@ -176,7 +176,7 @@ static void probe_msr_access(const struct cpudata *cpu)
 {
 	unsigned long long val;
 
-	if (user_is_root && has_perf_counters(cpu))
+	if (is_root() && has_perf_counters(cpu))
 		read_msr(cpu->number, perf_msr_base(cpu) + MSR_APERF, &val);
 }
 

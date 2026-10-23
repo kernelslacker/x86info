@@ -70,7 +70,7 @@ void parse_command_line(int argc, char **argv)
 	while ((opt = getopt_long(argc, argv, "acfhmrv", long_options, NULL)) != -1) {
 		switch (opt) {
 			case 'a':  // --all
-				if (user_is_root) {
+				if (is_root()) {
 					opts.show_apic = 1;
 					opts.show_bios = 1;
 					opts.show_msr = 1;

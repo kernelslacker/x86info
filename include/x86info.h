@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
@@ -193,7 +195,7 @@ void display_topology(struct cpudata *head);
 
 extern unsigned int nrCPUs;
 
-extern unsigned int user_is_root;
+bool is_root(void);
 
 
 /* command line args */

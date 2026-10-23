@@ -349,7 +349,7 @@ void decode_powernow(struct cpudata *cpu)
 	if (can_scale_fid==0 && can_scale_vid==0)
 		return;
 
-	if (!user_is_root)
+	if (!is_root())
 		return;
 
 	if (family(cpu) < 0xf)

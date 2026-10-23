@@ -14,9 +14,12 @@
 #include <intel.h>
 #include <amd.h>
 
-unsigned int user_is_root = 0;
-
 unsigned int nrCPUs = 1;
+
+bool is_root(void)
+{
+	return getuid() == 0;
+}
 
 
 #ifndef CPUID_REPLAY
@@ -230,9 +233,6 @@ int main(int argc, char **argv)
 	unsigned int nr_groups = 0;
 	int nrSMPCPUs;
 
-	if (getuid() == 0)
-		user_is_root = 1;
-
 	parse_command_line(argc, argv);
 
 	printf("x86info " __stringify(VERSION) "\n");
@@ -243,7 +243,7 @@ int main(int argc, char **argv)
 		exit(EXIT_SUCCESS);
 	}
 
-	if (opts.need_root && !user_is_root) {
+	if (opts.need_root && !is_root()) {
 		printf("Need to be root to use specified options.\n");
 		exit(EXIT_FAILURE);
 	}
@@ -279,7 +279,7 @@ int main(int argc, char **argv)
 		estimate_MHz_cpus(cpus, nrCPUs, leader);
 	display_one_cpu = nr_groups == 1 && !opts.all_cpus;
 
-	if (opts.show_mptable && user_is_root)
+	if (opts.show_mptable && is_root())
 		display_mptable();
 
 	/* Now we display the info we gathered */
@@ -289,7 +289,7 @@ int main(int argc, char **argv)
 
 		/* Check mptable if present. This way we get number of CPUs
 		   on SMP systems that have booted UP kernels. */
-		if (user_is_root) {
+		if (is_root()) {
 			nrSMPCPUs = enumerate_cpus();
 			if (nrSMPCPUs > 0 && (unsigned int)nrSMPCPUs > nrCPUs)
 				printf("Found %d CPUs in MPTable!\n", nrSMPCPUs);
