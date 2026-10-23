@@ -6,8 +6,6 @@
  *  Powernow register definitions.
  */
 
-#include <sys/types.h>
-
 #define MSR_FID_VID_CTL		0xc0010041
 #define MSR_FID_VID_STATUS	0xc0010042
 

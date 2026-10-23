@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string.h>
-
 void decode_intel_caches (struct cpudata *cpu, int output);
 void decode_intel_machine_check(int cpunum, int family);
 

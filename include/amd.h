@@ -6,9 +6,6 @@
  *  AMD specific prototypes.
  */
 
-#ifdef __linux__
-#include <linux/types.h>
-#endif
 #include <x86info.h>
 
 void decode_athlon_machine_check(int cpunum, unsigned int family);

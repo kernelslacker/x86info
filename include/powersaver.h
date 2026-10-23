@@ -6,8 +6,6 @@
  *  Powersaver MSR definitions.
  */
 
-#include <sys/types.h>
-
 #define MSR_POWERSAVER	0x110a
 
 /* Shared by the Longhaul (Samuel/Ezra/Nehemiah) and Powersaver (C7) CPUs. */

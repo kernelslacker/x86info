@@ -52,10 +52,6 @@ J6. cpuid.c:413-444 — dump_subleaves() skips other leaves that have
 
 ## 🟢 Minor nits / one-liners
 
-K10. include/amd.h:9-11 (<linux/types.h>), include/powernow.h and
-    include/powersaver.h (<sys/types.h>) and include/intel.h (<string.h>)
-    include headers nothing in them uses. [haiku]
-
 K11. .gitignore — `.d` and `x86info-*.tgz` are stale: dependency files live
     in .deps/ and `make tarball` writes .tar.xz. [haiku]
 
