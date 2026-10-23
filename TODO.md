@@ -29,12 +29,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
     pci_alloc/init/scan_bus/cleanup. Share one helper that scans once and
     finds a device by vendor + list of device IDs. [sonnet]
 
-## 🟡 Maintainability
-
-C25. vendors/amd/identify.c:1025-1029 — AMD always prints "Address Size"
-    (virtual/physical order) duplicating --addr (physical/virtual). Remove
-    the AMD copy. [haiku]
-
 ## 🟡 Clean-ups/Refactoring/Style
 
 D1. Remove commented-out code: powernow.c:70-73, identify-family6.c:225,

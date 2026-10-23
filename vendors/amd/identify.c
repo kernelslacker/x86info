@@ -895,10 +895,7 @@ void display_amd_info(struct cpudata *cpu)
 	/* AMD Multicore characterisation */
 	if (cpu->maxei >= 0x80000008) {
 		int n, p;
-		cpuid (cpu->number, 0x80000008, &eax, NULL, &ecx, NULL);
-		printf("Address Size: %d bits virtual, %d bits physical\n",
-		       (int) (eax >> 8) & 0xff, (int) eax & 0xff);
-
+		cpuid (cpu->number, 0x80000008, NULL, NULL, &ecx, NULL);
 		p = (ecx >> 12) & 0xf;
 		n = (ecx & 0xff) + 1;
 		if (p)
