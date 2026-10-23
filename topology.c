@@ -59,8 +59,11 @@ static int get_x2apic_topology(struct cpudata *cpu)
 	return 1;
 }
 
+/* Raw core type encodings: AMD 0x80000026 EBX[31:28], Intel 0x1A EAX[31:24]. */
 #define AMD_CORE_PERFORMANCE	0
 #define AMD_CORE_EFFICIENCY	1
+#define INTEL_CORE_ATOM		0x20
+#define INTEL_CORE_CORE		0x40
 
 /*
  * Intel: CPUID.7.EDX[15] flags a hybrid part; leaf 0x1A then names this
@@ -77,11 +80,13 @@ void get_core_type(struct cpudata *cpu)
 		cpuid_count(cpu->number, 0x80000026, 0, NULL, &ebx, NULL, NULL);
 		switch (ebx >> 28) {
 		case AMD_CORE_PERFORMANCE:
-			cpu->core_type = CORE_TYPE_CORE;
+			cpu->core_type = CORE_TYPE_PERFORMANCE;
 			break;
 		case AMD_CORE_EFFICIENCY:
-			cpu->core_type = CORE_TYPE_ATOM;
+			cpu->core_type = CORE_TYPE_EFFICIENCY;
 			break;
+		default:
+			cpu->core_type = CORE_TYPE_UNKNOWN;
 		}
 		return;
 	}
@@ -94,7 +99,16 @@ void get_core_type(struct cpudata *cpu)
 		return;
 
 	cpuid(cpu->number, 0x1a, &eax, NULL, NULL, NULL);
-	cpu->core_type = eax >> 24;
+	switch (eax >> 24) {
+	case INTEL_CORE_CORE:
+		cpu->core_type = CORE_TYPE_PERFORMANCE;
+		break;
+	case INTEL_CORE_ATOM:
+		cpu->core_type = CORE_TYPE_EFFICIENCY;
+		break;
+	default:
+		cpu->core_type = CORE_TYPE_UNKNOWN;
+	}
 }
 
 const char *core_type_name(const struct cpudata *cpu)
@@ -102,9 +116,9 @@ const char *core_type_name(const struct cpudata *cpu)
 	int amd = cpu->vendor == VENDOR_AMD;
 
 	switch (cpu->core_type) {
-	case CORE_TYPE_ATOM:
+	case CORE_TYPE_EFFICIENCY:
 		return amd ? "Efficiency (compact)" : "Efficiency (Atom)";
-	case CORE_TYPE_CORE:
+	case CORE_TYPE_PERFORMANCE:
 		return amd ? "Performance" : "Performance (Core)";
 	default:
 		return "unknown";
@@ -252,9 +266,9 @@ void display_topology(struct cpudata *cpus)
 	printf("\n");
 
 	for (i = 0; i < nrCPUs; i++) {
-		if (cpus[i].core_type == CORE_TYPE_CORE)
+		if (cpus[i].core_type == CORE_TYPE_PERFORMANCE)
 			p_threads++;
-		else if (cpus[i].core_type == CORE_TYPE_ATOM)
+		else if (cpus[i].core_type == CORE_TYPE_EFFICIENCY)
 			e_threads++;
 	}
 	if (p_threads || e_threads)

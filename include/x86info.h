@@ -216,8 +216,9 @@ struct options {
 
 extern struct options opts;
 
-#define CORE_TYPE_ATOM		0x20	/* Intel Atom, AMD compact */
-#define CORE_TYPE_CORE		0x40
+#define CORE_TYPE_PERFORMANCE	1
+#define CORE_TYPE_EFFICIENCY	2
+#define CORE_TYPE_UNKNOWN	3
 
 #define X86_FEATURE_HT		(1<<28)
 #define X86_FEATURE_MTRR	(1<<12)
