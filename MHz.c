@@ -6,6 +6,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include <string.h>
 #include <signal.h>
@@ -82,12 +83,46 @@ static void sighandler(int sig __attribute__((unused)))
 	nosignal = 1;
 }
 
+/*
+ * TSC rate in MHz from CPUID 0x15 (crystal clock ratio), or failing that
+ * the base frequency from CPUID 0x16 on Intel parts with an invariant TSC.
+ * Returns 0 if CPUID doesn't say.
+ */
+static unsigned int cpuid_tsc_MHz(const struct cpudata *cpu)
+{
+	unsigned int eax, ebx, ecx, edx = 0;
+
+	if (cpu->cpuid_level >= 0x15) {
+		cpuid(cpu->number, 0x15, &eax, &ebx, &ecx, NULL);
+		if (eax && ebx && ecx)
+			return (unsigned int)((unsigned long long)ecx * ebx /
+					      eax / 1000000);
+	}
+
+	if (cpu->vendor != VENDOR_INTEL || cpu->cpuid_level < 0x16)
+		return 0;
+	if (cpu->maxei >= 0x80000007)
+		cpuid(cpu->number, 0x80000007, NULL, NULL, NULL, &edx);
+	if (!(edx & (1 << 8)))
+		return 0;
+	cpuid(cpu->number, 0x16, &eax, NULL, NULL, NULL);
+	return eax & 0xffff;
+}
+
+static double elapsed_us(const struct timespec *t0, const struct timespec *t1)
+{
+	return (double)(t1->tv_sec - t0->tv_sec) * 1e6 +
+	       (double)(t1->tv_nsec - t0->tv_nsec) / 1e3;
+}
+
 void estimate_MHz(struct cpudata *cpu)
 {
 	unsigned long long int cycles[2]; /* gotta be 64 bit */
 	unsigned long long aperf[2], mperf[2];
+	struct timespec ts[2];
 	int have_perf;
-	unsigned int eax, ebx, ecx, edx;
+	unsigned int eax, ebx, ecx, edx, known_MHz;
+	double tsc_mhz;
 	void (*old)(int);
 	// coverity[DC.WEAK_CRYPTO]
 	unsigned long r = rand();
@@ -100,6 +135,16 @@ void estimate_MHz(struct cpudata *cpu)
 		return;
 	}
 
+	have_perf = user_is_root && read_perf_counters(cpu, &aperf[0], &mperf[0]);
+
+	/* Nothing left to measure if CPUID gives the TSC rate */
+	known_MHz = cpuid_tsc_MHz(cpu);
+	if (known_MHz && !have_perf) {
+		cpu->MHz = known_MHz;
+		cpu->core_MHz = 0;
+		return;
+	}
+
 	old = signal(SIGALRM, sighandler);
 	if (old == SIG_ERR) {
 		printf("Some kind of signal failure.\n");
@@ -107,8 +152,7 @@ void estimate_MHz(struct cpudata *cpu)
 		return;
 	}
 
-	have_perf = user_is_root && read_perf_counters(cpu, &aperf[0], &mperf[0]);
-
+	clock_gettime(CLOCK_MONOTONIC_RAW, &ts[0]);
 	cycles[0] = rdtsc();
 
 	alarm(1);
@@ -120,23 +164,21 @@ void estimate_MHz(struct cpudata *cpu)
 	signal(SIGALRM, old);
 
 	cycles[1] = rdtsc();
+	clock_gettime(CLOCK_MONOTONIC_RAW, &ts[1]);
+
+	/* Unsigned subtraction copes with rdtsc wrapping */
+	tsc_mhz = (double)(cycles[1] - cycles[0]) / elapsed_us(&ts[0], &ts[1]);
+	if (known_MHz)
+		tsc_mhz = known_MHz;
 
 	cpu->core_MHz = 0;
 	if (have_perf && read_perf_counters(cpu, &aperf[1], &mperf[1]) &&
-	    mperf[1] > mperf[0] && aperf[1] > aperf[0]) {
-		double tsc_mhz = (double)(cycles[1] - cycles[0]) / 1e6;
-
+	    mperf[1] > mperf[0] && aperf[1] > aperf[0])
 		cpu->core_MHz = (unsigned int)(tsc_mhz *
 			(double)(aperf[1] - aperf[0]) /
 			(double)(mperf[1] - mperf[0]) + 0.5);
-	}
 
-	/* Check to see if rdtsc wrapped */
-	if (cycles[1] < cycles[0])
-		/* yes we did. */
-		cpu->MHz = ((-1ULL - cycles[0]) + cycles[1]) / 1000000;
-	else
-		cpu->MHz = (cycles[1] - cycles[0]) / 1000000;
+	cpu->MHz = (unsigned int)(tsc_mhz + 0.5);
 }
 
 /* Fill cpu->MHz, measuring the TSC rate only once per run. */
@@ -148,8 +190,11 @@ void ensure_MHz(struct cpudata *cpu)
 	if (cpu->MHz)
 		return;
 	if (!measured) {
-		estimate_MHz(cpu);
-		tsc_MHz = cpu->MHz;
+		tsc_MHz = cpuid_tsc_MHz(cpu);
+		if (!tsc_MHz) {
+			estimate_MHz(cpu);
+			tsc_MHz = cpu->MHz;
+		}
 		measured = 1;
 	}
 	cpu->MHz = tsc_MHz;

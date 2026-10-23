@@ -39,13 +39,6 @@ E3. cpuid-solaris.c — bind_cpu is a FIXME stub and there is no rdmsr
     backend, so MSR output and per-CPU cpuid don't work. Implement them
     (processor_bind(), /dev/cpu/N/msr) or drop the README claim. [sonnet]
 
-## 🟡 Better API Alternatives
-
-F2. MHz.c:103-122 — elapsed time is assumed to be exactly 1 s from alarm().
-    Bracket the rdtsc reads with clock_gettime(CLOCK_MONOTONIC_RAW) and
-    divide by the measured interval. When CPUID 0x15/0x16 give the TSC or
-    base frequency, report that instead of measuring. [sonnet]
-
 ## 🟡 Architectural improvements
 
 G1. vendors/intel/cachesize.c — restructure decoding: [opus]
