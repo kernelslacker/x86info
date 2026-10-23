@@ -78,7 +78,7 @@ void get_intel_topology(struct cpudata *cpu)
 
 	core_bits = get_count_order(cpu->x86_max_cores);
 
-	cpu->cpu_core_id = initial_apicid >> index_msb &
+	cpu->cpu_core_id = (initial_apicid >> index_msb) &
 		((1 << core_bits) - 1);
 
 	if (debug) {

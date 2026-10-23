@@ -31,10 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C19. vendors/intel/info.c:37-49 — six snprintf calls with manual offset
-    arithmetic build the serial; one
-    `snprintf(..., "%04X-%04X-%04X-%04X-%04X-%04X", ...)` does it. [haiku]
-
 C20. vendors/centaur/longhaul.c:10-37 / include/powersaver.h — same MSR
     (0x110a), near-identical bitfield unions. Share one union. [haiku]
 

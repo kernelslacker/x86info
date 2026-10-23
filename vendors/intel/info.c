@@ -16,10 +16,8 @@
 /* Decode Pentium III CPU serial number */
 void decode_serial_number(struct cpudata *cpu)
 {
-	char *p = cpu->serialno;
 	unsigned int eax, ebx, ecx, edx;
 	unsigned int signature;
-	int n, rem;
 
 	if (cpu->cpuid_level < 3)
 		return;
@@ -32,22 +30,10 @@ void decode_serial_number(struct cpudata *cpu)
 		return;
 
 	cpuid(cpu->number, 3, &eax, &ebx, &ecx, &edx);
-	/* Six 4-digit groups and five dashes: 29 characters plus the NUL
-	 * exactly fill serialno, so rem never goes negative. */
-	rem = sizeof(cpu->serialno);
-	p = cpu->serialno;
-	n = snprintf(p, rem, "%04X", signature >> 16);
-	p += n; rem -= n;
-	n = snprintf(p, rem, "-%04X", signature & 0xffff);
-	p += n; rem -= n;
-	n = snprintf(p, rem, "-%04X", edx >> 16);
-	p += n; rem -= n;
-	n = snprintf(p, rem, "-%04X", edx & 0xffff);
-	p += n; rem -= n;
-	n = snprintf(p, rem, "-%04X", ecx >> 16);
-	p += n; rem -= n;
-	snprintf(p, rem, "-%04X", ecx & 0xffff);
-
+	snprintf(cpu->serialno, sizeof(cpu->serialno),
+		 "%04X-%04X-%04X-%04X-%04X-%04X",
+		 signature >> 16, signature & 0xffff,
+		 edx >> 16, edx & 0xffff, ecx >> 16, ecx & 0xffff);
 }
 
 static void decode_brand(struct cpudata *cpu)
