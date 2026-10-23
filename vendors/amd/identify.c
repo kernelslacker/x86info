@@ -508,7 +508,7 @@ out_660:
 		if (is_mobile(cpu))
 			add_to_cpuname("Mobile ");
 		if (getL2size(cpu->number) < 256) {
-			add_to_cpuname("Duron ");
+			add_to_cpuname("Duron");
 		} else {
 			add_to_cpuname("Athlon ");
 			determine_xp_mp(cpu);
@@ -516,9 +516,9 @@ out_660:
 		add_to_cpuname(" (Thoroughbred)");
 
 		if (cpu->stepping == 0)
-			add_to_cpuname("[A0]");
+			add_to_cpuname(" [A0]");
 		if (cpu->stepping == 1)
-			add_to_cpuname("[B0]");
+			add_to_cpuname(" [B0]");
 		break;
 
 	case 0x6a0:

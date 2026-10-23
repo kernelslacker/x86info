@@ -52,10 +52,6 @@ J6. cpuid.c:413-444 — dump_subleaves() skips other leaves that have
 
 ## 🟢 Minor nits / one-liners
 
-K9. vendors/amd/identify.c:534-544 — "Duron " + " (Thoroughbred)" gives a
-    double space, and "[A0]"/"[B0]" are appended with no leading space.
-    [haiku]
-
 K10. include/amd.h:9-11 (<linux/types.h>), include/powernow.h and
     include/powersaver.h (<sys/types.h>) and include/intel.h (<string.h>)
     include headers nothing in them uses. [haiku]
