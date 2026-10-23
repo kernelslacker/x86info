@@ -108,9 +108,6 @@ J4. cpuid.c:76 — dump_raw_cpuid() only dumps subleaf 0. Also walk
 
 ## 🟢 Minor nits / one-liners
 
-K3. vendors/amd/identify.c:62-68 — abort() on snprintf < 0 is overkill.
-    set_k8_revinfo() sets connector twice (lines 76, 86). [haiku]
-
 K5. lsmsr/lsmsr.c:47,207,350 — `g`, `vendor_names`, `unknown_msr`,
     `lopts` should be static. Same for cachesize.c:355,364
     tlbnames/pagenames. [haiku]

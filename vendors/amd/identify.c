@@ -54,7 +54,6 @@ static void set_k8_revinfo(int id, struct cpudata *c)
 	int i;
 	struct k8_rev *r;
 
-	c->connector = CONN_UNKNOWN;
 	r = NULL;
 	for (i = 0; i < ARRAY_SIZE(k8_revisions); i++) {
 		if (k8_revisions[i].eax == id) {
