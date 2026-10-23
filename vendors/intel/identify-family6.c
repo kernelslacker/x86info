@@ -222,7 +222,6 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 		break;
 
 	case 0x9:
-//		cpu->connector = 
 		add_to_cpuname("Pentium M (Banias)");
 		break;
 

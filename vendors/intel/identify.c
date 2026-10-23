@@ -55,10 +55,6 @@ void identify_intel(struct cpudata *cpu)
 		case 8:
 			add_to_cpuname("DX4");
 			cpu->connector = CONN_SOCKET_3;
-			//transistors = 1600000;
-			//fab_process = "0.6 micron CMOS";
-			//die_size = "345 sq. mm";
-			//introduction_date = "March 1994";
 			break;
 		case 9:
 			add_to_cpuname("write-back enhanced DX4");
@@ -93,10 +89,6 @@ void identify_intel(struct cpudata *cpu)
 		case 4:
 			add_to_cpuname("MMX");
 			cpu->connector = CONN_SOCKET_7;
-			//transistors = 4500000;
-			//fab_process = "0.35 micron CMOS";
-			//die_size = "140 sq.mm";
-			//introduction_date = "June 1997";
 			break;
 		case 7:
 			add_to_cpuname("Mobile");

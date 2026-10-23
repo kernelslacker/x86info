@@ -123,8 +123,6 @@ void display_extended_intel_info(struct cpudata *cpu)
 		dump_performance_msrs(cpu);
 
 		dump_thermal_msrs(cpu);
-
-//		dump_IDA_msrs(cpu);
 	}
 
 	/* FIXME: Bit test for MCA here!*/

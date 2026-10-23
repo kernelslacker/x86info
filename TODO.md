@@ -31,11 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Clean-ups/Refactoring/Style
 
-D1. Remove commented-out code: powernow.c:70-73, identify-family6.c:225,
-    amd/identify.c:859-861,871-873, intel/identify.c:69-72,107-110,
-    centaur/identify.c:20-24 etc, intel/info.c:141, intel/topology.c:63-69,
-    centaur/powersaver.c:75-76, cachesize.c:60-66. [haiku]
-
 D2. cpuid.c:48-52 — cpuid4() is cpuid_count(cpu, 4, n, ...). Delete it and
     use cpuid_count. dump_raw_cpuid's `ecx = 0;` (line 80) is dead. [haiku]
 

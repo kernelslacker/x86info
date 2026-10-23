@@ -730,9 +730,6 @@ out_660:
 			add_to_cpuname("[A0]");
 		if (cpu->stepping == 1)
 			add_to_cpuname("[B0]");
-		//fab_process = ".13 micron";
-		//transistors = 37600000;
-		//die_size = "84 sq.mm";
 		break;
 
 	case 0x6a0:
@@ -742,9 +739,6 @@ out_660:
 		add_to_cpuname("Athlon ");
 		determine_xp_mp(cpu);
 		add_to_cpuname(" (Barton)");
-		//fab_process = ".13 micron copper";
-		//transistors = 54300000;
-		//die_size = "101 sq. mm";
 		/* Barton
 		 * L2=512
 		 * 333 FSB & 400 FSB

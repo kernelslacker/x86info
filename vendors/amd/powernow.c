@@ -67,11 +67,6 @@ static void decode_fidvid(struct cpudata *cpu)
 		fid_codes[fidvidstatus.bits.SFID],
 		fid_codes[fidvidstatus.bits.CFID]);
 
-//	printf("Voltage ID codes: Maximum=0x%x Startup=0x%x Currently=0x%x\n",
-//		fidvidstatus.MVID, fidvidstatus.SVID, fidvidstatus.CVID);
-//	printf("Frequency ID codes: Maximum=0x%x Startup=0x%x Currently=0x%x\n",
-//		fidvidstatus.MFID, fidvidstatus.SFID, fidvidstatus.CFID);
-
 	if (show_bios) {
 		printf("Decoding BIOS PST tables (maxfid=%x, startvid=%x)\n",
 			fidvidstatus.bits.MFID, fidvidstatus.bits.SVID);

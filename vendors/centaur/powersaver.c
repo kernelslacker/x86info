@@ -69,9 +69,6 @@ void decode_powersaver(struct cpudata *cpu)
 			binary (2, ps.bits.MinMHzFSB);
 		}
 
-		//if (ps.bits.EnableSoftBSEL==1)
-		//	printf("\tEnableSoftBSEL=Enabled\n");
-
 		printf("\tSoftBusRatio4=%s\n", ps.bits.SoftBusRatio4 ? "1" : "0");
 		printf("\tSoftBusRatio=");
 		binary (4, ps.bits.SoftBusRatio);
