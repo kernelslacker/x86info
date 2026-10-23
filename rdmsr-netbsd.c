@@ -4,7 +4,7 @@
  *  NetBSD Routines for reading MSRs.
  */
 
-#if defined(__NetBSD__)
+#if defined(__NetBSD__) && !defined(CPUID_REPLAY)
 
 #include <stdio.h>
 #include <stdlib.h>

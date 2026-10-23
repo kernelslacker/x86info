@@ -4,7 +4,7 @@
  *  NetBSD Routines for retrieving cpuid registers.
  */
 
-#if defined(__NetBSD__)
+#if defined(__NetBSD__) && !defined(CPUID_REPLAY)
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/fcntl.h>

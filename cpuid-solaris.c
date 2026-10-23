@@ -5,7 +5,7 @@
  *  Originally submitted by John Levon <levon@movementarian.org>
  */
 
-#ifdef __sun__
+#if defined(__sun__) && !defined(CPUID_REPLAY)
 
 #define _FILE_OFFSET_BITS 64
 

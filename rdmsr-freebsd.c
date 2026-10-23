@@ -4,7 +4,7 @@
  *  FreeBSD Routines for reading MSRs.
  */
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) && !defined(CPUID_REPLAY)
 
 #define _LARGEFILE64_SOURCE
 #include <stdio.h>

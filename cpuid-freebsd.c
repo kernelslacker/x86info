@@ -5,7 +5,7 @@
  *  Originally submitted by Stanislav Sedov <stas@FreeBSD.org>
  */
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) && !defined(CPUID_REPLAY)
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/fcntl.h>
