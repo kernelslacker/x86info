@@ -54,15 +54,6 @@ void cpuid_count(unsigned int CPU_number, unsigned int op, int count,
 	      eax, ebx, ecx, edx);
 }
 
-unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op)
-{
-	unsigned int eax, ebx, ecx, edx;
-
-	cpuid(CPU_number, op, &eax, &ebx, &ecx, &edx);
-
-	return ebx;
-}
-
 
 /* Map the CPUID leaf 0 vendor string registers to a vendor. */
 enum vendor vendor_from_cpuid(unsigned int ebx, unsigned int edx)

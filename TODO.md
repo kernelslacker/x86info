@@ -6,12 +6,6 @@
 
 ## 🟡 Maintainability
 
-C28. Dead or needlessly exported functions: cpuid_ebx() (cpuid.c:358) has no
-    callers; estimate_MHz() (MHz.c:288) is a one-line wrapper used only by
-    measure_thread(); display_MHz() (MHz.c:37) is only used in MHz.c. Delete
-    them or make them static, and drop their prototypes from x86info.h.
-    [haiku]
-
 C29. MHz.c:356-372 — ensure_MHz() calls cpuid_tsc_MHz() and then
     measure_MHz(cpu, 0), which calls cpuid_tsc_MHz() again and returns early
     with it. Just call measure_MHz(cpu, 0). [haiku]

@@ -110,7 +110,6 @@ void cpuid(unsigned int cpu, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
 void cpuid_count(unsigned int CPU_number, unsigned int op, int count,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
-unsigned int cpuid_ebx(unsigned int CPU_number, unsigned int op);
 
 
 #define family(c) (c->family + c->efamily)
@@ -168,9 +167,7 @@ void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end);
 void dump_mtrrs(struct cpudata *cpu);
 void dump_apics(const struct cpudata *cpu);
 
-void display_MHz(const struct cpudata *cpu);
 void display_MHz_line(const struct cpudata *cpu);
-void estimate_MHz(struct cpudata *cpu);
 void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n,
 		       const unsigned int *leader);
 void ensure_MHz(struct cpudata *cpu);

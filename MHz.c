@@ -34,7 +34,7 @@ static void print_MHz(unsigned int mhz)
 	}
 }
 
-void display_MHz(const struct cpudata *cpu)
+static void display_MHz(const struct cpudata *cpu)
 {
 	print_MHz(cpu->MHz);
 }
@@ -299,17 +299,12 @@ static void measure_MHz(struct cpudata *cpu, int want_core)
 	cpu->MHz = (unsigned int)(tsc_mhz + 0.5);
 }
 
-void estimate_MHz(struct cpudata *cpu)
-{
-	measure_MHz(cpu, 1);
-}
-
 static void *measure_thread(void *arg)
 {
 	struct cpudata *cpu = arg;
 
 	bind_cpu(cpu->number);
-	estimate_MHz(cpu);
+	measure_MHz(cpu, 1);
 	perf_msr_close();
 	return NULL;
 }
