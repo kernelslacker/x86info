@@ -250,7 +250,6 @@ void display_topology(struct cpudata *cpus)
 	}
 
 	/* Print a topology summary */
-	printf("Total processor threads: %u\n", total_threads);
 	printf("This system has %u socket%s, %u core%s, %u thread%s",
 	       num_sockets, num_sockets == 1 ? "" : "s",
 	       cores, cores == 1 ? "" : "s",
