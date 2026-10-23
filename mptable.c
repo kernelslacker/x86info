@@ -57,14 +57,15 @@
 #define PROCENTRY_FLAG_EN	0x01
 #define PROCENTRY_FLAG_BP	0x02
 
-/* global data */
-static int pfd;			/* physical /dev/mem fd */
+/* State of one scan of the MP table. */
+struct mp_scan {
+	int fd;			/* physical /dev/mem fd */
+	int ncpu;
+	int silent;
+};
 
-static int	ncpu;
-static int	silent;
-
-#define mp_error(...)	do { if (!silent) printf(__VA_ARGS__); } while (0)
-#define mp_perror(s)	do { if (!silent) perror(s); } while (0)
+#define mp_error(mp, ...)	do { if (!(mp)->silent) printf(__VA_ARGS__); } while (0)
+#define mp_perror(mp, s)	do { if (!(mp)->silent) perror(s); } while (0)
 
 /* MP Floating Pointer Structure */
 struct mpfps {
@@ -114,64 +115,64 @@ _Static_assert(sizeof(struct mpcth) == 44, "mpcth layout");
 _Static_assert(sizeof(struct ProcEntry) == 20, "ProcEntry layout");
 
 
-static int seekEntry(unsigned long addr)
+static int seekEntry(struct mp_scan *mp, unsigned long addr)
 {
-	if (lseek(pfd, (off_t)addr, SEEK_SET) < 0) {
-		mp_perror("/dev/mem seek");
+	if (lseek(mp->fd, (off_t)addr, SEEK_SET) < 0) {
+		mp_perror(mp, "/dev/mem seek");
 		return -1;
 	}
 	return 0;
 }
 
-static int readEntry(void* entry, int size)
+static int readEntry(struct mp_scan *mp, void* entry, int size)
 {
-	if (read(pfd, entry, size) != size) {
-		mp_perror("readEntry");
+	if (read(mp->fd, entry, size) != size) {
+		mp_perror(mp, "readEntry");
 		return -1;
 	}
 	return 0;
 }
 
 /* Seek to a physical address and read size bytes; 0 on success. */
-static int readAt(unsigned long addr, void *buf, int size)
+static int readAt(struct mp_scan *mp, unsigned long addr, void *buf, int size)
 {
-	if (seekEntry(addr))
+	if (seekEntry(mp, addr))
 		return -1;
-	return readEntry(buf, size);
+	return readEntry(mp, buf, size);
 }
 
 /* Returns the type of the next entry without consuming it, or -1. */
-static int readType(void)
+static int readType(struct mp_scan *mp)
 {
 	unsigned char type;
 
-	if (read(pfd, &type, sizeof(unsigned char)) != sizeof(unsigned char)) {
-		mp_perror("type read");
+	if (read(mp->fd, &type, sizeof(unsigned char)) != sizeof(unsigned char)) {
+		mp_perror(mp, "type read");
 		return -1;
 	}
 
-	if (lseek(pfd, -1, SEEK_CUR) < 0) {
-		mp_perror("type seek");
+	if (lseek(mp->fd, -1, SEEK_CUR) < 0) {
+		mp_perror(mp, "type seek");
 		return -1;
 	}
 
 	return (int)type;
 }
 
-static int processorEntry(void)
+static int processorEntry(struct mp_scan *mp)
 {
 	struct ProcEntry entry;
 
 	/* read it into local memory */
-	if (readEntry(&entry, sizeof(entry)) < 0) {
-		mp_error("Error reading processor entry\n");
+	if (readEntry(mp, &entry, sizeof(entry)) < 0) {
+		mp_error(mp, "Error reading processor entry\n");
 		return -1;
 	}
 
 	/* count it */
-	++ncpu;
+	++mp->ncpu;
 
-	if (!silent) {
+	if (!mp->silent) {
 		int t, family, model;
 
 		printf("#\t%2d", (int) entry.apicID);
@@ -196,49 +197,49 @@ static int processorEntry(void)
 }
 
 
-static int MPConfigTableHeader(u32 pap)
+static int MPConfigTableHeader(struct mp_scan *mp, u32 pap)
 {
 	unsigned long paddr;
 	struct mpcth cth;
 	int count, c;
 
 	if (pap == 0) {
-		mp_error("MP Configuration Table Header MISSING!\n");
+		mp_error(mp, "MP Configuration Table Header MISSING!\n");
 		return SMP_NO;
 	}
 
 	paddr = (unsigned long) pap;
 
 	/* read in cth structure */
-	if (readAt(paddr, &cth, sizeof(cth))) {
-		mp_error("error reading MP Config table header structure\n");
+	if (readAt(mp, paddr, &cth, sizeof(cth))) {
+		mp_error(mp, "error reading MP Config table header structure\n");
 		return SMP_NO;
 	}
 
 	count = cth.entry_count;
 
-	ncpu = 0;
+	mp->ncpu = 0;
 
 	/* process all the CPUs */
-	if (!silent)
+	if (!mp->silent)
 		printf("MP Table:\n#\tAPIC ID\tVersion\tState\t\tFamily\tModel\tStep\tFlags\n");
 	for (c = count; c; c--) {
-		int type = readType();
+		int type = readType(mp);
 		if (type < 0)
 			return SMP_NO;
 		if (type == 0) {
-			if (processorEntry())
+			if (processorEntry(mp))
 				return SMP_NO;
 		} else {
 			/* Non-CPU entries (bus, I/O APIC, interrupt) are 8 bytes each;
 			 * skip them so the file position advances past every entry. */
-			if (lseek(pfd, 8, SEEK_CUR) < 0) {
-				mp_perror("entry seek");
+			if (lseek(mp->fd, 8, SEEK_CUR) < 0) {
+				mp_perror(mp, "entry seek");
 				return SMP_NO;
 			}
 		}
 	}
-	if (!silent)
+	if (!mp->silent)
 		printf("\n");
 
 	return SMP_YES;
@@ -251,15 +252,15 @@ static int MPConfigTableHeader(u32 pap)
  * Returns 1 and sets *paddr if found, 0 if not, -1 if it can't be read.
  */
 #define MP_ALIGN	16	/* the floating pointer is 16-byte aligned */
-static int scan_for_mp(const char *what, unsigned long addr, int size,
-		       unsigned long *paddr)
+static int scan_for_mp(struct mp_scan *mp, const char *what,
+		       unsigned long addr, int size, unsigned long *paddr)
 {
 	const char MP_SIG[] = "_MP_";
 	unsigned char buffer[BIOS_SIZE];
 	int x;
 
-	if (readAt(addr, buffer, size)) {
-		mp_error("error reading %s from %p\n", what, (void *)addr);
+	if (readAt(mp, addr, buffer, size)) {
+		mp_error(mp, "error reading %s from %p\n", what, (void *)addr);
 		return -1;
 	}
 
@@ -275,15 +276,15 @@ static int scan_for_mp(const char *what, unsigned long addr, int size,
 /*
  * set PHYSICAL address of MP floating pointer structure
  */
-static int apic_probe(unsigned long* paddr)
+static int apic_probe(struct mp_scan *mp, unsigned long* paddr)
 {
 	u16 segment;
 	unsigned long target;
 	int ret;
 
 	/* search Extended Bios Data Area, if present */
-	if (readAt((unsigned long)EBDA_POINTER, &segment, 2)) {
-		mp_error("error reading EBDA pointer\n");
+	if (readAt(mp, (unsigned long)EBDA_POINTER, &segment, 2)) {
+		mp_error(mp, "error reading EBDA pointer\n");
 		return 0;
 	}
 
@@ -294,14 +295,14 @@ static int apic_probe(unsigned long* paddr)
 		target = (unsigned long)segment << 4;
 		if (opts.debug)
 			printf("EBDA segment ptr: %lx\n", target);
-		ret = scan_for_mp("1K at the EBDA", target, ONE_KBYTE, paddr);
+		ret = scan_for_mp(mp, "1K at the EBDA", target, ONE_KBYTE, paddr);
 		if (ret)
 			return ret < 0 ? 0 : 1;
 	}
 
 	/* read CMOS for real top of mem */
-	if (readAt((unsigned long)TOPOFMEM_POINTER, &segment, 2)) {
-		mp_error("error reading CMOS for real top of mem (%p)\n", (void *) TOPOFMEM_POINTER);
+	if (readAt(mp, (unsigned long)TOPOFMEM_POINTER, &segment, 2)) {
+		mp_error(mp, "error reading CMOS for real top of mem (%p)\n", (void *) TOPOFMEM_POINTER);
 		return 0;
 	}
 
@@ -309,35 +310,35 @@ static int apic_probe(unsigned long* paddr)
 	if (segment != 0) {
 		--segment;			/* less ONE_KBYTE */
 		target = segment * 1024;
-		ret = scan_for_mp("1KB at the top of base memory", target, ONE_KBYTE, paddr);
+		ret = scan_for_mp(mp, "1KB at the top of base memory", target, ONE_KBYTE, paddr);
 		if (ret)
 			return ret < 0 ? 0 : 2;
 	}
 
 	/* we don't necessarily believe CMOS, check base of the last 1K of 640K */
 	if (target != (DEFAULT_TOPOFMEM - 1024)) {
-		ret = scan_for_mp("DEFAULT_TOPOFMEM - 1024", DEFAULT_TOPOFMEM - 1024,
-				  ONE_KBYTE, paddr);
+		ret = scan_for_mp(mp, "DEFAULT_TOPOFMEM - 1024",
+				  DEFAULT_TOPOFMEM - 1024, ONE_KBYTE, paddr);
 		if (ret)
 			return ret < 0 ? 0 : 3;
 	}
 
 	/* search the BIOS */
-	ret = scan_for_mp("BIOS_BASE", BIOS_BASE, BIOS_SIZE, paddr);
+	ret = scan_for_mp(mp, "BIOS_BASE",BIOS_BASE, BIOS_SIZE, paddr);
 	if (ret)
 		return ret < 0 ? 0 : 4;
 
 	/* search the extended BIOS */
-	ret = scan_for_mp("BIOS_BASE2", BIOS_BASE2, BIOS_SIZE, paddr);
+	ret = scan_for_mp(mp, "BIOS_BASE2",BIOS_BASE2, BIOS_SIZE, paddr);
 	if (ret)
 		return ret < 0 ? 0 : 4;
 
 	/* search additional memory */
-	ret = scan_for_mp("GROPE_AREA1", GROPE_AREA1, GROPE_SIZE, paddr);
+	ret = scan_for_mp(mp, "GROPE_AREA1",GROPE_AREA1, GROPE_SIZE, paddr);
 	if (ret)
 		return ret < 0 ? 0 : 5;
 
-	ret = scan_for_mp("GROPE_AREA2", GROPE_AREA2, GROPE_SIZE, paddr);
+	ret = scan_for_mp(mp, "GROPE_AREA2",GROPE_AREA2, GROPE_SIZE, paddr);
 	if (ret)
 		return ret < 0 ? 0 : 6;
 
@@ -348,51 +349,61 @@ static int apic_probe(unsigned long* paddr)
 /*
  * Find and parse the MP table.
  * Returns -1 if /dev/mem can't be opened, 1 if an MP configuration table
- * was parsed, 0 otherwise.
+ * was parsed, 0 otherwise. *ncpu is the number of processor entries found.
  */
-static int read_mptable(int quiet)
+static int read_mptable(int quiet, int *ncpu)
 {
+	struct mp_scan mp = { .silent = quiet };
 	unsigned long paddr;
 	struct mpfps mpfps;
 	int ret = 0;
 
-	silent = quiet;
-
 	/* open physical memory for access to MP structures */
-	if ((pfd = open("/dev/mem", O_RDONLY)) < 0) {
+	if ((mp.fd = open("/dev/mem", O_RDONLY)) < 0) {
 		if (!quiet)
 			fprintf(stderr, "mptable: /dev/mem: %s\n", strerror(errno));
 		return -1;
 	}
 
 	/* probe for MP structures */
-	if (apic_probe(&paddr) <= 0) {
-		close(pfd);
+	if (apic_probe(&mp, &paddr) <= 0) {
+		close(mp.fd);
 		return 0;
 	}
 
 	/* read in mpfps structure*/
-	if (readAt(paddr, &mpfps, sizeof(struct mpfps))) {
-		mp_error("error reading mpfps from %p\n", (void *)paddr);
-		close(pfd);
+	if (readAt(&mp, paddr, &mpfps, sizeof(struct mpfps))) {
+		mp_error(&mp, "error reading mpfps from %p\n", (void *)paddr);
+		close(mp.fd);
 		return 0;
 	}
 
 	/* check whether an MP config table exists */
 	if (!mpfps.mpfb1)
-		ret = MPConfigTableHeader(mpfps.pap) == SMP_YES;
+		ret = MPConfigTableHeader(&mp, mpfps.pap) == SMP_YES;
 
-	close(pfd);
+	close(mp.fd);
+	*ncpu = mp.ncpu;
 	return ret;
 }
 
 /* Result of the scan done by display_mptable(), if any. */
-static int displayed;
-static int display_ret;
+static struct {
+	int valid;
+	int ret;
+	int ncpu;
+} displayed;
 
 int enumerate_cpus(void)
 {
-	int ret = displayed ? display_ret : read_mptable(1);
+	int ret, ncpu = 0;
+
+	if (displayed.valid) {
+		ret = displayed.ret;
+		ncpu = displayed.ncpu;
+	} else {
+		ret = read_mptable(1, &ncpu);
+	}
 
 	if (ret < 0)
 		return -1;
@@ -401,6 +412,6 @@ int enumerate_cpus(void)
 
 void display_mptable(void)
 {
-	display_ret = read_mptable(0);
-	displayed = 1;
+	displayed.ret = read_mptable(0, &displayed.ncpu);
+	displayed.valid = 1;
 }
