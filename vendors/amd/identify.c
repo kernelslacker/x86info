@@ -172,59 +172,35 @@ static void set_fam10h_revinfo(int id, struct cpudata *c)
 	set_connector(c);
 }
 
-static void set_fam11h_revinfo(int id, struct cpudata *c)
+/* Families whose revision name is a lookup in an amd-revision.h table. */
+static const struct {
+	unsigned int family;
+	const char *prefix;
+	const char *(*lookup)(int id);
+} listed_families[] = {
+	{ 0x11, "AMD Turion X2 Ultra Dual-Core", get_fam11h_revision_name },
+	{ 0x12, "AMD A/E2-Series Processor", get_fam12h_revision_name },
+	{ 0x14, "AMD C/E/G-Series Processor", get_fam14h_revision_name },
+	{ 0x15, "AMD FX Series Processor", get_fam15h_revision_name },
+};
+
+static void set_listed_revinfo(int id, struct cpudata *c)
 {
-	const char *p;
+	unsigned int i;
 
-	p = get_fam11h_revision_name(id);
-	if (p)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "AMD Turion X2 Ultra Dual-Core (%s)", p);
-	else
-		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
+	snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
+	for (i = 0; i < ARRAY_SIZE(listed_families); i++) {
+		const char *p;
 
-	set_connector(c);
-}
+		if (listed_families[i].family != family(c))
+			continue;
+		p = listed_families[i].lookup(id);
+		if (p)
+			snprintf(c->name, CPU_NAME_LEN, "%s (%s)",
+				 listed_families[i].prefix, p);
+		break;
+	}
 
-static void set_fam12h_revinfo(int id, struct cpudata *c)
-{
-	const char *p;
-
-	p = get_fam12h_revision_name(id);
-	if(p)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "AMD A/E2-Series Processor (%s)", p);
-	else
-		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
-
-	set_connector(c);
-}
-
-static void set_fam14h_revinfo(int id, struct cpudata *c)
-{
-	const char *p;
-
-	p = get_fam14h_revision_name(id);
-	if (p)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "AMD C/E/G-Series Processor (%s)", p);
-	else
-		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
-
-
-	set_connector(c);
-}
-
-static void set_fam15h_revinfo(int id, struct cpudata *c)
-{
-	const char *p;
-
-	p = get_fam15h_revision_name(id);
-	if (p)
-		snprintf(c->name, CPU_NAME_LEN,
-			 "AMD FX Series Processor (%s)", p);
-	else
-		snprintf(c->name, CPU_NAME_LEN, "Unknown CPU");
 	set_connector(c);
 }
 
@@ -290,22 +266,6 @@ static void set_zen_revinfo(const char *series, const struct zen_die *dies,
 	}
 	snprintf(c->name, CPU_NAME_LEN, "Unknown CPU 0x%x", (unsigned)id);
 }
-
-static void set_fam17h_revinfo(int id, struct cpudata *c)
-{
-	set_zen_revinfo("Zen/Zen+/Zen2", fam17h_dies, ARRAY_SIZE(fam17h_dies), id, c);
-}
-
-static void set_fam19h_revinfo(int id, struct cpudata *c)
-{
-	set_zen_revinfo("Zen3/Zen3+/Zen4", fam19h_dies, ARRAY_SIZE(fam19h_dies), id, c);
-}
-
-static void set_fam1ah_revinfo(int id, struct cpudata *c)
-{
-	set_zen_revinfo("Zen5", fam1ah_dies, ARRAY_SIZE(fam1ah_dies), id, c);
-}
-
 
 static void do_assoc(unsigned long assoc)
 {
@@ -577,28 +537,31 @@ void identify_amd(struct cpudata *cpu)
 			set_fam10h_revinfo(eax, cpu);
 			break;
 		case 0x11:
-			set_fam11h_revinfo(eax, cpu);
+			set_listed_revinfo(eax, cpu);
 			break;
 		case 0x12:
-			set_fam12h_revinfo(eax, cpu);
+			set_listed_revinfo(eax, cpu);
 			break;
 		case 0x14:
-			set_fam14h_revinfo(eax, cpu);
+			set_listed_revinfo(eax, cpu);
 			break;
 		case 0x15:
-			set_fam15h_revinfo(eax, cpu);
+			set_listed_revinfo(eax, cpu);
 			break;
 		case 0x16:
 			set_fam16h_revinfo(eax, cpu);
 			break;
 		case 0x17:
-			set_fam17h_revinfo(eax, cpu);
+			set_zen_revinfo("Zen/Zen+/Zen2", fam17h_dies,
+					ARRAY_SIZE(fam17h_dies), eax, cpu);
 			break;
 		case 0x19:
-			set_fam19h_revinfo(eax, cpu);
+			set_zen_revinfo("Zen3/Zen3+/Zen4", fam19h_dies,
+					ARRAY_SIZE(fam19h_dies), eax, cpu);
 			break;
 		case 0x1a:
-			set_fam1ah_revinfo(eax, cpu);
+			set_zen_revinfo("Zen5", fam1ah_dies,
+					ARRAY_SIZE(fam1ah_dies), eax, cpu);
 			break;
 		default:
 			snprintf(cpu->name, CPU_NAME_LEN,

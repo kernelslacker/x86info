@@ -31,11 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C11. vendors/amd/identify.c:194-248 — set_fam11h/12h/14h/15h_revinfo are
-    the same function with a different lookup and prefix; set_fam17h/19h/
-    1ah_revinfo are one-line wrappers. Use a `{family, prefix, lookup}`
-    table and one function each. [sonnet]
-
 C12. vendors/amd/identify.c:102-177 — set_connector() is four switches
     mapping pkg_id to a constant. Use per-family arrays indexed by pkg_id;
     `c->connector = 0` should be CONN_UNKNOWN. [haiku]
