@@ -74,18 +74,8 @@ static void usage(const char *programname, int exit_code)
 {
 	printf("Usage: %s [<switches>]\n", programname);
 	for (int i = 0; long_options[i].name; i++) {
-		char short_opt = ' ';
-		switch (long_options[i].val) {
-			case 'a': short_opt = 'a'; break;
-			case 'c': short_opt = 'c'; break;
-			case 'f': short_opt = 'f'; break;
-			case 'h': short_opt = 'h'; break;
-			case 'm': short_opt = 'm'; break;
-			case 'r': short_opt = 'r'; break;
-			case 'v': short_opt = 'v'; break;
-		}
-		if (short_opt != ' ')
-			printf("-%c, --%s\n", short_opt, long_options[i].name);
+		if (long_options[i].val < 128)
+			printf("-%c, --%s\n", long_options[i].val, long_options[i].name);
 		else
 			printf("    --%s\n", long_options[i].name);
 	}

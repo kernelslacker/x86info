@@ -31,9 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Clean-ups/Refactoring/Style
 
-D4. commandline.c:78-86 — usage() re-derives short options with a switch
-    mirroring long_options. Print `-%c` when `val < 128`. [haiku]
-
 D5. vendors/cyrix/identify.c:15 / include/cyrix.h — decode_cyrix_tlb() is
     only used locally; make it static. [haiku]
 
