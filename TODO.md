@@ -8,10 +8,6 @@
 
 ## 🟡 Clean-ups/Refactoring/Style
 
-D9. features.c:299-301 — `ecx = 0;` before cpuid(..., 0x07, ...) does
-    nothing, because the subleaf comes from idx. Use
-    cpuid_count(cpu->number, 7, 0, ...). [haiku]
-
 D10. identify.c:25-31 — the unknown-vendor message issues CPUID 0 a second
     time; fetch ECX in the first call. [haiku]
 

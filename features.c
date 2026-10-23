@@ -305,8 +305,7 @@ static void show_extra_flags(const struct cpudata *cpu)
 	// CPUID 0x07 subleaf 0
 	if (cpu->cpuid_level >= 0x07) {
 		unsigned int max_subleaf;
-		ecx = 0;
-		cpuid(cpu->number, 0x07, &eax, &ebx, &ecx, &edx);
+		cpuid_count(cpu->number, 0x07, 0, &eax, &ebx, &ecx, &edx);
 		max_subleaf = eax;
 		flag_decode(ebx, "7:ebx", cpuid_07_ebx_flags, cpuid_07_ebx_flags_desc);
 		flag_decode(ecx, "7:ecx", cpuid_07_ecx_flags, cpuid_07_ecx_flags_desc);
