@@ -46,7 +46,7 @@ int intel_num_cpu_cores(struct cpudata *cpu)
 	/* intel.has a non-standard dependency on %ecx for this CPUID level. */
 	cpuid_count(cpu->number, 4, 0, &eax, &ebx, &ecx, &edx);
 	if (eax & 0x1f)
-		return (eax >> 26) + 1;
+		return ((eax >> 26) & 0x3f) + 1;
 	else
 		return 1;
 }
