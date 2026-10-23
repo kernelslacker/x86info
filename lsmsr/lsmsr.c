@@ -168,22 +168,13 @@ static int _show_msr(struct reg_spec *reg)
 
 static int show_matching(const char *name)
 {
-	int i, t;
-	int n = MSR_MAX_LEN;
+	int i;
+	size_t n = strnlen(name, MSR_MAX_LEN);
 	int ret = 0;
-
-	t = strlen(name);
-	if (t < n)
-		n = t;
 
 	g.show_all = 1;
 	for (i = 0; g.msr_table[i].name; i++) {
-		t = strlen(g.msr_table[i].name);
-		if (n < t)
-			t = n;
-		if (t < n)
-			continue;
-		if (strncmp(name, g.msr_table[i].name, t) == 0)
+		if (strncmp(g.msr_table[i].name, name, n) == 0)
 			if (_show_msr(&(g.msr_table[i]))) {
 				ret = 1;
 				break;
