@@ -14,9 +14,6 @@ void decode_microcode(struct cpudata *cpu)
 {
 	unsigned long long val = 0;
 
-	if (!user_is_root)
-		return;
-
 	if (cpu->family < 6)
 		return;
 

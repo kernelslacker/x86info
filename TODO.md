@@ -31,11 +31,6 @@ B4. vendors/amd/powernow.c:135-160,233-268 — two functions each do a full
 
 ## 🟡 Maintainability
 
-C22. Redundant `if (!user_is_root) return;` in dump_* / decode_* MSR
-    functions (msr-athlon, msr-k6, msr-p4, msr-performance, msr-thermal,
-    microcode, machine_check x2, powersaver, msr-c3, show_patch_level): all
-    are behind need_root already. Remove. [haiku]
-
 C23. vendors/intel/identify-family6-extended.c:14,228 — ONLYMHZ is never
     set in the table; remove the flag and its branch. strncpy at line 244
     should be snprintf. [haiku]

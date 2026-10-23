@@ -830,9 +830,6 @@ out_660:
 static void show_patch_level(struct cpudata *cpu)
 {
 	unsigned long long val = 0;
-	if (!user_is_root)
-		return;
-
 	if (read_msr(cpu->number, 0x8b, &val) == 1) {
 		if (val>0)
 			printf("Microcode patch level: 0x%llx\n", val);

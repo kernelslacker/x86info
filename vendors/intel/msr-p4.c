@@ -15,9 +15,6 @@ void dump_p4_msrs (struct cpudata *cpu)
 {
 	unsigned long long val = 0;
 
-	if (!user_is_root)
-		return;
-
 	printf("Pentium 4 specific msrs:\n");
 
 	if (read_msr (cpu->number, 0x17, &val) == 1)

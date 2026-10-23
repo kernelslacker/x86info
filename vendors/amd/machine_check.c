@@ -90,9 +90,6 @@ void decode_athlon_machine_check(int cpunum, unsigned int family)
 	unsigned long long val, val2;
 	unsigned int banks, i, ctlp = 0;
 
-	if (!user_is_root)
-		return;
-
 	if (read_msr(cpunum, MCG_CAP, &val) != 1)
 		return;
 

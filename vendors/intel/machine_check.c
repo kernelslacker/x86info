@@ -22,9 +22,6 @@ static int nr_msr_banks;
 void decode_intel_machine_check(int cpunum, int family)
 {
 	unsigned long long val;
-	if (!user_is_root)
-		return;
-
 	if (read_msr(cpunum, MCG_CAP, &val) != 1)
 		return;
 

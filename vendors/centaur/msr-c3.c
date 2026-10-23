@@ -9,9 +9,6 @@
 
 void dump_C3_MSR (struct cpudata *cpu)
 {
-	if (!user_is_root)
-		return;
-
 	printf("FCR: ");
 	dumpmsr (cpu->number, 0x1107, 32);
 

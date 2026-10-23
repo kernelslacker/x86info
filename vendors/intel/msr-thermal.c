@@ -12,9 +12,6 @@ void dump_thermal_msrs(struct cpudata *cpu)
 {
 	unsigned long long val = 0;
 
-	if (!user_is_root)
-		return;
-
 	if (read_msr(cpu->number, MSR_IA32_MISC_ENABLE, &val) != 1)
 		return;
 

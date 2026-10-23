@@ -12,9 +12,6 @@
 
 void dump_athlon_MSR(struct cpudata *cpu)
 {
-	if (!user_is_root)
-		return;
-
 	dumpmsr(cpu->number, 0x2A, 32);
 	dumpmsr(cpu->number, 0xC0000080, 32);
 	dumpmsr(cpu->number, 0xC0010010, 32);

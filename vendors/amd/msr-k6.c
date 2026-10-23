@@ -15,9 +15,6 @@ void dump_k6_MSR (struct cpudata *cpu)
 {
 	unsigned long long val=0;
 
-	if (!user_is_root)
-		return;
-
 	dumpmsr(cpu->number, 0xC0000082, 32);
 
 	/* Original K6 or K6-2 (old core). */

@@ -15,9 +15,6 @@ void decode_powersaver(struct cpudata *cpu)
 {
 	union msr_powersaver ps;
 
-	if (!user_is_root)
-		return;
-
 	dumpmsr(cpu->number, MSR_POWERSAVER, 64);
 	printf("\n");
 
