@@ -141,7 +141,8 @@ void show_header(struct cpudata *cpu)
 	len = strlen(cpu->name);
 	while (len > 0 && cpu->name[len - 1] == ' ')
 		len--;
-	printf("CPU Model (x86info's best guess): %.*s\n", (int)len, cpu->name);
+	if (len)
+		printf("CPU Model (x86info's best guess): %.*s\n", (int)len, cpu->name);
 	display_model_name(cpu);
 	if (cpu->vendor == VENDOR_AMD)
 		display_amd_package(cpu);
