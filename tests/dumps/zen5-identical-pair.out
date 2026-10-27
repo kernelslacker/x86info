@@ -5,7 +5,7 @@ Processor name string (BIOS programmed): AMD Ryzen AI 9 HX 470 w/ Radeon 890M
 The physical package has 24 of 32 possible threads implemented (12 cores).
 
 Monitor/Mwait: min/max line size 64/64, interrupt break event, enumeration extension
-SVM: revision 1, 32768 ASIDs, np, lbrVirt, SVMLock, NRIPSave, TscRateMsr, VmcbClean, FlushByAsid, DecodeAssists, PauseFilter, PauseFilterThreshold, AVIC, V_VMSAVE_VMLOAD, vGIF, GMET, x2AVIC, SpecCtrl, VNMI, SvmeAddrChk
+SVM: revision 1, 32768 ASIDs, np, lbrVirt, SVMLock, NRIPSave, TscRateMsr, VmcbClean, FlushByAsid, DecodeAssists, PauseFilter, PauseFilterThreshold, AVIC, V_VMSAVE_VMLOAD, vGIF, GMET, x2AVIC, SpecCtrl, VNMI, SvmeAddrChk, BusLockThreshold, IdleHltIntercept
 L1 Data TLB (1G):           Fully associative. 96 entries.
 L1 Instruction TLB (1G):    Fully associative. 64 entries.
 L1 Data TLB (2M/4M):        Fully associative. 96 entries.

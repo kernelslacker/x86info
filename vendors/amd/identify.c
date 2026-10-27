@@ -558,7 +558,7 @@ static const char *svm_features[32] = {
 	"vGIF", "GMET", "x2AVIC", NULL,
 	"SpecCtrl", NULL, NULL, NULL,
 	NULL, "VNMI", NULL, NULL,
-	"SvmeAddrChk", NULL, NULL, NULL,
+	"SvmeAddrChk", "BusLockThreshold", "IdleHltIntercept", NULL,
 };
 
 void display_amd_info(struct cpudata *cpu)
