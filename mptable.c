@@ -70,43 +70,43 @@ struct mp_scan {
 /* MP Floating Pointer Structure */
 struct mpfps {
 	char	signature[4];
-	u32	pap;
-	u8	length;
-	u8	spec_rev;
-	u8	checksum;
-	u8	mpfb1;
-	u8	mpfb2;
-	u8	mpfb3;
-	u8	mpfb4;
-	u8	mpfb5;
+	uint32_t	pap;
+	uint8_t	length;
+	uint8_t	spec_rev;
+	uint8_t	checksum;
+	uint8_t	mpfb1;
+	uint8_t	mpfb2;
+	uint8_t	mpfb3;
+	uint8_t	mpfb4;
+	uint8_t	mpfb5;
 };
 
 /* MP Configuration Table Header */
 struct mpcth {
 	char	signature[4];
-	u16	base_table_length;
-	u8	spec_rev;
-	u8	checksum;
-	u8	oem_id[8];
-	u8	product_id[12];
-	u32	oem_table_pointer;
-	u16	oem_table_size;
-	u16	entry_count;
-	u32	apic_address;
-	u16	extended_table_length;
-	u8	extended_table_checksum;
-	u8	reserved;
+	uint16_t	base_table_length;
+	uint8_t	spec_rev;
+	uint8_t	checksum;
+	uint8_t	oem_id[8];
+	uint8_t	product_id[12];
+	uint32_t	oem_table_pointer;
+	uint16_t	oem_table_size;
+	uint16_t	entry_count;
+	uint32_t	apic_address;
+	uint16_t	extended_table_length;
+	uint8_t	extended_table_checksum;
+	uint8_t	reserved;
 };
 
 struct ProcEntry {
-	u8	type;
-	u8	apicID;
-	u8	apicVersion;
-	u8	cpuFlags;
-	u32	cpuSignature;
-	u32	featureFlags;
-	u32	reserved1;
-	u32	reserved2;
+	uint8_t	type;
+	uint8_t	apicID;
+	uint8_t	apicVersion;
+	uint8_t	cpuFlags;
+	uint32_t	cpuSignature;
+	uint32_t	featureFlags;
+	uint32_t	reserved1;
+	uint32_t	reserved2;
 };
 
 /* These are read straight from /dev/mem: the layout must have no padding. */
@@ -198,13 +198,13 @@ static unsigned int checksum(const unsigned char *p, size_t len)
 	return sum & 0xff;
 }
 
-static int MPConfigTableHeader(struct mp_scan *mp, u32 pap)
+static int MPConfigTableHeader(struct mp_scan *mp, uint32_t pap)
 {
 	unsigned long paddr;
 	unsigned char *table;
 	struct mpcth cth;
 	unsigned int off;
-	u16 size;
+	uint16_t size;
 	int c;
 
 	if (pap == 0) {
@@ -302,7 +302,7 @@ static int scan_for_mp(struct mp_scan *mp, const char *what,
  */
 static int apic_probe(struct mp_scan *mp, unsigned long* paddr)
 {
-	u16 segment;
+	uint16_t segment;
 	unsigned long target;
 	int ret;
 

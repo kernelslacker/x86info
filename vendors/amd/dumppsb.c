@@ -22,20 +22,20 @@
 #define PSB_SIGLEN 10
 
 struct psb_s {
-	u8 signature[10];
-	u8 tableversion;
-	u8 flags;
-	u16 settlingtime;
-	u8 reserved1;
-	u8 numpst;
+	uint8_t signature[10];
+	uint8_t tableversion;
+	uint8_t flags;
+	uint16_t settlingtime;
+	uint8_t reserved1;
+	uint8_t numpst;
 };
 
 struct pst_s {
-	u32 cpuid;
-	u8 fsbspeed;
-	u8 maxfid;
-	u8 startvid;
-	u8 numpstates;
+	uint32_t cpuid;
+	uint8_t fsbspeed;
+	uint8_t maxfid;
+	uint8_t startvid;
+	uint8_t numpstates;
 };
 
 /* These are read straight from /dev/mem: the layout must have no padding. */

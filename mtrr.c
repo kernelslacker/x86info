@@ -61,7 +61,7 @@ static void decode_mtrrcap(unsigned long long val)
 static void decode_mtrr_deftype(int cpu, int msr)
 {
 	unsigned long long val;
-	u8 type;
+	uint8_t type;
 
 	if (read_msr(cpu, msr, &val) == 1) {
 		printf("0x%016llx ", val);
@@ -81,7 +81,7 @@ static void decode_mtrr_deftype(int cpu, int msr)
 static void decode_mtrr_physbase(int cpu, int msr, unsigned int max_phy_addr)
 {
 	unsigned long long val;
-	u8 type;
+	uint8_t type;
 
 	if (read_msr(cpu, msr, &val) == 1) {
 		printf("0x%016llx ", val);

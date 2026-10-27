@@ -1,10 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
-
-typedef unsigned char u8;
-typedef unsigned short u16;
-typedef unsigned int u32;
+#include <stdint.h>
 
 enum vendor {
 	VENDOR_UNKNOWN = 0 ,

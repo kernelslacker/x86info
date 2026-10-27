@@ -133,7 +133,7 @@ static int get_did(int family, union msr_pstate pstate)
  */
 #ifdef HAVE_LIBPCI
 static int read_amd_pci_byte(const int *ids, unsigned int nr_ids,
-			     unsigned int reg, u8 *val)
+			     unsigned int reg, uint8_t *val)
 {
 	struct pci_access *pacc;
 	struct pci_dev *z;
@@ -161,7 +161,7 @@ static int read_amd_pci_byte(const int *ids, unsigned int nr_ids,
 }
 #else
 static int read_amd_pci_byte(const int *ids, unsigned int nr_ids,
-			     unsigned int reg, u8 *val)
+			     unsigned int reg, uint8_t *val)
 {
 	(void)ids;
 	(void)nr_ids;
@@ -174,7 +174,7 @@ static int read_amd_pci_byte(const int *ids, unsigned int nr_ids,
 static int get_main_pll_fid(int *fid)
 {
 	static const int dev_ids[] = {0x1703};
-	u8 val = 0;
+	uint8_t val = 0;
 
 	if (!read_amd_pci_byte(dev_ids, ARRAY_SIZE(dev_ids), 0xd4, &val))
 		return 0;
@@ -258,7 +258,7 @@ static int get_zen_cof(struct cpudata *cpu, unsigned long long val)
 static int get_num_boost_states(void)
 {
 	static const int dev_ids[] = {0x1204, 0x1404, 0x1604, 0x1704};
-	u8 val;
+	uint8_t val;
 
 	if (!read_amd_pci_byte(dev_ids, ARRAY_SIZE(dev_ids), 0x15c, &val))
 		return 0;
