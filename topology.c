@@ -237,6 +237,11 @@ static unsigned int count_groups(const struct cpudata *cpus, unsigned int n,
 	unsigned long long *keys;
 	unsigned int i, run = 0, groups = 0, min = ~0u, max = 0;
 
+	if (min_threads)
+		*min_threads = 1;
+	if (max_threads)
+		*max_threads = 1;
+
 	keys = malloc(n * sizeof(*keys));
 	if (keys == NULL)
 		return 0;
