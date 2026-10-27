@@ -10,6 +10,9 @@ Core type: Performance
 
 Monitor/Mwait: min/max line size 64/64, interrupt break event, enumeration extension
 SVM: revision 1, 32768 ASIDs, np, lbrVirt, SVMLock, NRIPSave, TscRateMsr, VmcbClean, FlushByAsid, DecodeAssists, PauseFilter, PauseFilterThreshold, AVIC, V_VMSAVE_VMLOAD, vGIF, GMET, x2AVIC, SpecCtrl, VNMI, SvmeAddrChk, BusLockThreshold, IdleHltIntercept
+Memory encryption: C-bit 51, 2 bits of physical address reduction, 0 VMPLs, 0 guests, min SEV ASID 0
+Microcode patch size: 14368 bytes, return address predictor size: 8 entries
+PerfMonV2: 6 core, 8 northbridge, 16 UMC counters, LBR stack 16 entries, active UMCs 0xf
 L1 Data TLB (1G):           Fully associative. 96 entries.
 L1 Instruction TLB (1G):    Fully associative. 64 entries.
 L1 Data TLB (2M/4M):        Fully associative. 96 entries.
@@ -54,6 +57,9 @@ Core type: Efficiency (compact)
 
 Monitor/Mwait: min/max line size 64/64, interrupt break event, enumeration extension
 SVM: revision 1, 32768 ASIDs, np, lbrVirt, SVMLock, NRIPSave, TscRateMsr, VmcbClean, FlushByAsid, DecodeAssists, PauseFilter, PauseFilterThreshold, AVIC, V_VMSAVE_VMLOAD, vGIF, GMET, x2AVIC, SpecCtrl, VNMI, SvmeAddrChk, BusLockThreshold, IdleHltIntercept
+Memory encryption: C-bit 51, 2 bits of physical address reduction, 0 VMPLs, 0 guests, min SEV ASID 0
+Microcode patch size: 14368 bytes, return address predictor size: 8 entries
+PerfMonV2: 6 core, 8 northbridge, 16 UMC counters, LBR stack 16 entries, active UMCs 0xf
 L1 Data TLB (1G):           Fully associative. 96 entries.
 L1 Instruction TLB (1G):    Fully associative. 64 entries.
 L1 Data TLB (2M/4M):        Fully associative. 96 entries.

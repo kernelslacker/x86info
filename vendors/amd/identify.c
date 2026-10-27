@@ -602,6 +602,29 @@ void display_amd_info(struct cpudata *cpu)
 				printf(", %s", svm_features[i]);
 		printf("\n");
 	}
+
+	if (opts.show_feature_flags && cpu->maxei >= 0x8000001f) {
+		cpuid(cpu->number, 0x8000001f, &eax, &ebx, &ecx, &edx);
+		if (eax & 0x3)
+			printf("Memory encryption: C-bit %u, %u bits of physical address reduction, %u VMPLs, %u guests, min SEV ASID %u\n",
+			       ebx & 0x3f, (ebx >> 6) & 0x3f, (ebx >> 12) & 0xf,
+			       ecx, edx);
+	}
+
+	if (opts.show_feature_flags && cpu->maxei >= 0x80000021) {
+		cpuid(cpu->number, 0x80000021, NULL, &ebx, NULL, NULL);
+		if (ebx)
+			printf("Microcode patch size: %u bytes, return address predictor size: %u entries\n",
+			       (ebx & 0xffff) * 16, (ebx >> 16) & 0xff);
+	}
+
+	if (opts.show_feature_flags && cpu->maxei >= 0x80000022) {
+		cpuid_count(cpu->number, 0x80000022, 0, &eax, &ebx, &ecx, NULL);
+		if (eax & 1)
+			printf("PerfMonV2: %u core, %u northbridge, %u UMC counters, LBR stack %u entries, active UMCs %#x\n",
+			       ebx & 0xf, (ebx >> 10) & 0x3f, (ebx >> 16) & 0x3f,
+			       (ebx >> 4) & 0x3f, ecx);
+	}
 }
 
 /* How much of the package is implemented; the same for every core type. */
