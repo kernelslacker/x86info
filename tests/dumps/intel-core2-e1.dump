@@ -1,0 +1,4 @@
+CPU #0:
+eax in: 0x00000000, eax = 0000000a ebx = 756e6547 ecx = 6c65746e edx = 49656e69
+eax in: 0x00000001, eax = 000006fa ebx = 00010800 ecx = 0000e3bd edx = bfebfbff
+eax in: 0x00000002, eax = 05b0b101 ebx = 005657f0 ecx = 00000000 edx = 2cb43049

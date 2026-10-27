@@ -294,17 +294,13 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 			break;
 		case 6:
 			add_to_cpuname("Duo ");
-			switch (cpu->cachesize_L2) {
-			case 2048:
+			if (cpu->cachesize_L2 == 2048) {
 				add_to_cpuname("[B2]");
 				ensure_MHz(cpu);
 				if (MHz_matches(cpu->MHz, 1860))
 					add_to_cpuname("[SL9SA] E6300");
 				if (MHz_matches(cpu->MHz, 2130))
 					add_to_cpuname("[SL9S9] E6400");
-				break;
-			case 4096:
-				break;
 			}
 			break;
 		case 7:
@@ -320,7 +316,7 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 			break;
 
 		case 0xa:
-			add_to_cpuname(" [E1]");
+			add_to_cpuname("[E1]");
 			break;
 
 		case 0xb:
