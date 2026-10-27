@@ -171,16 +171,18 @@ static int read_amd_pci_byte(const int *ids, unsigned int nr_ids,
 }
 #endif
 
-static int get_main_pll_fid(void)
+static int get_main_pll_fid(int *fid)
 {
 	static const int dev_ids[] = {0x1703};
 	u8 val = 0;
 
 	if (!read_amd_pci_byte(dev_ids, ARRAY_SIZE(dev_ids), 0xd4, &val))
 		return 0;
-	return val & 0x3f;
+	*fid = val & 0x3f;
+	return 1;
 }
 
+/* Returns the frequency in MHz, or -1 if it cannot be determined. */
 static int get_cof(int family, union msr_pstate pstate)
 {
 	int t;
@@ -229,7 +231,8 @@ static int get_cof(int family, union msr_pstate pstate)
 		return (100 * (fid + t) * f / d);
 	}
 	if (family == 0x14) {
-		fid = get_main_pll_fid(); //from PCI
+		if (!get_main_pll_fid(&fid))
+			return -1;
 		return (((fid + 0x10) *100) * 4 / did);
 	}
 
@@ -303,6 +306,7 @@ static void decode_pstates(struct cpudata *cpu, int has_cpb)
 		psmax = 7;
 	for (i=0; i<=psmax; i++) {
 		int cof, enabled;
+		char mhz[16];
 
 		if (read_msr(cpu->number, MSR_PSTATE + i, &pstate.val) != 1) {
 			printf("Something went wrong reading MSR_PSTATE_%d\n",
@@ -316,12 +320,16 @@ static void decode_pstates(struct cpudata *cpu, int has_cpb)
 			cof = get_cof(fam, pstate);
 			enabled = pstate.bits.en;
 		}
+		if (cof < 0)
+			snprintf(mhz, sizeof(mhz), "unavailable");
+		else
+			snprintf(mhz, sizeof(mhz), "%dMHz", cof);
 		if (i < boost_states) {
-			printf("Pstate-Pb%d: %dMHz (boost state)\n", i, cof);
+			printf("Pstate-Pb%d: %s (boost state)\n", i, mhz);
 		} else if (enabled) {
 			/* show information only if pstate is enabled */
-			printf("Pstate-P%d:  %dMHz%s\n",
-			       i - boost_states, cof,
+			printf("Pstate-P%d:  %s%s\n",
+			       i - boost_states, mhz,
 			       (i == pscur) ? " (current)"  : "");
 		}
 	}
