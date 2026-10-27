@@ -7,34 +7,23 @@
 #include <stdio.h>
 #include <x86info.h>
 
-void dumpmsr(int cpu, unsigned int msr, int size)
+/* Print the MSR in binary, preceded by its address and hex value if labelled. */
+void dumpmsr(int cpu, unsigned int msr, int size, bool labelled)
 {
-	unsigned long long val=0;
+	unsigned long long val = 0;
 
-	if (read_msr(cpu, msr, &val) == 1) {
-		if (size == 32){
+	if (read_msr(cpu, msr, &val) != 1) {
+		printf("Couldn't read MSR 0x%x\n", msr);
+		return;
+	}
+	if (size == 32) {
+		if (labelled)
 			printf("MSR: 0x%08x=0x%08lx : ", msr, (unsigned long) val);
-			binary32(val);
-		}
-		if (size == 64) {
+		binary32(val);
+	}
+	if (size == 64) {
+		if (labelled)
 			printf("MSR: 0x%08x=0x%016llx : ", msr, val);
-			binary64(val);
-		}
-		return;
+		binary64(val);
 	}
-	printf("Couldn't read MSR 0x%x\n", msr);
-}
-
-void dumpmsr_bin(int cpu, unsigned int msr, int size)
-{
-	unsigned long long val=0;
-
-	if (read_msr(cpu, msr, &val) == 1) {
-		if (size == 32)
-			binary32(val);
-		if (size == 64)
-			binary64(val);
-		return;
-	}
-	printf("Couldn't read MSR 0x%x\n", msr);
 }

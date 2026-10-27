@@ -10,7 +10,7 @@
 void dump_C3_MSR (struct cpudata *cpu)
 {
 	printf("FCR: ");
-	dumpmsr (cpu->number, 0x1107, 32);
+	dumpmsr(cpu->number, 0x1107, 32, true);
 
 	printf("Power management: ");
 	if (cpu->model==6 || cpu->model==7) {

@@ -15,7 +15,7 @@ void dump_k6_MSR (struct cpudata *cpu)
 {
 	unsigned long long val=0;
 
-	dumpmsr(cpu->number, 0xC0000082, 32);
+	dumpmsr(cpu->number, 0xC0000082, 32, true);
 
 	/* Original K6 or K6-2 (old core). */
 	if ((cpu->model < 8) || ((cpu->model == 8) && (cpu->stepping < 8))) {

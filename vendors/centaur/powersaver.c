@@ -117,7 +117,7 @@ void decode_c3_power(struct cpudata *cpu, enum c3_power gen)
 	union msr_powersaver ps;
 
 	if (gen == C3_POWERSAVER) {
-		dumpmsr(cpu->number, MSR_POWERSAVER, 64);
+		dumpmsr(cpu->number, MSR_POWERSAVER, 64, true);
 		printf("\n");
 	}
 
@@ -128,7 +128,7 @@ void decode_c3_power(struct cpudata *cpu, enum c3_power gen)
 	}
 
 	if (gen == C3_LONGHAUL) {
-		dumpmsr(cpu->number, MSR_POWERSAVER, 64);
+		dumpmsr(cpu->number, MSR_POWERSAVER, 64, true);
 		decode_longhaul(&ps);
 	} else {
 		decode_powersaver(&ps);

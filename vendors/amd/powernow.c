@@ -33,8 +33,8 @@ static void decode_fidvid(struct cpudata *cpu)
 	union msr_vidctl vidctl;
 	union msr_fidvidstatus fidvidstatus;
 
-	dumpmsr(cpu->number, MSR_FID_VID_CTL, 64);
-	dumpmsr(cpu->number, MSR_FID_VID_STATUS, 64);
+	dumpmsr(cpu->number, MSR_FID_VID_CTL, 64, true);
+	dumpmsr(cpu->number, MSR_FID_VID_STATUS, 64, true);
 	printf("\n");
 
 	if (read_msr(cpu->number, MSR_FID_VID_CTL, &vidctl.val) != 1) {
@@ -93,8 +93,8 @@ static void k8_decode_fidvid(struct cpudata *cpu)
 {
 	union k8_msr_fidvidstatus fidvidstatus;
 
-	dumpmsr(cpu->number, MSR_FID_VID_CTL, 64);
-	dumpmsr(cpu->number, MSR_FID_VID_STATUS, 64);
+	dumpmsr(cpu->number, MSR_FID_VID_CTL, 64, true);
+	dumpmsr(cpu->number, MSR_FID_VID_STATUS, 64, true);
 	printf("\n");
 
 	if (read_msr(cpu->number, MSR_FID_VID_STATUS, &fidvidstatus.val) != 1) {

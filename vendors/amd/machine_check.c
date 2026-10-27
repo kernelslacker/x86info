@@ -123,7 +123,7 @@ void decode_athlon_machine_check(int cpunum, unsigned int family)
 	if (read_msr(cpunum, MCG_STATUS, &val) == 1) {
 		if (val != 0) {
 			printf("MCG_STATUS: ");
-			dumpmsr_bin (cpunum, MCG_STATUS, 64);
+			dumpmsr(cpunum, MCG_STATUS, 64, false);
 		}
 	}
 

@@ -19,13 +19,13 @@ void dump_mc_banks(int cpunum, unsigned int banks)
 	for (i = 0; i < banks; i++) {
 		printf("Bank: %u (0x%x)\n", i, (unsigned int)MC_CTL+i*4);
 		printf("MC%uCTL:    ", i);
-		dumpmsr_bin (cpunum, MC_CTL+i*4, 64);
+		dumpmsr(cpunum, MC_CTL+i*4, 64, false);
 		printf("MC%uSTATUS: ", i);
-		dumpmsr_bin (cpunum, MC_STATUS+i*4, 64);
+		dumpmsr(cpunum, MC_STATUS+i*4, 64, false);
 		printf("MC%uADDR:   ", i);
-		dumpmsr_bin (cpunum, MC_ADDR+i*4, 64);
+		dumpmsr(cpunum, MC_ADDR+i*4, 64, false);
 		printf("MC%uMISC:   ", i);
-		dumpmsr_bin (cpunum, MC_MISC+i*4, 64);
+		dumpmsr(cpunum, MC_MISC+i*4, 64, false);
 		printf("\n");
 	}
 }
