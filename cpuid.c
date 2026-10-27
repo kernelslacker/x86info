@@ -64,6 +64,8 @@ enum vendor vendor_from_cpuid(unsigned int ebx, unsigned int edx)
 		if (edx == 0x54656e69)
 			return VENDOR_TRANSMETA;
 		return VENDOR_INTEL;
+	case 0x6e617254:	/* "TransmetaCPU" */
+		return VENDOR_TRANSMETA;
 	case 0x6f677948:	/* "HygonGenuine" */
 	case 0x68747541:
 		return VENDOR_AMD;

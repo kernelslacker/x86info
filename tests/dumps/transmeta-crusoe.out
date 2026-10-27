@@ -1,0 +1,9 @@
+Family: 5 Model: 4 Stepping: 3
+
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 sep mtrr pge mca cmov pat pse36 mmx fxsr sse
+Extended feature flags:
+
+Long NOPs supported: not recorded
+
+Address sizes : 0 bits physical, 0 bits virtual
