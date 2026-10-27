@@ -41,7 +41,7 @@ static int decode_x2apic_leaf(struct cpudata *cpu, unsigned int leaf)
 		id = edx;
 		levels++;
 	}
-	if (!levels || !smt_count || !logical)
+	if (!levels || !smt_count || !logical || pkg_shift < smt_shift)
 		return 0;
 
 	cpu->num_siblings = smt_count;
