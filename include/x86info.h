@@ -253,7 +253,10 @@ static inline int want_powernow(void)
 #define CORE_TYPE_EFFICIENCY	2
 #define CORE_TYPE_UNKNOWN	3
 
+#define X86_FEATURE_PSN		(1<<18)
 #define X86_FEATURE_HT		(1<<28)
+#define X86_FEATURE_TSC		(1<<4)
+#define X86_APM_INVARIANT_TSC	(1<<8)	/* CPUID 0x80000007 EDX */
 #define X86_FEATURE_MTRR	(1<<12)
 #define X86_FEATURE_APIC	(1<<9)
 

@@ -26,7 +26,7 @@ void decode_serial_number(struct cpudata *cpu)
 	signature = eax;
 
 	/* PSN feature bit; clear when the BIOS disables the serial number */
-	if (!(edx & (1 << 18)))
+	if (!(edx & X86_FEATURE_PSN))
 		return;
 
 	cpuid(cpu->number, 3, &eax, &ebx, &ecx, &edx);

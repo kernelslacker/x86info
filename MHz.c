@@ -63,7 +63,7 @@ void display_MHz_line(const struct cpudata *cpu)
 	}
 
 	display_MHz(cpu);
-	if (cpu->apm_edx & (1 << 8))
+	if (cpu->apm_edx & X86_APM_INVARIANT_TSC)
 		printf(" TSC frequency.");
 	else
 		printf(" processor (estimate).");
@@ -223,7 +223,7 @@ static unsigned int cpuid_tsc_MHz(const struct cpudata *cpu)
 
 	if (cpu->vendor != VENDOR_INTEL || cpu->cpuid_level < 0x16)
 		return 0;
-	if (!(cpu->apm_edx & (1 << 8)))
+	if (!(cpu->apm_edx & X86_APM_INVARIANT_TSC))
 		return 0;
 	cpuid(cpu->number, 0x16, &eax, NULL, NULL, NULL);
 	return eax & 0xffff;
@@ -241,7 +241,7 @@ static void measure_MHz(struct cpudata *cpu, int want_core)
 
 	/* Make sure we have a TSC (and hence RDTSC) */
 	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
-	if ((edx & (1<<4)) == 0) {
+	if (!(edx & X86_FEATURE_TSC)) {
 		printf("No TSC, MHz calculation cannot be performed.\n");
 		cpu->MHz = 0;
 		return;
