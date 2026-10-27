@@ -49,10 +49,15 @@ static void replay_add_cpu(unsigned int cpu)
 
 static void replay_load(void)
 {
+	static int loaded;
 	const char *path = getenv("X86INFO_CPUID_DUMP");
 	char line[256];
 	int current = ALL_CPUS;
 	FILE *f;
+
+	if (loaded)
+		return;
+	loaded = 1;
 
 	if (!path) {
 		fprintf(stderr, "X86INFO_CPUID_DUMP is not set\n");
@@ -113,8 +118,7 @@ unsigned int *replay_cpu_ids(unsigned int *count)
 	unsigned int n;
 	unsigned int *ids;
 
-	if (!entries)
-		replay_load();
+	replay_load();
 
 	n = nr_cpu_ids ? nr_cpu_ids : 1;
 	ids = calloc(n, sizeof(*ids));
@@ -135,8 +139,7 @@ int cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int regs[4] = { 0, 0, 0, 0 };
 	unsigned int i;
 
-	if (!entries)
-		replay_load();
+	replay_load();
 
 	/* A leaf in the CPU's own section wins over a shared one. */
 	for (i = 0; i < nr_entries; i++) {
