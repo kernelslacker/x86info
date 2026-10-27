@@ -413,6 +413,35 @@ static void show_extra_flags(const struct cpudata *cpu)
 	// CPUID 0x80000007
 	if (cpu->maxei >= 0x80000007)
 		flag_decode(cpu->apm_edx, "80000007:edx", cpuid_80000007_edx_flags, cpuid_80000007_edx_flags_desc);
+
+	if (cpu->vendor != VENDOR_AMD)
+		return;
+
+	if (cpu->maxei >= 0x80000007) {
+		cpuid(cpu->number, 0x80000007, NULL, &ebx, NULL, NULL);
+		flag_decode(ebx, "80000007:ebx", cpuid_80000007_ebx_flags, NULL);
+	}
+	if (cpu->maxei >= 0x80000008) {
+		cpuid(cpu->number, 0x80000008, NULL, &ebx, NULL, NULL);
+		flag_decode(ebx, "80000008:ebx", cpuid_80000008_ebx_flags, NULL);
+	}
+	if (cpu->maxei >= 0x8000001f) {
+		cpuid(cpu->number, 0x8000001f, &eax, NULL, NULL, NULL);
+		flag_decode(eax, "8000001f:eax", cpuid_8000001f_eax_flags, NULL);
+	}
+	if (cpu->maxei >= 0x80000020) {
+		cpuid_count(cpu->number, 0x80000020, 0, NULL, &ebx, NULL, NULL);
+		flag_decode(ebx, "80000020:ebx", cpuid_80000020_ebx_flags, NULL);
+	}
+	if (cpu->maxei >= 0x80000021) {
+		cpuid(cpu->number, 0x80000021, &eax, NULL, &ecx, NULL);
+		flag_decode(eax, "80000021:eax", cpuid_80000021_eax_flags, NULL);
+		flag_decode(ecx, "80000021:ecx", cpuid_80000021_ecx_flags, NULL);
+	}
+	if (cpu->maxei >= 0x80000022) {
+		cpuid_count(cpu->number, 0x80000022, 0, &eax, NULL, NULL, NULL);
+		flag_decode(eax, "80000022:eax", cpuid_80000022_eax_flags, NULL);
+	}
 }
 
 /* CPUID 0x00000001 EDX flags */
