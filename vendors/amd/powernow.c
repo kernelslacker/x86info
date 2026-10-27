@@ -28,10 +28,20 @@ const double fid_codes[32] = {
 	15.0, 22.5, 16.0, 16.5, 17.0, 18.0, -1, -1,
 };
 
+/* A FID code's multiplier as text, or "reserved" for an unused code. */
+static const char *fid_text(unsigned int fid, char *buf, size_t len)
+{
+	if (fid_codes[fid] < 0)
+		return "reserved";
+	snprintf(buf, len, "%.1fx", fid_codes[fid]);
+	return buf;
+}
+
 static void decode_fidvid(struct cpudata *cpu)
 {
 	union msr_vidctl vidctl;
 	union msr_fidvidstatus fidvidstatus;
+	char maxfid[16], startfid[16], curfid[16];
 
 	dumpmsr(cpu->number, MSR_FID_VID_CTL, 64, true);
 	dumpmsr(cpu->number, MSR_FID_VID_STATUS, 64, true);
@@ -49,8 +59,8 @@ static void decode_fidvid(struct cpudata *cpu)
 		printf("Current VID multiplier code: %0.3f\n",
 			mobile_vid_table[vidctl.bits.VID]);
 	if (vidctl.bits.FIDC)
-		printf("Current FSB multiplier code: %.1f\n",
-			fid_codes[vidctl.bits.FID]);
+		printf("Current FSB multiplier code: %s\n",
+			fid_text(vidctl.bits.FID, curfid, sizeof(curfid)));
 
 	/* Now dump the status */
 	if (read_msr(cpu->number, MSR_FID_VID_STATUS, &fidvidstatus.val) != 1) {
@@ -64,10 +74,10 @@ static void decode_fidvid(struct cpudata *cpu)
 		mobile_vid_table[fidvidstatus.bits.SVID],
 		mobile_vid_table[fidvidstatus.bits.CVID]);
 
-	printf("Frequency ID codes: Maximum=%.1fx Startup=%.1fx Currently=%.1fx\n",
-		fid_codes[fidvidstatus.bits.MFID],
-		fid_codes[fidvidstatus.bits.SFID],
-		fid_codes[fidvidstatus.bits.CFID]);
+	printf("Frequency ID codes: Maximum=%s Startup=%s Currently=%s\n",
+		fid_text(fidvidstatus.bits.MFID, maxfid, sizeof(maxfid)),
+		fid_text(fidvidstatus.bits.SFID, startfid, sizeof(startfid)),
+		fid_text(fidvidstatus.bits.CFID, curfid, sizeof(curfid)));
 
 	if (opts.show_bios) {
 		printf("Decoding BIOS PST tables (maxfid=%x, startvid=%x)\n",

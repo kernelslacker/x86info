@@ -113,8 +113,11 @@ int decode_psb(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid,
 
 			for (j = 0 ; j < numpstates; j++) {
 				fid = (unsigned char)p[2 * j] & 0x1f;
-				printf("    FID: 0x%x (%.1fx [%.0fMHz])\t", fid,
-					fid_codes[fid], pst.fsbspeed * fid_codes[fid]);
+				if (fid_codes[fid] < 0)
+					printf("    FID: 0x%x (reserved)\t", fid);
+				else
+					printf("    FID: 0x%x (%.1fx [%.0fMHz])\t", fid,
+						fid_codes[fid], pst.fsbspeed * fid_codes[fid]);
 
 				vid = (unsigned char)p[2 * j + 1] & 0x1f;
 				printf("VID: 0x%x (%0.3fV)\n", vid, mobile_vid_table[vid]);
