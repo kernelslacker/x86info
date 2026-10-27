@@ -1,7 +1,7 @@
 /*
  *  Licensed under the terms of the GNU GPL License version 2.
  *
- *  AMD TLB and cache information (CPUID 0x80000005/6/19/1D).
+ *  AMD TLB and cache information (CPUID 0x80000005/6/19/21/1D).
  */
 
 #include <stdio.h>
@@ -73,6 +73,7 @@ void decode_amd_cacheinfo(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
 	unsigned int tlb1g_eax = 0, tlb1g_ebx = 0;
+	unsigned int shift = 0;
 	int have_1g = 0;
 
 	if ((cpu->eflags_edx & 1<<26) && cpu->maxei >= 0x80000019) {
@@ -115,14 +116,23 @@ void decode_amd_cacheinfo(struct cpudata *cpu)
 		/* K6-III (and later) on-chip L2 cache size */
 		cpuid(cpu->number, 0x80000006, &eax, &ebx, &ecx, &edx);
 
+		/* L2TlbSizeX32: L2 TLB sizes are multiples of 32 */
+		if (cpu->maxei >= 0x80000021) {
+			unsigned int ext2_eax, d1, d2, d3;
+
+			cpuid(cpu->number, 0x80000021, &ext2_eax, &d1, &d2, &d3);
+			if (ext2_eax & (1 << 14))
+				shift = 5;
+		}
+
 		print_tlb("L2 Data TLB (2M/4M):", do_l2assoc, eax >> 28,
-			  (eax >> 16) & 0xfff);
+			  ((eax >> 16) & 0xfff) << shift);
 		print_tlb("L2 Instruction TLB (2M/4M):", do_l2assoc,
-			  (eax >> 12) & 0xf, eax & 0xfff);
+			  (eax >> 12) & 0xf, (eax & 0xfff) << shift);
 		print_tlb("L2 Data TLB (4K):", do_l2assoc, ebx >> 28,
-			  (ebx >> 16) & 0xfff);
+			  ((ebx >> 16) & 0xfff) << shift);
 		print_tlb("L2 Instruction TLB (4K):", do_l2assoc,
-			  (ebx >> 12) & 0xf, ebx & 0xfff);
+			  (ebx >> 12) & 0xf, (ebx & 0xfff) << shift);
 
 		print_cache("L2 cache", ecx >> 16, do_l2assoc,
 			    (ecx >> 12) & 0x0f, (ecx >> 8) & 0x0f, ecx & 0xff);

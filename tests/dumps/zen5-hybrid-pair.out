@@ -24,10 +24,10 @@ L1 Instruction cache:
 	lines per tag=1	line size=64 bytes.
 L2 Data TLB (1G):           4-way associative. 32 entries.
 L2 Instruction TLB (1G):    Disabled. 0 entries.
-L2 Data TLB (2M/4M):        4-way associative. 128 entries.
-L2 Instruction TLB (2M/4M): 2-way associative. 64 entries.
-L2 Data TLB (4K):           8-way associative. 128 entries.
-L2 Instruction TLB (4K):    4-way associative. 64 entries.
+L2 Data TLB (2M/4M):        4-way associative. 4096 entries.
+L2 Instruction TLB (2M/4M): 2-way associative. 2048 entries.
+L2 Data TLB (4K):           8-way associative. 4096 entries.
+L2 Instruction TLB (4K):    4-way associative. 2048 entries.
 L2 cache:
 	Size: 1024Kb	16-way associative. 
 	lines per tag=1	line size=64 bytes.
@@ -68,10 +68,10 @@ L1 Instruction cache:
 	lines per tag=1	line size=64 bytes.
 L2 Data TLB (1G):           4-way associative. 32 entries.
 L2 Instruction TLB (1G):    Disabled. 0 entries.
-L2 Data TLB (2M/4M):        4-way associative. 128 entries.
-L2 Instruction TLB (2M/4M): 2-way associative. 64 entries.
-L2 Data TLB (4K):           8-way associative. 128 entries.
-L2 Instruction TLB (4K):    4-way associative. 64 entries.
+L2 Data TLB (2M/4M):        4-way associative. 4096 entries.
+L2 Instruction TLB (2M/4M): 2-way associative. 2048 entries.
+L2 Data TLB (4K):           8-way associative. 4096 entries.
+L2 Instruction TLB (4K):    4-way associative. 2048 entries.
 L2 cache:
 	Size: 1024Kb	16-way associative. 
 	lines per tag=1	line size=64 bytes.
