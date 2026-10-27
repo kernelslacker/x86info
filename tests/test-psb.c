@@ -23,18 +23,9 @@ static size_t add_pst(char *rom, size_t off, unsigned int sig,
 	return off + sizeof(hdr) + sizeof(states);
 }
 
-int main(void)
+/* A PSB at off with three PSTs, one of which matches family 6 model 8. */
+static void build_rom(char *rom, size_t off)
 {
-	static char rom[512];
-	struct cpudata cpu;
-	size_t off = 64;
-	int ret, fail = 0;
-
-	memset(&cpu, 0, sizeof(cpu));
-	cpu.family = 6;
-	cpu.model = 8;
-	cpu.stepping = 1;
-
 	memcpy(rom + off, "AMDK7PNOW!", 10);
 	rom[off + 10] = 0x12;
 	rom[off + 15] = 3;
@@ -42,12 +33,34 @@ int main(void)
 	off = add_pst(rom, off, 0x6a0, 0x10, 0x08);
 	off = add_pst(rom, off, 0x681, 0x10, 0x08);
 	off = add_pst(rom, off, 0x681, 0x12, 0x08);
+}
 
-	ret = decode_psb(&cpu, 0x10, 0x08, rom, sizeof(rom), 0);
-	if (ret != 1) {
-		fprintf(stderr, "matching PST: got %d, want 1\n", ret);
-		fail = 1;
+int main(void)
+{
+	static char rom[512];
+	struct cpudata cpu;
+	size_t off;
+	int ret, fail = 0;
+
+	memset(&cpu, 0, sizeof(cpu));
+	cpu.family = 6;
+	cpu.model = 8;
+	cpu.stepping = 1;
+
+	/* The tables can start at any byte of the ROM, aligned or not. */
+	for (off = 64; off < 68; off++) {
+		memset(rom, 0, sizeof(rom));
+		build_rom(rom, off);
+		ret = decode_psb(&cpu, 0x10, 0x08, rom, sizeof(rom), 0);
+		if (ret != 1) {
+			fprintf(stderr, "matching PST at offset %zu: got %d, want 1\n",
+				off, ret);
+			fail = 1;
+		}
 	}
+
+	memset(rom, 0, sizeof(rom));
+	build_rom(rom, 64);
 
 	ret = decode_psb(&cpu, 0x10, 0x08, rom, 100, 0);
 	if (ret != 0) {
