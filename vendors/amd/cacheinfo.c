@@ -154,7 +154,8 @@ void decode_amd_cacheinfo(struct cpudata *cpu)
 
 		printf("Caches (CPUID 0x8000001D):\n");
 		for (sub = 0; sub < 8; sub++) {
-			unsigned int type, ways, parts, line, sets;
+			unsigned int type, ways, parts, line;
+			unsigned long long sets;
 
 			cpuid_count(cpu->number, 0x8000001d, sub, &eax, &ebx, &ecx, &edx);
 			type = eax & 0x1f;
@@ -163,10 +164,10 @@ void decode_amd_cacheinfo(struct cpudata *cpu)
 			ways = (ebx >> 22) + 1;
 			parts = ((ebx >> 12) & 0x3ff) + 1;
 			line = (ebx & 0xfff) + 1;
-			sets = ecx + 1;
-			printf("\tL%u %s: %uKb, %u-way, line size=%u bytes, shared by %u threads\n",
+			sets = (unsigned long long)ecx + 1;
+			printf("\tL%u %s: %lluKb, %u-way, line size=%u bytes, shared by %u threads\n",
 			       (eax >> 5) & 7, ctype[type],
-			       ways * parts * line * sets / 1024, ways, line,
+			       sets * ways * parts * line / 1024, ways, line,
 			       ((eax >> 14) & 0xfff) + 1);
 		}
 	}
