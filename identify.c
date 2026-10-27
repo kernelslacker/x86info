@@ -67,30 +67,63 @@ void cpu_name_append(struct cpudata *cpu, const char *str)
 		snprintf(cpu->name + len, CPU_NAME_LEN - len, "%s", str);
 }
 
+/* What each vendor provides; vendors without an entry have nothing to run. */
+struct vendor_ops {
+	void (*identify)(struct cpudata *cpu);
+	void (*show_info)(struct cpudata *cpu);
+	void (*show_cache)(struct cpudata *cpu);
+};
+
+static void show_intel_cache(struct cpudata *cpu)
+{
+	decode_intel_caches(cpu, 1);
+}
+
+static const struct vendor_ops vendor_ops[] = {
+	[VENDOR_AMD] = {
+		.identify = identify_amd,
+		.show_info = display_amd_info,
+		.show_cache = decode_amd_cacheinfo,
+	},
+	[VENDOR_CENTAUR] = {
+		.identify = identify_centaur,
+		.show_info = display_centaur_info,
+	},
+	[VENDOR_CYRIX] = {
+		.identify = identify_cyrix,
+		.show_info = display_cyrix_info,
+	},
+	[VENDOR_INTEL] = {
+		.identify = identify_intel,
+		.show_info = display_extended_intel_info,
+		.show_cache = show_intel_cache,
+	},
+	[VENDOR_NATSEMI] = { .identify = identify_misc },
+	[VENDOR_RISE] = { .identify = identify_misc },
+	[VENDOR_SIS] = { .identify = identify_misc },
+};
+
+static const struct vendor_ops *ops_for(const struct cpudata *cpu)
+{
+	if ((unsigned int)cpu->vendor >= ARRAY_SIZE(vendor_ops))
+		return NULL;
+	return &vendor_ops[cpu->vendor];
+}
+
 void identify(struct cpudata *cpu)
 {
-	switch (cpu->vendor) {
-	case VENDOR_INTEL:
-		identify_intel(cpu);
-		break;
-	case VENDOR_AMD:
-		identify_amd(cpu);
-		break;
-	case VENDOR_CYRIX:
-		identify_cyrix(cpu);
-		break;
-	case VENDOR_CENTAUR:
-		identify_centaur(cpu);
-		break;
-	case VENDOR_NATSEMI:
-	case VENDOR_RISE:
-	case VENDOR_SIS:
-		identify_misc(cpu);
-		break;
-	case VENDOR_TRANSMETA:
-	case VENDOR_UNKNOWN:
-		break;
-	}
+	const struct vendor_ops *ops = ops_for(cpu);
+
+	if (ops && ops->identify)
+		ops->identify(cpu);
+}
+
+void show_cache_info(struct cpudata *cpu)
+{
+	const struct vendor_ops *ops = ops_for(cpu);
+
+	if (ops && ops->show_cache)
+		ops->show_cache(cpu);
 }
 
 /* What identifies the CPU model, shared by every core type. */
@@ -112,34 +145,13 @@ void show_header(struct cpudata *cpu)
 
 void show_info(struct cpudata *cpu, int header)
 {
+	const struct vendor_ops *ops = ops_for(cpu);
+
 	if (header)
 		show_header(cpu);
 	if (cpu->core_type)
 		printf("Core type: %s\n\n", core_type_name(cpu));
 
-	switch (cpu->vendor) {
-	case VENDOR_AMD:
-		display_amd_info(cpu);
-		break;
-
-	case VENDOR_CYRIX:
-		display_cyrix_info(cpu);
-		break;
-
-	case VENDOR_CENTAUR:
-		display_centaur_info(cpu);
-		break;
-
-	case VENDOR_INTEL:
-		display_extended_intel_info(cpu);
-		break;
-
-	case VENDOR_NATSEMI:
-	case VENDOR_RISE:
-	case VENDOR_SIS:
-	case VENDOR_TRANSMETA:
-	case VENDOR_UNKNOWN:
-	default:
-		break;
-	}
+	if (ops && ops->show_info)
+		ops->show_info(cpu);
 }

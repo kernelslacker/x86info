@@ -117,26 +117,8 @@ static void display_detailed_info(struct cpudata *cpu, int header)
 			dump_raw_cpuid(cpu->number, 0xC0000000, cpu->maxei2);
 	}
 
-	if (opts.show_cacheinfo) {
-		switch (cpu->vendor) {
-		case VENDOR_INTEL:
-			decode_intel_caches(cpu, 1);
-			break;
-		case VENDOR_AMD:
-			decode_amd_cacheinfo(cpu);
-			break;
-
-		case VENDOR_CENTAUR:
-		case VENDOR_CYRIX:
-		case VENDOR_NATSEMI:
-		case VENDOR_RISE:
-		case VENDOR_SIS:
-		case VENDOR_TRANSMETA:
-		case VENDOR_UNKNOWN:
-		default:
-			break;
-		}
-	}
+	if (opts.show_cacheinfo)
+		show_cache_info(cpu);
 
 	if (opts.show_feature_flags)
 		display_feature_flags(cpu);

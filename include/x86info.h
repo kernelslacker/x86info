@@ -166,6 +166,7 @@ void parse_command_line(int argc, char **argv);
 
 int get_cpu_info_basics(struct cpudata *cpu);
 void identify(struct cpudata *cpu);
+void show_cache_info(struct cpudata *cpu);
 void show_header(struct cpudata *cpu);
 void show_info(struct cpudata *cpu, int header);
 
