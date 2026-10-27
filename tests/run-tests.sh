@@ -60,10 +60,28 @@ roundtrip() {
 	fi
 }
 
+# tidy <dump>: verbose output must not leave trailing whitespace
+tidy() {
+	dump=$1
+	name=$(basename "$dump")-tidy
+
+	if ! raw=$(X86INFO_CPUID_DUMP=$dump "$bin" -v -f -c --addr --bugs --connector --all-cpus); then
+		echo "FAIL $name: $bin exited unsuccessfully"
+		fail=1
+	elif printf '%s\n' "$raw" | grep -n '[[:space:]]$' > "$tmp/ws"; then
+		echo "FAIL $name: trailing whitespace"
+		head -5 "$tmp/ws"
+		fail=1
+	else
+		echo "PASS $name"
+	fi
+}
+
 for dump in "$dir"/*.dump; do
 	golden "$dump" out -c -f --addr --bugs --connector
 	golden "$dump" v.out -v
 	roundtrip "$dump"
+	tidy "$dump"
 done
 
 exit $fail
