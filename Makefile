@@ -48,13 +48,15 @@ CHECK_BIN = tests/build/x86info
 PSB_TEST = tests/build/test-psb
 OPTS_TEST = tests/build/test-opts
 MPTABLE_TEST = tests/build/test-mptable
+CPULIST_TEST = tests/build/test-cpulist
 
 # Build x86info against the CPUID replay backend and diff its output with
 # the goldens in tests/dumps.
-check: $(CHECK_BIN) $(PSB_TEST) $(OPTS_TEST) $(MPTABLE_TEST)
+check: $(CHECK_BIN) $(PSB_TEST) $(OPTS_TEST) $(MPTABLE_TEST) $(CPULIST_TEST)
 	@$(PSB_TEST) > /dev/null
 	@$(OPTS_TEST)
 	@$(MPTABLE_TEST)
+	@$(CPULIST_TEST)
 	@tests/test-runner.sh
 	@tests/run-tests.sh $(CHECK_BIN)
 
@@ -65,6 +67,10 @@ $(PSB_TEST): tests/test-psb.c vendors/amd/dumppsb.c $(X86INFO_HEADERS)
 $(OPTS_TEST): tests/test-opts.c commandline.c $(X86INFO_HEADERS)
 	@mkdir -p tests/build
 	$(QUIET_CC)$(CC) $(CFLAGS) -o $@ tests/test-opts.c commandline.c
+
+$(CPULIST_TEST): tests/test-cpulist.c cpulist.c $(X86INFO_HEADERS)
+	@mkdir -p tests/build
+	$(QUIET_CC)$(CC) $(CFLAGS) -o $@ tests/test-cpulist.c cpulist.c
 
 $(MPTABLE_TEST): tests/test-mptable.c mptable.c $(X86INFO_HEADERS)
 	@mkdir -p tests/build
