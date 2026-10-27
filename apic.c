@@ -23,9 +23,15 @@ struct apic_map {
 /* Map the APIC registers at physical address addr; 0 on success. */
 static int map_apic_registers(struct apic_map *map, unsigned long long addr)
 {
-	unsigned long long offset = PAGE_OFFSET(addr);
-	int fd = open("/dev/mem", O_RDONLY);
+	long pagesize = sysconf(_SC_PAGESIZE);
+	unsigned long long offset;
+	int fd;
 
+	if (pagesize <= 0)
+		return -1;
+	offset = addr & ((unsigned long long)pagesize - 1);
+
+	fd = open("/dev/mem", O_RDONLY);
 	if (fd == -1)
 		return -1;
 

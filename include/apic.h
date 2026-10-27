@@ -5,8 +5,6 @@
 #define APIC_REGISTER_SPACE 		4096
 #define APIC_REGISTER_ALIGNED_SIZE 	4
 
-#define PAGE_OFFSET(addr) 		((unsigned long)(addr) & (sysconf(_SC_PAGESIZE) - 1))
-
 enum apic_register_offset
 {
 	APIC_ID		= 0x2,
