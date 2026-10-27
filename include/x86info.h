@@ -115,10 +115,20 @@ int cpuid_count(unsigned int CPU_number, unsigned int op, int count,
 	unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx);
 
 
-#define family(c) (c->family + c->efamily)
-#define model(c) ((c->emodel << 4) + c->model)
+static inline unsigned int family(const struct cpudata *c)
+{
+	return c->family + c->efamily;
+}
 
-#define tuple(c) ((c->family<<8)|(c->model<<4)|(c->stepping))
+static inline unsigned int model(const struct cpudata *c)
+{
+	return (c->emodel << 4) + c->model;
+}
+
+static inline unsigned int tuple(const struct cpudata *c)
+{
+	return (c->family << 8) | (c->model << 4) | c->stepping;
+}
 
 #define ARRAY_SIZE(x) ((int)(sizeof(x)/sizeof(x[0])))
 
