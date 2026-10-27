@@ -1,0 +1,9 @@
+Extended Family: 0 Extended Model: 5 Family: 6 Model: 92 Stepping: 9
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Atom [Goldmont/Apollo Lake]
+Processor name string (BIOS programmed): Intel(R) Celeron(R) CPU J3455 @ 1.50GHz
+
+This system has 1 socket, 1 core, 1 thread
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 1 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Core): 4 logical CPUs, x2APIC shift=5, x2APIC ID=0

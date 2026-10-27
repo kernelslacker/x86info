@@ -1,0 +1,8 @@
+Extended Family: 11 Extended Model: 2 Family: 15 Model: 36 Stepping: 0
+CPU Model (x86info's best guess): AMD Zen5/Zen6 Series Processor (Strix Point/Gorgon Point)
+Processor name string (BIOS programmed): AMD Ryzen AI 9 HX 470 w/ Radeon 890M           
+The physical package has 24 of 32 possible threads implemented (12 cores).
+
+This system has 1 socket, 1 core, 1 thread
+Extended topology (leaf 0x80000026):
+  Level 0 (Core): 2 logical CPUs, x2APIC shift=1, x2APIC ID=0

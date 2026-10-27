@@ -1,0 +1,9 @@
+Extended Family: 10 Extended Model: 4 Family: 15 Model: 68 Stepping: 1
+CPU Model (x86info's best guess): AMD Zen3/Zen3+/Zen4 Series Processor (Rembrandt)
+Processor name string (BIOS programmed): AMD Ryzen 7 7735HS with Radeon Graphics        
+The physical package has 16 of 16 possible threads implemented (8 cores).
+
+This system has 1 socket, 1 core, 1 thread
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 2 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Core): 16 logical CPUs, x2APIC shift=4, x2APIC ID=0

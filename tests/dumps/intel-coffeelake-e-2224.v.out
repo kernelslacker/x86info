@@ -1,0 +1,9 @@
+Extended Family: 0 Extended Model: 9 Family: 6 Model: 158 Stepping: 10
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): [Coffee Lake desktop]
+Processor name string (BIOS programmed): Intel(R) Xeon(R) E-2224 CPU @ 3.40GHz
+
+This system has 1 socket, 1 core, 1 thread
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 1 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Core): 4 logical CPUs, x2APIC shift=4, x2APIC ID=0

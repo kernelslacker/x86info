@@ -1,0 +1,9 @@
+Extended Family: 0 Extended Model: 9 Family: 6 Model: 150 Stepping: 1
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): [Tremont]
+Processor name string (BIOS programmed): Intel(R) Celeron(R) J6413 @ 1.80GHz
+
+This system has 1 socket, 1 core, 1 thread
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 1 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Core): 4 logical CPUs, x2APIC shift=7, x2APIC ID=0
