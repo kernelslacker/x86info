@@ -41,7 +41,7 @@ Feature flags:
 Extended feature flags:
  fpu vme de pse tsc msr pae mce cx8 apic syscall mtrr pge mca cmov pat pse36 nx mmxext mmx fxsr ffxsr page1gb rdtscp lm lahf_lm CmpLegacy svm ExtApicSpace LockMovCr0 abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce TopoExt PerfCtrExtCore PerfCtrExtNB DataBPExt PerfCtrExtLLC MwaitExtended AdMskExtn
 Additional feature flags:
- arat fsgsbase tsc_adj bmi1 avx2 smep bmi2 erms invpcid pqm pqe avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha avx512bw avx512vl avx512vbmi umip pku ospke avx512vbmi2 cet_ss gfni vaes vpclmulqdq avx512vnni avx512bitalg avx512vpopcntdq rdpid bus_lock_detect movdiri movdir64b fsrm avx512vp2intersect l1d_flush avx_vnni avx512_bf16 ts ttp tm hwpstate nonstop_tsc cpb eff_freq_ro connected_standby rapl
+ arat fsgsbase tsc_adj bmi1 avx2 smep bmi2 erms invpcid pqm pqe avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha avx512bw avx512vl avx512vbmi umip pku ospke avx512vbmi2 cet_ss gfni vaes vpclmulqdq avx512vnni avx512bitalg avx512vpopcntdq rdpid bus_lock_detect movdiri movdir64b fsrm avx512vp2intersect l1d_flush avx_vnni avx512_bf16 xsaveopt xsavec xgetbv1 xsaves ts ttp tm hwpstate nonstop_tsc cpb eff_freq_ro connected_standby rapl
 Long NOPs supported: not recorded
 
 Address sizes : 48 bits physical, 48 bits virtual

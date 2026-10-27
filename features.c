@@ -304,6 +304,74 @@ const char *cpuid_80000007_edx_flags_desc[32] = {
 	"RAPL",							// 14
 };
 
+/* CPUID 0x0000000d subleaf 1 EAX flags */
+static const char *cpuid_0d_1_eax_flags[32] = {
+	"xsaveopt", "xsavec", "xgetbv1", "xsaves", "xfd",
+};
+
+/* CPUID 0x00000007 EDX flags (subleaf 2) */
+static const char *cpuid_07_2_edx_flags[32] = {
+	"intel_psfd", "ipred_ctrl", "rrsba_ctrl", "ddp_ctrl",
+	"bhi_ctrl", "mcdt_no", "uclock_disable",
+};
+
+/* CPUID 0x80000007 EBX flags */
+static const char *cpuid_80000007_ebx_flags[32] = {
+	"overflow_recov", "succor", NULL, "smca",
+};
+
+/* CPUID 0x80000008 EBX flags */
+static const char *cpuid_80000008_ebx_flags[32] = {
+	"clzero", "irperf", "xsaveerptr", "invlpgb",
+	"rdpru", NULL, "mba", NULL,
+	"mcommit", "wbnoinvd", NULL, NULL,
+	"ibpb", "wbinvd_int", "ibrs", "stibp",
+	"ibrs_always_on", "stibp_always_on", "ibrs_fast", "ibrs_same_mode",
+	"no_efer_lmsle", "tlb_flush_nested", NULL, "amd_ppin",
+	"amd_ssbd", "virt_ssbd", "amd_ssb_no", "cppc",
+	"amd_psfd", "btc_no", "ibpb_ret", "branch_sampling",
+};
+
+/* CPUID 0x8000001f EAX flags */
+static const char *cpuid_8000001f_eax_flags[32] = {
+	"sme", "sev", "vm_page_flush", "sev_es",
+	"sev_snp", "vmpl", "rmpquery", "vmpl_sss",
+	"secure_tsc", "v_tsc_aux", "sme_coherent", "req_64bit_hypervisor",
+	"restricted_injection", "alternate_injection", "debug_swap", "disallow_host_ibs",
+	"virt_transparent_enc", "vmgexit_parameter", "virt_tom_msr", "virt_ibs",
+	NULL, "rmpread", NULL, "segmented_rmp",
+	"vmsa_reg_protection", "smt_protection", NULL, "allowed_sev_features",
+	"svsm", "nested_virt_snp_msr", "hv_inuse_wr_allowed", NULL,
+};
+
+/* CPUID 0x80000020 EBX flags */
+static const char *cpuid_80000020_ebx_flags[32] = {
+	NULL, "mba", "smba", "bmec", "l3rr", "abmc", "sdciae",
+};
+
+/* CPUID 0x80000021 EAX flags */
+static const char *cpuid_80000021_eax_flags[32] = {
+	"no_nested_data_bp", "fsgs_non_serializing", "lfence_serializing", "smm_page_cfg_lock",
+	"tlbsync_sfw_no", "verw_clear", "null_sel_clr_base", "upper_addr_ignore",
+	"auto_ibrs", "no_smm_ctl_msr", "fsrs", "fsrc",
+	NULL, "prefetch_ctl_msr", "l2_tlb_size_x32", NULL,
+	"opcode_reclaim", "user_cpuid_disable", "epsf", NULL,
+	NULL, NULL, "wl_feedback", "avx512_bmm",
+	"eraps", NULL, NULL, "sbpb",
+	"ibpb_brtype", "srso_no", "srso_user_kernel_no", "srso_bp_spec_reduce",
+};
+
+/* CPUID 0x80000021 ECX flags */
+static const char *cpuid_80000021_ecx_flags[32] = {
+	NULL, "tsa_sq_no", "tsa_l1_no", NULL, NULL, NULL, NULL, NULL,
+	"btb_ctx_isolation",
+};
+
+/* CPUID 0x80000022 EAX flags */
+static const char *cpuid_80000022_eax_flags[32] = {
+	"perfmon_v2", "lbr_v2", "lbr_pmc_freeze",
+};
+
 static void show_extra_flags(const struct cpudata *cpu)
 {
 	unsigned int eax = 0, ebx = 0, ecx = 0, edx = 0;
@@ -331,6 +399,16 @@ static void show_extra_flags(const struct cpudata *cpu)
 			flag_decode(eax, "7.1:eax", cpuid_07_1_eax_flags, cpuid_07_1_eax_flags_desc);
 			flag_decode(edx, "7.1:edx", cpuid_07_1_edx_flags, cpuid_07_1_edx_flags_desc);
 		}
+		// CPUID 0x07 subleaf 2
+		if (max_subleaf >= 2) {
+			cpuid_count(cpu->number, 0x07, 2, &eax, &ebx, &ecx, &edx);
+			flag_decode(edx, "7.2:edx", cpuid_07_2_edx_flags, NULL);
+		}
+	}
+	// CPUID 0x0d subleaf 1
+	if (cpu->cpuid_level >= 0x0d) {
+		cpuid_count(cpu->number, 0x0d, 1, &eax, &ebx, &ecx, &edx);
+		flag_decode(eax, "d.1:eax", cpuid_0d_1_eax_flags, NULL);
 	}
 	// CPUID 0x80000007
 	if (cpu->maxei >= 0x80000007)
