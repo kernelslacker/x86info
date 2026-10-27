@@ -52,12 +52,13 @@ void get_feature_flags(struct cpudata *cpu)
 }
 
 
-/* CPUID 0x00000006 EAX flags */
+/* CPUID 0x00000006 EAX flags (Intel programming reference 319433-056). */
 static const char *cpuid_06_eax_flags[32] = {
 	"dts", "ida", "arat", NULL, "pln", "ecmd", "ptm", "hwp",
 	"hwp_notify", "hwp_act_window", "hwp_epp", "hwp_lpr",
 	NULL, "hdc", NULL, "hwp_highest_perf_change",
-	NULL, NULL, NULL, "hfi", NULL, NULL, NULL, NULL,
+	"hwp_peci_override", "hwp_flexible", "hwp_fast_access", "hfi",
+	"hwp_ignore_idle", NULL, "hwp_ctl", NULL,
 	"dpti",
 };
 
@@ -78,13 +79,13 @@ static const char *cpuid_06_eax_flags_desc[32] = {
 	"Hardware Duty Cycling",				// 13
 	NULL,							// 14
 	"HWP highest performance change",			// 15
-	NULL,							// 16
-	NULL,							// 17
-	NULL,							// 18
+	"HWP PECI override",					// 16
+	"Flexible HWP",						// 17
+	"Fast access, low latency and posted HWP requests",	// 18
 	"Hardware Feedback Interface",				// 19
-	NULL,							// 20
+	"Ignore HWP requests from idle logical processors",	// 20
 	NULL,							// 21
-	NULL,							// 22
+	"IA32_HWP_CTL MSR",					// 22
 	NULL,							// 23
 	"Directed Package Thermal Interrupt",			// 24
 };
@@ -312,7 +313,7 @@ static const char *cpuid_0d_1_eax_flags[32] = {
 /* CPUID 0x00000007 EDX flags (subleaf 2) */
 static const char *cpuid_07_2_edx_flags[32] = {
 	"intel_psfd", "ipred_ctrl", "rrsba_ctrl", "ddp_ctrl",
-	"bhi_ctrl", "mcdt_no", "uclock_disable",
+	"bhi_ctrl", "mcdt_no", "uclock_disable", "monitor_mitg_no",
 };
 
 /* CPUID 0x80000007 EBX flags */
@@ -349,14 +350,14 @@ static const char *cpuid_80000020_ebx_flags[32] = {
 	NULL, "mba", "smba", "bmec", "l3rr", "abmc", "sdciae",
 };
 
-/* CPUID 0x80000021 EAX flags */
+/* CPUID 0x80000021 EAX flags (AMD APM volume 3, 24594 rev. 3.37). */
 static const char *cpuid_80000021_eax_flags[32] = {
 	"no_nested_data_bp", "fsgs_non_serializing", "lfence_serializing", "smm_page_cfg_lock",
 	"tlbsync_sfw_no", "verw_clear", "null_sel_clr_base", "upper_addr_ignore",
 	"auto_ibrs", "no_smm_ctl_msr", "fsrs", "fsrc",
-	NULL, "prefetch_ctl_msr", "l2_tlb_size_x32", NULL,
-	"opcode_reclaim", "user_cpuid_disable", "epsf", NULL,
-	NULL, NULL, "wl_feedback", "avx512_bmm",
+	"pmc2_precise_retire", "prefetch_ctl_msr", "l2_tlb_size_x32", "amd_ermsb",
+	"opcode_reclaim", "user_cpuid_disable", "epsf", "fast_rep_scasb",
+	"prefetchi", "fp512_downgrade", "wl_feedback", "avx512_bmm",
 	"eraps", NULL, NULL, "sbpb",
 	"ibpb_brtype", "srso_no", "srso_user_kernel_no", "srso_bp_spec_reduce",
 };

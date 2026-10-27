@@ -18,7 +18,7 @@ Feature flags:
 Extended feature flags:
  syscall nx rdtscp lm lahf_lm 3dnowprefetch
 Additional feature flags:
- dts ida arat pln ecmd ptm hwp hwp_notify hwp_act_window hwp_epp hwp_lpr hwp_highest_perf_change [6:eax:16] [6:eax:17] [6:eax:18] [6:eax:20] fsgsbase tsc_adj fdp_excp smep erms nofpucs pqe rdseed smap clflushopt clwb ipt sha umip waitpkg gfni rdpid movdiri movdir64b md_clear ibrs_ibpb stibp l1d_flush arch_capabilities core_capabilities ssbd xsaveopt xsavec xgetbv1 xsaves nonstop_tsc
+ dts ida arat pln ecmd ptm hwp hwp_notify hwp_act_window hwp_epp hwp_lpr hwp_highest_perf_change hwp_peci_override hwp_flexible hwp_fast_access hwp_ignore_idle fsgsbase tsc_adj fdp_excp smep erms nofpucs pqe rdseed smap clflushopt clwb ipt sha umip waitpkg gfni rdpid movdiri movdir64b md_clear ibrs_ibpb stibp l1d_flush arch_capabilities core_capabilities ssbd xsaveopt xsavec xgetbv1 xsaves nonstop_tsc
 Long NOPs supported: not recorded
 
 Address sizes : 39 bits physical, 48 bits virtual
