@@ -1,0 +1,16 @@
+CPU #0:
+eax in: 0x00000000, eax = 00000001 ebx = 68747541 ecx = 444d4163 edx = 69746e65
+eax in: 0x00000001, eax = 00b20f40 ebx = 00000800 ecx = 00000000 edx = 178bfbff
+eax in: 0x80000000, eax = 80000026 ebx = 68747541 ecx = 444d4163 edx = 69746e65
+eax in: 0x80000001, eax = 00b20f40 ebx = 00000000 ecx = 00400000 edx = 2fd3fbff
+eax in: 0x80000026, eax = 60000001 ebx = 00000002 ecx = 00000100 edx = 00000000
+eax in: 0x80000026, ecx in: 0x1, eax = 00000005 ebx = 00000008 ecx = 00000201 edx = 00000000
+
+CPU #1:
+eax in: 0x00000000, eax = 00000001 ebx = 68747541 ecx = 444d4163 edx = 69746e65
+eax in: 0x00000001, eax = 00b20f40 ebx = 01000800 ecx = 00000000 edx = 178bfbff
+eax in: 0x80000000, eax = 80000026 ebx = 68747541 ecx = 444d4163 edx = 69746e65
+eax in: 0x80000001, eax = 00b20f40 ebx = 00000000 ecx = 00400000 edx = 2fd3fbff
+eax in: 0x80000026, eax = 60000001 ebx = 20000002 ecx = 00000100 edx = 00000001
+eax in: 0x80000026, ecx in: 0x1, eax = 00000005 ebx = 00000008 ecx = 00000201 edx = 00000001
+

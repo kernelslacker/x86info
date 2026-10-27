@@ -1,0 +1,16 @@
+Found 2 CPUs of 2 kinds.
+
+Extended Family: 11 Extended Model: 2 Family: 15 Model: 36 Stepping: 0
+CPU Model (x86info's best guess): AMD Zen5/Zen6 Series Processor (Strix Point/Gorgon Point)
+
+CPU #0 (1 in this group):
+Core type: Performance
+
+CPU #1 (1 in this group):
+Core type: Low power
+
+This system has 1 socket, 1 core, 2 threads (2 threads per core)
+Hybrid: 1 Performance threads, 0 Efficiency threads, 1 Low power threads
+Extended topology (leaf 0x80000026):
+  Level 0 (Core): 2 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Complex): 8 logical CPUs, x2APIC shift=5, x2APIC ID=0

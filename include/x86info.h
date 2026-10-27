@@ -261,6 +261,7 @@ static inline int want_powernow(void)
 #define CORE_TYPE_PERFORMANCE	1
 #define CORE_TYPE_EFFICIENCY	2
 #define CORE_TYPE_UNKNOWN	3
+#define CORE_TYPE_LOW_POWER	4
 
 #define X86_FEATURE_PSN		(1<<18)
 #define X86_FEATURE_HT		(1<<28)

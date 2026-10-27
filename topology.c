@@ -75,12 +75,15 @@ static int get_x2apic_topology(struct cpudata *cpu)
 /* Raw core type encodings: AMD 0x80000026 EBX[31:28], Intel 0x1A EAX[31:24]. */
 #define AMD_CORE_PERFORMANCE	0
 #define AMD_CORE_EFFICIENCY	1
+#define AMD_CORE_LOW_POWER	2
+#define AMD_HETEROGENEOUS_CORES	(1u << 30)	/* 0x80000026 EAX */
 #define INTEL_CORE_ATOM		0x20
 #define INTEL_CORE_CORE		0x40
 
 /*
  * Intel: CPUID.7.EDX[15] flags a hybrid part; leaf 0x1A then names this
- * CPU's core. AMD: CPUID 0x80000026 EBX[31:28] of the core level.
+ * CPU's core. AMD: CPUID 0x80000026 EBX[31:28] of the core level, valid
+ * when EAX[30] is set.
  */
 void get_core_type(struct cpudata *cpu)
 {
@@ -90,13 +93,18 @@ void get_core_type(struct cpudata *cpu)
 	if (cpu->vendor == VENDOR_AMD) {
 		if (cpu->maxei < 0x80000026)
 			return;
-		cpuid_count(cpu->number, 0x80000026, 0, NULL, &ebx, NULL, NULL);
+		cpuid_count(cpu->number, 0x80000026, 0, &eax, &ebx, NULL, NULL);
+		if (!(eax & AMD_HETEROGENEOUS_CORES))
+			return;
 		switch (ebx >> 28) {
 		case AMD_CORE_PERFORMANCE:
 			cpu->core_type = CORE_TYPE_PERFORMANCE;
 			break;
 		case AMD_CORE_EFFICIENCY:
 			cpu->core_type = CORE_TYPE_EFFICIENCY;
+			break;
+		case AMD_CORE_LOW_POWER:
+			cpu->core_type = CORE_TYPE_LOW_POWER;
 			break;
 		default:
 			cpu->core_type = CORE_TYPE_UNKNOWN;
@@ -133,6 +141,8 @@ const char *core_type_name(const struct cpudata *cpu)
 		return amd ? "Efficiency (compact)" : "Efficiency (Atom)";
 	case CORE_TYPE_PERFORMANCE:
 		return amd ? "Performance" : "Performance (Core)";
+	case CORE_TYPE_LOW_POWER:
+		return "Low power";
 	default:
 		return "unknown";
 	}
@@ -308,7 +318,7 @@ void display_topology(struct cpudata *cpus, unsigned int n)
 	unsigned int total_threads = n;
 	unsigned int cores;
 	unsigned int min_siblings, max_siblings;
-	unsigned int p_threads = 0, e_threads = 0;
+	unsigned int p_threads = 0, e_threads = 0, l_threads = 0;
 
 	if (cpus[0].topology == TOPOLOGY_NONE)
 		return;
@@ -371,10 +381,16 @@ void display_topology(struct cpudata *cpus, unsigned int n)
 			p_threads++;
 		else if (cpus[i].core_type == CORE_TYPE_EFFICIENCY)
 			e_threads++;
+		else if (cpus[i].core_type == CORE_TYPE_LOW_POWER)
+			l_threads++;
 	}
-	if (p_threads || e_threads)
-		printf("Hybrid: %u Performance threads, %u Efficiency threads\n",
+	if (p_threads || e_threads || l_threads) {
+		printf("Hybrid: %u Performance threads, %u Efficiency threads",
 		       p_threads, e_threads);
+		if (l_threads)
+			printf(", %u Low power threads", l_threads);
+		printf("\n");
+	}
 
 	if (opts.debug || opts.verbose)
 		show_topology_levels(&cpus[0]);
