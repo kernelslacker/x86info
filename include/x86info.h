@@ -128,7 +128,7 @@ static inline unsigned int tuple(const struct cpudata *c)
 	return (c->family << 8) | (c->model << 4) | c->stepping;
 }
 
-#define ARRAY_SIZE(x) ((int)(sizeof(x)/sizeof(x[0])))
+#define ARRAY_SIZE(x) (sizeof(x)/sizeof(x[0]))
 
 /* Append to cpu->name, at the end of whatever is already there. */
 void cpu_name_append(struct cpudata *cpu, const char *str);
@@ -137,7 +137,7 @@ void cpu_name_append(struct cpudata *cpu, const char *str);
 #define get_name(title,type,table) \
 static const char *get_##title##_name(type id) \
 { \
-	int i; \
+	size_t i; \
         for (i = 0; i < ARRAY_SIZE(table); i++) \
                 if (id == table[i].id) \
                         return table[i].name;   \

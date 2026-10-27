@@ -51,7 +51,7 @@ static void set_k8_name(const struct k8_rev *r, struct cpudata *c)
 
 static void set_k8_revinfo(int id, struct cpudata *c)
 {
-	int i;
+	size_t i;
 	const struct k8_rev *r;
 
 	r = NULL;
@@ -132,7 +132,7 @@ static void set_connector(struct cpudata *c)
 
 static void set_fam10h_revinfo(int id, struct cpudata *c)
 {
-	int i;
+	size_t i;
 	const struct fam10h_rev *r = NULL;
 
 	for (i = 0; i < ARRAY_SIZE(fam10h_revisions); i++) {
