@@ -20,6 +20,5 @@ void decode_microcode(struct cpudata *cpu)
 	}
 
 	if (ver > 0)
-		printf("Microcode version: 0x%llx\n", ver);
-	printf("\n");
+		printf("Microcode version: 0x%llx\n\n", ver);
 }
