@@ -56,7 +56,9 @@ void get_feature_flags(struct cpudata *cpu)
 static const char *cpuid_06_eax_flags[32] = {
 	"dts", "ida", "arat", NULL, "pln", "ecmd", "ptm", "hwp",
 	"hwp_notify", "hwp_act_window", "hwp_epp", "hwp_lpr",
-	NULL, "hdc",
+	NULL, "hdc", NULL, "hwp_highest_perf_change",
+	NULL, NULL, NULL, "hfi", NULL, NULL, NULL, NULL,
+	"dpti",
 };
 
 static const char *cpuid_06_eax_flags_desc[32] = {
@@ -74,6 +76,17 @@ static const char *cpuid_06_eax_flags_desc[32] = {
 	"HWP Package Level Request",				// 11
 	NULL,							// 12
 	"Hardware Duty Cycling",				// 13
+	NULL,							// 14
+	"HWP highest performance change",			// 15
+	NULL,							// 16
+	NULL,							// 17
+	NULL,							// 18
+	"Hardware Feedback Interface",				// 19
+	NULL,							// 20
+	NULL,							// 21
+	NULL,							// 22
+	NULL,							// 23
+	"Directed Package Thermal Interrupt",			// 24
 };
 
 /* CPUID 0x00000007 ECX flags (subleaf 0) */
@@ -160,22 +173,22 @@ static const char *cpuid_07_edx_flags_desc[32] = {
 
 /* CPUID 0x00000007 EAX flags (subleaf 1) */
 static const char *cpuid_07_1_eax_flags[32] = {
-	NULL, NULL, NULL, NULL, "avx_vnni", "avx512_bf16", NULL, NULL,
-	NULL, NULL, "fzrm", "fsrs", "fsrc", NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL, "hreset", "avx_ifma",
-	NULL, NULL, "lam", NULL, NULL, NULL, NULL, NULL
+	"sha512", "sm3", "sm4", NULL, "avx_vnni", "avx512_bf16", "lass", "cmpccxadd",
+	"arch_perfmon_ext", NULL, "fzrm", "fsrs", "fsrc", NULL, NULL, NULL,
+	NULL, "fred", "lkgs", "wrmsrns", "nmi_src", "amx_fp16", "hreset", "avx_ifma",
+	NULL, NULL, "lam", "msrlist", NULL, NULL, NULL, "movrs"
 };
 
 static const char *cpuid_07_1_eax_flags_desc[32] = {
-	NULL,						// 0
-	NULL,						// 1
-	NULL,						// 2
+	"SHA512 instructions",				// 0
+	"SM3 instructions",				// 1
+	"SM4 instructions",				// 2
 	NULL,						// 3
 	"AVX Vector Neural Network Instructions",	// 4
 	"AVX-512 BF16 Instructions",			// 5
-	NULL,						// 6
-	NULL,						// 7
-	NULL,						// 8
+	"Linear Address Space Separation",		// 6
+	"CMPccXADD instructions",			// 7
+	"Architectural PerfMon extension (leaf 0x23)",	// 8
 	NULL,						// 9
 	"Fast Zero-length REP MOVSB",			// 10
 	"Fast Short REP STOSB",				// 11
@@ -184,37 +197,41 @@ static const char *cpuid_07_1_eax_flags_desc[32] = {
 	NULL,						// 14
 	NULL,						// 15
 	NULL,						// 16
-	NULL,						// 17
-	NULL,						// 18
-	NULL,						// 19
-	NULL,						// 20
-	NULL,						// 21
+	"Flexible Return and Event Delivery (FRED)",	// 17
+	"LKGS instruction",				// 18
+	"WRMSRNS instruction",				// 19
+	"NMI-source reporting",				// 20
+	"AMX FP16 Instructions",			// 21
 	"HRESET instruction",				// 22
 	"AVX Integer Fused Multiply-Add",		// 23
 	NULL,						// 24
 	NULL,						// 25
 	"Linear Address Masking (LAM)",			// 26
-	NULL,						// 27
+	"RDMSRLIST/WRMSRLIST instructions",		// 27
 	NULL,						// 28
 	NULL,						// 29
 	NULL,						// 30
-	NULL,						// 31
+	"MOVRS instructions",				// 31
 };
 
 /* CPUID 0x00000007 EDX flags (subleaf 1) */
 static const char *cpuid_07_1_edx_flags[32] = {
-	NULL, NULL, NULL, NULL, "amx_fp16", NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, "avx_vnni_int8", "avx_ne_convert", NULL, NULL,
+	"amx_complex", NULL, "avx_vnni_int16", NULL, NULL, NULL, "prefetchit0_1", "user_msr",
+	NULL, NULL, "cet_sss", "avx10", NULL, "apx_f", NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
 
 static const char *cpuid_07_1_edx_flags_desc[32] = {
-	NULL,						// 0
-	NULL,						// 1
-	NULL,						// 2
-	NULL,						// 3
-	"AMX FP16 Instructions",			// 4
+	[4] = "AVX-VNNI-INT8 instructions",
+	[5] = "AVX-NE-CONVERT instructions",
+	[8] = "AMX-COMPLEX instructions",
+	[10] = "AVX-VNNI-INT16 instructions",
+	[14] = "PREFETCHIT0/1 instructions",
+	[15] = "User-mode MSR access (URDMSR/UWRMSR)",
+	[18] = "CET supervisor shadow stacks safe to use",
+	[19] = "AVX10",
+	[21] = "Advanced Performance Extensions (APX_F)",
 };
 
 /* CPUID 0x00000007 EBX flags */
@@ -431,13 +448,14 @@ static const char *cap_extended_ecx_flags[32] = {
 	"skinit", "wdt", NULL, "lwp",
 	"fma4", "tce", NULL, "NodeId",
 	NULL, "tbm", "TopoExt", "PerfCtrExtCore",
-	"PerfCtrExtNB", NULL, "DataBPExt", NULL, "PerfCtrExtLLC", "MwaitExtended", "AdMskExtn", NULL
+	"PerfCtrExtNB", NULL, "DataBPExt", "PTSC", "PerfCtrExtLLC", "MwaitExtended", "AdMskExtn", NULL
 };
 
 static const char *cap_extended_ecx_flags_desc[32] = {
 	[0] = "LAHF/SAHF available in 64-bit mode",
 	[5] = "LZCNT/ABM instructions",
 	[8] = "PREFETCHW instruction",
+	[27] = "Performance time-stamp counter",
 };
 
 static const char *centaur_cap_ecx_flags[32] = {
