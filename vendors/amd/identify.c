@@ -622,7 +622,7 @@ void display_amd_info(struct cpudata *cpu)
 		cpuid_count(cpu->number, 0x80000022, 0, &eax, &ebx, &ecx, NULL);
 		if (eax & 1)
 			printf("PerfMonV2: %u core, %u northbridge, %u UMC counters, LBR stack %u entries, active UMCs %#x\n",
-			       ebx & 0xf, (ebx >> 10) & 0x3f, (ebx >> 16) & 0x3f,
+			       ebx & 0xf, (ebx >> 10) & 0x3f, (ebx >> 16) & 0xff,
 			       (ebx >> 4) & 0x3f, ecx);
 	}
 }
