@@ -165,6 +165,7 @@ int native_cpuid(unsigned int cpunr, unsigned long long idx,
 	unsigned int *ecx, unsigned int *edx);
 
 void parse_command_line(int argc, char **argv);
+unsigned int *parse_cpu_list(const char *s, unsigned int *count);
 
 int get_cpu_info_basics(struct cpudata *cpu);
 void identify(struct cpudata *cpu);
