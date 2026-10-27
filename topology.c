@@ -226,6 +226,45 @@ static int cmp_u64(const void *a, const void *b)
 }
 
 /*
+ * Each CPU's package ID, or with by_core its (package, core) pair, sorted
+ * so that CPUs in the same group are adjacent. NULL if out of memory.
+ */
+static unsigned long long *sorted_group_keys(const struct cpudata *cpus,
+					     unsigned int n, int by_core)
+{
+	unsigned long long *keys = malloc(n * sizeof(*keys));
+	unsigned int i;
+
+	if (keys == NULL)
+		return NULL;
+
+	for (i = 0; i < n; i++)
+		keys[i] = by_core ? ((unsigned long long)cpus[i].phys_proc_id << 32) |
+				    cpus[i].cpu_core_id : cpus[i].phys_proc_id;
+	qsort(keys, n, sizeof(*keys), cmp_u64);
+	return keys;
+}
+
+/* Print how many CPUs each package has, in package ID order. */
+static void print_socket_threads(const struct cpudata *cpus, unsigned int n)
+{
+	unsigned long long *keys = sorted_group_keys(cpus, n, 0);
+	unsigned int i, run = 0;
+
+	if (keys == NULL)
+		return;
+
+	for (i = 0; i < n; i++) {
+		run++;
+		if (i + 1 == n || keys[i + 1] != keys[i]) {
+			printf("Socket %llu: %u threads\n", keys[i], run);
+			run = 0;
+		}
+	}
+	free(keys);
+}
+
+/*
  * Number of distinct packages, or with by_core distinct (package, core)
  * pairs, among the CPUs; *min_threads and *max_threads (optional) get the
  * smallest and largest number of CPUs sharing one.
@@ -242,14 +281,9 @@ static unsigned int count_groups(const struct cpudata *cpus, unsigned int n,
 	if (max_threads)
 		*max_threads = 1;
 
-	keys = malloc(n * sizeof(*keys));
+	keys = sorted_group_keys(cpus, n, by_core);
 	if (keys == NULL)
 		return 0;
-
-	for (i = 0; i < n; i++)
-		keys[i] = by_core ? ((unsigned long long)cpus[i].phys_proc_id << 32) |
-				    cpus[i].cpu_core_id : cpus[i].phys_proc_id;
-	qsort(keys, n, sizeof(*keys), cmp_u64);
 
 	for (i = 0; i < n; i++) {
 		if (i == 0 || keys[i] != keys[i - 1]) {
@@ -347,19 +381,7 @@ void display_topology(struct cpudata *cpus, unsigned int n)
 			printf("\n");
 		}
 
-		for (i = 0; i < n; i++) {
-			unsigned int j, threads = 0;
-
-			for (j = 0; j < i; j++)
-				if (cpus[j].phys_proc_id == cpus[i].phys_proc_id)
-					break;
-			if (j < i)
-				continue;
-			for (j = i; j < n; j++)
-				if (cpus[j].phys_proc_id == cpus[i].phys_proc_id)
-					threads++;
-			printf("Socket %u: %u threads\n", cpus[i].phys_proc_id, threads);
-		}
+		print_socket_threads(cpus, n);
 	}
 
 	num_sockets = count_groups(cpus, n, 0, NULL, NULL);
