@@ -284,7 +284,8 @@ static int parse_int_opt(const char *name, const char *s, int base)
 
 	errno = 0;
 	val = strtol(s, &end, base);
-	if (*end != '\0' || errno == ERANGE || val < INT_MIN || val > INT_MAX) {
+	if (end == s || *end != '\0' || errno == ERANGE ||
+	    val < INT_MIN || val > INT_MAX) {
 		fprintf(stderr, "%s: invalid value: %s\n", name, s);
 		exit(EXIT_FAILURE);
 	}
@@ -298,7 +299,7 @@ static unsigned int parse_uint_opt(const char *name, const char *s, int base)
 
 	errno = 0;
 	val = strtoul(s, &end, base);
-	if (*end != '\0' || errno == ERANGE || val > UINT_MAX) {
+	if (end == s || *end != '\0' || errno == ERANGE || val > UINT_MAX) {
 		fprintf(stderr, "%s: invalid value: %s\n", name, s);
 		exit(EXIT_FAILURE);
 	}
