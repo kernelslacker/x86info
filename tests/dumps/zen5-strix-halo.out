@@ -1,0 +1,50 @@
+Extended Family: 11 Extended Model: 7 Family: 15 Model: 112 Stepping: 0
+CPU Model (x86info's best guess): AMD Zen5/Zen6 Series Processor (Strix Halo)
+Processor name string (BIOS programmed): AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
+The physical package has 32 of 32 possible threads implemented (16 cores).
+
+Monitor/Mwait: min/max line size 64/64, interrupt break event, enumeration extension
+SVM: revision 1, 32768 ASIDs, np, lbrVirt, SVMLock, NRIPSave, TscRateMsr, VmcbClean, FlushByAsid, DecodeAssists, PauseFilter, PauseFilterThreshold, AVIC, V_VMSAVE_VMLOAD, vGIF, GMET, x2AVIC, SpecCtrl, VNMI, SvmeAddrChk, BusLockThreshold, IdleHltIntercept
+Memory encryption: C-bit 51, 2 bits of physical address reduction, 0 VMPLs, 0 guests, min SEV ASID 0
+Microcode patch size: 14368 bytes, return address predictor size: 8 entries
+PerfMonV2: 6 core, 8 northbridge, 64 UMC counters, LBR stack 16 entries, active UMCs 0xffff
+L1 Data TLB (1G):           Fully associative. 96 entries.
+L1 Instruction TLB (1G):    Fully associative. 64 entries.
+L1 Data TLB (2M/4M):        Fully associative. 96 entries.
+L1 Instruction TLB (2M/4M): Fully associative. 64 entries.
+L1 Data TLB (4K):           Fully associative. 96 entries.
+L1 Instruction TLB (4K):    Fully associative. 64 entries.
+L1 Data cache:
+	Size: 48Kb	12-way associative. 
+	lines per tag=1	line size=64 bytes.
+L1 Instruction cache:
+	Size: 32Kb	8-way associative. 
+	lines per tag=1	line size=64 bytes.
+L2 Data TLB (1G):           4-way associative. 32 entries.
+L2 Instruction TLB (1G):    Disabled. 0 entries.
+L2 Data TLB (2M/4M):        4-way associative. 4096 entries.
+L2 Instruction TLB (2M/4M): 2-way associative. 2048 entries.
+L2 Data TLB (4K):           8-way associative. 4096 entries.
+L2 Instruction TLB (4K):    4-way associative. 2048 entries.
+L2 cache:
+	Size: 1024Kb	16-way associative. 
+	lines per tag=1	line size=64 bytes.
+L3 (shared) cache:
+	Size: 65536Kb	See CPUID 0x8000001D. 
+	lines per tag=1	line size=64 bytes.
+Caches (CPUID 0x8000001D):
+	L1 data: 48Kb, 12-way, line size=64 bytes, shared by 2 threads
+	L1 instruction: 32Kb, 8-way, line size=64 bytes, shared by 2 threads
+	L2 unified: 1024Kb, 16-way, line size=64 bytes, shared by 2 threads
+	L3 unified: 32768Kb, 16-way, line size=64 bytes, shared by 16 threads
+
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh mmx fxsr sse sse2 ht sse3 pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrnd
+Extended feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic syscall mtrr pge mca cmov pat pse36 nx mmxext mmx fxsr ffxsr page1gb rdtscp lm lahf_lm CmpLegacy svm ExtApicSpace LockMovCr0 abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce TopoExt PerfCtrExtCore PerfCtrExtNB DataBPExt PerfCtrExtLLC MwaitExtended AdMskExtn
+Additional feature flags:
+ arat fsgsbase tsc_adj bmi1 avx2 smep bmi2 erms invpcid pqm pqe avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha avx512bw avx512vl avx512vbmi umip pku ospke avx512vbmi2 cet_ss gfni vaes vpclmulqdq avx512vnni avx512bitalg avx512vpopcntdq rdpid bus_lock_detect movdiri movdir64b fsrm avx512vp2intersect l1d_flush avx_vnni avx512_bf16 xsaveopt xsavec xgetbv1 xsaves ts ttp tm hwpstate nonstop_tsc cpb eff_freq_ro connected_standby rapl overflow_recov succor smca [80000007:ebx:4] [80000007:ebx:5] clzero irperf xsaveerptr rdpru mba wbnoinvd ibpb wbinvd_int ibrs stibp stibp_always_on ibrs_fast ibrs_same_mode no_efer_lmsle amd_ssbd cppc amd_psfd btc_no ibpb_ret sme mba smba bmec l3rr abmc sdciae no_nested_data_bp fsgs_non_serializing lfence_serializing smm_page_cfg_lock verw_clear null_sel_clr_base upper_addr_ignore auto_ibrs no_smm_ctl_msr fsrs fsrc [80000021:eax:12] prefetch_ctl_msr l2_tlb_size_x32 [80000021:eax:15] opcode_reclaim user_cpuid_disable epsf [80000021:eax:19] [80000021:eax:20] [80000021:eax:21] eraps sbpb ibpb_brtype srso_user_kernel_no perfmon_v2 lbr_v2 lbr_pmc_freeze
+Long NOPs supported: not recorded
+
+Address sizes : 48 bits physical, 48 bits virtual
+This system has 1 socket, 1 core, 1 thread
