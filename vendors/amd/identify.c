@@ -561,10 +561,54 @@ static const char *svm_features[32] = {
 	"SvmeAddrChk", "BusLockThreshold", "IdleHltIntercept", NULL,
 };
 
-void display_amd_info(struct cpudata *cpu)
+/* CPUID based extras, shown with the feature flags. */
+static void display_amd_cpuid_extras(const struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx, i;
 
+	if (cpu->cpuid_level >= 0x05) {
+		cpuid (cpu->number, 0x05, &eax, &ebx, &ecx, NULL);
+		printf("Monitor/Mwait: min/max line size %u/%u%s%s\n",
+		       eax & 0xffff, ebx & 0xffff,
+		       (ecx & 0x2) ? ", interrupt break event" : "",
+		       (ecx & 0x1) ? ", enumeration extension" : "");
+	}
+
+	if (cpu->maxei >= 0x8000000a) {
+		cpuid (cpu->number, 0x8000000a, &eax, &ebx, NULL, &edx);
+		printf("SVM: revision %u, %u ASIDs", eax & 0xff, ebx);
+		for (i = 0; i < 32; i++)
+			if ((edx & (1u << i)) && svm_features[i])
+				printf(", %s", svm_features[i]);
+		printf("\n");
+	}
+
+	if (cpu->maxei >= 0x8000001f) {
+		cpuid(cpu->number, 0x8000001f, &eax, &ebx, &ecx, &edx);
+		if ((eax & 0x3) && ebx)
+			printf("Memory encryption: C-bit %u, %u bits of physical address reduction, %u VMPLs, %u guests, min SEV ASID %u\n",
+			       ebx & 0x3f, (ebx >> 6) & 0x3f, (ebx >> 12) & 0xf,
+			       ecx, edx);
+	}
+
+	if (cpu->maxei >= 0x80000021) {
+		cpuid(cpu->number, 0x80000021, NULL, &ebx, NULL, NULL);
+		if (ebx)
+			printf("Microcode patch size: %u bytes, return address predictor size: %u entries\n",
+			       (ebx & 0xffff) * 16, (ebx >> 16) & 0xff);
+	}
+
+	if (cpu->maxei >= 0x80000022) {
+		cpuid_count(cpu->number, 0x80000022, 0, &eax, &ebx, &ecx, NULL);
+		if (eax & 1)
+			printf("PerfMonV2: %u core, %u northbridge, %u UMC counters, LBR stack %u entries, active UMCs %#x\n",
+			       ebx & 0xf, (ebx >> 10) & 0x3f, (ebx >> 16) & 0xff,
+			       (ebx >> 4) & 0x3f, ecx);
+	}
+}
+
+void display_amd_info(struct cpudata *cpu)
+{
 	if (opts.show_msr) {
 		if (cpu->family == 5)
 			dump_k6_MSR(cpu);
@@ -586,45 +630,8 @@ void display_amd_info(struct cpudata *cpu)
 	if (opts.show_bugs)
 		show_amd_bugs(cpu);
 
-	if (opts.show_feature_flags && cpu->cpuid_level >= 0x05) {
-		cpuid (cpu->number, 0x05, &eax, &ebx, &ecx, NULL);
-		printf("Monitor/Mwait: min/max line size %u/%u%s%s\n",
-		       eax & 0xffff, ebx & 0xffff,
-		       (ecx & 0x2) ? ", interrupt break event" : "",
-		       (ecx & 0x1) ? ", enumeration extension" : "");
-	}
-
-	if (opts.show_feature_flags && cpu->maxei >= 0x8000000a) {
-		cpuid (cpu->number, 0x8000000a, &eax, &ebx, NULL, &edx);
-		printf("SVM: revision %u, %u ASIDs", eax & 0xff, ebx);
-		for (i = 0; i < 32; i++)
-			if ((edx & (1u << i)) && svm_features[i])
-				printf(", %s", svm_features[i]);
-		printf("\n");
-	}
-
-	if (opts.show_feature_flags && cpu->maxei >= 0x8000001f) {
-		cpuid(cpu->number, 0x8000001f, &eax, &ebx, &ecx, &edx);
-		if ((eax & 0x3) && ebx)
-			printf("Memory encryption: C-bit %u, %u bits of physical address reduction, %u VMPLs, %u guests, min SEV ASID %u\n",
-			       ebx & 0x3f, (ebx >> 6) & 0x3f, (ebx >> 12) & 0xf,
-			       ecx, edx);
-	}
-
-	if (opts.show_feature_flags && cpu->maxei >= 0x80000021) {
-		cpuid(cpu->number, 0x80000021, NULL, &ebx, NULL, NULL);
-		if (ebx)
-			printf("Microcode patch size: %u bytes, return address predictor size: %u entries\n",
-			       (ebx & 0xffff) * 16, (ebx >> 16) & 0xff);
-	}
-
-	if (opts.show_feature_flags && cpu->maxei >= 0x80000022) {
-		cpuid_count(cpu->number, 0x80000022, 0, &eax, &ebx, &ecx, NULL);
-		if (eax & 1)
-			printf("PerfMonV2: %u core, %u northbridge, %u UMC counters, LBR stack %u entries, active UMCs %#x\n",
-			       ebx & 0xf, (ebx >> 10) & 0x3f, (ebx >> 16) & 0xff,
-			       (ebx >> 4) & 0x3f, ecx);
-	}
+	if (opts.show_feature_flags)
+		display_amd_cpuid_extras(cpu);
 }
 
 /* How much of the package is implemented; the same for every core type. */
