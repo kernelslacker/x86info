@@ -44,8 +44,6 @@ void get_intel_topology(struct cpudata *cpu)
 	cpu->phys_proc_id = initial_apicid >> index_msb;
 
 	cpu->num_siblings = logical / cpu->x86_max_cores;
-	if (cpu->num_siblings == 0)
-		cpu->num_siblings = 1;
 
 	if (opts.debug && cpu->num_siblings == 1)
 		printf("Hyper-Threading is disabled\n");
