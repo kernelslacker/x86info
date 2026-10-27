@@ -653,18 +653,14 @@ static void decode_feature_flags(const struct cpudata *cpu)
 	printf("\n");
 }
 
-static void test_longnop(void)
-{
-	int ret = host_longnop();
-
-	printf("Long NOPs supported: %s\n",
-	       ret < 0 ? "not recorded" : ret ? "yes" : "no");
-}
-
 void display_feature_flags(const struct cpudata *cpu)
 {
 	decode_feature_flags(cpu);
-	if (!bind_cpu(cpu->number))
-		test_longnop();
+	if (!bind_cpu(cpu->number)) {
+		int longnop = host_longnop();
+
+		printf("Long NOPs supported: %s\n",
+		       longnop < 0 ? "not recorded" : longnop ? "yes" : "no");
+	}
 	printf("\n");
 }

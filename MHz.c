@@ -43,11 +43,6 @@ static void print_MHz(unsigned int mhz)
 	}
 }
 
-static void display_MHz(const struct cpudata *cpu)
-{
-	print_MHz(cpu->MHz);
-}
-
 /*
  * With an invariant TSC the measured rate is the TSC rate, not the core
  * clock; APERF/MPERF, when readable, give the core clock over the run.
@@ -62,7 +57,7 @@ void display_MHz_line(const struct cpudata *cpu)
 		return;
 	}
 
-	display_MHz(cpu);
+	print_MHz(cpu->MHz);
 	if (cpu->apm_edx & X86_APM_INVARIANT_TSC)
 		printf(" TSC frequency.");
 	else
