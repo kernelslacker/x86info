@@ -63,7 +63,7 @@ static void print_cache(const char *label, unsigned int size_kb,
 			void (*assoc_fn)(unsigned long), unsigned long assoc,
 			unsigned int lines_per_tag, unsigned int line_size)
 {
-	printf("%s:\n\tSize: %uKb\t", label, size_kb);
+	printf("%s:\n\tSize: %uKB\t", label, size_kb);
 	assoc_fn(assoc);
 	printf("\n\tlines per tag=%u\tline size=%u bytes.\n",
 	       lines_per_tag, line_size);
@@ -165,7 +165,7 @@ void decode_amd_cacheinfo(struct cpudata *cpu)
 			parts = ((ebx >> 12) & 0x3ff) + 1;
 			line = (ebx & 0xfff) + 1;
 			sets = (unsigned long long)ecx + 1;
-			printf("\tL%u %s: %lluKb, %u-way, line size=%u bytes, shared by %u threads\n",
+			printf("\tL%u %s: %lluKB, %u-way, line size=%u bytes, shared by %u threads\n",
 			       (eax >> 5) & 7, ctype[type],
 			       sets * ways * parts * line / 1024, ways, line,
 			       ((eax >> 14) & 0xfff) + 1);

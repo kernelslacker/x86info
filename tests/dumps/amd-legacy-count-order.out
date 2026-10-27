@@ -9,17 +9,17 @@ L1 Instruction TLB (2M/4M): 0 entries.
 L1 Data TLB (4K):           0 entries.
 L1 Instruction TLB (4K):    0 entries.
 L1 Data cache:
-	Size: 0Kb	
+	Size: 0KB	
 	lines per tag=0	line size=0 bytes.
 L1 Instruction cache:
-	Size: 0Kb	
+	Size: 0KB	
 	lines per tag=0	line size=0 bytes.
 L2 Data TLB (2M/4M):        Disabled. 0 entries.
 L2 Instruction TLB (2M/4M): Disabled. 0 entries.
 L2 Data TLB (4K):           Disabled. 0 entries.
 L2 Instruction TLB (4K):    Disabled. 0 entries.
 L2 cache:
-	Size: 0Kb	Disabled. 
+	Size: 0KB	Disabled. 
 	lines per tag=0	line size=0 bytes.
 L3 (shared) cache:
 	none/disabled

@@ -16,10 +16,10 @@ L1 Instruction TLB (2M/4M): Fully associative. 64 entries.
 L1 Data TLB (4K):           Fully associative. 96 entries.
 L1 Instruction TLB (4K):    Fully associative. 64 entries.
 L1 Data cache:
-	Size: 48Kb	12-way associative. 
+	Size: 48KB	12-way associative. 
 	lines per tag=1	line size=64 bytes.
 L1 Instruction cache:
-	Size: 32Kb	8-way associative. 
+	Size: 32KB	8-way associative. 
 	lines per tag=1	line size=64 bytes.
 L2 Data TLB (1G):           4-way associative. 32 entries.
 L2 Instruction TLB (1G):    Disabled. 0 entries.
@@ -28,16 +28,16 @@ L2 Instruction TLB (2M/4M): 2-way associative. 2048 entries.
 L2 Data TLB (4K):           8-way associative. 4096 entries.
 L2 Instruction TLB (4K):    4-way associative. 2048 entries.
 L2 cache:
-	Size: 1024Kb	16-way associative. 
+	Size: 1024KB	16-way associative. 
 	lines per tag=1	line size=64 bytes.
 L3 (shared) cache:
-	Size: 16384Kb	See CPUID 0x8000001D. 
+	Size: 16384KB	See CPUID 0x8000001D. 
 	lines per tag=1	line size=64 bytes.
 Caches (CPUID 0x8000001D):
-	L1 data: 48Kb, 12-way, line size=64 bytes, shared by 2 threads
-	L1 instruction: 32Kb, 8-way, line size=64 bytes, shared by 2 threads
-	L2 unified: 1024Kb, 16-way, line size=64 bytes, shared by 2 threads
-	L3 unified: 16384Kb, 16-way, line size=64 bytes, shared by 8 threads
+	L1 data: 48KB, 12-way, line size=64 bytes, shared by 2 threads
+	L1 instruction: 32KB, 8-way, line size=64 bytes, shared by 2 threads
+	L2 unified: 1024KB, 16-way, line size=64 bytes, shared by 2 threads
+	L3 unified: 16384KB, 16-way, line size=64 bytes, shared by 8 threads
 
 Feature flags:
  fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh mmx fxsr sse sse2 ht sse3 pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrnd
