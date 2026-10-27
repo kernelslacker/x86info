@@ -208,79 +208,47 @@ static int cmp_u64(const void *a, const void *b)
 	return (x > y) - (x < y);
 }
 
-static int cmp_uint(const void *a, const void *b)
-{
-	unsigned int x = *(const unsigned int *)a;
-	unsigned int y = *(const unsigned int *)b;
-
-	return (x > y) - (x < y);
-}
-
-/* Number of distinct packages among the CPUs. */
-static unsigned int count_sockets(struct cpudata *cpus, unsigned int n)
-{
-	unsigned int *ids;
-	unsigned int i, run = 0, sockets = 0;
-
-	ids = malloc(n * sizeof(*ids));
-	if (ids == NULL)
-		return 0;
-
-	for (i = 0; i < n; i++)
-		ids[i] = cpus[i].phys_proc_id;
-	qsort(ids, n, sizeof(*ids), cmp_uint);
-
-	for (i = 0; i < n; i++) {
-		if (i == 0 || ids[i] != ids[i - 1]) {
-			sockets++;
-			run = 0;
-		}
-		run++;
-		if (opts.debug && (i + 1 == n || ids[i + 1] != ids[i]))
-			printf("Socket %u: %u threads\n", ids[i], run);
-	}
-
-	free(ids);
-	return sockets;
-}
-
-/* Number of distinct (package, core) pairs among the CPUs, and the
- * smallest and largest number of CPUs sharing one. */
-static unsigned int count_cores(struct cpudata *cpus, unsigned int n,
-				unsigned int *min_threads,
-				unsigned int *max_threads)
+/*
+ * Number of distinct packages, or with by_core distinct (package, core)
+ * pairs, among the CPUs; *min_threads and *max_threads (optional) get the
+ * smallest and largest number of CPUs sharing one.
+ */
+static unsigned int count_groups(const struct cpudata *cpus, unsigned int n,
+				 int by_core, unsigned int *min_threads,
+				 unsigned int *max_threads)
 {
 	unsigned long long *keys;
-	unsigned int i, run = 0, cores = 0;
-
-	*min_threads = ~0u;
-	*max_threads = 0;
+	unsigned int i, run = 0, groups = 0, min = ~0u, max = 0;
 
 	keys = malloc(n * sizeof(*keys));
 	if (keys == NULL)
 		return 0;
 
 	for (i = 0; i < n; i++)
-		keys[i] = ((unsigned long long)cpus[i].phys_proc_id << 32) |
-			  cpus[i].cpu_core_id;
+		keys[i] = by_core ? ((unsigned long long)cpus[i].phys_proc_id << 32) |
+				    cpus[i].cpu_core_id : cpus[i].phys_proc_id;
 	qsort(keys, n, sizeof(*keys), cmp_u64);
 
 	for (i = 0; i < n; i++) {
 		if (i == 0 || keys[i] != keys[i - 1]) {
-			cores++;
+			groups++;
 			run = 0;
 		}
 		run++;
 		if (i + 1 == n || keys[i + 1] != keys[i]) {
-			if (run < *min_threads)
-				*min_threads = run;
-			if (run > *max_threads)
-				*max_threads = run;
+			if (run < min)
+				min = run;
+			if (run > max)
+				max = run;
 		}
 	}
 
 	free(keys);
-	return cores;
+	if (min_threads)
+		*min_threads = min;
+	if (max_threads)
+		*max_threads = max;
+	return groups;
 }
 
 /* Print the levels of the extended topology leaf the CPU decodes from. */
@@ -356,11 +324,25 @@ void display_topology(struct cpudata *cpus, unsigned int n)
 			printf("%u, ", cpus[i].cpu_core_id);
 		}
 		printf("\n");
+
+		for (i = 0; i < n; i++) {
+			unsigned int j, threads = 0;
+
+			for (j = 0; j < i; j++)
+				if (cpus[j].phys_proc_id == cpus[i].phys_proc_id)
+					break;
+			if (j < i)
+				continue;
+			for (j = i; j < n; j++)
+				if (cpus[j].phys_proc_id == cpus[i].phys_proc_id)
+					threads++;
+			printf("Socket %u: %u threads\n", cpus[i].phys_proc_id, threads);
+		}
 	}
 
-	num_sockets = count_sockets(cpus, n);
+	num_sockets = count_groups(cpus, n, 0, NULL, NULL);
 
-	cores = count_cores(cpus, n, &min_siblings, &max_siblings);
+	cores = count_groups(cpus, n, 1, &min_siblings, &max_siblings);
 
 	/* Print a topology summary */
 	printf("This system has %u socket%s, %u core%s, %u thread%s",
