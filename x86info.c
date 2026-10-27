@@ -36,7 +36,7 @@ static unsigned int *parse_cpu_list(const char *s, unsigned int *count)
 			if (end == s || hi < lo)
 				goto bad;
 		}
-		if (hi >= 65536 || n + (hi - lo + 1) > 65536)
+		if (hi >= MAX_CPUS || n + (hi - lo + 1) > MAX_CPUS)
 			goto bad;
 		tmp = realloc(ids, (n + (hi - lo + 1)) * sizeof(*ids));
 		if (!tmp)
@@ -79,7 +79,7 @@ static unsigned int *get_online_cpus(unsigned int *count)
 		long n = sysconf(_SC_NPROCESSORS_ONLN);
 		long i;
 
-		if (n < 1 || n > 65535) {
+		if (n < 1 || n > MAX_CPUS) {
 			printf("CPU count is bogus: defaulting to 1 CPU.\n");
 			n = 1;
 		}
