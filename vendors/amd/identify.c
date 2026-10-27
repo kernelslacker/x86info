@@ -605,7 +605,7 @@ void display_amd_info(struct cpudata *cpu)
 
 	if (opts.show_feature_flags && cpu->maxei >= 0x8000001f) {
 		cpuid(cpu->number, 0x8000001f, &eax, &ebx, &ecx, &edx);
-		if (eax & 0x3)
+		if ((eax & 0x3) && ebx)
 			printf("Memory encryption: C-bit %u, %u bits of physical address reduction, %u VMPLs, %u guests, min SEV ASID %u\n",
 			       ebx & 0x3f, (ebx >> 6) & 0x3f, (ebx >> 12) & 0xf,
 			       ecx, edx);

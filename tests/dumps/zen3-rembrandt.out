@@ -5,7 +5,6 @@ The physical package has 16 of 16 possible threads implemented (8 cores).
 
 Monitor/Mwait: min/max line size 64/64, interrupt break event, enumeration extension
 SVM: revision 1, 32768 ASIDs, np, lbrVirt, SVMLock, NRIPSave, TscRateMsr, VmcbClean, FlushByAsid, DecodeAssists, PauseFilter, PauseFilterThreshold, AVIC, V_VMSAVE_VMLOAD, vGIF, GMET, SpecCtrl, SvmeAddrChk
-Memory encryption: C-bit 0, 0 bits of physical address reduction, 0 VMPLs, 0 guests, min SEV ASID 1
 L1 Data TLB (1G):           Fully associative. 64 entries.
 L1 Instruction TLB (1G):    Fully associative. 64 entries.
 L1 Data TLB (2M/4M):        Fully associative. 64 entries.
