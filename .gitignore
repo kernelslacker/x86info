@@ -5,3 +5,4 @@ cov-int
 tags
 tests/build
 *.d
+tests/build-asan

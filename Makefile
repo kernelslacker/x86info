@@ -25,7 +25,7 @@ QUIET_CC = $(Q:@=@echo    '  CC '$@;)
 
 all: x86info lsmsr
 
-.PHONY: lsmsr check record clean tarball sparse cscope scan tags coverity
+.PHONY: lsmsr check check-asan record clean tarball sparse cscope scan tags coverity
 
 X86INFO_HEADERS = \
 	$(wildcard *.h) \
@@ -92,6 +92,18 @@ $(CHECK_BIN): $(X86INFO_HEADERS) $(wildcard *.c) $(wildcard vendors/*/*.c)
 	$(QUIET_CC)$(CC) $(CFLAGS) -DCPUID_REPLAY $(LDFLAGS) -o $@ \
 	    $(wildcard *.c) $(wildcard vendors/*/*.c) $(LIBPCI)
 
+# The same goldens against a replay build with ASan and UBSan.
+ASAN_BIN = tests/build-asan/x86info
+
+check-asan: $(ASAN_BIN)
+	@tests/run-tests.sh $(ASAN_BIN)
+
+$(ASAN_BIN): $(X86INFO_HEADERS) $(wildcard *.c) $(wildcard vendors/*/*.c)
+	@mkdir -p tests/build-asan
+	$(QUIET_CC)$(CC) $(CFLAGS) -DCPUID_REPLAY -fsanitize=address,undefined \
+	    -fno-sanitize-recover=undefined -fno-omit-frame-pointer $(LDFLAGS) \
+	    -o $@ $(wildcard *.c) $(wildcard vendors/*/*.c) $(LIBPCI)
+
 lsmsr: x86info
 	$(Q)$(MAKE) --no-print-directory -C lsmsr VERSION=$(VERSION)
 
@@ -122,7 +134,7 @@ clean:
 	@rm -rf $(DEPDIR)/*
 	@rm -f x86info-coverity.tar.xz
 	@rm -rf cov-int
-	@rm -rf tests/build
+	@rm -rf tests/build tests/build-asan
 
 sparse:
 	@sparse $(X86INFO_SRC)
