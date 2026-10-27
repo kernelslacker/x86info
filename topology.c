@@ -17,6 +17,12 @@ static unsigned int low_mask(unsigned int bits)
 	return bits >= 32 ? ~0u : (1u << bits) - 1;
 }
 
+/* Number of bits needed to index count items: ceil(log2(count)). */
+unsigned int get_count_order(unsigned int count)
+{
+	return count <= 1 ? 0 : 32 - __builtin_clz(count - 1);
+}
+
 /*
  * Decode an extended topology leaf. Each subleaf gives the shift to the
  * next level of the 32-bit x2APIC ID and how many logical processors sit

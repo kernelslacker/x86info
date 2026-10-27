@@ -10,32 +10,6 @@
 #include <x86info.h>
 #include "intel.h"
 
-/**
- * tp_fls - find last (most-significant) bit set
- * @x: the word to search
- *
- * This is defined the same way as ffs.
- * Note fls(0) = 0, fls(1) = 1, fls(0x80000000) = 32.
- */
-
-static int tp_fls(int x)
-{
-	return x ? sizeof(x) * 8 - __builtin_clz(x) : 0;
-}
-
-unsigned int get_count_order(unsigned int count)
-{
-	unsigned int order;
-
-	if (count <= 1)
-		return 0;
-
-	order = tp_fls(count) - 1;
-	if (count & (count - 1))
-		order++;
-	return order;
-}
-
 int intel_num_cpu_cores(struct cpudata *cpu)
 {
 	unsigned int eax, ebx, ecx, edx;
