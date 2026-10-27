@@ -217,8 +217,6 @@ void display_topology(struct cpudata *cpus, unsigned int n);
 /* Upper bound for per-CPU descriptor tables. */
 #define MAX_CPUS 8192
 
-extern unsigned int nrCPUs;
-
 bool is_root(void);
 
 /* Probes of the running machine; a replay build answers without them. */

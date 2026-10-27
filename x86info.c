@@ -14,8 +14,6 @@
 #include <intel.h>
 #include <amd.h>
 
-unsigned int nrCPUs = 1;
-
 /* Online CPU ids, which need not be contiguous. */
 static unsigned int *get_online_cpus(unsigned int *count)
 {
@@ -159,27 +157,27 @@ static int fill_in_cpu_info(struct cpudata *cpu)
 }
 
 
-/* Query every online CPU; sets nrCPUs to the number that could be read. */
-static struct cpudata *collect_cpus(void)
+/* Query every online CPU; *count is the number that could be read. */
+static struct cpudata *collect_cpus(unsigned int *count)
 {
 	struct cpudata *cpus;
 	unsigned int *online;
-	unsigned int i, n;
+	unsigned int i, n, nr_online;
 
-	online = get_online_cpus(&nrCPUs);
+	online = get_online_cpus(&nr_online);
 	if (!online) {
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
 
 	/* Allocate a flat array of CPUs */
-	cpus = calloc(nrCPUs, sizeof(struct cpudata));
+	cpus = calloc(nr_online, sizeof(struct cpudata));
 	if (!cpus) {
 		perror("calloc");
 		exit(EXIT_FAILURE);
 	}
 
-	for (i = 0, n = 0; i < nrCPUs; i++) {
+	for (i = 0, n = 0; i < nr_online; i++) {
 		cpus[n].number = online[i];
 		if (fill_in_cpu_info(&cpus[n])) {
 			fprintf(stderr, "CPU #%u: unable to read CPUID, skipping.\n",
@@ -194,9 +192,9 @@ static struct cpudata *collect_cpus(void)
 		fprintf(stderr, "No usable CPUs found.\n");
 		exit(EXIT_FAILURE);
 	}
-	nrCPUs = n;
+	*count = n;
 
-	clear_uniform_core_types(cpus, nrCPUs);
+	clear_uniform_core_types(cpus, n);
 	return cpus;
 }
 
@@ -272,6 +270,7 @@ static void display_cpus(struct cpudata *cpus, unsigned int n)
 int main(int argc, char **argv)
 {
 	struct cpudata *cpus;
+	unsigned int nr_cpus;
 
 	parse_command_line(argc, argv);
 
@@ -288,8 +287,8 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 
-	cpus = collect_cpus();
-	display_cpus(cpus, nrCPUs);
+	cpus = collect_cpus(&nr_cpus);
+	display_cpus(cpus, nr_cpus);
 	free(cpus);
 
 	exit(EXIT_SUCCESS);

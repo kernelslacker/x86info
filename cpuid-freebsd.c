@@ -65,7 +65,7 @@ int cpuid(unsigned int CPU_number, unsigned long long idx,
 
 	/* Something went wrong, just do UP and hope for the best. */
 	nodriver = 1;
-	if (nrCPUs != 1)
+	if (sysconf(_SC_NPROCESSORS_ONLN) != 1)
 		perror(cpuname);
 	return native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 }
