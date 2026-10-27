@@ -24,15 +24,11 @@ static int msr_fds[MAX_CPUS] = { [0 ... MAX_CPUS - 1] = CPUDEV_CLOSED };
 int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 {
 	unsigned long long raw;
-	int fh;
 
 	if (cpu < 0)
 		return 0;
-	fh = cpudev_fd(msr_fds, cpu, "msr");
-	if (fh == -1)
-		return 0;
-
-	if (pread(fh, &raw, sizeof(raw), (off_t)idx) != sizeof(raw))
+	if (cpudev_pread(msr_fds, cpu, "msr", &raw, sizeof(raw), (off_t)idx) !=
+	    sizeof(raw))
 		return 0;
 
 	*val = raw;

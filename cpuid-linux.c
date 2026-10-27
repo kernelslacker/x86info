@@ -9,6 +9,7 @@
 #define _GNU_SOURCE
 #define _FILE_OFFSET_BITS 64
 
+#include <errno.h>
 #include <string.h>
 #include <unistd.h>
 #include <sched.h>
@@ -55,16 +56,17 @@ int cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *edx)
 {
 	unsigned int regs[4] = { 0, 0, 0, 0 };
-	int fh;
+	ssize_t n;
 
 	/* Use the /dev/cpu interface in preference to the _up code. */
-	fh = cpudev_fd(cpuid_fds, CPU_number, "cpuid");
+	n = cpudev_pread(cpuid_fds, CPU_number, "cpuid", regs, CPUID_CHUNK_SIZE,
+			 (off_t)idx);
 
 	/* No device for this CPU, execute CPUID on it directly. */
-	if (fh == -1)
+	if (n == -1 && errno == ENODEV)
 		return native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 
-	if (pread(fh, regs, CPUID_CHUNK_SIZE, (off_t)idx) != CPUID_CHUNK_SIZE) {
+	if (n != CPUID_CHUNK_SIZE) {
 		memset(regs, 0, sizeof(regs));
 		cpuid_store(eax, ebx, ecx, edx, regs);
 		return -1;

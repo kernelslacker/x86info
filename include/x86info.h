@@ -2,6 +2,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <sys/types.h>
 
 enum vendor {
 	VENDOR_UNKNOWN = 0 ,
@@ -155,8 +156,12 @@ int bind_cpu(unsigned int cpunr);
 #define CPUDEV_CLOSED	-1
 #define CPUDEV_FAILED	-2
 
-/* Open or fetch /dev/cpu/<cpu>/<node> through the cache fds[MAX_CPUS]. */
-int cpudev_fd(int *fds, unsigned int cpu, const char *node);
+/*
+ * pread() from /dev/cpu/<cpu>/<node>, caching the descriptor in
+ * fds[MAX_CPUS]. Fails with errno ENODEV if the node can't be opened.
+ */
+ssize_t cpudev_pread(int *fds, unsigned int cpu, const char *node,
+		     void *buf, size_t len, off_t off);
 
 void cpuid_store(unsigned int *eax, unsigned int *ebx, unsigned int *ecx,
 		 unsigned int *edx, const unsigned int regs[4]);

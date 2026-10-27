@@ -14,19 +14,11 @@
 #include <errno.h>
 #include <x86info.h>
 
-static void cpudev_close_all(int *fds)
-{
-	unsigned int i;
-
-	for (i = 0; i < MAX_CPUS; i++) {
-		if (fds[i] >= 0)
-			close(fds[i]);
-		if (fds[i] != CPUDEV_FAILED)
-			fds[i] = CPUDEV_CLOSED;
-	}
-}
-
-int cpudev_fd(int *fds, unsigned int cpu, const char *node)
+/*
+ * Open or fetch the cached descriptor. Returns -1 if there is none, which
+ * leaves the slot CPUDEV_CLOSED when only descriptors ran out.
+ */
+static int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 {
 	static int reported_module;
 	char path[48];
@@ -42,10 +34,6 @@ int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 
 	(void)snprintf(path, sizeof(path), "/dev/cpu/%u/%s", cpu, node);
 	fh = open(path, O_RDONLY);
-	if (fh == -1 && (errno == EMFILE || errno == ENFILE)) {
-		cpudev_close_all(fds);
-		fh = open(path, O_RDONLY);
-	}
 	if (fh != -1) {
 		fds[cpu] = fh;
 		return fh;
@@ -64,6 +52,32 @@ int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 		perror(path);
 	}
 	return -1;
+}
+
+ssize_t cpudev_pread(int *fds, unsigned int cpu, const char *node,
+		     void *buf, size_t len, off_t off)
+{
+	char path[48];
+	ssize_t ret;
+	int fh;
+
+	fh = cpudev_fd(fds, cpu, node);
+	if (fh >= 0)
+		return pread(fh, buf, len, off);
+
+	if (cpu >= MAX_CPUS || fds[cpu] == CPUDEV_FAILED) {
+		errno = ENODEV;
+		return -1;
+	}
+
+	/* Out of descriptors: use a transient one rather than evict another. */
+	(void)snprintf(path, sizeof(path), "/dev/cpu/%u/%s", cpu, node);
+	fh = open(path, O_RDONLY);
+	if (fh == -1)
+		return -1;
+	ret = pread(fh, buf, len, off);
+	close(fh);
+	return ret;
 }
 
 #endif	/* __linux__ */
