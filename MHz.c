@@ -311,6 +311,11 @@ void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n,
 	} *workers = calloc(n, sizeof(*workers));
 	unsigned int i;
 
+	if (!workers) {
+		perror("calloc");
+		return;
+	}
+
 	for (i = 0; i < n; i++)
 		if (opts.all_cpus || leader[i] == i)
 			probe_msr_access(&cpus[i]);
@@ -318,15 +323,15 @@ void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n,
 	for (i = 0; i < n; i++) {
 		if (!opts.all_cpus && leader[i] != i)
 			continue;
-		if (workers &&
-		    pthread_create(&workers[i].tid, NULL, measure_thread, &cpus[i]) == 0)
+		if (pthread_create(&workers[i].tid, NULL, measure_thread, &cpus[i]) == 0)
 			workers[i].started = 1;
 		else
-			measure_thread(&cpus[i]);
+			fprintf(stderr, "CPU #%u: unable to start MHz measurement.\n",
+				cpus[i].number);
 	}
 
 	for (i = 0; i < n; i++) {
-		if (workers && workers[i].started)
+		if (workers[i].started)
 			pthread_join(workers[i].tid, NULL);
 	}
 
