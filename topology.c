@@ -283,31 +283,45 @@ static unsigned int count_cores(struct cpudata *cpus, unsigned int n,
 	return cores;
 }
 
-/* Print the levels of the extended topology leaf 0x1F. */
+/* Print the levels of the extended topology leaf the CPU decodes from. */
 static void show_topology_levels(const struct cpudata *cpu)
 {
-	static const char * const level_names[] = {
+	static const char * const intel_names[] = {
 		"Invalid", "SMT", "Core", "Module", "Tile", "Die"
 	};
-	unsigned int eax, ebx, ecx, edx, subleaf, level_type;
+	static const char * const amd_names[] = {
+		"Invalid", "Core", "Complex", "Die", "Socket"
+	};
+	const char * const *names = intel_names;
+	unsigned int nr_names = ARRAY_SIZE(intel_names);
+	unsigned int eax, ebx, ecx, edx, leaf, subleaf, level_type;
 
-	if (cpu->cpuid_level < 0x1f)
+	if (cpu->vendor == VENDOR_AMD && cpu->maxei >= 0x80000026) {
+		leaf = 0x80000026;
+		names = amd_names;
+		nr_names = ARRAY_SIZE(amd_names);
+	} else if (cpu->cpuid_level >= 0x1f) {
+		leaf = 0x1f;
+	} else if (cpu->cpuid_level >= 0xb) {
+		leaf = 0xb;
+	} else {
 		return;
-	cpuid_count(cpu->number, 0x1f, 0, &eax, &ebx, &ecx, &edx);
+	}
+
+	cpuid_count(cpu->number, leaf, 0, NULL, &ebx, NULL, NULL);
 	if (!ebx)
 		return;
 
-	printf("V2 extended topology (leaf 0x1F):\n");
+	printf("Extended topology (leaf 0x%X):\n", leaf);
 	for (subleaf = 0; subleaf < 8; subleaf++) {
-		cpuid_count(cpu->number, 0x1f, subleaf, &eax, &ebx, &ecx, &edx);
+		cpuid_count(cpu->number, leaf, subleaf, &eax, &ebx, &ecx, &edx);
 		level_type = (ecx >> 8) & 0xff;
 		if (level_type == 0)
 			break;
 		printf("  Level %u (%s): %u logical CPUs"
 		       ", x2APIC shift=%u, x2APIC ID=%u\n",
 		       ecx & 0xff,
-		       level_type < ARRAY_SIZE(level_names)
-			? level_names[level_type] : "Unknown",
+		       level_type < nr_names ? names[level_type] : "Unknown",
 		       ebx & 0xffff, eax & 0x1f, edx);
 	}
 }
