@@ -3,14 +3,18 @@ VERSION=$(shell git describe --tags --always --dirty 2>/dev/null || date +%Y-%m-
 include flags.mk
 
 CFLAGS = -DVERSION="$(VERSION)" -I. -Iinclude $(COMMON_CFLAGS)
-CFLAGS += $(shell pkg-config --cflags libpci)
 
 LDFLAGS = -Wl,-z,relro,-z,now
 
+# libpci is optional; "make LIBPCI=" builds without it.
 ifdef STATIC_LIBPCI
 LIBPCI = -Wl,-Bstatic -lpci -Wl,-Bdynamic -lz
 else
-LIBPCI ?= $(shell pkg-config --libs libpci)
+LIBPCI ?= $(shell pkg-config --libs libpci 2>/dev/null)
+endif
+
+ifneq ($(strip $(LIBPCI)),)
+CFLAGS += -DHAVE_LIBPCI $(shell pkg-config --cflags libpci 2>/dev/null)
 endif
 
 SHELL = /bin/sh

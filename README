@@ -21,8 +21,9 @@ Features:
 Requirements:
 *  A C compiler and make.
 
-*  libpci (pciutils development files), found with pkg-config. It is used
-   for the AMD --pm output.
+*  Optionally, libpci (pciutils development files), found with pkg-config.
+   It is used for the AMD --pm output. Without it, or with "make LIBPCI=",
+   x86info builds without that PCI lookup.
 
 *  For the MSR / per-CPU CPUID functions, x86info needs the cpuid and msr
    drivers from the Linux kernel (CONFIG_X86_CPUID, CONFIG_X86_MSR). If they

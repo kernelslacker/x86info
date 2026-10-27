@@ -7,7 +7,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
+#ifdef HAVE_LIBPCI
 #include <pci/pci.h>
+#endif
 #include <x86info.h>
 #include "amd.h"
 #include "powernow.h"
@@ -127,8 +129,9 @@ static int get_did(int family, union msr_pstate pstate)
 
 /*
  * Read a config space byte from the first AMD device whose ID is in ids.
- * Returns 1 and sets *val if found.
+ * Returns 1 and sets *val if found; always 0 without libpci.
  */
+#ifdef HAVE_LIBPCI
 static int read_amd_pci_byte(const int *ids, unsigned int nr_ids,
 			     unsigned int reg, u8 *val)
 {
@@ -156,6 +159,17 @@ static int read_amd_pci_byte(const int *ids, unsigned int nr_ids,
 	pci_cleanup(pacc);
 	return found;
 }
+#else
+static int read_amd_pci_byte(const int *ids, unsigned int nr_ids,
+			     unsigned int reg, u8 *val)
+{
+	(void)ids;
+	(void)nr_ids;
+	(void)reg;
+	(void)val;
+	return 0;
+}
+#endif
 
 static int get_main_pll_fid(void)
 {
