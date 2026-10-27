@@ -13,37 +13,31 @@
 #include <sys/mman.h>
 #include <x86info.h>
 
-static int fd;
-static void *apic_mapped_base;
-static unsigned int apic_mapped_size;
+/* The mapped local APIC register page. */
+struct apic_map {
+	void *base;
+	size_t size;
+	volatile unsigned int *regs;
+};
 
-static volatile unsigned int * mapping_apic_registers(unsigned long long addr)
+/* Map the APIC registers at physical address addr; 0 on success. */
+static int map_apic_registers(struct apic_map *map, unsigned long long addr)
 {
-	unsigned long long offset;
-	void *mapped;
+	unsigned long long offset = PAGE_OFFSET(addr);
+	int fd = open("/dev/mem", O_RDONLY);
 
-	if ((fd = open("/dev/mem", O_RDONLY)) == -1)
-		return NULL;
+	if (fd == -1)
+		return -1;
 
-	offset = PAGE_OFFSET(addr);
-	apic_mapped_size = APIC_REGISTER_SPACE + (unsigned int)offset;
+	map->size = APIC_REGISTER_SPACE + (size_t)offset;
+	map->base = mmap(NULL, map->size, PROT_READ, MAP_SHARED, fd,
+			 (off_t)(addr - offset));
+	close(fd);
+	if (map->base == MAP_FAILED)
+		return -1;
 
-	mapped = mmap(NULL, apic_mapped_size, PROT_READ, MAP_SHARED, fd, (off_t)(addr - offset));
-	if (mapped == MAP_FAILED) {
-		close(fd);
-		return NULL;
-	}
-
-	apic_mapped_base = mapped;
-	return (volatile unsigned int *)((char *)mapped + offset);
-}
-
-static void unmapping_apic_registers(void)
-{
-	if (munmap(apic_mapped_base, apic_mapped_size) == -1)
-		return;
-	if (close(fd) == -1)
-		return;
+	map->regs = (volatile unsigned int *)((char *)map->base + offset);
+	return 0;
 }
 
 
@@ -108,7 +102,7 @@ static void dump_apic_regs(const volatile unsigned int *apic_reg_buffer,
 
 void dump_apics(const struct cpudata *cpu)
 {
-	const volatile unsigned int *apic_reg_buffer;
+	struct apic_map map;
 	unsigned long long base;
 	unsigned int i, j;
 	char label[64];
@@ -132,8 +126,7 @@ void dump_apics(const struct cpudata *cpu)
 		return;
 	}
 
-	apic_reg_buffer = mapping_apic_registers((base >> 12) << 12);
-	if (apic_reg_buffer == NULL)
+	if (map_apic_registers(&map, (base >> 12) << 12))
 		return;
 
 	printf("APIC registers:\n");
@@ -141,19 +134,19 @@ void dump_apics(const struct cpudata *cpu)
 	snprintf(label, sizeof(label), "APIC MSR Base(0x%02x)", IA32_APIC_BASE_MSR);
 	printf("%-*s: 0x%016llx\n", APIC_LABEL_WIDTH, label, base);
 
-	dump_apic_regs(apic_reg_buffer, apic_regs_head, ARRAY_SIZE(apic_regs_head));
+	dump_apic_regs(map.regs, apic_regs_head, ARRAY_SIZE(apic_regs_head));
 
 	for (j = 0; j < ARRAY_SIZE(apic_regs_bitmaps); j++) {
 		for (i = 0; i < 8; i++) {
 			snprintf(label, sizeof(label), "%s%u)", apic_regs_bitmaps[j].label, i);
 			printf("%-*s: ", APIC_LABEL_WIDTH, label);
-			dump_apic(apic_reg_buffer, apic_regs_bitmaps[j].offset + i);
+			dump_apic(map.regs, apic_regs_bitmaps[j].offset + i);
 		}
 	}
 
-	dump_apic_regs(apic_reg_buffer, apic_regs_tail, ARRAY_SIZE(apic_regs_tail));
+	dump_apic_regs(map.regs, apic_regs_tail, ARRAY_SIZE(apic_regs_tail));
 
-	unmapping_apic_registers();
+	munmap(map.base, map.size);
 
 	printf("\n");
 }
