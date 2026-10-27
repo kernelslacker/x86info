@@ -150,14 +150,7 @@ int cpuid(unsigned int CPU_number, unsigned long long idx,
 			memcpy(regs, entries[i].regs, sizeof(regs));
 	}
 
-	if (eax)
-		*eax = regs[0];
-	if (ebx)
-		*ebx = regs[1];
-	if (ecx)
-		*ecx = regs[2];
-	if (edx)
-		*edx = regs[3];
+	cpuid_store(eax, ebx, ecx, edx, regs);
 	return 0;
 }
 

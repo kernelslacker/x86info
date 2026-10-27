@@ -158,6 +158,8 @@ int bind_cpu(unsigned int cpunr);
 /* Open or fetch /dev/cpu/<cpu>/<node> through the cache fds[MAX_CPUS]. */
 int cpudev_fd(int *fds, unsigned int cpu, const char *node);
 
+void cpuid_store(unsigned int *eax, unsigned int *ebx, unsigned int *ecx,
+		 unsigned int *edx, const unsigned int regs[4]);
 int native_cpuid(unsigned int cpunr, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx,
 	unsigned int *ecx, unsigned int *edx);

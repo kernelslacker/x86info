@@ -5,52 +5,43 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <errno.h>
 #include <x86info.h>
+
+/* Store regs[0..3] into the registers the caller wants, skipping NULLs. */
+void cpuid_store(unsigned int *eax, unsigned int *ebx, unsigned int *ecx,
+		 unsigned int *edx, const unsigned int regs[4])
+{
+	if (eax != NULL)
+		*eax = regs[0];
+	if (ebx != NULL)
+		*ebx = regs[1];
+	if (ecx != NULL)
+		*ecx = regs[2];
+	if (edx != NULL)
+		*edx = regs[3];
+}
 
 /* returns zero on success */
 int native_cpuid(unsigned int cpunr, unsigned long long idx,
 	unsigned int *eax, unsigned int *ebx,
 	unsigned int *ecx, unsigned int *edx)
 {
-	unsigned int a = 0, b = 0, c = 0, d = 0;
+	unsigned int regs[4] = { 0, 0, idx >> 32, 0 };
 
-	if (eax != NULL)
-		*eax = 0;
-	if (ebx != NULL)
-		*ebx = 0;
-	if (ecx != NULL)
-		*ecx = 0;
-	if (edx != NULL)
-		*edx = 0;
-
-	c = idx >> 32;
-
-	if (bind_cpu(cpunr))
+	if (bind_cpu(cpunr)) {
+		regs[2] = 0;
+		cpuid_store(eax, ebx, ecx, edx, regs);
 		return -1;
+	}
 
 	asm("cpuid"
-		: "=a" (a),
-		  "=b" (b),
-		  "+c" (c),
-		  "=d" (d)
+		: "=a" (regs[0]),
+		  "=b" (regs[1]),
+		  "+c" (regs[2]),
+		  "=d" (regs[3])
 		: "0" ((unsigned int)idx));
 
-	if (eax!=NULL)
-		*eax = a;
-	if (ebx!=NULL)
-		*ebx = b;
-	if (ecx!=NULL)
-		*ecx = c;
-	if (edx!=NULL)
-		*edx = d;
-
+	cpuid_store(eax, ebx, ecx, edx, regs);
 	return 0;
 }
 

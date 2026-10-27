@@ -9,15 +9,8 @@
 #define _GNU_SOURCE
 #define _FILE_OFFSET_BITS 64
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <unistd.h>
-#include <errno.h>
-
 #include <sched.h>
 
 #include <x86info.h>
@@ -61,7 +54,7 @@ int cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *ecx,
 	unsigned int *edx)
 {
-	unsigned char buffer[CPUID_CHUNK_SIZE];
+	unsigned int regs[4] = { 0, 0, 0, 0 };
 	int fh;
 
 	/* Use the /dev/cpu interface in preference to the _up code. */
@@ -71,26 +64,12 @@ int cpuid(unsigned int CPU_number, unsigned long long idx,
 	if (fh == -1)
 		return native_cpuid(CPU_number, idx, eax,ebx,ecx,edx);
 
-	memset(buffer, 0, sizeof(buffer));
-	if (pread(fh, buffer, CPUID_CHUNK_SIZE, (off_t)idx) != CPUID_CHUNK_SIZE) {
-		if (eax != NULL)
-			*eax = 0;
-		if (ebx != NULL)
-			*ebx = 0;
-		if (ecx != NULL)
-			*ecx = 0;
-		if (edx != NULL)
-			*edx = 0;
+	if (pread(fh, regs, CPUID_CHUNK_SIZE, (off_t)idx) != CPUID_CHUNK_SIZE) {
+		memset(regs, 0, sizeof(regs));
+		cpuid_store(eax, ebx, ecx, edx, regs);
 		return -1;
 	}
-	if (eax != NULL)
-		memcpy(eax, buffer, 4);
-	if (ebx != NULL)
-		memcpy(ebx, buffer + 4, 4);
-	if (ecx != NULL)
-		memcpy(ecx, buffer + 8, 4);
-	if (edx != NULL)
-		memcpy(edx, buffer + 12, 4);
+	cpuid_store(eax, ebx, ecx, edx, regs);
 	return 0;
 }
 
