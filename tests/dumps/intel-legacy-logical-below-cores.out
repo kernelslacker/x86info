@@ -1,0 +1,18 @@
+Found 2 identical CPUs
+Family: 6 Model: 15 Stepping: 6
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Core 2 Duo 
+Processor name string (BIOS programmed): 
+
+Cache info
+TLB info
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh ds acpi mmx fxsr sse sse2 ss ht
+Extended feature flags:
+
+Additional feature flags:
+
+Long NOPs supported: not recorded
+
+Address sizes : 0 bits physical, 0 bits virtual
+This system has 1 socket, 2 cores, 2 threads

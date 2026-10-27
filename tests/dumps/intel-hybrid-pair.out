@@ -1,0 +1,37 @@
+Found 2 CPUs of 2 kinds.
+
+Extended Family: 0 Extended Model: 9 Family: 6 Model: 151 Stepping: 2
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): [Alder Lake]
+Processor name string (BIOS programmed): 
+
+CPU #0 (1 in this group):
+Core type: Performance (Core)
+
+Cache info
+TLB info
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh ds acpi mmx fxsr sse sse2 ss ht tm pbe sse3 pclmulqdq dtes64 monitor ds-cpl vmx smx est tm2 ssse3 sdbg fma cx16 xTPR pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc-deadline aes xsave osxsave avx f16c rdrnd
+Extended feature flags:
+
+Additional feature flags:
+ hybrid
+Long NOPs supported: not recorded
+
+Address sizes : 0 bits physical, 0 bits virtual
+CPU #1 (1 in this group):
+Core type: Efficiency (Atom)
+
+Cache info
+TLB info
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh ds acpi mmx fxsr sse sse2 ss ht tm pbe sse3 pclmulqdq dtes64 monitor ds-cpl vmx smx est tm2 ssse3 sdbg fma cx16 xTPR pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc-deadline aes xsave osxsave avx f16c rdrnd
+Extended feature flags:
+
+Additional feature flags:
+ hybrid
+Long NOPs supported: not recorded
+
+Address sizes : 0 bits physical, 0 bits virtual
+This system has 1 socket, 2 cores, 2 threads
+Hybrid: 1 Performance threads, 1 Efficiency threads

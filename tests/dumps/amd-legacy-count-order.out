@@ -1,0 +1,38 @@
+Found 3 identical CPUs
+Extended Family: 1 Extended Model: 0 Family: 15 Model: 2 Stepping: 2
+CPU Model (x86info's best guess): Phenom/Athlon/Sempron/Turion (II)/Opteron (DR-B2)
+Processor name string (BIOS programmed): 
+The physical package has 4 of 4 possible cores implemented.
+
+L1 Data TLB (2M/4M):        0 entries.
+L1 Instruction TLB (2M/4M): 0 entries.
+L1 Data TLB (4K):           0 entries.
+L1 Instruction TLB (4K):    0 entries.
+L1 Data cache:
+	Size: 0Kb	
+	lines per tag=0	line size=0 bytes.
+L1 Instruction cache:
+	Size: 0Kb	
+	lines per tag=0	line size=0 bytes.
+L2 Data TLB (2M/4M):        Disabled. 0 entries.
+L2 Instruction TLB (2M/4M): Disabled. 0 entries.
+L2 Data TLB (4K):           Disabled. 0 entries.
+L2 Instruction TLB (4K):    Disabled. 0 entries.
+L2 cache:
+	Size: 0Kb	Disabled. 
+	lines per tag=0	line size=0 bytes.
+L3 (shared) cache:
+	none/disabled
+
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh mmx fxsr sse sse2 ht
+Extended feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic syscall mtrr pge mca cmov pat pse36 nx mmxext mmx fxsr ffxsr page1gb rdtscp lm
+Additional feature flags:
+
+Long NOPs supported: not recorded
+
+Connector type: Socket Fr2 (1207)
+
+Address sizes : 48 bits physical, 48 bits virtual
+This system has 2 sockets, 3 cores, 3 threads

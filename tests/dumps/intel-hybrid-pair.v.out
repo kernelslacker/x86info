@@ -1,0 +1,18 @@
+Found 2 CPUs of 2 kinds.
+
+Extended Family: 0 Extended Model: 9 Family: 6 Model: 151 Stepping: 2
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): [Alder Lake]
+Processor name string (BIOS programmed): 
+
+CPU #0 (1 in this group):
+Core type: Performance (Core)
+
+CPU #1 (1 in this group):
+Core type: Efficiency (Atom)
+
+This system has 1 socket, 2 cores, 2 threads
+Hybrid: 1 Performance threads, 1 Efficiency threads
+Extended topology (leaf 0x1F):
+  Level 0 (SMT): 2 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Core): 16 logical CPUs, x2APIC shift=5, x2APIC ID=0
