@@ -58,8 +58,11 @@ Show CPU feature flags.
 Show a summary of options.
 .TP
 .B \-\-mhz
-Measure the TSC rate, which is the CPU clock on older CPUs.  Takes one second
-per CPU measured.
+Measure the TSC rate, which is the CPU clock on older CPUs, over a tenth of a
+second.  Where the APERF/MPERF counters can be read (as root, or through the
+kernel's msr perf events) the CPU first spins for six seconds to reach its
+boost clock, and the core clock is reported as well.  The CPUs are measured
+in parallel.
 .TP
 .B \-\-microcode
 Show the microcode revision.
