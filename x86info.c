@@ -190,11 +190,11 @@ static unsigned int find_groups(const struct cpudata *cpus, unsigned int n,
 }
 
 /* True if the groups differ only in core type, so one header serves all. */
-static int groups_share_header(const struct cpudata *cpus)
+static int groups_share_header(const struct cpudata *cpus, unsigned int n)
 {
 	unsigned int i;
 
-	for (i = 1; i < nrCPUs; i++) {
+	for (i = 1; i < n; i++) {
 		const struct cpudata *a = &cpus[0], *b = &cpus[i];
 
 		if (a->vendor != b->vendor || a->efamily != b->efamily ||
@@ -221,30 +221,12 @@ static int fill_in_cpu_info(struct cpudata *cpu)
 }
 
 
-int main(int argc, char **argv)
+/* Query every online CPU; sets nrCPUs to the number that could be read. */
+static struct cpudata *collect_cpus(void)
 {
 	struct cpudata *cpus;
 	unsigned int *online;
-	unsigned int *leader, *group_size;
 	unsigned int i, n;
-	unsigned int display_one_cpu = 1;
-	unsigned int nr_groups = 0;
-	int nrSMPCPUs;
-
-	parse_command_line(argc, argv);
-
-	printf("x86info " __stringify(VERSION) "\n");
-
-	if ((HaveCPUID()) == 0) {
-		printf("No CPUID instruction available.\n");
-		printf("No further information available for this CPU.\n");
-		exit(EXIT_SUCCESS);
-	}
-
-	if (opts.need_root && !is_root()) {
-		printf("Need to be root to use specified options.\n");
-		exit(EXIT_FAILURE);
-	}
 
 	online = get_online_cpus(&nrCPUs);
 	if (!online) {
@@ -277,15 +259,25 @@ int main(int argc, char **argv)
 	nrCPUs = n;
 
 	clear_uniform_core_types(cpus, nrCPUs);
-	leader = malloc(nrCPUs * sizeof(*leader));
-	group_size = malloc(nrCPUs * sizeof(*group_size));
+	return cpus;
+}
+
+static void display_cpus(struct cpudata *cpus, unsigned int n)
+{
+	unsigned int *leader, *group_size;
+	unsigned int i, nr_groups;
+	int display_one_cpu;
+	int nrSMPCPUs;
+
+	leader = malloc(n * sizeof(*leader));
+	group_size = malloc(n * sizeof(*group_size));
 	if (!leader || !group_size) {
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
-	nr_groups = find_groups(cpus, nrCPUs, leader, group_size);
+	nr_groups = find_groups(cpus, n, leader, group_size);
 	if (opts.show_MHz)
-		estimate_MHz_cpus(cpus, nrCPUs, leader);
+		estimate_MHz_cpus(cpus, n, leader);
 	display_one_cpu = nr_groups == 1 && !opts.all_cpus;
 
 	if (opts.show_mptable && is_root())
@@ -293,27 +285,27 @@ int main(int argc, char **argv)
 
 	/* Now we display the info we gathered */
 	if (display_one_cpu) {
-		if (nrCPUs >= 2)
-			printf("Found %u identical CPUs\n", nrCPUs);
+		if (n >= 2)
+			printf("Found %u identical CPUs\n", n);
 
 		/* Check mptable if present. This way we get number of CPUs
 		   on SMP systems that have booted UP kernels. */
 		if (is_root()) {
 			nrSMPCPUs = enumerate_cpus();
-			if (nrSMPCPUs > 0 && (unsigned int)nrSMPCPUs > nrCPUs)
+			if (nrSMPCPUs > 0 && (unsigned int)nrSMPCPUs > n)
 				printf("Found %d CPUs in MPTable!\n", nrSMPCPUs);
 		}
 
 		display_detailed_info(&cpus[0], 1);
 	} else if (!opts.all_cpus) {
-		int common = groups_share_header(cpus);
+		int common = groups_share_header(cpus, n);
 
-		printf("Found %u CPUs of %u kinds.\n", nrCPUs, nr_groups);
+		printf("Found %u CPUs of %u kinds.\n", n, nr_groups);
 		if (common) {
 			printf("\n");
 			show_header(&cpus[0]);
 		}
-		for (i = 0; i < nrCPUs; i++) {
+		for (i = 0; i < n; i++) {
 			if (leader[i] != i)
 				continue;
 			printf("CPU #%u (%u in this group):\n", cpus[i].number,
@@ -322,21 +314,44 @@ int main(int argc, char **argv)
 			display_detailed_info(&cpus[i], !common);
 		}
 	} else {
-		printf("Found %u CPUs.\n", nrCPUs);
-		for (i = 0; i < nrCPUs; i++) {
+		printf("Found %u CPUs.\n", n);
+		for (i = 0; i < n; i++) {
 			printf("CPU #%u:\n", cpus[i].number);
 
 			display_detailed_info(&cpus[i], 1);
 
-			if (nrCPUs > 1)
+			if (n > 1)
 				separator();
 		}
 	}
 
-	display_topology(&cpus[0], nrCPUs);
+	display_topology(&cpus[0], n);
 
 	free(leader);
 	free(group_size);
+}
+
+int main(int argc, char **argv)
+{
+	struct cpudata *cpus;
+
+	parse_command_line(argc, argv);
+
+	printf("x86info " __stringify(VERSION) "\n");
+
+	if ((HaveCPUID()) == 0) {
+		printf("No CPUID instruction available.\n");
+		printf("No further information available for this CPU.\n");
+		exit(EXIT_SUCCESS);
+	}
+
+	if (opts.need_root && !is_root()) {
+		printf("Need to be root to use specified options.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	cpus = collect_cpus();
+	display_cpus(cpus, nrCPUs);
 	free(cpus);
 
 	exit(EXIT_SUCCESS);
