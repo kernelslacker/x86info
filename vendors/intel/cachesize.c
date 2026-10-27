@@ -417,6 +417,31 @@ static void print_unknown(const struct cpudata *cpu, const unsigned char *bytes,
 		printf("\n");
 }
 
+/* Sizes summed from the CPUID 2 descriptors; levels the CPU lacks are left out. */
+static void print_cache_totals(const struct cpudata *cpu)
+{
+	const struct {
+		const char *label;
+		unsigned int kb;
+	} levels[] = {
+		{ "L1 instruction", cpu->cachesize_L1_I },
+		{ "L1 data", cpu->cachesize_L1_D },
+		{ "L2", cpu->cachesize_L2 },
+		{ "L3", cpu->cachesize_L3 },
+	};
+	const char *sep = "Total cache:";
+	unsigned int i;
+
+	for (i = 0; i < ARRAY_SIZE(levels); i++) {
+		if (!levels[i].kb)
+			continue;
+		printf("%s %s %uKB", sep, levels[i].label, levels[i].kb);
+		sep = ",";
+	}
+	if (sep[0] == ',')
+		printf("\n");
+}
+
 void decode_intel_caches(struct cpudata *cpu, int output)
 {
 	unsigned char bytes[16 * MAX_LEAF2_ITER];
@@ -443,6 +468,8 @@ void decode_intel_caches(struct cpudata *cpu, int output)
 	decode_kind(cpu, bytes, count, K_L1D, output);
 	decode_kind(cpu, bytes, count, K_L2, output);
 	decode_kind(cpu, bytes, count, K_L3, output);
+	if (output && !use_leaf4)
+		print_cache_totals(cpu);
 	/* The cache descriptor 0xff means the CPU doesn't provide any
 	 * cache information in cpuid.2. It is instead provided in
 	 * cpuid.4.

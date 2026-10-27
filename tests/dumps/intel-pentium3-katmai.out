@@ -1,0 +1,24 @@
+Family: 6 Model: 7 Stepping: 3
+Type: 0 (Original OEM)
+	Brand: 2 (Intel® Pentium® III processor)
+CPU Model (x86info's best guess): Pentium III (Katmai) [kC0]
+
+Cache info
+ L1 Instruction cache: 16KB, 4-way associative. 32 byte line size.
+ L1 Data cache: 16KB, 4-way associative. 32 byte line size.
+ L2 cache: 512KB, 4-way associative. 32 byte line size.
+Total cache: L1 instruction 16KB, L1 data 16KB, L2 512KB
+TLB info
+ Instruction TLB: 4KB pages, 4-way associative, 32 entries
+ Instruction TLB: 4MB pages, fully associative, 2 entries
+ Data TLB: 4KB pages, 4-way associative, 64 entries
+ Data TLB: 4MB pages, 4-way associative, 8 entries
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 mmx fxsr sse
+
+Long NOPs supported: not recorded
+
+Connector type: Slot 1 (242 Contact Cartridge)
+
+Address sizes : 0 bits physical, 0 bits virtual
+This system has 1 socket, 1 core, 1 thread
