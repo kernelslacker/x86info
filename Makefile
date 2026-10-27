@@ -104,7 +104,7 @@ $(ASAN_BIN): $(X86INFO_HEADERS) $(wildcard *.c) $(wildcard vendors/*/*.c)
 	    -fno-sanitize-recover=undefined -fno-omit-frame-pointer $(LDFLAGS) \
 	    -o $@ $(wildcard *.c) $(wildcard vendors/*/*.c) $(LIBPCI)
 
-lsmsr: x86info
+lsmsr:
 	$(Q)$(MAKE) --no-print-directory -C lsmsr VERSION=$(VERSION)
 
 DEPDIR= .deps
