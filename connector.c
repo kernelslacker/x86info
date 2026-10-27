@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <x86info.h>
 
-static struct {
+static const struct {
 	enum connector id;
 	const char *name;
 } connector_strings[] = {

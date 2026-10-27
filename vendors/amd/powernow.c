@@ -86,7 +86,7 @@ static void decode_fidvid(struct cpudata *cpu)
 	}
 }
 
-static double k8_vid_table[32] = {
+static const double k8_vid_table[32] = {
 	1.550, 1.525, 1.500, 1.475, 1.450, 1.425, 1.400, 1.375,
 	1.350, 1.325, 1.300, 1.275, 1.250, 1.225, 1.200, 1.175,
 	1.150, 1.125, 1.100, 1.075, 1.050, 1.025, 1.000, 0.975,
