@@ -52,8 +52,8 @@ int decode_psb(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid,
 	       const char *rom, size_t len, unsigned long base)
 {
 	const char *p = rom, *end = rom + len;
-	const struct psb_s *psb;
-	const struct pst_s *pst;
+	struct psb_s psb;
+	struct pst_s pst;
 	unsigned int fid, vid;
 	int numpstates, j, t, matched = 0;
 
@@ -68,53 +68,53 @@ int decode_psb(struct cpudata *cpu, unsigned int maxfid, unsigned int startvid,
 		printf("PSB header runs past the end of the ROM\n");
 		return -1;
 	}
-	psb = (const struct psb_s *) p;
-	printf("Table version: 0x%x\n", (unsigned int) psb->tableversion);
-	if (psb->tableversion != 0x12) {
+	memcpy(&psb, p, sizeof(psb));
+	printf("Table version: 0x%x\n", (unsigned int) psb.tableversion);
+	if (psb.tableversion != 0x12) {
 		printf("Sorry, only v1.2 tables supported right now\n");
 		return -1;
 	}
 
-	printf("Flags: 0x%x ", (unsigned int) psb->flags);
-	if ((psb->flags & 1) == 0)
+	printf("Flags: 0x%x ", (unsigned int) psb.flags);
+	if ((psb.flags & 1) == 0)
 		printf("(Mobile voltage regulator)\n");
 	else
 		printf("(Desktop voltage regulator)\n");
 
-	printf("Settling Time: %d microseconds.\n", (int) psb->settlingtime);
+	printf("Settling Time: %d microseconds.\n", (int) psb.settlingtime);
 	printf("Has %d PST tables. (Only dumping ones relevant to this CPU).\n",
-		(int) psb->numpst);
+		(int) psb.numpst);
 
 	p += sizeof (struct psb_s);
 
-	for (t = 0 ; t < psb->numpst; t++) {
+	for (t = 0 ; t < psb.numpst; t++) {
 		if (end - p < (long) sizeof(struct pst_s)) {
 			printf("PST table runs past the end of the ROM\n");
 			return matched;
 		}
-		pst = (const struct pst_s *) p;
-		numpstates = pst->numpstates;
+		memcpy(&pst, p, sizeof(pst));
+		numpstates = pst.numpstates;
 		if (end - p - (long) sizeof(struct pst_s) < 2L * numpstates) {
 			printf("PST table runs past the end of the ROM\n");
 			return matched;
 		}
 
 		p += sizeof (struct pst_s);
-		if (tuple(cpu) == pst->cpuid && maxfid == pst->maxfid &&
-		    startvid == pst->startvid) {
+		if (tuple(cpu) == pst.cpuid && maxfid == pst.maxfid &&
+		    startvid == pst.startvid) {
 			matched++;
 			printf(" PST:%d (@0x%lx)\n", t, base +
-			       (unsigned long)((const char *)pst - rom));
-			printf("  cpuid: 0x%x\t", pst->cpuid);
-			printf("  fsb: %d\t", (int) pst->fsbspeed);
-			printf("  maxFID: 0x%x\t", (unsigned int) pst->maxfid);
-			printf("  startvid: 0x%x\n", (unsigned int) pst->startvid);
+			       (unsigned long)(p - sizeof(pst) - rom));
+			printf("  cpuid: 0x%x\t", pst.cpuid);
+			printf("  fsb: %d\t", (int) pst.fsbspeed);
+			printf("  maxFID: 0x%x\t", (unsigned int) pst.maxfid);
+			printf("  startvid: 0x%x\n", (unsigned int) pst.startvid);
 			printf("  num of p states in this table: %d\n", numpstates);
 
 			for (j = 0 ; j < numpstates; j++) {
 				fid = (unsigned char)p[2 * j] & 0x1f;
 				printf("    FID: 0x%x (%.1fx [%.0fMHz])\t", fid,
-					fid_codes[fid], pst->fsbspeed * fid_codes[fid]);
+					fid_codes[fid], pst.fsbspeed * fid_codes[fid]);
 
 				vid = (unsigned char)p[2 * j + 1] & 0x1f;
 				printf("VID: 0x%x (%0.3fV)\n", vid, mobile_vid_table[vid]);
