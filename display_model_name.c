@@ -14,6 +14,7 @@ void display_model_name(struct cpudata *cpu)
 	unsigned int i, j;
 	unsigned int eax, ebx, ecx, edx;
 	char namestring[49], *cp;
+	size_t len;
 
 	if (cpu->maxei < 0x80000004)
 		return;
@@ -44,5 +45,10 @@ void display_model_name(struct cpudata *cpu)
 		}
 	}
 
-	printf("Processor name string (BIOS programmed): %s\n", cp);
+	len = strlen(cp);
+	while (len > 0 && cp[len - 1] == ' ')
+		cp[--len] = '\0';
+
+	if (len > 0)
+		printf("Processor name string (BIOS programmed): %s\n", cp);
 }

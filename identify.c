@@ -129,6 +129,8 @@ void show_cache_info(struct cpudata *cpu)
 /* What identifies the CPU model, shared by every core type. */
 void show_header(struct cpudata *cpu)
 {
+	size_t len;
+
 	if ((cpu->efamily != 0) || (cpu->emodel != 0))
 		printf("Extended Family: %u Extended Model: %u ",
 			cpu->efamily, cpu->emodel);
@@ -136,7 +138,10 @@ void show_header(struct cpudata *cpu)
 	       cpu->family, model(cpu), cpu->stepping);
 	if (cpu->vendor == VENDOR_INTEL)
 		display_basic_intel_info(cpu);
-	printf("CPU Model (x86info's best guess): %s\n", cpu->name);
+	len = strlen(cpu->name);
+	while (len > 0 && cpu->name[len - 1] == ' ')
+		len--;
+	printf("CPU Model (x86info's best guess): %.*s\n", (int)len, cpu->name);
 	display_model_name(cpu);
 	if (cpu->vendor == VENDOR_AMD)
 		display_amd_package(cpu);

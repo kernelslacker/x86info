@@ -8,19 +8,21 @@
 #include <x86info.h>
 #include <amd.h>
 
-static void do_assoc(unsigned long assoc)
+/* Associativity as text; empty if the field says nothing. */
+typedef const char *(*assoc_fn_t)(unsigned long assoc, char *buf, size_t size);
+
+static const char *do_assoc(unsigned long assoc, char *buf, size_t size)
 {
 	switch (assoc & 0xff) {
 	case 0x0:
-		break;
+		return "";
 	case 0x1:
-		printf("Direct mapped. ");
-		break;
+		return "Direct mapped.";
 	case 0xff:
-		printf("Fully associative. ");
-		break;
+		return "Fully associative.";
 	default:
-		printf("%lu-way associative. ", assoc);
+		snprintf(buf, size, "%lu-way associative.", assoc);
+		return buf;
 	}
 }
 
@@ -30,41 +32,46 @@ static const unsigned char l2assoc_ways[16] = {
 	[0xb] = 48, [0xc] = 64, [0xd] = 96, [0xe] = 128,
 };
 
-static void do_l2assoc(unsigned long assoc)
+static const char *do_l2assoc(unsigned long assoc, char *buf, size_t size)
 {
 	switch (assoc) {
 	case 0x0:
-		printf("Disabled. ");
-		return;
+		return "Disabled.";
 	case 0x1:
-		printf("Direct mapped. ");
-		return;
+		return "Direct mapped.";
 	case 0xf:
-		printf("Fully associative. ");
-		return;
+		return "Fully associative.";
 	case 0x9:
-		printf("See CPUID 0x8000001D. ");
-		return;
+		return "See CPUID 0x8000001D.";
 	}
 
-	if (assoc < ARRAY_SIZE(l2assoc_ways) && l2assoc_ways[assoc])
-		printf("%u-way associative. ", l2assoc_ways[assoc]);
+	if (assoc < ARRAY_SIZE(l2assoc_ways) && l2assoc_ways[assoc]) {
+		snprintf(buf, size, "%u-way associative.", l2assoc_ways[assoc]);
+		return buf;
+	}
+	return "";
 }
 
-static void print_tlb(const char *label, void (*assoc_fn)(unsigned long),
+static void print_tlb(const char *label, assoc_fn_t assoc_fn,
 		      unsigned long assoc, unsigned int entries)
 {
-	printf("%-28s", label);
-	assoc_fn(assoc);
-	printf("%u entries.\n", entries);
+	char buf[32];
+	const char *text = assoc_fn(assoc, buf, sizeof(buf));
+
+	printf("%-28s%s%s%u entries.\n", label, text, *text ? " " : "",
+	       entries);
 }
 
 static void print_cache(const char *label, unsigned int size_kb,
-			void (*assoc_fn)(unsigned long), unsigned long assoc,
+			assoc_fn_t assoc_fn, unsigned long assoc,
 			unsigned int lines_per_tag, unsigned int line_size)
 {
-	printf("%s:\n\tSize: %uKB\t", label, size_kb);
-	assoc_fn(assoc);
+	char buf[32];
+	const char *text = assoc_fn(assoc, buf, sizeof(buf));
+
+	printf("%s:\n\tSize: %uKB", label, size_kb);
+	if (*text)
+		printf("\t%s", text);
 	printf("\n\tlines per tag=%u\tline size=%u bytes.\n",
 	       lines_per_tag, line_size);
 }

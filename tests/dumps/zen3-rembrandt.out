@@ -1,6 +1,6 @@
 Extended Family: 10 Extended Model: 4 Family: 15 Model: 68 Stepping: 1
 CPU Model (x86info's best guess): AMD Zen3/Zen3+/Zen4 Series Processor (Rembrandt)
-Processor name string (BIOS programmed): AMD Ryzen 7 7735HS with Radeon Graphics        
+Processor name string (BIOS programmed): AMD Ryzen 7 7735HS with Radeon Graphics
 The physical package has 16 of 16 possible threads implemented (8 cores).
 
 Monitor/Mwait: min/max line size 64/64, interrupt break event, enumeration extension
@@ -12,10 +12,10 @@ L1 Instruction TLB (2M/4M): Fully associative. 64 entries.
 L1 Data TLB (4K):           Fully associative. 64 entries.
 L1 Instruction TLB (4K):    Fully associative. 64 entries.
 L1 Data cache:
-	Size: 32KB	8-way associative. 
+	Size: 32KB	8-way associative.
 	lines per tag=1	line size=64 bytes.
 L1 Instruction cache:
-	Size: 32KB	8-way associative. 
+	Size: 32KB	8-way associative.
 	lines per tag=1	line size=64 bytes.
 L2 Data TLB (1G):           Fully associative. 64 entries.
 L2 Instruction TLB (1G):    Disabled. 0 entries.
@@ -24,10 +24,10 @@ L2 Instruction TLB (2M/4M): 2-way associative. 512 entries.
 L2 Data TLB (4K):           8-way associative. 2048 entries.
 L2 Instruction TLB (4K):    4-way associative. 512 entries.
 L2 cache:
-	Size: 512KB	8-way associative. 
+	Size: 512KB	8-way associative.
 	lines per tag=1	line size=64 bytes.
 L3 (shared) cache:
-	Size: 16384KB	See CPUID 0x8000001D. 
+	Size: 16384KB	See CPUID 0x8000001D.
 	lines per tag=1	line size=64 bytes.
 Caches (CPUID 0x8000001D):
 	L1 data: 32KB, 8-way, line size=64 bytes, shared by 2 threads

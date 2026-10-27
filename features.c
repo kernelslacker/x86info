@@ -12,22 +12,26 @@ static void flag_decode(unsigned long reg, const char * reg_desc, const char *fl
 	unsigned int i;
 
 	for (i = 0; i < 32; i++) {
-		if (reg & (1UL << i)) {
-			if (!opts.verbose) {
-			    if (flags[i])
-				    printf(" %s", flags[i]);
-			    else
-				    printf(" [%s:%u]", reg_desc, i);
-			} else {
-			    if (flags[i])
-				    printf(" %-8s", flags[i]);
-			    else
-				    printf(" [%s:%u]     ", reg_desc, i);
-			    if (flags_desc && flags_desc[i])
-				    printf("\t%s\n", flags_desc[i]);
-			    else
-				    printf("\n");
-			}
+		const char *desc = flags_desc ? flags_desc[i] : NULL;
+
+		if (!(reg & (1UL << i)))
+			continue;
+
+		if (!opts.verbose) {
+			if (flags[i])
+				printf(" %s", flags[i]);
+			else
+				printf(" [%s:%u]", reg_desc, i);
+		} else if (desc) {
+			if (flags[i])
+				printf(" %-8s\t%s\n", flags[i], desc);
+			else
+				printf(" [%s:%u]     \t%s\n", reg_desc, i, desc);
+		} else {
+			if (flags[i])
+				printf(" %s\n", flags[i]);
+			else
+				printf(" [%s:%u]\n", reg_desc, i);
 		}
 	}
 }

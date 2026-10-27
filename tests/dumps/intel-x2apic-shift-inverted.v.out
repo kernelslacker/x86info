@@ -2,7 +2,6 @@ Found 2 identical CPUs
 Extended Family: 0 Extended Model: 3 Family: 6 Model: 58 Stepping: 9
 Type: 0 (Original OEM)
 CPU Model (x86info's best guess): Core i7 3520M [IvyBridge]
-Processor name string (BIOS programmed): 
 
 This system has 1 socket, 1 core, 2 threads (2 threads per core)
 Extended topology (leaf 0xB):

@@ -2,7 +2,7 @@ Found 2 CPUs of 2 kinds.
 
 Extended Family: 11 Extended Model: 2 Family: 15 Model: 36 Stepping: 0
 CPU Model (x86info's best guess): AMD Zen5/Zen6 Series Processor (Strix Point/Gorgon Point)
-Processor name string (BIOS programmed): AMD Ryzen AI 9 HX 470 w/ Radeon 890M           
+Processor name string (BIOS programmed): AMD Ryzen AI 9 HX 470 w/ Radeon 890M
 The physical package has 24 of 32 possible threads implemented (12 cores).
 
 CPU #0 (1 in this group):
@@ -20,10 +20,10 @@ L1 Instruction TLB (2M/4M): Fully associative. 64 entries.
 L1 Data TLB (4K):           Fully associative. 96 entries.
 L1 Instruction TLB (4K):    Fully associative. 64 entries.
 L1 Data cache:
-	Size: 48KB	12-way associative. 
+	Size: 48KB	12-way associative.
 	lines per tag=1	line size=64 bytes.
 L1 Instruction cache:
-	Size: 32KB	8-way associative. 
+	Size: 32KB	8-way associative.
 	lines per tag=1	line size=64 bytes.
 L2 Data TLB (1G):           4-way associative. 32 entries.
 L2 Instruction TLB (1G):    Disabled. 0 entries.
@@ -32,10 +32,10 @@ L2 Instruction TLB (2M/4M): 2-way associative. 2048 entries.
 L2 Data TLB (4K):           8-way associative. 4096 entries.
 L2 Instruction TLB (4K):    4-way associative. 2048 entries.
 L2 cache:
-	Size: 1024KB	16-way associative. 
+	Size: 1024KB	16-way associative.
 	lines per tag=1	line size=64 bytes.
 L3 (shared) cache:
-	Size: 16384KB	See CPUID 0x8000001D. 
+	Size: 16384KB	See CPUID 0x8000001D.
 	lines per tag=1	line size=64 bytes.
 Caches (CPUID 0x8000001D):
 	L1 data: 48KB, 12-way, line size=64 bytes, shared by 2 threads
@@ -67,10 +67,10 @@ L1 Instruction TLB (2M/4M): Fully associative. 64 entries.
 L1 Data TLB (4K):           Fully associative. 96 entries.
 L1 Instruction TLB (4K):    Fully associative. 64 entries.
 L1 Data cache:
-	Size: 48KB	12-way associative. 
+	Size: 48KB	12-way associative.
 	lines per tag=1	line size=64 bytes.
 L1 Instruction cache:
-	Size: 32KB	8-way associative. 
+	Size: 32KB	8-way associative.
 	lines per tag=1	line size=64 bytes.
 L2 Data TLB (1G):           4-way associative. 32 entries.
 L2 Instruction TLB (1G):    Disabled. 0 entries.
@@ -79,10 +79,10 @@ L2 Instruction TLB (2M/4M): 2-way associative. 2048 entries.
 L2 Data TLB (4K):           8-way associative. 4096 entries.
 L2 Instruction TLB (4K):    4-way associative. 2048 entries.
 L2 cache:
-	Size: 1024KB	16-way associative. 
+	Size: 1024KB	16-way associative.
 	lines per tag=1	line size=64 bytes.
 L3 (shared) cache:
-	Size: 8192KB	See CPUID 0x8000001D. 
+	Size: 8192KB	See CPUID 0x8000001D.
 	lines per tag=1	line size=64 bytes.
 Caches (CPUID 0x8000001D):
 	L1 data: 48KB, 12-way, line size=64 bytes, shared by 2 threads

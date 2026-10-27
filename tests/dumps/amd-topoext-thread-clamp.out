@@ -1,7 +1,6 @@
 Found 2 identical CPUs
 Extended Family: 8 Extended Model: 0 Family: 15 Model: 1 Stepping: 2
 CPU Model (x86info's best guess): AMD Zen/Zen+/Zen2 Series Processor (Zeppelin)
-Processor name string (BIOS programmed): 
 The physical package has 2 of 2 possible threads implemented (0 cores).
 
 SVM: revision 0, 0 ASIDs
@@ -12,10 +11,10 @@ L1 Instruction TLB (2M/4M): 0 entries.
 L1 Data TLB (4K):           0 entries.
 L1 Instruction TLB (4K):    0 entries.
 L1 Data cache:
-	Size: 0KB	
+	Size: 0KB
 	lines per tag=0	line size=0 bytes.
 L1 Instruction cache:
-	Size: 0KB	
+	Size: 0KB
 	lines per tag=0	line size=0 bytes.
 L2 Data TLB (1G):           Disabled. 0 entries.
 L2 Instruction TLB (1G):    Disabled. 0 entries.
@@ -24,7 +23,7 @@ L2 Instruction TLB (2M/4M): Disabled. 0 entries.
 L2 Data TLB (4K):           Disabled. 0 entries.
 L2 Instruction TLB (4K):    Disabled. 0 entries.
 L2 cache:
-	Size: 0KB	Disabled. 
+	Size: 0KB	Disabled.
 	lines per tag=0	line size=0 bytes.
 L3 (shared) cache:
 	none/disabled

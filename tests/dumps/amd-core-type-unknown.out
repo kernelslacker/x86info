@@ -2,7 +2,6 @@ Found 2 CPUs of 2 kinds.
 
 Extended Family: 11 Extended Model: 2 Family: 15 Model: 36 Stepping: 0
 CPU Model (x86info's best guess): AMD Zen5/Zen6 Series Processor (Strix Point/Gorgon Point)
-Processor name string (BIOS programmed): 
 
 CPU #0 (1 in this group):
 Core type: Performance
@@ -15,10 +14,10 @@ L1 Instruction TLB (2M/4M): 0 entries.
 L1 Data TLB (4K):           0 entries.
 L1 Instruction TLB (4K):    0 entries.
 L1 Data cache:
-	Size: 0KB	
+	Size: 0KB
 	lines per tag=0	line size=0 bytes.
 L1 Instruction cache:
-	Size: 0KB	
+	Size: 0KB
 	lines per tag=0	line size=0 bytes.
 L2 Data TLB (1G):           Disabled. 0 entries.
 L2 Instruction TLB (1G):    Disabled. 0 entries.
@@ -27,7 +26,7 @@ L2 Instruction TLB (2M/4M): Disabled. 0 entries.
 L2 Data TLB (4K):           Disabled. 0 entries.
 L2 Instruction TLB (4K):    Disabled. 0 entries.
 L2 cache:
-	Size: 0KB	Disabled. 
+	Size: 0KB	Disabled.
 	lines per tag=0	line size=0 bytes.
 L3 (shared) cache:
 	none/disabled
@@ -53,10 +52,10 @@ L1 Instruction TLB (2M/4M): 0 entries.
 L1 Data TLB (4K):           0 entries.
 L1 Instruction TLB (4K):    0 entries.
 L1 Data cache:
-	Size: 0KB	
+	Size: 0KB
 	lines per tag=0	line size=0 bytes.
 L1 Instruction cache:
-	Size: 0KB	
+	Size: 0KB
 	lines per tag=0	line size=0 bytes.
 L2 Data TLB (1G):           Disabled. 0 entries.
 L2 Instruction TLB (1G):    Disabled. 0 entries.
@@ -65,7 +64,7 @@ L2 Instruction TLB (2M/4M): Disabled. 0 entries.
 L2 Data TLB (4K):           Disabled. 0 entries.
 L2 Instruction TLB (4K):    Disabled. 0 entries.
 L2 cache:
-	Size: 0KB	Disabled. 
+	Size: 0KB	Disabled.
 	lines per tag=0	line size=0 bytes.
 L3 (shared) cache:
 	none/disabled
