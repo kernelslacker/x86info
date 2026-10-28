@@ -1,0 +1,10 @@
+Found 2 identical CPUs
+Extended Family: 0 Extended Model: 3 Family: 6 Model: 55 Stepping: 8
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Atom [Silvermont]
+Processor name string (BIOS programmed): Intel(R) Celeron(R) CPU  J1800  @ 2.41GHz
+
+This system has 1 socket, 2 cores, 2 threads
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 1 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Core): 2 logical CPUs, x2APIC shift=4, x2APIC ID=0
