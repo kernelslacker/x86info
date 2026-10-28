@@ -1,6 +1,6 @@
 Found 2 identical CPUs
 Extended Family: 8 Extended Model: 0 Family: 15 Model: 1 Stepping: 2
 CPU Model (x86info's best guess): AMD Zen/Zen+/Zen2 Series Processor (Zeppelin)
-The physical package has 2 of 2 possible threads implemented (0 cores).
+The physical package has 2 of 2 possible threads implemented (1 core).
 
 This system has 1 socket, 1 core, 2 threads (2 threads per core)

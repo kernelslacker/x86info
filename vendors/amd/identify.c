@@ -655,11 +655,14 @@ void display_amd_package(struct cpudata *cpu)
 			printf("The physical package has %u of %u "
 			       "possible threads implemented", n, p);
 			if (cpu->maxei >= 0x8000001e) {
-				unsigned int tpc;
+				unsigned int tpc, cores;
 
 				cpuid(cpu->number, 0x8000001e, NULL, &ebx, NULL, NULL);
 				tpc = ((ebx >> 8) & 0xff) + 1;
-				printf(" (%u cores)", n / tpc);
+				if (tpc > n)
+					tpc = n;
+				cores = n / tpc;
+				printf(" (%u core%s)", cores, cores == 1 ? "" : "s");
 			}
 			printf(".\n");
 		} else if (p > 1) {
