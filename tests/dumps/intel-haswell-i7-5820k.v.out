@@ -1,0 +1,10 @@
+Found 12 identical CPUs
+Extended Family: 0 Extended Model: 3 Family: 6 Model: 63 Stepping: 2
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Core i7-5820K [Haswell-X]
+Processor name string (BIOS programmed): Intel(R) Core(TM) i7-5820K CPU @ 3.30GHz
+
+This system has 1 socket, 6 cores, 12 threads (2 threads per core)
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 2 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Core): 12 logical CPUs, x2APIC shift=4, x2APIC ID=0
