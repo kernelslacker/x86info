@@ -1,0 +1,10 @@
+Found 4 identical CPUs
+Extended Family: 0 Extended Model: 3 Family: 6 Model: 60 Stepping: 3
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Xeon E3 [Haswell]
+Processor name string (BIOS programmed): Intel(R) Xeon(R) CPU E3-1225 v3 @ 3.20GHz
+
+This system has 1 socket, 4 cores, 4 threads
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 1 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Core): 4 logical CPUs, x2APIC shift=4, x2APIC ID=0
