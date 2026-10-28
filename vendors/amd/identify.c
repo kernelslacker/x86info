@@ -643,7 +643,8 @@ void display_amd_package(struct cpudata *cpu)
 		unsigned int n, p;
 		cpuid (cpu->number, 0x80000008, NULL, NULL, &ecx, NULL);
 		p = (ecx >> 12) & 0xf;
-		n = (ecx & 0xff) + 1;
+		/* Above 256 threads NC continues into bits 11:8 */
+		n = (ecx & 0xfff) + 1;
 		if (p)
 			p = 1u << p;
 		else

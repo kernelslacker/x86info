@@ -173,7 +173,8 @@ static int get_amd_topology(struct cpudata *cpu)
 		return 0;
 
 	cpuid(cpu->number, 0x80000008, NULL, NULL, &ecx, NULL);
-	nthreads = (ecx & 0xff) + 1;
+	/* Above 256 threads NC continues into bits 11:8 */
+	nthreads = (ecx & 0xfff) + 1;
 	bits = (ecx >> 12) & 0xf;
 	if (!bits)
 		bits = get_count_order(nthreads);
