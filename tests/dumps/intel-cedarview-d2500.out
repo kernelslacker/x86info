@@ -1,0 +1,26 @@
+Found 2 identical CPUs
+Extended Family: 0 Extended Model: 3 Family: 6 Model: 54 Stepping: 1
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Atom [Cedarview]
+Processor name string (BIOS programmed): Intel(R) Atom(TM) CPU D2500   @ 1.86GHz
+
+Cache info
+ L1 Instruction cache: 32KB, 8-way associative. 64 byte line size.
+ L1 Data cache: 24KB, 6-way associative. 64 byte line size. ECC.
+ L2 cache: 512KB, 8-way associative. 64 byte line size.
+Total cache: L1 instruction 32KB, L1 data 24KB, L2 512KB
+TLB info
+ Instruction TLB: 4KB pages, 32 entries
+ Data TLB0: 4KB pages, fully associative, 16 entries
+ Data TLB1: 4KB pages, 4-way associative, 64 entries
+ Data TLB: 4KB or 4MB pages, 4-way associative, 8 entries
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh ds acpi mmx fxsr sse sse2 ss ht tm pbe sse3 dtes64 monitor ds-cpl tm2 ssse3 cx16 xTPR pdcm movbe
+Extended feature flags:
+ syscall nx lm lahf_lm
+Additional feature flags:
+ dts arat nonstop_tsc
+Long NOPs supported: not recorded
+
+Address sizes : 36 bits physical, 48 bits virtual
+This system has 1 socket, 2 cores, 2 threads
