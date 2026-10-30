@@ -76,15 +76,17 @@ check: $(CHECK_BIN) $(UNIT_TESTS:%=tests/build/test-%)
 	@tests/run-tests.sh $(CHECK_BIN)
 
 # Record this machine's CPUID leaves, one section per CPU, as
-# tests/dumps/$(NAME).dump. Check the output of the replay build, then
+# tests/dumps/$(VENDOR)/$(NAME).dump. Check the replay build's output, then
 # create the golden with UPDATE=1 tests/run-tests.sh $(CHECK_BIN).
+RECORD_DUMP = tests/dumps/$(VENDOR)/$(NAME)
 record: x86info
-	@test -n "$(NAME)" || { echo "usage: make record NAME=<dump name>"; exit 1; }
-	@test ! -e tests/dumps/$(NAME).dump || { echo "tests/dumps/$(NAME).dump exists"; exit 1; }
-	@./x86info -r --all-cpus > tests/dumps/$(NAME).raw || { rm -f tests/dumps/$(NAME).raw; exit 1; }
-	@grep -E '^(CPU #[0-9]+:|eax in:)' tests/dumps/$(NAME).raw > tests/dumps/$(NAME).dump; \
-	 rm -f tests/dumps/$(NAME).raw; \
-	 echo "recorded tests/dumps/$(NAME).dump: $$(grep -c '^CPU #' tests/dumps/$(NAME).dump) CPUs"
+	@test -n "$(VENDOR)" -a -n "$(NAME)" || { echo "usage: make record VENDOR=<vendor> NAME=<dump name>"; exit 1; }
+	@test ! -e $(RECORD_DUMP).dump || { echo "$(RECORD_DUMP).dump exists"; exit 1; }
+	@mkdir -p tests/dumps/$(VENDOR)
+	@./x86info -r --all-cpus > $(RECORD_DUMP).raw || { rm -f $(RECORD_DUMP).raw; exit 1; }
+	@grep -E '^(CPU #[0-9]+:|eax in:)' $(RECORD_DUMP).raw > $(RECORD_DUMP).dump; \
+	 rm -f $(RECORD_DUMP).raw; \
+	 echo "recorded $(RECORD_DUMP).dump: $$(grep -c '^CPU #' $(RECORD_DUMP).dump) CPUs"
 
 $(CHECK_BIN): $(X86INFO_HEADERS) $(wildcard *.c) $(wildcard vendors/*/*.c)
 	@mkdir -p tests/build

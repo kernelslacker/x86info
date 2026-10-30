@@ -10,17 +10,18 @@ Plain C, plain Makefile (`flags.mk` holds the shared warning flags; the build is
 - libpci is optional (found via pkg-config, used for AMD `--pm`); `make LIBPCI=` builds without it.
 - `make check` runs everything: unit tests (`tests/test-{psb,opts,mptable,cpulist}.c`), `tests/test-runner.sh` (tests the golden runner itself), then the golden tests.
 - `make check-asan` repeats the unit tests and goldens under ASan/UBSan.
-- No single-test target. For one unit test: `make tests/build/test-opts && tests/build/test-opts`. For one golden: copy the loop body in `tests/run-tests.sh`, i.e. `X86INFO_CPUID_DUMP=tests/dumps/<name>.dump tests/build/x86info -c -f --addr --bugs --connector | tail -n +2 | diff tests/dumps/<name>.out -` (`-v` and `<name>.v.out` for the verbose golden).
+- No single-test target. For one unit test: `make tests/build/test-opts && tests/build/test-opts`. For one golden: copy the loop body in `tests/run-tests.sh`, i.e. `X86INFO_CPUID_DUMP=tests/dumps/<vendor>/<name>.dump tests/build/x86info -c -f --addr --bugs --connector | tail -n +2 | diff tests/dumps/<vendor>/<name>.out -` (`-v` and `<name>.v.out` for the verbose golden).
 - `make clean` removes `tests/build*`, `.deps`, objects.
 
 ## Golden tests (the main regression suite)
 
 `make check` builds a second binary, `tests/build/x86info`, with `-DCPUID_REPLAY`. That swaps the live CPUID/MSR backends (`cpuid-linux.c`, `cpudev-linux.c`, `rdmsr-linux.c`, `host.c`) for `cpuid-replay.c`, which reads the dump named by `$X86INFO_CPUID_DUMP`.
 
-Each `tests/dumps/<name>.dump` has `<name>.out` (default options) and `<name>.v.out` (`-v`) goldens; the runner also checks that `-r --all-cpus` output replays to an identical dump, and that verbose output has no trailing whitespace. The first line (version) is stripped before diffing.
+Each `tests/dumps/<vendor>/<name>.dump` has `<name>.out` (default options) and `<name>.v.out` (`-v`) goldens; the runner also checks that `-r --all-cpus` output replays to an identical dump, and that verbose output has no trailing whitespace. The first line (version) is stripped before diffing.
 
 - Regenerate goldens: `UPDATE=1 tests/run-tests.sh tests/build/x86info`, then check `git status` shows only the intended files changed, and review the diff.
-- Add a machine: on the target host run `x86info -r --all-cpus` as root (needs the `cpuid` module, `modprobe cpuid`) and keep only the `CPU #n:` / `eax in:` lines (that is what `make record NAME=<name>` does), save as `tests/dumps/<name>.dump`, then generate goldens as above. Sanity-check the output against the real CPU before committing; the live `-v` output should match the replay golden.
+- Add a machine: on the target host run `x86info -r --all-cpus` as root (needs the `cpuid` module, `modprobe cpuid`) and keep only the `CPU #n:` / `eax in:` lines (that is what `make record VENDOR=<vendor> NAME=<name>` does), save as `tests/dumps/<vendor>/<name>.dump`, then generate goldens as above. Sanity-check the output against the real CPU before committing; the live `-v` output should match the replay golden.
+- Dumps are grouped under `tests/dumps/<vendor>/` (`amd`, `intel`, etc.); AMD Zen fixtures also live under `amd/`. Keep each dump and both goldens together.
 - Dump names are `<vendor>-<uarch>-<part>` (e.g. `intel-silvermont-j1800`) or `zen5-...` for AMD synthetic cases.
 
 ## Architecture
