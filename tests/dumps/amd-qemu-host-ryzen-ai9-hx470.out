@@ -1,0 +1,47 @@
+Extended Family: 11 Extended Model: 2 Family: 15 Model: 36 Stepping: 0
+CPU Model (x86info's best guess): AMD Zen5/Zen6 Series Processor (Strix Point/Gorgon Point)
+Processor name string (BIOS programmed): AMD Ryzen AI 9 HX 470 w/ Radeon 890M
+
+Monitor/Mwait: min/max line size 0/0, interrupt break event, enumeration extension
+SVM: revision 1, 16 ASIDs, np, lbrVirt, NRIPSave, TscRateMsr, VmcbClean, FlushByAsid, PauseFilter, PauseFilterThreshold, V_VMSAVE_VMLOAD, vGIF, VNMI, SvmeAddrChk
+PerfMonV2: 6 core, 0 northbridge, 0 UMC counters, LBR stack 0 entries, active UMCs 0
+L1 Data TLB (1G):           Disabled. 0 entries.
+L1 Instruction TLB (1G):    Disabled. 0 entries.
+L1 Data TLB (2M/4M):        Direct mapped. 255 entries.
+L1 Instruction TLB (2M/4M): Direct mapped. 255 entries.
+L1 Data TLB (4K):           Direct mapped. 255 entries.
+L1 Instruction TLB (4K):    Direct mapped. 255 entries.
+L1 Data cache:
+	Size: 64KB	2-way associative.
+	lines per tag=1	line size=64 bytes.
+L1 Instruction cache:
+	Size: 64KB	2-way associative.
+	lines per tag=1	line size=64 bytes.
+L2 Data TLB (1G):           Disabled. 0 entries.
+L2 Instruction TLB (1G):    Disabled. 0 entries.
+L2 Data TLB (2M/4M):        Disabled. 0 entries.
+L2 Instruction TLB (2M/4M): Disabled. 0 entries.
+L2 Data TLB (4K):           4-way associative. 512 entries.
+L2 Instruction TLB (4K):    4-way associative. 512 entries.
+L2 cache:
+	Size: 512KB	16-way associative.
+	lines per tag=1	line size=64 bytes.
+L3 (shared) cache:
+	Size: 16384KB	16-way associative.
+	lines per tag=1	line size=64 bytes.
+Caches (CPUID 0x8000001D):
+	L1 data: 64KB, 2-way, line size=64 bytes, shared by 1 threads
+	L1 instruction: 64KB, 2-way, line size=64 bytes, shared by 1 threads
+	L2 unified: 512KB, 16-way, line size=64 bytes, shared by 1 threads
+	L3 unified: 16384KB, 16-way, line size=64 bytes, shared by 1 threads
+
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh mmx fxsr sse sse2 sse3 pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt tsc-deadline aes xsave avx f16c rdrnd [1:ecx:31]
+Extended feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic syscall mtrr pge mca cmov pat pse36 nx mmxext mmx fxsr ffxsr page1gb rdtscp lm lahf_lm CmpLegacy svm LockMovCr0 abm sse4a misalignsse 3dnowprefetch osvw PerfCtrExtCore
+Additional feature flags:
+ arat fsgsbase tsc_adj bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha avx512bw avx512vl avx512vbmi umip pku avx512vbmi2 gfni vaes vpclmulqdq avx512vnni avx512bitalg avx512vpopcntdq rdpid movdiri movdir64b fsrm avx512vp2intersect ibrs_ibpb stibp l1d_flush arch_capabilities ssbd avx_vnni avx512_bf16 xsaveopt xsavec xgetbv1 xsaves overflow_recov succor clzero xsaveerptr wbnoinvd ibpb ibrs stibp stibp_always_on amd_ssbd virt_ssbd amd_psfd no_nested_data_bp lfence_serializing null_sel_clr_base auto_ibrs eraps sbpb ibpb_brtype srso_user_kernel_no perfmon_v2
+Long NOPs supported: not recorded
+
+Address sizes : 48 bits physical, 48 bits virtual
+This system has 1 socket, 1 core, 1 thread

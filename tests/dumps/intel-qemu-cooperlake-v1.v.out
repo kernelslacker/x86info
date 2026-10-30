@@ -1,0 +1,9 @@
+Extended Family: 0 Extended Model: 5 Family: 6 Model: 85 Stepping: 10
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Core i7 (Skylake-X)
+Processor name string (BIOS programmed): Intel Xeon Processor (Cooperlake)
+
+This system has 1 socket, 1 core, 1 thread
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 1 logical CPUs, x2APIC shift=0, x2APIC ID=0
+  Level 1 (Core): 1 logical CPUs, x2APIC shift=0, x2APIC ID=0

@@ -1,0 +1,21 @@
+Family: 7 Model: 11 Stepping: 3
+CPU Model (x86info's best guess): Unknown Zhaoxin CPU
+Processor name string (BIOS programmed): Zhaoxin YongFeng Processor
+
+Cache info
+ L1 Instruction cache: 64KB, 2-way associative, 1 lines per tag, line size=64 bytes.
+ L1 Data cache: 64KB 2-way associative, 1 lines per tag, line size=64 bytes.
+ L2 (on CPU) cache: 512KB 8-way associative, 1 lines per tag, line size=64 bytes.
+TLB info
+ Instruction TLB: 1-way associative. 255 entries.
+ Data TLB: 1-way associative. 255 entries.
+Feature flags:
+ fpu de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh acpi mmx fxsr sse sse2 ss
+Extended feature flags:
+ sse3 [1:ecx:1] [1:ecx:3] [1:ecx:9] [1:ecx:12] [1:ecx:13] [1:ecx:19] [1:ecx:20] [1:ecx:21] [1:ecx:22] [1:ecx:23] [1:ecx:25] [1:ecx:26] [1:ecx:28] [1:ecx:29] [1:ecx:30] [1:ecx:31] [80000001:edx:11] [80000001:edx:20] [80000001:edx:26] [80000001:edx:27] [80000001:edx:29]
+Additional feature flags:
+ fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap sha umip pku rdpid xsaveopt
+Long NOPs supported: not recorded
+
+Address sizes : 40 bits physical, 48 bits virtual
+This system has 1 socket, 1 core, 1 thread

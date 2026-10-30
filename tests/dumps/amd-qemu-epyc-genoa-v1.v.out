@@ -1,0 +1,8 @@
+Extended Family: 10 Extended Model: 1 Family: 15 Model: 17 Stepping: 0
+CPU Model (x86info's best guess): AMD Zen3/Zen3+/Zen4 Series Processor (Genoa)
+Processor name string (BIOS programmed): AMD EPYC-Genoa Processor
+
+This system has 1 socket, 1 core, 1 thread
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 1 logical CPUs, x2APIC shift=0, x2APIC ID=0
+  Level 1 (Core): 1 logical CPUs, x2APIC shift=0, x2APIC ID=0

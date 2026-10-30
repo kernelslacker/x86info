@@ -1,0 +1,43 @@
+Extended Family: 6 Extended Model: 0 Family: 15 Model: 1 Stepping: 2
+CPU Model (x86info's best guess): AMD FX Series Processor (OR-B2)
+Processor name string (BIOS programmed): AMD Opteron 62xx class CPU
+
+Monitor/Mwait: min/max line size 0/0, interrupt break event, enumeration extension
+SVM: revision 1, 16 ASIDs, np
+L1 Data TLB (1G):           Disabled. 0 entries.
+L1 Instruction TLB (1G):    Disabled. 0 entries.
+L1 Data TLB (2M/4M):        Direct mapped. 255 entries.
+L1 Instruction TLB (2M/4M): Direct mapped. 255 entries.
+L1 Data TLB (4K):           Direct mapped. 255 entries.
+L1 Instruction TLB (4K):    Direct mapped. 255 entries.
+L1 Data cache:
+	Size: 64KB	2-way associative.
+	lines per tag=1	line size=64 bytes.
+L1 Instruction cache:
+	Size: 64KB	2-way associative.
+	lines per tag=1	line size=64 bytes.
+L2 Data TLB (1G):           Disabled. 0 entries.
+L2 Instruction TLB (1G):    Disabled. 0 entries.
+L2 Data TLB (2M/4M):        Disabled. 0 entries.
+L2 Instruction TLB (2M/4M): Disabled. 0 entries.
+L2 Data TLB (4K):           4-way associative. 512 entries.
+L2 Instruction TLB (4K):    4-way associative. 512 entries.
+L2 cache:
+	Size: 512KB	16-way associative.
+	lines per tag=1	line size=64 bytes.
+L3 (shared) cache:
+	Size: 16384KB	16-way associative.
+	lines per tag=1	line size=64 bytes.
+
+Feature flags:
+ fpu de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh mmx fxsr sse sse2 sse3 pclmulqdq ssse3 cx16 sse4_1 sse4_2 popcnt aes xsave avx [1:ecx:31]
+Extended feature flags:
+ fpu de pse tsc msr pae mce cx8 apic syscall mtrr pge mca cmov pat pse36 nx mmx fxsr page1gb rdtscp lm lahf_lm svm abm sse4a 3dnowprefetch
+Additional feature flags:
+
+Long NOPs supported: not recorded
+
+Connector type: Socket Fr2 (1207)
+
+Address sizes : 40 bits physical, 48 bits virtual
+This system has 1 socket, 1 core, 1 thread

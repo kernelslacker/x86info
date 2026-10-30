@@ -25,7 +25,7 @@ QUIET_CC = $(Q:@=@echo    '  CC '$@;)
 
 all: x86info lsmsr
 
-.PHONY: lsmsr check check-asan record clean tarball sparse cscope scan tags coverity
+.PHONY: lsmsr check check-asan check-qemu record clean tarball sparse cscope scan tags coverity
 
 X86INFO_HEADERS = \
 	$(wildcard *.h) \
@@ -93,6 +93,21 @@ $(CHECK_BIN): $(X86INFO_HEADERS) $(wildcard *.c) $(wildcard vendors/*/*.c)
 
 # The unit tests and goldens again, built with ASan and UBSan.
 ASAN_BIN = tests/build-asan/x86info
+
+# Optional integration sweep; uses software emulation and needs no guest OS.
+QEMU ?= qemu-system-x86_64
+check-qemu: $(CHECK_BIN) $(ASAN_BIN) tests/build/qemu-rom.bin
+	@python3 tests/qemu/run.py --qemu $(QEMU)
+
+tests/build/qemu-rom.elf: tests/qemu/boot.S tests/qemu/collect.c tests/qemu/rom.ld
+	@mkdir -p tests/build
+	$(QUIET_CC)$(CC) -m32 -march=i486 -Os -Wall -Wextra -ffreestanding \
+	    -fno-pie -fno-stack-protector -nostdlib -no-pie \
+	    -Wl,-m,elf_i386 -Wl,-T,tests/qemu/rom.ld -Wl,--build-id=none \
+	    -o $@ tests/qemu/boot.S tests/qemu/collect.c
+
+tests/build/qemu-rom.bin: tests/build/qemu-rom.elf
+	objcopy -O binary $< $@
 
 check-asan: $(ASAN_BIN) $(UNIT_TESTS:%=tests/build-asan/test-%)
 	@tests/build-asan/test-psb > /dev/null

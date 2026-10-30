@@ -1,0 +1,36 @@
+Family: 6 Model: 6 Stepping: 3
+CPU Model (x86info's best guess): Athlon XP (Palomino)
+Processor name string (BIOS programmed): QEMU TCG CPU version 2.5+
+
+Monitor/Mwait: min/max line size 0/0, interrupt break event, enumeration extension
+SVM: revision 1, 16 ASIDs, np, vGIF, SvmeAddrChk
+L1 Data TLB (2M/4M):        Direct mapped. 255 entries.
+L1 Instruction TLB (2M/4M): Direct mapped. 255 entries.
+L1 Data TLB (4K):           Direct mapped. 255 entries.
+L1 Instruction TLB (4K):    Direct mapped. 255 entries.
+L1 Data cache:
+	Size: 64KB	2-way associative.
+	lines per tag=1	line size=64 bytes.
+L1 Instruction cache:
+	Size: 64KB	2-way associative.
+	lines per tag=1	line size=64 bytes.
+L2 Data TLB (2M/4M):        Disabled. 0 entries.
+L2 Instruction TLB (2M/4M): Disabled. 0 entries.
+L2 Data TLB (4K):           4-way associative. 512 entries.
+L2 Instruction TLB (4K):    4-way associative. 512 entries.
+L2 cache:
+	Size: 512KB	16-way associative.
+	lines per tag=1	line size=64 bytes.
+
+Feature flags:
+ fpu de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh acpi mmx fxsr sse sse2 ss sse3 pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrnd [1:ecx:31]
+Extended feature flags:
+ fpu de pse tsc msr pae mce cx8 apic syscall mtrr pge mca cmov pat pse36 nx mmxext mmx fxsr page1gb rdtscp lm 3dnowext 3dnow lahf_lm CmpLegacy svm LockMovCr0 abm sse4a 3dnowprefetch
+Additional feature flags:
+ arat fsgsbase bmi1 avx2 smep bmi2 erms mpx rdseed adx smap clflushopt clwb sha umip pku vaes la57 rdpid pks fsrm cmpccxadd fzrm fsrs fsrc xsaveopt xgetbv1 xsaveerptr wbnoinvd
+Long NOPs supported: not recorded
+
+Connector type: Socket A (462 Pin PGA)
+
+Address sizes : 40 bits physical, 57 bits virtual
+This system has 1 socket, 1 core, 1 thread

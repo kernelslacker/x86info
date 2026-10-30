@@ -1,0 +1,22 @@
+Family: 6 Model: 6 Stepping: 3
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Celeron / Mobile Pentium II
+Processor name string (BIOS programmed): QEMU Virtual CPU version 2.5+
+
+Cache info
+ L1 Instruction cache: 32KB, 8-way associative. 64 byte line size.
+ L1 Data cache: 32KB, 8-way associative. 64 byte line size.
+ L2 cache: 2MB, 8-way associative. 64 byte line size.
+ L3 cache: 16MB, 16-way associative. 64 byte line size.
+Total cache: L1 instruction 32KB, L1 data 32KB, L2 2048KB, L3 16384KB
+TLB info
+Feature flags:
+ fpu de pse tsc msr pae mce cx8 apic sep pge cmov pat mmx fxsr sse sse2 sse3 [1:ecx:31]
+Extended feature flags:
+
+Long NOPs supported: not recorded
+
+Connector type: Socket 370  (370 Pin PGA)
+
+Address sizes : 0 bits physical, 0 bits virtual
+This system has 1 socket, 1 core, 1 thread
