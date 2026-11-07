@@ -23,7 +23,7 @@ static int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 	static int reported_module;
 	char path[48];
 	struct stat st;
-	int fh;
+	int fh, err;
 
 	if (cpu >= MAX_CPUS)
 		return -1;
@@ -39,16 +39,18 @@ static int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 		return fh;
 	}
 
-	if (errno == EMFILE || errno == ENFILE)
+	err = errno;
+	if (err == EMFILE || err == ENFILE)
 		return -1;
 
 	fds[cpu] = CPUDEV_FAILED;
-	if (errno == ENOENT && stat("/dev/cpu", &st) != 0) {
+	if (err == ENOENT && stat("/dev/cpu", &st) != 0) {
 		if (!reported_module)
 			fprintf(stderr, "%s: %s. Try 'modprobe %s'.\n", path,
 				strerror(errno), node);
 		reported_module = 1;
-	} else if (errno != EACCES && errno != EPERM) {
+	} else if (err != EACCES && err != EPERM) {
+		errno = err;
 		perror(path);
 	}
 	return -1;
