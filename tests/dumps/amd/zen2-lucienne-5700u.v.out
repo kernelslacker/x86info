@@ -1,0 +1,10 @@
+Found 16 identical CPUs
+Extended Family: 8 Extended Model: 6 Family: 15 Model: 104 Stepping: 1
+CPU Model (x86info's best guess): AMD Zen/Zen+/Zen2 Series Processor (Renoir)
+Processor name string (BIOS programmed): AMD Ryzen 7 5700U with Radeon Graphics
+The physical package has 16 of 128 possible threads implemented (8 cores).
+
+This system has 1 socket, 8 cores, 16 threads (2 threads per core)
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 2 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Core): 16 logical CPUs, x2APIC shift=7, x2APIC ID=0

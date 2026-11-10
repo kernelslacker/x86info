@@ -1,0 +1,49 @@
+Found 16 identical CPUs
+Extended Family: 8 Extended Model: 6 Family: 15 Model: 104 Stepping: 1
+CPU Model (x86info's best guess): AMD Zen/Zen+/Zen2 Series Processor (Renoir)
+Processor name string (BIOS programmed): AMD Ryzen 7 5700U with Radeon Graphics
+The physical package has 16 of 128 possible threads implemented (8 cores).
+
+Monitor/Mwait: min/max line size 64/64, interrupt break event, enumeration extension
+SVM: revision 1, 32768 ASIDs, np, lbrVirt, SVMLock, NRIPSave, TscRateMsr, VmcbClean, FlushByAsid, DecodeAssists, PauseFilter, PauseFilterThreshold, AVIC, V_VMSAVE_VMLOAD, vGIF, GMET, SpecCtrl
+Memory encryption: C-bit 47, 4 bits of physical address reduction, 0 VMPLs, 14 guests, min SEV ASID 1
+L1 Data TLB (1G):           Fully associative. 64 entries.
+L1 Instruction TLB (1G):    Fully associative. 64 entries.
+L1 Data TLB (2M/4M):        Fully associative. 64 entries.
+L1 Instruction TLB (2M/4M): Fully associative. 64 entries.
+L1 Data TLB (4K):           Fully associative. 64 entries.
+L1 Instruction TLB (4K):    Fully associative. 64 entries.
+L1 Data cache:
+	Size: 32KB	8-way associative.
+	lines per tag=1	line size=64 bytes.
+L1 Instruction cache:
+	Size: 32KB	8-way associative.
+	lines per tag=1	line size=64 bytes.
+L2 Data TLB (1G):           Disabled. 0 entries.
+L2 Instruction TLB (1G):    Disabled. 0 entries.
+L2 Data TLB (2M/4M):        4-way associative. 2048 entries.
+L2 Instruction TLB (2M/4M): 8-way associative. 1024 entries.
+L2 Data TLB (4K):           8-way associative. 2048 entries.
+L2 Instruction TLB (4K):    8-way associative. 1024 entries.
+L2 cache:
+	Size: 512KB	8-way associative.
+	lines per tag=1	line size=64 bytes.
+L3 (shared) cache:
+	Size: 8192KB	See CPUID 0x8000001D.
+	lines per tag=1	line size=64 bytes.
+Caches (CPUID 0x8000001D):
+	L1 data: 32KB, 8-way, line size=64 bytes, shared by 2 threads
+	L1 instruction: 32KB, 8-way, line size=64 bytes, shared by 2 threads
+	L2 unified: 512KB, 8-way, line size=64 bytes, shared by 2 threads
+	L3 unified: 4096KB, 16-way, line size=64 bytes, shared by 8 threads
+
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh mmx fxsr sse sse2 ht sse3 pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrnd
+Extended feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic syscall mtrr pge mca cmov pat pse36 mmxext mmx fxsr ffxsr page1gb rdtscp lm lahf_lm CmpLegacy svm ExtApicSpace LockMovCr0 abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce TopoExt PerfCtrExtCore PerfCtrExtNB DataBPExt PerfCtrExtLLC MwaitExtended AdMskExtn
+Additional feature flags:
+ arat fsgsbase bmi1 avx2 smep bmi2 pqm pqe rdseed adx smap clflushopt clwb sha umip rdpid xsaveopt xsavec xgetbv1 xsaves ts ttp tm hwpstate nonstop_tsc cpb eff_freq_ro connected_standby rapl overflow_recov succor smca [80000007:ebx:4] clzero irperf xsaveerptr rdpru mba mcommit wbnoinvd [80000008:ebx:10] ibpb wbinvd_int ibrs stibp ibrs_fast ibrs_same_mode amd_ssbd cppc sme sev vm_page_flush sev_es virt_transparent_enc mba
+Long NOPs supported: not recorded
+
+Address sizes : 48 bits physical, 48 bits virtual
+This system has 1 socket, 8 cores, 16 threads (2 threads per core)
