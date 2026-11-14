@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
-#include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
 #include <x86info.h>
@@ -20,9 +19,9 @@
  */
 static int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 {
-	static int reported_module;
+	static unsigned int reported;
+	unsigned int bit = strcmp(node, "msr") == 0 ? 2 : 1;
 	char path[48];
-	struct stat st;
 	int fh, err;
 
 	if (cpu >= MAX_CPUS)
@@ -44,11 +43,11 @@ static int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 		return -1;
 
 	fds[cpu] = CPUDEV_FAILED;
-	if (err == ENOENT && stat("/dev/cpu", &st) != 0) {
-		if (!reported_module)
+	if (err == ENOENT) {
+		if (!(reported & bit))
 			fprintf(stderr, "%s: %s. Try 'modprobe %s'.\n", path,
-				strerror(errno), node);
-		reported_module = 1;
+				strerror(err), node);
+		reported |= bit;
 	} else if (err != EACCES && err != EPERM) {
 		errno = err;
 		perror(path);

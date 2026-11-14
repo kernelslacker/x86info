@@ -5,14 +5,6 @@ from reading the code only; confirm them before fixing.
 
 ## 🔴 Correctness
 
-A2. `cpudev-linux.c:101,125` — the "Try 'modprobe'" hint only fires when
-    `/dev/cpu` itself is missing, and `reported_module` is one flag for
-    both nodes. With `msr` loaded but `cpuid` not, root gets one
-    `perror()` line per CPU and no hint; a missing `msr` after a reported
-    `cpuid` is never hinted. Unverified on a live machine. (sonnet)
-    - On `ENOENT`, print the hint once per node name.
-    - Drop the per-CPU `perror()` for `ENOENT`.
-
 A3. `x86info.c:147` — `fill_in_cpu_info()` fails the CPU when
     `bind_cpu()` fails, although `/dev/cpu/N/cpuid` does not need the
     bind. Under a restricted cpuset or `taskset`, root loses every CPU
