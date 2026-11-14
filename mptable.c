@@ -295,7 +295,8 @@ static int scan_for_mp(struct mp_scan *mp, const char *what,
 }
 
 /*
- * set PHYSICAL address of MP floating pointer structure
+ * set PHYSICAL address of MP floating pointer structure;
+ * returns 1 if it was found, 0 if not
  */
 static int apic_probe(struct mp_scan *mp, unsigned long* paddr)
 {
@@ -318,7 +319,7 @@ static int apic_probe(struct mp_scan *mp, unsigned long* paddr)
 			printf("EBDA segment ptr: %lx\n", target);
 		ret = scan_for_mp(mp, "1K at the EBDA", target, ONE_KBYTE, paddr);
 		if (ret)
-			return ret < 0 ? 0 : 1;
+			return ret > 0;
 	}
 
 	/* read CMOS for real top of mem */
@@ -333,7 +334,7 @@ static int apic_probe(struct mp_scan *mp, unsigned long* paddr)
 		target = segment * 1024;
 		ret = scan_for_mp(mp, "1KB at the top of base memory", target, ONE_KBYTE, paddr);
 		if (ret)
-			return ret < 0 ? 0 : 2;
+			return ret > 0;
 	}
 
 	/* we don't necessarily believe CMOS, check base of the last 1K of 640K */
@@ -341,27 +342,27 @@ static int apic_probe(struct mp_scan *mp, unsigned long* paddr)
 		ret = scan_for_mp(mp, "DEFAULT_TOPOFMEM - 1024",
 				  DEFAULT_TOPOFMEM - 1024, ONE_KBYTE, paddr);
 		if (ret)
-			return ret < 0 ? 0 : 3;
+			return ret > 0;
 	}
 
 	/* search the BIOS */
 	ret = scan_for_mp(mp, "BIOS_BASE",BIOS_BASE, BIOS_SIZE, paddr);
 	if (ret)
-		return ret < 0 ? 0 : 4;
+		return ret > 0;
 
 	/* search the extended BIOS */
 	ret = scan_for_mp(mp, "BIOS_BASE2",BIOS_BASE2, BIOS_SIZE, paddr);
 	if (ret)
-		return ret < 0 ? 0 : 4;
+		return ret > 0;
 
 	/* search additional memory */
 	ret = scan_for_mp(mp, "GROPE_AREA1",GROPE_AREA1, GROPE_SIZE, paddr);
 	if (ret)
-		return ret < 0 ? 0 : 5;
+		return ret > 0;
 
 	ret = scan_for_mp(mp, "GROPE_AREA2",GROPE_AREA2, GROPE_SIZE, paddr);
 	if (ret)
-		return ret < 0 ? 0 : 6;
+		return ret > 0;
 
 	*paddr = (unsigned long)0;
 	return 0;
@@ -382,7 +383,7 @@ int mptable_scan_fd(int fd, int quiet, int *ncpu)
 	*ncpu = 0;
 
 	/* probe for MP structures */
-	if (apic_probe(&mp, &paddr) <= 0)
+	if (!apic_probe(&mp, &paddr))
 		return 0;
 
 	/* read in mpfps structure*/

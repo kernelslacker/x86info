@@ -3,7 +3,6 @@
  */
 
 #include <stdio.h>
-#include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <x86info.h>
@@ -378,23 +377,18 @@ void display_topology(struct cpudata *cpus, unsigned int n)
 		return;
 
 	if (opts.debug) {
-		static const struct {
-			const char *label;
-			size_t offset;
-		} fields[] = {
-			{ "cpu->phys_proc_id: ", offsetof(struct cpudata, phys_proc_id) },
-			{ "cpu->x86_max_cores: ", offsetof(struct cpudata, x86_max_cores) },
-			{ "cpu->cpu_core_id: ", offsetof(struct cpudata, cpu_core_id) },
-		};
-		unsigned int f;
-
-		for (f = 0; f < ARRAY_SIZE(fields); f++) {
-			printf("%s", fields[f].label);
-			for (i = 0; i < n; i++)
-				printf("%u, ", *(const unsigned int *)
-				       ((const char *)&cpus[i] + fields[f].offset));
-			printf("\n");
-		}
+		printf("cpu->phys_proc_id: ");
+		for (i = 0; i < n; i++)
+			printf("%u, ", cpus[i].phys_proc_id);
+		printf("\n");
+		printf("cpu->x86_max_cores: ");
+		for (i = 0; i < n; i++)
+			printf("%u, ", cpus[i].x86_max_cores);
+		printf("\n");
+		printf("cpu->cpu_core_id: ");
+		for (i = 0; i < n; i++)
+			printf("%u, ", cpus[i].cpu_core_id);
+		printf("\n");
 
 		print_socket_threads(cpus, n);
 	}

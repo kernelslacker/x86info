@@ -27,11 +27,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
     frequency-keyed SKU refinement to display time, or pass the rate in.
     See C2. (sonnet)
 
-B10. `topology.c:366-383` — an `offsetof` table to print three fields in
-    debug mode; three plain loops are shorter. `mptable.c:303`
-    `apic_probe()` returns codes 1 to 6 that no caller tells apart;
-    return found / not found. (haiku)
-
 B11. `identify.c:121` — Centaur and Cyrix print cache data from their
     `show_info` hook under `opts.show_cacheinfo`, while AMD and Intel use
     the `show_cache` hook. Move both to `show_cache`. (sonnet)
