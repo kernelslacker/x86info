@@ -34,7 +34,9 @@ static int has_perf_counters(const struct cpudata *cpu)
 
 static void print_MHz(unsigned int mhz)
 {
-	if (mhz < 1000) {
+	if (!mhz) {
+		printf("unknown");
+	} else if (mhz < 1000) {
 		printf("%uMHz", mhz);
 	} else {
 		unsigned int centi = (mhz + 5) / 10;

@@ -5,11 +5,6 @@ from reading the code only; confirm them before fixing.
 
 ## 🔴 Correctness
 
-A7. `MHz.c:50` — `display_MHz_line()` prints "0MHz ..." when nothing was
-    measured: no TSC, `bind_cpu()` failure in `measure_thread()`, or a
-    replay dump without leaf 0x15/0x16 (seen with `--mhz` on
-    `amd/zen3-rembrandt`). Print "unknown" for zero. (haiku)
-
 A8. `features.c:620` — Centaur/Zhaoxin decode CPUID 1 ECX with a
     three-entry table, so modern Zhaoxin output is mostly `[1:ecx:N]`
     (see `centaur/centaur-qemu-yongfeng-v1.out` line 15). The same
