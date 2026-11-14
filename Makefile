@@ -68,10 +68,7 @@ $(foreach t,$(UNIT_TESTS),$(eval $(call unit_test,$(t),tests/build-asan,$(SAN_FL
 # Build x86info against the CPUID replay backend and diff its output with
 # the goldens in tests/dumps.
 check: $(CHECK_BIN) $(UNIT_TESTS:%=tests/build/test-%)
-	@tests/build/test-psb > /dev/null
-	@tests/build/test-opts
-	@tests/build/test-mptable
-	@tests/build/test-cpulist
+	@for t in $(UNIT_TESTS); do tests/build/test-$$t > /dev/null || exit 1; done
 	@tests/test-runner.sh
 	@tests/run-tests.sh $(CHECK_BIN)
 
@@ -112,10 +109,7 @@ tests/build/qemu-rom.bin: tests/build/qemu-rom.elf
 	objcopy -O binary $< $@
 
 check-asan: $(ASAN_BIN) $(UNIT_TESTS:%=tests/build-asan/test-%)
-	@tests/build-asan/test-psb > /dev/null
-	@tests/build-asan/test-opts
-	@tests/build-asan/test-mptable
-	@tests/build-asan/test-cpulist
+	@for t in $(UNIT_TESTS); do tests/build-asan/test-$$t > /dev/null || exit 1; done
 	@tests/run-tests.sh $(ASAN_BIN)
 
 $(ASAN_BIN): $(X86INFO_HEADERS) $(wildcard *.c) $(wildcard vendors/*/*.c)

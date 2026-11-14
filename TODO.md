@@ -29,10 +29,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
 
 ## 🟡 Tests & docs
 
-C3. `Makefile:71-76,115-119` — `check` and `check-asan` list the unit
-    test binaries by hand next to `UNIT_TESTS`. Loop over `UNIT_TESTS`
-    so a new test needs one edit. (haiku)
-
 ## 🟢 Enhancements
 
 D1. `features.c:402` — CPUID 7 subleaf 1 EBX and ECX are not decoded,
