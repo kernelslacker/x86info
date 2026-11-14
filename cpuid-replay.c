@@ -6,6 +6,7 @@
  *
  *  A dump from 'x86info -r --all-cpus' has a "CPU #N:" line before each
  *  CPU's leaves. Leaves before the first such line apply to every CPU.
+ *  An optional "MHz: N" line gives the TSC rate a live run would measure.
  */
 
 #ifdef CPUID_REPLAY
@@ -25,6 +26,14 @@ struct replay_entry {
 
 static struct replay_entry *entries;
 static unsigned int nr_entries;
+
+struct replay_mhz {
+	int cpu;
+	unsigned int mhz;
+};
+
+static struct replay_mhz *rates;
+static unsigned int nr_rates;
 
 static unsigned int *cpu_ids;
 static unsigned int nr_cpu_ids;
@@ -72,12 +81,26 @@ static void replay_load(void)
 	while (fgets(line, sizeof(line), f)) {
 		struct replay_entry e = { .cpu = current };
 		struct replay_entry *tmp;
-		unsigned int cpu;
+		unsigned int cpu, mhz;
 		int len = 0;
 
 		if (sscanf(line, "CPU #%u:%n", &cpu, &len) >= 1 && len) {
 			current = cpu;
 			replay_add_cpu(cpu);
+			continue;
+		}
+
+		if (sscanf(line, "MHz: %u", &mhz) == 1) {
+			struct replay_mhz *r;
+
+			r = realloc(rates, (nr_rates + 1) * sizeof(*rates));
+			if (!r) {
+				perror("realloc");
+				exit(EXIT_FAILURE);
+			}
+			rates = r;
+			rates[nr_rates].cpu = current;
+			rates[nr_rates++].mhz = mhz;
 			continue;
 		}
 
@@ -181,6 +204,21 @@ int host_microcode_version(unsigned int cpu, unsigned long long *ver)
 int host_can_measure(void)
 {
 	return 0;
+}
+
+unsigned int host_recorded_MHz(unsigned int cpu)
+{
+	unsigned int i, mhz = 0;
+
+	replay_load();
+	/* A rate in the CPU's own section wins over a shared one. */
+	for (i = 0; i < nr_rates; i++) {
+		if (rates[i].cpu == (int)cpu)
+			return rates[i].mhz;
+		if (rates[i].cpu == ALL_CPUS)
+			mhz = rates[i].mhz;
+	}
+	return mhz;
 }
 
 #endif	/* CPUID_REPLAY */

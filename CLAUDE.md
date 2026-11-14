@@ -21,6 +21,7 @@ Each `tests/dumps/<vendor>/<name>.dump` has `<name>.out` (default options) and `
 
 - Regenerate goldens: `UPDATE=1 tests/run-tests.sh tests/build/x86info`, then check `git status` shows only the intended files changed, and review the diff.
 - Add a machine: on the target host run `x86info -r --all-cpus` as root (needs the `cpuid` module, `modprobe cpuid`) and keep only the `CPU #n:` / `eax in:` lines (that is what `make record VENDOR=<vendor> NAME=<name>` does), save as `tests/dumps/<vendor>/<name>.dump`, then generate goldens as above. Sanity-check the output against the real CPU before committing; the live `-v` output should match the replay golden.
+- A dump may carry an `MHz: <n>` line (per CPU section, or before the first one) giving the TSC rate a live run would measure. Replay uses it when CPUID 0x15/0x16 give none, so the frequency-keyed SKU rows get a fixture.
 - Dumps are grouped under `tests/dumps/<vendor>/` (`amd`, `intel`, etc.); AMD Zen fixtures also live under `amd/`. Keep each dump and both goldens together.
 - Dump names are `<vendor>-<uarch>-<part>` (e.g. `intel-silvermont-j1800`) or `zen5-...` for AMD synthetic cases.
 

@@ -63,4 +63,10 @@ int host_can_measure(void)
 	return 1;
 }
 
+unsigned int host_recorded_MHz(unsigned int cpu)
+{
+	(void)cpu;
+	return 0;
+}
+
 #endif	/* !CPUID_REPLAY */

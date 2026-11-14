@@ -29,11 +29,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
 
 ## 🟡 Tests & docs
 
-C2. `vendors/intel/identify-family6-extended.c:25-104` — rows keyed on
-    `.mhz` can never match in replay, because `host_can_measure()` is 0.
-    Let the replay backend supply a rate (for example a `MHz:` line in
-    the dump) so these rows get a fixture. (sonnet)
-
 C3. `Makefile:71-76,115-119` — `check` and `check-asan` list the unit
     test binaries by hand next to `UNIT_TESTS`. Loop over `UNIT_TESTS`
     so a new test needs one edit. (haiku)

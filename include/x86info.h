@@ -242,6 +242,7 @@ bool is_root(void);
 /* Probes of the running machine; a replay build answers without them. */
 int host_longnop(void);			/* 1 yes, 0 no, -1 unknown */
 int host_microcode_version(unsigned int cpu, unsigned long long *ver);
+unsigned int host_recorded_MHz(unsigned int cpu); /* replay only, else 0 */
 int host_can_measure(void);		/* may time or read counters */
 
 
