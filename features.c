@@ -165,6 +165,11 @@ static const struct flag_info cpuid_07_1_eax_flags[32] = {
 };
 
 /* CPUID 0x00000007 EDX flags (subleaf 1) */
+/* CPUID 0x00000007 subleaf 1 EBX flags */
+static const struct flag_info cpuid_07_1_ebx_flags[32] = {
+	[0] = { "intel_ppin", "Protected Processor Inventory Number" },
+};
+
 static const struct flag_info cpuid_07_1_edx_flags[32] = {
 	[4] = { "avx_vnni_int8", "AVX-VNNI-INT8 instructions" },
 	[5] = { "avx_ne_convert", "AVX-NE-CONVERT instructions" },
@@ -406,6 +411,7 @@ static void show_extra_flags(const struct cpudata *cpu)
 		if (max_subleaf >= 1) {
 			cpuid_count(cpu->number, 0x07, 1, &eax, &ebx, &ecx, &edx);
 			flag_decode(eax, "7.1:eax", cpuid_07_1_eax_flags);
+			flag_decode(ebx, "7.1:ebx", cpuid_07_1_ebx_flags);
 			flag_decode(edx, "7.1:edx", cpuid_07_1_edx_flags);
 		}
 		// CPUID 0x07 subleaf 2
@@ -651,9 +657,12 @@ static void decode_feature_flags(const struct cpudata *cpu)
 		case VENDOR_NATSEMI:
 		case VENDOR_RISE:
 		case VENDOR_SIS:
+			break;
+
 		case VENDOR_UNKNOWN:
 		default:
-			/* Unknown CPU manufacturer or no special handling needed */
+			/* Unknown manufacturer: use the architectural ECX bits */
+			flag_decode(cpu->flags_ecx, "1:ecx", cap_generic_ecx_flags);
 			break;
 	}
 

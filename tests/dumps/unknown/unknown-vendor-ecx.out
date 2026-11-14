@@ -1,0 +1,10 @@
+Unknown vendor (FakeVendCpu!)
+No TSC, MHz calculation cannot be performed.
+Family: 6 Model: 0 Stepping: 0
+
+Feature flags:
+ fpu sse3 ssse3
+Long NOPs supported: not recorded
+
+Address sizes : 0 bits physical, 0 bits virtual
+unknown processor (estimate).

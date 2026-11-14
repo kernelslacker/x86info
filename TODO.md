@@ -31,10 +31,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
 
 ## 🟢 Enhancements
 
-D1. `features.c:402` — CPUID 7 subleaf 1 EBX and ECX are not decoded,
-    and an unknown vendor gets only 1:EDX (`features.c:649`). Decode the
-    generic ECX table in the default case.
-
 D2. `vendors/centaur/identify.c:133` — Zhaoxin cache data comes only
     from 0x80000005/6. These parts have leaf 4; reuse the Intel decoder.
 
