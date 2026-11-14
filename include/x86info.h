@@ -214,6 +214,17 @@ void decode_connector(enum connector type);
 
 unsigned int get_count_order(unsigned int count);
 void get_topology(struct cpudata *head);
+
+struct amd_threads {
+	unsigned int threads;		/* implemented logical CPUs */
+	unsigned int apic_bits;		/* APIC ID width, 0 if not reported */
+	unsigned int possible;		/* threads the package could hold */
+	unsigned int per_core;		/* threads per core, 1 without TOPOEXT */
+	unsigned int topoext;
+	unsigned int ext_apic_id;	/* 0x8000001E EAX, with TOPOEXT */
+	unsigned int core_id;		/* 0x8000001E EBX[7:0], with TOPOEXT */
+};
+int amd_thread_info(const struct cpudata *cpu, struct amd_threads *t);
 void get_core_type(struct cpudata *cpu);
 const char *core_type_name(const struct cpudata *cpu);
 void clear_uniform_core_types(struct cpudata *cpus, unsigned int n);

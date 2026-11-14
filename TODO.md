@@ -21,12 +21,6 @@ A11. `vendors/amd/identify.c:597` — `(ebx >> 16) & 0xff` of 0x80000021
 
 ## 🟡 Maintainability
 
-B2. `topology.c:175-180` and `vendors/amd/identify.c:644-651` — the same
-    0x80000008 ECX decode (thread count, APIC ID width) appears twice,
-    with the same comment. `identify.c:657` also reads 0x8000001E without
-    the TopoExt check that `topology.c:188` makes. Extract one helper
-    that returns threads, possible threads and threads per core. (sonnet)
-
 B3. `cpuid.c:106` — `subleaf_state()` takes nine arguments. Pass two
     `const unsigned int regs[4]` (this subleaf, subleaf 0). (sonnet)
 

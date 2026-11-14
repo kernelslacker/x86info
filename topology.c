@@ -162,42 +162,63 @@ void clear_uniform_core_types(struct cpudata *cpus, unsigned int n)
 }
 
 /*
- * AMD without an extended topology leaf: 0x80000008 gives the thread count
- * and APIC ID width, and with TOPOEXT 0x8000001E the core ID and the
- * threads per core.
+ * AMD thread counts from 0x80000008 and, with TOPOEXT, 0x8000001E.
+ * Returns 0 if the CPU has no 0x80000008.
  */
-static int get_amd_topology(struct cpudata *cpu)
+int amd_thread_info(const struct cpudata *cpu, struct amd_threads *t)
 {
-	unsigned int eax, ebx, ecx, nthreads, bits, apicid, threads = 1;
+	unsigned int eax, ebx, ecx;
 
 	if (cpu->maxei < 0x80000008)
 		return 0;
 
+	memset(t, 0, sizeof(*t));
 	cpuid(cpu->number, 0x80000008, NULL, NULL, &ecx, NULL);
 	/* Above 256 threads NC continues into bits 11:8 */
-	nthreads = (ecx & 0xfff) + 1;
-	bits = (ecx >> 12) & 0xf;
-	if (!bits)
-		bits = get_count_order(nthreads);
-
-	cpuid(cpu->number, 1, NULL, &ebx, NULL, NULL);
-	apicid = ebx >> 24;
-	cpu->cpu_core_id = apicid & low_mask(bits);
+	t->threads = (ecx & 0xfff) + 1;
+	t->apic_bits = (ecx >> 12) & 0xf;
+	t->possible = t->apic_bits ? 1u << t->apic_bits : t->threads;
+	t->per_core = 1;
 
 	if (cpu->maxei >= 0x8000001e) {
 		cpuid(cpu->number, 0x80000001, NULL, NULL, &ecx, NULL);
 		if (ecx & (1u << 22)) {
 			cpuid(cpu->number, 0x8000001e, &eax, &ebx, NULL, NULL);
-			apicid = eax;
-			threads = ((ebx >> 8) & 0xff) + 1;
-			cpu->cpu_core_id = ebx & 0xff;
+			t->topoext = 1;
+			t->ext_apic_id = eax;
+			t->core_id = ebx & 0xff;
+			t->per_core = ((ebx >> 8) & 0xff) + 1;
+			if (t->per_core > t->threads)
+				t->per_core = t->threads;
 		}
 	}
-	if (threads > nthreads)
-		threads = nthreads;
+	return 1;
+}
 
-	cpu->num_siblings = threads;
-	cpu->x86_max_cores = nthreads / threads;
+/* AMD without an extended topology leaf. */
+static int get_amd_topology(struct cpudata *cpu)
+{
+	struct amd_threads t;
+	unsigned int ebx, bits, apicid;
+
+	if (!amd_thread_info(cpu, &t))
+		return 0;
+
+	bits = t.apic_bits;
+	if (!bits)
+		bits = get_count_order(t.threads);
+
+	cpuid(cpu->number, 1, NULL, &ebx, NULL, NULL);
+	apicid = ebx >> 24;
+	cpu->cpu_core_id = apicid & low_mask(bits);
+
+	if (t.topoext) {
+		apicid = t.ext_apic_id;
+		cpu->cpu_core_id = t.core_id;
+	}
+
+	cpu->num_siblings = t.per_core;
+	cpu->x86_max_cores = t.threads / t.per_core;
 	cpu->phys_proc_id = apicid >> bits;
 	cpu->topology = TOPOLOGY_LEGACY;
 	return 1;

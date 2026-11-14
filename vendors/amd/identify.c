@@ -639,37 +639,21 @@ void display_amd_info(struct cpudata *cpu)
 /* How much of the package is implemented; the same for every core type. */
 void display_amd_package(struct cpudata *cpu)
 {
-	unsigned int ebx, ecx;
+	struct amd_threads t;
 
-	if (cpu->maxei >= 0x80000008) {
-		unsigned int n, p;
-		cpuid (cpu->number, 0x80000008, NULL, NULL, &ecx, NULL);
-		p = (ecx >> 12) & 0xf;
-		/* Above 256 threads NC continues into bits 11:8 */
-		n = (ecx & 0xfff) + 1;
-		if (p)
-			p = 1u << p;
-		else
-			p = n;
+	if (!amd_thread_info(cpu, &t) || t.possible <= 1)
+		return;
 
-		/* NC counts logical processors from Zen onwards */
-		if (p > 1 && family(cpu) >= 0x17) {
-			printf("The physical package has %u of %u "
-			       "possible threads implemented", n, p);
-			if (cpu->maxei >= 0x8000001e) {
-				unsigned int tpc, cores;
-
-				cpuid(cpu->number, 0x8000001e, NULL, &ebx, NULL, NULL);
-				tpc = ((ebx >> 8) & 0xff) + 1;
-				if (tpc > n)
-					tpc = n;
-				cores = n / tpc;
-				printf(" (%u core%s)", cores, cores == 1 ? "" : "s");
-			}
-			printf(".\n");
-		} else if (p > 1) {
-			printf("The physical package has %u of %u "
-			       "possible cores implemented.\n", n, p);
-		}
+	/* NC counts logical processors from Zen onwards */
+	if (family(cpu) >= 0x17) {
+		printf("The physical package has %u of %u "
+		       "possible threads implemented", t.threads, t.possible);
+		if (t.topoext)
+			printf(" (%u core%s)", t.threads / t.per_core,
+			       t.threads / t.per_core == 1 ? "" : "s");
+		printf(".\n");
+	} else {
+		printf("The physical package has %u of %u "
+		       "possible cores implemented.\n", t.threads, t.possible);
 	}
 }
