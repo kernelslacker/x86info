@@ -162,8 +162,8 @@ static int read_perf_counters(const struct cpudata *cpu,
 	if (!has_perf_counters(cpu))
 		return 0;
 	if (is_root() &&
-	    read_msr(cpu->number, base + MSR_APERF, aperf) == 1 &&
-	    read_msr(cpu->number, base + MSR_MPERF, mperf) == 1)
+	    read_msr(cpu->number, base + MSR_APERF, aperf) &&
+	    read_msr(cpu->number, base + MSR_MPERF, mperf))
 		return 1;
 	return read_perf_msr_pmu(aperf, mperf);
 }

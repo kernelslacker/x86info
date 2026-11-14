@@ -17,10 +17,10 @@ void dump_p4_msrs (struct cpudata *cpu)
 
 	printf("Pentium 4 specific msrs:\n");
 
-	if (read_msr (cpu->number, MSR_IA32_PLATFORM_ID, &val) == 1)
+	if (read_msr (cpu->number, MSR_IA32_PLATFORM_ID, &val))
 		printf("IA32_PLATFORM_ID=%016llx\n", val);
 
-	if (read_msr (cpu->number, 0x2a, &val) == 1) {
+	if (read_msr (cpu->number, 0x2a, &val)) {
 		printf("System bus in order queue depth=");
 		if ((val & (1<<2)))
 			printf("1");
@@ -29,15 +29,15 @@ void dump_p4_msrs (struct cpudata *cpu)
 		printf("\n");
 	}
 
-	if (read_msr (cpu->number, 0x2c, &val) == 1) {
+	if (read_msr (cpu->number, 0x2c, &val)) {
 		printf("MSR_EBC_FREQUENCY_ID=%016llx\n", val);
 	}
 
-	if (read_msr (cpu->number, MSR_IA32_UCODE_REV, &val) == 1) {
+	if (read_msr (cpu->number, MSR_IA32_UCODE_REV, &val)) {
 		printf("IA32_BIOS_SIGN_ID=%016llx\n", val);
 	}
 
-	if (read_msr (cpu->number, 0x119, &val) == 1) {
+	if (read_msr (cpu->number, 0x119, &val)) {
 		printf("Processor serial number is ");
 		if ((val & (1<<21)))
 			printf("dis");
@@ -46,7 +46,7 @@ void dump_p4_msrs (struct cpudata *cpu)
 		printf("abled\n");
 	}
 
-	if (read_msr (cpu->number, MSR_IA32_MISC_ENABLE, &val) == 1) {
+	if (read_msr (cpu->number, MSR_IA32_MISC_ENABLE, &val)) {
 		decode_misc_enable(val);
 	}
 

@@ -8,11 +8,11 @@
 #include <x86info.h>
 
 /* Print the MSR in binary, preceded by its address and hex value if labelled. */
-void dumpmsr(int cpu, unsigned int msr, int size, bool labelled)
+void dumpmsr(unsigned int cpu, unsigned int msr, int size, bool labelled)
 {
 	unsigned long long val = 0;
 
-	if (read_msr(cpu, msr, &val) != 1) {
+	if (!read_msr(cpu, msr, &val)) {
 		printf("Couldn't read MSR 0x%x\n", msr);
 		return;
 	}

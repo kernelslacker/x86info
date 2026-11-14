@@ -121,7 +121,7 @@ void decode_c3_power(struct cpudata *cpu, enum c3_power gen)
 		printf("\n");
 	}
 
-	if (read_msr(cpu->number, MSR_POWERSAVER, &ps.val) != 1) {
+	if (!read_msr(cpu->number, MSR_POWERSAVER, &ps.val)) {
 		if (gen == C3_POWERSAVER)
 			printf("Something went wrong reading MSR_POWERSAVER\n");
 		return;

@@ -119,7 +119,7 @@ void dump_apics(const struct cpudata *cpu)
 	if (bind_cpu(cpu->number))
 		return;
 
-	if (read_msr(cpu->number, IA32_APIC_BASE_MSR, &base) != 1)
+	if (!read_msr(cpu->number, IA32_APIC_BASE_MSR, &base))
 		return;
 
 	/* APIC_BASE bit 11: enabled */

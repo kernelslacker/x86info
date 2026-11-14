@@ -85,7 +85,7 @@ static void print_ctl_bits(const struct mc_bit *bits, unsigned int nr,
 		       ctl & (1ULL << bits[i].bit) ? "en" : "dis");
 }
 
-static void print_k7_mcg_ctl(int cpunum, unsigned long long ctl,
+static void print_k7_mcg_ctl(unsigned int cpunum, unsigned long long ctl,
 			     unsigned int banks)
 {
 	unsigned long long val;
@@ -99,17 +99,17 @@ static void print_k7_mcg_ctl(int cpunum, unsigned long long ctl,
 		printf(" %s check %sabled\n", u->name, ctl & (1<<i) ? "en" : "dis");
 		if (!(ctl & (1<<i)) || banks <= i)
 			continue;
-		if (read_msr(cpunum, MC_CTL + 4 * i, &val) == 1)
+		if (read_msr(cpunum, MC_CTL + 4 * i, &val))
 			print_ctl_bits(u->bits, u->nr_bits, val);
 	}
 }
 
-void decode_athlon_machine_check(int cpunum, unsigned int family)
+void decode_athlon_machine_check(unsigned int cpunum, unsigned int family)
 {
 	unsigned long long val;
 	unsigned int banks, ctlp = 0;
 
-	if (read_msr(cpunum, MCG_CAP, &val) != 1)
+	if (!read_msr(cpunum, MCG_CAP, &val))
 		return;
 
 	ctlp = val & (1<<8);
@@ -120,7 +120,7 @@ void decode_athlon_machine_check(int cpunum, unsigned int family)
 
 	printf("Number of reporting banks : %u\n\n", banks);
 
-	if (read_msr(cpunum, MCG_STATUS, &val) == 1) {
+	if (read_msr(cpunum, MCG_STATUS, &val)) {
 		if (val != 0) {
 			printf("MCG_STATUS: ");
 			dumpmsr(cpunum, MCG_STATUS, 64, false);
@@ -128,7 +128,7 @@ void decode_athlon_machine_check(int cpunum, unsigned int family)
 	}
 
 	/* The per-unit MCG_CTL bits below are the K7/K8 layout. */
-	if (ctlp && read_msr(cpunum, MCG_CTL, &val) == 1) {
+	if (ctlp && read_msr(cpunum, MCG_CTL, &val)) {
 		if (family >= 0x10)
 			printf("MCG_CTL: 0x%016llx\n", val);
 		else

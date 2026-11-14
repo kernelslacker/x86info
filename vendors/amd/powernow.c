@@ -47,7 +47,7 @@ static void decode_fidvid(struct cpudata *cpu)
 	dumpmsr(cpu->number, MSR_FID_VID_STATUS, 64, true);
 	printf("\n");
 
-	if (read_msr(cpu->number, MSR_FID_VID_CTL, &vidctl.val) != 1) {
+	if (!read_msr(cpu->number, MSR_FID_VID_CTL, &vidctl.val)) {
 		printf("Something went wrong reading MSR_FID_VID_CTL\n");
 		return;
 	}
@@ -63,7 +63,7 @@ static void decode_fidvid(struct cpudata *cpu)
 			fid_text(vidctl.bits.FID, curfid, sizeof(curfid)));
 
 	/* Now dump the status */
-	if (read_msr(cpu->number, MSR_FID_VID_STATUS, &fidvidstatus.val) != 1) {
+	if (!read_msr(cpu->number, MSR_FID_VID_STATUS, &fidvidstatus.val)) {
 		printf("Something went wrong reading MSR_FID_VID_STATUS\n");
 		return;
 	}
@@ -107,7 +107,7 @@ static void k8_decode_fidvid(struct cpudata *cpu)
 	dumpmsr(cpu->number, MSR_FID_VID_STATUS, 64, true);
 	printf("\n");
 
-	if (read_msr(cpu->number, MSR_FID_VID_STATUS, &fidvidstatus.val) != 1) {
+	if (!read_msr(cpu->number, MSR_FID_VID_STATUS, &fidvidstatus.val)) {
 		printf("Something went wrong reading MSR_FID_VID_STATUS\n");
 		return;
 	}
@@ -297,13 +297,13 @@ static void decode_pstates(struct cpudata *cpu, int has_cpb)
 	if (has_cpb && fam <= 0x15)
 		boost_states = get_num_boost_states();
 
-	if (read_msr(cpu->number, MSR_PSTATE_LIMIT, &val) != 1) {
+	if (!read_msr(cpu->number, MSR_PSTATE_LIMIT, &val)) {
 		printf("Something went wrong reading MSR_PSTATE_CUR_LIMIT\n");
 		return;
 	}
 	psmax = (val >> 4) & 0x7;
 
-	if (read_msr(cpu->number, MSR_PSTATE_STATUS, &val) != 1) {
+	if (!read_msr(cpu->number, MSR_PSTATE_STATUS, &val)) {
 		printf("Something went wrong reading MSR_PSTATE_STATUS\n");
 		return;
 	}
@@ -318,7 +318,7 @@ static void decode_pstates(struct cpudata *cpu, int has_cpb)
 		int cof, enabled;
 		char mhz[16];
 
-		if (read_msr(cpu->number, MSR_PSTATE + i, &pstate.val) != 1) {
+		if (!read_msr(cpu->number, MSR_PSTATE + i, &pstate.val)) {
 			printf("Something went wrong reading MSR_PSTATE_%d\n",
 				i);
 			return;

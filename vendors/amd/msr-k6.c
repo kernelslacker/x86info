@@ -19,7 +19,7 @@ void dump_k6_MSR (struct cpudata *cpu)
 
 	/* Original K6 or K6-2 (old core). */
 	if ((cpu->model < 8) || ((cpu->model == 8) && (cpu->stepping < 8))) {
-		if (read_msr (cpu->number, 0xC0000082, &val) == 1) {
+		if (read_msr (cpu->number, 0xC0000082, &val)) {
 			printf("Write allocate enable limit: %dMbytes\n", (int) ((val & 0x7e) >>1) * 4);
 			printf("Write allocate 15-16M bytes: %s\n", val & 1 ? "enabled" : "disabled");
 		} else {
@@ -29,7 +29,7 @@ void dump_k6_MSR (struct cpudata *cpu)
 
 	/* K6-2 core (Stepping 8-F), K6-III or later. */
 	if ((cpu->model > 8) || ((cpu->model == 8) && (cpu->stepping >= 8))) {
-		if (read_msr (cpu->number, 0xC0000082, &val) == 1) {
+		if (read_msr (cpu->number, 0xC0000082, &val)) {
 			if (!(val & (0x3ffULL << 22)))
 				printf("Write allocate disabled\n");
 			else {
@@ -43,7 +43,7 @@ void dump_k6_MSR (struct cpudata *cpu)
 
 	/* Dump EWBE register on K6-2 & K6-3 */
 	if ((cpu->family == 5) && (cpu->model >= 8)) {
-		if (read_msr (cpu->number, 0xC0000080, &val) == 1) {
+		if (read_msr (cpu->number, 0xC0000080, &val)) {
 			if (val & (1<<0))
 				printf("System call extension present.\n");
 			if (val & (1<<1))

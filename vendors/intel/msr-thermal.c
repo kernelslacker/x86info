@@ -12,7 +12,7 @@ void dump_thermal_msrs(struct cpudata *cpu)
 {
 	unsigned long long val = 0;
 
-	if (read_msr(cpu->number, MSR_IA32_MISC_ENABLE, &val) != 1)
+	if (!read_msr(cpu->number, MSR_IA32_MISC_ENABLE, &val))
 		return;
 
 	// tcc enabled ?
@@ -20,11 +20,11 @@ void dump_thermal_msrs(struct cpudata *cpu)
 		return;
 
 	printf("Thermal msrs:\n");
-	if (read_msr(cpu->number, MSR_PM_THERM2_CTL, &val) == 1) { /* THERM2_CTL */
+	if (read_msr(cpu->number, MSR_PM_THERM2_CTL, &val)) { /* THERM2_CTL */
 		printf("  MSR_PM_THERM2_CTL: 0x%llx [Thermal monitor: %d]\n",
 			val, (val & (1<<16)) ? 2 : 1);
 	}
-	if (read_msr(cpu->number, MSR_IA32_THERM_CONTROL, &val) == 1) {
+	if (read_msr(cpu->number, MSR_IA32_THERM_CONTROL, &val)) {
 		printf("  MSR_IA32_THERM_CONTROL: 0x%llx ", val);
 		if (val & (1<<4)) {
 			unsigned int duty = (val >> 1) & 7;
@@ -37,7 +37,7 @@ void dump_thermal_msrs(struct cpudata *cpu)
 		} else
 			printf("[Software-controlled clock disabled (full speed)]\n");
 	}
-	if (read_msr (cpu->number, MSR_IA32_THERM_STATUS, &val) == 1) { /* THERM_STATUS */
+	if (read_msr (cpu->number, MSR_IA32_THERM_STATUS, &val)) { /* THERM_STATUS */
 		printf("  MSR_IA32_THERM_STATUS: 0x%llx", val);
 		if (val & (1<<0|1<<1)) {
 			printf(" [");

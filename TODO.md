@@ -21,13 +21,6 @@ A11. `vendors/amd/identify.c:597` — `(ebx >> 16) & 0xff` of 0x80000021
 
 ## 🟡 Maintainability
 
-B4. `include/x86info.h:181` — `read_msr()` returns 1 on success and
-    `cpuid()` returns 0. Callers test `== 1`, `!= 1` and `!read_msr()`.
-    The CPU number is `int` in `read_msr`, `dumpmsr`, `dump_raw_cpuid`
-    and the machine check functions, `unsigned int` elsewhere. Make
-    `read_msr()` return `bool` and take `unsigned int`. (sonnet; wide but
-    mechanical)
-
 B5. `vendors/intel/cachesize.c:445` — `decode_intel_caches(cpu, output)`
     mixes sizing and printing. The `output == 0` pass from
     `identify_intel()` still walks leaf 4 and 0x18 and discards the

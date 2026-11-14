@@ -42,11 +42,11 @@ static void decode_address(unsigned long long val, unsigned int max_phy_addr)
 	       (val >> 12) & ((1ULL << bits) - 1));
 }
 
-static void dump_mtrr(int cpu, int msr)
+static void dump_mtrr(unsigned int cpu, int msr)
 {
 	unsigned long long val = 0;
 
-	if (read_msr(cpu, msr, &val) == 1)
+	if (read_msr(cpu, msr, &val))
 		printf("0x%016llx\n", val);
 }
 
@@ -58,12 +58,12 @@ static void decode_mtrrcap(unsigned long long val)
 	printf("vcnt:%u\n", (unsigned int) val & IA32_MTRRCAP_VCNT);
 }
 
-static void decode_mtrr_deftype(int cpu, int msr)
+static void decode_mtrr_deftype(unsigned int cpu, int msr)
 {
 	unsigned long long val;
 	uint8_t type;
 
-	if (read_msr(cpu, msr, &val) == 1) {
+	if (read_msr(cpu, msr, &val)) {
 		printf("0x%016llx ", val);
 
 		printf("(fixed-range flag:%d ",
@@ -78,12 +78,12 @@ static void decode_mtrr_deftype(int cpu, int msr)
 	}
 }
 
-static void decode_mtrr_physbase(int cpu, int msr, unsigned int max_phy_addr)
+static void decode_mtrr_physbase(unsigned int cpu, int msr, unsigned int max_phy_addr)
 {
 	unsigned long long val;
 	uint8_t type;
 
-	if (read_msr(cpu, msr, &val) == 1) {
+	if (read_msr(cpu, msr, &val)) {
 		printf("0x%016llx ", val);
 
 		printf("(physbase:");
@@ -95,11 +95,11 @@ static void decode_mtrr_physbase(int cpu, int msr, unsigned int max_phy_addr)
 	}
 }
 
-static void decode_mtrr_physmask(int cpu, int msr, unsigned int max_phy_addr)
+static void decode_mtrr_physmask(unsigned int cpu, int msr, unsigned int max_phy_addr)
 {
 	unsigned long long val;
 
-	if (read_msr(cpu, msr, &val) == 1) {
+	if (read_msr(cpu, msr, &val)) {
 		printf("0x%016llx ", val);
 
 		printf("(physmask:");

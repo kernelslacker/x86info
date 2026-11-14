@@ -21,18 +21,16 @@
 /* Per-CPU /dev/cpu/N/msr descriptors, opened lazily. */
 static int msr_fds[MAX_CPUS] = { [0 ... MAX_CPUS - 1] = CPUDEV_CLOSED };
 
-int read_msr(int cpu, unsigned int idx, unsigned long long *val)
+bool read_msr(unsigned int cpu, unsigned int idx, unsigned long long *val)
 {
 	unsigned long long raw;
 
-	if (cpu < 0)
-		return 0;
 	if (cpudev_pread(msr_fds, cpu, "msr", &raw, sizeof(raw), (off_t)idx) !=
 	    sizeof(raw))
-		return 0;
+		return false;
 
 	*val = raw;
-	return 1;
+	return true;
 }
 
 #endif /* __linux__ */

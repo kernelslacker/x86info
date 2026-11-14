@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <x86info.h>
 
-int read_msr(int cpu, unsigned int idx, unsigned long long *val)
+bool read_msr(unsigned int cpu, unsigned int idx, unsigned long long *val)
 {
 	char cpuname[16];
 	int fh;
@@ -25,15 +25,15 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 	cpuctl_msr_args_t args;
 
 	if (nodriver==1)
-		return 0;
+		return false;
 
-	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpuctl%d", cpu);
+	(void)snprintf(cpuname, sizeof(cpuname), "/dev/cpuctl%u", cpu);
 
 	fh = open(cpuname, O_RDONLY);
 	if (fh==-1) {
 		perror(cpuname);
 		nodriver=1;
-		return 0;
+		return false;
 	}
 
 	args.msr = idx;
@@ -43,7 +43,7 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 			exit(EXIT_FAILURE);
 		}
 
-		return 0;
+		return false;
 	}
 
 	*val = args.data;
@@ -52,7 +52,7 @@ int read_msr(int cpu, unsigned int idx, unsigned long long *val)
 		perror("close");
 		exit(EXIT_FAILURE);
 	}
-	return 1;
+	return true;
 }
 
 #endif /* __FreeBSD__ */

@@ -184,15 +184,15 @@ void show_cache_info(struct cpudata *cpu);
 void show_header(struct cpudata *cpu);
 void show_info(struct cpudata *cpu, int header);
 
-int read_msr(int cpu, unsigned int idx, unsigned long long *val);
+bool read_msr(unsigned int cpu, unsigned int idx, unsigned long long *val);
 void binary(unsigned int n, unsigned long value);
 void binary32(unsigned long value);
 void binary64(unsigned long long value);
-void dumpmsr(int cpunum, unsigned int msr, int size, bool labelled);
-void dump_mc_banks(int cpunum, unsigned int banks);
+void dumpmsr(unsigned int cpunum, unsigned int msr, int size, bool labelled);
+void dump_mc_banks(unsigned int cpunum, unsigned int banks);
 enum vendor vendor_from_cpuid(unsigned int ebx, unsigned int edx);
 unsigned int sane_max_leaf(unsigned int max, unsigned int base);
-void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end);
+void dump_raw_cpuid(unsigned int cpunum, unsigned int begin, unsigned int end);
 
 void dump_mtrrs(struct cpudata *cpu);
 void dump_apics(const struct cpudata *cpu);

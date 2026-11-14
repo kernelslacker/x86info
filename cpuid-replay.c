@@ -104,12 +104,12 @@ int bind_cpu(unsigned int cpunr)
 	return 0;
 }
 
-int read_msr(int cpu, unsigned int idx, unsigned long long *val)
+bool read_msr(unsigned int cpu, unsigned int idx, unsigned long long *val)
 {
 	(void)cpu;
 	(void)idx;
 	(void)val;
-	return 0;
+	return false;
 }
 
 /* The CPUs the dump describes: those it has sections for, else CPU 0. */

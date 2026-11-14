@@ -151,7 +151,7 @@ static enum subleaf_state subleaf_state(unsigned int leaf, unsigned int sub,
 }
 
 /* Dump subleaves 1 and up of the leaves that have them. */
-static void dump_subleaves(int cpunum, unsigned int leaf,
+static void dump_subleaves(unsigned int cpunum, unsigned int leaf,
 			   const unsigned int r0[4])
 {
 	unsigned int sub;
@@ -172,7 +172,7 @@ static void dump_subleaves(int cpunum, unsigned int leaf,
 	}
 }
 
-void dump_raw_cpuid(int cpunum, unsigned int begin, unsigned int end)
+void dump_raw_cpuid(unsigned int cpunum, unsigned int begin, unsigned int end)
 {
 	unsigned int i;
 	unsigned int eax, ebx, ecx, edx;

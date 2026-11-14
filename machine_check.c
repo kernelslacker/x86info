@@ -12,7 +12,7 @@
 #define MC_ADDR 0x402
 #define MC_MISC 0x403
 
-void dump_mc_banks(int cpunum, unsigned int banks)
+void dump_mc_banks(unsigned int cpunum, unsigned int banks)
 {
 	unsigned int i;
 
