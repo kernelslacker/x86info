@@ -52,7 +52,7 @@ SAN_FLAGS = -fsanitize=address,undefined -fno-sanitize-recover=undefined \
 UNIT_TESTS = psb opts mptable cpulist
 UNIT_SRC_psb = tests/test-psb.c vendors/amd/dumppsb.c
 UNIT_SRC_opts = tests/test-opts.c commandline.c
-UNIT_SRC_mptable = tests/test-mptable.c mptable.c
+UNIT_SRC_mptable = tests/test-mptable.c mptable.c signature.c
 UNIT_SRC_cpulist = tests/test-cpulist.c cpulist.c
 
 # unit_test(name, build directory, extra flags)
