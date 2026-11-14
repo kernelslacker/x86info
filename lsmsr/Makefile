@@ -27,9 +27,6 @@ LSMSR_SRC = \
 	../signature.c \
 	../cpuid-linux.c \
 	../cpudev-linux.c \
-	../cpuid-freebsd.c \
-	../cpuid-netbsd.c \
-	../cpuid-solaris.c \
 	../havecpuid.c
 
 LSMSR_OBJS = $(LSMSR_SRC:%.c=%.o)

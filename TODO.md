@@ -5,15 +5,6 @@ from reading the code only; confirm them before fixing.
 
 ## 🔴 Correctness
 
-A10. `cpuid-freebsd.c`, `cpuid-solaris.c`, `rdmsr-freebsd.c` — these do
-    not follow the `cpuid()` contract: they `exit()` on error, do not use
-    `cpuid_store()`, and reopen the device on every call. Solaris has no
-    `read_msr()`, so it cannot link. FreeBSD `bind_cpu()` sets the
-    affinity of the whole process, which breaks the per-thread MHz
-    measurement. `MHz.c` uses `CLOCK_MONOTONIC_RAW`, which I believe the
-    BSDs lack (unverified). Decide first: delete the non-Linux backends,
-    or repair them. (decision, then sonnet)
-
 A11. `vendors/amd/identify.c:597` — `(ebx >> 16) & 0xff` of 0x80000021
     is printed as the return address predictor size in entries. My
     recollection of the APM is that the field is in units of 8.

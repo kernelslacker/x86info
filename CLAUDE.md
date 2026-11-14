@@ -30,7 +30,7 @@ Each `tests/dumps/<vendor>/<name>.dump` has `<name>.out` (default options) and `
 `x86info.c` drives a per-CPU pass: for each CPU it fills a `struct cpudata` (`include/x86info.h`) from CPUID, then dispatches by vendor.
 
 - **Vendor dispatch**: `identify.c` reads the vendor string and calls into `vendors/<vendor>/` (`amd`, `intel`, `centaur`, `cyrix`, `natsemi`, `rise`, `sis`, `misc`). Each vendor directory holds its own model identification, cache decoding, MSR dumping (`msr-*.c`), bugs and machine-check decoding. Intel family 6 identification is split across several `identify-family6*.c` files.
-- **Backends**: CPUID and MSR access are per-OS files (`cpuid-linux.c`, `cpuid-freebsd.c`, `rdmsr-*.c`, ...) behind `native_cpuid` / the helpers in `cpuid.c`. Linux reads `/dev/cpu/N/{cpuid,msr}` (root only) and falls back to executing CPUID on the current CPU. The BSD/Solaris backends are lightly tested.
+- **Backends**: CPUID and MSR access are per-OS files (`cpuid-linux.c`, `rdmsr-linux.c`, `cpudev-linux.c`) behind `native_cpuid` / the helpers in `cpuid.c`. Linux reads `/dev/cpu/N/{cpuid,msr}` (root only) and falls back to executing CPUID on the current CPU. Only Linux is supported.
 - **Topology**: `topology.c`, `apic.c`, `cpulist.c` and `mptable.c` build the socket/core/thread summary (leaf 0xB/0x1F where available, legacy leaves otherwise); AMD TopoExt handling is in `vendors/amd/identify.c`.
 - **Output**: default output is the identification + cache/TLB + feature flag listing per CPU, collapsed to "N identical CPUs" in `-v` mode; flag naming lives in `features.c`.
 - `docs/sspecs.md` holds S-spec/stepping notes moved out of the identification code comments.
