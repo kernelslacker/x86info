@@ -33,9 +33,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
 
 ## 🟢 Minor nits
 
-E2. `features.c:256,269,529` — "hle" has the TSX description, "Instruct"
-    is cut short, "XSTOR" should be "XRSTOR".
-
 E3. `vendors/intel/identify-family6-extended.c:125` — model 0x66 is
     Cannon Lake (Core), not Atom.
 
