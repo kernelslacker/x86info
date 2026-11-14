@@ -144,8 +144,6 @@ static int groups_share_header(const struct cpudata *cpus, unsigned int n)
 /* Returns zero on success, -1 if the CPU can't be queried. */
 static int fill_in_cpu_info(struct cpudata *cpu)
 {
-	if (bind_cpu(cpu->number))
-		return -1;
 	if (get_cpu_info_basics(cpu))	/* get vendor,family,model,stepping */
 		return -1;
 	get_core_type(cpu);

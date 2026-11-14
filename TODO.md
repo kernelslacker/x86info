@@ -5,13 +5,6 @@ from reading the code only; confirm them before fixing.
 
 ## 🔴 Correctness
 
-A3. `x86info.c:147` — `fill_in_cpu_info()` fails the CPU when
-    `bind_cpu()` fails, although `/dev/cpu/N/cpuid` does not need the
-    bind. Under a restricted cpuset or `taskset`, root loses every CPU
-    outside the mask as "unable to read CPUID". Unverified. Remove the
-    bind here; `native_cpuid()`, `dump_apics()`, `display_feature_flags()`
-    and the MHz threads already bind for themselves. (sonnet)
-
 A4. `vendors/intel/cachesize.c:177` — `decode_general_cache()` loops on
     leaf 4 with no upper bound; a hypervisor that returns the same
     non-zero subleaf forever hangs x86info. Every other subleaf loop is
