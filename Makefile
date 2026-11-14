@@ -1,4 +1,4 @@
-VERSION=$(shell git describe --tags --always --dirty 2>/dev/null || date +%Y-%m-%d)
+VERSION := $(shell git describe --tags --always --dirty 2>/dev/null || date +%Y-%m-%d)
 
 include flags.mk
 

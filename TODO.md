@@ -33,9 +33,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
 
 ## 🟢 Minor nits
 
-E1. `Makefile:1` — `VERSION =` runs `git describe` on every expansion;
-    use `:=`.
-
 E2. `features.c:256,269,529` — "hle" has the TSX description, "Instruct"
     is cut short, "XSTOR" should be "XRSTOR".
 
