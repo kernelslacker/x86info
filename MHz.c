@@ -346,20 +346,24 @@ void estimate_MHz_cpus(struct cpudata *cpus, unsigned int n,
 	free(workers);
 }
 
-/* Fill cpu->MHz, measuring the TSC rate only once per run. */
+/* Fill cpu->MHz, measuring each CPU's TSC rate only once per run. */
 void ensure_MHz(struct cpudata *cpu)
 {
-	static int measured;
-	static unsigned int tsc_MHz;
+	static unsigned char measured[MAX_CPUS];
+	static unsigned int tsc_MHz[MAX_CPUS];
 
 	if (cpu->MHz)
 		return;
-	if (!measured) {
+	if (cpu->number >= MAX_CPUS) {
 		measure_MHz(cpu, 0);
-		tsc_MHz = cpu->MHz;
-		measured = 1;
+		return;
 	}
-	cpu->MHz = tsc_MHz;
+	if (!measured[cpu->number]) {
+		measure_MHz(cpu, 0);
+		tsc_MHz[cpu->number] = cpu->MHz;
+		measured[cpu->number] = 1;
+	}
+	cpu->MHz = tsc_MHz[cpu->number];
 }
 
 /* True if a measured MHz is within 1% of a nominal SKU frequency. */

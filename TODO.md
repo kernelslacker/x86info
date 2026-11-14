@@ -23,9 +23,9 @@ A11. `vendors/amd/identify.c:597` — `(ebx >> 16) & 0xff` of 0x80000021
 
 B8. `vendors/intel/identify-family6-extended.c:209`,
     `identify-family6.c:299,309` — identification calls `ensure_MHz()`,
-    so naming a CPU can spin for 100 ms, and the static cache gives every
-    CPU the first CPU's rate. Move the frequency-keyed SKU refinement to
-    display time, or pass the rate in. See C2. (sonnet)
+    so naming a Core 2 CPU can spin for 100 ms per CPU. Move the
+    frequency-keyed SKU refinement to display time, or pass the rate in.
+    See C2. (sonnet)
 
 B9. `identify.c:38-46`, `lsmsr/lsmsr.c:211-229`, `mptable.c:163-169` —
     three copies of the family/model decode from CPUID 1 EAX, with
