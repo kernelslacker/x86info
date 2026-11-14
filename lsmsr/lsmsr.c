@@ -70,13 +70,12 @@ static struct option lopts[] = {
 	{"list", no_argument, 0, 'l'},		/* list known MSRs */
 	{"register", required_argument, 0, 'r'},  /* register name or address */
 	{"help", no_argument, 0, 'h'},		/* help */
-	{"model", required_argument, 0, 'm'},	/* CPU model */
 	{"version", no_argument, 0, 'v'},	/* version info */
 	{"verbosity", required_argument, 0, 'V'}, /* verbosity */
 	{0, 0, 0, 0}
 };
 
-#define OPTSTRING "ac:f:hlm:r:vV:"
+#define OPTSTRING "ac:f:hlr:vV:"
 
 #define _USAGE "[OPTION] <MSR>\n"
 
@@ -87,7 +86,6 @@ static struct option lopts[] = {
 "  -l, --list                 list info about MSR(s), its addresses and fields\n"\
 "  -r, --register <name|addr> select register by name or address\n"\
 "  -h, --help                 show help\n"\
-"  -m, --model                set cpu model to be used\n"\
 "  -v, --version              show version info\n"\
 "  -V, --verbosity <n>        set verbosity\n"\
 "                             V=1 show all fields of the register\n"\
@@ -219,8 +217,7 @@ static void set_family_model(void)
 	decode_cpu_signature(a, g.vendor == VENDOR_AMD, &sig);
 	if (!g.family)
 		g.family = sig.family + sig.efamily;
-	if (!g.model)
-		g.model = sig.model | sig.emodel << 4;
+	g.model = sig.model | sig.emodel << 4;
 }
 
 static int set_msr_table(void)
@@ -341,9 +338,6 @@ int main(int argc, char *argv[])
 				fprintf(stderr, "-c: invalid value: %s\n", optarg);
 				exit(EXIT_FAILURE);
 			}
-			break;
-		case 'm':
-			g.model = parse_int_opt("-m", optarg, 0);
 			break;
 		case 'f':
 			g.family = parse_int_opt("-f", optarg, 0);

@@ -49,7 +49,7 @@ void identify_cyrix(struct cpudata *cpu)
 	}
 
 	/* The extended family only refines an unrecognised tuple */
-	if (known || cpu->maxei < 0x80000000)
+	if (known)
 		return;
 
 	if (cpu->maxei >= 0x80000001) {

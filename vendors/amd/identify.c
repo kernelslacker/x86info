@@ -177,9 +177,8 @@ static void set_listed_revinfo(int id, struct cpudata *c)
 	set_connector(c);
 }
 
-static void set_fam16h_revinfo(int id, struct cpudata *c)
+static void set_fam16h_revinfo(struct cpudata *c)
 {
-	(void)id;
 	if (model(c) <= 0x0f)
 		snprintf(c->name, CPU_NAME_LEN, "AMD Jaguar APU (Kabini/Temash)");
 	else if (model(c) >= 0x30 && model(c) <= 0x3f)
@@ -312,7 +311,7 @@ void identify_amd(struct cpudata *cpu)
 			set_listed_revinfo(eax, cpu);
 			break;
 		case 0x16:
-			set_fam16h_revinfo(eax, cpu);
+			set_fam16h_revinfo(cpu);
 			break;
 		case 0x17:
 			set_zen_revinfo("Zen/Zen+/Zen2", fam17h_dies,

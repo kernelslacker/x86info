@@ -381,6 +381,6 @@ void decode_powernow(struct cpudata *cpu)
 		decode_fidvid(cpu);
 	else if (family(cpu) == 0xf)
 		k8_decode_fidvid(cpu);
-	else if (family(cpu) >= 0x10)
+	else
 		decode_pstates(cpu, has_cpb);
 }

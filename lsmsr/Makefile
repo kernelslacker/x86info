@@ -2,9 +2,7 @@ SHELL = /bin/sh
 
 include ../flags.mk
 
-VERSION ?= $(shell date +%Y-%m-%d)
-
-CFLAGS = -DVERSION="$(VERSION)" -I. -I../include $(COMMON_CFLAGS) -MMD -MP
+CFLAGS = -I. -I../include $(COMMON_CFLAGS) -MMD -MP
 
 LDFLAGS = -Wl,-z,relro,-z,now
 

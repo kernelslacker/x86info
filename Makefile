@@ -124,7 +124,7 @@ $(ASAN_BIN): $(X86INFO_HEADERS) $(wildcard *.c) $(wildcard vendors/*/*.c)
 	    -o $@ $(wildcard *.c) $(wildcard vendors/*/*.c) $(LIBPCI)
 
 lsmsr:
-	$(Q)$(MAKE) --no-print-directory -C lsmsr VERSION=$(VERSION)
+	$(Q)$(MAKE) --no-print-directory -C lsmsr
 
 DEPDIR= .deps
 -include $(X86INFO_SRC:%.c=$(DEPDIR)/%.d)

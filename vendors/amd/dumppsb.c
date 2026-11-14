@@ -7,8 +7,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
 #include <sys/mman.h>
 
 #include <x86info.h>

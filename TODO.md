@@ -27,18 +27,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
     frequency-keyed SKU refinement to display time, or pass the rate in.
     See C2. (sonnet)
 
-B13. Dead or redundant code. (haiku)
-    - `lsmsr/lsmsr.c:53,351` — `-m/--model` is parsed but only printed in
-      an error message; `-DVERSION` is unused next to `LSMSR_VERSION`.
-    - `vendors/amd/identify.c:180` — unused `id` parameter.
-    - `include/apic.h` — `APIC_APR`, `APIC_EOI`, `APIC_RRD` unused.
-    - `vendors/cyrix/identify.c:46` — `maxei < 0x80000000` is covered by
-      the next test.
-    - `vendors/amd/powernow.c:391` — `else if (family >= 0x10)` is always
-      true there.
-    - Unused includes: `MHz.c` `<sys/time.h>`, `vendors/amd/dumppsb.c`
-      `<stdlib.h>` `<ctype.h>`, `vendors/intel/topology.c` `<strings.h>`.
-
 B14. `vendors/centaur/identify.c:60-110` — process, voltage and
     transistor-count notes sit in comments. Move them to
     `docs/sspecs.md`. (haiku)
