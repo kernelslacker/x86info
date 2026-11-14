@@ -122,16 +122,18 @@ static void version(void)
 static int get_msr_val(unsigned int msr, unsigned long long *val)
 {
 	ssize_t ret;
+	const char *name;
 	int err;
 
 	*val = 0;
 	ret = pread(g.fd, val, 8, (off_t) msr);
 	err = errno;
 	if (ret != 8) {
+		name = get_reg_name(msr, g.msr_table);
 		fflush(stdout);
 		fprintf(stderr,
 			"could not read MSR 0x%8.8x (%s): %s\n",
-			msr, get_reg_name(msr, g.msr_table), strerror(err));
+			msr, name ? name : "unknown", strerror(err));
 		return 1;
 	}
 

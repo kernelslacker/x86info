@@ -5,11 +5,6 @@ from reading the code only; confirm them before fixing.
 
 ## 🔴 Correctness
 
-A5. `lsmsr/lsmsr.c:134` — `get_reg_name()` returns NULL for an MSR that
-    is not in the table, and the result goes to `%s`. Reachable with
-    `lsmsr -r <unknown addr>` when the read fails. Print "unknown".
-    (haiku)
-
 A6. `rdmsr.c:15` — the 32-bit labelled form prints `(unsigned long)val`
     with `%08lx`, so on 64-bit the hex shows the high half while
     `binary32()` shows only the low half. Cast to `unsigned int`, use
