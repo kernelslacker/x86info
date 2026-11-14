@@ -16,7 +16,7 @@ static const struct {
 	{CONN_SOCKET_4, "Socket 4 (273 pin PGA)"},
 	{CONN_SOCKET_5, "Socket 5 (296 pin PGA socket)"},
 	{CONN_SOCKET_7, "Socket 7 (321 pin PGA socket)"},
-	{CONN_SOCKET_370, "Socket 370  (370 Pin PGA)"},
+	{CONN_SOCKET_370, "Socket 370 (370 Pin PGA)"},
 	{CONN_SOCKET_370_FCPGA, "Socket 370 (FC-PGA) or (PPGA)"},
 	/* AMD specific sockets */
 	{CONN_SOCKET_5_7, "Socket 5/7 (296 Pin PGA)"},
@@ -60,7 +60,7 @@ static const struct {
 	/* Transmeta specific sockets */
 	{CONN_BGA474, "474 Pin BGA"},
 	/* natsemi specific (Geode) */
-	{CONN_BGA, "BGA"},	/*  */
+	{CONN_BGA, "BGA"},
 };
 
 get_name(connector, enum connector, connector_strings);

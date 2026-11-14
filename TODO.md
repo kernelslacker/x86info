@@ -33,9 +33,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
 
 ## 🟢 Minor nits
 
-E4. `connector.c:17,62` — double space in "Socket 370  (370 Pin PGA)";
-    empty `/*  */` comment.
-
 E5. `vendors/amd/identify.c:479-490,542-545` — `goto out_660` inside a
     `case` (an `else if` does it), and four blank lines.
     `vendors/amd/powernow.c:227` trailing whitespace.
