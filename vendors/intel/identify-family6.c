@@ -333,6 +333,6 @@ void identify_intel_family6pentium(struct cpudata *cpu)
 		break;
 
 	default:
-                add_to_cpuname("Unknown model. ");
+		add_to_cpuname("Unknown model. ");
 	}
 }

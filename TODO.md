@@ -33,7 +33,3 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
 
 ## 🟢 Minor nits
 
-E5. `vendors/amd/identify.c:479-490,542-545` — `goto out_660` inside a
-    `case` (an `else if` does it), and four blank lines.
-    `vendors/amd/powernow.c:227` trailing whitespace.
-    `vendors/intel/identify-family6.c:336` space indentation.
