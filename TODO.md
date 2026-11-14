@@ -27,10 +27,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
     frequency-keyed SKU refinement to display time, or pass the rate in.
     See C2. (sonnet)
 
-B9. `identify.c:38-46`, `lsmsr/lsmsr.c:211-229`, `mptable.c:163-169` —
-    three copies of the family/model decode from CPUID 1 EAX, with
-    different extended-model rules. Add one helper in `cpuid.c`. (sonnet)
-
 B10. `topology.c:366-383` — an `offsetof` table to print three fields in
     debug mode; three plain loops are shorter. `mptable.c:303`
     `apic_probe()` returns codes 1 to 6 that no caller tells apart;

@@ -212,23 +212,15 @@ static void set_vendor(void)
 
 static void set_family_model(void)
 {
+	struct cpu_signature sig;
 	unsigned int a;
 
-	if (!g.family) {
-		cpuid(g.cpu, 1, &a, NULL, NULL, NULL);
-		g.family = (a >> 8) & 0xf;
-		if (g.family == 0xf)
-			g.family += (a >> 20) & 0xff;
-	}
-
-	if (!g.model) {
-		cpuid(g.cpu, 1, &a, NULL, NULL, NULL);
-		g.model = (a >> 4) & 0xf;
-		/* ExtModel applies at base family 0xf, and 6 and up except on AMD */
-		if (((a >> 8) & 0xf) == 0xf ||
-		    (((a >> 8) & 0xf) >= 6 && g.vendor != VENDOR_AMD))
-			g.model |= (a >> 12) & 0xf0;
-	}
+	cpuid(g.cpu, 1, &a, NULL, NULL, NULL);
+	decode_cpu_signature(a, g.vendor == VENDOR_AMD, &sig);
+	if (!g.family)
+		g.family = sig.family + sig.efamily;
+	if (!g.model)
+		g.model = sig.model | sig.emodel << 4;
 }
 
 static int set_msr_table(void)

@@ -192,6 +192,10 @@ void dumpmsr(unsigned int cpunum, unsigned int msr, int size, bool labelled);
 void dump_mc_banks(unsigned int cpunum, unsigned int banks);
 enum vendor vendor_from_cpuid(unsigned int ebx, unsigned int edx);
 unsigned int sane_max_leaf(unsigned int max, unsigned int base);
+struct cpu_signature {
+	unsigned int stepping, model, family, efamily, emodel;
+};
+void decode_cpu_signature(unsigned int eax, bool amd, struct cpu_signature *sig);
 void dump_raw_cpuid(unsigned int cpunum, unsigned int begin, unsigned int end);
 
 void dump_mtrrs(struct cpudata *cpu);

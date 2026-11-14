@@ -151,7 +151,8 @@ static void processorEntry(struct mp_scan *mp, const unsigned char *raw)
 	++mp->ncpu;
 
 	if (!mp->silent) {
-		int t, family, model;
+		struct cpu_signature sig;
+		int t;
 
 		printf("#\t%2d", (int) entry.apicID);
 		printf("\t 0x%2x", (unsigned int) entry.apicVersion);
@@ -161,14 +162,10 @@ static void processorEntry(struct mp_scan *mp, const unsigned char *raw)
 			(entry.cpuFlags & PROCENTRY_FLAG_EN) ? "usable" : "unusable");
 
 		t = (int) entry.cpuSignature;
-		family = (t >> 8) & 0xf;
-		model = (t >> 4) & 0xf;
-		if (family == 0xf) {
-			family += (t >> 20) & 0xff;
-			model += (t >> 12) & 0xf0;
-		}
+		decode_cpu_signature(t, false, &sig);
 
-		printf("\t %d\t %d\t %d", family, model, t & 0xf);
+		printf("\t %u\t %u\t %u", sig.family + sig.efamily,
+		       sig.model | sig.emodel << 4, sig.stepping);
 		printf("\t 0x%04x\n", entry.featureFlags);
 	}
 }

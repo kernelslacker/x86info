@@ -15,6 +15,7 @@ int get_cpu_info_basics(struct cpudata *cpu)
 	static int unknown_vendor_reported;
 
 	unsigned int maxi, maxei, vendor, vendor_ecx, vendor_edx, address_bits;
+	struct cpu_signature sig;
 	unsigned int eax;
 
 	if (cpuid(cpu->number, 0, &maxi, &vendor, &vendor_ecx, &vendor_edx))
@@ -35,15 +36,12 @@ int get_cpu_info_basics(struct cpudata *cpu)
 	/* Everything that supports cpuid supports these. */
 	if (cpuid(cpu->number, 1, &eax, NULL, NULL, NULL))
 		return -1;
-	cpu->stepping = eax & 0xf;
-	cpu->model = (eax >> 4) & 0xf;
-	cpu->family = (eax >> 8) & 0xf;
-	if (cpu->family == 0xf)
-		cpu->efamily = (eax >> 20) & 0xff;
-	/* AMD only has an extended model at family 0xf */
-	if (cpu->family == 0xf ||
-	    (cpu->family >= 6 && cpu->vendor != VENDOR_AMD))
-		cpu->emodel = (eax >> 16) & 0xf;
+	decode_cpu_signature(eax, cpu->vendor == VENDOR_AMD, &sig);
+	cpu->stepping = sig.stepping;
+	cpu->model = sig.model;
+	cpu->family = sig.family;
+	cpu->efamily = sig.efamily;
+	cpu->emodel = sig.emodel;
 
 	cpuid(cpu->number, 0x80000000, &maxei, NULL, NULL, NULL);
 	cpu->maxei = sane_max_leaf(maxei, 0x80000000);
