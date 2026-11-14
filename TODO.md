@@ -5,11 +5,6 @@ from reading the code only; confirm them before fixing.
 
 ## 🔴 Correctness
 
-A6. `rdmsr.c:15` — the 32-bit labelled form prints `(unsigned long)val`
-    with `%08lx`, so on 64-bit the hex shows the high half while
-    `binary32()` shows only the low half. Cast to `unsigned int`, use
-    `%08x`. (haiku)
-
 A7. `MHz.c:50` — `display_MHz_line()` prints "0MHz ..." when nothing was
     measured: no TSC, `bind_cpu()` failure in `measure_thread()`, or a
     replay dump without leaf 0x15/0x16 (seen with `--mhz` on

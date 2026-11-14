@@ -18,7 +18,7 @@ void dumpmsr(int cpu, unsigned int msr, int size, bool labelled)
 	}
 	if (size == 32) {
 		if (labelled)
-			printf("MSR: 0x%08x=0x%08lx : ", msr, (unsigned long) val);
+			printf("MSR: 0x%08x=0x%08x : ", msr, (unsigned int)val);
 		binary32(val);
 	}
 	if (size == 64) {
