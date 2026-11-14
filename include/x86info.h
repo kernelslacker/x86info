@@ -100,6 +100,7 @@ struct cpudata {
 
 	unsigned int phys_proc_id;
 	unsigned int topology;		/* TOPOLOGY_* */
+	unsigned int x2apic_leaf;	/* leaf the x2APIC topology came from */
 	unsigned int core_type;		/* CORE_TYPE_*, 0 if not hybrid */
 	unsigned int x86_max_cores;
 	unsigned int cpu_core_id;

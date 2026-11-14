@@ -56,6 +56,7 @@ static int decode_x2apic_leaf(struct cpudata *cpu, unsigned int leaf)
 	cpu->phys_proc_id = id >> pkg_shift;
 	cpu->cpu_core_id = (id >> smt_shift) & low_mask(pkg_shift - smt_shift);
 	cpu->topology = TOPOLOGY_X2APIC;
+	cpu->x2apic_leaf = leaf;
 	return 1;
 }
 
@@ -321,21 +322,13 @@ static void show_topology_levels(const struct cpudata *cpu)
 	unsigned int nr_names = ARRAY_SIZE(intel_names);
 	unsigned int eax, ebx, ecx, edx, leaf, subleaf, level_type;
 
-	if (cpu->vendor == VENDOR_AMD && cpu->maxei >= 0x80000026) {
-		leaf = 0x80000026;
+	leaf = cpu->x2apic_leaf;
+	if (!leaf)
+		return;
+	if (leaf == 0x80000026) {
 		names = amd_names;
 		nr_names = ARRAY_SIZE(amd_names);
-	} else if (cpu->cpuid_level >= 0x1f) {
-		leaf = 0x1f;
-	} else if (cpu->cpuid_level >= 0xb) {
-		leaf = 0xb;
-	} else {
-		return;
 	}
-
-	cpuid_count(cpu->number, leaf, 0, NULL, &ebx, NULL, NULL);
-	if (!ebx)
-		return;
 
 	printf("Extended topology (leaf 0x%X):\n", leaf);
 	for (subleaf = 0; subleaf < 8; subleaf++) {

@@ -5,17 +5,6 @@ from reading the code only; confirm them before fixing.
 
 ## 🔴 Correctness
 
-A1. `topology.c:324` — `show_topology_levels()` picks the leaf from the
-    max leaf number, but `get_x2apic_topology()` falls back when that leaf
-    is empty. With an empty 0x1F (or 0x80000026) and a valid 0xB, `-v`
-    prints no "Extended topology" block at all. Fixtures
-    `intel/intel-empty-1f` and the QEMU Sapphire/Granite Rapids dumps show
-    it. (sonnet)
-    - Record the leaf that `decode_x2apic_leaf()` accepted in `struct
-      cpudata`.
-    - Make `show_topology_levels()` use that leaf.
-    - Regenerate goldens; expect about ten `.v.out` files to gain the block.
-
 A2. `cpudev-linux.c:101,125` — the "Try 'modprobe'" hint only fires when
     `/dev/cpu` itself is missing, and `reported_module` is one flag for
     both nodes. With `msr` loaded but `cpuid` not, root gets one
