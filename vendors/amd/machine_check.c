@@ -9,12 +9,7 @@
 #include <sys/types.h>
 #include <x86info.h>
 #include <amd.h>
-
-#define MCG_CAP 0x0179
-#define MCG_STATUS 0x17a
-#define MCG_CTL 0x17b
-
-#define MC_CTL 0x0400
+#include <machine_check.h>
 
 struct mc_bit {
 	unsigned int bit;

@@ -9,13 +9,7 @@
 #include <sys/types.h>
 #include <x86info.h>
 #include "intel.h"
-
-#define MCG_CAP 0x0179
-#define MCG_CTL_PBIT	8
-#define MCG_EXT_PBIT	9
-#define MCG_STATUS 0x17a
-#define MCG_CTL 0x17b
-#define MCG_EXT 0x180
+#include <machine_check.h>
 
 void decode_intel_machine_check(unsigned int cpunum, int family)
 {

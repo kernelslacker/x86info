@@ -6,11 +6,7 @@
 
 #include <stdio.h>
 #include <x86info.h>
-
-#define MC_CTL 0x0400
-#define MC_STATUS 0x0401
-#define MC_ADDR 0x402
-#define MC_MISC 0x403
+#include <machine_check.h>
 
 void dump_mc_banks(unsigned int cpunum, unsigned int banks)
 {

@@ -21,10 +21,6 @@ A11. `vendors/amd/identify.c:597` — `(ebx >> 16) & 0xff` of 0x80000021
 
 ## 🟡 Maintainability
 
-B6. `machine_check.c:10`, `vendors/amd/machine_check.c:13`,
-    `vendors/intel/machine_check.c:13` — `MCG_*` and `MC_CTL` are defined
-    three times. Move them to one header. (haiku)
-
 B7. `vendors/amd/powernow.c:196` — `get_cof()` is a `goto` maze, returns
     0 for a bad divisor although the comment says -1, and
     `get_num_boost_states()` prints as a side effect of a getter. Use
