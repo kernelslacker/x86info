@@ -570,18 +570,6 @@ static const char *cap_extended_ecx_flags_desc[32] = {
 	[27] = "Performance time-stamp counter",
 };
 
-static const char *centaur_cap_ecx_flags[32] = {
-	"sse3", NULL, NULL, NULL, NULL, NULL, NULL, "EPS",
-	"tm2", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
-};
-static const char *centaur_cap_80000001_edx_flags[32] = {
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL, "mmxext", NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL, "3dnowext", "3dnow"
-};
 static const char *centaur_cap_extended_edx_flags[32] = {
 	NULL, NULL, "RNGp", "RNGe", NULL, NULL, "ACEp", "ACEe",
 	"ACE2p", "ACE2e", "PHEp", "PHEe", "PMMp", "PMMe", NULL, NULL,
@@ -620,9 +608,9 @@ static void decode_feature_flags(const struct cpudata *cpu)
 		case VENDOR_CENTAUR:
 			printf("\n");
 			printf("Extended feature flags:\n");
-			flag_decode(cpu->flags_ecx, "1:ecx", centaur_cap_ecx_flags, NULL);
+			flag_decode(cpu->flags_ecx, "1:ecx", cap_generic_ecx_flags, cap_generic_ecx_flags_desc);
 			if (cpu->maxei >= 0x80000001)
-				flag_decode(cpu->eflags_edx, "80000001:edx", centaur_cap_80000001_edx_flags, NULL);
+				flag_decode(cpu->eflags_edx, "80000001:edx", cap_extended_edx_flags, cap_extended_edx_flags_desc);
 			if (cpu->maxei2 >= 0xc0000001) {
 				cpuid(cpu->number, 0xc0000001, &eax, &ebx, &ecx, &edx);
 				flag_decode(edx, "c0000001:edx", centaur_cap_extended_edx_flags, NULL);

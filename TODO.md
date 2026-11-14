@@ -5,14 +5,6 @@ from reading the code only; confirm them before fixing.
 
 ## 🔴 Correctness
 
-A8. `features.c:620` — Centaur/Zhaoxin decode CPUID 1 ECX with a
-    three-entry table, so modern Zhaoxin output is mostly `[1:ecx:N]`
-    (see `centaur/centaur-qemu-yongfeng-v1.out` line 15). The same
-    applies to 0x80000001 EDX. (sonnet)
-    - Use the generic ECX and extended tables for `VENDOR_CENTAUR`.
-    - Keep the 0xC0000001 table.
-    - Regenerate the Centaur goldens.
-
 A9. `vendors/centaur/msr-c3.c:15` — "Power management: " is printed with
     no newline and no text for models other than 6 to 9. Print the
     heading only inside the two branches. (haiku)
