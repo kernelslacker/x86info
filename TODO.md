@@ -5,11 +5,6 @@ from reading the code only; confirm them before fixing.
 
 ## 🔴 Correctness
 
-A11. `vendors/amd/identify.c:597` — `(ebx >> 16) & 0xff` of 0x80000021
-    is printed as the return address predictor size in entries. My
-    recollection of the APM is that the field is in units of 8.
-    Unverified; check 24594 before changing. (haiku after the check)
-
 ## 🟡 Maintainability
 
 B8. `vendors/intel/identify-family6-extended.c:209`,
