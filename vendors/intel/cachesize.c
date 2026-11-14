@@ -164,7 +164,7 @@ static const char *cache_types[32] =
 	"Unified Cache",
 };
 
-static void decode_general_cache(struct cpudata *cpu, int output)
+static void decode_general_cache(struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned int a, b, c, d;
@@ -203,9 +203,8 @@ static void decode_general_cache(struct cpudata *cpu, int output)
 			unit = "MB";
 		}
 
-		if (output)
-			printf(" L%u %s: %llu%s, %u-way associative, %u byte line size\n",
-			       level, type, size, unit, associativity, line_size);
+		printf(" L%u %s: %llu%s, %u-way associative, %u byte line size\n",
+		       level, type, size, unit, associativity, line_size);
 	}
 }
 
@@ -237,15 +236,14 @@ static const char * const pagenames[] = {
 	"1GB/4MB/2MB/4KB",
 };
 
-static void decode_general_tlb(struct cpudata *cpu, int output)
+static void decode_general_tlb(struct cpudata *cpu)
 {
 	unsigned int i = 0;
 	unsigned int max = 0xffffffff;
 	unsigned int a, b, c, d;
 
 	if (cpu->cpuid_level < 0x18) {
-		if (output)
-			printf("Leaf 0x18 not supported\n");
+		printf("Leaf 0x18 not supported\n");
 		return;
 	}
 
@@ -278,10 +276,9 @@ static void decode_general_tlb(struct cpudata *cpu, int output)
 		typename = tlbnames[type];
 		if (!typename)
 			typename = "Unknown";
-		if (output)
-			printf(" L%u %s TLB: %s pages, %s associative, "
-				"%u entries\n", level, typename,
-				pagenames[page_size], assoc, entries);
+		printf(" L%u %s TLB: %s pages, %s associative, "
+			"%u entries\n", level, typename,
+			pagenames[page_size], assoc, entries);
 	}
 }
 
@@ -348,19 +345,19 @@ static unsigned int read_descriptors(struct cpudata *cpu,
 	return count;
 }
 
-/* Print (and total up) the descriptors of one kind, in CPUID order. */
-static void decode_kind(struct cpudata *cpu, const unsigned char *bytes,
-			unsigned int count, enum desc_kind kind, int output)
+/* Add up the L1, L2 and L3 descriptors into the cachesize_* fields. */
+static void sum_cache_sizes(struct cpudata *cpu, const unsigned char *bytes,
+			    unsigned int count)
 {
 	unsigned int i;
 
 	for (i = 0; i < count; i++) {
 		const struct cache_desc *d = lookup_desc(bytes[i], cpu);
 
-		if (!d || d->kind != kind)
+		if (!d)
 			continue;
 
-		switch (kind) {
+		switch (d->kind) {
 		case K_L1I:
 			cpu->cachesize_L1_I += d->size;
 			break;
@@ -379,8 +376,19 @@ static void decode_kind(struct cpudata *cpu, const unsigned char *bytes,
 		case K_DTLB:
 			break;
 		}
+	}
+}
 
-		if (output)
+/* Print the descriptors of one kind, in CPUID order. */
+static void print_kind(const struct cpudata *cpu, const unsigned char *bytes,
+		       unsigned int count, enum desc_kind kind)
+{
+	unsigned int i;
+
+	for (i = 0; i < count; i++) {
+		const struct cache_desc *d = lookup_desc(bytes[i], cpu);
+
+		if (d && d->kind == kind)
 			printf(" %s\n", d->string);
 	}
 }
@@ -442,7 +450,25 @@ static void print_cache_totals(const struct cpudata *cpu)
 		printf("\n");
 }
 
-void decode_intel_caches(struct cpudata *cpu, int output)
+/* Fill in cachesize_* from the CPUID 2 descriptors. */
+void size_intel_caches(struct cpudata *cpu)
+{
+	unsigned char bytes[16 * MAX_LEAF2_ITER];
+	unsigned int count;
+
+	cpu->cachesize_L1_I = 0;
+	cpu->cachesize_L1_D = 0;
+	cpu->cachesize_L2 = 0;
+	cpu->cachesize_L3 = 0;
+
+	if (cpu->cpuid_level < 2)
+		return;
+
+	count = read_descriptors(cpu, bytes);
+	sum_cache_sizes(cpu, bytes, count);
+}
+
+void show_intel_caches(struct cpudata *cpu)
 {
 	unsigned char bytes[16 * MAX_LEAF2_ITER];
 	unsigned int count;
@@ -451,39 +477,31 @@ void decode_intel_caches(struct cpudata *cpu, int output)
 	if (cpu->cpuid_level < 2)
 		return;
 
-	cpu->cachesize_L1_I = 0;
-	cpu->cachesize_L1_D = 0;
-	cpu->cachesize_L2 = 0;
-	cpu->cachesize_L3 = 0;
-
 	count = read_descriptors(cpu, bytes);
 	use_leaf4 = has_descriptor(bytes, count, DESC_USE_LEAF4);
 	use_leaf18 = has_descriptor(bytes, count, DESC_USE_LEAF18);
 
-	if (output)
-		printf("Cache info\n");
+	printf("Cache info\n");
 
-	decode_kind(cpu, bytes, count, K_TRACE, output);
-	decode_kind(cpu, bytes, count, K_L1I, output);
-	decode_kind(cpu, bytes, count, K_L1D, output);
-	decode_kind(cpu, bytes, count, K_L2, output);
-	decode_kind(cpu, bytes, count, K_L3, output);
-	if (output && !use_leaf4)
+	print_kind(cpu, bytes, count, K_TRACE);
+	print_kind(cpu, bytes, count, K_L1I);
+	print_kind(cpu, bytes, count, K_L1D);
+	print_kind(cpu, bytes, count, K_L2);
+	print_kind(cpu, bytes, count, K_L3);
+	if (!use_leaf4)
 		print_cache_totals(cpu);
 	/* The cache descriptor 0xff means the CPU doesn't provide any
 	 * cache information in cpuid.2. It is instead provided in
 	 * cpuid.4.
 	 */
 	if (use_leaf4)
-		decode_general_cache(cpu, output);
-	decode_kind(cpu, bytes, count, K_PREFETCH, output);
-	if (output)
-		printf("TLB info\n");
+		decode_general_cache(cpu);
+	print_kind(cpu, bytes, count, K_PREFETCH);
+	printf("TLB info\n");
 	if (use_leaf18)
-		decode_general_tlb(cpu, output);
-	decode_kind(cpu, bytes, count, K_ITLB, output);
-	decode_kind(cpu, bytes, count, K_DTLB, output);
+		decode_general_tlb(cpu);
+	print_kind(cpu, bytes, count, K_ITLB);
+	print_kind(cpu, bytes, count, K_DTLB);
 
-	if (output)
-		print_unknown(cpu, bytes, count);
+	print_unknown(cpu, bytes, count);
 }

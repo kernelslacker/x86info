@@ -24,7 +24,7 @@ void identify_intel(struct cpudata *cpu)
 
 	cpu->x86_max_cores = intel_num_cpu_cores(cpu);
 
-	decode_intel_caches(cpu, 0);
+	size_intel_caches(cpu);
 
 	switch (cpu->family) {
 	case 4:	add_to_cpuname("i486 ");

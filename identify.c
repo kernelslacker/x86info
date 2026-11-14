@@ -74,11 +74,6 @@ struct vendor_ops {
 	void (*show_cache)(struct cpudata *cpu);
 };
 
-static void show_intel_cache(struct cpudata *cpu)
-{
-	decode_intel_caches(cpu, 1);
-}
-
 static const struct vendor_ops vendor_ops[] = {
 	[VENDOR_AMD] = {
 		.identify = identify_amd,
@@ -96,7 +91,7 @@ static const struct vendor_ops vendor_ops[] = {
 	[VENDOR_INTEL] = {
 		.identify = identify_intel,
 		.show_info = display_extended_intel_info,
-		.show_cache = show_intel_cache,
+		.show_cache = show_intel_caches,
 	},
 	[VENDOR_NATSEMI] = { .identify = identify_misc },
 	[VENDOR_RISE] = { .identify = identify_misc },

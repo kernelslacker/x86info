@@ -21,12 +21,6 @@ A11. `vendors/amd/identify.c:597` — `(ebx >> 16) & 0xff` of 0x80000021
 
 ## 🟡 Maintainability
 
-B5. `vendors/intel/cachesize.c:445` — `decode_intel_caches(cpu, output)`
-    mixes sizing and printing. The `output == 0` pass from
-    `identify_intel()` still walks leaf 4 and 0x18 and discards the
-    result. Split into a sizing function that fills `cachesize_*` and a
-    display function. (sonnet)
-
 B6. `machine_check.c:10`, `vendors/amd/machine_check.c:13`,
     `vendors/intel/machine_check.c:13` — `MCG_*` and `MC_CTL` are defined
     three times. Move them to one header. (haiku)
