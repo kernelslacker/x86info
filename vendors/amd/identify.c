@@ -479,16 +479,13 @@ void identify_amd(struct cpudata *cpu)
 
 		if (is_mobile(cpu)) {
 			add_to_cpuname("Mobile Athlon 4");
-			goto out_660;
-		}
-		if (getL2size(cpu->number) < 256) {
+		} else if (getL2size(cpu->number) < 256) {
 			add_to_cpuname("Duron (Morgan)");
 		} else {
 			add_to_cpuname("Athlon ");
 			determine_xp_mp(cpu);
 			add_to_cpuname(" (Palomino)");
 		}
-out_660:
 		switch (cpu->stepping) {
 		case 0:
 			add_to_cpuname(" [A0-A1]");
@@ -540,9 +537,6 @@ out_660:
 		determine_xp_mp(cpu);
 		add_to_cpuname(" (Barton)");
 		break;
-
-
-
 
 	default:
 		add_to_cpuname("Unknown CPU");
