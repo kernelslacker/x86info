@@ -33,9 +33,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
 
 ## 🟢 Minor nits
 
-E3. `vendors/intel/identify-family6-extended.c:125` — model 0x66 is
-    Cannon Lake (Core), not Atom.
-
 E4. `connector.c:17,62` — double space in "Socket 370  (370 Pin PGA)";
     empty `/*  */` comment.
 

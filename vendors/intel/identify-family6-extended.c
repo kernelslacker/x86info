@@ -122,7 +122,7 @@ static const struct cpu_name_def intel_fam6e_names[] = {
 	{ .model = 0x5e, .flags = ONLYMODEL, .str = "Core-i7 [Skylake desktop]" },
 	{ .model = 0x5f, .flags = ONLYMODEL, .str = "Atom [Denverton]" },
 
-	{ .model = 0x66, .flags = ONLYMODEL, .str = "Atom [Cannonlake]" },
+	{ .model = 0x66, .flags = ONLYMODEL, .str = "Core [Cannon Lake]" },
 	{ .model = 0x6a, .flags = ONLYMODEL, .str = "[Icelake-X]" },
 	{ .model = 0x6c, .flags = ONLYMODEL, .str = "[Icelake Xeon-D]" },
 
