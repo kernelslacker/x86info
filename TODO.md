@@ -31,9 +31,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
 
 ## 🟢 Enhancements
 
-D2. `vendors/centaur/identify.c:133` — Zhaoxin cache data comes only
-    from 0x80000005/6. These parts have leaf 4; reuse the Intel decoder.
-
 ## 🟢 Minor nits
 
 E1. `Makefile:1` — `VERSION =` runs `git describe` on every expansion;

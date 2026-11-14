@@ -2,6 +2,7 @@
 
 void size_intel_caches(struct cpudata *cpu);
 void show_intel_caches(struct cpudata *cpu);
+void show_leaf4_caches(struct cpudata *cpu);
 void decode_intel_machine_check(unsigned int cpunum, int family);
 
 void dump_p4_msrs(struct cpudata *cpu);

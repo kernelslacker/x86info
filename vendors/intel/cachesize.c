@@ -164,7 +164,8 @@ static const char *cache_types[32] =
 	"Unified Cache",
 };
 
-static void decode_general_cache(struct cpudata *cpu)
+/* Print the caches CPUID leaf 4 describes. */
+void show_leaf4_caches(struct cpudata *cpu)
 {
 	unsigned int i;
 	unsigned int a, b, c, d;
@@ -495,7 +496,7 @@ void show_intel_caches(struct cpudata *cpu)
 	 * cpuid.4.
 	 */
 	if (use_leaf4)
-		decode_general_cache(cpu);
+		show_leaf4_caches(cpu);
 	print_kind(cpu, bytes, count, K_PREFETCH);
 	printf("TLB info\n");
 	if (use_leaf18)

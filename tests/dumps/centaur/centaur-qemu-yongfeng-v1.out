@@ -3,9 +3,10 @@ CPU Model (x86info's best guess): Unknown Zhaoxin CPU
 Processor name string (BIOS programmed): Zhaoxin YongFeng Processor
 
 Cache info
- L1 Instruction cache: 64KB, 2-way associative, 1 lines per tag, line size=64 bytes.
- L1 Data cache: 64KB 2-way associative, 1 lines per tag, line size=64 bytes.
- L2 (on CPU) cache: 512KB 8-way associative, 1 lines per tag, line size=64 bytes.
+ L1 Data Cache: 32KB, 8-way associative, 64 byte line size
+ L1 Instruction Cache: 32KB, 8-way associative, 64 byte line size
+ L2 Unified Cache: 4MB, 16-way associative, 64 byte line size
+ L3 Unified Cache: 16MB, 16-way associative, 64 byte line size
 TLB info
  Instruction TLB: 1-way associative. 255 entries.
  Data TLB: 1-way associative. 255 entries.

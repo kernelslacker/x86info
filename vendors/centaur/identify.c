@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <x86info.h>
 #include "centaur.h"
+#include "intel.h"
 
 /* Zhaoxin parts have an extended model, or are family 7. */
 static void identify_zhaoxin(struct cpudata *cpu)
@@ -97,14 +98,30 @@ void identify_centaur(struct cpudata *cpu)
 }
 
 
+/* Zhaoxin parts have the Intel-style CPUID leaf 4; older Centaur parts do not. */
+static int has_leaf4_caches(struct cpudata *cpu)
+{
+	unsigned int eax;
+
+	if (cpu->cpuid_level < 4)
+		return 0;
+	cpuid_count(cpu->number, 4, 0, &eax, NULL, NULL, NULL);
+	return (eax & 0x1f) != 0;
+}
+
 void show_centaur_cache(struct cpudata *cpu)
 {
 	unsigned int ebx, ecx, edx, l2_ecx;
+	int leaf4 = has_leaf4_caches(cpu);
 
-	if (cpu->maxei >= 0x80000005) {
-		/* TLB and cache info */
-		cpuid(cpu->number, 0x80000005, NULL, &ebx, &ecx, &edx);
-		printf("Cache info\n");
+	if (cpu->maxei < 0x80000005 && !leaf4)
+		return;
+
+	printf("Cache info\n");
+	if (leaf4) {
+		show_leaf4_caches(cpu);
+	} else {
+		cpuid(cpu->number, 0x80000005, NULL, NULL, &ecx, &edx);
 		printf(" L1 Instruction cache: %uKB, %u-way associative, %u lines per tag, line size=%u bytes.\n",
 			edx >> 24, (edx >> 16) & 0xff, (edx >> 8) & 0xff, edx & 0xff);
 		printf(" L1 Data cache: %uKB %u-way associative, %u lines per tag, line size=%u bytes.\n",
@@ -119,6 +136,10 @@ void show_centaur_cache(struct cpudata *cpu)
 				printf(" L2 (on CPU) cache: %uKB %u-way associative, %u lines per tag, line size=%u bytes.\n",
 					l2_ecx >> 16, (l2_ecx >> 12) & 0x0f, (l2_ecx >> 8) & 0x0f, l2_ecx & 0xff);
 		}
+	}
+
+	if (cpu->maxei >= 0x80000005) {
+		cpuid(cpu->number, 0x80000005, NULL, &ebx, NULL, NULL);
 		printf("TLB info\n");
 		printf(" Instruction TLB: %u-way associative. %u entries.\n", (ebx >> 8) & 0xff, ebx & 0xff);
 		printf(" Data TLB: %u-way associative. %u entries.\n", ebx >> 24, (ebx >> 16) & 0xff);
