@@ -173,17 +173,16 @@ static void decode_general_cache(struct cpudata *cpu, int output)
 	if (cpu->cpuid_level < 4)
 		return;
 
-	i = 0;
-	for (;;) {
+	for (i = 0; i < 32; i++) {
 		const char *type;
 		unsigned int level;
 		unsigned int associativity;
 		unsigned int partitions;
 		unsigned int line_size;
 		unsigned int sets;
-		unsigned int size;
+		unsigned long long size;
 
-		cpuid_count(cpu->number, 4, i++, &a, &b, &c, &d);
+		cpuid_count(cpu->number, 4, i, &a, &b, &c, &d);
 		if ((a & 0x1f) == 0)
 			break;
 
@@ -197,14 +196,15 @@ static void decode_general_cache(struct cpudata *cpu, int output)
 		sets = c + 1;
 
 		unit = "KB";
-		size = (associativity * partitions * line_size * sets) / 1024;
+		size = (unsigned long long)associativity * partitions *
+		       line_size * sets / 1024;
 		if (size >= 1024 && size % 1024 == 0) {
 			size /= 1024;
 			unit = "MB";
 		}
 
 		if (output)
-			printf(" L%u %s: %u%s, %u-way associative, %u byte line size\n",
+			printf(" L%u %s: %llu%s, %u-way associative, %u byte line size\n",
 			       level, type, size, unit, associativity, line_size);
 	}
 }

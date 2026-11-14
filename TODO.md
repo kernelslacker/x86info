@@ -5,12 +5,6 @@ from reading the code only; confirm them before fixing.
 
 ## 🔴 Correctness
 
-A4. `vendors/intel/cachesize.c:177` — `decode_general_cache()` loops on
-    leaf 4 with no upper bound; a hypervisor that returns the same
-    non-zero subleaf forever hangs x86info. Every other subleaf loop is
-    capped. Cap at 32. Also compute `size` in `unsigned long long`, as
-    `vendors/amd/cacheinfo.c:177` does. (haiku)
-
 A5. `lsmsr/lsmsr.c:134` — `get_reg_name()` returns NULL for an MSR that
     is not in the table, and the result goes to `%s`. Reachable with
     `lsmsr -r <unknown addr>` when the read fails. Print "unknown".
