@@ -5,10 +5,6 @@ from reading the code only; confirm them before fixing.
 
 ## 🔴 Correctness
 
-A9. `vendors/centaur/msr-c3.c:15` — "Power management: " is printed with
-    no newline and no text for models other than 6 to 9. Print the
-    heading only inside the two branches. (haiku)
-
 A10. `cpuid-freebsd.c`, `cpuid-solaris.c`, `rdmsr-freebsd.c` — these do
     not follow the `cpuid()` contract: they `exit()` on error, do not use
     `cpuid_store()`, and reopen the device on every call. Solaris has no
