@@ -20,8 +20,7 @@ golden() {
 	name=$(basename "$dump")-$suffix
 	golden=${dump%.dump}.$suffix
 
-	# shellcheck disable=SC2068
-	if ! raw=$(X86INFO_CPUID_DUMP=$dump "$bin" $@); then
+	if ! raw=$(X86INFO_CPUID_DUMP=$dump "$bin" "$@"); then
 		echo "FAIL $name: $bin exited unsuccessfully"
 		fail=1
 		return
