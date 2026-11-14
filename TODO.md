@@ -21,11 +21,6 @@ A11. `vendors/amd/identify.c:597` — `(ebx >> 16) & 0xff` of 0x80000021
 
 ## 🟡 Maintainability
 
-B1. `features.c:60-597` — each leaf has a name array and a parallel
-    description array, kept in step by index comments, in two different
-    initializer styles. Merge each pair into one table of
-    `{ name, desc }` with designated indexes. (sonnet)
-
 B2. `topology.c:175-180` and `vendors/amd/identify.c:644-651` — the same
     0x80000008 ECX decode (thread count, APIC ID width) appears twice,
     with the same comment. `identify.c:657` also reads 0x8000001E without

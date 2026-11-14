@@ -362,7 +362,7 @@ void decode_powernow(struct cpudata *cpu)
 
 	for (i = 0; i < 15; i++)
 		if (edx & (1U << i))
-			printf("\n\t%s", cpuid_80000007_edx_flags_desc[i]);
+			printf("\n\t%s", cpuid_80000007_edx_flags[i].desc);
 
 	can_scale_fid = !!(edx & ((1 << 1) | (1 << 7)));
 	can_scale_vid = !!(edx & ((1 << 2) | (1 << 7)));

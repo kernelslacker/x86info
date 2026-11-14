@@ -147,7 +147,12 @@ static const char *get_##title##_name(type id) \
 
 void identify_misc(struct cpudata *cpu);
 
-extern const char *cpuid_80000007_edx_flags_desc[32];
+struct flag_info {
+	const char *name;
+	const char *desc;
+};
+
+extern const struct flag_info cpuid_80000007_edx_flags[32];
 void get_feature_flags(struct cpudata *cpu);
 void display_feature_flags(const struct cpudata *cpu);
 
