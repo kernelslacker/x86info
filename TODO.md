@@ -21,9 +21,6 @@ A11. `vendors/amd/identify.c:597` — `(ebx >> 16) & 0xff` of 0x80000021
 
 ## 🟡 Maintainability
 
-B3. `cpuid.c:106` — `subleaf_state()` takes nine arguments. Pass two
-    `const unsigned int regs[4]` (this subleaf, subleaf 0). (sonnet)
-
 B4. `include/x86info.h:181` — `read_msr()` returns 1 on success and
     `cpuid()` returns 0. Callers test `== 1`, `!= 1` and `!read_msr()`.
     The CPU number is `int` in `read_msr`, `dumpmsr`, `dump_raw_cpuid`
