@@ -81,10 +81,11 @@ static const struct vendor_ops vendor_ops[] = {
 	[VENDOR_CENTAUR] = {
 		.identify = identify_centaur,
 		.show_info = display_centaur_info,
+		.show_cache = show_centaur_cache,
 	},
 	[VENDOR_CYRIX] = {
 		.identify = identify_cyrix,
-		.show_info = display_cyrix_info,
+		.show_cache = show_cyrix_cache,
 	},
 	[VENDOR_INTEL] = {
 		.identify = identify_intel,

@@ -9,3 +9,4 @@ enum c3_power {
 void decode_c3_power(struct cpudata *cpu, enum c3_power gen);
 void identify_centaur(struct cpudata *cpu);
 void display_centaur_info(struct cpudata *cpu);
+void show_centaur_cache(struct cpudata *cpu);

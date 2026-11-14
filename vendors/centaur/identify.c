@@ -130,7 +130,7 @@ void identify_centaur(struct cpudata *cpu)
 }
 
 
-static void decode_centaur_cacheinfo(struct cpudata *cpu)
+void show_centaur_cache(struct cpudata *cpu)
 {
 	unsigned int ebx, ecx, edx, l2_ecx;
 
@@ -163,9 +163,6 @@ void display_centaur_info(struct cpudata *cpu)
 {
 	if (cpu->maxei == 0)
 		return;
-
-	if (opts.show_cacheinfo)
-		decode_centaur_cacheinfo(cpu);
 
 	if (cpu->family == 6 && opts.show_msr)
 		dump_C3_MSR(cpu);

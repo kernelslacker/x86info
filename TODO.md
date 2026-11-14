@@ -27,10 +27,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
     frequency-keyed SKU refinement to display time, or pass the rate in.
     See C2. (sonnet)
 
-B11. `identify.c:121` — Centaur and Cyrix print cache data from their
-    `show_info` hook under `opts.show_cacheinfo`, while AMD and Intel use
-    the `show_cache` hook. Move both to `show_cache`. (sonnet)
-
 B12. `tests/qemu/run.py` — no type hints, results are bare dicts, and
     `test_model()` is about 70 lines that mix the QEMU lifecycle with the
     replay comparisons. Add hints, a `TypedDict` result, and split the

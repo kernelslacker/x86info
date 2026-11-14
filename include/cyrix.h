@@ -1,4 +1,4 @@
 #pragma once
 
 void identify_cyrix(struct cpudata *cpu);
-void display_cyrix_info(struct cpudata *cpu);
+void show_cyrix_cache(struct cpudata *cpu);
