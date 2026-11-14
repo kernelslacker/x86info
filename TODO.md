@@ -27,11 +27,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
     frequency-keyed SKU refinement to display time, or pass the rate in.
     See C2. (sonnet)
 
-B12. `tests/qemu/run.py` — no type hints, results are bare dicts, and
-    `test_model()` is about 70 lines that mix the QEMU lifecycle with the
-    replay comparisons. Add hints, a `TypedDict` result, and split the
-    function. (sonnet; lint with haiku)
-
 B13. Dead or redundant code. (haiku)
     - `lsmsr/lsmsr.c:53,351` — `-m/--model` is parsed but only printed in
       an error message; `-DVERSION` is unused next to `LSMSR_VERSION`.
