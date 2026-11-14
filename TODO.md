@@ -21,12 +21,6 @@ A11. `vendors/amd/identify.c:597` — `(ebx >> 16) & 0xff` of 0x80000021
 
 ## 🟡 Maintainability
 
-B7. `vendors/amd/powernow.c:196` — `get_cof()` is a `goto` maze, returns
-    0 for a bad divisor although the comment says -1, and
-    `get_num_boost_states()` prints as a side effect of a getter. Use
-    one `switch` on the family, and move the printing to the caller.
-    (sonnet)
-
 B8. `vendors/intel/identify-family6-extended.c:209`,
     `identify-family6.c:299,309` — identification calls `ensure_MHz()`,
     so naming a CPU can spin for 100 ms, and the static cache gives every

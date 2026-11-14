@@ -195,60 +195,55 @@ static int get_main_pll_fid(int *fid)
 /* Returns the frequency in MHz, or -1 if it cannot be determined. */
 static int get_cof(int family, union msr_pstate pstate)
 {
-	int t;
-	int fid, did;
+	int did = get_did(family, pstate);
+	int fid = pstate.bits.fid;
+	int t = 0x10;
 
-	did = get_did(family, pstate);
-
-	t = 0x10;
-	fid = pstate.bits.fid;
-	if ((family == 0x10) || (family == 0x15))
-		goto out;
-
-	if (family == 0x11) {
+	switch (family) {
+	case 0x11:
 		t = 0x8;
-		goto out;
-	}
-
-	if (family == 0x12) {
+		break;
+	case 0x12: {
 		int f, d;
-		t = 0x10;
-		fid = (pstate.val >> 4) & 0x1f;
 
+		fid = (pstate.val >> 4) & 0x1f;
 		switch (did) {
 		case 0:
-			goto out;
+			break;
 		case 2:
-			did = 1; goto out;
 		case 4:
-			did = 2; goto out;
 		case 6:
-			did = 3; goto out;
-		case 8: 
-			did = 4; goto out;
+		case 8:
+			did /= 2;
+			break;
 		case 1:
-			f = 2; d = 3; break;
+			f = 2; d = 3;
+			return 100 * (fid + t) * f / d;
 		case 3:
-			f = 1; d = 3; break;
+			f = 1; d = 3;
+			return 100 * (fid + t) * f / d;
 		case 5:
-			f = 1; d = 6; break;
+			f = 1; d = 6;
+			return 100 * (fid + t) * f / d;
 		case 7:
-			f = 1; d = 12; break;
+			f = 1; d = 12;
+			return 100 * (fid + t) * f / d;
 		default:
 			printf("Invalid divisor ID: %d\n", did);
-			return 0;
-		}
-		return (100 * (fid + t) * f / d);
-	}
-	if (family == 0x14) {
-		if (!get_main_pll_fid(&fid))
 			return -1;
-		return (((fid + 0x10) *100) * 4 / did);
+		}
+		break;
+	}
+	case 0x14:
+		if (!get_main_pll_fid(&fid) || !did)
+			return -1;
+		return ((fid + 0x10) * 100) * 4 / did;
+	default:
+		break;
 	}
 
- out:
-	return ((100 * (fid + t)) >> did);
- }
+	return (100 * (fid + t)) >> did;
+}
 
 /* Zen P-state MSR: CpuFid and CpuDfsId, widened to 12 bits of Fid from Zen 5. */
 static int get_zen_cof(struct cpudata *cpu, unsigned long long val)
@@ -265,21 +260,12 @@ static int get_zen_cof(struct cpudata *cpu, unsigned long long val)
 	return 200 * fid / did;
 }
 
-static int get_num_boost_states(void)
+/* The NB boost register: bits 1:0 enable boosting, bits 4:2 count the states. */
+static int read_boost_reg(uint8_t *val)
 {
 	static const int dev_ids[] = {0x1204, 0x1404, 0x1604, 0x1704};
-	uint8_t val;
 
-	if (!read_amd_pci_byte(dev_ids, ARRAY_SIZE(dev_ids), 0x15c, &val))
-		return 0;
-
-	if (val & 3)
-		printf("Boosting enabled\n");
-	else
-		printf("Boosting disabled\n");
-	val = (val >> 2) & 7;
-	printf("Number of boost states: %u\n", val);
-	return val;
+	return read_amd_pci_byte(dev_ids, ARRAY_SIZE(dev_ids), 0x15c, val);
 }
 
 static void decode_pstates(struct cpudata *cpu, int has_cpb)
@@ -294,8 +280,15 @@ static void decode_pstates(struct cpudata *cpu, int has_cpb)
 		return;
 
 	/* The NB PCI IDs for the boost state count only exist up to family 15h */
-	if (has_cpb && fam <= 0x15)
-		boost_states = get_num_boost_states();
+	if (has_cpb && fam <= 0x15) {
+		uint8_t boost;
+
+		if (read_boost_reg(&boost)) {
+			printf("Boosting %s\n", (boost & 3) ? "enabled" : "disabled");
+			boost_states = (boost >> 2) & 7;
+			printf("Number of boost states: %d\n", boost_states);
+		}
+	}
 
 	if (!read_msr(cpu->number, MSR_PSTATE_LIMIT, &val)) {
 		printf("Something went wrong reading MSR_PSTATE_CUR_LIMIT\n");
