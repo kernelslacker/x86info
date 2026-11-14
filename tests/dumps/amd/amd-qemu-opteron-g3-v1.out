@@ -2,6 +2,9 @@ Extended Family: 1 Extended Model: 0 Family: 15 Model: 2 Stepping: 3
 CPU Model (x86info's best guess): Phenom/Athlon/Sempron/Turion (II)/Opteron (DR-B3)
 Processor name string (BIOS programmed): AMD Opteron 23xx (Gen 3 Class Opteron)
 
+PowerNOW! Technology information
+Available features: None
+
 Monitor/Mwait: min/max line size 0/0, interrupt break event, enumeration extension
 SVM: revision 1, 16 ASIDs
 L1 Data TLB (2M/4M):        Direct mapped. 255 entries.
@@ -36,4 +39,6 @@ Long NOPs supported: not recorded
 Connector type: Socket Fr2 (1207)
 
 Address sizes : 40 bits physical, 48 bits virtual
+unknown processor (estimate).
+
 This system has 1 socket, 1 core, 1 thread

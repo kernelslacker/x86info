@@ -19,4 +19,6 @@ Additional feature flags:
 Long NOPs supported: not recorded
 
 Address sizes : 40 bits physical, 57 bits virtual
+unknown processor (estimate).
+
 This system has 1 socket, 1 core, 1 thread

@@ -3,6 +3,9 @@ Extended Family: 1 Extended Model: 0 Family: 15 Model: 2 Stepping: 2
 CPU Model (x86info's best guess): Phenom/Athlon/Sempron/Turion (II)/Opteron (DR-B2)
 The physical package has 4 of 4 possible cores implemented.
 
+PowerNOW! Technology information
+Available features: None
+
 L1 Data TLB (2M/4M):        0 entries.
 L1 Instruction TLB (2M/4M): 0 entries.
 L1 Data TLB (4K):           0 entries.
@@ -34,4 +37,6 @@ Long NOPs supported: not recorded
 Connector type: Socket Fr2 (1207)
 
 Address sizes : 48 bits physical, 48 bits virtual
+unknown processor (estimate).
+
 This system has 2 sockets, 3 cores, 3 threads

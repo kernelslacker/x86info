@@ -1,4 +1,5 @@
 Unknown vendor ()
+No TSC, MHz calculation cannot be performed.
 Family: 0 Model: 0 Stepping: 0
 
 Feature flags:
@@ -6,3 +7,4 @@ Feature flags:
 Long NOPs supported: not recorded
 
 Address sizes : 0 bits physical, 0 bits virtual
+unknown processor (estimate).

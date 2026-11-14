@@ -2,6 +2,9 @@ Extended Family: 8 Extended Model: 0 Family: 15 Model: 1 Stepping: 2
 CPU Model (x86info's best guess): AMD Zen/Zen+/Zen2 Series Processor (Zeppelin)
 Processor name string (BIOS programmed): AMD EPYC Processor (with IBPB)
 
+PowerNOW! Technology information
+Available features: None
+
 Monitor/Mwait: min/max line size 0/0, interrupt break event, enumeration extension
 SVM: revision 1, 16 ASIDs, np
 L1 Data TLB (1G):           Disabled. 0 entries.
@@ -43,4 +46,6 @@ Additional feature flags:
 Long NOPs supported: not recorded
 
 Address sizes : 40 bits physical, 48 bits virtual
+unknown processor (estimate).
+
 This system has 1 socket, 1 core, 1 thread

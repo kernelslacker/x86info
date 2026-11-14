@@ -6,6 +6,9 @@ CPU Model (x86info's best guess): AMD Zen5/Zen6 Series Processor (Strix Point/Go
 CPU #0 (1 in this group):
 Core type: Performance
 
+PowerNOW! Technology information
+Available features: None
+
 SVM: revision 0, 0 ASIDs
 L1 Data TLB (1G):           Disabled. 0 entries.
 L1 Instruction TLB (1G):    Disabled. 0 entries.
@@ -41,9 +44,14 @@ Additional feature flags:
 Long NOPs supported: not recorded
 
 Address sizes : 0 bits physical, 0 bits virtual
+unknown processor (estimate).
+
 CPU #1 (1 in this group):
 Core type: Low power
 
+PowerNOW! Technology information
+Available features: None
+
 SVM: revision 0, 0 ASIDs
 L1 Data TLB (1G):           Disabled. 0 entries.
 L1 Instruction TLB (1G):    Disabled. 0 entries.
@@ -79,5 +87,7 @@ Additional feature flags:
 Long NOPs supported: not recorded
 
 Address sizes : 0 bits physical, 0 bits virtual
+unknown processor (estimate).
+
 This system has 1 socket, 1 core, 2 threads (2 threads per core)
 Hybrid: 1 Performance threads, 0 Efficiency threads, 1 Low power threads

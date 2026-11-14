@@ -2,6 +2,9 @@ Found 2 identical CPUs
 Extended Family: 11 Extended Model: 2 Family: 15 Model: 36 Stepping: 0
 CPU Model (x86info's best guess): AMD Zen5/Zen6 Series Processor (Strix Point/Gorgon Point)
 
+PowerNOW! Technology information
+Available features: None
+
 SVM: revision 0, 0 ASIDs
 L1 Data TLB (1G):           Disabled. 0 entries.
 L1 Instruction TLB (1G):    Disabled. 0 entries.
@@ -37,4 +40,6 @@ Additional feature flags:
 Long NOPs supported: not recorded
 
 Address sizes : 0 bits physical, 0 bits virtual
+unknown processor (estimate).
+
 This system has 1 socket, 1 core, 2 threads (2 threads per core)

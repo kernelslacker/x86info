@@ -21,4 +21,6 @@ Additional feature flags:
 Long NOPs supported: not recorded
 
 Address sizes : 36 bits physical, 48 bits virtual
+unknown TSC frequency. Run as root for the core clock.
+
 This system has 1 socket, 1 core, 1 thread

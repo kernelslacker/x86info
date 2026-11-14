@@ -29,12 +29,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
 
 ## 🟡 Tests & docs
 
-C1. `tests/run-tests.sh:85` — the goldens never run `--mhz` or `--pm`.
-    Both are deterministic in replay (CPUID 0x15/0x16, the PowerNOW
-    feature list), so `cpuid_tsc_MHz()`, `display_MHz_line()` and
-    `decode_powernow()` have no coverage. Add both options to the default
-    golden after A7. (haiku, then regenerate)
-
 C2. `vendors/intel/identify-family6-extended.c:25-104` — rows keyed on
     `.mhz` can never match in replay, because `host_can_measure()` is 0.
     Let the replay backend supply a rate (for example a `MHz:` line in

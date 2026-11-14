@@ -3,6 +3,9 @@ Extended Family: 8 Extended Model: 0 Family: 15 Model: 1 Stepping: 2
 CPU Model (x86info's best guess): AMD Zen/Zen+/Zen2 Series Processor (Zeppelin)
 The physical package has 2 of 2 possible threads implemented (1 core).
 
+PowerNOW! Technology information
+Available features: None
+
 SVM: revision 0, 0 ASIDs
 L1 Data TLB (1G):           Disabled. 0 entries.
 L1 Instruction TLB (1G):    Disabled. 0 entries.
@@ -38,4 +41,6 @@ Additional feature flags:
 Long NOPs supported: not recorded
 
 Address sizes : 48 bits physical, 48 bits virtual
+unknown processor (estimate).
+
 This system has 1 socket, 1 core, 2 threads (2 threads per core)

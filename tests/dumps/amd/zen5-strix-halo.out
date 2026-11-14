@@ -3,6 +3,19 @@ CPU Model (x86info's best guess): AMD Zen5/Zen6 Series Processor (Strix Halo)
 Processor name string (BIOS programmed): AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
 The physical package has 32 of 32 possible threads implemented (16 cores).
 
+PowerNOW! Technology information
+Available features:
+	Temperature sensing diode present
+	Thermal Trip
+	Thermal Monitoring
+	Hardware P-state control
+	Invariant/nonstop/constant TSC
+	Core Performance Boost
+	read-only Effective Frequency Interface
+	Connected Standby
+	RAPL
+	Effective Frequency Interface
+
 Monitor/Mwait: min/max line size 64/64, interrupt break event, enumeration extension
 SVM: revision 1, 32768 ASIDs, np, lbrVirt, SVMLock, NRIPSave, TscRateMsr, VmcbClean, FlushByAsid, DecodeAssists, PauseFilter, PauseFilterThreshold, AVIC, V_VMSAVE_VMLOAD, vGIF, GMET, x2AVIC, SpecCtrl, VNMI, SvmeAddrChk, BusLockThreshold, IdleHltIntercept
 Memory encryption: C-bit 51, 2 bits of physical address reduction, 0 VMPLs, 0 guests, min SEV ASID 0
@@ -47,4 +60,6 @@ Additional feature flags:
 Long NOPs supported: not recorded
 
 Address sizes : 48 bits physical, 48 bits virtual
+unknown TSC frequency. Run as root for the core clock.
+
 This system has 1 socket, 1 core, 1 thread

@@ -81,7 +81,7 @@ for dump in "$dir"/*/*.dump; do
 		echo "FAIL: no CPUID dumps found in $dir/<vendor>/"
 		exit 1
 	fi
-	golden "$dump" out -c -f --addr --bugs --connector
+	golden "$dump" out -c -f --addr --bugs --connector --mhz --pm
 	golden "$dump" v.out -v
 	roundtrip "$dump"
 	tidy "$dump"

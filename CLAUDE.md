@@ -10,7 +10,7 @@ Plain C, plain Makefile (`flags.mk` holds the shared warning flags; the build is
 - libpci is optional (found via pkg-config, used for AMD `--pm`); `make LIBPCI=` builds without it.
 - `make check` runs everything: unit tests (`tests/test-{psb,opts,mptable,cpulist}.c`), `tests/test-runner.sh` (tests the golden runner itself), then the golden tests.
 - `make check-asan` repeats the unit tests and goldens under ASan/UBSan.
-- No single-test target. For one unit test: `make tests/build/test-opts && tests/build/test-opts`. For one golden: copy the loop body in `tests/run-tests.sh`, i.e. `X86INFO_CPUID_DUMP=tests/dumps/<vendor>/<name>.dump tests/build/x86info -c -f --addr --bugs --connector | tail -n +2 | diff tests/dumps/<vendor>/<name>.out -` (`-v` and `<name>.v.out` for the verbose golden).
+- No single-test target. For one unit test: `make tests/build/test-opts && tests/build/test-opts`. For one golden: copy the loop body in `tests/run-tests.sh`, i.e. `X86INFO_CPUID_DUMP=tests/dumps/<vendor>/<name>.dump tests/build/x86info -c -f --addr --bugs --connector --mhz --pm | tail -n +2 | diff tests/dumps/<vendor>/<name>.out -` (`-v` and `<name>.v.out` for the verbose golden).
 - `make clean` removes `tests/build*`, `.deps`, objects.
 
 ## Golden tests (the main regression suite)
