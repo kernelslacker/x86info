@@ -27,10 +27,6 @@ B8. `vendors/intel/identify-family6-extended.c:209`,
     frequency-keyed SKU refinement to display time, or pass the rate in.
     See C2. (sonnet)
 
-B14. `vendors/centaur/identify.c:60-110` — process, voltage and
-    transistor-count notes sit in comments. Move them to
-    `docs/sspecs.md`. (haiku)
-
 B15. `tests/run-tests.sh:23` — `shellcheck disable=SC2068` hides an
     unquoted `$@`. `"$@"` passes the same words; remove the directive.
     (haiku)

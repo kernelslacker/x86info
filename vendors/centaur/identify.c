@@ -58,54 +58,21 @@ void identify_centaur(struct cpudata *cpu)
 		 * This is the CyrixIII family. */
 		case 0x660:
 			add_to_cpuname("VIA Cyrix 3 (Samuel) [C5A]");
-				//1.8-2.0V
-				//CPGA
-				//75mm
-				//0.18 Al
-				//500-733MHz
-				//11.3 mil transistors
-				//June 6 2000
 				break;
 		case 0x670:
 				switch (cpu->stepping) {
 				case 0 ... 7:
 					add_to_cpuname("VIA C3 (Samuel 2) [C5B]");
-					//1.6V
-					//CPGA/EBGA
-					//52mm
-					//0.15u Al
-					//650-800MHz
-					//15.2 mil transistors
-					//Mar 25 2001
 					break;
 				case 8 ... 0xf:
 					add_to_cpuname("VIA C3 (Ezra) [C5C]");
-					//1.35V
-					//CPGA/EBGA
-					//52mm
-					//0.15u/0.13u hybrid Al
-					//800-1000MHz
-					//15.4 mil transistors
-					//Sep 11 2001
 					break;
 				}
 				break;
 		/* Ezra-T is much like Ezra but reworked to run in Pentium III Tualatin sockets. */
 		case 0x680:	add_to_cpuname("VIA C3 (Ezra-T) [C5M/C5N]");
-					//CPGA/EBGA/uPGA2/uFCPGA
-					//900-1200MHz
-					//56mm
-					//0.15/0.13u hybrid (Cu)
-					//15.5 mil transistors
-					//C5N=copper interconnectrs
-					//2002
 					break;
 		case 0x690:	add_to_cpuname("VIA C3 (Nehemiah) [C5XL]");
-					//2 SSE units
-					//first C3 to run FPU at full clock speed (previous ran at 50%)
-					//1100-1300
-					//0.13 (Cu)
-					//January 22 2003
 					break;
 		case 0x6A0:	switch (cpu->stepping) {
 					case 0:

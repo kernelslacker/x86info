@@ -659,3 +659,20 @@ SL8J7 3.8GHz  800
    SL8FK	3.2GHz
  */
 ```
+
+## vendors/centaur/identify.c
+
+Process, voltage and transistor-count notes for the VIA C3 family.
+
+| Core | Packages | Voltage | Die | Process | Speed | Transistors | Date |
+|------|----------|---------|-----|---------|-------|-------------|------|
+| Samuel [C5A] | CPGA | 1.8-2.0V | 75mm | 0.18 Al | 500-733MHz | 11.3M | June 6 2000 |
+| Samuel 2 [C5B] | CPGA/EBGA | 1.6V | 52mm | 0.15u Al | 650-800MHz | 15.2M | Mar 25 2001 |
+| Ezra [C5C] | CPGA/EBGA | 1.35V | 52mm | 0.15u/0.13u hybrid Al | 800-1000MHz | 15.4M | Sep 11 2001 |
+| Ezra-T [C5M/C5N] | CPGA/EBGA/uPGA2/uFCPGA | | 56mm | 0.15/0.13u hybrid (Cu) | 900-1200MHz | 15.5M | 2002 |
+| Nehemiah [C5XL] | | | | 0.13 (Cu) | 1100-1300 | | January 22 2003 |
+
+- Ezra-T is Ezra reworked to run in Pentium III Tualatin sockets. C5N has
+  copper interconnects.
+- Nehemiah has two SSE units and is the first C3 to run the FPU at full clock
+  speed; earlier parts ran it at 50%.
