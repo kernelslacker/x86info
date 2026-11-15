@@ -1,0 +1,53 @@
+Found 2 identical CPUs
+Extended Family: 10 Extended Model: 0 Family: 15 Model: 1 Stepping: 1
+CPU Model (x86info's best guess): AMD Zen3/Zen3+/Zen4 Series Processor (Milan)
+Processor name string (BIOS programmed): AMD EPYC 7713 64-Core Processor
+The physical package has 2 of 2 possible threads implemented.
+
+PowerNOW! Technology information
+Available features: None
+
+Monitor/Mwait: min/max line size 0/0, interrupt break event, enumeration extension
+SVM: revision 0, 0 ASIDs
+L1 Data TLB (1G):           Disabled. 0 entries.
+L1 Instruction TLB (1G):    Disabled. 0 entries.
+L1 Data TLB (2M/4M):        Direct mapped. 255 entries.
+L1 Instruction TLB (2M/4M): Direct mapped. 255 entries.
+L1 Data TLB (4K):           Direct mapped. 255 entries.
+L1 Instruction TLB (4K):    Direct mapped. 255 entries.
+L1 Data cache:
+	Size: 64KB	2-way associative.
+	lines per tag=1	line size=64 bytes.
+L1 Instruction cache:
+	Size: 64KB	2-way associative.
+	lines per tag=1	line size=64 bytes.
+L2 Data TLB (1G):           Disabled. 0 entries.
+L2 Instruction TLB (1G):    Disabled. 0 entries.
+L2 Data TLB (2M/4M):        Disabled. 0 entries.
+L2 Instruction TLB (2M/4M): Disabled. 0 entries.
+L2 Data TLB (4K):           4-way associative. 512 entries.
+L2 Instruction TLB (4K):    4-way associative. 512 entries.
+L2 cache:
+	Size: 512KB	16-way associative.
+	lines per tag=1	line size=64 bytes.
+L3 (shared) cache:
+	Size: 16384KB	16-way associative.
+	lines per tag=1	line size=64 bytes.
+Caches (CPUID 0x8000001D):
+	L1 data: 64KB, 2-way, line size=64 bytes, shared by 1 threads
+	L1 instruction: 64KB, 2-way, line size=64 bytes, shared by 1 threads
+	L2 unified: 512KB, 16-way, line size=64 bytes, shared by 1 threads
+	L3 unified: 16384KB, 16-way, line size=64 bytes, shared by 2 threads
+
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh mmx fxsr sse sse2 ht sse3 pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc-deadline aes xsave osxsave avx f16c rdrnd [1:ecx:31]
+Extended feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic syscall mtrr pge mca cmov pat pse36 nx mmxext mmx fxsr ffxsr page1gb rdtscp lm lahf_lm CmpLegacy LockMovCr0 abm sse4a misalignsse 3dnowprefetch osvw PerfCtrExtCore
+Additional feature flags:
+ arat fsgsbase tsc_adj bmi1 avx2 smep bmi2 rdseed adx smap clflushopt clwb sha umip pku vaes vpclmulqdq rdpid ibrs_ibpb stibp ssbd xsaveopt xsavec xgetbv1 xsaves overflow_recov succor clzero xsaveerptr wbnoinvd ibpb ibrs stibp stibp_always_on amd_ssbd virt_ssbd
+Long NOPs supported: not recorded
+
+Address sizes : 48 bits physical, 48 bits virtual
+unknown processor (estimate).
+
+This system has 1 socket, 2 cores, 2 threads

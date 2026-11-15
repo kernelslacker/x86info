@@ -1,0 +1,10 @@
+Found 2 identical CPUs
+Extended Family: 10 Extended Model: 0 Family: 15 Model: 1 Stepping: 1
+CPU Model (x86info's best guess): AMD Zen3/Zen3+/Zen4 Series Processor (Milan)
+Processor name string (BIOS programmed): AMD EPYC 7713 64-Core Processor
+The physical package has 2 of 2 possible threads implemented.
+
+This system has 1 socket, 2 cores, 2 threads
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 1 logical CPUs, x2APIC shift=0, x2APIC ID=0
+  Level 1 (Core): 2 logical CPUs, x2APIC shift=1, x2APIC ID=0
