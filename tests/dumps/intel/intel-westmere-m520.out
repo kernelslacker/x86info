@@ -1,0 +1,31 @@
+Found 4 identical CPUs
+Extended Family: 0 Extended Model: 2 Family: 6 Model: 37 Stepping: 5
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Core i7 (Westmere)
+Processor name string (BIOS programmed): Intel(R) Core(TM) i5 CPU       M 520  @ 2.40GHz
+
+Cache info
+ L1 Instruction cache: 32KB, 4-way associative. 64 byte line size.
+ L1 Data cache: 32KB, 8-way associative. 64 byte line size.
+ L2 (MLC): 256KB, 8-way associative. 64 byte line size.
+ L3 cache: 3MB, 12-way associative. 64 byte line size.
+Total cache: L1 instruction 32KB, L1 data 32KB, L2 256KB, L3 3072KB
+ 64 byte prefetching.
+TLB info
+ Instruction TLB: 2MB or 4MB pages, fully associative, 7 entries
+ Instruction TLB: 4K pages, 4-way associative, 64 entries.
+ Data TLB0: 2MB or 4MB pages, 4-way set associative, 32 entries
+ Data TLB: 4KB pages, 4-way associative, 64 entries
+ Shared L2 TLB: 4KB pages, 4-way associative, 512 entries
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh ds acpi mmx fxsr sse sse2 ss ht tm pbe sse3 pclmulqdq dtes64 monitor ds-cpl vmx smx est tm2 ssse3 cx16 xTPR pdcm pcid sse4_1 sse4_2 popcnt aes
+Extended feature flags:
+ syscall nx rdtscp lm lahf_lm
+Additional feature flags:
+ dts ida arat nonstop_tsc
+Long NOPs supported: not recorded
+
+Address sizes : 36 bits physical, 48 bits virtual
+unknown TSC frequency. Run as root for the core clock.
+
+This system has 1 socket, 2 cores, 4 threads (2 threads per core)

@@ -1,0 +1,10 @@
+Found 8 identical CPUs
+Extended Family: 0 Extended Model: 9 Family: 6 Model: 158 Stepping: 9
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): [Kabylake desktop]
+Processor name string (BIOS programmed): Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz
+
+This system has 1 socket, 4 cores, 8 threads (2 threads per core)
+Extended topology (leaf 0xB):
+  Level 0 (SMT): 2 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Core): 8 logical CPUs, x2APIC shift=4, x2APIC ID=0
