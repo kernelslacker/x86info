@@ -1,0 +1,31 @@
+Found 2 identical CPUs
+Extended Family: 0 Extended Model: 1 Family: 6 Model: 23 Stepping: 10
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Core 2 Duo P8600 [Penryn] [R0]
+Processor name string (BIOS programmed): Intel(R) Core(TM)2 Duo CPU     P8600  @ 2.40GHz
+
+Cache info
+ L1 Instruction cache: 32KB, 8-way associative. 64 byte line size.
+ L1 Data cache: 32KB, 8-way associative. 64 byte line size.
+ L2 cache: 3MB, 12-way associative. 64 byte line size. Unified on-die.
+Total cache: L1 instruction 32KB, L1 data 32KB, L2 3072KB
+ 64 byte prefetching.
+TLB info
+ Instruction TLB: 4x 4MB page entries, or 8x 2MB pages entries, 4-way associative
+ Instruction TLB: 4K pages, 4-way associative, 128 entries.
+ Data TLB: 4MB pages, 4-way associative, 32 entries
+ Data TLB0: 4KB pages, 4-way associative, 16 entries
+ Data TLB0: 4MB pages, 4-way associative, 16 entries
+ Data TLB1: 4KB pages, 4-way associative, 256 entries
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh ds acpi mmx fxsr sse sse2 ss ht tm pbe sse3 dtes64 monitor ds-cpl vmx smx est tm2 ssse3 cx16 xTPR pdcm sse4_1 xsave osxsave
+Extended feature flags:
+ syscall nx lm lahf_lm
+Additional feature flags:
+ dts
+Long NOPs supported: not recorded
+
+Address sizes : 36 bits physical, 48 bits virtual
+2.40GHz processor (estimate). Run as root for the core clock.
+
+This system has 1 socket, 2 cores, 2 threads

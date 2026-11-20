@@ -63,6 +63,7 @@ static const struct cpu_name_def intel_fam6e_names[] = {
 
 	{ .model = 0x17, .stepping = 4, .str = "Core 2 Duo [Penryn]" },
 	{ .model = 0x17, .stepping = 6, .cores = 2, .str = "Core 2 Duo P8600 [Penryn]" },
+	{ .model = 0x17, .stepping = 10, .cores = 2, .mhz = 2400, .str = "Core 2 Duo P8600 [Penryn] [R0]" },
 	{ .model = 0x17, .stepping = 10, .cores = 2, .str = "Core 2 Duo [Wolfdale]" },
 
 	{ .model = 0x1a, .stepping = 4, .mhz = 3200, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCJ]" },
