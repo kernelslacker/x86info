@@ -1,0 +1,63 @@
+Found 24 CPUs of 2 kinds.
+
+Extended Family: 0 Extended Model: 12 Family: 6 Model: 198 Stepping: 2
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): [Arrow Lake]
+Processor name string (BIOS programmed): Intel(R) Core(TM) Ultra 9 275HX
+
+CPU #0 (8 in this group):
+Core type: Performance (Core)
+
+Cache info
+ L1 Data Cache: 48KB, 12-way associative, 64 byte line size
+ L1 Instruction Cache: 64KB, 16-way associative, 64 byte line size
+ L2 Unified Cache: 3MB, 12-way associative, 64 byte line size
+ L3 Unified Cache: 36MB, 12-way associative, 64 byte line size
+ 64 byte prefetching.
+TLB info
+ L1 Instruction TLB: 4KB pages, 8-way associative, 256 entries
+ L1 Instruction TLB: 4MB/2MB pages, 8-way associative, 32 entries
+ L1 Store Only TLB: 1GB/4MB/2MB/4KB pages, fully associative, 16 entries
+ L1 Load Only TLB: 4KB pages, 8-way associative, 128 entries
+ L1 Load Only TLB: 4MB/2MB pages, 4-way associative, 32 entries
+ L1 Load Only TLB: 1GB pages, fully associative, 8 entries
+ L2 Unified TLB: 4MB/2MB/4KB pages, 8-way associative, 1024 entries
+ L2 Unified TLB: 1GB/4KB pages, 8-way associative, 1024 entries
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh ds acpi mmx fxsr sse sse2 ss ht tm pbe sse3 pclmulqdq dtes64 monitor ds-cpl vmx smx est tm2 ssse3 sdbg fma cx16 xTPR pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc-deadline aes xsave osxsave avx f16c rdrnd
+Extended feature flags:
+ syscall nx page1gb rdtscp lm lahf_lm abm 3dnowprefetch
+Additional feature flags:
+ dts ida arat pln ecmd ptm hwp hwp_notify hwp_act_window hwp_epp hwp_lpr [6:eax:14] hwp_highest_perf_change hwp_peci_override hwp_flexible hwp_fast_access hfi hwp_ignore_idle hwp_ctl [6:eax:23] fsgsbase tsc_adj bmi1 avx2 fdp_excp smep bmi2 erms invpcid nofpucs pqe rdseed adx smap clflushopt clwb ipt sha umip pku ospke waitpkg cet_ss gfni vaes vpclmulqdq rdpid bus_lock_detect movdiri movdir64b pks fsrm uintr md_clear serialize hybrid arch_lbr ibt ibrs_ibpb stibp l1d_flush arch_capabilities core_capabilities ssbd sha512 sm3 sm4 avx_vnni lass cmpccxadd arch_perfmon_ext fsrs hreset avx_ifma lam [7.1:eax:30] intel_ppin avx_vnni_int8 avx_ne_convert avx_vnni_int16 cet_sss intel_psfd ipred_ctrl rrsba_ctrl ddp_ctrl bhi_ctrl mcdt_no monitor_mitg_no xsaveopt xsavec xgetbv1 xsaves nonstop_tsc
+Long NOPs supported: not recorded
+
+Address sizes : 42 bits physical, 48 bits virtual
+3.07GHz TSC frequency. Run as root for the core clock.
+
+CPU #8 (16 in this group):
+Core type: Efficiency (Atom)
+
+Cache info
+ L1 Data Cache: 32KB, 8-way associative, 64 byte line size
+ L1 Instruction Cache: 64KB, 8-way associative, 64 byte line size
+ L2 Unified Cache: 4MB, 16-way associative, 64 byte line size
+ L3 Unified Cache: 36MB, 12-way associative, 64 byte line size
+ 64 byte prefetching.
+TLB info
+ L1 Data TLB: 4KB/2MB pages, fully associative, 48 entries
+ L2 Unified TLB: 4KB/2MB pages, 4-way associative, 4096 entries
+ L1 Instruction TLB: 4KB pages, fully associative, 128 entries
+ L2 Unified TLB: 1GB pages, fully associative, 8 entries
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh ds acpi mmx fxsr sse sse2 ss ht tm pbe sse3 pclmulqdq dtes64 monitor ds-cpl vmx smx est tm2 ssse3 sdbg fma cx16 xTPR pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc-deadline aes xsave osxsave avx f16c rdrnd
+Extended feature flags:
+ syscall nx page1gb rdtscp lm lahf_lm abm 3dnowprefetch
+Additional feature flags:
+ dts ida arat pln ecmd ptm hwp hwp_notify hwp_act_window hwp_epp hwp_lpr [6:eax:14] hwp_highest_perf_change hwp_peci_override hwp_flexible hwp_fast_access hfi hwp_ignore_idle hwp_ctl [6:eax:23] fsgsbase tsc_adj bmi1 avx2 fdp_excp smep bmi2 erms invpcid nofpucs pqe rdseed adx smap clflushopt clwb ipt sha umip pku ospke waitpkg cet_ss gfni vaes vpclmulqdq rdpid bus_lock_detect movdiri movdir64b pks fsrm uintr md_clear serialize hybrid arch_lbr ibt ibrs_ibpb stibp l1d_flush arch_capabilities core_capabilities ssbd sha512 sm3 sm4 avx_vnni lass cmpccxadd arch_perfmon_ext fsrs hreset avx_ifma lam [7.1:eax:30] intel_ppin avx_vnni_int8 avx_ne_convert avx_vnni_int16 cet_sss intel_psfd ipred_ctrl rrsba_ctrl ddp_ctrl bhi_ctrl mcdt_no monitor_mitg_no xsaveopt xsavec xgetbv1 xsaves nonstop_tsc
+Long NOPs supported: not recorded
+
+Address sizes : 42 bits physical, 48 bits virtual
+3.07GHz TSC frequency. Run as root for the core clock.
+
+This system has 1 socket, 24 cores, 24 threads
+Hybrid: 8 Performance threads, 16 Efficiency threads

@@ -1,0 +1,19 @@
+Found 24 CPUs of 2 kinds.
+
+Extended Family: 0 Extended Model: 12 Family: 6 Model: 198 Stepping: 2
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): [Arrow Lake]
+Processor name string (BIOS programmed): Intel(R) Core(TM) Ultra 9 275HX
+
+CPU #0 (8 in this group):
+Core type: Performance (Core)
+
+CPU #8 (16 in this group):
+Core type: Efficiency (Atom)
+
+This system has 1 socket, 24 cores, 24 threads
+Hybrid: 8 Performance threads, 16 Efficiency threads
+Extended topology (leaf 0x1F):
+  Level 0 (SMT): 1 logical CPUs, x2APIC shift=1, x2APIC ID=0
+  Level 1 (Core): 1 logical CPUs, x2APIC shift=3, x2APIC ID=0
+  Level 2 (Module): 24 logical CPUs, x2APIC shift=7, x2APIC ID=0
