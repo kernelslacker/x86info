@@ -1,0 +1,30 @@
+Found 4 identical CPUs
+Extended Family: 0 Extended Model: 3 Family: 6 Model: 58 Stepping: 9
+Type: 0 (Original OEM)
+CPU Model (x86info's best guess): Core i3-3220 [IvyBridge]
+Processor name string (BIOS programmed): Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz
+
+Cache info
+ L1 Data Cache: 32KB, 8-way associative, 64 byte line size
+ L1 Instruction Cache: 32KB, 8-way associative, 64 byte line size
+ L2 Unified Cache: 256KB, 8-way associative, 64 byte line size
+ L3 Unified Cache: 3MB, 12-way associative, 64 byte line size
+ 64 byte prefetching.
+TLB info
+ Instruction TLB: 2M/4M pages, fully associative, 8 entries
+ Instruction TLB: 4K pages, 4-way associative, 64 entries.
+ Data TLB0: 2MB or 4MB pages, 4-way set associative, 32 entries
+ Data TLB: 4KB pages, 4-way associative, 64 entries
+ Shared L2 TLB: 4KB pages, 4-way associative, 512 entries
+Feature flags:
+ fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflsh ds acpi mmx fxsr sse sse2 ss ht tm pbe sse3 pclmulqdq dtes64 monitor ds-cpl vmx est tm2 ssse3 cx16 xTPR pdcm pcid sse4_1 sse4_2 popcnt tsc-deadline xsave osxsave avx f16c
+Extended feature flags:
+ syscall nx rdtscp lm lahf_lm
+Additional feature flags:
+ dts arat pln ecmd ptm fsgsbase smep erms xsaveopt nonstop_tsc
+Long NOPs supported: not recorded
+
+Address sizes : 36 bits physical, 48 bits virtual
+3.30GHz TSC frequency. Run as root for the core clock.
+
+This system has 1 socket, 2 cores, 4 threads (2 threads per core)
