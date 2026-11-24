@@ -6,11 +6,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Performance
 
-B2. vendors/amd/powernow.c:read_amd_pci_byte — allocates and scans the whole
-    PCI bus on every call. `get_main_pll_fid` (family 14h) calls it once
-    per P-state per CPU. Fix: cache the found device, or the byte, in a
-    static. Model: sonnet.
-
 B3. Makefile (%.o rule) — dependency files run the compiler a second time
     (`$(CC) -MM`) and post-process with sed and fmt. lsmsr/Makefile already
     uses `-MMD -MP`. Fix: use `-MMD -MP -MF $(df).d` in the main Makefile

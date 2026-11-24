@@ -5,6 +5,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #ifdef HAVE_LIBPCI
@@ -142,17 +143,32 @@ static int get_did(int family, union msr_pstate pstate)
  * Returns 1 and sets *val if found; always 0 without libpci.
  */
 #ifdef HAVE_LIBPCI
+static struct pci_access *pacc;
+
+static void free_pci_access(void)
+{
+	pci_cleanup(pacc);
+	pacc = NULL;
+}
+
+/*
+ * The bus scan is slow and the callers run once per P-state per CPU, so
+ * scan once and keep it until exit. Not thread-safe: only called from
+ * the single-threaded per-CPU pass.
+ */
 static int read_amd_pci_byte(const int *ids, unsigned int nr_ids,
 			     unsigned int reg, uint8_t *val)
 {
-	struct pci_access *pacc;
 	struct pci_dev *z;
 	unsigned int i;
 	int found = 0;
 
-	pacc = pci_alloc();
-	pci_init(pacc);
-	pci_scan_bus(pacc);
+	if (!pacc) {
+		pacc = pci_alloc();
+		pci_init(pacc);
+		pci_scan_bus(pacc);
+		atexit(free_pci_access);
+	}
 
 	for (i = 0; i < nr_ids && !found; i++) {
 		struct pci_filter filter = { .domain = -1, .bus = -1, .slot = -1, .func = -1, .vendor = 0x1022, .device = ids[i], };
@@ -166,7 +182,6 @@ static int read_amd_pci_byte(const int *ids, unsigned int nr_ids,
 		}
 	}
 
-	pci_cleanup(pacc);
 	return found;
 }
 #else
