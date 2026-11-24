@@ -94,10 +94,12 @@ static const struct cpu_name_def intel_fam6e_names[] = {
 	{ .model = 0x35, .flags = ONLYMODEL, .str = "Atom [Cloverview]" },
 	{ .model = 0x36, .flags = ONLYMODEL, .str = "Atom [Cedarview]" },
 	{ .model = 0x37, .flags = ONLYMODEL, .str = "Atom [Silvermont]" },
+	{ .model = 0x3a, .stepping = 9, .mhz = 3300, .str = "Core i3-3220 [IvyBridge]" },
 	{ .model = 0x3a, .stepping = 9, .str = "Core i7 3520M [IvyBridge]" },
 	{ .model = 0x3a, .flags = ONLYMODEL, .str = "Core i7 [IvyBridge]" },
 	// 8M cache
 	{ .model = 0x3c, .stepping = 3, .mhz = 3200, .str = "Xeon E3-1225 v3 [Haswell]" },
+	{ .model = 0x3c, .stepping = 3, .mhz = 3000, .str = "Pentium G3220 [Haswell]" },
 	{ .model = 0x3c, .stepping = 3, .mhz = 3500, .str = "Xeon E3-1270 [Haswell]" },
 	{ .model = 0x3c, .stepping = 3, .mhz = 4000, .str = "4790K [Haswell: Devils Canyon]" },
 	{ .model = 0x3c, .stepping = 3, .str = "Xeon E3 [Haswell]" },
