@@ -18,6 +18,12 @@
 #define IA32_PHYBASE_TYPE   0xFF
 #define IA32_PHYMASK_VALID  (1 << 11)
 
+#define MSR_IA32_MTRRCAP      0xfe
+#define MSR_IA32_MTRR_DEFTYPE 0x2ff
+
+/* Architectural minimum when CPUID doesn't report the physical address width. */
+#define MTRR_DEFAULT_PHYS_BITS 36
+
 #define MTRR_NUM_TYPES 7
 
 static const char * mtrr_types[MTRR_NUM_TYPES] =
@@ -33,10 +39,10 @@ static const char * mtrr_types[MTRR_NUM_TYPES] =
 
 static void decode_address(unsigned long long val, unsigned int max_phy_addr)
 {
-	unsigned int bits = max_phy_addr ? max_phy_addr : 36;
+	unsigned int bits = max_phy_addr ? max_phy_addr : MTRR_DEFAULT_PHYS_BITS;
 
 	if (bits <= 12 || bits > 64)
-		bits = 36;
+		bits = MTRR_DEFAULT_PHYS_BITS;
 	bits -= 12;
 	printf("0x%0*llx ", (int)((bits + 3) / 4),
 	       (val >> 12) & ((1ULL << bits) - 1));
@@ -142,12 +148,12 @@ void dump_mtrrs(struct cpudata *cpu)
 	 * If MTRR registers are not accessible like in some
 	 * virtualization systems then return
 	 */
-	if (!read_msr(cpu->number, 0xfe, &val))
+	if (!read_msr(cpu->number, MSR_IA32_MTRRCAP, &val))
 		return;
 
 	printf("MTRR registers:\n");
 
-	printf("MTRRcap (0xfe): ");
+	printf("MTRRcap (0x%x): ", MSR_IA32_MTRRCAP);
 	decode_mtrrcap(val);
 
 	max_phy_addr = cpu->phyaddr_bits;
@@ -169,8 +175,8 @@ void dump_mtrrs(struct cpudata *cpu)
 		}
 	}
 
-	printf("MTRRdefType (0x2ff): ");
-	decode_mtrr_deftype(cpu->number, 0x2ff);
+	printf("MTRRdefType (0x%x): ", MSR_IA32_MTRR_DEFTYPE);
+	decode_mtrr_deftype(cpu->number, MSR_IA32_MTRR_DEFTYPE);
 
 	printf("\n");
 }
