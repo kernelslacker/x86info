@@ -14,8 +14,8 @@
 #include "powernow.h"
 
 #define START 0x000c0000L
-#define END   0x000ffff0L
-#define ROMSIZE ((END-START)+1)
+/* Map up to the 1MB boundary: a whole number of pages, as mmap wants. */
+#define ROMSIZE (0x00100000L - START)
 
 #define PSB_SIGLEN 10
 
