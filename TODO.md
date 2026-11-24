@@ -6,11 +6,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Performance
 
-B3. Makefile (%.o rule) — dependency files run the compiler a second time
-    (`$(CC) -MM`) and post-process with sed and fmt. lsmsr/Makefile already
-    uses `-MMD -MP`. Fix: use `-MMD -MP -MF $(df).d` in the main Makefile
-    and delete the sed/fmt lines. Model: sonnet.
-
 B4. Makefile ($(CHECK_BIN), $(ASAN_BIN)) — every `.c` is rebuilt in a single
     compile line for each replay binary, so no incremental or parallel
     build. Fix: build replay objects into `tests/build/obj/` with a pattern
