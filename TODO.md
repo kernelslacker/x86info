@@ -8,12 +8,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Maintainability
 
-C2. MHz.c:read_perf_msr_pmu / perf_msr_close — the close-both-descriptors
-    code is written twice, and `fds` and `tried` are pointless local
-    copies of the statics. Fix: split "open" from "close", make the
-    failure path call the close helper, and use the statics directly.
-    Model: haiku.
-
 C3. MHz.c:measure_MHz — one function does CPUID lookup, perf counter
     reads, warm-up, TSC timing and the final maths. Fix: split into
     `read_tsc_rate()` (timing only) and `core_clock()` (APERF/MPERF

@@ -99,37 +99,39 @@ static int perf_msr_open(unsigned int config)
 static __thread int perf_fds[2] = { -1, -1 };
 static __thread int perf_tried;
 
-static void perf_msr_close(void)
+/* Does not clear perf_tried: a failed open must not be retried on every read. */
+static void perf_fds_close(void)
 {
 	if (perf_fds[0] >= 0)
 		close(perf_fds[0]);
 	if (perf_fds[1] >= 0)
 		close(perf_fds[1]);
 	perf_fds[0] = perf_fds[1] = -1;
+}
+
+static void perf_msr_open_pair(void)
+{
+	perf_tried = 1;
+	perf_fds[0] = perf_msr_open(PERF_MSR_APERF);
+	perf_fds[1] = perf_msr_open(PERF_MSR_MPERF);
+	if (perf_fds[0] < 0 || perf_fds[1] < 0)
+		perf_fds_close();
+}
+
+static void perf_msr_close(void)
+{
+	perf_fds_close();
 	perf_tried = 0;
 }
 
 static int read_perf_msr_pmu(unsigned long long *aperf, unsigned long long *mperf)
 {
-	int *fds = perf_fds;
-	int tried = perf_tried;
-
-	if (!tried) {
-		perf_tried = 1;
-		fds[0] = perf_msr_open(PERF_MSR_APERF);
-		fds[1] = perf_msr_open(PERF_MSR_MPERF);
-		if (fds[0] < 0 || fds[1] < 0) {
-			if (fds[0] >= 0)
-				close(fds[0]);
-			if (fds[1] >= 0)
-				close(fds[1]);
-			fds[0] = fds[1] = -1;
-		}
-	}
-	if (fds[0] < 0)
+	if (!perf_tried)
+		perf_msr_open_pair();
+	if (perf_fds[0] < 0)
 		return 0;
-	return read(fds[0], aperf, sizeof(*aperf)) == sizeof(*aperf) &&
-	       read(fds[1], mperf, sizeof(*mperf)) == sizeof(*mperf);
+	return read(perf_fds[0], aperf, sizeof(*aperf)) == sizeof(*aperf) &&
+	       read(perf_fds[1], mperf, sizeof(*mperf)) == sizeof(*mperf);
 }
 #else
 static void perf_msr_close(void)
