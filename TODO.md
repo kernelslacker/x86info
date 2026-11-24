@@ -4,12 +4,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🔴 Correctness
 
-A2. mptable.c:apic_probe — a read error in one scan region (`ret == -1`)
-    returns 0 and skips the remaining regions. With a restrictive
-    /dev/mem (STRICT_DEVMEM) one unreadable area hides a table in a later
-    area. Fix: treat -1 as "not found here" and continue; report only if
-    every region failed. Model: sonnet.
-
 A3. x86info.c:display_cpus — as root, every default run opens /dev/mem and
     scans the BIOS areas (`enumerate_cpus`). It exists only to find SMP
     CPUs when a UP kernel booted, so it matters only when `n == 1`. Fix:

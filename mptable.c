@@ -305,9 +305,13 @@ static int apic_probe(struct mp_scan *mp, unsigned long* paddr)
 	int ret;
 
 	/* search Extended Bios Data Area, if present */
+	/*
+	 * A region that can't be read (e.g. STRICT_DEVMEM) only means the
+	 * table isn't findable there; keep going so later regions are tried.
+	 */
 	if (readAt(mp, (unsigned long)EBDA_POINTER, &segment, 2)) {
 		mp_error(mp, "error reading EBDA pointer\n");
-		return 0;
+		segment = 0;
 	}
 
 	if (segment != 0) {
@@ -318,14 +322,14 @@ static int apic_probe(struct mp_scan *mp, unsigned long* paddr)
 		if (opts.debug)
 			printf("EBDA segment ptr: %lx\n", target);
 		ret = scan_for_mp(mp, "1K at the EBDA", target, ONE_KBYTE, paddr);
-		if (ret)
-			return ret > 0;
+		if (ret > 0)
+			return 1;
 	}
 
 	/* read CMOS for real top of mem */
 	if (readAt(mp, (unsigned long)TOPOFMEM_POINTER, &segment, 2)) {
 		mp_error(mp, "error reading CMOS for real top of mem (%p)\n", (void *) TOPOFMEM_POINTER);
-		return 0;
+		segment = 0;
 	}
 
 	target = 0;
@@ -333,36 +337,36 @@ static int apic_probe(struct mp_scan *mp, unsigned long* paddr)
 		--segment;			/* less ONE_KBYTE */
 		target = segment * 1024;
 		ret = scan_for_mp(mp, "1KB at the top of base memory", target, ONE_KBYTE, paddr);
-		if (ret)
-			return ret > 0;
+		if (ret > 0)
+			return 1;
 	}
 
 	/* we don't necessarily believe CMOS, check base of the last 1K of 640K */
 	if (target != (DEFAULT_TOPOFMEM - 1024)) {
 		ret = scan_for_mp(mp, "DEFAULT_TOPOFMEM - 1024",
 				  DEFAULT_TOPOFMEM - 1024, ONE_KBYTE, paddr);
-		if (ret)
-			return ret > 0;
+		if (ret > 0)
+			return 1;
 	}
 
 	/* search the BIOS */
 	ret = scan_for_mp(mp, "BIOS_BASE",BIOS_BASE, BIOS_SIZE, paddr);
-	if (ret)
-		return ret > 0;
+	if (ret > 0)
+		return 1;
 
 	/* search the extended BIOS */
 	ret = scan_for_mp(mp, "BIOS_BASE2",BIOS_BASE2, BIOS_SIZE, paddr);
-	if (ret)
-		return ret > 0;
+	if (ret > 0)
+		return 1;
 
 	/* search additional memory */
 	ret = scan_for_mp(mp, "GROPE_AREA1",GROPE_AREA1, GROPE_SIZE, paddr);
-	if (ret)
-		return ret > 0;
+	if (ret > 0)
+		return 1;
 
 	ret = scan_for_mp(mp, "GROPE_AREA2",GROPE_AREA2, GROPE_SIZE, paddr);
-	if (ret)
-		return ret > 0;
+	if (ret > 0)
+		return 1;
 
 	*paddr = (unsigned long)0;
 	return 0;

@@ -120,5 +120,12 @@ int main(void)
 	ret = scan(&ncpu);
 	check("entry count past table", ret, ncpu, 0, 0);
 
+	/* unreadable EBDA must not hide the table in the BIOS area */
+	build("PCMP", 44 + sizeof(entries), 3, entries, sizeof(entries));
+	image[0x40e] = 0xff;
+	image[0x40f] = 0xff;
+	ret = scan(&ncpu);
+	check("unreadable EBDA", ret, ncpu, 1, 2);
+
 	return fail;
 }
