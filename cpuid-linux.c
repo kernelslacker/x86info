@@ -42,7 +42,7 @@ int bind_cpu(unsigned int cpunr)
 }
 
 /* Kernel CPUID driver's minimum supported read size
- * (see linux/arch/i386/kernel/cpuid.c)
+ * (see linux/arch/x86/kernel/cpuid.c)
  */
 #define CPUID_CHUNK_SIZE (16)
 

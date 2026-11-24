@@ -10,10 +10,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Clean-ups / Style
 
-D2. cpuid-linux.c:CPUID_CHUNK_SIZE comment — points to
-    `linux/arch/i386/kernel/cpuid.c`, which no longer exists
-    (`arch/x86/kernel/cpuid.c`). Fix: correct the path. Model: haiku.
-
 D3. rdmsr.c / binary.c — `binary()`, `binary32(unsigned long)` take
     `unsigned long`, but the values are 32 or 64 bit. `binary()` has no
     callers outside the MSR dumps. Fix: check callers, remove `binary()` if
