@@ -23,6 +23,7 @@ LSMSR_TMP_HEADERS=AMD_k8.h \
 
 LSMSR_SRC = \
 	lsmsr.c \
+	lsmsr-opts.c \
 	../cpuid.c \
 	../signature.c \
 	../cpuid-linux.c \

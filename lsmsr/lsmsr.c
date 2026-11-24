@@ -23,6 +23,7 @@
 #include <getopt.h>
 
 #include "msr.h"
+#include "lsmsr-opts.h"
 #include <x86info.h>
 #include "AMD_k8.h"
 #include "AMD_fam10h.h"
@@ -60,21 +61,6 @@ static struct {
 	.reg = -1,
 };
 
-
-/* getopt_long stuff */
-static struct option lopts[] = {
-	{"all", no_argument, 0, 'a'},		/* show all MSRs */
-	{"cpu", required_argument, 0, 'c'},	/* CPU number */
-	{"family", required_argument, 0, 'f'},	/* CPU family */
-	{"list", no_argument, 0, 'l'},		/* list known MSRs */
-	{"register", required_argument, 0, 'r'},  /* register name or address */
-	{"help", no_argument, 0, 'h'},		/* help */
-	{"version", no_argument, 0, 'v'},	/* version info */
-	{"verbosity", required_argument, 0, 'V'}, /* verbosity */
-	{0, 0, 0, 0}
-};
-
-#define OPTSTRING "ac:f:hlr:vV:"
 
 #define _USAGE "[OPTION] <MSR>\n"
 
@@ -267,41 +253,13 @@ static int set_msr_table(void)
 	return 0;
 }
 
-static int parse_int_opt(const char *name, const char *s, int base)
-{
-	char *end;
-	long val;
-
-	errno = 0;
-	val = strtol(s, &end, base);
-	if (end == s || *end != '\0' || errno == ERANGE ||
-	    val < INT_MIN || val > INT_MAX) {
-		fprintf(stderr, "%s: invalid value: %s\n", name, s);
-		exit(EXIT_FAILURE);
-	}
-	return (int)val;
-}
-
-static int try_parse_uint(const char *s, int base, unsigned int *out)
-{
-	char *end;
-	unsigned long val;
-
-	errno = 0;
-	val = strtoul(s, &end, base);
-	if (end == s || *end != '\0' || errno == ERANGE || val > UINT_MAX)
-		return -1;
-	*out = (unsigned int)val;
-	return 0;
-}
-
 static struct reg_spec unknown_msr = {0, "unknown", "(at your own risk)", NULL, NULL};
 
 #define OPT_MAX 32
 int main(int argc, char *argv[])
 {
-	int c;
-	int i, li, ret;
+	struct lsmsr_opts o;
+	int i, ret;
 	struct reg_spec *reg;
 
 	ret = 1;
@@ -316,42 +274,27 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	while((c = getopt_long(argc, argv, OPTSTRING, lopts, &li)) != -1) {
-		switch (c) {
-		case 'a':
-			g.show_all = 1;
-			break;
-		case 'h':
-			help();
-			return 0;
-		case 'v':
-			version();
-			return 0;
-		case 'V':
-			g.verbosity = parse_int_opt("-V", optarg, 10);
-			break;
-		case 'c':
-			g.cpu = parse_int_opt("-c", optarg, 0);
-			if (g.cpu < 0) {
-				fprintf(stderr, "-c: invalid value: %s\n", optarg);
-				exit(EXIT_FAILURE);
-			}
-			break;
-		case 'f':
-			g.family = parse_int_opt("-f", optarg, 0);
-			break;
-		case 'l':
-			g.list = 1;
-			break;
-		case 'r':
-			/* Hex addresses may start with a-f, so try a number first. */
-			if (try_parse_uint(optarg, 16, &g.reg))
-				g.msr_name = optarg;
-			break;
-		default:
-			usage();
-		}
+	switch (lsmsr_parse_opts(argc, argv, &o)) {
+	case LSMSR_OPT_OK:
+		break;
+	case LSMSR_OPT_HELP:
+		help();
+		return 0;
+	case LSMSR_OPT_VERSION:
+		version();
+		return 0;
+	case LSMSR_OPT_BAD:
+		exit(EXIT_FAILURE);
+	default:
+		usage();
 	}
+	g.show_all = o.show_all;
+	g.list = o.list;
+	g.verbosity = o.verbosity;
+	g.cpu = o.cpu;
+	g.family = o.family;
+	g.msr_name = o.msr_name;
+	g.reg = o.reg;
 
 	if (argc < 2)
 		usage();

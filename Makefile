@@ -49,11 +49,12 @@ SAN_FLAGS = -fsanitize=address,undefined -fno-sanitize-recover=undefined \
 	    -fno-omit-frame-pointer
 
 # Unit tests, each built from its test source plus the code it covers.
-UNIT_TESTS = psb opts mptable cpulist
+UNIT_TESTS = psb opts mptable cpulist lsmsr
 UNIT_SRC_psb = tests/test-psb.c vendors/amd/dumppsb.c
 UNIT_SRC_opts = tests/test-opts.c commandline.c
 UNIT_SRC_mptable = tests/test-mptable.c mptable.c signature.c
 UNIT_SRC_cpulist = tests/test-cpulist.c cpulist.c
+UNIT_SRC_lsmsr = tests/test-lsmsr.c lsmsr/lsmsr-opts.c
 
 # unit_test(name, build directory, extra flags)
 define unit_test
