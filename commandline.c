@@ -51,14 +51,42 @@ static struct option long_options[] = {
 	{ NULL, 0, NULL, 0 },
 };
 
+/* Indexed by option value, so entries need not follow long_options order. */
+static const char *const help_text[] = {
+	['a'] = "Show everything (non-root skips root-only output)",
+	['c'] = "Show TLB, cache sizes and associativity",
+	['f'] = "Show CPU feature flags",
+	['h'] = "Show a summary of options",
+	['m'] = "Dump model specific registers (root)",
+	['r'] = "Show register values from all CPUID calls",
+	['v'] = "Show verbose descriptions",
+	[OPT_ALL_CPUS] = "Report every CPU separately, even when identical",
+	[OPT_ADDR] = "Show physical and virtual address sizes",
+	[OPT_APIC] = "Dump the local APIC registers (root)",
+	[OPT_BIOS] = "Show BIOS information (root)",
+	[OPT_BUGS] = "Show known CPU bugs",
+	[OPT_CONNECTOR] = "Show the CPU socket or slot type",
+	[OPT_DEBUG] = "Show extra debugging output",
+	[OPT_SHOW_MACHINE_CHECK] = "Show machine check exception information (root)",
+	[OPT_MHZ] = "Measure the TSC rate over a tenth of a second",
+	[OPT_MICROCODE] = "Show the microcode revision (root)",
+	[OPT_MPTABLE] = "Dump the MP table of CPUs known to the BIOS (root)",
+	[OPT_MTRR] = "Dump the memory type range registers (root)",
+	[OPT_PM] = "Show power management information",
+};
+
 static void usage(const char *programname, int exit_code)
 {
 	printf("Usage: %s [<switches>]\n", programname);
 	for (int i = 0; long_options[i].name; i++) {
-		if (long_options[i].val < 128)
-			printf("-%c, --%s\n", long_options[i].val, long_options[i].name);
+		int val = long_options[i].val;
+
+		if (val < 128)
+			printf("  -%c, --%-18s  %s\n", val,
+			       long_options[i].name, help_text[val]);
 		else
-			printf("    --%s\n", long_options[i].name);
+			printf("      --%-18s  %s\n", long_options[i].name,
+			       help_text[val]);
 	}
 	exit(exit_code);
 }

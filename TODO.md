@@ -10,11 +10,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Clean-ups / Style
 
-D1. commandline.c — uses `//` comments for each case. The project rule
-    is `/* */`. Fix: convert them. `usage()` prints only option names, with
-    no descriptions, so it cannot replace the man page. Fix: add a help
-    string per option in the table and print it. Model: haiku.
-
 D2. cpuid-linux.c:CPUID_CHUNK_SIZE comment — points to
     `linux/arch/i386/kernel/cpuid.c`, which no longer exists
     (`arch/x86/kernel/cpuid.c`). Fix: correct the path. Model: haiku.
