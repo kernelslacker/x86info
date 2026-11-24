@@ -10,10 +10,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Clean-ups / Style
 
-D6. vendors/intel/identify.c — the family 0x12 and 0x13 branches are nested
-    switches inside the `case 0xF` switch. Fix: move them to a table keyed
-    by `efamily`/model like the family 6 tables. Model: sonnet.
-
 ## 🟡 Tests & docs
 
 E1. CLAUDE.md (Architecture) — lists `natsemi`, `rise` and `sis` as vendor

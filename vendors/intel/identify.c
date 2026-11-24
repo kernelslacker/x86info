@@ -13,6 +13,29 @@
 #include <x86info.h>
 #include "intel.h"
 
+/* Families 0x12 (efamily 3) and 0x13 (efamily 4). */
+static const struct {
+	unsigned int efamily;
+	unsigned int model;
+	const char *str;
+} intel_efamily_names[] = {
+	{ .efamily = 3, .model = 0x1, .str = "[Nova Lake]" },
+	{ .efamily = 3, .model = 0x3, .str = "[Nova Lake L]" },
+	{ .efamily = 4, .model = 0x1, .str = "[Diamond Rapids]" },
+};
+
+static const char *extended_family_name(const struct cpudata *cpu)
+{
+	unsigned int i;
+
+	for (i = 0; i < sizeof(intel_efamily_names) / sizeof(intel_efamily_names[0]); i++) {
+		if (intel_efamily_names[i].efamily == cpu->efamily &&
+		    intel_efamily_names[i].model == model(cpu))
+			return intel_efamily_names[i].str;
+	}
+	return "Unknown model.";
+}
+
 void identify_intel(struct cpudata *cpu)
 {
 	unsigned int eax, ebx;
@@ -119,26 +142,8 @@ void identify_intel(struct cpudata *cpu)
 		case 0:
 			identify_intel_family15(cpu);
 			break;
-		case 3:		/* Family 0x12 */
-			switch (model(cpu)) {
-			case 0x1:
-				add_to_cpuname("[Nova Lake]");
-				break;
-			case 0x3:
-				add_to_cpuname("[Nova Lake L]");
-				break;
-			default:
-				add_to_cpuname("Unknown model.");
-			}
-			break;
-		case 4:		/* Family 0x13 */
-			if (model(cpu) == 0x1)
-				add_to_cpuname("[Diamond Rapids]");
-			else
-				add_to_cpuname("Unknown model.");
-			break;
 		default:
-			add_to_cpuname("Unknown model.");
+			add_to_cpuname(extended_family_name(cpu));
 		}
 		break;
 	}
