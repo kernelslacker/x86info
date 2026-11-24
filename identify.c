@@ -21,7 +21,7 @@ int get_cpu_info_basics(struct cpudata *cpu)
 	if (cpuid(cpu->number, 0, &maxi, &vendor, &vendor_ecx, &vendor_edx))
 		return -1;
 	maxi &= 0xffff;		/* The high-order word is non-zero on some Cyrix CPUs */
-	cpu->cpuid_level = maxi;
+	cpu->cpuid_level = sane_max_leaf(maxi, 0);
 
 	cpu->vendor = vendor_from_cpuid(vendor, vendor_edx);
 	if (cpu->vendor == VENDOR_UNKNOWN && !unknown_vendor_reported) {

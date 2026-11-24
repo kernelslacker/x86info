@@ -10,11 +10,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Clean-ups / Style
 
-D5. cpuid.c:dump_raw_cpuid — `cpu->cpuid_level` is only masked with 0xffff,
-    so a bogus CPU can make `-r` print 65536 leaves. The extended ranges
-    use `sane_max_leaf`. Fix: cap the basic range the same way. Model:
-    haiku.
-
 D6. vendors/intel/identify.c — the family 0x12 and 0x13 branches are nested
     switches inside the `case 0xF` switch. Fix: move them to a table keyed
     by `efamily`/model like the family 6 tables. Model: sonnet.
