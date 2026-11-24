@@ -8,11 +8,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Maintainability
 
-C4. apic.c:map_apic_registers — the caller passes `(base >> 12) << 12`, so
-    `offset` is always 0. The offset arithmetic and `map->size` addition
-    are dead. Fix: remove the offset handling, or pass the raw address.
-    Model: haiku.
-
 C5. mptable.c — mixes camelCase (`MPConfigTableHeader`, `seekEntry`,
     `ProcEntry`) with the kernel style used elsewhere. `seekEntry`,
     `readEntry` and `readAt` are three layers for one `pread()`. Fix:

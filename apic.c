@@ -20,29 +20,24 @@ struct apic_map {
 	volatile unsigned int *regs;
 };
 
-/* Map the APIC registers at physical address addr; 0 on success. */
+/* Map the APIC registers at page-aligned physical address addr; 0 on success.
+ * The caller masks the MSR base, so no in-page offset is needed. */
 static int map_apic_registers(struct apic_map *map, unsigned long long addr)
 {
-	long pagesize = sysconf(_SC_PAGESIZE);
-	unsigned long long offset;
 	int fd;
-
-	if (pagesize <= 0)
-		return -1;
-	offset = addr & ((unsigned long long)pagesize - 1);
 
 	fd = open("/dev/mem", O_RDONLY);
 	if (fd == -1)
 		return -1;
 
-	map->size = APIC_REGISTER_SPACE + (size_t)offset;
+	map->size = APIC_REGISTER_SPACE;
 	map->base = mmap(NULL, map->size, PROT_READ, MAP_SHARED, fd,
-			 (off_t)(addr - offset));
+			 (off_t)addr);
 	close(fd);
 	if (map->base == MAP_FAILED)
 		return -1;
 
-	map->regs = (volatile unsigned int *)((char *)map->base + offset);
+	map->regs = map->base;
 	return 0;
 }
 
