@@ -4,11 +4,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🔴 Correctness
 
-A4. havecpuid.c:flag_is_changeable_p — the asm pushes onto the stack in a
-    leaf function without a "memory" or "cc" clobber. On x86-64 that can
-    overwrite the red zone. Fix: add the clobbers. Alternatively drop the
-    check on x86-64, where CPUID always exists. Model: haiku.
-
 A5. cpudev-linux.c:cpudev_fd — once `EMFILE` is hit, every later CPUID/MSR
     call retries `open()` (fails) and then opens a transient descriptor.
     With the default 1024 limit this starts at about 1000 open nodes (two
