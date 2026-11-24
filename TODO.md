@@ -8,13 +8,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Maintainability
 
-C1. cpudev-linux.c / cpuid-linux.c / rdmsr-linux.c — per-CPU descriptor
-    tables are initialised with the GNU range designator
-    `[0 ... MAX_CPUS - 1] = CPUDEV_CLOSED`, in two places. Fix: make
-    "closed" the value 0 and keep descriptors as fd+1, or add one
-    `cpudev_init_fds()` helper. Removes the GNU extension and the
-    duplicated init. Model: sonnet.
-
 C2. MHz.c:read_perf_msr_pmu / perf_msr_close — the close-both-descriptors
     code is written twice, and `fds` and `tried` are pointless local
     copies of the statics. Fix: split "open" from "close", make the

@@ -19,7 +19,7 @@
 #include <x86info.h>
 
 /* Per-CPU /dev/cpu/N/msr descriptors, opened lazily. */
-static int msr_fds[MAX_CPUS] = { [0 ... MAX_CPUS - 1] = CPUDEV_CLOSED };
+static int msr_fds[MAX_CPUS];
 
 bool read_msr(unsigned int cpu, unsigned int idx, unsigned long long *val)
 {

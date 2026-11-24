@@ -47,7 +47,7 @@ int bind_cpu(unsigned int cpunr)
 #define CPUID_CHUNK_SIZE (16)
 
 /* Per-CPU /dev/cpu/N/cpuid descriptors, opened lazily. */
-static int cpuid_fds[MAX_CPUS] = { [0 ... MAX_CPUS - 1] = CPUDEV_CLOSED };
+static int cpuid_fds[MAX_CPUS];
 
 int cpuid(unsigned int CPU_number, unsigned long long idx,
 	unsigned int *eax,

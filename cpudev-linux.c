@@ -26,15 +26,15 @@ static int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 
 	if (cpu >= MAX_CPUS)
 		return -1;
-	if (fds[cpu] >= 0)
-		return fds[cpu];
+	if (fds[cpu] > CPUDEV_CLOSED)
+		return fds[cpu] - 1;
 	if (fds[cpu] == CPUDEV_FAILED)
 		return -1;
 
 	(void)snprintf(path, sizeof(path), "/dev/cpu/%u/%s", cpu, node);
 	fh = open(path, O_RDONLY);
 	if (fh != -1) {
-		fds[cpu] = fh;
+		fds[cpu] = fh + 1;
 		return fh;
 	}
 

@@ -158,9 +158,12 @@ void display_feature_flags(const struct cpudata *cpu);
 
 int bind_cpu(unsigned int cpunr);
 
-/* Per-CPU descriptor cache slots: >= 0 is open. */
-#define CPUDEV_CLOSED	-1
-#define CPUDEV_FAILED	-2
+/*
+ * Per-CPU descriptor cache slots hold fd + 1, so a zero-initialised
+ * static table is all CPUDEV_CLOSED: > 0 is open.
+ */
+#define CPUDEV_CLOSED	0
+#define CPUDEV_FAILED	-1
 
 /*
  * pread() from /dev/cpu/<cpu>/<node>, caching the descriptor in
