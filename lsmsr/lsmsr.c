@@ -16,7 +16,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <ctype.h>
 #include <limits.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -283,18 +282,17 @@ static int parse_int_opt(const char *name, const char *s, int base)
 	return (int)val;
 }
 
-static unsigned int parse_uint_opt(const char *name, const char *s, int base)
+static int try_parse_uint(const char *s, int base, unsigned int *out)
 {
 	char *end;
 	unsigned long val;
 
 	errno = 0;
 	val = strtoul(s, &end, base);
-	if (end == s || *end != '\0' || errno == ERANGE || val > UINT_MAX) {
-		fprintf(stderr, "%s: invalid value: %s\n", name, s);
-		exit(EXIT_FAILURE);
-	}
-	return (unsigned int)val;
+	if (end == s || *end != '\0' || errno == ERANGE || val > UINT_MAX)
+		return -1;
+	*out = (unsigned int)val;
+	return 0;
 }
 
 static struct reg_spec unknown_msr = {0, "unknown", "(at your own risk)", NULL, NULL};
@@ -346,10 +344,9 @@ int main(int argc, char *argv[])
 			g.list = 1;
 			break;
 		case 'r':
-			if (isalpha((unsigned char)*optarg))
+			/* Hex addresses may start with a-f, so try a number first. */
+			if (try_parse_uint(optarg, 16, &g.reg))
 				g.msr_name = optarg;
-			else
-				g.reg = parse_uint_opt("-r", optarg, 16);
 			break;
 		default:
 			usage();

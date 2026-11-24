@@ -4,14 +4,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🔴 Correctness
 
-A1. lsmsr/lsmsr.c:main (case 'r') — `isalpha(*optarg)` treats a hex
-    address that starts with a-f as a register name. `lsmsr -r c0010015`
-    fails with `unknown register "c0010015"`. Nearly every AMD MSR starts
-    with 0xc, so the bare-hex form in the help text ("<name|addr>") is
-    unusable. Fix: try `parse_uint_opt` first (accept a bare or 0x-prefixed
-    hex string), and fall back to a name lookup only if it does not parse.
-    Model: sonnet.
-
 A2. mptable.c:apic_probe — a read error in one scan region (`ret == -1`)
     returns 0 and skips the remaining regions. With a restrictive
     /dev/mem (STRICT_DEVMEM) one unreadable area hides a table in a later
@@ -147,7 +139,7 @@ E1. CLAUDE.md (Architecture) — lists `natsemi`, `rise` and `sis` as vendor
 
 E2. tests — no unit test covers `cpudev_pread` descriptor fallback
     (EMFILE, ENODEV), `parse_command_line` for `--all` as non-root, or the
-    lsmsr option parser (A1). Fix: add `tests/test-cpudev.c` using a
+    lsmsr option parser. Fix: add `tests/test-cpudev.c` using a
     temporary directory, and an lsmsr option test. Model: sonnet.
 
 E3. tests/test-opts.c — check that it covers short options `-a -c -f -m -r -v`
