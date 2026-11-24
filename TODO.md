@@ -8,12 +8,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Maintainability
 
-C5. mptable.c — mixes camelCase (`MPConfigTableHeader`, `seekEntry`,
-    `ProcEntry`) with the kernel style used elsewhere. `seekEntry`,
-    `readEntry` and `readAt` are three layers for one `pread()`. Fix:
-    replace them with `pread()` on the fd (drops the lseek state) and
-    rename the rest to snake_case. Model: sonnet.
-
 C6. vendors/amd/powernow.c:get_cof (case 0x12) — five near-identical
     `f`/`d` return statements. Fix: a small table of {mul, div} per
     divisor ID. Model: haiku.
