@@ -12,11 +12,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Tests & docs
 
-E2. tests — no unit test covers `cpudev_pread` descriptor fallback
-    (EMFILE, ENODEV), `parse_command_line` for `--all` as non-root, or the
-    lsmsr option parser. Fix: add `tests/test-cpudev.c` using a
-    temporary directory, and an lsmsr option test. Model: sonnet.
-
 E3. tests/test-opts.c — check that it covers short options `-a -c -f -m -r -v`
     and every long option in the man page (x86info.1 matches
     `long_options` today; keep it that way with a check). Model: haiku.

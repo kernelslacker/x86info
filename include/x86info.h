@@ -165,8 +165,11 @@ int bind_cpu(unsigned int cpunr);
 #define CPUDEV_CLOSED	0
 #define CPUDEV_FAILED	-1
 
+/* Directory holding the per-CPU nodes; only a test has a reason to change it. */
+extern const char *cpudev_dir;
+
 /*
- * pread() from /dev/cpu/<cpu>/<node>, caching the descriptor in
+ * pread() from <cpudev_dir>/<cpu>/<node>, caching the descriptor in
  * fds[MAX_CPUS]. Fails with errno ENODEV if the node can't be opened.
  */
 ssize_t cpudev_pread(int *fds, unsigned int cpu, const char *node,

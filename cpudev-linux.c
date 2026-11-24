@@ -13,6 +13,10 @@
 #include <errno.h>
 #include <x86info.h>
 
+const char *cpudev_dir = "/dev/cpu";
+
+#define CPUDEV_PATH_MAX	256
+
 /*
  * Open or fetch the cached descriptor. Returns -1 if there is none, which
  * leaves the slot CPUDEV_CLOSED when only descriptors ran out.
@@ -21,7 +25,7 @@ static int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 {
 	static unsigned int reported;
 	unsigned int bit = strcmp(node, "msr") == 0 ? 2 : 1;
-	char path[48];
+	char path[CPUDEV_PATH_MAX];
 	int fh, err;
 
 	if (cpu >= MAX_CPUS)
@@ -31,7 +35,7 @@ static int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 	if (fds[cpu] == CPUDEV_FAILED)
 		return -1;
 
-	(void)snprintf(path, sizeof(path), "/dev/cpu/%u/%s", cpu, node);
+	(void)snprintf(path, sizeof(path), "%s/%u/%s", cpudev_dir, cpu, node);
 	fh = open(path, O_RDONLY);
 	if (fh != -1) {
 		fds[cpu] = fh + 1;
@@ -58,7 +62,7 @@ static int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 ssize_t cpudev_pread(int *fds, unsigned int cpu, const char *node,
 		     void *buf, size_t len, off_t off)
 {
-	char path[48];
+	char path[CPUDEV_PATH_MAX];
 	ssize_t ret;
 	int fh;
 
@@ -72,7 +76,7 @@ ssize_t cpudev_pread(int *fds, unsigned int cpu, const char *node,
 	}
 
 	/* Out of descriptors: use a transient one rather than evict another. */
-	(void)snprintf(path, sizeof(path), "/dev/cpu/%u/%s", cpu, node);
+	(void)snprintf(path, sizeof(path), "%s/%u/%s", cpudev_dir, cpu, node);
 	fh = open(path, O_RDONLY);
 	if (fh == -1)
 		return -1;
