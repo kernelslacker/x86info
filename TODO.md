@@ -6,11 +6,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Performance
 
-B4. Makefile ($(CHECK_BIN), $(ASAN_BIN)) — every `.c` is rebuilt in a single
-    compile line for each replay binary, so no incremental or parallel
-    build. Fix: build replay objects into `tests/build/obj/` with a pattern
-    rule. Model: sonnet.
-
 ## 🟡 Maintainability
 
 C1. cpudev-linux.c / cpuid-linux.c / rdmsr-linux.c — per-CPU descriptor

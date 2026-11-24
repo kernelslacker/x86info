@@ -85,13 +85,29 @@ record: x86info
 	 rm -f $(RECORD_DUMP).raw; \
 	 echo "recorded $(RECORD_DUMP).dump: $$(grep -c '^CPU #' $(RECORD_DUMP).dump) CPUs"
 
-$(CHECK_BIN): $(X86INFO_HEADERS) $(wildcard *.c) $(wildcard vendors/*/*.c)
-	@mkdir -p tests/build
-	$(QUIET_CC)$(CC) $(CFLAGS) -DCPUID_REPLAY $(LDFLAGS) -o $@ \
-	    $(wildcard *.c) $(wildcard vendors/*/*.c) $(LIBPCI)
-
 # The unit tests and goldens again, built with ASan and UBSan.
 ASAN_BIN = tests/build-asan/x86info
+
+# Replay objects live in a per-build directory so the plain and sanitizer
+# builds never share objects built with different flags.
+REPLAY_SRC = $(wildcard *.c) $(wildcard vendors/*/*.c)
+
+# replay_bin(binary, object directory, extra flags)
+define replay_bin
+$(1): $$(REPLAY_SRC:%.c=$(2)/%.o)
+	$$(QUIET_CC)$$(CC) $$(CFLAGS) -DCPUID_REPLAY $(3) $$(LDFLAGS) -o $$@ \
+	    $$^ $$(LIBPCI)
+
+$(2)/%.o: %.c
+	@mkdir -p $$(@D)
+	$$(QUIET_CC)$$(CC) $$(CFLAGS) -DCPUID_REPLAY $(3) -MMD -MP -MF $$(@:.o=.d) \
+	    -o $$@ -c $$<
+
+-include $$(REPLAY_SRC:%.c=$(2)/%.d)
+endef
+
+$(eval $(call replay_bin,$(CHECK_BIN),tests/build/obj,))
+$(eval $(call replay_bin,$(ASAN_BIN),tests/build-asan/obj,$(SAN_FLAGS)))
 
 # Optional integration sweep; uses software emulation and needs no guest OS.
 QEMU ?= qemu-system-x86_64
@@ -111,11 +127,6 @@ tests/build/qemu-rom.bin: tests/build/qemu-rom.elf
 check-asan: $(ASAN_BIN) $(UNIT_TESTS:%=tests/build-asan/test-%)
 	@for t in $(UNIT_TESTS); do tests/build-asan/test-$$t > /dev/null || exit 1; done
 	@tests/run-tests.sh $(ASAN_BIN)
-
-$(ASAN_BIN): $(X86INFO_HEADERS) $(wildcard *.c) $(wildcard vendors/*/*.c)
-	@mkdir -p tests/build-asan
-	$(QUIET_CC)$(CC) $(CFLAGS) -DCPUID_REPLAY $(SAN_FLAGS) $(LDFLAGS) \
-	    -o $@ $(wildcard *.c) $(wildcard vendors/*/*.c) $(LIBPCI)
 
 lsmsr:
 	$(Q)$(MAKE) --no-print-directory -C lsmsr
