@@ -223,8 +223,10 @@ static void display_cpus(struct cpudata *cpus, unsigned int n)
 			printf("Found %u identical CPUs\n", n);
 
 		/* Check mptable if present. This way we get number of CPUs
-		   on SMP systems that have booted UP kernels. */
-		if (is_root()) {
+		   on SMP systems that have booted UP kernels. Only a
+		   single visible CPU can hide others; a failed open of
+		   /dev/mem (lockdown) makes enumerate_cpus() return -1. */
+		if (n == 1 && is_root()) {
 			nrSMPCPUs = enumerate_cpus();
 			if (nrSMPCPUs > 0 && (unsigned int)nrSMPCPUs > n)
 				printf("Found %d CPUs in MPTable!\n", nrSMPCPUs);

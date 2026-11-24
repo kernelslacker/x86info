@@ -4,12 +4,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🔴 Correctness
 
-A3. x86info.c:display_cpus — as root, every default run opens /dev/mem and
-    scans the BIOS areas (`enumerate_cpus`). It exists only to find SMP
-    CPUs when a UP kernel booted, so it matters only when `n == 1`. Fix:
-    call it only when `n == 1`, and skip it when /dev/mem is locked down.
-    This removes needless privileged I/O on every run. Model: sonnet.
-
 A4. havecpuid.c:flag_is_changeable_p — the asm pushes onto the stack in a
     leaf function without a "memory" or "cc" clobber. On x86-64 that can
     overwrite the red zone. Fix: add the clobbers. Alternatively drop the
