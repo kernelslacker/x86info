@@ -8,7 +8,6 @@
  */
 
 #include <stdio.h>
-#include <string.h>
 #include <x86info.h>
 #include "intel.h"
 
@@ -263,17 +262,18 @@ static void decode_general_tlb(struct cpudata *cpu)
 			if (max > 64)
 				max = 64;
 		}
+		type = d & 0x1f;
+		/* Unused descriptor slots; skip before formatting. */
+		if (type == 0)
+			continue;
 		page_size = b & 0xf;
 		ways = b >> 16;
-		type = d & 0x1f;
 		level = (d >> 5) & 7;
 		entries = c * ways;
 		if ((d >> 8) & 1)
-			strcpy(assoc, "fully");
+			snprintf(assoc, sizeof(assoc), "fully");
 		else
 			snprintf(assoc, sizeof(assoc), "%u-way", ways);
-		if (type == 0)
-			continue;
 		typename = tlbnames[type];
 		if (!typename)
 			typename = "Unknown";

@@ -8,11 +8,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Maintainability
 
-C7. vendors/intel/cachesize.c:decode_general_tlb — builds `assoc` (including
-    a `strcpy`) before the `type == 0` early `continue`, so the work is
-    wasted. Fix: move the `type == 0` test first and use `snprintf` for both
-    branches. Model: haiku.
-
 C8. host.c:host_longnop — uses `signal()` plus `siglongjmp`, which has
     unspecified handler semantics. The comment names `%eax`, but the
     code runs in 64-bit mode. Fix: use `sigaction` with `SA_NODEFER`,
