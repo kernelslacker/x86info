@@ -12,10 +12,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Tests & docs
 
-E1. CLAUDE.md (Architecture) — lists `natsemi`, `rise` and `sis` as vendor
-    directories. They have no directory; `vendors/misc/identify.c` handles
-    them. Fix: edit the vendor list. Model: haiku.
-
 E2. tests — no unit test covers `cpudev_pread` descriptor fallback
     (EMFILE, ENODEV), `parse_command_line` for `--all` as non-root, or the
     lsmsr option parser. Fix: add `tests/test-cpudev.c` using a
