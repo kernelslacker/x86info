@@ -188,9 +188,9 @@ void show_header(struct cpudata *cpu);
 void show_info(struct cpudata *cpu, int header);
 
 bool read_msr(unsigned int cpu, unsigned int idx, unsigned long long *val);
-void binary(unsigned int n, unsigned long value);
-void binary32(unsigned long value);
-void binary64(unsigned long long value);
+void binary(unsigned int n, uint64_t value);
+void binary32(uint32_t value);
+void binary64(uint64_t value);
 void dumpmsr(unsigned int cpunum, unsigned int msr, int size, bool labelled);
 void dump_mc_banks(unsigned int cpunum, unsigned int banks);
 enum vendor vendor_from_cpuid(unsigned int ebx, unsigned int edx);

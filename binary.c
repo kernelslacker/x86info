@@ -8,7 +8,7 @@
 #include <x86info.h>
 
 /* Print the low n bits of value, most significant first; n is at most 64. */
-static void print_bits(unsigned int n, unsigned long long value, int bytes)
+static void print_bits(unsigned int n, uint64_t value, int bytes)
 {
 	unsigned int i;
 
@@ -20,17 +20,17 @@ static void print_bits(unsigned int n, unsigned long long value, int bytes)
 	(void)putchar('\n');
 }
 
-void binary(unsigned int n, unsigned long value)
+void binary(unsigned int n, uint64_t value)
 {
 	print_bits(n > 64 ? 64 : n, value, 0);
 }
 
-void binary32(unsigned long value)
+void binary32(uint32_t value)
 {
 	print_bits(32, value, 1);
 }
 
-void binary64(unsigned long long value)
+void binary64(uint64_t value)
 {
 	binary32(value>>32);
 	printf("           ");

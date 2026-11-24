@@ -10,11 +10,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Clean-ups / Style
 
-D3. rdmsr.c / binary.c — `binary()`, `binary32(unsigned long)` take
-    `unsigned long`, but the values are 32 or 64 bit. `binary()` has no
-    callers outside the MSR dumps. Fix: check callers, remove `binary()` if
-    unused, and use `uint32_t` / `uint64_t`. Model: haiku.
-
 D4. lsmsr/lsmsr.c:open_dev — `char s[20]` truncates "/dev/cpu/%d/msr" for CPU
     numbers of eight or more digits. Fix: use `char s[32]`. Model: haiku.
 
