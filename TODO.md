@@ -8,11 +8,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Maintainability
 
-C3. MHz.c:measure_MHz — one function does CPUID lookup, perf counter
-    reads, warm-up, TSC timing and the final maths. Fix: split into
-    `read_tsc_rate()` (timing only) and `core_clock()` (APERF/MPERF
-    ratio). Model: sonnet.
-
 C4. apic.c:map_apic_registers — the caller passes `(base >> 12) << 12`, so
     `offset` is always 0. The offset arithmetic and `map->size` addition
     are dead. Fix: remove the offset handling, or pass the raw address.

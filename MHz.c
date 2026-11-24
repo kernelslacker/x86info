@@ -227,39 +227,16 @@ static unsigned int cpuid_tsc_MHz(const struct cpudata *cpu)
 	return eax & 0xffff;
 }
 
-/* Measure the TSC rate and, if want_core, the core clock as well. */
-static void measure_MHz(struct cpudata *cpu, int want_core)
+/*
+ * Time the TSC against the monotonic clock over MEASURE_US. CPUID's
+ * figure, when there is one, replaces the result but the window still
+ * runs, as the core clock counters are sampled across it.
+ */
+static double read_tsc_rate(unsigned int known_MHz)
 {
 	unsigned long long int cycles[2]; /* gotta be 64 bit */
-	unsigned long long aperf[2], mperf[2];
 	struct timespec ts[2];
-	int have_perf;
-	unsigned int eax, ebx, ecx, edx, known_MHz;
 	double tsc_mhz;
-
-	/* Make sure we have a TSC (and hence RDTSC) */
-	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
-	if (!(edx & X86_FEATURE_TSC)) {
-		printf("No TSC, MHz calculation cannot be performed.\n");
-		cpu->MHz = 0;
-		return;
-	}
-
-	have_perf = want_core && host_can_measure() &&
-		    read_perf_counters(cpu, &aperf[0], &mperf[0]);
-
-	/* Nothing left to measure if CPUID gives the TSC rate */
-	known_MHz = cpuid_tsc_MHz(cpu);
-	if ((known_MHz && !have_perf) || !host_can_measure()) {
-		cpu->MHz = known_MHz ? known_MHz : host_recorded_MHz(cpu->number);
-		cpu->core_MHz = 0;
-		return;
-	}
-
-	if (have_perf) {
-		spin(WARMUP_US);
-		read_perf_counters(cpu, &aperf[0], &mperf[0]);
-	}
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &ts[0]);
 	cycles[0] = rdtsc();
@@ -273,14 +250,60 @@ static void measure_MHz(struct cpudata *cpu, int want_core)
 	tsc_mhz = (double)(cycles[1] - cycles[0]) / elapsed_us(&ts[0], &ts[1]);
 	if (known_MHz)
 		tsc_mhz = known_MHz;
+	return tsc_mhz;
+}
 
-	cpu->core_MHz = 0;
-	if (have_perf && read_perf_counters(cpu, &aperf[1], &mperf[1]) &&
-	    mperf[1] > mperf[0] && aperf[1] > aperf[0])
-		cpu->core_MHz = (unsigned int)(tsc_mhz *
-			(double)(aperf[1] - aperf[0]) /
-			(double)(mperf[1] - mperf[0]) + 0.5);
+/*
+ * Core clock in MHz: the TSC rate scaled by the APERF/MPERF growth since
+ * the start counts. Returns 0 if the counters can't be read or didn't move.
+ */
+static unsigned int core_clock(const struct cpudata *cpu, double tsc_mhz,
+			       unsigned long long aperf0, unsigned long long mperf0)
+{
+	unsigned long long aperf1, mperf1;
 
+	if (!read_perf_counters(cpu, &aperf1, &mperf1) ||
+	    mperf1 <= mperf0 || aperf1 <= aperf0)
+		return 0;
+	return (unsigned int)(tsc_mhz * (double)(aperf1 - aperf0) /
+			      (double)(mperf1 - mperf0) + 0.5);
+}
+
+/* Measure the TSC rate and, if want_core, the core clock as well. */
+static void measure_MHz(struct cpudata *cpu, int want_core)
+{
+	unsigned long long aperf0, mperf0;
+	int have_perf;
+	unsigned int eax, ebx, ecx, edx, known_MHz;
+	double tsc_mhz;
+
+	/* Make sure we have a TSC (and hence RDTSC) */
+	cpuid(cpu->number, 1, &eax, &ebx, &ecx, &edx);
+	if (!(edx & X86_FEATURE_TSC)) {
+		printf("No TSC, MHz calculation cannot be performed.\n");
+		cpu->MHz = 0;
+		return;
+	}
+
+	have_perf = want_core && host_can_measure() &&
+		    read_perf_counters(cpu, &aperf0, &mperf0);
+
+	/* Nothing left to measure if CPUID gives the TSC rate */
+	known_MHz = cpuid_tsc_MHz(cpu);
+	if ((known_MHz && !have_perf) || !host_can_measure()) {
+		cpu->MHz = known_MHz ? known_MHz : host_recorded_MHz(cpu->number);
+		cpu->core_MHz = 0;
+		return;
+	}
+
+	if (have_perf) {
+		spin(WARMUP_US);
+		read_perf_counters(cpu, &aperf0, &mperf0);
+	}
+
+	tsc_mhz = read_tsc_rate(known_MHz);
+
+	cpu->core_MHz = have_perf ? core_clock(cpu, tsc_mhz, aperf0, mperf0) : 0;
 	cpu->MHz = (unsigned int)(tsc_mhz + 0.5);
 }
 
