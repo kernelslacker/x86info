@@ -4,11 +4,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🔴 Correctness
 
-A6. cpudev-linux.c:cpudev_fd — the static `reported` bitmask is written by
-    the MHz worker threads (`estimate_MHz_cpus`) without a lock. Result:
-    a duplicate "Try 'modprobe'" message. Fix: use an atomic flag, or
-    report before the threads start. Model: haiku.
-
 ## 🟡 Performance
 
 B1. cpuid-replay.c:cpuid — linear scan of all entries per call. A dump with

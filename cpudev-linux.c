@@ -44,10 +44,10 @@ static int cpudev_fd(int *fds, unsigned int cpu, const char *node)
 
 	fds[cpu] = CPUDEV_FAILED;
 	if (err == ENOENT) {
-		if (!(reported & bit))
+		/* Called from the MHz measuring threads too; test-and-set once. */
+		if (!(__atomic_fetch_or(&reported, bit, __ATOMIC_RELAXED) & bit))
 			fprintf(stderr, "%s: %s. Try 'modprobe %s'.\n", path,
 				strerror(err), node);
-		reported |= bit;
 	} else if (err != EACCES && err != EPERM) {
 		errno = err;
 		perror(path);
