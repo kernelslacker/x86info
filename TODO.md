@@ -8,11 +8,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Maintainability
 
-C8. host.c:host_longnop — uses `signal()` plus `siglongjmp`, which has
-    unspecified handler semantics. The comment names `%eax`, but the
-    code runs in 64-bit mode. Fix: use `sigaction` with `SA_NODEFER`,
-    and fix the comment. Model: haiku.
-
 C9. x86info.c:get_online_cpus — the `n > MAX_CPUS` message goes to stdout and
     is mixed into the normal output. `main()` also prints "Need to be root"
     to stdout. Fix: write both to stderr. Model: haiku.

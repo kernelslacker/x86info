@@ -28,16 +28,21 @@ static void sigill(__attribute__((__unused__))int sig)
 int host_longnop(void)
 {
 	volatile int died;
-	void (*old)(int);
+	struct sigaction sa, old;
 
-	old = signal(SIGILL, sigill);
+	sa.sa_handler = sigill;
+	sigemptyset(&sa.sa_mask);
+	/* The handler leaves via siglongjmp, so SIGILL must not stay blocked. */
+	sa.sa_flags = SA_NODEFER;
+	sigaction(SIGILL, &sa, &old);
 
 	died = sigsetjmp(out, 1);
 
+	/* 0f 1f is the multi-byte nop, which pre-P6 CPUs reject with #UD. */
 	if (!died)
-		asm volatile(".byte 0x0f,0x1f,0x00 /* nopl 0(%eax) */");
+		asm volatile(".byte 0x0f,0x1f,0x00 /* nopl (%rax) */");
 
-	signal(SIGILL, old);
+	sigaction(SIGILL, &old, NULL);
 
 	return !died;
 }
