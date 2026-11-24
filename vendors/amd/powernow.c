@@ -207,6 +207,22 @@ static int get_main_pll_fid(int *fid)
 	return 1;
 }
 
+/*
+ * Family 0x12 odd divisor IDs are not powers of two, so they cannot use
+ * the shift at the end of get_cof(). Each scales 100 * (fid + t) by
+ * mul / div.
+ */
+static const struct {
+	int did;
+	int mul;
+	int div;
+} fam12_frac_div[] = {
+	{1, 2, 3},
+	{3, 1, 3},
+	{5, 1, 6},
+	{7, 1, 12},
+};
+
 /* Returns the frequency in MHz, or -1 if it cannot be determined. */
 static int get_cof(int family, union msr_pstate pstate)
 {
@@ -219,9 +235,15 @@ static int get_cof(int family, union msr_pstate pstate)
 		t = 0x8;
 		break;
 	case 0x12: {
-		int f, d;
+		size_t i;
 
 		fid = (pstate.val >> 4) & 0x1f;
+		for (i = 0; i < ARRAY_SIZE(fam12_frac_div); i++) {
+			if (fam12_frac_div[i].did == did)
+				return 100 * (fid + t) *
+				       fam12_frac_div[i].mul /
+				       fam12_frac_div[i].div;
+		}
 		switch (did) {
 		case 0:
 			break;
@@ -231,18 +253,6 @@ static int get_cof(int family, union msr_pstate pstate)
 		case 8:
 			did /= 2;
 			break;
-		case 1:
-			f = 2; d = 3;
-			return 100 * (fid + t) * f / d;
-		case 3:
-			f = 1; d = 3;
-			return 100 * (fid + t) * f / d;
-		case 5:
-			f = 1; d = 6;
-			return 100 * (fid + t) * f / d;
-		case 7:
-			f = 1; d = 12;
-			return 100 * (fid + t) * f / d;
 		default:
 			printf("Invalid divisor ID: %d\n", did);
 			return -1;

@@ -8,10 +8,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Maintainability
 
-C6. vendors/amd/powernow.c:get_cof (case 0x12) — five near-identical
-    `f`/`d` return statements. Fix: a small table of {mul, div} per
-    divisor ID. Model: haiku.
-
 C7. vendors/intel/cachesize.c:decode_general_tlb — builds `assoc` (including
     a `strcpy`) before the `type == 0` early `continue`, so the work is
     wasted. Fix: move the `type == 0` test first and use `snprintf` for both
