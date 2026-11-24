@@ -35,7 +35,7 @@ static unsigned int *get_online_cpus(unsigned int *count)
 		long i;
 
 		if (n < 1 || n > MAX_CPUS) {
-			printf("CPU count is bogus: defaulting to 1 CPU.\n");
+			fprintf(stderr, "CPU count is bogus: defaulting to 1 CPU.\n");
 			n = 1;
 		}
 		ids = malloc(n * sizeof(*ids));
@@ -299,7 +299,7 @@ int main(int argc, char **argv)
 	}
 
 	if (opts.need_root && !is_root()) {
-		printf("Need to be root to use specified options.\n");
+		fprintf(stderr, "Need to be root to use specified options.\n");
 		exit(EXIT_FAILURE);
 	}
 
