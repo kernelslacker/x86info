@@ -10,9 +10,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Clean-ups / Style
 
-D4. lsmsr/lsmsr.c:open_dev — `char s[20]` truncates "/dev/cpu/%d/msr" for CPU
-    numbers of eight or more digits. Fix: use `char s[32]`. Model: haiku.
-
 D5. cpuid.c:dump_raw_cpuid — `cpu->cpuid_level` is only masked with 0xffff,
     so a bogus CPU can make `-r` print 65536 leaves. The extended ranges
     use `sane_max_leaf`. Fix: cap the basic range the same way. Model:

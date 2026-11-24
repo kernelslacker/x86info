@@ -139,7 +139,7 @@ static int get_msr_val(unsigned int msr, unsigned long long *val)
 
 static int open_dev(int cpu)
 {
-	char s[20];
+	char s[32];
 
 	snprintf(s, sizeof(s), "/dev/cpu/%d/msr", cpu);
 	g.fd = open(s, O_RDONLY);
