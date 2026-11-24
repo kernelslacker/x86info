@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/resource.h>
 
 #include <x86info.h>
 #include "mptable.h"
@@ -267,11 +268,26 @@ static void display_cpus(struct cpudata *cpus, unsigned int n)
 	free(group_size);
 }
 
+/*
+ * One cpuid and one msr descriptor per CPU are cached; the default soft
+ * limit of 1024 runs out on large machines and forces slow-path opens.
+ */
+static void raise_nofile_limit(void)
+{
+	struct rlimit rl;
+
+	if (getrlimit(RLIMIT_NOFILE, &rl) == 0 && rl.rlim_cur < rl.rlim_max) {
+		rl.rlim_cur = rl.rlim_max;
+		(void)setrlimit(RLIMIT_NOFILE, &rl);
+	}
+}
+
 int main(int argc, char **argv)
 {
 	struct cpudata *cpus;
 	unsigned int nr_cpus;
 
+	raise_nofile_limit();
 	parse_command_line(argc, argv);
 
 	printf("x86info " __stringify(VERSION) "\n");

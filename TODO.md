@@ -4,12 +4,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🔴 Correctness
 
-A5. cpudev-linux.c:cpudev_fd — once `EMFILE` is hit, every later CPUID/MSR
-    call retries `open()` (fails) and then opens a transient descriptor.
-    With the default 1024 limit this starts at about 1000 open nodes (two
-    per CPU as root) and doubles the syscalls. Fix: raise the `RLIMIT_NOFILE` soft
-    limit to the hard limit once at start-up, in `main()`. Model: sonnet.
-
 A6. cpudev-linux.c:cpudev_fd — the static `reported` bitmask is written by
     the MHz worker threads (`estimate_MHz_cpus`) without a lock. Result:
     a duplicate "Try 'modprobe'" message. Fix: use an atomic flag, or
