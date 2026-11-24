@@ -6,11 +6,6 @@ Whole-tree review. Baseline: `make check` passes, cppcheck is clean.
 
 ## 🟡 Performance
 
-B1. cpuid-replay.c:cpuid — linear scan of all entries per call. A dump with
-    hundreds of CPUs (leaf count x CPU count) makes the replay tests
-    quadratic. Fix: sort the entries once after load and use `bsearch` on
-    (leaf, sub), or key per CPU. Model: sonnet.
-
 B2. vendors/amd/powernow.c:read_amd_pci_byte — allocates and scans the whole
     PCI bus on every call. `get_main_pll_fid` (family 14h) calls it once
     per P-state per CPU. Fix: cache the found device, or the byte, in a

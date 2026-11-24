@@ -21,6 +21,7 @@
 struct replay_entry {
 	int cpu;
 	unsigned int leaf, sub;
+	unsigned int seq;
 	unsigned int regs[4];
 };
 
@@ -54,6 +55,39 @@ static void replay_add_cpu(unsigned int cpu)
 	}
 	cpu_ids = tmp;
 	cpu_ids[nr_cpu_ids++] = cpu;
+}
+
+static int entry_cmp(const void *a, const void *b)
+{
+	const struct replay_entry *x = a, *y = b;
+
+	if (x->leaf != y->leaf)
+		return x->leaf < y->leaf ? -1 : 1;
+	if (x->sub != y->sub)
+		return x->sub < y->sub ? -1 : 1;
+	if (x->cpu != y->cpu)
+		return x->cpu < y->cpu ? -1 : 1;
+	/* qsort isn't stable; file order decides between duplicates. */
+	if (x->seq != y->seq)
+		return x->seq < y->seq ? -1 : 1;
+	return 0;
+}
+
+/* First entry not ordered before (leaf, sub, cpu). */
+static unsigned int entry_lower_bound(unsigned int leaf, unsigned int sub, int cpu)
+{
+	struct replay_entry key = { .cpu = cpu, .leaf = leaf, .sub = sub };
+	unsigned int lo = 0, hi = nr_entries;
+
+	while (lo < hi) {
+		unsigned int mid = lo + (hi - lo) / 2;
+
+		if (entry_cmp(&entries[mid], &key) < 0)
+			lo = mid + 1;
+		else
+			hi = mid;
+	}
+	return lo;
 }
 
 static void replay_load(void)
@@ -116,9 +150,13 @@ static void replay_load(void)
 			exit(EXIT_FAILURE);
 		}
 		entries = tmp;
+		e.seq = nr_entries;
 		entries[nr_entries++] = e;
 	}
 	fclose(f);
+
+	if (nr_entries)
+		qsort(entries, nr_entries, sizeof(*entries), entry_cmp);
 }
 
 int bind_cpu(unsigned int cpunr)
@@ -164,16 +202,20 @@ int cpuid(unsigned int CPU_number, unsigned long long idx,
 
 	replay_load();
 
-	/* A leaf in the CPU's own section wins over a shared one. */
-	for (i = 0; i < nr_entries; i++) {
-		if (entries[i].leaf != leaf || entries[i].sub != sub)
-			continue;
-		if (entries[i].cpu == (int)CPU_number) {
-			memcpy(regs, entries[i].regs, sizeof(regs));
-			break;
-		}
-		if (entries[i].cpu == ALL_CPUS)
-			memcpy(regs, entries[i].regs, sizeof(regs));
+	/*
+	 * A leaf in the CPU's own section wins (first duplicate), else the
+	 * last shared one.
+	 */
+	i = entry_lower_bound(leaf, sub, (int)CPU_number);
+	if (i < nr_entries && entries[i].leaf == leaf && entries[i].sub == sub &&
+	    entries[i].cpu == (int)CPU_number) {
+		memcpy(regs, entries[i].regs, sizeof(regs));
+	} else {
+		/* Shared entries (cpu -1) sort just before CPU 0's. */
+		i = entry_lower_bound(leaf, sub, 0);
+		if (i > 0 && entries[i - 1].leaf == leaf &&
+		    entries[i - 1].sub == sub && entries[i - 1].cpu == ALL_CPUS)
+			memcpy(regs, entries[i - 1].regs, sizeof(regs));
 	}
 
 	cpuid_store(eax, ebx, ecx, edx, regs);
