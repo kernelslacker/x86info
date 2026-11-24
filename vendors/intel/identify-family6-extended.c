@@ -12,68 +12,95 @@
 
 #define ONLYMODEL 1
 
+/* One SKU, selected by nominal TSC rate (and optionally core count). */
+struct cpu_sku {
+	unsigned int mhz;
+	unsigned int cores;	/* 0 matches any core count */
+	const char *str;	/* NULL terminates the list */
+};
+
+/*
+ * One model/stepping. SKUs are tried in order, then .str is the fallback
+ * (only for .cores, if set). A group with no match is skipped.
+ */
 struct cpu_name_def {
 	unsigned int model;
 	unsigned int stepping;
-	unsigned int mhz;
 	unsigned int flags;
-	unsigned int cores;	/* 0 matches any core count */
+	unsigned int cores;
 	const char *str;
+	const struct cpu_sku *skus;
 };
 
+#define SKUS(...) (const struct cpu_sku[]){ __VA_ARGS__ { .str = NULL } }
+
 static const struct cpu_name_def intel_fam6e_names[] = {
-	{ .model = 0x17, .cores = 4,.stepping = 6, .mhz = 3000, .str = "Core 2 quad (QX9650) [C0]" },
-	{ .model = 0x17, .cores = 4,.stepping = 6, .mhz = 3200, .str = "Core 2 extreme quad (QX9775) [C0]" },
+	{ .model = 0x17, .stepping = 6, .cores = 2, .str = "Core 2 Duo P8600 [Penryn]", .skus = SKUS(
+		{ .cores = 4, .mhz = 3000, .str = "Core 2 quad (QX9650) [C0]" },
+		{ .cores = 4, .mhz = 3200, .str = "Core 2 extreme quad (QX9775) [C0]" },
+	) },
 
-	{ .model = 0x17, .cores = 4,.stepping = 7, .mhz = 3200, .str = "Core 2 quad (QX9770) [C1]" },
-	{ .model = 0x17, .cores = 4,.stepping = 7, .mhz = 2830, .str = "Core 2 quad (Q9550) [C1]" },
-	{ .model = 0x17, .cores = 4,.stepping = 7, .mhz = 2660, .str = "Core 2 quad (Q9450) [C1]" },
-	{ .model = 0x17, .cores = 4,.stepping = 7, .mhz = 2500, .str = "Core 2 quad (Q9300) [M1]" },
-	{ .model = 0x17, .cores = 4,.stepping = 7, .mhz = 2330, .str = "Core 2 quad (Q8200) [M1]" },
+	{ .model = 0x17, .stepping = 7, .skus = SKUS(
+		{ .cores = 4, .mhz = 3200, .str = "Core 2 quad (QX9770) [C1]" },
+		{ .cores = 4, .mhz = 2830, .str = "Core 2 quad (Q9550) [C1]" },
+		{ .cores = 4, .mhz = 2660, .str = "Core 2 quad (Q9450) [C1]" },
+		{ .cores = 4, .mhz = 2500, .str = "Core 2 quad (Q9300) [M1]" },
+		{ .cores = 4, .mhz = 2330, .str = "Core 2 quad (Q8200) [M1]" },
+	) },
 
-	{ .model = 0x17, .cores = 4,.stepping = 10, .mhz = 3000, .str = "Core 2 quad (Q9650) [E0]" },
-	{ .model = 0x17, .cores = 4,.stepping = 10, .mhz = 2830, .str = "Core 2 quad (Q9550) [E0]" },
-	{ .model = 0x17, .cores = 4,.stepping = 10, .mhz = 2660, .str = "Core 2 quad (Q9400) [R0]" },
-	{ .model = 0x17, .cores = 4,.stepping = 10, .mhz = 2500, .str = "Core 2 quad (Q8300) [R0]" },
+	{ .model = 0x17, .stepping = 10, .cores = 2, .str = "Core 2 Duo [Wolfdale]", .skus = SKUS(
+		{ .cores = 4, .mhz = 3000, .str = "Core 2 quad (Q9650) [E0]" },
+		{ .cores = 4, .mhz = 2830, .str = "Core 2 quad (Q9550) [E0]" },
+		{ .cores = 4, .mhz = 2660, .str = "Core 2 quad (Q9400) [R0]" },
+		{ .cores = 4, .mhz = 2500, .str = "Core 2 quad (Q8300) [R0]" },
+		{ .cores = 2, .mhz = 2400, .str = "Core 2 Duo P8600 [Penryn] [R0]" },
+	) },
 
 	{ .model = 0x1c,.stepping = 1, .str = "Atom" },
 
-	{ .model = 0x1c,.stepping = 2, .mhz = 800, .str = "Atom Z500/Z515 [C0]" },
-	{ .model = 0x1c,.stepping = 2, .mhz = 1100, .str = "Atom Z510 [C0]" },
-	{ .model = 0x1c,.stepping = 2, .mhz = 1330, .str = "Atom Z520 [C0]" },
-	{ .model = 0x1c,.stepping = 2, .mhz = 1600, .str = "Atom Z530/N270/QKGY1/QGZR2" },
-	{ .model = 0x1c,.stepping = 2, .mhz = 1860, .str = "Atom Z540 [C0]" },
-	{ .model = 0x1c,.stepping = 2, .mhz = 2000, .str = "Atom Z550 [C0]" },
+	{ .model = 0x1c, .stepping = 2, .skus = SKUS(
+		{ .mhz = 800, .str = "Atom Z500/Z515 [C0]" },
+		{ .mhz = 1100, .str = "Atom Z510 [C0]" },
+		{ .mhz = 1330, .str = "Atom Z520 [C0]" },
+		{ .mhz = 1600, .str = "Atom Z530/N270/QKGY1/QGZR2" },
+		{ .mhz = 1860, .str = "Atom Z540 [C0]" },
+		{ .mhz = 2000, .str = "Atom Z550 [C0]" },
+	) },
 
-	{ .model = 0xe, .stepping = 8, .mhz = 1000, .str = "Core Duo U2400/Solo U1300 [Yonah] [C-0]" },
-	{ .model = 0xe, .stepping = 8, .mhz = 1200, .str = "Core Solo U1400 [Yonah] [C-0]" },
-	{ .model = 0xe, .stepping = 8, .mhz = 1500, .str = "Core Duo L2300 [Yonah] [C-0]" },
-	{ .model = 0xe, .stepping = 8, .mhz = 1600, .str = "Core Solo T1300/Duo T2300(E)/Duo L2400 [Yonah]" },
-	{ .model = 0xe, .stepping = 8, .mhz = 1800, .str = "Core Solo T1400/Duo T2400 [Yonah] [C-0]" },
-	{ .model = 0xe, .stepping = 8, .mhz = 2000, .str = "Core Solo T1500/Duo T2500 [Yonah] [C-0]" },
-	{ .model = 0xe, .stepping = 8, .mhz = 2150, .str = "Core Duo T2600 [Yonah] [C-0]" },
+	{ .model = 0xe, .stepping = 8, .skus = SKUS(
+		{ .mhz = 1000, .str = "Core Duo U2400/Solo U1300 [Yonah] [C-0]" },
+		{ .mhz = 1200, .str = "Core Solo U1400 [Yonah] [C-0]" },
+		{ .mhz = 1500, .str = "Core Duo L2300 [Yonah] [C-0]" },
+		{ .mhz = 1600, .str = "Core Solo T1300/Duo T2300(E)/Duo L2400 [Yonah]" },
+		{ .mhz = 1800, .str = "Core Solo T1400/Duo T2400 [Yonah] [C-0]" },
+		{ .mhz = 2000, .str = "Core Solo T1500/Duo T2500 [Yonah] [C-0]" },
+		{ .mhz = 2150, .str = "Core Duo T2600 [Yonah] [C-0]" },
+	) },
 
-	{ .model = 0xe, .stepping = 12, .mhz = 1200, .str = "Core Duo U2500 [Yonah] [D-0]" },
-	{ .model = 0xe, .stepping = 12, .mhz = 1800, .str = "Core Duo L2500 [Yonah] [D-0]" },
-	{ .model = 0xe, .stepping = 12, .mhz = 2300, .str = "Core Duo T2700 [Yonah] [D-0]" },
+	{ .model = 0xe, .stepping = 12, .skus = SKUS(
+		{ .mhz = 1200, .str = "Core Duo U2500 [Yonah] [D-0]" },
+		{ .mhz = 1800, .str = "Core Duo L2500 [Yonah] [D-0]" },
+		{ .mhz = 2300, .str = "Core Duo T2700 [Yonah] [D-0]" },
+	) },
 
 	{ .model = 0xe, .flags = ONLYMODEL, .str = "Core Duo/Solo [Yonah]" },
 
 	{ .model = 0x16, .flags = ONLYMODEL, .str = "Core 2 [Merom-L]" },
 
 	{ .model = 0x17, .stepping = 4, .str = "Core 2 Duo [Penryn]" },
-	{ .model = 0x17, .stepping = 6, .cores = 2, .str = "Core 2 Duo P8600 [Penryn]" },
-	{ .model = 0x17, .stepping = 10, .cores = 2, .mhz = 2400, .str = "Core 2 Duo P8600 [Penryn] [R0]" },
-	{ .model = 0x17, .stepping = 10, .cores = 2, .str = "Core 2 Duo [Wolfdale]" },
 
-	{ .model = 0x1a, .stepping = 4, .mhz = 3200, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCJ]" },
-	{ .model = 0x1a, .stepping = 4, .mhz = 2930, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCK]" },
-	{ .model = 0x1a, .stepping = 4, .mhz = 2660, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCH]" },
-	{ .model = 0x1a, .stepping = 5, .mhz = 3330, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEQ]" },
-	{ .model = 0x1a, .stepping = 5, .mhz = 3200, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEU]" },
-	{ .model = 0x1a, .stepping = 5, .mhz = 3060, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEN]" },
-	{ .model = 0x1a, .stepping = 5, .mhz = 2660, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEJ]" },
-	{ .model = 0x1a, .stepping = 5, .mhz = 2800, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBKP]" },
+	{ .model = 0x1a, .stepping = 4, .skus = SKUS(
+		{ .mhz = 3200, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCJ]" },
+		{ .mhz = 2930, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCK]" },
+		{ .mhz = 2660, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [C-0] [SLBCH]" },
+	) },
+	{ .model = 0x1a, .stepping = 5, .skus = SKUS(
+		{ .mhz = 3330, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEQ]" },
+		{ .mhz = 3200, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEU]" },
+		{ .mhz = 3060, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEN]" },
+		{ .mhz = 2660, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBEJ]" },
+		{ .mhz = 2800, .str = "Core i7 [Nehalem-EP] [bloomfield/gainestown] [D-0] [SLBKP]" },
+	) },
 
 	{ .model = 0x1a, .flags = ONLYMODEL, .str = "Core i7 (Nehalem)" },
 
@@ -94,15 +121,17 @@ static const struct cpu_name_def intel_fam6e_names[] = {
 	{ .model = 0x35, .flags = ONLYMODEL, .str = "Atom [Cloverview]" },
 	{ .model = 0x36, .flags = ONLYMODEL, .str = "Atom [Cedarview]" },
 	{ .model = 0x37, .flags = ONLYMODEL, .str = "Atom [Silvermont]" },
-	{ .model = 0x3a, .stepping = 9, .mhz = 3300, .str = "Core i3-3220 [IvyBridge]" },
-	{ .model = 0x3a, .stepping = 9, .str = "Core i7 3520M [IvyBridge]" },
+	{ .model = 0x3a, .stepping = 9, .str = "Core i7 3520M [IvyBridge]", .skus = SKUS(
+		{ .mhz = 3300, .str = "Core i3-3220 [IvyBridge]" },
+	) },
 	{ .model = 0x3a, .flags = ONLYMODEL, .str = "Core i7 [IvyBridge]" },
 	// 8M cache
-	{ .model = 0x3c, .stepping = 3, .mhz = 3200, .str = "Xeon E3-1225 v3 [Haswell]" },
-	{ .model = 0x3c, .stepping = 3, .mhz = 3000, .str = "Pentium G3220 [Haswell]" },
-	{ .model = 0x3c, .stepping = 3, .mhz = 3500, .str = "Xeon E3-1270 [Haswell]" },
-	{ .model = 0x3c, .stepping = 3, .mhz = 4000, .str = "4790K [Haswell: Devils Canyon]" },
-	{ .model = 0x3c, .stepping = 3, .str = "Xeon E3 [Haswell]" },
+	{ .model = 0x3c, .stepping = 3, .str = "Xeon E3 [Haswell]", .skus = SKUS(
+		{ .mhz = 3200, .str = "Xeon E3-1225 v3 [Haswell]" },
+		{ .mhz = 3000, .str = "Pentium G3220 [Haswell]" },
+		{ .mhz = 3500, .str = "Xeon E3-1270 [Haswell]" },
+		{ .mhz = 4000, .str = "4790K [Haswell: Devils Canyon]" },
+	) },
 	{ .model = 0x3d, .flags = ONLYMODEL, .str = "Core M/i3/i5/i7 [Broadwell-U/Y]" },
 	{ .model = 0x3e, .flags = ONLYMODEL, .str = "Core i7 [IvyBridge-X]" },
 	{ .model = 0x3f, .stepping = 2, .str = "Core i7-5820K [Haswell-X]" },
@@ -193,30 +222,35 @@ static const char unknown[] = "Unknown model.";
 
 static const char * get_namestring(struct cpudata *cpu)
 {
+	const struct cpu_name_def *def;
+	const struct cpu_sku *sku;
 	unsigned int i;
 
 	for (i = 0; i < ARRAY_SIZE(intel_fam6e_names); i++) {
-		if (model(cpu) != intel_fam6e_names[i].model)
+		def = &intel_fam6e_names[i];
+
+		if (model(cpu) != def->model)
 			continue;
 
-		if (intel_fam6e_names[i].cores &&
-		    intel_fam6e_names[i].cores != cpu->x86_max_cores)
+		if (!(def->flags & ONLYMODEL) && def->stepping != cpu->stepping)
 			continue;
 
-		if (intel_fam6e_names[i].flags & ONLYMODEL)
-			return intel_fam6e_names[i].str;
-
-		if (intel_fam6e_names[i].stepping != cpu->stepping)
-			continue;
-
-		if (intel_fam6e_names[i].mhz > 0) {
-			ensure_MHz(cpu);
-			if (!MHz_matches(cpu->MHz, intel_fam6e_names[i].mhz))
+		for (sku = def->skus; sku && sku->str; sku++) {
+			if (sku->cores && sku->cores != cpu->x86_max_cores)
 				continue;
+
+			ensure_MHz(cpu);
+			if (MHz_matches(cpu->MHz, sku->mhz))
+				return sku->str;
 		}
 
-		return intel_fam6e_names[i].str;
+		if (!def->str)
+			continue;
 
+		if (def->cores && def->cores != cpu->x86_max_cores)
+			continue;
+
+		return def->str;
 	}
 	return unknown;
 }
